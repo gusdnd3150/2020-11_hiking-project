@@ -38,21 +38,21 @@
 	</beans:bean>
 
 	<!-- Spring tiles -->
-	<beans:bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles2.TilesConfigurer"> 
-		<beans:property name="definitions"> <beans:list> <beans:value>classpath:tiles/*.xml</beans:value> 
-		</beans:list> </beans:property> <beans:property name="preparerFactoryClass" 
-		value="org.springframework.web.servlet.view.tiles2.SpringBeanPreparerFactory" 
-		/> </beans:bean> <beans:bean id="viewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver"> 
-		<beans:property name="viewClass" value="org.springframework.web.servlet.view.tiles2.TilesView"/>
-	</beans:bean>
-		
-	<!-- multiple fileUpload -->
-	<beans:bean id="multipartResolver"
-		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-		<beans:property name="maxUploadSize" value="52428800" />
-		<beans:property name="maxInMemorySize" value="1000000" />
-		<beans:property name="defaultEncoding" value="utf-8" />
-	</beans:bean>
+<!--	<beans:bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles2.TilesConfigurer"> -->
+<!--		<beans:property name="definitions"> <beans:list> <beans:value>classpath:tiles/*.xml</beans:value> -->
+<!--		</beans:list> </beans:property> <beans:property name="preparerFactoryClass" -->
+<!--		value="org.springframework.web.servlet.view.tiles2.SpringBeanPreparerFactory" -->
+<!--		/> </beans:bean> <beans:bean id="viewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver"> -->
+<!--		<beans:property name="viewClass" value="org.springframework.web.servlet.view.tiles2.TilesView"/>-->
+<!--	</beans:bean>-->
+<!--		-->
+<!--	&lt;!&ndash; multiple fileUpload &ndash;&gt;-->
+<!--	<beans:bean id="multipartResolver"-->
+<!--		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">-->
+<!--		<beans:property name="maxUploadSize" value="52428800" />-->
+<!--		<beans:property name="maxInMemorySize" value="1000000" />-->
+<!--		<beans:property name="defaultEncoding" value="utf-8" />-->
+<!--	</beans:bean>-->
  
     <!-- websocket -->
 
