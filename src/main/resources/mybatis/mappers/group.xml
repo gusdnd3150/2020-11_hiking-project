@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.group">
+    <resultMap id="groupResult" type="groupVO">
+        <result property="groupName" column="groupName" />
+        <result property="groupType" column="groupType" />
+        <result property="groupPeopleCount" column="groupPeopleCount" />
+        <result property="groupDetail" column="groupDetail" />
+        <result property="groupStatus" column="groupStatus" />
+        <result property="groupEnrollDate" column="groupEnrollDate" />
+        <result property="groupModDate" column="groupModDate" />
+        <result property="groupArea" column="groupArea" />
+        <result property="groupAgeStart" column="groupAgeStart" />
+        <result property="groupAgeEnd" column="groupAgeEnd" />
+        <result property="groupSex" column="groupSex" />
+        <result property="mtNum" column="mtNum" />
+        <result property="groupStartDate" column="groupStartDate" />
+    </resultMap>
+    
+    <insert id="insertGroup" parameterType="groupVO">
+        insert into grouph
+        values (GROUPH_SEQ.NEXTVAL, '그룹1', 1, 1, 'detail content', 1, sysdate, sysdate, 'seoul', 0, 100, 1, 'mt-1', sysdate )
+    </insert>
+</mapper>
