@@ -15,7 +15,18 @@
 	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
 	
 	<!-- Enables the Spring MVC @Controller programming model -->
-	<mvc:annotation-driven />
+	<mvc:annotation-driven>
+		<mvc:message-converters>
+			<!-- @ResponseBody로 String 처리할때 한글처리 -->
+			<beans:bean class="org.springframework.http.converter.StringHttpMessageConverter">
+				<beans:property name="supportedMediaTypes">
+					<beans:list>
+						<beans:value>text/html;charset=UTF-8</beans:value>
+					</beans:list>
+				</beans:property>
+			</beans:bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
 	<mvc:default-servlet-handler />
 	<aop:aspectj-autoproxy />
 
