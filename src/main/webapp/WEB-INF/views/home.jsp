@@ -7,10 +7,6 @@
 	<title>Home</title>
 </head>
 <body>
-<h1>
-	Hello world!  
-</h1>
-
-<P>  The time on the server is ${serverTime}. </P>
+메인 JSP 페이지 입니다.
 </body>
 </html>
