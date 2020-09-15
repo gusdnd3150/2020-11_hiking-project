@@ -7,22 +7,12 @@
   request.setCharacterEncoding("UTF-8");
 %> 
 <c:set var="contextPath"  value="${pageContext.request.contextPath}"  />
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>헤더</title>
-    <style>
+ <style>
         * {
             margin: 0;
             padding: 0;
             color: #000;
             box-sizing: border-box;
-        }
-
-        img {
-            width: 40px; height: 40px;
         }
 
         ul {
@@ -69,8 +59,6 @@
         }
 
     </style>
-</head>
-<body>
 <div class="container">
     <header>
         <div class="title-box">
@@ -102,6 +90,3 @@
         </c:choose>
         </div>
     </header>
-</div>
-</body>
-</html>

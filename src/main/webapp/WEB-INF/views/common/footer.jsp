@@ -2,11 +2,6 @@
     pageEncoding="UTF-8"   isELIgnored="false"
  %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>footer</title>
     <style>
         p {
             font-size:14px;
@@ -21,8 +16,6 @@
             list-style: none;
         }
     </style>
-</head>
-<body>
 <footer>
     <ul>
         <li>e-mail:admin@test.com</li>
@@ -30,5 +23,3 @@
         <li>찾아오는 길: <a href="#">약도</a></li>
     </ul>
 </footer>
-</body>
-</html>
