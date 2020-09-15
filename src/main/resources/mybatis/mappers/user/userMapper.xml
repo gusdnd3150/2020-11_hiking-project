@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="userMapper">
+	<!-- <resultMap id="userInsertResult01" type="userVO">
+		<result property="USERNUM" column="USERNUM" />
+		<result property="USERID" column="USERID" />
+		<result property="USERPWD" column="USERPWD" />
+		<result property="USERNAME" column="USERNAME" />
+		<result property="USERSEX" column="USERSEX" />
+		<result property="USERPHONE" column="USERPHONE" />
+		<result property="USERADDRESS" column="USERADDRESS" /> 
+		<result property="USEREMAIL" column="USEREMAIL" />
+		<result property="USERTYPE" column="USERTYPE" /> 
+		<result property="USERSTATUS" column="USERSTATUS" />
+		<result property="USERJOINDATE" column="USERJOINDATE" />
+		<result property="USERMODDATE" column="USERMODDATE" /> 
+	</resultMap> -->
+      <insert id="insertUser" parameterType="userVO">
+      <selectKey resultType="int" keyProperty="userNum" order="BEFORE">
+      <![CDATA[
+         SELECT  nvl(max(userNum), 0) + 1 from USERS   
+      ]]>
+      </selectKey>
+      <![CDATA[
+      INSERT INTO USERS(userNum, userId , userPwd, userName, userSex, userPhone, userAddress, userEmail, userType, userStatus, userJoindate)
+      VALUES (#{userNum}, #{userId}, #{userPwd}, #{userName}, #{userSex}, #{userPhone}, #{userAddress}, #{userEmail}, 200, 10, systimestamp)
+      ]]>
+   </insert> 
+   
+	   <select id="userIdCheck" parameterType="String" resultType="int">
+	   select count(*) from users where userId = #{userId} and userStatus = '10'
+	   </select>
+</mapper>
