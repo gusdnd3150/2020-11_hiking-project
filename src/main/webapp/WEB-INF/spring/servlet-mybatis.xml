@@ -11,9 +11,9 @@
 	<bean id="propertyPlaceholderConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">
 		    <list>
-			    <value>/WEB-INF/config/jdbc/jdbc.properties</value>
-				<value>/WEB-INF/config/jdbc/log4jdbc.log4j2.properties</value>
-			    <value>/WEB-INF/config/config.properties</value>
+			    <value>classpath:config/jdbc/jdbc.properties</value>
+				<value>classpath:config/jdbc/log4jdbc.log4j2.properties</value>
+			    <value>classpath:config/config.properties</value>
 			</list>
 		</property>
 	</bean>

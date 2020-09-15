@@ -39,8 +39,9 @@
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<beans:property name="prefix" value="/WEB-INF/views/" />
 		<beans:property name="suffix" value="" />
+		<beans:property name="order" value="2" />
 	</beans:bean>
-	
+
 	<mvc:view-controller path="/" view-name="" />
 
 	<beans:bean id="localeResolver"
@@ -48,16 +49,18 @@
 		<beans:property name="defaultLocale" value="ko" />
 	</beans:bean>
 
-	<!-- Spring tiles -->
-<!--	<beans:bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles2.TilesConfigurer"> -->
-<!--		<beans:property name="definitions"> <beans:list> <beans:value>classpath:tiles/*.xml</beans:value> -->
-<!--		</beans:list> </beans:property> <beans:property name="preparerFactoryClass" -->
-<!--		value="org.springframework.web.servlet.view.tiles2.SpringBeanPreparerFactory" -->
-<!--		/> </beans:bean> <beans:bean id="viewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver"> -->
-<!--		<beans:property name="viewClass" value="org.springframework.web.servlet.view.tiles2.TilesView"/>-->
-<!--	</beans:bean>-->
-<!--		-->
-<!--	&lt;!&ndash; multiple fileUpload &ndash;&gt;-->
+	<!-- Tiles 뷰 리졸버 -->
+	<beans:bean id="viewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+		<beans:property name="viewClass" value="org.springframework.web.servlet.view.tiles3.TilesView" />
+		<beans:property name="order" value="1" />
+	</beans:bean>
+	<!-- Tiles 설정 파일 -->
+	<beans:bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
+		<beans:property name="definitions" value="classpath:tiles/*.xml" />
+		<beans:property name="preparerFactoryClass" value="org.springframework.web.servlet.view.tiles3.SpringBeanPreparerFactory"/>
+	</beans:bean>
+
+	<!-- multiple fileUpload -->
 <!--	<beans:bean id="multipartResolver"-->
 <!--		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">-->
 <!--		<beans:property name="maxUploadSize" value="52428800" />-->
