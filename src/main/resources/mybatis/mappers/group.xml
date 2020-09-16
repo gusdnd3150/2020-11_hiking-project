@@ -24,7 +24,7 @@
     
     <insert id="insertGroup" parameterType="groupVO">
         insert into groups
-        values (GROUPH_SEQ.NEXTVAL, #{name}, 1, 1, #{staffMax}, #{detail}, 1, #{startDay}, sysdate, sysdate, #{area}, #{ageStart}, #{ageEnd}, #{sex}, 'mt-1')
+        values (GROUPS_SEQ.NEXTVAL, #{name}, 1, 1, #{staffMax}, #{detail}, 1, #{startDay}, sysdate, sysdate, #{area}, #{ageStart}, #{ageEnd}, #{sex}, 'mt-1')
     </insert>
 
     <select id="selectGroup" resultMap="groupResult" parameterType="java.util.Map">

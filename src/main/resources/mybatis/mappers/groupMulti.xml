@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.groupMulti">
+    <resultMap id="groupMultiResult" type="groupMultiVO">
+        <result property="groupNum" column="groupNum" />
+        <result property="multiNum" column="multiNum" />
+        <result property="type" column="type" />
+        <result property="content" column="content" jdbcType="BLOB" javaType="[B"/>
+        <result property="createdAt" column="createdAt" />
+        <result property="updatedAt" column="updatedAt" />
+    </resultMap>
+
+    <insert id="insertGroupMulti" parameterType="groupMultiVO">
+        insert into groupsMulti
+        values (2, 2, 2, #{content}, sysdate, sysdate)
+    </insert>
+</mapper>
+        <!--values (#{groupNum}, #{multiNum}, #{type}, #{content}, sysdate, sysdate)-->
