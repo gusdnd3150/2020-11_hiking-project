@@ -6,56 +6,55 @@
 <mapper namespace="mapper.group">
     <resultMap id="groupResult" type="groupVO">
         <result property="groupNum" column="groupNum" />
-        <result property="groupName" column="groupName" />
-        <result property="groupType" column="groupType" />
-        <result property="groupPeopleCount" column="groupPeopleCount" />
-        <result property="groupDetail" column="groupDetail" />
-        <result property="groupStatus" column="groupStatus" />
-        <result property="groupEnrollDate" column="groupEnrollDate" />
-        <result property="groupModDate" column="groupModDate" />
-        <result property="groupArea" column="groupArea" />
-        <result property="groupAgeStart" column="groupAgeStart" />
-        <result property="groupAgeEnd" column="groupAgeEnd" />
-        <result property="groupSex" column="groupSex" />
+        <result property="name" column="name" />
+        <result property="type" column="type" />
+        <result property="staffCurrent" column="staffCurrent" />
+        <result property="staffMax" column="staffMax" />
+        <result property="detail" column="detail" />
+        <result property="status" column="status" />
+        <result property="startDay" column="startDay" />
+        <result property="createdAt" column="createdAt" />
+        <result property="updatedAt" column="updatedAt" />
+        <result property="area" column="area" />
+        <result property="ageStart" column="ageStart" />
+        <result property="ageEnd" column="ageEnd" />
+        <result property="sex" column="sex" />
         <result property="mtNum" column="mtNum" />
-        <result property="groupStartDate" column="groupStartDate" />
     </resultMap>
     
     <insert id="insertGroup" parameterType="groupVO">
-        insert into grouph
-        values (GROUPH_SEQ.NEXTVAL, #{groupName}, 1, 1, #{groupDetail}, 1, sysdate, sysdate, #{groupArea}, #{groupAgeStart}, #{groupAgeEnd}, #{groupSex}, 'mt-1', sysdate )
+        insert into groups
+        values (GROUPH_SEQ.NEXTVAL, #{name}, 1, 1, #{staffMax}, #{detail}, 1, #{startDay}, sysdate, sysdate, #{area}, #{ageStart}, #{ageEnd}, #{sex}, 'mt-1')
     </insert>
 
     <select id="selectGroup" resultMap="groupResult" parameterType="java.util.Map">
         <![CDATA[
             SELECT *
-            FROM GROUPH
+            FROM groups
         ]]>
         <where>
-            <if test="groupName != '' and groupName != null">
-                groupName = #{groupName}
+            <if test="name != '' and name != null">
+                name = #{name}
             </if>
         </where>
     </select>
 
     <update id="updateGroup" parameterType="groupVO">
-        UPDATE GROUPH
-        SET groupName = #{groupName},
-            <!-- groupPeoleCount -->
-            groupDetail = #{groupDetail},
-            groupStatus = #{groupStatus},
-            groupModdate = sysdate,
-            groupArea = #{groupArea},
-            groupAgeStart = #{groupAgeStart},
-            groupAgeEnd = #{groupAgeEnd},
-            groupSex = #{groupSex} ,
-            <!-- groupStartDate 수정해야 함 -->
-            groupStartDate = sysdate
+        UPDATE groups
+        SET name = #{name},
+            detail = #{detail},
+            staffMax = #{staffMax},
+            detail = #{detail},
+            updatedAt = sysdate,
+            area = #{area},
+            ageStart = #{ageStart},
+            ageEnd = #{ageEnd},
+            sex = #{sex} ,
         WHERE groupNum = #{groupNum}
     </update>
 
     <delete id="deleteGroup" parameterType="java.util.Map">
-        DELETE FROM GROUPH
+        DELETE FROM groups
         WHERE groupNum = #{groupNum}
     </delete>
 </mapper>
