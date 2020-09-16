@@ -5,6 +5,7 @@
 
 <mapper namespace="mapper.group">
     <resultMap id="groupResult" type="groupVO">
+        <result property="groupNum" column="groupNum" />
         <result property="groupName" column="groupName" />
         <result property="groupType" column="groupType" />
         <result property="groupPeopleCount" column="groupPeopleCount" />
@@ -22,6 +23,39 @@
     
     <insert id="insertGroup" parameterType="groupVO">
         insert into grouph
-        values (GROUPH_SEQ.NEXTVAL, '그룹1', 1, 1, 'detail content', 1, sysdate, sysdate, 'seoul', 0, 100, 1, 'mt-1', sysdate )
+        values (GROUPH_SEQ.NEXTVAL, #{groupName}, 1, 1, #{groupDetail}, 1, sysdate, sysdate, #{groupArea}, #{groupAgeStart}, #{groupAgeEnd}, #{groupSex}, 'mt-1', sysdate )
     </insert>
+
+    <select id="selectGroup" resultMap="groupResult" parameterType="java.util.Map">
+        <![CDATA[
+            SELECT *
+            FROM GROUPH
+        ]]>
+        <where>
+            <if test="groupName != '' and groupName != null">
+                groupName = #{groupName}
+            </if>
+        </where>
+    </select>
+
+    <update id="updateGroup" parameterType="groupVO">
+        UPDATE GROUPH
+        SET groupName = #{groupName},
+            <!-- groupPeoleCount -->
+            groupDetail = #{groupDetail},
+            groupStatus = #{groupStatus},
+            groupModdate = sysdate,
+            groupArea = #{groupArea},
+            groupAgeStart = #{groupAgeStart},
+            groupAgeEnd = #{groupAgeEnd},
+            groupSex = #{groupSex} ,
+            <!-- groupStartDate 수정해야 함 -->
+            groupStartDate = sysdate
+        WHERE groupNum = #{groupNum}
+    </update>
+
+    <delete id="deleteGroup" parameterType="java.util.Map">
+        DELETE FROM GROUPH
+        WHERE groupNum = #{groupNum}
+    </delete>
 </mapper>

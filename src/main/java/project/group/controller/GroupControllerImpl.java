@@ -1,16 +1,16 @@
 package project.group.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import project.group.service.GroupService;
 import project.group.vo.GroupVO;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Controller
@@ -23,17 +23,60 @@ public class GroupControllerImpl implements GroupController{
     GroupService groupService;
 
     @Override
-    @GetMapping("group")
+    @GetMapping("/group")
     public String groupPage(){
         return "group/group.html";
     }
 
     @Override
     @ResponseBody @PostMapping("/group")
-    public String insertGroup(@RequestBody GroupVO groupVO) throws Exception {
+    public Map insertGroup(@RequestBody GroupVO groupVO) throws Exception {
+        Map map = new HashMap();
 
         int result = groupService.insertGroup(groupVO);
 
-        return "insertGroup OK";
+        if(result==1){
+            map.put("result", 1);
+            map.put("message", "insert 성공");
+        }
+        return map;
+    }
+
+    @Override
+    @GetMapping("/group/lists")
+    public String printGroupList(){
+        return "group/groupList.html";
+    }
+
+    @Override
+    @ResponseBody @PostMapping("/groupList")
+    public ModelAndView selectGroup(@RequestParam("groupName")String groupName)throws Exception{
+        Map<String, Object> searchMap = new HashMap<String, Object>();
+        searchMap.put("groupName",groupName);
+
+        List<GroupVO> list = groupService.selectGroup(searchMap);
+
+        ModelAndView mav = new ModelAndView("/group/groupList.html");
+        mav.addObject("selectList", list);
+        return mav;
+    }
+
+    @Override
+    @ResponseBody @PostMapping("/group/update")
+    public void updateGroup(@RequestBody GroupVO groupVO) throws Exception {
+//        Map<String, Object> updateMap = new HashMap<String, Object>();
+//        updateMap.put("updateMap", userInfo);
+
+        groupService.updateGroup(groupVO);
+        //여기 try-catch 돌려서 http 응답코드 같이 return 하기
+    }
+
+    @Override
+    @ResponseBody @PostMapping("/group/delete")
+    public void deleteGroup(@RequestParam("groupNum") int groupNum) throws Exception {
+        Map<String, Object> deleteMap = new HashMap<String, Object>();
+        deleteMap.put("groupNum",groupNum);
+
+        groupService.deleteGroup(deleteMap);
     }
 }

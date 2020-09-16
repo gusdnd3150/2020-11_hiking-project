@@ -72,7 +72,7 @@
         <nav class="menu-bar">
             <ul>
                 <li><a href="#">산 오르기</a></li>
-                <li><a href="#">산 모임</a></li>
+                <li><a href="/group/lists">산 모임</a></li>
                 <li><a href="#">오름 마켓</a></li>
                 <li><a href="#">고객센터</a></li>
             </ul>
