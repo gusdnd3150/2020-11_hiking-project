@@ -10,4 +10,9 @@ public class HomeController {
 	public String home() {
 		return "home.jsp";
 	}
+
+	@RequestMapping(value = "/admin", method = RequestMethod.GET)
+	public String adminHome() {
+		return "admin_home.jsp";
+	}
 }

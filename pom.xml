@@ -259,6 +259,12 @@
 			<version>1.18.12</version>
 			<scope>provided</scope>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/commons-codec/commons-codec -->
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.9</version>
+		</dependency>
 	</dependencies>
 	
     <build>
@@ -298,6 +304,7 @@
                 </configuration>
             </plugin>
 			<!-- react -->
+			<!-- 
 			<plugin>
 				<groupId>com.github.eirslett</groupId>
 				<artifactId>frontend-maven-plugin</artifactId>
@@ -356,7 +363,8 @@
 						</goals>
 					</execution>
 				</executions>
-			</plugin>
+			</plugin> 
+			-->
         </plugins>
     </build>
 </project>
