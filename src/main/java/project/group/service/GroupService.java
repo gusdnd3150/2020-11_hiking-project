@@ -17,4 +17,6 @@ public interface GroupService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     void deleteGroup(Map<String, Object> deleteMap);
+
+    List<GroupVO> test();
 }

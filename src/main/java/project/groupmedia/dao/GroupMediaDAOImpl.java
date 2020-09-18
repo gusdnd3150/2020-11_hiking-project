@@ -21,14 +21,14 @@ public class GroupMediaDAOImpl implements GroupMediaDAO {
     }
 
     @Override
-    public List<GroupMediaVO> selectGroupMediaList() throws Exception {
-        List<GroupMediaVO> list = sqlSession.selectList("mapper.groupMedia.selectGroupMediaList");
-        return list;
+    public Map<String, Object> selectGroupMedia(int groupNum) throws Exception {
+        Map<String, Object> map = sqlSession.selectOne("mapper.groupMedia.selectGroupMedia",groupNum);
+        return map;
     }
 
     @Override
-    public byte[] selectGroupMediaOne(int groupNum) throws Exception {
-        byte[] bytes = sqlSession.selectOne("mapper.groupMedia.selectGroupMediaOne", groupNum);
-        return bytes;
+    public Map<String,Object> selectGroupMediaOne(int groupNum) throws Exception {
+        Map<String, Object> map = sqlSession.selectOne("mapper.groupMedia.selectGroupMediaOne", groupNum);
+        return map;
     }
 }

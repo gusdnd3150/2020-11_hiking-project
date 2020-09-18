@@ -57,4 +57,11 @@
         DELETE FROM groups
         WHERE groupNum = #{groupNum}
     </delete>
+
+    <select id="selectGroupList" resultMap="groupResult" parameterType="java.util.Map">
+        <![CDATA[
+            SELECT *
+            FROM groups
+        ]]>
+    </select>
 </mapper>

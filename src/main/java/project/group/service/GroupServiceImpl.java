@@ -66,4 +66,10 @@ public class GroupServiceImpl implements GroupService{
             e.printStackTrace();
         }
     }
+
+    @Override
+    public List<GroupVO> test(){
+        List<GroupVO> list = groupDAO.test();
+        return list;
+    }
 }

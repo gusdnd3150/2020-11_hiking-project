@@ -7,6 +7,6 @@ import java.util.Map;
 
 public interface GroupMediaDAO {
     void insertGroupMedia(GroupMediaVO groupMediaVO) throws Exception;
-    List<GroupMediaVO> selectGroupMediaList() throws Exception;
-    byte[] selectGroupMediaOne(int groupNum) throws Exception;
+    Map<String, Object> selectGroupMedia(int groupNum) throws Exception;
+    Map<String,Object> selectGroupMediaOne(int groupNum) throws Exception;
 }

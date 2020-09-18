@@ -60,4 +60,15 @@ public class GroupDAOImpl implements GroupDAO{
             e.printStackTrace();
         }
     }
+
+    @Override
+    public List<GroupVO> test(){
+        List<GroupVO> list = null;
+        try{
+            list = sqlSession.selectList("mapper.group.selectGroupList");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return list;
+    }
 }

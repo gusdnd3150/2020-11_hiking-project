@@ -2,8 +2,6 @@
     pageEncoding="UTF-8"
     isELIgnored="false" %>
 <!DOCTYPE html>
-
-
 <html lang="ko">
 
 <head>
@@ -28,7 +26,7 @@
 </head>
 
 
-
+<style>
 </style>
 
 <body>

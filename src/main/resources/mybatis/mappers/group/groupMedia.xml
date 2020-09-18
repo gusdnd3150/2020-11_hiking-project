@@ -12,26 +12,30 @@
         <result property="createdAt" column="createdAt" />
         <result property="updatedAt" column="updatedAt" />
     </resultMap>
+    <resultMap id="groupMediaContent" type="hashmap">
+        <result property="content" column="content" jdbcType="BLOB" javaType="[B"/>
+    </resultMap>
 
     <insert id="insertGroupMedia" parameterType="groupMediaVO">
         insert into groupsMedia
         values (#{groupNum}, #{mediaNum}, #{type}, #{content}, sysdate, sysdate)
     </insert>
 
-    <select id="selectGroupMediaList" resultMap="groupMediaResult" parameterType="java.util.Map">
+    <!-- groupNum 일치 1개 content select -->
+    <select id="selectGroupMedia" resultMap="groupMediaContent" parameterType="Integer">
         <![CDATA[
-            SELECT *
+            SELECT content
             FROM groupsMedia
-            WHERE MEDIANUM = 1
-            ORDER BY GROUPNUM
+            WHERE mediaNum = 1
+            AND groupNum = #{groupNum}
         ]]>
     </select>
 
-    <select id="selectGroupMediaOne" resultMap="byte" parameterType="Integer">
-        <![CDATA[
-            SELECT content
-            FROM groupsmulti
-            WHERE groupNum = #{groupNum}
-        ]]>
-    </select>
+<!--    <select id="selectGroupMediaOne" resultMap="groupMediaResult" parameterType="Integer">-->
+<!--        <![CDATA[-->
+<!--            SELECT content-->
+<!--            FROM groupsMedia-->
+<!--            WHERE groupNum = #{groupNum}-->
+<!--        ]]>-->
+<!--    </select>-->
 </mapper>

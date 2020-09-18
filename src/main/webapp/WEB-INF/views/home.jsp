@@ -56,6 +56,26 @@
 		<div><img src="resources/img/slider/photo6.jpeg"></div>
 	</div>
 
+	<h1>추천 등산모임</h1>
+
+	<div class="row text-center">
+
+		<c:forEach var="list" items="${list}">
+		<div class="col-lg-3 col-md-6 mb-4">
+			<div class="card h-100">
+				<img class="card-img-top" src="/group/media/${list.groupNum}" alt="">
+				<!-- http://placehold.it/500x325 -->
+				<div class="card-body">
+					<h4 class="card-title">${list.name}</h4>
+					<p class="card-text">${list.detail}</p>
+				</div>
+				<div class="card-footer">
+					<a href="#" class="btn btn-primary">더보기</a>
+				</div>
+			</div>
+		</div>
+		</c:forEach>
+
 <script src="resources/js/jquery.js"></script>
 <script type="text/javascript" src="http://kenwheeler.github.io/slick/slick/slick.min.js"></script>
 	<script type="text/javascript">
