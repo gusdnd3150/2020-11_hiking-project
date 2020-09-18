@@ -16,4 +16,17 @@
       <put-attribute name="body" value="/WEB-INF/views/home.jsp" />
    </definition>
 
+   <definition name="/*/mypageHome.jsp" extends="baseLayout">
+      <put-attribute name="title" value="" />
+      <put-attribute name="header" value="/WEB-INF/views/common/header.jsp" />
+      <put-attribute name="side" value="" />
+      <put-attribute name="footer" value="/WEB-INF/views/common/footer.jsp" />
+      <put-attribute name="body" value="/WEB-INF/views/user/mypageHome.jsp" />
+   </definition>
+
+   <definition name="productDetail" extends="baseLayout">
+      <put-attribute name="title" value="주문상세" />
+      <put-attribute name="body" value="/WEB-INF/views/product/productDetail.jsp" />
+   </definition>
+
 </tiles-definitions>
