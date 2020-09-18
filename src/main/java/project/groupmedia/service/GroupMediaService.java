@@ -3,10 +3,11 @@ package project.groupmedia.service;
 import project.groupmedia.vo.GroupMediaVO;
 
 import java.util.List;
+import java.util.Map;
 
 public interface GroupMediaService {
     void insertGroupMedia(GroupMediaVO groupMediaVO);
-    List<GroupMediaVO> selectGroupMediaList();
+    Map<String, Object> selectGroupMedia(int groupNum);
 
-    byte[] selectGroupMediaOne(int groupNum);
+    Map<String,Object> selectGroupMediaOne(int groupNum);
 }

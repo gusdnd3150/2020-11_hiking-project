@@ -12,4 +12,6 @@ public interface GroupDAO {
     void updateGroup(GroupVO groupVO);
 
     void deleteGroup(Map<String, Object> deleteMap);
+
+    List<GroupVO> test();
 }

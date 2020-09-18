@@ -8,6 +8,7 @@ import project.groupmedia.dao.GroupMediaDAO;
 import project.groupmedia.vo.GroupMediaVO;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class GroupMediaServiceImpl implements GroupMediaService {
@@ -26,24 +27,24 @@ public class GroupMediaServiceImpl implements GroupMediaService {
     }
 
     @Override
-    public List<GroupMediaVO> selectGroupMediaList(){
-        List<GroupMediaVO> list = null;
+    public Map<String, Object> selectGroupMedia(int groupNum){
+        Map<String, Object> map = null;
         try{
-            list = groupMediaDAO.selectGroupMediaList();
+            map = groupMediaDAO.selectGroupMedia(groupNum);
         } catch (Exception e){
             e.printStackTrace();
         }
-        return list;
+        return map;
     }
 
     @Override
-    public byte[] selectGroupMediaOne(int groupNum){
-        byte[] bytes = null;
+    public Map<String,Object> selectGroupMediaOne(int groupNum){
+        Map<String,Object> map = null;
         try{
-            bytes = groupMediaDAO.selectGroupMediaOne(groupNum);
+            map = groupMediaDAO.selectGroupMediaOne(groupNum);
         } catch (Exception e){
             e.printStackTrace();
         }
-        return bytes;
+        return map;
     }
 }

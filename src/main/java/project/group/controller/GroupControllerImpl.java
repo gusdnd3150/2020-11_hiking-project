@@ -45,7 +45,7 @@ public class GroupControllerImpl implements GroupController{
     @Override
     @GetMapping("/group/lists")
     public String printGroupList(){
-        return "group/groupList.html";
+        return "groupList.jsp";
     }
 
     @Override
@@ -56,7 +56,7 @@ public class GroupControllerImpl implements GroupController{
 
         List<GroupVO> list = groupService.selectGroup(searchMap);
 
-        ModelAndView mav = new ModelAndView("/group/groupList.html");
+        ModelAndView mav = new ModelAndView("groupList.jsp");
         mav.addObject("selectList", list);
         return mav;
     }
@@ -78,5 +78,12 @@ public class GroupControllerImpl implements GroupController{
         deleteMap.put("groupNum",groupNum);
 
         groupService.deleteGroup(deleteMap);
+    }
+
+    @Override
+    @RequestMapping("/test")
+    public List<GroupVO> test(){
+        List<GroupVO> list = groupService.test();
+        return list;
     }
 }

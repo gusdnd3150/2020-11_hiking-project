@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import project.group.vo.GroupVO;
 
+import java.util.List;
 import java.util.Map;
 
 public interface GroupController {
@@ -26,4 +27,6 @@ public interface GroupController {
 
     @ResponseBody @PostMapping("/group/delete")
     void deleteGroup(@RequestParam("groupNum") int groupNum) throws Exception;
+
+    List<GroupVO> test();
 }
