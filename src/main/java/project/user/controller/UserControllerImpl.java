@@ -1,14 +1,20 @@
 package project.user.controller;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import project.user.dto.LoginDTO;
 import project.user.service.UserService;
 import project.user.vo.UserVO;
 
@@ -20,26 +26,62 @@ public class UserControllerImpl implements UserController {
 	@Autowired
 	UserService userService;
 	
+	//왜 UserVO를 Autowired 선언해주면 안되는거지??
+	
 	//회원가입 화면	
-	@RequestMapping(value ="/user/signUpView", method= RequestMethod.GET)
-	public void signUpView() throws Exception {
+	@RequestMapping(value ="/signUpView", method= RequestMethod.GET)
+	public String signUpView() throws Exception {
 		logger.info("signUpView");
+		return "/user/signUpView.jsp";
 	}
 
 	//회원가입 완료	
-	@RequestMapping(value = "/user/insertUser", method=RequestMethod.POST)
+	@RequestMapping(value = "/insertUser", method=RequestMethod.POST)
 	public String insertUser(UserVO userVO) throws Exception{
 		logger.info("insertUser");
 		userService.insertUser(userVO);
 		return "redirect:/";
 	}
 	
-	@RequestMapping(value ="/user/userIdCheck", method = RequestMethod.GET)
+	@RequestMapping(value ="/idCheck", method = RequestMethod.GET)
 	@ResponseBody
-	public int userIdCheck(@RequestParam("userId") String userId) throws Exception {
-		System.out.println(userId);
-		int rst = userService.userIdCheck(userId);
-		System.out.println("Controller : "+ rst);
+	public int idCheck(@RequestParam("id") String id) throws Exception {
+		System.out.println(id);
+		int rst = userService.idCheck(id);
+		System.out.println("유저Controller : "+ rst);
 		return rst;
 	}
+
+	@RequestMapping(value="/logInView", method=RequestMethod.GET)
+	public String logInView() {
+		System.out.println("로그인 페이지간다");
+		return "/user/logIn.jsp";
+	
+	}
+
+	@RequestMapping(value="/logIn", method=RequestMethod.POST)
+	public void logIn(LoginDTO loginDTO, HttpSession httpSession, Model model) throws Exception {
+		UserVO userVO = userService.logIn(loginDTO);
+		System.out.println("로그인디티오"+loginDTO);
+		System.out.println(userVO);
+		if(userVO == null) { // 뭔가 더 해야 할 것 같은데 모르겠다. 
+			System.out.println("널이었음");
+			return;
+		}
+		model.addAttribute("userVO", userVO);
+		System.out.println("유저컨트롤러model"+ model);
+	}
+
+	@RequestMapping(value="/logOut", method=RequestMethod.GET)
+	public String logOut(HttpServletRequest request, HttpServletResponse response, HttpSession httpSession)
+			throws Exception {
+		Object object = httpSession.getAttribute("logIn");
+		if(object != null) {
+			httpSession.removeAttribute("logIn");
+			httpSession.invalidate();
+		}
+	
+		return "/user/logout.jsp";
+	}
+	
 }

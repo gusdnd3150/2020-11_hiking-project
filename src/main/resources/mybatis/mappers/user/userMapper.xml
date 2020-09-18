@@ -5,32 +5,58 @@
 
 <mapper namespace="userMapper">
 	<!-- <resultMap id="userInsertResult01" type="userVO">
-		<result property="USERNUM" column="USERNUM" />
-		<result property="USERID" column="USERID" />
-		<result property="USERPWD" column="USERPWD" />
-		<result property="USERNAME" column="USERNAME" />
-		<result property="USERSEX" column="USERSEX" />
-		<result property="USERPHONE" column="USERPHONE" />
-		<result property="USERADDRESS" column="USERADDRESS" /> 
-		<result property="USEREMAIL" column="USEREMAIL" />
-		<result property="USERTYPE" column="USERTYPE" /> 
-		<result property="USERSTATUS" column="USERSTATUS" />
-		<result property="USERJOINDATE" column="USERJOINDATE" />
-		<result property="USERMODDATE" column="USERMODDATE" /> 
+		<result property="userNum" column="userNum" />
+		<result property="id" column="id" />
+		<result property="password" column="password" />
+		<result property="name" column="name" />
+		<result property="sex" column="sex" />
+		<result property="phone" column="phone" />
+		<result property="address" column="address" /> 
+		<result property="email" column="email" />
+		<result property="type" column="type" /> 
+		<result property="status" column="status" />
+		<result property="createdAt" column="createdAt" />
+		<result property="updatedAt" column="updatedAt" /> 
 	</resultMap> -->
+	
+	<resultMap id="logInResult01" type="userVO">
+	<result property="id" column="userId"/>
+	<result property="password" column="userPwd"/>
+	</resultMap>
+	
+	
+	
       <insert id="insertUser" parameterType="userVO">
-      <selectKey resultType="int" keyProperty="userNum" order="BEFORE">
       <![CDATA[
-         SELECT  nvl(max(userNum), 0) + 1 from USERS   
+      INSERT INTO USERS(userNum, id , password, name, sex, phone, address, email, type, status, createdAt)
+      VALUES (users_SEQ.nextVal, #{id}, #{password}, #{name}, #{sex}, #{phone}, #{address}, #{email}, 200, 10, sysdate)
       ]]>
-      </selectKey>
-      <![CDATA[
-      INSERT INTO USERS(userNum, userId , userPwd, userName, userSex, userPhone, userAddress, userEmail, userType, userStatus, userJoindate)
-      VALUES (#{userNum}, #{userId}, #{userPwd}, #{userName}, #{userSex}, #{userPhone}, #{userAddress}, #{userEmail}, 200, 10, systimestamp)
-      ]]>
-   </insert> 
-   
-	   <select id="userIdCheck" parameterType="String" resultType="int">
-	   select count(*) from users where userId = #{userId} and userStatus = '10'
+	   </insert> 
+	   
+	   <select id="idCheck" parameterType="String" resultType="int">
+	   <![CDATA[
+	    select count(*) 
+	    from users 
+	    where id = #{id} and status=10
+	    ]]>
 	   </select>
+	   
+	   <select id="logIn" resultMap="logInResult01">
+	    <![CDATA[
+	    select id, password
+	    from users where id=#{id} And password=#{password} and status=10
+	    
+	    ]]>
+	    </select>
+	   
+	   <update id="updateUser" parameterType="String">
+	  <![CDATA[
+	   update users 
+	   set name=#{name}, password=#{password} , sex=#{sex}, phone=#{phone}, address=#{address}, email=#{email}, updatedAt=systimestamp
+	   where id=#{id}
+	        ]]>
+	   </update>
+   
+	   
+	   
 </mapper>

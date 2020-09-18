@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 
 import project.user.dao.UserDAO;
+import project.user.dto.LoginDTO;
 import project.user.vo.UserVO;
 
 @Service("userService")
@@ -25,9 +26,16 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public int userIdCheck(String userId) throws Exception{
-		int rst = userDAO.userIdCheck(userId);
+	public int idCheck(String id) throws Exception{
+		int rst = userDAO.idCheck(id);
 		System.out.println("Service : "+ rst);
 		return rst;
 	}
+	
+	public UserVO logIn(LoginDTO loginDTO) throws Exception {
+		System.out.println("서비스왔다감");
+		return userDAO.logIn(loginDTO);
+	}
+	
+	
 }

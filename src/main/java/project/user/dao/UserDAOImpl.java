@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import project.user.dto.LoginDTO;
 import project.user.vo.UserVO;
 
 @Repository("userDAO")
@@ -23,10 +24,17 @@ public class UserDAOImpl implements UserDAO{
 	}
 
 	@Override
-	public int userIdCheck(String userId) throws Exception{
-		int rst = sqlSession.selectOne("userMapper.userIdCheck", userId);
+	public int idCheck(String id) throws Exception{
+		System.out.println("다오아이디: "+id);
+		int rst = sqlSession.selectOne("userMapper.idCheck", id);
 	System.out.println("DAO : "+ rst);
 		return rst;
+	}
+	
+	@Override
+	public UserVO logIn(LoginDTO loginDTO) throws Exception {
+		System.out.println("다오왔다감");
+		return sqlSession.selectOne("userMapper.logIn", loginDTO);
 	}
 
 }

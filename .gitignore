@@ -1,2 +1,9 @@
-# Project exclude paths
-/target/classes/
+*.DS_Store
+bin
+target
+.classpath
+.project
+.settings
+src/main/webapp/META-INF
+.idea
+*.iml

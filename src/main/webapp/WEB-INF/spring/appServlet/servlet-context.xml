@@ -15,9 +15,22 @@
 	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
 	
 	<!-- Enables the Spring MVC @Controller programming model -->
-	<mvc:annotation-driven />
+	<mvc:annotation-driven>
+		<mvc:message-converters>
+			<!-- @ResponseBody로 String 처리할때 한글처리 -->
+			<beans:bean class="org.springframework.http.converter.StringHttpMessageConverter">
+				<beans:property name="supportedMediaTypes">
+					<beans:list>
+						<beans:value>text/html;charset=UTF-8</beans:value>
+					</beans:list>
+				</beans:property>
+			</beans:bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
 	<mvc:default-servlet-handler />
 	<aop:aspectj-autoproxy />
+
+	<context:component-scan base-package="project" />
 
 	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
 	<resources mapping="/resources/**" location="/resources/" />
@@ -25,37 +38,37 @@
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<beans:property name="prefix" value="/WEB-INF/views/" />
-		<beans:property name="suffix" value=".jsp" />
+		<beans:property name="suffix" value="" />
+		<beans:property name="order" value="2" />
 	</beans:bean>
-	
-	<mvc:view-controller path="/" view-name="" />
 
-	<context:component-scan base-package="project" />
+	<mvc:view-controller path="/" view-name="" />
 
 	<beans:bean id="localeResolver"
 		class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
 		<beans:property name="defaultLocale" value="ko" />
 	</beans:bean>
 
-	<!-- Spring tiles -->
-<!--	<beans:bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles2.TilesConfigurer"> -->
-<!--		<beans:property name="definitions"> <beans:list> <beans:value>classpath:tiles/*.xml</beans:value> -->
-<!--		</beans:list> </beans:property> <beans:property name="preparerFactoryClass" -->
-<!--		value="org.springframework.web.servlet.view.tiles2.SpringBeanPreparerFactory" -->
-<!--		/> </beans:bean> <beans:bean id="viewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver"> -->
-<!--		<beans:property name="viewClass" value="org.springframework.web.servlet.view.tiles2.TilesView"/>-->
-<!--	</beans:bean>-->
-<!--		-->
-<!--	&lt;!&ndash; multiple fileUpload &ndash;&gt;-->
-<!--	<beans:bean id="multipartResolver"-->
-<!--		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">-->
-<!--		<beans:property name="maxUploadSize" value="52428800" />-->
-<!--		<beans:property name="maxInMemorySize" value="1000000" />-->
-<!--		<beans:property name="defaultEncoding" value="utf-8" />-->
-<!--	</beans:bean>-->
+	<!-- Tiles 뷰 리졸버 -->
+	<beans:bean id="viewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+		<beans:property name="viewClass" value="org.springframework.web.servlet.view.tiles3.TilesView" />
+		<beans:property name="order" value="1" />
+	</beans:bean>
+	<!-- Tiles 설정 파일 -->
+	<beans:bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
+		<beans:property name="definitions" value="classpath:tiles/*.xml" />
+		<beans:property name="preparerFactoryClass" value="org.springframework.web.servlet.view.tiles3.SpringBeanPreparerFactory"/>
+	</beans:bean>
+
+	<!-- multiple fileUpload -->
+	<beans:bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<beans:property name="maxUploadSize" value="52428800" />
+		<beans:property name="maxInMemorySize" value="1000000" />
+		<beans:property name="defaultEncoding" value="utf-8" />
+	</beans:bean>
  
     <!-- websocket -->
-
 <!--    <beans:bean id="chatHandler" class="project.chat.ChatWebSocketHandler" />-->
 <!--    -->
 <!-- 	<websocket:handlers>-->

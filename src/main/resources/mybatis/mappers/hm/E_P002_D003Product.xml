@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="project.e_P002_D003">
+<!-- 리절트 맵 정의 -->	
+	<resultMap id="ProductsResult" type="e_P002_D003ProductsVO">
+		<result property="PRODNUM" column="PRODNUM" />
+		<result property="PCATEGORYNUM" column="PCATEGORYNUM" />
+		<result property="NAME" column="NAME" />
+		<result property="PRICE" column="PRICE" />
+		<result property="CONTENT" column="CONTENT" />
+		<result property="QUANTITY" column="QUANTITY" />
+		<result property="TYPE" column="TYPE" />
+		<result property="CREATEDAT" column="CREATEDAT" />
+		<result property="UPDATEDAT" column="UPDATEDAT" />
+	</resultMap>
+
+     <resultMap id="clobMap" type="java.util.HashMap">
+	 <result property="PRODNUM2" column="PRODNUM2" />
+	 <result property="PPHOTONUM" column="PPHOTONUM" />
+	 <result property="CREATEDAT" column="CREATEDAT" />
+	 <result property="UPDATEDAT" column="UPDATEDAT" />
+     <result property="CONTENT1" column="CONTENT1" javaType="[B" jdbcType="BLOB"  />
+     <result property="CONTENT2" column="CONTENT2" javaType="[B" jdbcType="BLOB"  />
+     <result property="CONTENT3" column="CONTENT3" javaType="[B" jdbcType="BLOB"  />
+     <result property="CONTENT4" column="CONTENT4" javaType="[B" jdbcType="BLOB"  />
+	</resultMap>
+ 
+     	<insert id="saveImage1" parameterType="java.util.Map"   >
+		<selectKey resultType="int" keyProperty="PRODNUM2" order="BEFORE">
+	    	select count(prodNum) from products
+	    </selectKey>
+	    <![CDATA[
+	    		INSERT INTO prodphoto (prodNum,pPhotoNum,content,createdAt)
+	    		VALUES(#{PRODNUM2},1,#{CONTENT1},sysdate)
+		]]>
+	    </insert>  
+	    
+	    <insert id="saveImage2" parameterType="java.util.Map"   >
+		<selectKey resultType="int" keyProperty="PRODNUM2" order="BEFORE">
+	    	select count(prodNum) from products
+	    </selectKey>
+	    <![CDATA[
+	    		INSERT INTO prodphoto (prodNum,pPhotoNum,content,createdAt)
+	    		VALUES(#{PRODNUM2},2,#{CONTENT2},sysdate)
+		]]>
+	    </insert> 
+	    
+	     <insert id="saveImage3" parameterType="java.util.Map"   >
+		<selectKey resultType="int" keyProperty="PRODNUM2" order="BEFORE">
+	    	select count(prodNum) from products
+	    </selectKey>
+	    <![CDATA[
+	    		INSERT INTO prodphoto (prodNum,pPhotoNum,content,createdAt)
+	    		VALUES(#{PRODNUM2},3,#{CONTENT3},sysdate)
+		]]>
+	    </insert> 
+	    
+	    
+	     <insert id="saveImage4" parameterType="java.util.Map"   >
+		<selectKey resultType="int" keyProperty="PRODNUM2" order="BEFORE">
+	    	select count(prodNum) from products
+	    </selectKey>
+	    <![CDATA[
+	    		INSERT INTO prodphoto (prodNum,pPhotoNum,content,createdAt)
+	    		VALUES(#{PRODNUM2},4,#{CONTENT4},sysdate)
+		]]>
+	    </insert> 
+	    
+	
+	 <insert id="addProduct" parameterType="java.util.Map"   >
+		<selectKey resultType="String" keyProperty="PRODNUM" order="BEFORE">
+	    	select seq_prod_prodNum.nextval from dual
+	    </selectKey>
+	    <![CDATA[
+		   insert into products(
+		                prodNum, 
+		                pCategoryNum,
+                    name,
+                    price,
+                    content,
+					Quantity,
+					type,
+					createdAt
+				    )
+					  			values(
+					  			      #{PRODNUM},
+					  			      #{PCATEGORYNUM},
+					  			      #{NAME},
+					  			      #{PRICE},
+					  			      #{CONTENT},
+					  			      #{QUANTITY},
+					  			      #{TYPE},
+					  			      sysdate)
+		]]>
+	</insert> 
+
+	<!--
+		<insert id="insertGoodsImageFile" parameterType="imageFileVO"   >
+		<selectKey resultType="int" keyProperty="image_id" order="BEFORE">
+	    	select seq_image_id.nextval from dual
+	    </selectKey>
+	    <![CDATA[
+		   insert into t_goods_detail_image (image_id,
+		                                     goods_id,
+																				 fileName,
+																				 fileType,
+																				 reg_id)
+											   					values(#{image_id},
+											   					 			 #{goods_id},
+											   							 	 #{fileName},
+											   								 #{fileType},
+											   								 #{reg_id} )
+		]]>
+	</insert> 
+	<select id="selectNewGoodsList" resultMap="goodsResult"   parameterType="java.util.Map"  >
+	    <![CDATA[
+		  select * from (
+			   select rowNum as recNum,
+			   		  goods_id,
+			          goods_title,
+			          goods_writer,
+			          goods_publisher,
+			          goods_sales_price,
+			          to_char(goods_creDate,'YYYY-MM-DD')  as goods_creDate,
+			          to_char(goods_published_date,'YYYY-MM-DD') as goods_published_date
+			       from (
+			             select  goods_id,
+			             		 goods_title,
+			             		 goods_writer,
+			             		 goods_publisher,
+			             		 goods_sales_price,
+			             		 goods_creDate,
+			             		 goods_published_date
+			              from t_shopping_goods 
+			                where  to_char(goods_creDate,'YYYY-MM-DD')  between #{beginDate} and #{endDate}
+			               order by goods_creDate desc
+					    )
+				)							
+			where				
+		recNum between (#{section}-1)*100+ (#{pageNum}-1)*10+1 and (#{section}-1)*100+(#{pageNum})*10				        
+    	]]>
+	</select> -->
+	<!-- 
+	<select id="selectOrderGoodsList" resultMap="orderGoodsResult"   parameterType="java.util.Map"  >
+		  select * from (
+			    select rowNum as recNum,t.*
+			       from (
+			              select  *  from t_shopping_order 
+			              where to_char(pay_order_time,'yyyy-mm-dd')  between #{beginDate} and #{endDate}
+			                <if test="search_type=='orderer_id'">
+			                  AND orderer_id=#{search_word}
+			                </if>
+			                <if test="search_type=='orderer_name'">
+			                  AND orderer_name=#{search_word}
+			                </if>
+			                <if test="search_type=='orderer_hp_num'">
+			                   AND pay_orderer_hp_num=#{search_word} 
+			                </if>
+			              order by PAY_ORDER_TIME desc
+					    ) t
+				)							
+			where				
+		recNum between (#{section}-1)*100+ (#{pageNum}-1)*10+1 and (#{section}-1)*100+(#{pageNum})*10				        
+	</select>
+	
+ 
+
+	
+	<select id="selectGoodsDetail" resultMap="goodsResult"   parameterType="String"  >
+	    <![CDATA[
+		     select g.*,to_char(g.goods_published_date,'YYYY-MM-DD') as goods_published_date, d.fileName from t_shopping_goods g, t_goods_detail_image d
+	        where g.goods_id=d.goods_id
+	        and d.filetype='main_image'
+	        and g.goods_id=#{goods_id}
+	        order by g.goods_id
+    	]]>
+	</select>
+	<select id="selectGoodsImageFileList" resultMap="imageResult"   parameterType="String"  >
+	    <![CDATA[
+		    	select * from  t_goods_detail_image 
+		    	where  
+			    goods_id=#{goods_id}
+			    order by image_id asc
+    	]]>
+	</select>	
+	
+	
+<update id="updateGoodsInfo" parameterType="java.util.HashMap" >
+	   update t_shopping_goods
+	    <set> 
+	      <if test=" goods_sort!='' and goods_sort!=null">
+	        goods_sort=#{goods_sort},
+	      </if>
+	      <if test=" goods_title!='' and goods_title!=null">
+	        goods_title=#{goods_title},
+	      </if>
+	      <if test=" goods_writer!='' and goods_writer!=null">
+	        goods_writer=#{goods_writer},
+	      </if>
+	      <if test=" goods_publisher!='' and goods_publisher!=null">
+	        goods_publisher=#{goods_publisher},
+	      </if>
+	      <if test=" goods_price!='' and goods_price!=null">
+	        goods_price=#{goods_price},
+	      </if>
+	      <if test=" goods_published_date!='' and goods_published_date!=null">
+	        goods_published_date=#{goods_published_date},
+	      </if>
+	      <if test=" goods_sales_price!='' and goods_sales_price!=null">
+	        goods_sales_price=#{goods_sales_price},
+	      </if>
+	      <if test=" goods_point!='' and goods_point!=null">
+	        goods_point=#{goods_point},
+	      </if>
+	      <if test=" goods_page_total!='' and goods_page_total!=null">
+	        goods_page_total=#{goods_page_total},
+	      </if>
+	      <if test=" goods_isbn!='' and goods_isbn!=null">
+	        goods_isbn=#{goods_isbn},
+	      </if>
+	      <if test=" goods_delivery_price!='' and goods_delivery_price!=null">
+	        goods_delivery_price=#{goods_delivery_price},
+	      </if>
+	      <if test=" goods_delivery_date!='' and goods_delivery_date!=null">
+	        goods_delivery_date=#{goods_delivery_date},
+	      </if>
+	      <if test=" goods_status!='' and goods_status!=null">
+	        goods_status=#{goods_status},
+	      </if>
+	      <if test=" goods_writer_intro!='' and goods_writer_intro!=null">
+	        goods_writer_intro=#{goods_writer_intro},
+	      </if>
+	      <if test=" goods_intro!='' and goods_intro!=null">
+	        goods_intro=#{goods_intro},
+	      </if>
+	      <if test=" publisher_comment!='' and publisher_comment!=null">
+	        publisher_comment=#{publisher_comment},
+	      </if>
+	      <if test=" recommendation!='' and recommendation!=null">
+	        recommendation=#{recommendation},
+	      </if>
+	      <if test=" goods_contents_order!='' and goods_contents_order!=null">
+	        goods_contents_order=#{goods_contents_order:VARCHAR}
+	      </if>
+	     </set>
+	    where 
+	    goods_id=#{goods_id}
+	
+	</update>	
+	<update id="updateGoodsImage" parameterType="imageFileVO">
+		update t_goods_detail_image
+		set fileName=#{fileName}
+		where	 
+		goods_id=#{goods_id} and image_id=#{image_id}
+	</update>
+	
+	<delete id="deleteGoodsImage" parameterType="String">
+	  delete from t_goods_detail_image
+	  where image_id=#{image_id}
+	</delete>
+	
+<update id="updateOrderGoods" parameterType="java.util.HashMap" >
+	   update t_shopping_order
+	    <set> 
+	      <if test=" delivery_state!='' and delivery_state!=null">
+	        delivery_state=#{delivery_state},
+	      </if>
+	      <if test=" delivery_address!='' and delivery_address!=null">
+	        delivery_address=#{delivery_address},
+	      </if>
+	    </set>
+	    where 
+	    order_id=#{order_id}
+	
+	</update> -->		
+</mapper>
