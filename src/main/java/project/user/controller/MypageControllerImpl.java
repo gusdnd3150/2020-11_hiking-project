@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import project.user.dto.LoginDTO;
 import project.user.service.MypageService;
+import project.user.vo.UserVO;
 
 @Controller
 @RequestMapping("/mypage/*")
@@ -51,10 +51,10 @@ public class MypageControllerImpl implements MypageController{
 	}
 	
 	@RequestMapping(value = "/mypage/updateUser", method = RequestMethod.POST)
-	public String updateUser(HttpSession httpsession, RedirectAttributes rttr, LoginDTO loginDTO) throws Exception {
-	mypageService.updateUser(loginDTO);
+	public String updateUser(HttpSession httpsession, RedirectAttributes rttr, UserVO userVO) throws Exception {
+	mypageService.updateUser(userVO);
 		httpsession.invalidate();
-		return "/user/profileView.jsp";
+		return "/user/logInView.jsp";
 			
 	}
 	

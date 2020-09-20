@@ -86,6 +86,7 @@
             </c:when>
             <c:otherwise>
                 <a href="${contextPath}/user/logInView"><h3>로그인</h3></a>
+                <a href="${contextPath}/user/signUpView"><h3>회원가입</h3></a>
             </c:otherwise>
         </c:choose>
         </div>

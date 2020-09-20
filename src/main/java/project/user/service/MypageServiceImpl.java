@@ -20,8 +20,8 @@ public class MypageServiceImpl implements MypageService{
 	
 	
 	@Override
-	public void updateUser(LoginDTO loginDTO) throws Exception {
-		mypageDAO.updateUser(loginDTO);
+	public void updateUser(UserVO userVO) throws Exception {
+		mypageDAO.updateUser(userVO);
 	}
 	
 	@Override

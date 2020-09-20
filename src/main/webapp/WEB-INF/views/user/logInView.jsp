@@ -26,7 +26,7 @@
 				<div class="col-sm-3"></div>
 
 				<div class="col-sm-6">
-					<h2>회원가입</h2>
+					<h2>로그인</h2>
 					<form action="/user/logIn" method="post">
 						<table class="table table-boardered">
 

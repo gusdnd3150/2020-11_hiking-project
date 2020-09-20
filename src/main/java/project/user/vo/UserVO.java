@@ -21,5 +21,6 @@ public class UserVO {
 	private int status;
 	private LocalDateTime createdAt;
 	private LocalDateTime updatedAt;
+	private String sex2;
 	
 }

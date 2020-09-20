@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,8 @@ public class UserControllerImpl implements UserController {
 	//회원가입 완료	
 	@RequestMapping(value = "/insertUser", method=RequestMethod.POST)
 	public String insertUser(UserVO userVO) throws Exception{
+		String hashedPw = BCrypt.hashpw(userVO.getPassword(), BCrypt.gensalt(10));
+		    userVO.setPassword(hashedPw);
 		logger.info("insertUser");
 		userService.insertUser(userVO);
 		return "redirect:/";
@@ -61,10 +64,11 @@ public class UserControllerImpl implements UserController {
 
 	@RequestMapping(value="/logIn", method=RequestMethod.POST)
 	public ModelAndView logIn(LoginDTO loginDTO, HttpSession httpSession, ModelAndView mav) throws Exception {
-		UserVO userVO = userService.logIn(loginDTO);
+	    UserVO userVO = userService.logIn(loginDTO);
 		System.out.println("로그인디티오"+loginDTO);
 		System.out.println(userVO);
-		if(userVO == null) { // 뭔가 더 해야 할 것 같은데 모르겠다. 
+	  
+		if(userVO == null || !BCrypt.checkpw(loginDTO.getPassword(), userVO.getPassword())) {  
 			System.out.println("널이었음");
 			mav.setViewName("user/logIn.jsp");
 			return mav;
@@ -78,12 +82,12 @@ public class UserControllerImpl implements UserController {
 	@RequestMapping(value="/logOut", method=RequestMethod.GET)
 	public String logOut(HttpServletRequest request, HttpServletResponse response, HttpSession httpSession)
 			throws Exception {
-		Object object = httpSession.getAttribute("logIn");
+		Object object = httpSession.getAttribute("LOGIN");
 		if(object != null) {
-			httpSession.removeAttribute("logIn");
+			httpSession.removeAttribute("LOGIN");
 			httpSession.invalidate();
 		}
-		return "/user/logout.jsp";
+		return "/user/logOut.jsp";
 	}
 	
 }

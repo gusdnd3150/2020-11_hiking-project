@@ -17,7 +17,7 @@ public interface MypageController {
 	public String mypageHome() throws Exception;
 	public String profileView() throws Exception ;
 	public ModelAndView updateUserView(HttpServletRequest request, ModelAndView mav) throws Exception;
-	public String updateUser(HttpSession httpsession, RedirectAttributes rttr, LoginDTO loginDTO) throws Exception;
+	public String updateUser(HttpSession httpsession, RedirectAttributes rttr, UserVO userVO) throws Exception;
 			
 	}
 	

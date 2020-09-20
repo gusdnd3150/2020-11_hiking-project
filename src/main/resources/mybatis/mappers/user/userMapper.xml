@@ -32,6 +32,7 @@
 		<result property="status" column="status" />
 		<result property="createdAt" column="createdAt" />
 		<result property="updatedAt" column="updatedAt" /> 
+		<result property="sex2" column="sex2" /> 
 	</resultMap>
 	
 	
@@ -53,7 +54,7 @@
 	   
 	   <select id="logIn" resultMap="userResult">
 	    <![CDATA[
-	    select *
+	    select id, password, name, sex, phone, address, email, type, status, createdAt, updatedAt, DECODE(sex, '10', '남자', '20', '여자', '기타') sex2
 	    from users where id=#{id} And password=#{password} and status=10
 	    
 	    ]]>
@@ -62,8 +63,8 @@
 	   <update id="updateUser" parameterType="String">
 	  <![CDATA[
 	   update users 
-	   set name=#{name}, password=#{password} , sex=#{sex}, phone=#{phone}, address=#{address}, email=#{email}, updatedAt=systimestamp
-	   where id=#{id}
+	   set name=#{name}, password=#{password} , sex=#{sex}, phone=#{phone}, address=#{address}, email=#{email}, updatedAt=sysdate
+	   where id=#{id} and status=10
 	        ]]>
 	   </update>
    
