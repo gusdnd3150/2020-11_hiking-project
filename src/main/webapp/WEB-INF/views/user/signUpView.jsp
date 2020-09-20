@@ -93,13 +93,13 @@
                    <div class ="check_font" id="phoneCheck"></div></td>       
             </tr>
          
-            <tr>
-                <th>성별</th>
-                <td>
-                <input type="radio"  name="sex" value="10">남성 &nbsp;&nbsp;
-                <input type="radio"  name="sex" value="20">여성 &nbsp;&nbsp;
-                </td>     
-            </tr>
+           <tr>
+								<th>성별</th>
+								<td>
+								<input type="radio" name="sex" value="10">남성&nbsp;&nbsp; 
+								<input type="radio" name="sex" value="20">여성&nbsp;&nbsp;
+								<div class="check_font" id="sexCheck"></div></td>
+							</tr>
             <tr>
                 <td colspan="2">
                 <input type="submit" class="btn btn-primary" value="가입" id="insertUser" >
@@ -238,6 +238,19 @@ var phoneJ = /^01([0|1|6|7|8|9]?)?([0-9]{3,4})?([0-9]{4})$/;
 			$('#phoneCheck').css('color', 'red');
 		}
 	});
+	//성별
+	$("input:radio[name=sex]").click(function() {
+		if ($("input:radio[name=sex]:checked").val()=="10") {
+			console.log($(this).val());
+			$("#sexCheck").text('남자');
+			$('#sexCheck').css('color', 'green');
+		} else {
+			console.log($(this).val());
+			$('#sexCheck').text('여자');
+			$('#sexCheck').css('color', 'green');
+		}
+	});
 });
+
 	</script>
 </html>

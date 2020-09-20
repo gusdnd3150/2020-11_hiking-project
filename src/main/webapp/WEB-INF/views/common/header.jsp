@@ -63,7 +63,7 @@
     <header>
         <div class="title-box">
             <div class="title">
-                <h1>산오름</h1>
+               <a href="${contextPath}"><h1>산오름</h1></a>
             </div>
             <!--            <div class="logo-container">-->
             <!--                <a href="#"><img src="./home.png"  /></a>-->
@@ -80,12 +80,12 @@
 
         <div class="login-box">
         <c:choose>
-            <c:when test="${isLogOn == true  && member!= null}">
-                <a href="${contextPath}/member/logout.do"><h3>로그아웃</h3></a>
-                <a href="${contextPath}/member/loginForm.do"><h3>로그인</h3></a>
+            <c:when test="${not empty LOGIN}">
+                <a href="${contextPath}/user/logout"><h3>로그아웃</h3></a>
+                <a href="${contextPath}/mypage/mypageHome"><h3>마이페이지</h3></a>
             </c:when>
             <c:otherwise>
-                <a href="${contextPath}/member/loginForm.do"><h3>로그인</h3></a>
+                <a href="${contextPath}/user/logInView"><h3>로그인</h3></a>
             </c:otherwise>
         </c:choose>
         </div>

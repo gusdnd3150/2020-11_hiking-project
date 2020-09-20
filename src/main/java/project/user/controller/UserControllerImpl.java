@@ -8,11 +8,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import project.user.dto.LoginDTO;
 import project.user.service.UserService;
@@ -55,21 +55,24 @@ public class UserControllerImpl implements UserController {
 	@RequestMapping(value="/logInView", method=RequestMethod.GET)
 	public String logInView() {
 		System.out.println("로그인 페이지간다");
-		return "/user/logIn.jsp";
+		return "/user/logInView.jsp";
 	
 	}
 
 	@RequestMapping(value="/logIn", method=RequestMethod.POST)
-	public void logIn(LoginDTO loginDTO, HttpSession httpSession, Model model) throws Exception {
+	public ModelAndView logIn(LoginDTO loginDTO, HttpSession httpSession, ModelAndView mav) throws Exception {
 		UserVO userVO = userService.logIn(loginDTO);
 		System.out.println("로그인디티오"+loginDTO);
 		System.out.println(userVO);
 		if(userVO == null) { // 뭔가 더 해야 할 것 같은데 모르겠다. 
 			System.out.println("널이었음");
-			return;
+			mav.setViewName("user/logIn.jsp");
+			return mav;
 		}
-		model.addAttribute("userVO", userVO);
-		System.out.println("유저컨트롤러model"+ model);
+		mav.setViewName("home.jsp");
+		mav.addObject("userVO", userVO);
+		System.out.println("유저컨트롤러mav"+ mav);
+		return mav;
 	}
 
 	@RequestMapping(value="/logOut", method=RequestMethod.GET)
@@ -80,7 +83,6 @@ public class UserControllerImpl implements UserController {
 			httpSession.removeAttribute("logIn");
 			httpSession.invalidate();
 		}
-	
 		return "/user/logout.jsp";
 	}
 	

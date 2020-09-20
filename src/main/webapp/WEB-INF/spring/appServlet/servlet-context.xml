@@ -67,6 +67,16 @@
 		<beans:property name="maxInMemorySize" value="1000000" />
 		<beans:property name="defaultEncoding" value="utf-8" />
 	</beans:bean>
+	
+	<!-- interceptor -->
+	<beans:bean id="loginInterceptor"
+	class="project.user.interceptor.LoginInterceptor" />
+<mvc:interceptors>
+	<mvc:interceptor>
+		<mvc:mapping path="/user/logIn" />
+		<beans:ref bean="loginInterceptor" />
+	</mvc:interceptor>
+</mvc:interceptors>
  
     <!-- websocket -->
 <!--    <beans:bean id="chatHandler" class="project.chat.ChatWebSocketHandler" />-->

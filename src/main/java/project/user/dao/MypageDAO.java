@@ -1,7 +1,8 @@
 package project.user.dao;
 
+import org.springframework.web.servlet.ModelAndView;
+
 import project.user.dto.LoginDTO;
-import project.user.vo.UserVO;
 
 public interface MypageDAO {
 	
