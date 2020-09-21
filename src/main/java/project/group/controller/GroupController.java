@@ -9,8 +9,8 @@ import java.util.Map;
 
 public interface GroupController {
 
-    @GetMapping("group")
-    String groupPage();
+    @GetMapping("/group")
+    ModelAndView groupPage(ModelAndView mav);
 
     @ResponseBody
     @PostMapping("/group")
