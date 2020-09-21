@@ -1,21 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"   isELIgnored="false"
  %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-    <style>
-        p {
-            font-size:14px;
-            text-align:left;
-            margin-left: 100px;
-        }
-        footer {
-            background-color: gray;
-            height: 150px;
-        }
-        li {
-            list-style: none;
-        }
-    </style>
+<style>
+    footer {
+        background-color: gray;
+        height: 150px;
+    }
+    footer ul li {
+        list-style: none;
+    }
+</style>
 <footer>
     <ul>
         <li>e-mail:admin@test.com</li>

@@ -29,7 +29,7 @@ public class GroupMediaControllerImpl implements GroupMediaController {
 
     @RequestMapping("/group/list")
     public String groupList(){
-        return "group/groupList.jsp";
+        return "groupMain.jsp";
     }
     @Override
     @PostMapping("/group/media/insert")

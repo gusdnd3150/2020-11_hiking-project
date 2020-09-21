@@ -1,5 +1,6 @@
 package project.group.controller;
 
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,8 +25,10 @@ public class GroupControllerImpl implements GroupController{
 
     @Override
     @GetMapping("/group")
-    public String groupPage(){
-        return "group/group.html";
+    public ModelAndView groupPage(ModelAndView mav){
+        mav.setViewName("group/groupMain.jsp");
+        mav.addObject("list", test());
+        return mav;
     }
 
     @Override
@@ -45,7 +48,7 @@ public class GroupControllerImpl implements GroupController{
     @Override
     @GetMapping("/group/lists")
     public String printGroupList(){
-        return "groupList.jsp";
+        return "groupMain.jsp";
     }
 
     @Override
@@ -56,7 +59,7 @@ public class GroupControllerImpl implements GroupController{
 
         List<GroupVO> list = groupService.selectGroup(searchMap);
 
-        ModelAndView mav = new ModelAndView("groupList.jsp");
+        ModelAndView mav = new ModelAndView("groupMain.jsp");
         mav.addObject("selectList", list);
         return mav;
     }

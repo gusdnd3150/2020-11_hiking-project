@@ -28,6 +28,7 @@
             FROM groupsMedia
             WHERE mediaNum = 1
             AND groupNum = #{groupNum}
+            ORDER BY groupNum
         ]]>
     </select>
 
