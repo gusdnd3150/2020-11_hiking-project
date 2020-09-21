@@ -19,17 +19,30 @@
 		<result property="updatedAt" column="updatedAt" /> 
 	</resultMap> -->
 	
-	<resultMap id="logInResult01" type="userVO">
-	<result property="id" column="userId"/>
-	<result property="password" column="userPwd"/>
+	<resultMap id="userResult" type="userVO">
+	<result property="userNum" column="userNum" />
+		<result property="id" column="id" />
+		<result property="password" column="password" />
+		<result property="name" column="name" />
+		<result property="sex" column="sex" />
+		<result property="phone" column="phone" />
+		<result property="address" column="address" /> 
+		<result property="email" column="email" />
+		<result property="type" column="type" /> 
+		<result property="status" column="status" />
+		<result property="createdAt" column="createdAt" />
+		<result property="updatedAt" column="updatedAt" /> 
+		<result property="sex2" column="sex2" /> 
+		<result property="sessionId" column="sessionId" /> 
+		<result property="sessionLimit" column="sessionLimit" /> 
 	</resultMap>
 	
 	
 	
       <insert id="insertUser" parameterType="userVO">
       <![CDATA[
-      INSERT INTO USERS(userNum, id , password, name, sex, phone, address, email, type, status, createdAt)
-      VALUES (users_SEQ.nextVal, #{id}, #{password}, #{name}, #{sex}, #{phone}, #{address}, #{email}, 200, 10, sysdate)
+      INSERT INTO USERS(userNum, id , password, name, sex, phone, address, email, type, status, createdAt, sessionId)
+      VALUES (users_SEQ.nextVal, #{id}, #{password}, #{name}, #{sex}, #{phone}, #{address}, #{email}, 200, 10, sysdate, #{id})
       ]]>
 	   </insert> 
 	   
@@ -41,10 +54,10 @@
 	    ]]>
 	   </select>
 	   
-	   <select id="logIn" resultMap="logInResult01">
+	   <select id="logIn" resultMap="userResult">
 	    <![CDATA[
-	    select id, password
-	    from users where id=#{id} And password=#{password} and status=10
+	    select id, password, name, sex, phone, address, email, type, status, createdAt, updatedAt, DECODE(sex, '10', '남자', '20', '여자', '기타') sex2
+	    from users where id=#{id} and status=10
 	    
 	    ]]>
 	    </select>
@@ -52,10 +65,30 @@
 	   <update id="updateUser" parameterType="String">
 	  <![CDATA[
 	   update users 
-	   set name=#{name}, password=#{password} , sex=#{sex}, phone=#{phone}, address=#{address}, email=#{email}, updatedAt=systimestamp
-	   where id=#{id}
+	   set name=#{name}, password=#{password} , sex=#{sex}, phone=#{phone}, address=#{address}, email=#{email}, updatedAt=sysdate
+	   where id=#{id} and status=10
 	        ]]>
 	   </update>
+	   
+	   <update id="keepLogin">
+	    <![CDATA[
+	   update users
+	   set sessionId=#{sessionId}
+	   , sessionLimit=#{sessionLimit}
+	   where id = #{id}
+	   and status=10
+	   ]]>
+	   </update>
+   
+    <select id="checkUserWithSessionKey" resultMap="userResult">
+	    <![CDATA[
+	  select *
+	  from users
+	  where sessionId=#{value}
+	   ]]>
+	   </select>
+   
+   
    
 	   
 	   

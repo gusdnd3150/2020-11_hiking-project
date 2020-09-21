@@ -1,5 +1,6 @@
 package project.user.controller;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -8,15 +9,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import project.user.dto.LoginDTO;
 import project.user.service.MypageService;
+import project.user.vo.UserVO;
 
 @Controller
 @RequestMapping("/mypage/*")
 public class MypageControllerImpl implements MypageController{
 	public static final Logger logger = LoggerFactory.getLogger(MypageControllerImpl.class);
+	private static final String LOGIN = "LOGIN";
 
 	@Autowired
 	MypageService mypageService; 
@@ -36,18 +39,22 @@ public class MypageControllerImpl implements MypageController{
 		return "/user/profileView.jsp";
 	}
 	
-	@RequestMapping(value = "/mypage/updateUserView", method = RequestMethod.GET)
-	public String updateUserView() throws Exception {
-		logger.info("modify");	
-		return "/user/modify.jsp";
+	@RequestMapping(value = "/mypage/modifyView", method = {RequestMethod.GET, RequestMethod.POST})
+	public ModelAndView updateUserView(HttpServletRequest request, ModelAndView mav) throws Exception {
+		HttpSession httpSession = request.getSession();
+		logger.info("modifyView");	
+		mav.addObject(httpSession.getAttribute(LOGIN));
+		System.out.println("modyfy!!!!httpSession.getAttribute(LOGIN)"+httpSession.getAttribute(LOGIN));
+		mav.setViewName("/user/modifyView.jsp");
+		return mav;
 	
 	}
 	
 	@RequestMapping(value = "/mypage/updateUser", method = RequestMethod.POST)
-	public String updateUser(HttpSession httpsession, RedirectAttributes rttr, LoginDTO loginDTO) throws Exception {
-	mypageService.updateUser(loginDTO);
+	public String updateUser(HttpSession httpsession, RedirectAttributes rttr, UserVO userVO) throws Exception {
+	mypageService.updateUser(userVO);
 		httpsession.invalidate();
-		return "/user/profileView.jsp";
+		return "/user/logInView.jsp";
 			
 	}
 	

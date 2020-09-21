@@ -36,12 +36,13 @@
 
         <div class="login-box">
         <c:choose>
-            <c:when test="${isLogOn == true  && member!= null}">
-                <a href="${contextPath}/member/logout.do"><h3>로그아웃</h3></a>
-                <a href="${contextPath}/member/loginForm.do"><h3>로그인</h3></a>
+            <c:when test="${not empty LOGIN}">
+                <a href="${contextPath}/user/logOut"><h3>로그아웃</h3></a>
+                <a href="${contextPath}/mypage/mypageHome"><h3>마이페이지</h3></a>
             </c:when>
             <c:otherwise>
-                <a href="${contextPath}/member/loginForm.do"><h3>로그인</h3></a>
+                <a href="${contextPath}/user/logInView"><h3>로그인</h3></a>
+                <a href="${contextPath}/user/signUpView"><h3>회원가입</h3></a>
             </c:otherwise>
         </c:choose>
         </div>

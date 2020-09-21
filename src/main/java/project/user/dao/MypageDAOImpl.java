@@ -16,8 +16,10 @@ public class MypageDAOImpl implements MypageDAO {
 	
 
 	@Override
-	public void updateUser(LoginDTO loginDTO) throws Exception {
-		sqlSession.update("userMapper.updateUser", loginDTO);
+	public void updateUser(UserVO userVO) throws Exception {
+		System.out.println("마이페이지다오업데이트:"+ userVO);
+		sqlSession.update("userMapper.updateUser", userVO);
+	
 	
 	}
 
