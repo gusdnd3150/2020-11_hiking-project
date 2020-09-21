@@ -1,8 +1,7 @@
 package project.user.dto;
 
-import java.util.Date;
-
 import lombok.Data;
+import lombok.Getter;
 
 @Data
 public class LoginDTO {
@@ -19,6 +18,9 @@ public class LoginDTO {
 	private int status;
 //	private Date createdAt;
 //	private Date updatedAt;
+	@Getter
+	public boolean useCookie = true;
+	
 	
 	
 }

@@ -70,7 +70,7 @@
 			value="org.springframework.web.servlet.view.tiles3.SpringBeanPreparerFactory" />
 	</beans:bean>
 
-	<!-- multiple fileUpload -->
+	<!-- Multiple fileUpload -->
 	<beans:bean id="multipartResolver"
 		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 		<beans:property name="maxUploadSize" value="52428800" />
@@ -78,7 +78,7 @@
 		<beans:property name="defaultEncoding" value="utf-8" />
 	</beans:bean>
 
-	<!-- interceptor -->
+	<!-- Interceptor -->
 	<beans:bean id="loginInterceptor"
 		class="project.user.interceptor.LoginInterceptor" />
 	<mvc:interceptors>
@@ -88,16 +88,27 @@
 		</mvc:interceptor>
 	</mvc:interceptors>
 	
-	<!-- authIntercept -->
-	<beans:bean id="AuthInterceptor"
+	<!-- AuthIntercept -->
+	<beans:bean id="authInterceptor"
 		class="project.user.interceptor.AuthInterceptor" />
 	<mvc:interceptors>
 		<mvc:interceptor>
 			<mvc:mapping path="/mypage/mapageHome" />
 			<mvc:mapping path="/mypage/modifyView" />
-			<beans:ref bean="AuthInterceptor" />
+			<beans:ref bean="authInterceptor" />
 		</mvc:interceptor>
 	</mvc:interceptors>
+	
+	<!-- RemembermeInterceptor 자동로그인 -->
+	<beans:bean id="remembermeInterceptor"
+		class="project.user.interceptor.RemembermeInterceptor" />
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**/" />
+			<beans:ref bean="remembermeInterceptor" />
+		</mvc:interceptor>
+	</mvc:interceptors>
+	
 
 	<!-- websocket -->
 	<!-- <beans:bean id="chatHandler" class="project.chat.ChatWebSocketHandler" 

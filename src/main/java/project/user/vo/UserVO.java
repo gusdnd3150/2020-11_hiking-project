@@ -19,8 +19,10 @@ public class UserVO {
 	private String email;
 	private int type;
 	private int status;
-	private LocalDateTime createdAt;
-	private LocalDateTime updatedAt;
+	private String createdAt;
+	private String updatedAt;
 	private String sex2;
+	private String sessionId;
+	private Date sessionLimit;
 	
 }

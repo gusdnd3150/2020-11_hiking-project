@@ -1,5 +1,8 @@
 package project.user.controller;
 
+import java.util.Date;
+
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.util.WebUtils;
 
 import project.user.dto.LoginDTO;
 import project.user.service.UserService;
@@ -63,8 +67,10 @@ public class UserControllerImpl implements UserController {
 	}
 
 	@RequestMapping(value="/logIn", method=RequestMethod.POST)
-	public ModelAndView logIn(LoginDTO loginDTO, HttpSession httpSession, ModelAndView mav) throws Exception {
-	    UserVO userVO = userService.logIn(loginDTO);
+	public ModelAndView logIn(HttpServletRequest request, LoginDTO loginDTO, HttpSession httpSession, ModelAndView mav) throws Exception {
+	  //String returnUrl = request.getHeader("Referer");
+	  //System.out.println("returnUrl: " + returnUrl);
+		UserVO userVO = userService.logIn(loginDTO);
 		System.out.println("로그인디티오"+loginDTO);
 		System.out.println(userVO);
 	  
@@ -73,9 +79,18 @@ public class UserControllerImpl implements UserController {
 			mav.setViewName("user/logIn.jsp");
 			return mav;
 		}
+		//mav.setViewName(returnUrl);
 		mav.setViewName("home.jsp");
 		mav.addObject("userVO", userVO);
 		System.out.println("유저컨트롤러mav"+ mav);
+		//로그인 유지를 선택할 경우
+		if (loginDTO.isUseCookie()) {
+			int amount = 60*60*24*7; //7일	
+			Date sessionLimit = new Date(System.currentTimeMillis()+(1000*amount));// 로그인 유지기간 설정	
+			userService.keepLogin(userVO.getId(), httpSession.getId(), sessionLimit);
+			System.out.println("세션아이디 저장");
+		}
+	
 		return mav;
 	}
 
@@ -84,8 +99,16 @@ public class UserControllerImpl implements UserController {
 			throws Exception {
 		Object object = httpSession.getAttribute("LOGIN");
 		if(object != null) {
+			UserVO userVO= (UserVO) object;
 			httpSession.removeAttribute("LOGIN");
 			httpSession.invalidate();
+			Cookie loginCookie = WebUtils.getCookie(request, "loginCookie");
+			if(loginCookie != null) {
+				loginCookie.setPath("/");
+				loginCookie.setMaxAge(0);
+				response.addCookie(loginCookie);
+				userService.keepLogin(userVO.getId(), "none", new Date());
+			}
 		}
 		return "/user/logOut.jsp";
 	}

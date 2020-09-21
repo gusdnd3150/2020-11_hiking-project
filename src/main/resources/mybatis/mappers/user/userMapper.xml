@@ -33,14 +33,16 @@
 		<result property="createdAt" column="createdAt" />
 		<result property="updatedAt" column="updatedAt" /> 
 		<result property="sex2" column="sex2" /> 
+		<result property="sessionId" column="sessionId" /> 
+		<result property="sessionLimit" column="sessionLimit" /> 
 	</resultMap>
 	
 	
 	
       <insert id="insertUser" parameterType="userVO">
       <![CDATA[
-      INSERT INTO USERS(userNum, id , password, name, sex, phone, address, email, type, status, createdAt)
-      VALUES (users_SEQ.nextVal, #{id}, #{password}, #{name}, #{sex}, #{phone}, #{address}, #{email}, 200, 10, sysdate)
+      INSERT INTO USERS(userNum, id , password, name, sex, phone, address, email, type, status, createdAt, sessionId)
+      VALUES (users_SEQ.nextVal, #{id}, #{password}, #{name}, #{sex}, #{phone}, #{address}, #{email}, 200, 10, sysdate, #{id})
       ]]>
 	   </insert> 
 	   
@@ -55,7 +57,7 @@
 	   <select id="logIn" resultMap="userResult">
 	    <![CDATA[
 	    select id, password, name, sex, phone, address, email, type, status, createdAt, updatedAt, DECODE(sex, '10', '남자', '20', '여자', '기타') sex2
-	    from users where id=#{id} And password=#{password} and status=10
+	    from users where id=#{id} and status=10
 	    
 	    ]]>
 	    </select>
@@ -67,6 +69,26 @@
 	   where id=#{id} and status=10
 	        ]]>
 	   </update>
+	   
+	   <update id="keepLogin">
+	    <![CDATA[
+	   update users
+	   set sessionId=#{sessionId}
+	   , sessionLimit=#{sessionLimit}
+	   where id = #{id}
+	   and status=10
+	   ]]>
+	   </update>
+   
+    <select id="checkUserWithSessionKey" resultMap="userResult">
+	    <![CDATA[
+	  select *
+	  from users
+	  where sessionId=#{value}
+	   ]]>
+	   </select>
+   
+   
    
 	   
 	   

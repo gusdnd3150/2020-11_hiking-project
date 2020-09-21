@@ -81,7 +81,7 @@
         <div class="login-box">
         <c:choose>
             <c:when test="${not empty LOGIN}">
-                <a href="${contextPath}/user/logout"><h3>로그아웃</h3></a>
+                <a href="${contextPath}/user/logOut"><h3>로그아웃</h3></a>
                 <a href="${contextPath}/mypage/mypageHome"><h3>마이페이지</h3></a>
             </c:when>
             <c:otherwise>

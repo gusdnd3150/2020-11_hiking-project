@@ -1,6 +1,8 @@
 package project.user.controller;
 
 
+import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -19,7 +21,8 @@ public interface UserController {
 	
 	public String logInView();
 	
-	public ModelAndView logIn(LoginDTO loginDTO, HttpSession httpsession, ModelAndView mav) throws Exception;
+	public ModelAndView logIn(HttpServletRequest request, LoginDTO loginDTO, HttpSession httpsession, ModelAndView mav) throws Exception;
+
 	
 	public String logOut(HttpServletRequest request, HttpServletResponse response, HttpSession httpsession) throws Exception;
 
