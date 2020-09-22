@@ -11,6 +11,7 @@ public interface GroupMediaController {
 
     String insertGroupMedia(@RequestBody GroupMediaVO vo, @RequestParam("content") MultipartFile file) throws IOException;
 
-    @RequestMapping("/group/media/{groupNum}")
+    @PostMapping("/group/media/{groupNum}")
+    @ResponseBody
     ResponseEntity<byte[]> selectGroupMedia(@PathVariable("groupNum") int groupNum) throws Exception;
 }
