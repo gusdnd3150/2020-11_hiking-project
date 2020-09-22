@@ -28,10 +28,35 @@
       <put-attribute name="footer" value="/WEB-INF/views/common/footer.jsp" />
       <put-attribute name="body" value="/WEB-INF/views/user/mypageHome.jsp" />
    </definition>
-
-   <definition name="productDetail" extends="baseLayout">
-      <put-attribute name="title" value="주문상세" />
-      <put-attribute name="body" value="/WEB-INF/views/product/productDetail.jsp" />
+   
+        <!-- 쇼핑몰 -->
+    <definition name="shopBase"  template="/WEB-INF/views/commonShop/layout.jsp">
+      <put-attribute name="title" value="" />
+      <put-attribute name="header" value="/WEB-INF/views/commonShop/header.jsp" />
+      <put-attribute name="side" value="/WEB-INF/views/commonShop/side.jsp" />
+      <put-attribute name="body" value="" />
+      <put-attribute name="footer" value="/WEB-INF/views/common/footer.jsp" />
    </definition>
+   
+   <definition name="/shopMain" extends="shopBase">
+      <put-attribute name="title" value="메인페이지" />
+      <put-attribute name="body" value="/WEB-INF/views/shoppingMall/main.jsp" />
+   </definition>
+   
+   <definition name="/product/productForm" extends="shopBase">
+      <put-attribute name="title" value="주문상세" />
+      <put-attribute name="body" value="/WEB-INF/views/product/productForm.jsp" />
+   </definition>
+   
+      <definition name="pay" extends="shopBase">
+      <put-attribute name="title" value="주문결제" />
+      <put-attribute name="body" value="/WEB-INF/views/product/pay.jsp" />
+   </definition>
+   
+      <definition name="productDetail" extends="shopBase">
+      <put-attribute name="title" value="주문상세" />
+      <put-attribute name="body" value="/WEB-INF/views/shoppingMall/productDetail.jsp" />
+   </definition>
+   
 
 </tiles-definitions>

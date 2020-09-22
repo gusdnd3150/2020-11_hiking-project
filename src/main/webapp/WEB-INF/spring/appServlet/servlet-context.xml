@@ -67,6 +67,11 @@
 		<beans:property name="maxInMemorySize" value="1000000" />
 		<beans:property name="defaultEncoding" value="utf-8" />
 	</beans:bean>
+	
+	<!-- SWAGGER -->
+	<beans:bean id="swagger2Config" class="springfox.documentation.swagger2.configuration.Swagger2DocumentationConfiguration" />
+	<mvc:resources location="classpath:META-INF/resources/" mapping="swagger-ui.html" />
+	<mvc:resources location="classpath:META-INF/resources/webjars/" mapping="/webjars/**"/>
  
     <!-- websocket -->
 <!--    <beans:bean id="chatHandler" class="project.chat.ChatWebSocketHandler" />-->

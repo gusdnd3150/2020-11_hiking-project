@@ -15,7 +15,7 @@ public class HomeController {
 	@GetMapping("/")
 	public ModelAndView home(ModelAndView mav) {
 		mav.setViewName("home.jsp");
-		mav.addObject("list", groupController.test());
+//		mav.addObject("list", groupController.test());
 		return mav;
 	}
 

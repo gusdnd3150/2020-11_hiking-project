@@ -5,16 +5,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class E_P002_D003ProductsVO {
 	
-    /*private String prodNum;
-    private String pCatgNum;
-    private String prodName;
-    private String prodPrice ; 
-    private String prodContent;    
-    private String prodQuantity;   
-    private String prodType;
-    private String prodJoindate;   
-    private String prodModdate;*/
-    
      private String PRODNUM;	//상품번호
      private String PCATEGORYNUM;		//상품분류코드
      private String NAME;		//상품명
@@ -24,8 +14,6 @@ public class E_P002_D003ProductsVO {
      private String TYPE;		//상품구분
      private String CREATEDAT;	//등록일자
      private String UPDATEDAT;		//수정일자
-     
-     
      
 	public String getPRODNUM() {
 		return PRODNUM;
