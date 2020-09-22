@@ -1,5 +1,6 @@
 package project.group.controller;
 
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -31,8 +32,7 @@ public class GroupControllerImpl implements GroupController{
     }
 
     @Override
-    @ResponseBody
-    @PostMapping("/group/new")
+    @ResponseBody @PostMapping("/group")
     public Map insertGroup(@RequestBody GroupVO groupVO) throws Exception {
         Map map = new HashMap();
 
