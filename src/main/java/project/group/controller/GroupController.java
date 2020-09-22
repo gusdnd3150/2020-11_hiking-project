@@ -13,7 +13,7 @@ public interface GroupController {
     ModelAndView groupPage(ModelAndView mav);
 
     @ResponseBody
-    @PostMapping("/group")
+    @PostMapping("/group/new")
     Map insertGroup(@RequestBody GroupVO groupVO) throws Exception;
 
     @GetMapping("/group/lists")
@@ -28,5 +28,6 @@ public interface GroupController {
     @ResponseBody @PostMapping("/group/delete")
     void deleteGroup(@RequestParam("groupNum") int groupNum) throws Exception;
 
+    @RequestMapping("/test")
     List<GroupVO> test();
 }

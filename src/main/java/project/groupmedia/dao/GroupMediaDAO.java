@@ -8,5 +8,6 @@ import java.util.Map;
 public interface GroupMediaDAO {
     void insertGroupMedia(GroupMediaVO groupMediaVO) throws Exception;
     Map<String, Object> selectGroupMedia(int groupNum) throws Exception;
-    Map<String,Object> selectGroupMediaOne(int groupNum) throws Exception;
+
+    List<Map<String,Object>> selectGroupMediaOne(int groupNum) throws Exception;
 }
