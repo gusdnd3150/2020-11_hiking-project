@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import project.group.controller.GroupController;
+import project.group.GroupController;
 
 @Controller
 public class HomeController {
@@ -12,9 +12,9 @@ public class HomeController {
 	@Autowired
 	GroupController groupController;
 	
-	@GetMapping("/")
+	@GetMapping("/main.do")
 	public ModelAndView home(ModelAndView mav) {
-		mav.setViewName("home.jsp");
+		mav.setViewName("home");
 //		mav.addObject("list", groupController.test());
 		return mav;
 	}

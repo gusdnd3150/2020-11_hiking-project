@@ -80,25 +80,25 @@
 	</mvc:interceptors>
 
 	<!-- AuthIntercept -->
-	<beans:bean id="authInterceptor"
-		class="project.user.interceptor.AuthInterceptor" />
-	<mvc:interceptors>
-		<mvc:interceptor>
-			<mvc:mapping path="/mypage/mapageHome" />
-			<mvc:mapping path="/mypage/modifyView" />
-			<beans:ref bean="authInterceptor" />
-		</mvc:interceptor>
-	</mvc:interceptors>
+<!--	<beans:bean id="authInterceptor"-->
+<!--		class="project.user.interceptor.AuthInterceptor" />-->
+<!--	<mvc:interceptors>-->
+<!--		<mvc:interceptor>-->
+<!--			<mvc:mapping path="/mypage/mapageHome" />-->
+<!--			<mvc:mapping path="/mypage/modifyView" />-->
+<!--			<beans:ref bean="authInterceptor" />-->
+<!--		</mvc:interceptor>-->
+<!--	</mvc:interceptors>-->
 
 	<!-- RemembermeInterceptor 자동로그인 -->
-	<beans:bean id="remembermeInterceptor"
-		class="project.user.interceptor.RemembermeInterceptor" />
-	<mvc:interceptors>
-		<mvc:interceptor>
-			<mvc:mapping path="/**/" />
-			<beans:ref bean="remembermeInterceptor" />
-		</mvc:interceptor>
-	</mvc:interceptors>
+<!--	<beans:bean id="remembermeInterceptor"-->
+<!--		class="project.user.interceptor.RemembermeInterceptor" />-->
+<!--	<mvc:interceptors>-->
+<!--		<mvc:interceptor>-->
+<!--			<mvc:mapping path="/**/" />-->
+<!--			<beans:ref bean="remembermeInterceptor" />-->
+<!--		</mvc:interceptor>-->
+<!--	</mvc:interceptors>-->
 
 
 	<!-- websocket -->
