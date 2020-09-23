@@ -5,7 +5,17 @@
 
 <mapper namespace="project.e_P002_D003">
 <!-- 리절트 맵 정의 -->	
-	<resultMap id="ProductsResult" type="e_P002_D003ProductsVO">
+                <!-- 상품 이미지 -->
+     <resultMap id="e_P002_D003PhotoVO" type="e_P002_D003PhotoVO">
+	 <result property="PRODNUM" column="PRODNUM" />
+	 <result property="PPHOTONUM" column="PPHOTONUM" />
+	 <result property="CREATEDAT" column="CREATEDAT" />
+	 <result property="UPDATEDAT" column="UPDATEDAT" />
+     <result property="CONTENTImage" column="CONTENT" javaType="[B" jdbcType="BLOB"  />
+	</resultMap>
+	
+	             <!-- 상품 상세내용 -->
+	<resultMap id="e_P002_D003ProductsVO" type="e_P002_D003ProductsVO">
 		<result property="PRODNUM" column="PRODNUM" />
 		<result property="PCATEGORYNUM" column="PCATEGORYNUM" />
 		<result property="NAME" column="NAME" />
@@ -16,60 +26,95 @@
 		<result property="CREATEDAT" column="CREATEDAT" />
 		<result property="UPDATEDAT" column="UPDATEDAT" />
 	</resultMap>
-
-     <resultMap id="clobMap" type="java.util.HashMap">
-	 <result property="PRODNUM2" column="PRODNUM2" />
-	 <result property="PPHOTONUM" column="PPHOTONUM" />
-	 <result property="CREATEDAT" column="CREATEDAT" />
-	 <result property="UPDATEDAT" column="UPDATEDAT" />
-     <result property="CONTENT1" column="CONTENT1" javaType="[B" jdbcType="BLOB"  />
-     <result property="CONTENT2" column="CONTENT2" javaType="[B" jdbcType="BLOB"  />
-     <result property="CONTENT3" column="CONTENT3" javaType="[B" jdbcType="BLOB"  />
-     <result property="CONTENT4" column="CONTENT4" javaType="[B" jdbcType="BLOB"  />
-	</resultMap>
- 
-     	<insert id="saveImage1" parameterType="java.util.Map"   >
-		<selectKey resultType="int" keyProperty="PRODNUM2" order="BEFORE">
-	    	select count(prodNum) from products
-	    </selectKey>
-	    <![CDATA[
-	    		INSERT INTO prodphoto (prodNum,pPhotoNum,content,createdAt)
-	    		VALUES(#{PRODNUM2},1,#{CONTENT1},sysdate)
-		]]>
-	    </insert>  
-	    
-	    <insert id="saveImage2" parameterType="java.util.Map"   >
-		<selectKey resultType="int" keyProperty="PRODNUM2" order="BEFORE">
-	    	select count(prodNum) from products
-	    </selectKey>
-	    <![CDATA[
-	    		INSERT INTO prodphoto (prodNum,pPhotoNum,content,createdAt)
-	    		VALUES(#{PRODNUM2},2,#{CONTENT2},sysdate)
-		]]>
-	    </insert> 
-	    
-	     <insert id="saveImage3" parameterType="java.util.Map"   >
-		<selectKey resultType="int" keyProperty="PRODNUM2" order="BEFORE">
-	    	select count(prodNum) from products
-	    </selectKey>
-	    <![CDATA[
-	    		INSERT INTO prodphoto (prodNum,pPhotoNum,content,createdAt)
-	    		VALUES(#{PRODNUM2},3,#{CONTENT3},sysdate)
-		]]>
-	    </insert> 
-	    
-	    
-	     <insert id="saveImage4" parameterType="java.util.Map"   >
-		<selectKey resultType="int" keyProperty="PRODNUM2" order="BEFORE">
-	    	select count(prodNum) from products
-	    </selectKey>
-	    <![CDATA[
-	    		INSERT INTO prodphoto (prodNum,pPhotoNum,content,createdAt)
-	    		VALUES(#{PRODNUM2},4,#{CONTENT4},sysdate)
-		]]>
-	    </insert> 
-	    
 	
+		  <!-- 페이징 -->
+	<resultMap id="Paging" type="Paging">
+		<result property="start"  />
+		<result property="end"  />
+		<result property="nowPage"  />
+		<result property="startPage"  />
+		<result property="endPage"  />
+		<result property="total"  />
+		<result property="cntPerPage"  />
+		<result property="lastPage"  />
+	</resultMap>
+	
+	
+<!-- ////////////////////////////////////////////////////////////////////// -->
+
+	<!-- 총 게시글 갯수 출력 -->
+       <select id="countBoard" resultType="int">
+	      SELECT COUNT(*) FROM products
+       </select>
+	
+	<!-- 페이징 처리 후 게시글 조회 -->
+        <select id="selectProduct" resultType="e_P002_D003ProductsVO" parameterType="Paging">
+            <![CDATA[
+	          SELECT * 
+		       FROM (
+			       SELECT  A.* 
+				     FROM (
+						SELECT * 
+						FROM products 
+						ORDER BY prodNum ASC 
+						) A
+				    )
+	         WHERE prodNum BETWEEN #{start} AND #{end} 
+	            ]]>
+       </select>
+    <!-- 페이징 처리 후 게시글 이미지 조회 -->   
+         <select id="shopMainImage" resultMap="e_P002_D003PhotoVO" parameterType="Paging">
+        <![CDATA[
+            SELECT * 
+		       FROM (
+			       SELECT  A.* 
+				     FROM (
+						SELECT * 
+						FROM prodphoto
+						where  pphotoNum=1
+						ORDER BY prodNum ASC 
+						) A
+				    )
+	         WHERE prodNum BETWEEN #{start} AND #{end} 
+        ]]>
+        </select>
+
+
+
+	      <!-- 상품등록 -->
+   <insert id="saveImage"  parameterType="java.util.Map">
+   		<selectKey resultType="int" keyProperty="PRODNUM" order="BEFORE">
+	    	select count(prodNum) from products
+	    </selectKey>
+    <foreach item="item"  collection="list"   open="INSERT ALL" 
+                  separator=" " close="SELECT * FROM DUAL" >
+      INTO prodphoto(PRODNUM,PPHOTONUM,CONTENT,CREATEDAT)
+      VALUES (#{PRODNUM}, #{item.PPHOTONUM}, #{item.CONTENTImage}, sysdate)
+    </foreach>
+  </insert>
+   
+                <!-- 글목록 이미지 하나 -->  
+        <select id="getByteImage" resultMap="e_P002_D003PhotoVO" parameterType="e_P002_D003PhotoVO">
+        <![CDATA[
+            SELECT content
+            FROM prodphoto
+            WHERE pphotoNum = 1 and prodNum = #{PRODNUM}
+            ORDER BY prodNum
+        ]]>
+        </select>
+        
+          
+     <select id="shopMainText" resultMap="e_P002_D003ProductsVO" parameterType="e_P002_D003ProductsVO">
+        <![CDATA[
+           select p.prodNum,p.name,p.price,p.content
+          from products p inner join prodphoto i on p.prodnum =i.prodnum
+          where i.pphotonum=1
+          order by p.prodNum
+        ]]>
+        </select>
+
+
+	          <!-- 상품등록 상세내용 -->
 	 <insert id="addProduct" parameterType="java.util.Map"   >
 		<selectKey resultType="String" keyProperty="PRODNUM" order="BEFORE">
 	    	select seq_prod_prodNum.nextval from dual
