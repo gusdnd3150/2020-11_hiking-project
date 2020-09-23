@@ -44,10 +44,10 @@ public class GroupMediaController {
 //            list.add(encodedBytes);
 //        }
     }
-    @RequestMapping("/group/detail/media/{groupNum}")
-    @ResponseBody
-    public List<Map<String,Object>> selectGroupDetailMedia(@PathVariable("groupNum") int groupNum) throws Exception {
-        List<Map<String,Object>> list = groupMultiService.selectGroupMediaOne(groupNum);
-        return list;
-    }
+//    @RequestMapping("/group/detail/media/{groupNum}")
+//    @ResponseBody
+//    public List<Map<String,Object>> selectGroupDetailMedia(@PathVariable("groupNum") int groupNum) throws Exception {
+//        List<Map<String,Object>> list = groupMultiService.selectGroupMediaOne(groupNum);
+//        return list;
+//    }
 }

@@ -35,14 +35,10 @@ public class GroupMediaServiceImpl implements GroupMediaService {
         return map;
     }
 
-    @Override
-    public Map<String,Object> selectGroupMediaOne(int groupNum){
-        Map<String,Object> map = null;
-        try{
-            map = groupMediaDAO.selectGroupMediaOne(groupNum);
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-        return map;
-    }
+//    @Override
+//    public Map<String,Object> selectGroupMediaOne(int groupNum){
+//        Map<String,Object> map = null;
+//            map = groupMediaDAO.selectGroupMediaOne(groupNum);
+//        return map;
+//    }
 }

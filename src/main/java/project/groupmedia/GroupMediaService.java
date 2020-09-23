@@ -7,5 +7,5 @@ public interface GroupMediaService {
     void insertGroupMedia(GroupMediaVO groupMediaVO);
     Map<String, Object> selectGroupMedia(int groupNum);
 
-    Map<String,Object> selectGroupMediaOne(int groupNum);
+//    Map<String,Object> selectGroupMediaOne(int groupNum);
 }
