@@ -1,11 +1,12 @@
 package project.user.service;
 
+import java.util.Date;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 
 import project.user.dao.UserDAO;
 import project.user.dto.LoginDTO;
@@ -35,6 +36,17 @@ public class UserServiceImpl implements UserService {
 	public UserVO logIn(LoginDTO loginDTO) throws Exception {
 		System.out.println("서비스왔다감");
 		return userDAO.logIn(loginDTO);
+	}
+
+	@Override
+	public void keepLogin(String id, String sessionId, Date sessionLimit) throws Exception {
+		userDAO.keepLogIn(id, sessionId, sessionLimit);
+		
+	}
+
+	@Override
+	public UserVO checkLoginBefore(String value) throws Exception {
+		return userDAO.checkUserWithSessionKey(value);
 	}
 	
 	

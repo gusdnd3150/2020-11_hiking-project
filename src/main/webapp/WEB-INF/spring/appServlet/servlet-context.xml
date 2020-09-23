@@ -68,12 +68,56 @@
 		<beans:property name="maxInMemorySize" value="1000000" />
 		<beans:property name="defaultEncoding" value="utf-8" />
 	</beans:bean>
-	
+
+	<!-- Interceptor -->
+	<beans:bean id="loginInterceptor"
+		class="project.user.interceptor.LoginInterceptor" />
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/user/logIn" />
+			<beans:ref bean="loginInterceptor" />
+		</mvc:interceptor>
+	</mvc:interceptors>
+
+	<!-- AuthIntercept -->
+	<beans:bean id="authInterceptor"
+		class="project.user.interceptor.AuthInterceptor" />
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/mypage/mapageHome" />
+			<mvc:mapping path="/mypage/modifyView" />
+			<beans:ref bean="authInterceptor" />
+		</mvc:interceptor>
+	</mvc:interceptors>
+
+	<!-- RemembermeInterceptor 자동로그인 -->
+	<beans:bean id="remembermeInterceptor"
+		class="project.user.interceptor.RemembermeInterceptor" />
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**/" />
+			<beans:ref bean="remembermeInterceptor" />
+		</mvc:interceptor>
+	</mvc:interceptors>
+
+
+	<!-- websocket -->
+	<!-- <beans:bean id="chatHandler" class="project.chat.ChatWebSocketHandler"
+		/> -->
+	<!-- -->
+	<!-- <websocket:handlers> -->
+	<!-- <websocket:mapping handler="chatHandler" path="/chat-ws" /> -->
+	<!-- <websocket:handshake-interceptors> -->
+	<!-- <beans:bean class="org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor"
+		/> -->
+	<!-- </websocket:handshake-interceptors> -->
+	<!-- </websocket:handlers> -->
+
 	<!-- SWAGGER -->
 	<beans:bean id="swagger2Config" class="springfox.documentation.swagger2.configuration.Swagger2DocumentationConfiguration" />
 	<mvc:resources location="classpath:META-INF/resources/" mapping="swagger-ui.html" />
 	<mvc:resources location="classpath:META-INF/resources/webjars/" mapping="/webjars/**"/>
- 
+
     <!-- websocket -->
 <!--    <beans:bean id="chatHandler" class="project.chat.ChatWebSocketHandler" />-->
 <!--    -->

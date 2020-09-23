@@ -7,7 +7,7 @@ public interface MypageService {
 	
 	
 	
-	public void updateUser(LoginDTO loginDTO) throws Exception; // 회원수정
+	public void updateUser(UserVO userVO) throws Exception; // 회원수정
 	
 	public void deleteUser(LoginDTO loginDTO) throws Exception; // 회원탈퇴
 
