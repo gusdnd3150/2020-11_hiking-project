@@ -6,15 +6,16 @@
 	<typeAliases>
 
 		<!-- group -->
-	    <typeAlias type="project.group.vo.GroupVO"  alias="groupVO" />
-		<typeAlias type="project.groupmedia.vo.GroupMediaVO" alias="groupMediaVO" />
+	    <typeAlias type="project.group.GroupVO" alias="groupVO" />
+		<typeAlias type="project.groupmedia.GroupMediaVO" alias="groupMediaVO" />
 
 		<!-- user -->
 		<typeAlias type="project.user.vo.UserVO"  alias="userVO" />
 
 		<!-- products -->
 		<typeAlias type="project.E_P002_D003.vo.E_P002_D003ProductsVO" alias="e_P002_D003ProductsVO"/>
-		<typeAlias type="project.E_P002_D003.file.E_P002_D003PhotoVO" alias="e_P002_D003PhotoVO"/>
+		<typeAlias type="project.E_P002_D003.vo.E_P002_D003PhotoVO" alias="e_P002_D003PhotoVO"/>
+		<typeAlias type="project.Paging" alias="Paging"/>
 
 		<!-- admin -->
 		<typeAlias type="project.admin.e_p001.vo.E_p001VO"  alias="e_p001VO" />
