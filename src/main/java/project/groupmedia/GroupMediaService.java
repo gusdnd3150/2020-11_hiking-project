@@ -1,6 +1,4 @@
-package project.groupmedia.service;
-
-import project.groupmedia.vo.GroupMediaVO;
+package project.groupmedia;
 
 import java.util.List;
 import java.util.Map;

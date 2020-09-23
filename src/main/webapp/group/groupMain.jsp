@@ -27,7 +27,7 @@
                     <div class="cont">
                         <strong>${list.name}</strong>
                         <p>${list.detail}</p>
-                        <a href="#">바로가기</a>
+                        <a href="/group/d">바로가기</a>
                     </div>
                 </li>
             </c:forEach>

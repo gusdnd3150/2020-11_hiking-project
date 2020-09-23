@@ -6,8 +6,8 @@
 	<typeAliases>
 
 		<!-- group -->
-	    <typeAlias type="project.group.vo.GroupVO"  alias="groupVO" />
-		<typeAlias type="project.groupmedia.vo.GroupMediaVO" alias="groupMediaVO" />
+	    <typeAlias type="project.group.GroupVO" alias="groupVO" />
+		<typeAlias type="project.groupmedia.GroupMediaVO" alias="groupMediaVO" />
 
 		<!-- user -->
 		<typeAlias type="project.user.vo.UserVO"  alias="userVO" />

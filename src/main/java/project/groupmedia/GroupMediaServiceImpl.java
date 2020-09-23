@@ -1,11 +1,9 @@
-package project.groupmedia.service;
+package project.groupmedia;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import project.groupmedia.dao.GroupMediaDAO;
-import project.groupmedia.vo.GroupMediaVO;
 
 import java.util.List;
 import java.util.Map;

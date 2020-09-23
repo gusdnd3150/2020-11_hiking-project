@@ -3,35 +3,35 @@
         "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
 
 <tiles-definitions>
-   <definition name="baseLayout"  template="/WEB-INF/views/common/layout.jsp">
+   <definition name="baseLayout"  template="/common/layout.jsp">
       <put-attribute name="title" value="" />
-      <put-attribute name="header" value="/WEB-INF/views/common/header.jsp" />
-      <put-attribute name="side" value="/WEB-INF/views/common/side.jsp" />
+      <put-attribute name="header" value="/common/header.jsp" />
+      <put-attribute name="side" value="/common/side.jsp" />
       <put-attribute name="body" value="" />
-      <put-attribute name="footer" value="/WEB-INF/views/common/footer.jsp" />
+      <put-attribute name="footer" value="/common/footer.jsp" />
    </definition>
 
    <definition name="home.jsp" extends="baseLayout">
       <put-attribute name="side" value="" />
-      <put-attribute name="body" value="/WEB-INF/views/home.jsp" />
+      <put-attribute name="body" value="home.jsp" />
    </definition>
 
    <definition name="group/*" extends="baseLayout">
       <put-attribute name="side" value="" />
-      <put-attribute name="body" value="/WEB-INF/views/group/{1}" />
+      <put-attribute name="body" value="group/{1}" />
    </definition>
 
    <definition name="/*/mypageHome.jsp" extends="baseLayout">
       <put-attribute name="title" value="" />
-      <put-attribute name="header" value="/WEB-INF/views/common/header.jsp" />
+      <put-attribute name="header" value="common/header.jsp" />
       <put-attribute name="side" value="" />
-      <put-attribute name="footer" value="/WEB-INF/views/common/footer.jsp" />
-      <put-attribute name="body" value="/WEB-INF/views/user/mypageHome.jsp" />
+      <put-attribute name="footer" value="common/footer.jsp" />
+      <put-attribute name="body" value="user/mypageHome.jsp" />
    </definition>
 
    <definition name="productDetail" extends="baseLayout">
       <put-attribute name="title" value="주문상세" />
-      <put-attribute name="body" value="/WEB-INF/views/product/productDetail.jsp" />
+      <put-attribute name="body" value="product/productDetail.jsp" />
    </definition>
 
 </tiles-definitions>

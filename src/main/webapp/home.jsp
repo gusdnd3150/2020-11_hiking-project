@@ -5,7 +5,7 @@
 <link rel="stylesheet" type="text/css" href="http://kenwheeler.github.io/slick/slick/slick.css" />
 <link rel="stylesheet" type="text/css" href="http://kenwheeler.github.io/slick/slick/slick-theme.css" />
 <link rel="stylesheet" type="text/css" href="/resources/css/views/home.css">
-
+<jsp:include page="/common/header.jsp" />
 	<!-- slider -->
 	<div class="single-item">
 		<div><img src="resources/img/slider/photo1.jpeg"></div>
@@ -56,3 +56,4 @@
 
 	</script>
 </body>
+<jsp:include page="/common/footer.jsp" />

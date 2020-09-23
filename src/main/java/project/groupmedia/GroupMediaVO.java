@@ -1,4 +1,4 @@
-package project.groupmedia.vo;
+package project.groupmedia;
 
 import lombok.Data;
 import org.springframework.stereotype.Component;

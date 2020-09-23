@@ -1,6 +1,5 @@
-package project.groupmedia.controller;
+package project.groupmedia;
 
-import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -9,22 +8,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import project.groupmedia.service.GroupMediaService;
-import project.groupmedia.vo.GroupMediaVO;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
 @Controller
-public class GroupMediaControllerImpl implements GroupMediaController {
+public class GroupMediaController {
 
     @Autowired
     GroupMediaVO groupMediaVO;
     @Autowired
     GroupMediaService groupMultiService;
 
-    @Override
     @PostMapping("/group/media/new")
     public String insertGroupMedia(@RequestBody GroupMediaVO vo, @RequestParam("content") MultipartFile file) throws IOException {
         vo.setContent(file.getBytes());
@@ -33,7 +29,6 @@ public class GroupMediaControllerImpl implements GroupMediaController {
         //groupmedia넣는path
     }
 
-    @Override
     @RequestMapping("/group/media/{groupNum}")
     public ResponseEntity<byte[]> selectGroupMedia(@PathVariable("groupNum") int groupNum) throws Exception {
         Map<String,Object> map = groupMultiService.selectGroupMedia(groupNum);
