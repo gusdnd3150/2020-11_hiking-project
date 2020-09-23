@@ -8,9 +8,13 @@ import java.util.Map;
 
 public interface GroupService {
 
-    void insertGroup(GroupVO groupVO) throws Exception;
-    List<GroupVO> selectGroup(Map<String, Object> searchMap);
-    void updateGroup(GroupVO groupVO);
+    void insertGroup(GroupVO vo) throws Exception;
+
+    List<GroupVO> selectGroupList();
+
+    void updateGroup(GroupVO vo);
+
     void deleteGroup(int groupNum);
-    List<GroupVO> test();
+
+    Map selectGroupDetail(int groupNum);
 }

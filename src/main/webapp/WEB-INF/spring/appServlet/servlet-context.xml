@@ -37,9 +37,7 @@
 
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-<!--		<beans:property name="prefix" value="/" />-->
 		<beans:property name="suffix" value=".jsp" />
-<!--		<beans:property name="order" value="2" />-->
 		<beans:property name="order" value="1" />
 	</beans:bean>
 
@@ -49,17 +47,6 @@
 		class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
 		<beans:property name="defaultLocale" value="ko" />
 	</beans:bean>
-
-	<!-- Tiles 뷰 리졸버 -->
-<!--	<beans:bean id="viewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">-->
-<!--		<beans:property name="viewClass" value="org.springframework.web.servlet.view.tiles3.TilesView" />-->
-<!--		<beans:property name="order" value="1" />-->
-<!--	</beans:bean>-->
-<!--	&lt;!&ndash; Tiles 설정 파일 &ndash;&gt;-->
-<!--	<beans:bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">-->
-<!--		<beans:property name="definitions" value="classpath:tiles/*.xml" />-->
-<!--		<beans:property name="preparerFactoryClass" value="org.springframework.web.servlet.view.tiles3.SpringBeanPreparerFactory"/>-->
-<!--	</beans:bean>-->
 
 	<!-- multiple fileUpload -->
 	<beans:bean id="multipartResolver"
@@ -99,19 +86,6 @@
 <!--			<beans:ref bean="remembermeInterceptor" />-->
 <!--		</mvc:interceptor>-->
 <!--	</mvc:interceptors>-->
-
-
-	<!-- websocket -->
-	<!-- <beans:bean id="chatHandler" class="project.chat.ChatWebSocketHandler"
-		/> -->
-	<!-- -->
-	<!-- <websocket:handlers> -->
-	<!-- <websocket:mapping handler="chatHandler" path="/chat-ws" /> -->
-	<!-- <websocket:handshake-interceptors> -->
-	<!-- <beans:bean class="org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor"
-		/> -->
-	<!-- </websocket:handshake-interceptors> -->
-	<!-- </websocket:handlers> -->
 
 	<!-- SWAGGER -->
 	<beans:bean id="swagger2Config" class="springfox.documentation.swagger2.configuration.Swagger2DocumentationConfiguration" />

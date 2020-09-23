@@ -24,63 +24,61 @@
     
     <insert id="insertGroup" parameterType="groupVO">
         <![CDATA[
-        INSERT INTO GROUPS
-        VALUES (
-            groups_seq.nextval,
-            #{name},
-            1,
-            1,
-            #{staffMax},
-            #{detail},
-            1,
-            #{startDay},
-            sysdate,
-            sysdate,
-            #{area},
-            #{ageStart},
-            #{ageEnd},
-            #{sex},
-            'mt-1'
-            )
+            INSERT INTO groups
+            VALUES (
+                groups_seq.nextval,
+                #{name},
+                1,
+                1,
+                #{staffMax},
+                #{detail},
+                1,
+                #{startDay},
+                sysdate,
+                sysdate,
+                #{area},
+                #{ageStart},
+                #{ageEnd},
+                #{sex},
+                'mt-1'
+                )
         ]]>
     </insert>
 
-    <select id="selectGroup" resultMap="groupResult" parameterType="java.util.Map">
+    <select id="selectGroupList" resultMap="groupResult">
         <![CDATA[
             SELECT *
             FROM groups
         ]]>
-        <where>
-            <if test="name != '' and name != null">
-                name = #{name}
-            </if>
-        </where>
     </select>
 
     <update id="updateGroup" parameterType="groupVO">
-        UPDATE groups
-        SET name = #{name},
-            detail = #{detail},
-            staffMax = #{staffMax},
-            detail = #{detail},
-            updatedAt = sysdate,
-            area = #{area},
-            ageStart = #{ageStart},
-            ageEnd = #{ageEnd},
-            sex = #{sex} ,
-        WHERE groupNum = #{groupNum}
+            UPDATE groups
+            SET name = #{name},
+                staffMax = #{staffMax},
+                detail = #{detail},
+                updatedAt = sysdate,
+                area = #{area},
+                ageStart = #{ageStart},
+                ageEnd = #{ageEnd},
+                sex = #{sex}
+        <where>
+            <if test="groupNum != '' and groupNum != null">
+                groupNum = #{groupNum}
+            </if>
+        </where>
     </update>
 
-    <delete id="deleteGroup" parameterType="java.util.Map">
+    <delete id="deleteGroup" parameterType="map">
         DELETE FROM groups
         WHERE groupNum = #{groupNum}
     </delete>
 
-    <select id="selectGroupList" resultMap="groupResult" parameterType="java.util.Map">
+    <select id="selectGroupDetail" resultType="map" parameterType="Integer">
         <![CDATA[
             SELECT *
             FROM groups
-            WHERE rownum <=4
+            WHERE groupNum = #{groupNum}
         ]]>
     </select>
 </mapper>

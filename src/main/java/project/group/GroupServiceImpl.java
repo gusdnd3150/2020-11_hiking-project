@@ -19,20 +19,19 @@ public class GroupServiceImpl implements GroupService{
         groupDAO.insertGroup(vo);
     }
 
-    public List<GroupVO> selectGroup(Map<String, Object> map){
-        return groupDAO.selectGroup(map);
+    public List<GroupVO> selectGroupList(){
+        return groupDAO.selectGroupList();
     }
 
-    public void updateGroup(GroupVO groupVO){
-        groupDAO.updateGroup(groupVO);
+    public void updateGroup(GroupVO vo){
+        groupDAO.updateGroup(vo);
     }
 
     public void deleteGroup(int groupNum){
         groupDAO.deleteGroup(groupNum);
     }
 
-    public List<GroupVO> test(){
-        List<GroupVO> list = groupDAO.test();
-        return list;
+    public Map selectGroupDetail(int groupNum){
+        return groupDAO.selectGroupDetail(groupNum);
     }
 }

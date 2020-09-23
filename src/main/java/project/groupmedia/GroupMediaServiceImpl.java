@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Map;
 
-@Service
+@Service("groupMediaService")
 public class GroupMediaServiceImpl implements GroupMediaService {
 
     @Autowired
@@ -25,20 +25,13 @@ public class GroupMediaServiceImpl implements GroupMediaService {
     }
 
     @Override
-    public Map<String, Object> selectGroupMedia(int groupNum){
+    public Map<String, Object> selectGroupMediaOne(int groupNum){
         Map<String, Object> map = null;
         try{
-            map = groupMediaDAO.selectGroupMedia(groupNum);
+            map = groupMediaDAO.selectGroupMediaOne(groupNum);
         } catch (Exception e){
             e.printStackTrace();
         }
         return map;
     }
-
-//    @Override
-//    public Map<String,Object> selectGroupMediaOne(int groupNum){
-//        Map<String,Object> map = null;
-//            map = groupMediaDAO.selectGroupMediaOne(groupNum);
-//        return map;
-//    }
 }

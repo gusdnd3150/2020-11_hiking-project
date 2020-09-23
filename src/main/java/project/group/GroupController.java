@@ -1,66 +1,55 @@
 package project.group;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import project.groupmedia.GroupMediaService;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Slf4j
-@Controller("/group")
+@Controller
+@RequestMapping("/group")
 public class GroupController{
 
     @Resource(name = "groupService")
     private GroupService groupService;
 
-    @ResponseBody
-    @PostMapping("/group/new")
-    public Map insertGroup(@RequestBody GroupVO groupVO) throws Exception {
-        Map map = new HashMap();
+    @Resource(name = "groupMediaService")
+    private GroupMediaService groupMediaService;
 
-        groupService.insertGroup(groupVO);
-
-        return map;
+    @PostMapping("/insert.do")
+    public void insertGroup(GroupVO vo) throws Exception {
+        groupService.insertGroup(vo);
     }
 
-    @ResponseBody
-    @PostMapping("/groupList")
-    public ModelAndView selectGroup(@RequestParam("groupName")String groupName)throws Exception{
-        Map<String, Object> searchMap = new HashMap<String, Object>();
-        searchMap.put("groupName",groupName);
-
-        List<GroupVO> list = groupService.selectGroup(searchMap);
-
-        ModelAndView mav = new ModelAndView("groupMain.jsp");
-        mav.addObject("selectList", list);
+    @GetMapping("/list.do")
+    public ModelAndView selectGroupList() throws Exception{
+        List<GroupVO> groupList = groupService.selectGroupList();
+        ModelAndView mav = new ModelAndView("main");
+        mav.addObject("group",groupList);
         return mav;
     }
 
-    @ResponseBody
-    @PostMapping("/group/update")
-    public void updateGroup(@RequestBody GroupVO groupVO) throws Exception {
-        groupService.updateGroup(groupVO);
+    @PostMapping("/update.do")
+    public void updateGroup(@ModelAttribute GroupVO vo) throws Exception {
+        groupService.updateGroup(vo);
     }
 
-    @ResponseBody
-    @PostMapping("/group/delete")
+    @PostMapping("/delete.do")
     public void deleteGroup(@RequestParam("groupNum") int groupNum) throws Exception {
         groupService.deleteGroup(groupNum);
     }
 
-    @RequestMapping("/test")
-    public List<GroupVO> test(){
-        List<GroupVO> list = groupService.test();
-        return list;
-    }
-
-    @GetMapping("/group/{groupNum}")
-    public String groupDetail(@PathVariable("groupNum")int groupNum){
-        return "";
+    @GetMapping("/detail/{groupNum}")
+    public ModelAndView groupDetail(@PathVariable("groupNum") int groupNum){
+        ModelAndView mav = new ModelAndView();
+        mav.setViewName("/group/detail");
+        Map<String,Object> map = groupService.selectGroupDetail(groupNum);
+        mav.addObject("group", map);
+        return mav;
     }
 }

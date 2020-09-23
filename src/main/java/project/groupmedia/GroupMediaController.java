@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
+@RequestMapping("/group/media")
 public class GroupMediaController {
 
     @Autowired
@@ -21,17 +22,16 @@ public class GroupMediaController {
     @Autowired
     GroupMediaService groupMultiService;
 
-    @PostMapping("/group/media/new")
+    @PostMapping("/insert.do")
     public String insertGroupMedia(@RequestBody GroupMediaVO vo, @RequestParam("content") MultipartFile file) throws IOException {
         vo.setContent(file.getBytes());
         groupMultiService.insertGroupMedia(groupMediaVO);
         return "";
-        //groupmedia넣는path
     }
 
-    @RequestMapping("/group/media/{groupNum}")
+    @RequestMapping("/{groupNum}")
     public ResponseEntity<byte[]> selectGroupMedia(@PathVariable("groupNum") int groupNum) throws Exception {
-        Map<String,Object> map = groupMultiService.selectGroupMedia(groupNum);
+        Map<String,Object> map = groupMultiService.selectGroupMediaOne(groupNum);
 
         byte[] imageContent = (byte[]) map.get("content");
         final HttpHeaders headers = new HttpHeaders();
@@ -44,10 +44,4 @@ public class GroupMediaController {
 //            list.add(encodedBytes);
 //        }
     }
-//    @RequestMapping("/group/detail/media/{groupNum}")
-//    @ResponseBody
-//    public List<Map<String,Object>> selectGroupDetailMedia(@PathVariable("groupNum") int groupNum) throws Exception {
-//        List<Map<String,Object>> list = groupMultiService.selectGroupMediaOne(groupNum);
-//        return list;
-//    }
 }

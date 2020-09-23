@@ -11,8 +11,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import project.user.controller.UserControllerImpl;
-
 public class LoginInterceptor extends HandlerInterceptorAdapter {
 
 	private static final String LOGIN = "LOGIN";

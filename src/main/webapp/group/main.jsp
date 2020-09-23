@@ -2,10 +2,10 @@
          pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page session="false" %>
+<jsp:include page="/common/header.jsp" />
 <link rel="stylesheet" type="text/css" href="/resources/css/views/group/groupList.css" />
 <body>
 <div class="container">
-
     <div class="search_container">
         <div class="search_box">
             <h1>등산로 검색</h1>
@@ -15,19 +15,18 @@
             </div>
         </div>
     </div>
-
     <div class="list_wrap">
         <div class="list_title">
             <h1>추천 등산모임</h1>
         </div>
         <div class="list_content">
-            <c:forEach var="list" items="${list}">
+            <c:forEach items="${group}" var="group">
                 <li class="item">
-                    <img class="image" src="/group/media/${list.groupNum}"></img>
+                    <img class="image" src="/group/media/${group.groupNum}" />
                     <div class="cont">
-                        <strong>${list.name}</strong>
-                        <p>${list.detail}</p>
-                        <a href="/group/d">바로가기</a>
+                        <strong>${group.name}</strong>
+                        <p>${group.detail}</p>
+                        <a href="/group/detail/${group.groupNum}">바로가기</a>
                     </div>
                 </li>
             </c:forEach>

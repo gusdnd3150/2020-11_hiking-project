@@ -17,13 +17,8 @@ public class GroupMediaDAO {
         sqlSession.insert("mapper.groupMedia.insertGroupMedia", groupMediaVO);
     }
 
-    public Map<String, Object> selectGroupMedia(int groupNum) throws Exception {
+    public Map<String, Object> selectGroupMediaOne(int groupNum) throws Exception {
         Map<String, Object> map = sqlSession.selectOne("mapper.groupMedia.selectGroupMedia",groupNum);
         return map;
-    }
-
-    public List<Map<String,Object>> selectGroupMediaOne(int groupNum) throws Exception {
-        List<Map<String,Object>> list = sqlSession.selectList("mapper.groupMedia.selectGroupMediaOne", groupNum);
-        return list;
     }
 }

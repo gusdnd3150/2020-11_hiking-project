@@ -13,12 +13,12 @@ public class GroupDAO{
     @Autowired
     private SqlSession sqlSession;
 
-    public void insertGroup(GroupVO vo) {
+    public void insertGroup(GroupVO vo){
         sqlSession.insert("group.insertGroup", vo);
     }
 
-    public List<GroupVO> selectGroup(Map<String, Object> map) {
-        return sqlSession.selectList("group.selectGroup", map);
+    public List<GroupVO> selectGroupList(){
+        return sqlSession.selectList("group.selectGroupList");
     }
 
     public void updateGroup(GroupVO vo){
@@ -29,7 +29,7 @@ public class GroupDAO{
         sqlSession.delete("group.deleteGroup", groupNum);
     }
 
-    public List<GroupVO> test(){
-        return sqlSession.selectList("group.selectGroupList");
+    public Map selectGroupDetail(int groupNum){
+        return sqlSession.selectOne("group.selectGroupDetail", groupNum);
     }
 }
