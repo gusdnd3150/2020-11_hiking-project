@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="mapper.groupMedia">
+<mapper namespace="groupMedia">
     <resultMap id="groupMediaResult" type="groupMediaVO">
         <result property="groupNum" column="groupNum" />
         <result property="mediaNum" column="mediaNum" />
@@ -12,17 +12,13 @@
         <result property="createdAt" column="createdAt" />
         <result property="updatedAt" column="updatedAt" />
     </resultMap>
-    <resultMap id="groupMediaContent" type="hashmap">
-        <result property="content" column="content" jdbcType="BLOB" javaType="[B"/>
-    </resultMap>
 
     <insert id="insertGroupMedia" parameterType="groupMediaVO">
         insert into groupsMedia
         values (#{groupNum}, #{mediaNum}, #{type}, #{content}, sysdate, sysdate)
     </insert>
 
-    <!-- groupNum 일치 1개 content select -->
-    <select id="selectGroupMedia" resultMap="groupMediaContent" parameterType="Integer">
+    <select id="selectGroupMedia" resultType="_byte[]" parameterType="Integer">
         <![CDATA[
             SELECT content
             FROM groupsMedia
@@ -32,11 +28,12 @@
         ]]>
     </select>
 
-<!--    <select id="selectGroupMediaOne" resultMap="groupMediaResult" parameterType="Integer">-->
-<!--        <![CDATA[-->
-<!--            SELECT content-->
-<!--            FROM groupsMedia-->
-<!--            WHERE groupNum = #{groupNum}-->
-<!--        ]]>-->
-<!--    </select>-->
+    <select id="selectGroupMediaDetail" resultType="_byte[]" parameterType="Integer">
+        <![CDATA[
+            SELECT content
+            FROM groupsMedia
+            WHERE groupNum = #{groupNum}
+            ORDER BY mediaNum
+        ]]>
+    </select>
 </mapper>

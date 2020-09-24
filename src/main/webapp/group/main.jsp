@@ -36,13 +36,13 @@
     <div class="list_title">
         <h1>추천 등산로</h1>
     </div>
-    <div class="list_content">
-        <c:forEach var="list" items="${list}">
+    <div class="group_list">
+        <c:forEach var="group" items="${group}">
             <li class="item">
-                <img class="image" src="/group/media/${list.groupNum}"></img>
+                <img class="image" src="/group/media/${group.groupNum}"></img>
                 <div class="cont">
-                    <strong>${list.name}</strong>
-                    <p>${list.detail}</p>
+                    <strong>${group.name}</strong>
+                    <p>${group.detail}</p>
                     <a href="#">바로가기</a>
                 </div>
             </li>

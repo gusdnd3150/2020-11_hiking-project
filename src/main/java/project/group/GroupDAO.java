@@ -32,4 +32,8 @@ public class GroupDAO{
     public Map selectGroupDetail(int groupNum){
         return sqlSession.selectOne("group.selectGroupDetail", groupNum);
     }
+
+    public List<Map> selectGroupsByKeyword(String keyword){
+        return sqlSession.selectList("group.selectGroupsByKeyword", keyword);
+    }
 }

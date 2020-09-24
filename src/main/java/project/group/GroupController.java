@@ -27,7 +27,7 @@ public class GroupController{
     }
 
     @GetMapping("/list.do")
-    public ModelAndView selectGroupList() throws Exception{
+    public ModelAndView selectGroupList(){
         List<GroupVO> groupList = groupService.selectGroupList();
         ModelAndView mav = new ModelAndView("main");
         mav.addObject("group",groupList);
@@ -35,12 +35,12 @@ public class GroupController{
     }
 
     @PostMapping("/update.do")
-    public void updateGroup(@ModelAttribute GroupVO vo) throws Exception {
+    public void updateGroup(@ModelAttribute GroupVO vo){
         groupService.updateGroup(vo);
     }
 
     @PostMapping("/delete.do")
-    public void deleteGroup(@RequestParam("groupNum") int groupNum) throws Exception {
+    public void deleteGroup(@RequestParam("groupNum") int groupNum){
         groupService.deleteGroup(groupNum);
     }
 

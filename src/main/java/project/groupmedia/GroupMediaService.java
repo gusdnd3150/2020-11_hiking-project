@@ -5,5 +5,6 @@ import java.util.Map;
 
 public interface GroupMediaService {
     void insertGroupMedia(GroupMediaVO groupMediaVO);
-    Map<String, Object> selectGroupMediaOne(int groupNum);
+    byte[] selectGroupMediaOne(int groupNum);
+    List<byte[]> selectGroupMediaDetail(int groupNum);
 }

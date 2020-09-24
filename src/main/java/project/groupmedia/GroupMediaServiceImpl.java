@@ -5,16 +5,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 
 @Service("groupMediaService")
 public class GroupMediaServiceImpl implements GroupMediaService {
 
-    @Autowired
+    @Resource(name = "groupMediaDAO")
     GroupMediaDAO groupMediaDAO;
 
-    @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public void insertGroupMedia(GroupMediaVO groupMediaVO){
         try {
@@ -24,14 +24,11 @@ public class GroupMediaServiceImpl implements GroupMediaService {
         }
     }
 
-    @Override
-    public Map<String, Object> selectGroupMediaOne(int groupNum){
-        Map<String, Object> map = null;
-        try{
-            map = groupMediaDAO.selectGroupMediaOne(groupNum);
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-        return map;
+    public byte[] selectGroupMediaOne(int groupNum){
+        return groupMediaDAO.selectGroupMediaOne(groupNum);
+    }
+
+    public List<byte[]> selectGroupMediaDetail(int groupNum){
+        return groupMediaDAO.selectGroupMediaDetail(groupNum);
     }
 }

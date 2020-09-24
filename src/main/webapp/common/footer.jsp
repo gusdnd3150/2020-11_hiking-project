@@ -17,3 +17,5 @@
         <li>찾아오는 길: <a href="#">약도</a></li>
     </ul>
 </footer>
+</body>
+</html>

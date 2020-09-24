@@ -13,12 +13,16 @@ public class GroupMediaDAO {
     @Autowired
     private SqlSession sqlSession;
 
-    public void insertGroupMedia(GroupMediaVO groupMediaVO) throws Exception {
-        sqlSession.insert("mapper.groupMedia.insertGroupMedia", groupMediaVO);
+    public void insertGroupMedia(GroupMediaVO groupMediaVO){
+        sqlSession.insert("groupMedia.insertGroupMedia", groupMediaVO);
     }
 
-    public Map<String, Object> selectGroupMediaOne(int groupNum) throws Exception {
-        Map<String, Object> map = sqlSession.selectOne("mapper.groupMedia.selectGroupMedia",groupNum);
-        return map;
+    public byte[] selectGroupMediaOne(int groupNum){
+        return sqlSession.selectOne("groupMedia.selectGroupMedia",groupNum);
+    }
+
+    public List<byte[]> selectGroupMediaDetail(int groupNum){
+        return sqlSession.selectList("groupMedia.selectGroupMediaDetail", groupNum);
+
     }
 }

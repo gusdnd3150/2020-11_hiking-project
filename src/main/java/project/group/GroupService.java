@@ -17,4 +17,6 @@ public interface GroupService {
     void deleteGroup(int groupNum);
 
     Map selectGroupDetail(int groupNum);
+
+    List<Map> selectGroupsByKeyword(String keyword);
 }

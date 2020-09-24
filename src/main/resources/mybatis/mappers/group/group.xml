@@ -45,10 +45,13 @@
         ]]>
     </insert>
 
+    <!-- 리스트 4개 불러오기 -->
     <select id="selectGroupList" resultMap="groupResult">
         <![CDATA[
             SELECT *
             FROM groups
+            WHERE rownum <= 4
+            ORDER BY groupNum ASC
         ]]>
     </select>
 
@@ -80,5 +83,19 @@
             FROM groups
             WHERE groupNum = #{groupNum}
         ]]>
+    </select>
+
+    <select id="selectGroupsByKeyword" resultType="map" parameterType="String">
+        <![CDATA[
+            SELECT *
+            FROM groups
+        ]]>
+        <where>
+            <if test="value != '' and value != null">
+                name LIKE '%'||#{keyword}||'%'
+                OR area LIKE '%'||#{keyword}||'%'
+                OR detail LIKE '%'||#{keyword}||'%'
+            </if>
+        </where>
     </select>
 </mapper>

@@ -20,20 +20,18 @@ public class GroupMediaController {
     @Autowired
     GroupMediaVO groupMediaVO;
     @Autowired
-    GroupMediaService groupMultiService;
+    GroupMediaService groupMediaService;
 
     @PostMapping("/insert.do")
     public String insertGroupMedia(@RequestBody GroupMediaVO vo, @RequestParam("content") MultipartFile file) throws IOException {
         vo.setContent(file.getBytes());
-        groupMultiService.insertGroupMedia(groupMediaVO);
+        groupMediaService.insertGroupMedia(groupMediaVO);
         return "";
     }
 
-    @RequestMapping("/{groupNum}")
+    @GetMapping("/{groupNum}")
     public ResponseEntity<byte[]> selectGroupMedia(@PathVariable("groupNum") int groupNum) throws Exception {
-        Map<String,Object> map = groupMultiService.selectGroupMediaOne(groupNum);
-
-        byte[] imageContent = (byte[]) map.get("content");
+        byte[] imageContent = groupMediaService.selectGroupMediaOne(groupNum);
         final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.IMAGE_PNG);
         return new ResponseEntity<byte[]>(imageContent, headers, HttpStatus.OK);
@@ -43,5 +41,10 @@ public class GroupMediaController {
 //            byte[] encodedBytes = Base64.encodeBase64();
 //            list.add(encodedBytes);
 //        }
+    }
+    @GetMapping("/detail/{groupNum}")
+    public List<byte[]> selectGroupMediaDetail(@PathVariable("groupNum") int groupNum) throws Exception {
+        System.out.println(groupMediaService.selectGroupMediaDetail(groupNum));
+        return null;
     }
 }
