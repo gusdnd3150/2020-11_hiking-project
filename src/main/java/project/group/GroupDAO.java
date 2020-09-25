@@ -36,4 +36,12 @@ public class GroupDAO{
     public List<Map> selectGroupsByKeyword(String keyword){
         return sqlSession.selectList("group.selectGroupsByKeyword", keyword);
     }
+
+    public void joinGroup(Map map){
+        sqlSession.insert("group.joinGroup",map);
+    }
+
+    public List<Integer> listApplied(int groupNum){
+        return sqlSession.selectList("group.listApplied",groupNum);
+    }
 }

@@ -17,11 +17,7 @@ public class GroupMediaServiceImpl implements GroupMediaService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public void insertGroupMedia(GroupMediaVO groupMediaVO){
-        try {
-            groupMediaDAO.insertGroupMedia(groupMediaVO);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        groupMediaDAO.insertGroupMedia(groupMediaVO);
     }
 
     public byte[] selectGroupMediaOne(int groupNum){

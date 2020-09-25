@@ -15,6 +15,10 @@
             </div>
         </div>
     </div>
+    <div class="group_button">
+        <button id="create">산모임 만들기</button>
+    </div>
+
     <div class="list_wrap">
         <div class="list_title">
             <h1>추천 등산모임</h1>
@@ -26,7 +30,7 @@
                     <div class="cont">
                         <strong>${group.name}</strong>
                         <p>${group.detail}</p>
-                        <a href="/group/detail/${group.groupNum}">바로가기</a>
+                        <a href="/group/${group.groupNum}">바로가기</a>
                     </div>
                 </li>
             </c:forEach>

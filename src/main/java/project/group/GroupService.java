@@ -19,4 +19,9 @@ public interface GroupService {
     Map selectGroupDetail(int groupNum);
 
     List<Map> selectGroupsByKeyword(String keyword);
+
+    //
+    void joinGroup(Map map);
+
+    List<Integer> listApplied(int groupNum);
 }

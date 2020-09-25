@@ -18,7 +18,7 @@
         values (#{groupNum}, #{mediaNum}, #{type}, #{content}, sysdate, sysdate)
     </insert>
 
-    <select id="selectGroupMedia" resultType="_byte[]" parameterType="Integer">
+    <select id="selectGroupMedia" resultType="_byte[]" parameterType="_int">
         <![CDATA[
             SELECT content
             FROM groupsMedia

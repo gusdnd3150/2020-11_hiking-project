@@ -77,7 +77,7 @@
         WHERE groupNum = #{groupNum}
     </delete>
 
-    <select id="selectGroupDetail" resultType="map" parameterType="Integer">
+    <select id="selectGroupDetail" resultType="map" parameterType="_int">
         <![CDATA[
             SELECT *
             FROM groups
@@ -85,7 +85,7 @@
         ]]>
     </select>
 
-    <select id="selectGroupsByKeyword" resultType="map" parameterType="String">
+    <select id="selectGroupsByKeyword" resultType="map" parameterType="string">
         <![CDATA[
             SELECT *
             FROM groups
@@ -97,5 +97,23 @@
                 OR detail LIKE '%'||#{keyword}||'%'
             </if>
         </where>
+    </select>
+
+    <insert id="joinGroup" parameterType="map">
+        <![CDATA[
+            INSERT INTO userapplied
+            VALUES (
+                    #{groupNum},
+                    #{userNum}
+                    )
+        ]]>
+    </insert>
+
+    <select id="listApplied" resultType="_int" parameterType="_int">
+        <![CDATA[
+            SELECT userNum
+            FROM userapplied
+            WHERE groupNum = #{groupNum}
+        ]]>
     </select>
 </mapper>

@@ -38,4 +38,12 @@ public class GroupServiceImpl implements GroupService{
     public List<Map> selectGroupsByKeyword(String keyword){
         return groupDAO.selectGroupsByKeyword(keyword);
     }
+
+    public void joinGroup(Map map){
+        groupDAO.joinGroup(map);
+    }
+
+    public List<Integer> listApplied(int groupNum){
+        return groupDAO.listApplied(groupNum);
+    }
 }

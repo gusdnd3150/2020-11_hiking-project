@@ -12,7 +12,11 @@
                 <p>그룹상태 : ${group.STATUS}</p>
                 <p>현재인원 : ${group.STAFFCURRENT}</p>
                 <p>모집인원 : ${group.STAFFMAX}</p>
+                <img src="${group.image[0]}">
             </div>
+            <form action="/group/join" method="post">
+                <input type="submit" value="신청하기">
+            </form>
         </div>
     </div>
 </body>
