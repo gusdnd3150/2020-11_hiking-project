@@ -15,10 +15,33 @@
     </style>
     <link href="/resources/css/bootstrap.css" rel="stylesheet" />
     <link href="/resources/css/bootstrap-datepicker.css" rel="stylesheet" />
+
+    <script src="/resources/js/jquery-1.10.2.js" type="text/javascript"></script>
     <script src="/resources/js/bootstrap.js" type="text/javascript"></script>
     <script src="/resources/js/bootstrap-datepicker.js" type="text/javascript"></script>
-    <script src="resources/js/jquery-1.10.2.js" type="text/javascript"></script>
-
+</head>
+<body>
+<div class="container">
+        모임 제목 : <input type="text"><br>
+        모임 최대 인원 : <input type="text"><br>
+        모임 상세 :<textarea></textarea><br>
+        모임 시작 날짜 :
+        <div class="col-xs-3">
+            <div class="controls">
+                <input class="datepicker form-control" type="text"/>
+            </div>
+        </div>
+        <br>
+        모임 지역 :<br><br>
+        이미지 :
+        <div class="drag_drop_zone">
+        </div>
+        -상세 설정-<br>
+        나이대 설정 :<br>
+        최소:<br>
+        최대:<br>
+        성별:<br>
+    </div>
     <script>
         $('.datepicker').datepicker({
             weekStart:1,
@@ -69,28 +92,5 @@
             }
         }
     </script>
-</head>
-<body>
-    <div class="container">
-        모임 제목 : <input type="text"><br>
-        모임 최대 인원 : <input type="text"><br>
-        모임 상세 :<textarea></textarea><br>
-        모임 시작 날짜 :<div class="col-xs-3">
-                        <div class="controls">
-                            <input class="datepicker form-control" type="text"/>
-                        </div>
-                        </div><br>
-        모임 지역 :<br><br>
-        이미지 :
-        <div class="drag_drop_zone">
-<%--                <div>이미지를 올려주세요</div>--%>
-        </div>
-        -상세 설정-<br>
-        나이대 설정 :<br>
-        최소:<br>
-        최대:<br>
-        성별:<br>
-    </div>
-
 </body>
 </html>

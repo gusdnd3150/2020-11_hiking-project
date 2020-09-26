@@ -5,7 +5,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import project.groupmedia.GroupMediaService;
-import project.user.vo.UserVO;
 
 import javax.annotation.Resource;
 import java.util.HashMap;

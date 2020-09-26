@@ -3,18 +3,48 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page session="false" %>
 <jsp:include page="/common/header.jsp" />
-<link rel="stylesheet" type="text/css" href="http://kenwheeler.github.io/slick/slick/slick.css" />
-<link rel="stylesheet" type="text/css" href="http://kenwheeler.github.io/slick/slick/slick-theme.css" />
-<%--<link rel="stylesheet" type="text/css" href="/resources/css/views/home.css">--%>
+<link rel="stylesheet" type="text/css" href="./resources/css/views/home.css">
 	<!-- slider -->
-	<div class="single-item">
-		<div><img src="resources/img/slider/photo1.jpeg"></div>
-		<div><img src="resources/img/slider/photo2.jpeg"></div>
-		<div><img src="resources/img/slider/photo3.jpeg"></div>
-		<div><img src="resources/img/slider/photo4.jpeg"></div>
-		<div><img src="resources/img/slider/photo5.jpeg"></div>
-		<div><img src="resources/img/slider/photo6.jpeg"></div>
+<header>
+	<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+		<ol class="carousel-indicators">
+			<li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+			<li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+			<li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+		</ol>
+		<div class="carousel-inner" role="listbox">
+			<!-- Slide One - Set the background image for this slide in the line below -->
+			<div class="carousel-item active" style="background-image: url('/resources/img/slider/photo1.jpeg')">
+				<div class="carousel-caption d-none d-md-block">
+					<h3 class="display-4">First Slide</h3>
+					<p class="lead">This is a description for the first slide.</p>
+				</div>
+			</div>
+			<!-- Slide Two - Set the background image for this slide in the line below -->
+			<div class="carousel-item" style="background-image: url('/resources/img/slider/photo2.jpeg')">
+				<div class="carousel-caption d-none d-md-block">
+					<h3 class="display-4">Second Slide</h3>
+					<p class="lead">This is a description for the second slide.</p>
+				</div>
+			</div>
+			<!-- Slide Three - Set the background image for this slide in the line below -->
+			<div class="carousel-item" style="background-image: url('/resources/img/slider/photo3.jpeg')">
+				<div class="carousel-caption d-none d-md-block">
+					<h3 class="display-4">Third Slide</h3>
+					<p class="lead">This is a description for the third slide.</p>
+				</div>
+			</div>
+		</div>
+		<a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+			<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+			<span class="sr-only">Previous</span>
+		</a>
+		<a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+			<span class="carousel-control-next-icon" aria-hidden="true"></span>
+			<span class="sr-only">Next</span>
+		</a>
 	</div>
+</header>
 	<div class="container">
 		<div class="row">
 			<div class="col-md-4">
@@ -36,26 +66,4 @@
 			</div>
 		</div>
 	</div>
-<script src="resources/js/jquery.js"></script>
-<script type="text/javascript" src="http://kenwheeler.github.io/slick/slick/slick.min.js" />
-<script type="text/javascript">
-		$(document).ready(function () {
-			$('.single-item').slick({
-				autoplay : true,
-				dots: true,
-				speed : 300 ,
-				infinite: true,
-				autoplaySpeed: 3000 ,
-				arrows: true,
-				slidesToShow: 1,
-				slidesToScroll: 1,
-				fade: false,
-			});
-			$('.multiple-items').slick({
-				slidesToShow: 4,
-				slidesToScroll: 1
-			});
-		});
-
-</script>
 <jsp:include page="/common/footer.jsp" />

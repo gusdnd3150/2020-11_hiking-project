@@ -17,6 +17,9 @@
             <form action="/group/join" method="post">
                 <input type="submit" value="신청하기">
             </form>
+
+            <!-- 임시 -->
+            <a href="/group/form.jsp">임시 버튼</a>
         </div>
     </div>
 </body>

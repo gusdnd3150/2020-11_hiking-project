@@ -24,7 +24,7 @@ public class GroupVO {
     private String area;                // 그룹 지역
     private int ageStart;               // 그룹 시작 나이
     private int ageEnd;                 // 그룹 끝 나이
-    private String sex;                    // 그룹 성별
+    private String sex;                 // 그룹 성별
     private String mtNum;               // 등산로명
 
 }
