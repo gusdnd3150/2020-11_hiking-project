@@ -12,7 +12,18 @@
     height: 200px;
     width: 360px;
 }
-
-.responsive div{
-    margin: 100px;
+/* 화살표 */
+.slick-arrow{
+    z-index: 2; /* prev버튼은 위치 이동시 이미지 뒤로 숨겨짐 */
+    position:absolute;  /* 원하는 위치에 지정  */
+    top: 50%;
+    width: 50px;
+    height: 50px;
+    transform: translateY(-25px);
+}
+.slick-prev.slick-arrow{ /* prev 이전 */
+    left: 0;
+}
+.slick-next.slick-arrow{ /* next 다음 */
+    right: 0;
 }

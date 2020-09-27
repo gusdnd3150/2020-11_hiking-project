@@ -49,22 +49,24 @@
 	</div>
 </header>
 <div class="container">
-	<div>
-		<h1>추천 등산모임</h1>
-	</div>
-	<div class="responsive">
-			<c:forEach var="group" items="${group}">
-					<div class="card" >
-						<img class="card-img-top" src="/group/media/${group.groupNum}" alt="..." style="width: 100%"></img>
-						<div class="card-body">
-							<h5 class="card-title">${group.name}</h5>
-							<p class="card-text text-muted" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">${group.detail}</p>
-							<a href="/group/${group.groupNum}" class="btn btn-info">바로가기</a>
+	<div class="groupList">
+		<label for="groupList"><h1>추천 등산모임</h1></label>
+		<div class="responsive" id="groupList">
+				<c:forEach var="group" items="${group}">
+						<div class="card" >
+							<img class="card-img-top" src="/group/media/${group.groupNum}" alt="..." style="width: 100%"></img>
+							<div class="card-body">
+								<h5 class="card-title">${group.name}</h5>
+								<p class="card-text text-muted" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">${group.detail}</p>
+								<a href="/group/${group.groupNum}" class="btn btn-info">바로가기</a>
+							</div>
 						</div>
-					</div>
-			</c:forEach>
+				</c:forEach>
+		</div>
 	</div>
+	<div><h2>공지사항</h2></div>
 </div>
+
 <!-- js -->
 <script type="text/javascript" src="./resources/js/jquery.js"></script>
 <script type="text/javascript" src="./resources/js/bootstrap.min.js"></script>

@@ -65,7 +65,9 @@
                 </li>
                     </c:otherwise>
                 </c:choose>
-                <button class="btn my-2 my-sm-0"><img src="../resources/img/search.png" width="25" height="25"></button>
+                <button class="btn my-2 my-sm-0">
+                    <img src="../resources/img/search.png" width="25" height="25" onclick="">
+                </button>
             </ul>
         </div>
     </div>

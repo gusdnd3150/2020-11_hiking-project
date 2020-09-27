@@ -1,0 +1,40 @@
+/** {*/
+/*    list-style: none;*/
+/*}*/
+footer {
+    text-align: center;
+    padding: 30px 50px;
+}
+
+footer li {
+    display: inline;
+    padding: 0 7px;
+    white-space: nowrap;
+    position: relative;
+}
+
+footer li a {
+    color: gray;
+}
+
+footer li:before {
+    content: '';
+    width: 1px;
+    height: 10px;
+    background-color: #000;
+    position: absolute;
+    left: 0;
+    top: 2px;
+}
+
+footer li:first-child:before {
+    width: 0;
+}
+
+footer address {
+    padding-top: 15px;
+}
+
+.sanorem {
+    color: mediumaquamarine;
+}
