@@ -1,0 +1,9 @@
+.card-img-top {
+    height: 200px;
+    width: 360px;
+}
+
+.responsive div{
+    margin-top: 10px;
+    /*padding: 0;*/
+}

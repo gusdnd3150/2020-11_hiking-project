@@ -45,12 +45,12 @@
         ]]>
     </insert>
 
-    <!-- 리스트 4개 불러오기 -->
+    <!-- 리스트 6개 불러오기 -->
     <select id="selectGroupList" resultMap="groupResult">
         <![CDATA[
             SELECT *
             FROM groups
-            WHERE rownum <= 4
+            WHERE rownum <= 6
             ORDER BY groupNum ASC
         ]]>
     </select>

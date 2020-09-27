@@ -13,12 +13,12 @@
             background-color: lightgrey;
         }
     </style>
-    <link href="/resources/css/bootstrap.css" rel="stylesheet" />
-    <link href="/resources/css/bootstrap-datepicker.css" rel="stylesheet" />
+    <link href="../resources/css/bootstrap.css" rel="stylesheet" />
+    <link href="../resources/css/bootstrap-datepicker.css" rel="stylesheet" />
 
-    <script src="/resources/js/jquery-1.10.2.js" type="text/javascript"></script>
-    <script src="/resources/js/bootstrap.js" type="text/javascript"></script>
-    <script src="/resources/js/bootstrap-datepicker.js" type="text/javascript"></script>
+    <script src="../resources/js/jquery.js" type="text/javascript"></script>
+    <script src="../resources/js/bootstrap.js" type="text/javascript"></script>
+    <script src="../resources/js/bootstrap-datepicker.js" type="text/javascript"></script>
 </head>
 <body>
 <div class="container">

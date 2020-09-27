@@ -10,9 +10,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import project.group.GroupVO;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.sql.Blob;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -24,9 +27,12 @@ public class GroupMediaController {
     GroupMediaService groupMediaService;
 
     @PostMapping("/insert.do")
-    public String insertGroupMedia(@RequestBody GroupMediaVO vo, @RequestParam("content") MultipartFile file) throws IOException {
-        vo.setContent(file.getBytes());
-        groupMediaService.insertGroupMedia(vo);
+    @ResponseBody
+    public String insertGroupMedia(@RequestParam("content") MultipartFile file) throws IOException, SQLException {
+        Blob blob = new javax.sql.rowset.serial.SerialBlob(file.getBytes());
+        System.out.println(file.getContentType());
+//        System.out.println(blob.);
+//        groupMediaService.insertGroupMedia();
         return "";
     }
 

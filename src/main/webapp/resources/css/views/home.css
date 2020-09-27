@@ -7,3 +7,12 @@
     -o-background-size: cover;
     background-size: cover;
 }
+
+.card-img-top {
+    height: 200px;
+    width: 360px;
+}
+
+.responsive div{
+    margin: 100px;
+}
