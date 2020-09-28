@@ -16,9 +16,6 @@ import org.springframework.stereotype.Repository;
 import project.Paging;
 import project.E_P002_D003.vo.E_P002_D003PhotoVO;
 import project.E_P002_D003.vo.E_P002_D003ProductsVO;
-
-
-
 @Repository
 public class B_P002_D001ShopingMallDAOImpl implements B_P002_D001ShopingMallDAO{
 	
@@ -28,22 +25,31 @@ public class B_P002_D001ShopingMallDAOImpl implements B_P002_D001ShopingMallDAO{
 	
 	@Override
 	public int totalCount() {
-		int totalCount = sqlSession.selectOne("countBoard");
+		int totalCount = sqlSession.selectOne("project.e_P002_D003.countBoard");
 		return totalCount;
 	}
+	@Override
+	public int totalCount2(Map<String, Object> info) {
+		int totalCount = sqlSession.selectOne("project.e_P002_D003.countBoard2",info);
+		return totalCount;
+	}
+	
 	@Override
 	public List<E_P002_D003ProductsVO> shopListText2(Paging vo) throws DataAccessException {//메인 페이지
 		List<E_P002_D003ProductsVO> list= sqlSession.selectList("project.e_P002_D003.selectProduct",vo);
 		return list;
 	}
 	@Override
-	public List<E_P002_D003PhotoVO> shopListImage(Paging vo) throws DataAccessException { //메인 상품 이미지 리스트
+	public List<E_P002_D003PhotoVO> shopListImage(Paging vo) throws DataAccessException { //사용안함
 		List<E_P002_D003PhotoVO> list= sqlSession.selectList("project.e_P002_D003.shopMainImage",vo);
 		return list;             
 	}
 	
-	
-	
+	@Override
+	public List<E_P002_D003ProductsVO> shopListTextCate(Map<String,Object> map) throws DataAccessException {
+		List<E_P002_D003ProductsVO> list= sqlSession.selectList("project.e_P002_D003.selectProductCate",map);
+		return list;
+	}
 	
 
 	@Override
@@ -56,6 +62,21 @@ public class B_P002_D001ShopingMallDAOImpl implements B_P002_D001ShopingMallDAO{
 		E_P002_D003PhotoVO vor = sqlSession.selectOne("project.e_P002_D003.getByteImage", vo);
 		return vor;
 	}
+	
+	
+	///////////////////////아래 작업중////////////////////
+	
+	@Override
+	public List<E_P002_D003ProductsVO> searchResult(Map<String, Object> info) throws DataAccessException {
+		List<E_P002_D003ProductsVO> result = sqlSession.selectList("project.e_P002_D003.searchResult",info);
+		return result;
+	}
+	@Override
+	public int SearchTotalCount(Map<String, Object> info) {
+		int totalCount = sqlSession.selectOne("project.e_P002_D003.searchTotal",info);
+		return totalCount;
+	}
+
 
 
 	

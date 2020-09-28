@@ -51,69 +51,188 @@ public class B_P002_D001ControllerImpl  implements B_P002_D001Controller{
 	
 	@Autowired
 	private B_P002_D001ShopingMallService b_P002_D001ShopingMallService;
-	
 
-	@Override          //메인 쇼핑몰 페이지
-	@RequestMapping(value = "/B_P002_D001/shopMain.do", method = { RequestMethod.GET, RequestMethod.POST })
-	public ModelAndView shopmain(HttpServletRequest request, HttpServletResponse response)throws Exception {
-		ModelAndView mav = new ModelAndView();
-		Paging vo =null;
-		
-		String nowPage = request.getParameter("nowPage");
-		String cntPerPage = request.getParameter("cntPerPage");
-		//List<E_P002_D003PhotoVO> list =b_P002_D001ShopingMallService.shopListImage(); 이미지 보류
-		
-		int total = b_P002_D001ShopingMallService.totalCount();		
-		System.out.println("토탈 상품"+total);
-		
-		if (nowPage == null && cntPerPage == null) {
-			nowPage = "1";
-			cntPerPage = "5";
-		} else if (nowPage == null) {
-			nowPage = "1";
-		} else if (cntPerPage == null) { 
-			cntPerPage = "5";
-		}
-		vo = new Paging(total, Integer.parseInt(nowPage), Integer.parseInt(cntPerPage));
-		
-		List<E_P002_D003ProductsVO> list =b_P002_D001ShopingMallService.shopListText2(vo);  // 글만가져옴
-		/*List<String> encodinglist = new ArrayList<String>();     //인코딩 완료된 이미지를 받기 위함
-		try {
-			List<E_P002_D003PhotoVO> Imagelist =b_P002_D001ShopingMallService.shopListImage(vo);
-			System.out.println(list.size());
-			for(int i=0;i<list.size();i++) {
-				byte[] encoded = Base64.getEncoder().encode(Imagelist.get(i).getCONTENTImage());
-				String encodedString = new String(encoded);		
-				encodinglist.add(encodedString);
-			}
-		} catch (Exception e) {
-			e.getStackTrace();
-		}*/
-		mav.addObject("paging",vo);
-		mav.addObject("viewAll", list);
-		mav.setViewName("/shopMain");
-		return mav;
-	}
 	
 	@Override  	//상품에대한 이미지
 	@RequestMapping(value = "/B_P002_D001/mainImage/{num}")
 	public ResponseEntity<byte[]> getByteImage(@PathVariable("num") int num,
 		HttpServletRequest req, HttpServletResponse res)throws Exception {
-		
 		E_P002_D003PhotoVO vo = new E_P002_D003PhotoVO();
-		vo.setPRODNUM(num);
+		vo.setProdNum(num);
 		vo = b_P002_D001ShopingMallService.getImage(vo);
-		byte[] imageContent = (byte[])vo.getCONTENTImage();  //가져온 데이터를 바이트로 뿌린다
+		byte[] imageContent = (byte[])vo.getContent();  //가져온 데이터를 바이트로 뿌린다
 		final HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.IMAGE_PNG);
 		return new ResponseEntity<byte[]>(imageContent, headers, HttpStatus.OK);
 		}
 	
+	               //상품 카테고리별 페이징
+	@Override
+	@RequestMapping(value = "/B_P002_D001/shopMainCate", method = { RequestMethod.GET, RequestMethod.POST })
+	public ModelAndView shopmainCate(@RequestParam Map<String, Object> info,HttpServletRequest request, HttpServletResponse response) throws Exception {
+		ModelAndView mav = new ModelAndView();
+		Map<String,Object> search = new HashMap<String,Object>(); //해쉬맵으로 처리할거다 
+		String nowPage = (String) info.get("nowPage");
+		String cntPerPage = (String) info.get("cntPerPage");
+		String listType = (String) info.get("listType");
+		
+		if (nowPage == null && cntPerPage == null) {
+			nowPage = "1";
+			cntPerPage = "6";
+		} else if (nowPage == null) {
+			nowPage = "1";
+		} else if (cntPerPage == null) { 
+			cntPerPage = "6";
+		}
+		search.put("listType", Integer.parseInt(listType));
+		int total = b_P002_D001ShopingMallService.totalCount2(search);
+		
+		Paging vo2 = new Paging(Integer.parseInt(listType),total, Integer.parseInt(nowPage), Integer.parseInt(cntPerPage));
+		search.put("listType", vo2.getListType());
+		search.put("start", vo2.getStart());
+		search.put("end", vo2.getEnd());
+		
+		List<E_P002_D003ProductsVO> list =b_P002_D001ShopingMallService.shopListTextCate(search);  // 글만가져옴
+		System.out.println("분류값 : "+vo2.getListType());
+		mav.addObject("paging",vo2);
+		mav.addObject("viewAll", list);
+		mav.setViewName("/shoppingMall/category");
+		
+		return mav;
+	}
+	
+	/*               home화면 백업용
+	@Override
+	@RequestMapping(value = "/B_P002_D001/shopMainCate", method = { RequestMethod.GET, RequestMethod.POST })
+	public ModelAndView shopmainCate(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		ModelAndView mav = new ModelAndView();
+		Map<String,Integer> search = new HashMap<String,Integer>(); //해쉬맵으로 처리할거다 
+		Paging vo =  new Paging();  
+		String nowPage = request.getParameter("nowPage");
+		String cntPerPage = request.getParameter("cntPerPage");
+		String listType = request.getParameter("listType");
+		
+		if (nowPage == null && cntPerPage == null) {
+			nowPage = "1";
+			cntPerPage = "6";
+		} else if (nowPage == null) {
+			nowPage = "1";
+		} else if (cntPerPage == null) { 
+			cntPerPage = "6";
+		}
+		if(listType=="10") {
+			mav.setViewName("/shoppingMall/main");
+		}else {
+			mav.setViewName("/shoppingMall/category");
+		}
+		
+		int total = b_P002_D001ShopingMallService.totalCount2(vo);
+		Paging vo2 = new Paging(Integer.parseInt(listType),total, Integer.parseInt(nowPage), Integer.parseInt(cntPerPage));
+		search.put("listType", vo2.getListType());
+		search.put("start", vo2.getStart());
+		search.put("end", vo2.getEnd());
+		List<E_P002_D003ProductsVO> list =b_P002_D001ShopingMallService.shopListTextCate(search);  // 글만가져옴
+		System.out.println("분류값 : "+vo2.getListType());
+		mav.addObject("paging",vo2);
+		mav.addObject("viewAll", list);
+		
+		return mav;
+	}*/
+
+
+///////////////////////////위는 완료 아래처리///////////////////////////////////////////
+	
+	@Override /* 검색 결과 */ 
+	@RequestMapping(value = "/B_P002_D001/searchResult", method = { RequestMethod.GET, RequestMethod.POST })
+	public ModelAndView searchResult(@RequestParam Map<String, Object> info, HttpServletRequest request, HttpServletResponse response)throws Exception {
+		ModelAndView mav= new ModelAndView();
+		String nowPage = request.getParameter("nowPage");
+		String cntPerPage = request.getParameter("cntPerPage");
+		if (nowPage == null && cntPerPage == null) {
+			nowPage = "1";
+			cntPerPage = "6";
+		} else if (nowPage == null) {
+			nowPage = "1";
+		} else if (cntPerPage == null) { 
+			cntPerPage = "6";
+		}
+		//System.out.println("타입"+info.get("searchtype"));
+		//System.out.println("내용"+info.get("searchContent"));
+		
+		if(info.get("searchtype")==""&&info.get("searchtype")==null) {
+			String searchtype = (String) request.getAttribute("searchtype");
+			String searchContent = (String) request.getAttribute("searchContent");
+			info.put("searchtype", searchtype);
+			info.put("searchContent", searchContent);
+			System.out.println("타입"+info.get("searchtype"));
+			System.out.println("내용"+info.get("searchContent"));
+			int total = b_P002_D001ShopingMallService.SearchTotalCount(info);
+			System.out.println("총 개수"+total);
+			Paging vo = new Paging(total, Integer.parseInt(nowPage), Integer.parseInt(cntPerPage));
+			int start = vo.getStart();
+			int end = vo.getEnd();
+			info.put("start",start );
+			info.put("end", end);
+			List<E_P002_D003ProductsVO> list = b_P002_D001ShopingMallService.searchResult(info);
+			System.out.println("넘어온 리스트"+list.size());
+			mav.addObject("viewAll", list);
+			mav.addObject("paging",vo);
+		}else {
+			int total = b_P002_D001ShopingMallService.SearchTotalCount(info);
+			System.out.println("총 개수"+total);
+			Paging vo = new Paging(total, Integer.parseInt(nowPage), Integer.parseInt(cntPerPage));
+			int start = vo.getStart();
+			int end = vo.getEnd();
+			info.put("start",start );
+			info.put("end", end);
+			List<E_P002_D003ProductsVO> list = b_P002_D001ShopingMallService.searchResult(info);
+			System.out.println("넘어온 리스트"+list.size());
+			mav.addObject("viewAll", list);
+			mav.addObject("paging",vo);
+		}
+		
+		request.setAttribute("searchtype", info.get("searchtype"));
+		request.setAttribute("searchContent", info.get("searchContent"));
+		mav.setViewName("/shoppingMall/searchResult");
+		return mav;
+	}
 
 	
-
+	
+	
+	
+	
+	
 	/*
-	@Override        //다중 이미지 다운로드  공부용ㄴ
+	@Override          //메인 쇼핑몰 페이지
+	@RequestMapping(value = "/B_P002_D001/shopMain", method = { RequestMethod.GET, RequestMethod.POST })
+	public ModelAndView shopmain(HttpServletRequest request, HttpServletResponse response)throws Exception {
+		ModelAndView mav = new ModelAndView();
+		Paging vo = new Paging();  
+		String nowPage = request.getParameter("nowPage");
+		String cntPerPage = request.getParameter("cntPerPage");
+		if (nowPage == null && cntPerPage == null) {
+			nowPage = "1";
+			cntPerPage = "6";
+		} else if (nowPage == null) {
+			nowPage = "1";
+		} else if (cntPerPage == null) { 
+			cntPerPage = "6";
+		}
+		int total = b_P002_D001ShopingMallService.totalCount();		
+		vo = new Paging(total, Integer.parseInt(nowPage), Integer.parseInt(cntPerPage));
+		List<E_P002_D003ProductsVO> list =b_P002_D001ShopingMallService.shopListText2(vo);  // 글만가져옴
+		mav.addObject("paging",vo);
+		mav.addObject("viewAll", list);
+		mav.setViewName("/shoppingMall/main");
+		return mav;
+	}*/
+	
+	
+	
+	
+/*
+	@Override        //다중 이미지 다운로드  공부용
 	@RequestMapping(value = "/B_P002_D001/mainprodList.do", method = { RequestMethod.GET, RequestMethod.POST })
 	public ModelAndView getimageList(HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
@@ -122,7 +241,7 @@ public class B_P002_D001ControllerImpl  implements B_P002_D001Controller{
 
 		List<String> encodinglist = new ArrayList<String>();     //다중이미지 출력
 		try {
-			//List<E_P002_D003PhotoVO> list =b_P002_D001ShopingMallService.getImage();
+			List<E_P002_D003PhotoVO> list =b_P002_D001ShopingMallService.getImage();
 			System.out.println(list.size());
 			for(int i=0;i<list.size();i++) {
 				byte[] encoded = Base64.getEncoder().encode(list.get(i).getCONTENTImage());

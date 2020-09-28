@@ -1,76 +1,127 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="userMapper">
-	<!-- <resultMap id="userInsertResult01" type="userVO">
+	<!-- <resultMap id="userInsertResult01" type="userVO"> <result property="userNum"
+		column="userNum" /> <result property="id" column="id" /> <result property="password"
+		column="password" /> <result property="name" column="name" /> <result property="sex"
+		column="sex" /> <result property="phone" column="phone" /> <result property="address"
+		column="address" /> <result property="email" column="email" /> <result property="type"
+		column="type" /> <result property="status" column="status" /> <result property="createdAt"
+		column="createdAt" /> <result property="updatedAt" column="updatedAt" />
+		</resultMap> -->
+
+	<resultMap id="userResult" type="userVO">
 		<result property="userNum" column="userNum" />
 		<result property="id" column="id" />
 		<result property="password" column="password" />
 		<result property="name" column="name" />
 		<result property="sex" column="sex" />
 		<result property="phone" column="phone" />
-		<result property="address" column="address" /> 
+		<result property="address" column="address" />
+		<result property="address2" column="address2" />
+		<result property="zonecode" column="zonecode" />
 		<result property="email" column="email" />
-		<result property="type" column="type" /> 
+		<result property="type" column="type" />
 		<result property="status" column="status" />
 		<result property="createdAt" column="createdAt" />
-		<result property="updatedAt" column="updatedAt" /> 
-	</resultMap> -->
-	
-	<resultMap id="userResult" type="userVO">
-	<result property="userNum" column="userNum" />
-		<result property="id" column="id" />
-		<result property="password" column="password" />
-		<result property="name" column="name" />
-		<result property="sex" column="sex" />
-		<result property="phone" column="phone" />
-		<result property="address" column="address" /> 
-		<result property="email" column="email" />
-		<result property="type" column="type" /> 
-		<result property="status" column="status" />
-		<result property="createdAt" column="createdAt" />
-		<result property="updatedAt" column="updatedAt" /> 
-		<result property="sex2" column="sex2" /> 
-		<result property="sessionId" column="sessionId" /> 
-		<result property="sessionLimit" column="sessionLimit" /> 
+		<result property="updatedAt" column="updatedAt" />
+		<result property="sex2" column="sex2" />
+		<result property="sessionId" column="sessionId" />
+		<result property="sessionLimit" column="sessionLimit" />
+		<result property="profile" column="profile" />
+		<result property="content" column="content" />
 	</resultMap>
-	
-	
-	
-      <insert id="insertUser" parameterType="userVO">
+
+	<insert id="insertUser" parameterType="userVO">
       <![CDATA[
-      INSERT INTO USERS(userNum, id , password, name, sex, phone, address, email, type, status, createdAt, sessionId)
-      VALUES (users_SEQ.nextVal, #{id}, #{password}, #{name}, #{sex}, #{phone}, #{address}, #{email}, 200, 10, sysdate, #{id})
+      INSERT INTO USERS(userNum, id , password, name, sex, phone, address, address2, zonecode, email, type, status, createdAt, sessionId)
+      VALUES (users_SEQ.nextVal, #{id}, #{password}, #{name}, #{sex}, #{phone}, #{address}, #{address2}, #{zonecode}, #{email}, 200, 10, sysdate, #{id})
       ]]>
-	   </insert> 
-	   
-	   <select id="idCheck" parameterType="String" resultType="int">
+	</insert>
+
+	<insert id="insertUser2" parameterType="java.util.Map">
+      <![CDATA[
+      INSERT INTO USERS(userNum, id , password, name, email, type, status, createdAt, sessionId)
+      VALUES (users_SEQ.nextVal, #{email}, #{id}, #{name}, #{email}, 200, 10, sysdate, 0)
+      ]]>
+	</insert>
+
+	<insert id="insertUser3" parameterType="userVO">
+      <![CDATA[
+     INSERT INTO userinfo(usernum)
+	  VALUES ((SELECT max(userNum) from users))
+      ]]>
+	</insert>
+
+	<insert id="insertUser4" parameterType="java.util.Map">
+      <![CDATA[
+     INSERT INTO userinfo(usernum)
+	  VALUES ((SELECT max(userNum) from users))
+      ]]>
+	</insert>
+
+	<select id="idCheck" parameterType="String" resultType="int">
 	   <![CDATA[
-	    select count(*) 
-	    from users 
+	    select count(*)
+	    from users
 	    where id = #{id} and status=10
 	    ]]>
-	   </select>
-	   
-	   <select id="logIn" resultMap="userResult">
+	</select>
+
+	<select id="logIn" resultMap="userResult">
 	    <![CDATA[
-	    select id, password, name, sex, phone, address, email, type, status, createdAt, updatedAt, DECODE(sex, '10', '남자', '20', '여자', '기타') sex2
+	    select userNum, id, password, name, sex, phone, address, address2, zonecode, email, type, status, createdAt, updatedAt, DECODE(sex, '10', '남자', '20', '여자', '기타') sex2
 	    from users where id=#{id} and status=10
-	    
+
 	    ]]>
-	    </select>
-	   
-	   <update id="updateUser" parameterType="String">
+	</select>
+
+	<update id="updateUser" parameterType="userVO">
 	  <![CDATA[
-	   update users 
-	   set name=#{name}, password=#{password} , sex=#{sex}, phone=#{phone}, address=#{address}, email=#{email}, updatedAt=sysdate
+	   update users
+	   set name=#{name}, sex=#{sex}, phone=#{phone}, zonecode=#{zonecode}, address=#{address}, address2=#{address2}, email=#{email}, updatedAt=sysdate
 	   where id=#{id} and status=10
 	        ]]>
-	   </update>
-	   
-	   <update id="keepLogin">
+	</update>
+
+	<update id="updatePwd" parameterType="userVO">
+	  <![CDATA[
+	   update users
+	   set password=#{password}
+	   where sessionId=#{sessionId} and status=10
+	        ]]>
+	</update>
+
+	<update id="updateUserInfo" parameterType="java.util.Map">
+		<!-- 	<selectKey resultType="java.lang.Integer" keyProperty="userNum" order="BEFORE" >
+
+            </selectKey> -->
+		<![CDATA[
+	 update userInfo
+	 set profile=#{profile}, content=#{content}
+	 where userNum Exsist(select users.userNum
+					from users
+					where users.sessionId=#{sessionId})
+	]]>
+	</update>
+
+	<!-- 	 <update id="updateUserInfo" parameterType="java.util.Map">
+        <selectKey resultType="java.lang.Integer" keyProperty="userNum" order="BEFORE" >
+        select userNum
+        from users
+        where sessionId=#{sessionId}
+        </selectKey>
+         <![CDATA[
+         update userInfo
+         set profile=#{profile}, content=#{content}
+         where userNum=#{userNum}
+        ]]>
+        </update>  -->
+
+	<update id="keepLogin">
 	    <![CDATA[
 	   update users
 	   set sessionId=#{sessionId}
@@ -78,18 +129,41 @@
 	   where id = #{id}
 	   and status=10
 	   ]]>
-	   </update>
-   
-    <select id="checkUserWithSessionKey" resultMap="userResult">
+	</update>
+
+	<select id="checkUserWithSessionKey" resultMap="userResult"
+			parameterType="String">
 	    <![CDATA[
-	  select *
-	  from users
-	  where sessionId=#{value}
+		select *
+		from users a full outer join userinfo b on a.userNum = b.userNum
+		where a.sessionId = #{sessionId}
+		and status=10
 	   ]]>
-	   </select>
-   
-   
-   
-	   
-	   
+
+	</select>
+
+	<select id="getBySns" resultMap="userResult"
+			parameterType="java.util.Map">
+	   <![CDATA[
+	    select *
+	    from users
+	    where id = #{email} and status=10
+	    ]]>
+	</select>
+
+	<select id="pwdCheck" resultMap="userResult"
+			parameterType="String">
+	   <![CDATA[
+	    select *
+	    from users
+	    where sessionId=#{sessionId} and status=10
+	    ]]>
+	</select>
+	<update id="removeSessionId" parameterType="String">
+	   <![CDATA[
+		update users
+	  	set sessionId='abc'
+	    where sessionId=#{sessionId}
+	    ]]>
+</update>
 </mapper>

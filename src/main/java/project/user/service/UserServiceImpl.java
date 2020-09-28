@@ -1,6 +1,7 @@
 package project.user.service;
 
 import java.util.Date;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.slf4j.Logger;
@@ -48,6 +49,23 @@ public class UserServiceImpl implements UserService {
 	public UserVO checkLoginBefore(String value) throws Exception {
 		return userDAO.checkUserWithSessionKey(value);
 	}
-	
+
+	@Override
+	public UserVO getBySns(Map<String, Object> snsUser) {
+		return userDAO.getBySns(snsUser);
+	}
+
+	@Override
+	public void insertUser2(Map<String, Object> snsUser) {
+		userDAO.insertUser2(snsUser);
+	}
+
+	@Override
+	public void removeSessionId(String sessionId) {
+		userDAO.removeSessionId(sessionId);
+		
+	}
+
+
 	
 }

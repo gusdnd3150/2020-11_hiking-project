@@ -5,17 +5,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-
-<!-- Bootstrap core CSS -->
-  <link href="${pageContext.request.contextPath}/resources/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<jsp:include page="/common/header.jsp" />
+    <!-- Bootstrap core CSS -->
+  <link href="/resources/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <!-- Custom styles for this template -->
-  <link href="${pageContext.request.contextPath}/resources/css/shop-homepage.css" rel="stylesheet">
-  <!-- Bootstrap core JavaScript -->
-   <script src="<c:url value="/resources/vendor/jquery/jquery.min.js" />"></script> 
-  <script src="<c:url value="/resources/vendor/bootstrap/js/bootstrap.bundle.min.js" />"></script>
-  
-  
-  
+  <link href="/resources/css/shop-homepage.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="/resources/css/views/common/header.css">
+    <!-- Bootstrap core JavaScript -->
+  <script src="/resources/vendor/jquery/jquery.min.js"></script>
+  <script src="/resources/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   
   
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -79,7 +77,18 @@ ul{
 }
 
 </style>
+<script src="http://code.jquery.com/jquery-latest.js"></script>
 <script>
+$(document).ready(function(){
+    $("#addAfterdform").on("click",function(){
+         $("#form").removeAttr("style");
+    });
+    
+    $("#addComentForm").on("click",function(){
+        $("#comentform").removeAttr("style");
+   });
+});
+
 function openCity(evt, cityName) {
   var i, tabcontent, tablinks;
   tabcontent = document.getElementsByClassName("tabcontent");
@@ -93,21 +102,22 @@ function openCity(evt, cityName) {
   document.getElementById(cityName).style.display = "block";
   evt.currentTarget.className += " active";
 }
+
 </script>
 </head>
 <body>
 
 <h2>주문 상세</h2>
-
+<div class="container">
 <div class="row"> 
-
-    <img class="column" src="resource/image/images.jpg" width="600" height="900" alt="">
+     <img class="column" src="/B_P002_D001/mainImage/${prodDetail.prodNum }"  alt="" width="600" height="900">    
+    <!-- <img class="column" src="/resources/img/images.jpg" width="600" height="900" alt=""> -->
   <div class="column" style="background-color:#bbb;">
-    <h2>상품</h2>
+     <h2>${prodDetail.name}</h2>  <!-- 제목 -->
     <hr>
     <ul>
-    <li>아이젠4p/골드 등산용품/원버클</li>
-    <li><b>22,000원</b></li>
+    <li>남은 수량: ${prodDetail.quantity }!!! </li>   <!-- 남은수량 -->
+    <li><b> ${prodDetail.price }원</b></li>   <!-- 가격 -->
     <hr>
     <li><b>적립 포인트 4p</b></li>
     <hr>
@@ -116,7 +126,7 @@ function openCity(evt, cityName) {
     수량: <input type="text" name="count">
     <table align="center">
     <tr>
-    <td><button>장바구니</button></td>
+    <td> <a href="/B_P003_D001/pay/${prodDetail.prodNum }">장바구니</a></td>
      <td><button>구매하기</button></td>
      <td><button>위시리스트</button></td>
     </tr>
@@ -137,58 +147,116 @@ function openCity(evt, cityName) {
 </div>
 
 <div id="London" class="tabcontent">
-  <h3>상품후기</h3>
-  <div class="row"> 
-
-    <img class="column" src="resource/image/images.jpg" width="600" height="900" alt="">
-  <div class="column" style="background-color:#bbb;">
-    <h2>상품</h2>
-    <hr>
-    <ul>
-    <li>아이젠4p/골드 등산용품/원버클</li>
-    <li><b>22,000원</b></li>
-    <hr>
-    <li><b>적립 포인트 4p</b></li>
-    <hr>
-    <li>
-    <form>
-    <table align="center">
-    <tr>
-    <td>수량:</td>
-    </tr>
-    <tr>
-    <td><button>장바구니</button></td>
-     <td><button>구매하기</button></td>
-     <td><button>위시리스트</button></td>
-    </tr>
-    </table>
+   <p id="addAfterdform">후기 작성하기</p>
+   <form name="addAfter" id="form" method="post" action="/B_P003_D001/addAfter" style="display:none" enctype="multipart/form-data">
+        <label>평점</label>
+        <input type="hidden" name="prodNum" value="${prodDetail.prodNum }"><br>
+        <select name="evalue" id="evalue">
+            <option value="1">1</option>    
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select><br>
+        <label>내용</label>
+        <textarea name="content"> </textarea><br>
+        <label>첨부</label><br>
+        <input  type="file" name="photo"><br>
+        <input type="submit" value="등록"><br>
+        <hr>
     </form>
-    </li>
-    </ul>
-  </div>
+    
+  <div class="row"> 
+    <%-- <img class="card-img-top" src="/B_P002_D001/mainImage/${data.prodNum }"  alt="" width="600" height="900"> --%>
+  <!-- <div class="column" style="background-color:#bbb;"> -->
+    <!-- 상품 후기 리스트 -->
+                    <table class="table">
+                        <hr>
+                        <tbody>
+                         <c:choose>
+                            <c:when test="${empty afterList }">
+                                 <p> 후기가 없습니다 </p>
+                            </c:when>
+                            <c:when test="${not empty afterList }">      
+                               <c:forEach var="afterList" items="${afterList }">
+                                 <c:if test="${afterList.lvl == 1 }">    <!--  후기원글일 경우 -->
+                                 <div class="row">
+                                     <img class="column" src="/B_P003_D001/AfterImage/${afterList.afterNum }"  alt="" width="300" height="300">
+                                   <div class="column" >
+                                    <p class="prodtext">후기내용: ${afterList.content }, 평점: ${afterList.evalue } , 작성일: ${afterList.createDat } , 아이디: ${afterList.userNum }</p>
+                                    
+                                    <p id="addComentForm">댓글등록</p>
+                                     <form name="addComent" id="comentform" method="post" action="/B_P003_D001/addComent" style="display:none" >
+                                            <input type="hidden" name="prodNum" value="${prodDetail.prodNum }"><br>
+                                            <input type="hidden" name="afterType" value="${afterList.afterNum }">
+                                          <label>내용</label>
+                                         <textarea name="content"> </textarea><br>
+                                         <input type="submit" value="댓글등록"><br>
+                                        <hr>
+                                       </form>
+                                    <br>
+                                   </div>
+                                 </div>
+                                 </c:if>
+                                  <c:if test="${afterList.lvl == 2 }">    <!-- 댓글 경우 -->
+                                      <div class="row">
+                                      <h class="column">댓글</h>
+                                   <div class="column" >
+                                    <p class="prodtext">댓글 내용: ${afterList.content }, 평점: ${afterList.evalue } , 작성일: ${afterList.createDat } , 아이디: ${afterList.userNum }</p>
+                                     <br>
+                                   </div>
+                                 </div>
+                                 </c:if>
+                               </c:forEach>
+                            </c:when>
+                         </c:choose>
+                        </tbody>
+                        <hr>
+                    </table>
+  </div>  
+  
+            <!-- 페이징 -->
+  <div style="display: block; text-align: center;">
+	<c:if test="${paging.startPage != 1 }">
+			<a href="/B_P003_D001/productDetail?prodNum=${prodDetail.prodNum }&nowPage=${paging.startPage - 1 }&cntPerPage=${paging.cntPerPage}">&lt;</a>
+		</c:if>
+		<c:forEach begin="${paging.startPage }" end="${paging.endPage }" var="p">
+			<c:choose>
+				<c:when test="${p == paging.nowPage }">
+					<b>${p }</b>
+				</c:when>
+				<c:when test="${p != paging.nowPage }">
+					<a href="/B_P003_D001/productDetail?prodNum=${prodDetail.prodNum}&nowPage=${p }&cntPerPage=${paging.cntPerPage}">${p }</a>
+				</c:when>
+			</c:choose>
+		</c:forEach>
+		<c:if test="${paging.endPage != paging.lastPage}">
+			<a href="/B_P003_D001/productDetail?prodNum=${prodDetail.prodNum}&nowPage=${paging.endPage+1 }&cntPerPage=${paging.cntPerPage}">&gt;</a>
+			<p> ${paging.listType}</p>
+		</c:if>
+	</div>
 </div>
-  <p>London is the capital city of England.</p>
-  <p>London is the capital city of England.</p>
-  <p>London is the capital city of England.</p>
-  <p>London is the capital city of England.</p>
-  <p>London is the capital city of England.</p>
-  <p>London is the capital city of England.</p><p>London is the capital city of England.</p>
-</div>
+
 
 <div id="Paris" class="tabcontent">
   <h3>제품설명</h3>
-  <p>Paris is the capital of France.</p> 
-  <p>London is the capital city of England.</p>
-  <p>London is the capital city of England.</p>
-  <p>London is the capital city of England.</p>
-  <p>London is the capital city of England.</p>
-  <p>London is the capital city of England.</p>
-  <p>London is the capital city of England.</p>
-  <p>London is the capital city of England.</p>
-  
+  <c:choose>
+     <c:when test="${empty images }">
+     <p>이미지가 없습니다.</p>     
+     </c:when>
+     <c:when test="${not empty images }">
+         <c:forEach var="images" items="${images }">
+       <img src="data:image/jpg;base64, ${images}"  alt="상" width="800" height="500"><br>
+         </c:forEach>
+     </c:when>
+  </c:choose>
+  <%-- <img src="data:image/jpg;base64, ${images}"  alt="" width="800" height="500" /> --%>
+  <p> ${prodDetail.content }</p> 
 </div>
 
-
+</div>
 
 </body>
+
+<jsp:include page="/common/footer.jsp" />
 </html>

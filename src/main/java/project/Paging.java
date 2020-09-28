@@ -4,12 +4,28 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class Paging {
-	
+
 	// 현재페이지, 시작페이지, 끝페이지, 게시글 총 갯수, 페이지당 글 갯수, 마지막페이지, SQL쿼리에 쓸 start, end
 	private int nowPage, startPage, endPage, total, cntPerPage, lastPage, start, end;
 	private int cntPage = 7;
-	
+	private int listType;
+
+	public int getListType() {
+		return listType;
+	}
+	public void setListType(int listType) {
+		this.listType = listType;
+	}
 	public Paging() {
+	}
+	public Paging(int listType,int total, int nowPage, int cntPerPage) {
+		setNowPage(nowPage);
+		setCntPerPage(cntPerPage);
+		setTotal(total);
+		calcLastPage(getTotal(), getCntPerPage());
+		calcStartEndPage(getNowPage(), cntPage);
+		calcStartEnd(getNowPage(), getCntPerPage());
+		this.listType=listType;
 	}
 	public Paging(int total, int nowPage, int cntPerPage) {
 		setNowPage(nowPage);
@@ -39,7 +55,7 @@ public class Paging {
 		setEnd(nowPage * cntPerPage);
 		setStart(getEnd() - cntPerPage + 1);
 	}
-	
+
 	public int getNowPage() {
 		return nowPage;
 	}
@@ -87,7 +103,7 @@ public class Paging {
 	}
 	public void setEnd(int end) {
 		this.end = end;
-	}	
+	}
 	public int setCntPage() {
 		return cntPage;
 	}
@@ -98,6 +114,6 @@ public class Paging {
 	public String toString() {
 		return "PagingVO [nowPage=" + nowPage + ", startPage=" + startPage + ", endPage=" + endPage + ", total=" + total
 				+ ", cntPerPage=" + cntPerPage + ", lastPage=" + lastPage + ", start=" + start + ", end=" + end
-				+ ", cntPage=" + cntPage + "]";
+				+ ", cntPage=" + cntPage + ""+", 카테고리 분류값="+listType+"]";
 	}
 }

@@ -152,7 +152,7 @@ align:bottom;
                     <table class="table">
                         <tbody>
                                   <div class="row">
-                                 <img class="column" src="resource/image/images.jpg" width="150" height="150" alt="">
+                                 <img class="column" src="/resources/img/images.jpg" width="150" height="150" alt="">
                                  <div class="column" >
                                 <p class="prodtext">신상품  쫀득쫀득 고무고무 가방/ 내가 너라면 사겠어...ssssssssssssssssssssssss</p>
                                  </div>
@@ -161,7 +161,7 @@ align:bottom;
                         <hr>
                          <tbody>
                                   <div class="row">
-                                 <img class="column" src="resource/image/images.jpg" width="150" height="150" alt="">
+                                 <img class="column" src="/resource/img/images.jpg" width="150" height="150" alt="">
                                  <div class="column coloumncontent" >
                                 <p class="prodtext">신상품  쫀득쫀득 고무고무 가방/ 내가 너라면 사겠어...ssssssssssssssssssssssss</p>
                                  </div>

@@ -25,11 +25,6 @@ public class E_p001DAOImpl implements E_p001DAO{
 	public List selectUser(Map<String, String> search) throws Exception {
 		System.out.println("조건 검색들어옴");
 		 List<E_p001VO> userList=sqlSession.selectList("admin.mapper.e_p001.selectUser", search);
-		 for (int i = 0; i<userList.size(); i++) {
-			 
-			 System.out.println(userList.get(i).getCreatedAt());
-		 }
-		 System.out.println("조건검색 값: "+userList);
 		return userList;
 	}
 
@@ -50,4 +45,5 @@ public class E_p001DAOImpl implements E_p001DAO{
 		result=sqlSession.update("admin.mapper.e_p001.updateUser", e_p001VO);
 		return result;
 	}
+
 }

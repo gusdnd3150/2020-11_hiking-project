@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import org.springframework.stereotype.Component;
 
 @Component
-public class E_p001VO {
+public class E_p001VO  {
 
 	 int userNum;
 	 String id;

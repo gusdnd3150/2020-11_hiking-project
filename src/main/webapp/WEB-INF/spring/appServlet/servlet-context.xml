@@ -92,6 +92,20 @@
 	<mvc:resources location="classpath:META-INF/resources/" mapping="swagger-ui.html" />
 	<mvc:resources location="classpath:META-INF/resources/webjars/" mapping="/webjars/**"/>
 
+	<!-- naver -->
+	<beans:bean id="naverSns" class="project.user.auth.SnsValue">
+		<beans:constructor-arg value="${auth.snsNaver}" />
+		<beans:constructor-arg value="${auth.naverClientID}" />
+		<beans:constructor-arg value="${auth.naverClientSecret}" />
+		<beans:constructor-arg value="${auth.naverRedirectUrl}" />
+	</beans:bean>
+	<!-- google -->
+	<beans:bean id="googleSns" class="project.user.auth.SnsValue">
+		<beans:constructor-arg value="${auth.snsGoogle}" />
+		<beans:constructor-arg value="${auth.googleClientID}" />
+		<beans:constructor-arg value="${auth.googleClientSecret}" />
+		<beans:constructor-arg value="${auth.googleRedirectUrl}"  />
+	</beans:bean>
     <!-- websocket -->
 <!--    <beans:bean id="chatHandler" class="project.chat.ChatWebSocketHandler" />-->
 <!--    -->

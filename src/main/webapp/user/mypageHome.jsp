@@ -1,83 +1,115 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<c:set var="contextPath" value="${pageContext.request.contextPath}" />
-<%request.setCharacterEncoding("UTF-8");%>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="utf-8">
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script type="text/JavaScript"
+	src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>MypageHome</title>
-<!-- Tell the browser to be responsive to screen width -->
-<meta
-	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
-	name="viewport">
-<!-- Bootstrap 3.3.7 -->
-<link rel="stylesheet"
-	href="/resources/bower_components/bootstrap/dist/css/bootstrap.min.css">
-<!-- Font Awesome -->
-<link rel="stylesheet"
-	href="/resources/bower_components/font-awesome/css/font-awesome.min.css">
-<!-- Ionicons -->
-<link rel="stylesheet"
-	href="/resources/bower_components/Ionicons/css/ionicons.min.css">
-<!-- Theme style -->
-<link rel="stylesheet" href="/resources/dist/css/AdminLTE.min.css">
-<!-- AdminLTE Skins. Choose a skin from the css/skins
-       folder instead of downloading all of them to reduce the load. -->
-<link rel="stylesheet"
-	href="/resources/dist/css/skins/_all-skins.min.css">
-
-<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-<!--[if lt IE 9]>
-  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-  <![endif]-->
-
-<!-- Google Font -->
-<link rel="stylesheet"
-	href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
-<style>
-.content-wrapper {
-	padding: 50px 20px;
-	margin: 0 auto;
-}
-</style>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8">
+<title>mypageHome</title>
+<link href="/resources/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<!— body —>
+<script src="/resources/js/jquery.js"></script>
+<script src="/resources/js/bootstrap.bundle.js"></script>
 <body>
-	<!-- Content Wrapper. Contains page content -->
-	<div class="content-wrapper">
-		<!-- Main content -->
-		<section class="content">
-			<div class="row">
-				<div class="col-md-3">
-				<h1>MyPage</h1>
-					<!-- Profile Image -->
+	<div class="container">
+		<header class="blog-header py-3">
+			<div
+				class="row flex-nowrap justify-content-between align-items-center">
+				<div class="col-4 pt-1">
+					<a class="text-muted" href="#">Subscribe</a>
+				</div>
+				<div class="col-4 text-center">
+					<a class="blog-header-logo text-dark" href="#">Large</a>
+				</div>
+				<div class="col-4 d-flex justify-content-end align-items-center">
+					<a class="text-muted" href="#"> <svg
+							xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+							viewBox="0 0 24 24" fill="none" stroke="currentColor"
+							stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+							class="mx-3">
+							<circle cx="10.5" cy="10.5" r="7.5"></circle>
+							<line x1="21" y1="21" x2="15.8" y2="15.8"></line></svg>
+					</a> <a class="btn btn-sm btn-outline-secondary" href="#">Sign up</a>
+				</div>
+			</div>
+		</header>
+
+		<div class="nav-scroller py-1 mb-2">
+			<nav class="nav d-flex justify-content-between">
+				<a class="p-2 text-muted" href="#">World</a> <a
+					class="p-2 text-muted" href="#">U.S.</a> <a class="p-2 text-muted"
+					href="#">Design</a> <a class="p-2 text-muted" href="#">Culture</a>
+				<a class="p-2 text-muted" href="#">Health</a> <a
+					class="p-2 text-muted" href="#">Style</a>
+			</nav>
+		</div>
+
+		<h1>MyPage</h1>
+		<!-- Profile Image -->
+		<table
+			style="width: 100%; height: 200px; table-layout: fixed; !important">
+			<tr>
+				<td>
 					<div class="box box-primary">
 						<div class="box-body box-profile">
-							<img class="profile-user-img img-responsive img-circle"
-								src="../../dist/img/user4-128x128.jpg"
-								alt="User profile picture">
+							<img class="profile-user-img img-responsive img-circle" src=""
+								alt="프로필 사진">
 
-							<h3 class="profile-username text-center">Nina Mcintire</h3>
+							<h3 class="profile-username text-center">개존잘</h3>
 
-							<p class="text-muted text-center">Software Engineer</p>
+							<p class="text-muted text-center">여기다가는 뭘 넣을까 그냥 뺼까</p>
 
 							<ul class="list-group list-group-unbordered">
-								<li class="list-group-item"><b>Followers</b> <a
-									class="pull-right">1,322</a></li>
-								<li class="list-group-item"><b>Following</b> <a
-									class="pull-right">543</a></li>
-								<li class="list-group-item"><b>Friends</b> <a
-									class="pull-right">13,287</a></li>
-							</ul>
-							<a href="#" class="btn btn-primary btn-block"><b>Follow</b></a>
+								<li class="list-group-item text-center">
+									<p>여기에 나의 소개글이 이렇게 들어갈거에요.</p>
+								</li>
+								<li class="list-group-item"><b>내가 오른 산</b> <a
+									class="pull-right"><h5 style="text-align: right">15</h5></a></li>
+								<li class="list-group-item"><b>오르고 싶은 산</b> <a
+									class="pull-right"><h5 style="text-align: right">50</h5></a></li>
+								<li class="list-group-item"><b>나의 산 모임</b> <a
+									class="pull-right"><h5 style="text-align: right">청솔 젊은 산모임</h5></a></li>
+								<jsp:include page="/user/modProfile.jsp" flush="false" /></ul>
 						</div>
-						<!-- /.box-body -->
 					</div>
-					<!-- /.box -->
+				</td>
+				<td colspan="2" rowspan="4">
+					<div class="card text-center">
+						<div class="card-header">
+							<ul class="nav nav-tabs card-header-tabs" id="tabs">
+								<li class="nav-item"><a class="nav-link active"
+									href="#tab1" data-toggle="tab">Link</a></li>
+								<li class="nav-item"><a class="nav-link" href="#tab2"
+									id="" data-toggle="tab">Link2</a></li>
+								<li class="nav-item"><a class="nav-link"
+									data-toggle="modal" data-target="#exampleModalCenter3">나의정보</a>
+									<jsp:include page="/user/pwdCheck.jsp" /></li>
+							</ul>
+						</div>
+						<div class="tab-content">
+							<div class="card-body fade in action" id="tab1">
+								<p class="card-text" id="tab1">여긴 아무것도 없었으면 해???</p>
+							</div>
+							<div class="card-body fade" id="tab2">
+							</div>
+							<div class="card-body fade" id="tab3">
+								<p class="card-text" id="tab2"><jsp:include page="/user/modifyView.jsp" /></p>
+							</div>
+							<!-- 	<a href="#" class="btn btn-primary">수정하기</a> -->
+							<!-- 이거 누르면 disabled readonly 사라지게하기. -->
+						</div>
+					</div>
 
+				</td>
+			</tr>
+			<tr>
+				<td rowspan="3">
 					<!-- About Me Box -->
 					<div class="box box-primary">
 						<div class="box-header with-border">
@@ -116,435 +148,113 @@
 
 							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 								Etiam fermentum enim neque.</p>
-							<a href="${contextPath}/mypage/modifyView" class="btn btn-primary btn-block"><b>나의 정보
-									수정하기</b></a>
+							<a href="#" id=""
+								class="btn btn-primary btn-block"> <b>나의 정보 수정하기</b>
+							</a>
 						</div>
 						<!-- /.box-body -->
+					</div> <!-- /.box -->
 					</div>
-					<!-- /.box -->
+				</td>
+			</tr>
+		</table>
+		<!-- /.box-body -->
+
+		<div class="row mb-2">
+			<div class="col-md-6">
+				<div class="card flex-md-row mb-4 box-shadow h-md-250">
+					<div class="card-body d-flex flex-column align-items-start">
+						<strong class="d-inline-block mb-2 text-primary">World</strong>
+						<h3 class="mb-0">
+							<a class="text-dark" href="#">Featured post</a>
+						</h3>
+						<div class="mb-1 text-muted">Nov 12</div>
+						<p class="card-text mb-auto">This is a wider card with
+							supporting text below as a natural lead-in to additional content.</p>
+						<a href="#">Continue reading</a>
+					</div>
+					<img class="card-img-right flex-auto d-none d-md-block"
+						data-src="holder.js/200x250?theme=thumb" alt="Card image cap">
 				</div>
-				<!-- /.col -->
-				<div class="col-md-9">
-					<div class="nav-tabs-custom">
-						<ul class="nav nav-tabs">
-							<li class="active"><a href="#activity" data-toggle="tab">Activity</a></li>
-							<li><a href="#timeline" data-toggle="tab">Timeline</a></li>
-							<li><a href="#settings" data-toggle="tab">Settings</a></li>
-						</ul>
-						<div class="tab-content">
-							<div class="active tab-pane" id="activity">
-								<!-- Post -->
-							
+			</div>
+			<div class="col-md-6">
+				<div class="card flex-md-row mb-4 box-shadow h-md-250">
+					<div class="card-body d-flex flex-column align-items-start">
+						<strong class="d-inline-block mb-2 text-success">Design</strong>
+						<h3 class="mb-0">
+							<a class="text-dark" href="#">Post title</a>
+						</h3>
+						<div class="mb-1 text-muted">Nov 11</div>
+						<p class="card-text mb-auto">This is a wider card with
+							supporting text below as a natural lead-in to additional content.</p>
+						<a href="#">Continue reading</a>
+					</div>
+					<img class="card-img-right flex-auto d-none d-md-block"
+						data-src="holder.js/200x250?theme=thumb" alt="Card image cap">
+				</div>
+			</div>
+		</div>
+	</div>
 
-<script type="text/JavaScript" src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- 위 3개의 메타 태그는 *반드시* head 태그의 처음에 와야합니다; 어떤 다른 콘텐츠들은 반드시 이 태그들 *다음에* 와야 합니다 -->
-<!-- 합쳐지고 최소화된 최신 CSS -->
-<!-- 합쳐지고 최소화된 최신 자바스크립트 -->
+	<main role="main" class="container">
+		<div class="row">
+			<div class="col-md-8 blog-main">
+				<h3 class="pb-3 mb-4 font-italic border-bottom">From the
+					Firehose</h3>
 
-<script type="text/javascript">
-		function openDaumZipAddress() {
-			new daum.Postcode({
-				oncomplete:function(data) {
-					jQuery("#postcode1").val(data.postcode1);
-					jQuery("#postcode2").val(data.postcode2);
-					jQuery("#zonecode").val(data.zonecode);
-					jQuery("#address").val(data.address);
-					jQuery("#address_etc").focus();
-					console.log(data);
-				}
-			}).open();
-		}
-	</script>
-
-     <div class="container">
-    <div class="row">
-    <div class="col-sm-12 text-center" >
-    <div class="col-sm-3"></div>
-     
-    <div class="col-sm-6">
-    <h2>회원가입</h2>
-    <form action="/user/insertUser" method="post">
-        <table class="table table-boardered">
-            <tr>
-                <th>아이디</th>
-                <td><input type="text" class="form-control" id="id" name="id" placeholder="소문자와 숫자 4~12자리" required><br>
-                <div class ="check_font" id="idCheck"></div></td>  
-           </tr>
-        
-            <tr>
-                <th>비밀번호</th>
-                <td><input type="password" class="form-control" id="password" name="password" placeholder="대소문자와 숫자 4~12자리" required><br>
-                <div class ="check_font" id="passwordCheck"></div></td>      
-                
-            </tr>
-                 <tr>
-                <th>비밀번호 확인</th>
-                <td><input type="password" class="form-control" id="password2" name="password2" placeholder="비밀번호 확인" required><br>
-                 <div class ="check_font" id="password2Check"></div></td>      
-            </tr>
-            <tr>
-                <th>이름</th>
-                <td><input type="text" class="form-control" id="name" name="name" required><br>  
-                 <div class ="check_font" id="nameCheck"></div></td>    
-            </tr>
-
-            <tr>
-                <th>이메일</th>
-                <td><input type="email" class="form-control"id="email" name="email" required><br>
-                 <div class ="check_font" id="emailCheck"></div></td>       
-            </tr>
-            <tr>
-                <th>주소</th>
-                <td> 
-				<input id="zonecode" type="text" value="" style="width:50px;" readonly/> &nbsp;
-				<input type="button" onClick="openDaumZipAddress();" value = "주소 찾기" /> &nbsp;
-                <input type="text" id="address" value="" style="width:240px;" readonly/><br>
-                <input type="text" class="form-control" id="userAddress" name="userAddress" value="상세 주소를 입력해주세요."  required><br>
-                <div class ="check_font" id="addressCheck"></div></td>      
-            </tr>
-            <tr>
-                <th>전화번호</th>
-                <td><input type="text" class="form-control" id="phone" name="phone" placeholder="'-'없이 입력해 주세요." required><br>
-                   <div class ="check_font" id="phoneCheck"></div></td>       
-            </tr>
-         
-            <tr>
-                <th>성별</th>
-                <td>
-                <input type="radio"  name="sex" value="10">남성 &nbsp;&nbsp;
-                <input type="radio"  name="sex" value="20">여성 &nbsp;&nbsp;
-                </td>     
-            </tr>
-            <tr>
-                <td colspan="2">
-                <input type="submit" class="btn btn-primary" value="수정" id="updateUser" >
-               
-                
-                
-                </td>
-            </tr>
-        </table>
-    </form>
-    </div>
-     
-    </div>
-    </div>
-</div>
- 				<form method="post">
-				<input type="text" name="id" value="${login.id}">
-				<input type="text" name="password" value="${login.password}">
-				<input type="submit" class="btn btn-primary" value="탈퇴" id="deleteUser" >
-				</form>
-
+			</div>
+		</div>
+		<!-- /.row -->
+	</main>
+</body>
 <script>
-//모든 공백 체크 정규식
-var empJ = /\s/g;
-//아이디 정규식
-var idJ = /^[a-z0-9]{4,12}$/;
-// 이름 정규식
-var nameJ = /^[가-힣]{2,6}$/;
-// 비밀번호 정규식
-var pwdJ = /^[A-Za-z0-9]{4,12}$/; 
-//이메일 검사 정규식
-var mailJ = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
-//휴대폰 번호 정규식
-var phoneJ = /^01([0|1|6|7|8|9]?)?([0-9]{3,4})?([0-9]{4})$/;
-	
-	$(document).ready(function(){ 
-		//아이디 유효성 검사
-		$("#id").blur(function() {
-		console.log("이벤트 먹었니");					
-		var userId = $("#id").val();
-		$.ajax({
-			url : "/user/idCheck?id="+id ,
-			type : "get",
-			success : function(data, textStatus) {
-				console.log("1 = 중복o / 0 = 중복x : "+ data);		
-				if (data == 1) {
-						// 1 : 아이디가 중복되는 문구
-						$("#idCheck").text("사용중인 아이디입니다 :p");
-						$("#idCheck").css("color", "red");
-						$("#insertUser").attr("disabled", true);
-					} else {
-						if(idJ.test(userId)){
-							// 0 : 아이디 길이 / 문자열 검사
-							$("#idCheck").text("");
-							$("#insertUser").attr("disabled", false);
-						} else if(userId == ""){
-							$('#idCheck').text('아이디를 입력해주세요 :)');
-							$('#idCheck').css('color', 'red');
-							$("#insertUser").attr("disabled", true);		
-						} else {
-							$('#idCheck').text("아이디는 소문자와 숫자 4~12자리만 가능합니다:)");
-							$('#idCheck').css('color', 'red');
-							$("#insertUser").attr("disabled", true);
-						}
-					}
-				}, error : function(data, textStatus) {
-					console.log(data.readyState);
-					console.log(data.status);
-					console.log(data.responseText); 
-						console.log("실패");
+<!-- /.container -->
+	$(document).ready(function() {
+		$("#editInfo").click(function() {
+			$.ajax({
+				url : "/mypage/modifyView.do",
+				type : "post",
+				success : function(data) {
+					console.log(data);
+					$('#id').val(data.id);
+					$('#name').val(data.name);
+					$('#email').val(data.email);
+					$('#zonecode').val(data.zonecode);
+					$('#address').val(data.address);
+					$('#address2').val(data.address2);
+					$('#phone').val(data.phone);
+					$('#sexCheck').text(data.sex2);
+				},
+				error : function(data, textStatus) {
+					console.log("실패");
 				},
 				complete : function(data, textStatus) {
 				}
+			//responsebody -> 아작스로 들어옴
 			});
 		});
-		// 이름에 특수문자 들어가지 않도록 설정
-		$("#name").blur(function() {
-			console.log("이벤트 먹었니");	
-			if (nameJ.test($(this).val())) {
-					console.log(nameJ.test($(this).val()));
-					$("#nameCheck").text('');
-			} else {
-				$('#nameCheck').text('이름을 확인해주세요 :)');
-				$('#nameCheck').css('color', 'red');
-			}
+
+		$("#editProf").click(function() {
+			$.ajax({
+				url : "/mypage/modProfile.do",
+				type : "post",
+				success : function(data) {
+					console.log(data);
+					$('#profile').text(data.profile);
+
+				},
+				error : function(data, textStatus) {
+					console.log("실패");
+				},
+				complete : function(data, textStatus) {
+
+				}
+
+			});
 		});
-		//비밀번호
-		$('#password').blur(function(){
-			console.log("이벤트 먹었니");	
-			if(pwdJ.test($(this).val())){
-				console.log(pwdJ.test($(this).val()));
-				$("#passwordCheck").text('');
-			} else{
-				$('#passwordCheck').text('비밀번호를 확인해주세요 :)');
-				$('#passwordCheck').css('color', 'red');
-			}
-		});
-		//비밀번호 확인
-		$('#password2').blur(function(){
-			console.log("이벤트 먹었니");
-			var password = $("password").val()
-			if($(this).val() == userPwd){
-				console.log("비밀번호 같을 때 ");
-				console.log($(this).val())
-				$("#password2Check").text('');
-			} else{
-				console.log(userPwd)
-				console.log($(this).val())
-				console.log("비밀번호 다를 때 ");	
-				$('#password2Check').text('비밀번호가 일치하지 않습니다 :p');
-				$('#password2Check').css('color', 'red');
-			}
-		});
-		// 이메일
-		$('#email').blur(function(){
-			console.log("이벤트 먹었니");	
-			if(mailJ.test($(this).val())){
-				console.log(mailJ.test($(this).val()));
-				$("#emailCheck").text('');
-			} else {
-				$('#emailCheck').text('이메일을 확인해주세요 :)');
-				$('#emailCheck').css('color', 'red');
-			}
-		});
-		
-		//주소	
-		$('#zonecode').blur(function(){
-			console.log("이벤트 먹었니");	
-			if($(this).val() != ""){
-				$("#addressCheck").text('');
-			} else{
-				$('#addressCheck').text('주소를 확인해주세요 :)');
-				$('#addressCheck').css('color', 'red');
-			}
-		});
-	// 휴대전화
-	$('#phone').blur(function(){
-		if(phoneJ.test($(this).val())){
-			console.log(phoneJ.test($(this).val()));
-			$("#phoneCheck").text('');
-		} else {
-			$('#phoneCheck').text('휴대폰번호를 확인해주세요 :)');
-			$('#phoneCheck').css('color', 'red');
-		}
 	});
-});
-	</script>
 
-							<!-- /.tab-pane -->
-							<div class="tab-pane" id="timeline">
-								<!-- The timeline -->
-								<ul class="timeline timeline-inverse">
-									<!-- timeline time label -->
-									<li class="time-label"><span class="bg-red"> 10
-											Feb. 2014 </span></li>
-									<!-- /.timeline-label -->
-									<!-- timeline item -->
-									<li><i class="fa fa-envelope bg-blue"></i>
-
-										<div class="timeline-item">
-											<span class="time"><i class="fa fa-clock-o"></i> 12:05</span>
-
-											<h3 class="timeline-header">
-												<a href="#">Support Team</a> sent you an email
-											</h3>
-
-											<div class="timeline-body">Etsy doostang zoodles disqus
-												groupon greplin oooj voxy zoodles, weebly ning heekya
-												handango imeem plugg dopplr jibjab, movity jajah plickers
-												sifteo edmodo ifttt zimbra. Babblely odeo kaboodle quora
-												plaxo ideeli hulu weebly balihoo...</div>
-											<div class="timeline-footer">
-												<a class="btn btn-primary btn-xs">Read more</a> <a
-													class="btn btn-danger btn-xs">Delete</a>
-											</div>
-										</div></li>
-									<!-- END timeline item -->
-									<!-- timeline item -->
-									<li><i class="fa fa-user bg-aqua"></i>
-
-										<div class="timeline-item">
-											<span class="time"><i class="fa fa-clock-o"></i> 5
-												mins ago</span>
-
-											<h3 class="timeline-header no-border">
-												<a href="#">Sarah Young</a> accepted your friend request
-											</h3>
-										</div></li>
-									<!-- END timeline item -->
-									<!-- timeline item -->
-									<li><i class="fa fa-comments bg-yellow"></i>
-
-										<div class="timeline-item">
-											<span class="time"><i class="fa fa-clock-o"></i> 27
-												mins ago</span>
-
-											<h3 class="timeline-header">
-												<a href="#">Jay White</a> commented on your post
-											</h3>
-
-											<div class="timeline-body">Take me to your leader!
-												Switzerland is small and neutral! We are more like Germany,
-												ambitious and misunderstood!</div>
-											<div class="timeline-footer">
-												<a class="btn btn-warning btn-flat btn-xs">View comment</a>
-											</div>
-										</div></li>
-									<!-- END timeline item -->
-									<!-- timeline time label -->
-									<li class="time-label"><span class="bg-green"> 3
-											Jan. 2014 </span></li>
-									<!-- /.timeline-label -->
-									<!-- timeline item -->
-									<li><i class="fa fa-camera bg-purple"></i>
-
-										<div class="timeline-item">
-											<span class="time"><i class="fa fa-clock-o"></i> 2
-												days ago</span>
-
-											<h3 class="timeline-header">
-												<a href="#">Mina Lee</a> uploaded new photos
-											</h3>
-
-											<div class="timeline-body">
-												<img src="http://placehold.it/150x100" alt="..."
-													class="margin"> <img
-													src="http://placehold.it/150x100" alt="..." class="margin">
-												<img src="http://placehold.it/150x100" alt="..."
-													class="margin"> <img
-													src="http://placehold.it/150x100" alt="..." class="margin">
-											</div>
-										</div></li>
-									<!-- END timeline item -->
-									<li><i class="fa fa-clock-o bg-gray"></i></li>
-								</ul>
-							</div>
-							<!-- /.tab-pane -->
-
-							<div class="tab-pane" id="settings">
-								<form class="form-horizontal">
-									<div class="form-group">
-										<label for="inputName" class="col-sm-2 control-label">Name</label>
-
-										<div class="col-sm-10">
-											<input type="email" class="form-control" id="inputName"
-												placeholder="Name">
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="inputEmail" class="col-sm-2 control-label">Email</label>
-
-										<div class="col-sm-10">
-											<input type="email" class="form-control" id="inputEmail"
-												placeholder="Email">
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="inputName" class="col-sm-2 control-label">Name</label>
-
-										<div class="col-sm-10">
-											<input type="text" class="form-control" id="inputName"
-												placeholder="Name">
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="inputExperience" class="col-sm-2 control-label">Experience</label>
-
-										<div class="col-sm-10">
-											<textarea class="form-control" id="inputExperience"
-												placeholder="Experience"></textarea>
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="inputSkills" class="col-sm-2 control-label">Skills</label>
-
-										<div class="col-sm-10">
-											<input type="text" class="form-control" id="inputSkills"
-												placeholder="Skills">
-										</div>
-									</div>
-									<div class="form-group">
-										<div class="col-sm-offset-2 col-sm-10">
-											<div class="checkbox">
-												<label> <input type="checkbox"> I agree to
-													the <a href="#">terms and conditions</a>
-												</label>
-											</div>
-										</div>
-									</div>
-									<div class="form-group">
-										<div class="col-sm-offset-2 col-sm-10">
-											<button type="submit" class="btn btn-danger">Submit</button>
-										</div>
-									</div>
-								</form>
-							</div>
-							<!-- /.tab-pane -->
-						</div>
-						<!-- /.tab-content -->
-					</div>
-					<!-- /.nav-tabs-custom -->
-				</div>
-				<!-- /.col -->
-			</div>
-			<!-- /.row -->
-
-		</section>
-		<!-- /.content -->
-	</div>
-	<!-- /.content-wrapper -->
-
-	<!-- /.control-sidebar -->
-	<!-- Add the sidebar's background. This div must be placed
-       immediately after the control sidebar -->
-	<div class="control-sidebar-bg"></div>
-	</div>
-	<!-- ./wrapper -->
-
-	<!-- jQuery 3 -->
-	<script src="../../bower_components/jquery/dist/jquery.min.js"></script>
-	<!-- Bootstrap 3.3.7 -->
-	<script src="../../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-	<!-- FastClick -->
-	<script src="../../bower_components/fastclick/lib/fastclick.js"></script>
-	<!-- AdminLTE App -->
-	<script src="../../dist/js/adminlte.min.js"></script>
-	<!-- AdminLTE for demo purposes -->
-	<script src="../../dist/js/demo.js"></script>
+	$('a[href="#settings"]').tab('show');
+</script>
 </body>
 </html>

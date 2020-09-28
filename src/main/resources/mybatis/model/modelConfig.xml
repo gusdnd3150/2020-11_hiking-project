@@ -13,11 +13,16 @@
 		<typeAlias type="project.user.vo.UserVO"  alias="userVO" />
 
 		<!-- products -->
+		<typeAlias type="project.Paging" alias="Paging"/>
 		<typeAlias type="project.E_P002_D003.vo.E_P002_D003ProductsVO" alias="e_P002_D003ProductsVO"/>
 		<typeAlias type="project.E_P002_D003.vo.E_P002_D003PhotoVO" alias="e_P002_D003PhotoVO"/>
-		<typeAlias type="project.Paging" alias="Paging"/>
+		<typeAlias type="project.B_P003_D001.vo.productAfterVO" alias="productAfterVO"/>
 
 		<!-- admin -->
 		<typeAlias type="project.admin.e_p001.vo.E_p001VO"  alias="e_p001VO" />
+		<typeAlias type="project.admin.e_p003.vo.E_p003VO"  alias="e_p003VO" />
+		<typeAlias type="project.admin.e_p005.vo.E_p005VO"  alias="e_p005VO" />
+		<typeAlias type="project.admin.e_p006.vo.E_p006VO"  alias="e_p006VO" />
+
 	</typeAliases>
 </configuration>

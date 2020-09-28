@@ -11,11 +11,14 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import project.user.dao.MypageDAO;
+
 public class LoginInterceptor extends HandlerInterceptorAdapter {
 
 	private static final String LOGIN = "LOGIN";
 	public static final Logger logger = LoggerFactory.getLogger(LoginInterceptor.class);
 
+	
 	@Override
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object Handler, ModelAndView mav)
 			throws Exception {
@@ -28,7 +31,6 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 			System.out.println("Success!!!!");
 			httpSession.setAttribute(LOGIN, userVO);
 			System.out.println("httpSession.getAttribute(LOGIN)" + httpSession.getAttribute(LOGIN));
-			//response.sendRedirect("/");
 
 			if (request.getParameter("useCookie") != null) {
 				logger.info("remember me...	");
@@ -42,7 +44,8 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 
 			}
 			Object destination = httpSession.getAttribute("destinateion");
-			response.sendRedirect(destination != null ? (String) destination : "/");
+			response.sendRedirect(destination != null ? (String) destination : "/main.do");
+
 		}
 	}
 

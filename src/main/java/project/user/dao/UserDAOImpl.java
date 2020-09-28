@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
+import org.codehaus.plexus.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import project.user.vo.UserVO;
 public class UserDAOImpl implements UserDAO{
 	
 	public static final Logger logger = LoggerFactory.getLogger(UserDAOImpl.class);
+	public static final String GET_BY_SNS = "userMapper.getBySns";
 	
 	@Autowired
 	private SqlSession sqlSession;
@@ -24,6 +26,14 @@ public class UserDAOImpl implements UserDAO{
 	@Override
 	public void insertUser(UserVO userVO) throws Exception{
 		sqlSession.insert("userMapper.insertUser", userVO);
+		sqlSession.insert("userMapper.insertUser3", userVO);
+		
+	}
+	
+	@Override
+	public void insertUser2(Map<String, Object> snsUser) {
+		sqlSession.insert("userMapper.insertUser2", snsUser);
+		sqlSession.insert("userMapper.insertUser4", snsUser);
 		
 	}
 
@@ -53,12 +63,28 @@ public class UserDAOImpl implements UserDAO{
 		sqlSession.update("userMapper.keepLogin", paramMap);
 	}
 	
-	
-
 	@Override
 	public UserVO checkUserWithSessionKey(String value) throws Exception {
 		logger.info("------checkUserWithSessionKeyDAO------");
 		return sqlSession.selectOne("userMapper.checkUserWithSessionKey", value);
 	}
+
+	@Override
+	public UserVO getBySns(Map<String, Object> snsUser) {
+//		if(StringUtils.isNotEmpty(snsUser.getId())) {
+			return sqlSession.selectOne(GET_BY_SNS, snsUser.get("email"));
+//		} 
+//		else (StringUtils.isNotEmpty(snsUser.getId()) {
+//			return sqlSession.selectOne(GET_BY_SNS_GOOGLE, snsUser.getId());
+//		}
+	}
+
+	@Override
+	public void removeSessionId(String sessionId) {
+		sqlSession.update("userMapper.removeSessionId", sessionId);
+		
+	}
+
+	
 
 }

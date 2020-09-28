@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="${host}" />
+		<property name="port" value="${port}" />
+		<property name="username" value="${mail}" /> <!-- 내 메일주소 -->
+		<property name="password" value="${password}" /> <!-- 메일비번 -->
+		<property name="javaMailProperties">
+			<props>
+				<prop key="mail.transport.protocol">smtp</prop>
+				<prop key="mail.smtp.auth">true</prop>
+				<prop key="mail.smtp.starttls.enable">true</prop>
+				<prop key="mail.smtp.socketFactory.class">javax.net.ssl.SSLSocketFactory</prop>
+				<prop key="mail.debug">true</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!-- You can have some pre-configured messagess also which are ready to send -->
+	<bean id="preConfiguredMessage" class="org.springframework.mail.SimpleMailMessage">
+		<property name="to" value="${to}"></property> <!--받는사람 주소  -->
+		<property name="from" value="${from}"></property> <!-- 보내는사람 메일주소 -->
+		<property name="subject" value="문의 사항" /> <!--제목  -->
+	</bean>
+</beans>
+

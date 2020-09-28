@@ -39,7 +39,7 @@
                     <a class="nav-link" href="#">산모임</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">오름마켓</a>
+                    <a class="nav-link" href="/B_P002_D001/shopMainCate?listType=10">오름마켓</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">고객센터</a>

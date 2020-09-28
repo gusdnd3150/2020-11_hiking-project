@@ -1,6 +1,7 @@
 package project.E_P002_D003.Controller;
 
 import java.io.File;
+
 import java.io.IOException;
 
 import org.slf4j.Logger;
@@ -74,10 +75,10 @@ public class E_P002_D003ProductsControllerImpl  implements E_P002_D003ProductsCo
 		
 		for(int i=0;i<test.size();i++) {
 			E_P002_D003PhotoVO vo =new E_P002_D003PhotoVO();
-			vo.setCONTENTImage(test.get(i).getBytes());
-			vo.setPPHOTONUM(i+1);
+			vo.setContent(test.get(i).getBytes());
+			vo.setpPhotoNum(i+1);
 			imageFileList.add(vo);
-			System.out.println("파일정보"+vo.getCONTENTImage());
+			System.out.println("파일정보"+vo.getContent());
 		}
 		articleMap.put("imageFileList",imageFileList);
 		

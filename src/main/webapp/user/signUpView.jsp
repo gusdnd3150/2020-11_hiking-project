@@ -48,7 +48,7 @@
      
     <div class="col-sm-6">
     <h2>회원가입</h2>
-    <form action="/user/insertUser" method="post">
+    <form action="/user/insertUser.do" method="post">
         <table class="table table-boardered">
             <tr>
                 <th>아이디</th>
@@ -81,10 +81,10 @@
             <tr>
                 <th>주소</th>
                 <td> 
-				<input id="zonecode" type="text" value="" style="width:50px;" readonly/> &nbsp;
+				<input id="zonecode" name="zonecode" type="text"  style="width:50px;" readonly/> &nbsp;
 				<input type="button" onClick="openDaumZipAddress();" value = "주소 찾기" /> &nbsp;
-                <input type="text" id="address" name="address" value="" style="width:240px;" readonly/><br><br>
-                <input type="text" class="form-control" id="address" name="address" placeholder="상세 주소를 입력해주세요."  required><br>
+                <input type="text" id="address" name="address"  style="width:240px;" readonly/><br><br>
+                <input type="text" class="form-control" id="address2" name="address2" placeholder="상세 주소를 입력해주세요."  required><br>
                 <div class ="check_font" id="addressCheck"></div></td>      
             </tr>
             <tr>
@@ -133,7 +133,7 @@ var phoneJ = /^01([0|1|6|7|8|9]?)?([0-9]{3,4})?([0-9]{4})$/;
 		console.log("이벤트 먹었니");					
 		var id = $("#id").val();
 		$.ajax({
-			url : "/user/idCheck?id="+id ,
+			url : "/user/idCheck.do?id="+id ,
 			type : "get",
 			success : function(data, textStatus) {
 				console.log("1 = 중복o / 0 = 중복x : "+ data);		
@@ -204,6 +204,7 @@ var phoneJ = /^01([0|1|6|7|8|9]?)?([0-9]{3,4})?([0-9]{4})$/;
 				console.log("비밀번호 다를 때 ");	
 				$('#password2Check').text('비밀번호가 일치하지 않습니다 :p');
 				$('#password2Check').css('color', 'red');
+				$("#insertUser").attr("disabled", true);
 			}
 		});
 		// 이메일

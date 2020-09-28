@@ -46,6 +46,7 @@
 			<param-value>
 				/WEB-INF/spring/servlet-mybatis.xml
 				/WEB-INF/spring/appServlet/servlet-context.xml
+				/WEB-INF/spring/mail-context.xml
 			</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>

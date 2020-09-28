@@ -5,30 +5,10 @@
 <%
 	request.setCharacterEncoding("UTF-8");
 %>
-
 <!-- 주소, 비밀번호 확인 미완성 -->
-
-
 <html>
-<head>
-<script src="http://code.jquery.com/jquery-latest.min.js"></script>
-<script type="text/JavaScript"
-	src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<!-- 위 3개의 메타 태그는 *반드시* head 태그의 처음에 와야합니다; 어떤 다른 콘텐츠들은 반드시 이 태그들 *다음에* 와야 합니다 -->
-<title>수정</title>
-<!-- 합쳐지고 최소화된 최신 CSS -->
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-<!-- 부가적인 테마 -->
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
-
-<!-- 합쳐지고 최소화된 최신 자바스크립트 -->
-<script
-	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script> -->
 <script type="text/javascript">
 	function openDaumZipAddress() {
 		new daum.Postcode({
@@ -43,88 +23,79 @@
 		}).open();
 	}
 </script>
-</head>
 <body>
-	<div class="container">
-		<div class="row">
-			<div class="col-sm-12 text-center">
-				<div class="col-sm-3"></div>
-
-				<div class="col-sm-6">
-					<h2>나의 정보 수정하기</h2>
-					<form action="/mypage/updateUser" method="post">
+			<div class="col-sm-14 text-center">
+				<div class="col-sm-2"></div>
+				<div class="col-sm-10">
+					<h2>나의 정보</h2>
+					<form action="/mypage/updateUser.do" method="post">
 						<table class="table table-boardered">
 							<tr>
 								<th>아이디</th>
 								<td><input type="text" class="form-control" id="id"
-									name="id" placeholder="소문자와 숫자 4~12자리" value="${LOGIN.id}" disabled><br>
+									name="id" placeholder="소문자와 숫자 4~12자리"
+									readonly><br>
 									<div class="check_font" id="idCheck"></div></td>
 							</tr>
-
 							<tr>
 								<th>비밀번호</th>
-								<td><input type="password" class="form-control"
-									id="password" name="password" placeholder="대소문자와 숫자 4~12자리" 
-									required><br>
-									<div class="check_font" id="passwordCheck"></div></td>
-							</tr>
-							<tr>
-								<th>비밀번호 확인</th>
-								<td><input type="password" class="form-control"
-									id="password2" name="password2" placeholder="비밀번호 확인"  required><br>
-									<div class="check_font" id="password2Check"></div></td>
+						<td><jsp:include page="/user/modPassword.jsp" flush="false"/></td>
 							</tr>
 							<tr>
 								<th>이름</th>
 								<td><input type="text" class="form-control" id="name"
-									name="name" required value="${LOGIN.name}"><br>
+									name="name"  required ><br>
 									<div class="check_font" id="nameCheck"></div></td>
 							</tr>
-
 							<tr>
 								<th>이메일</th>
 								<td><input type="email" class="form-control" id="email"
-									name="email" value="${LOGIN.email}" required><br>
+									name="email" required><br>
 									<div class="check_font" id="emailCheck"></div></td>
 							</tr>
 							<tr>
-								<th> 주소</th>
-								<td><input id="zonecode" type="text" value="" style="width: 50px;" readonly /> &nbsp; 
-								<input type="button" onClick="openDaumZipAddress();" value="주소 찾기" /> &nbsp; 
-								<input type="text" id="address" value="" style="width: 240px;" readonly /><br> 
-								<input type="text" class="form-control" id="address" name="address" 
-								placeholder="상세 주소를 입력해주세요." value="${LOGIN.address}" required><br>
-								<div class="check_font" id="addressCheck"></div></td>
+								<th>주소</th>
+								<td><input type="text" id="zonecode" name="zonecode" style="width: 50px;"  readonly  /> &nbsp; 
+									<input type="button" onClick="openDaumZipAddress();" value="주소 찾기" /> &nbsp; 
+									<input type="text" id="address" name="address" style="width: 240px;" readonly /><br> 
+									<input type="text" class="form-control" id="address2" name="address2" placeholder="상세 주소를 입력해주세요."
+									 required ><br>
+									<div class="check_font" id="addressCheck"></div></td>
 							</tr>
 							<tr>
 								<th>전화번호</th>
 								<td><input type="text" class="form-control" id="phone"
-									name="phone" placeholder="'-'없이 입력해 주세요." value="${LOGIN.phone}" required><br>
+									name="phone" placeholder="'-'없이 입력해 주세요."
+									 required><br>
 									<div class="check_font" id="phoneCheck"></div></td>
 							</tr>
 
 							<tr>
 								<th>성별</th>
 								<td>
-								<input type="radio" name="sex" value="10">남성&nbsp;&nbsp; 
-								<input type="radio" name="sex" value="20">여성&nbsp;&nbsp;<div style="color:green" class="check_font" id="sexCheck"></div></td>
+								<table>
+								<tr>
+								<td style="border: #000000 solid; border-width: 0px;">
+								<input type="radio" name="sex" value="10">&nbsp;&nbsp;남성&nbsp;&nbsp;</td>
+								<td style="border: #000000 solid; border-width: 0px;">
+								<input type="radio" name="sex" value="20">&nbsp;&nbsp;여성&nbsp;&nbsp;</td>
+								<td colspan="3" style="border: #000000 solid; border-width: 0px;"></td>
+									<td style="border: #000000 solid; border-width: 0px;">
+									<div style="color: green" class="check_font" id="sexCheck" ></div></td>
+									</tr>
+									</table>
+									</td>
 							</tr>
 							<tr>
-								<td colspan="2">
-								<input type="submit" class="btn btn-primary" value="저장" id="updateUser"></td>
-							</tr>			
-								<tr><td colspan="2"><form action="/mypage/deleteUser"method="post">
-									<input type="text" name="id" value="${LOGIN.id}"> 
-									<input type="text" name="password3" value="${LOGIN.password}"> 
-									<input type="submit" class="btn btn-primary" value="탈퇴하기" id="deleteUser">
-								</form></td>
+								<td colspan="2"><input type="submit"
+									class="btn btn-primary" value="저장하기" id="updateUser">
+						</form>
+										<input type="submit" class="btn btn-primary" value="탈퇴하기"
+											id="deleteUser">
+									</td>
 							</tr>
 						</table>
-					</form>
 				</div>
-
-			</div>
-		</div>
 	</div>
 
 </body>
@@ -135,54 +106,11 @@
 	var idJ = /^[a-z0-9]{4,12}$/;
 	// 이름 정규식
 	var nameJ = /^[가-힣]{2,6}$/;
-	// 비밀번호 정규식
-	var pwdJ = /^[A-Za-z0-9]{4,12}$/;
 	//이메일 검사 정규식
 	var mailJ = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
 	//휴대폰 번호 정규식
 	var phoneJ = /^01([0|1|6|7|8|9]?)?([0-9]{3,4})?([0-9]{4})$/;
-
-	$(document).ready(function() {
-		//아이디 유효성 검사
-		$("#id").blur(function() {
-			console.log("이벤트 먹었니");
-			var userId = $("#id").val();
-			$.ajax({
-				url : "/user/idCheck?id=" + id,
-				type : "get",
-				success : function(data, textStatus) {
-					console.log("1 = 중복o / 0 = 중복x : " + data);
-					if (data == 1) {
-						// 1 : 아이디가 중복되는 문구
-						$("#idCheck").text("사용중인 아이디입니다 :p");
-						$("#idCheck").css("color", "red");
-						$("#insertUser").attr("disabled", true);
-					} else {
-						if (idJ.test(userId)) {
-							// 0 : 아이디 길이 / 문자열 검사
-							$("#idCheck").text("");
-							$("#insertUser").attr("disabled", false);
-						} else if (userId == "") {
-							$('#idCheck').text('아이디를 입력해주세요 :)');
-							$('#idCheck').css('color', 'red');
-							$("#insertUser").attr("disabled", true);
-						} else {
-							$('#idCheck').text("아이디는 소문자와 숫자 4~12자리만 가능합니다:)");
-							$('#idCheck').css('color', 'red');
-							$("#insertUser").attr("disabled", true);
-						}
-					}
-				},
-				error : function(data, textStatus) {
-					console.log(data.readyState);
-					console.log(data.status);
-					console.log(data.responseText);
-					console.log("실패");
-				},
-				complete : function(data, textStatus) {
-				}
-			});
-		});
+	
 		// 이름에 특수문자 들어가지 않도록 설정
 		$("#name").blur(function() {
 			console.log("이벤트 먹었니");
@@ -194,33 +122,7 @@
 				$('#nameCheck').css('color', 'red');
 			}
 		});
-		//비밀번호
-		$('#password').blur(function() {
-			console.log("이벤트 먹었니");
-			if (pwdJ.test($(this).val())) {
-				console.log(pwdJ.test($(this).val()));
-				$("#passwordCheck").text('');
-			} else {
-				$('#passwordCheck').text('비밀번호를 확인해주세요 :)');
-				$('#passwordCheck').css('color', 'red');
-			}
-		});
-		//비밀번호 확인
-		$('#password2').blur(function() {
-			console.log("이벤트 먹었니");
-			var password = $("#password").val()
-			if ($(this).val() == password) {
-				console.log("비밀번호 같을 때 ");
-				console.log($(this).val())
-				$("#password2Check").text('');
-			} else {
-				console.log(password)
-				console.log($(this).val())
-				console.log("비밀번호 다를 때 ");
-				$('#password2Check').text('비밀번호가 일치하지 않습니다 :p');
-				$('#password2Check').css('color', 'red');
-			}
-		});
+		
 		// 이메일
 		$('#email').blur(function() {
 			console.log("이벤트 먹었니");
@@ -253,19 +155,32 @@
 				$('#phoneCheck').css('color', 'red');
 			}
 		});
-	
-	//성별
-	$("input:radio[name=sex]").click(function() {
-		if ($("input:radio[name=sex]:checked").val()=="10") {
-			console.log($(this).val());
-			$("#sexCheck").text('남자');
-			$('#sexCheck').css('color', 'green');
-		} else {
-			console.log($(this).val());
-			$('#sexCheck').text('여자');
-			$('#sexCheck').css('color', 'green');
-		}
-	});
-});
+
+		//성별
+		$("input:radio[name=sex]").click(function() {
+			if ($("input:radio[name=sex]:checked").val() == "10") {
+				console.log($(this).val());
+				$("#sexCheck").text('남자');
+				$('#sexCheck').css('color', 'green');
+			} else {
+				console.log($(this).val());
+				$('#sexCheck').text('여자');
+				$('#sexCheck').css('color', 'green');
+			}
+		});
+		
+		//성별
+		$("input:radio[name=sex]").click(function() {
+			if ($("input:radio[name=sex]:checked").val()=="10") {
+				console.log($(this).val());
+				$("#sexCheck").text('남자');
+				$('#sexCheck').css('color', 'green');
+			} else {
+				console.log($(this).val());
+				$('#sexCheck').text('여자');
+				$('#sexCheck').css('color', 'green');
+			}
+		});
+
 </script>
 </html>

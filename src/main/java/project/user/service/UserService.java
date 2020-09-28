@@ -1,6 +1,9 @@
 package project.user.service;
 
 import java.util.Date;
+import java.util.Map;
+
+import org.springframework.util.MultiValueMap;
 
 import project.user.dto.LoginDTO;
 import project.user.vo.UserVO;
@@ -16,4 +19,12 @@ public interface UserService {
 	void keepLogin(String id, String sessionId, Date sessionLimit) throws Exception;
 	
 	UserVO checkLoginBefore(String value) throws Exception;
+
+	UserVO getBySns(Map<String, Object> snsUser);
+
+	public void insertUser2(Map<String, Object> snsUser);
+
+	public void removeSessionId(String sessionId);
+
+	
 }

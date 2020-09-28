@@ -1,5 +1,7 @@
 package project.user.service;
 
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +18,6 @@ public class MypageServiceImpl implements MypageService{
 	@Autowired
 	public MypageDAO mypageDAO;
 
-
-	
-	
 	@Override
 	public void updateUser(UserVO userVO) throws Exception {
 		mypageDAO.updateUser(userVO);
@@ -29,7 +28,34 @@ public class MypageServiceImpl implements MypageService{
 		mypageDAO.deleteUser(loginDTO);
 	}
 
+	@Override
+	public void updateUserCont(Map<String, Object> contMap) {
+		mypageDAO.updateUserCont(contMap);
+		
+	}
 
+	@Override
+	public void updateUserProf(Map<String, Object> profMap) {
+		mypageDAO.updateUserProf(profMap);		
+	}
+
+	@Override
+	public UserVO getUserInfo(String sessionId) {
+		return mypageDAO.getUserInfo(sessionId);	
+	}
+
+	@Override
+	public UserVO pwdCheck(String sessionId) {
+		return mypageDAO.pwdCheck(sessionId);
+	}
+
+	@Override
+	public void updatePwd(UserVO userVO) {
+		mypageDAO.updatePwd(userVO);
+		
+	}
+
+	
 	
 	
 

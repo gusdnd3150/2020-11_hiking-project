@@ -1,6 +1,7 @@
 package project.user.dao;
 
 import java.util.Date;
+import java.util.Map;
 
 import project.user.dto.LoginDTO;
 import project.user.vo.UserVO;
@@ -16,5 +17,12 @@ public interface UserDAO {
 	void keepLogIn(String id, String sessionId, Date sessionLimit) throws Exception;
 	
 	UserVO checkUserWithSessionKey(String value) throws Exception;
+
+
+	public UserVO getBySns(Map<String, Object> snsUser);
+
+	public void insertUser2(Map<String, Object> snsUser);
+
+	public void removeSessionId(String sessionId);
 
 }

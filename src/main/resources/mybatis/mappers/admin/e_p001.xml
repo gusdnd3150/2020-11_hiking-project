@@ -47,7 +47,7 @@
       	]]>
     	<choose>
     		<when test="searchOption=='userNum'">
-    		where  userNum =userNum
+    		<!-- where  userNum =userNum -->
     		</when>
     		<when test="searchOption!='userNum'">
     		where  ${searchOption} like '%'||#{key_word}||'%'

@@ -5,71 +5,73 @@ import org.springframework.stereotype.Component;
 @Component
 public class E_P002_D003ProductsVO {
 	
-     private String PRODNUM;	//상품번호
-     private String PCATEGORYNUM;		//상품분류코드
-     private String NAME;		//상품명
-     private String PRICE;		//상품가격(단가)
-     private String CONTENT;	    	//상품내용
-     private String QUANTITY;		//상품수량
-     private String TYPE;		//상품구분
-     private String CREATEDAT;	//등록일자
-     private String UPDATEDAT;		//수정일자
+     private String prodNum;//상품번호
+     private int pCategoryNum;		//상품분류코드
+     private String name;		//상품명
+     private String price;		//상품가격(단가)
+     private String content;	    	//상품내용
+     private String quantity;		//상품수량
+     private String type;		//상품구분
+     private String createDat;	//등록일자
+     private String updateDat;		//수정일자
      
-	public String getPRODNUM() {
-		return PRODNUM;
+	public String getProdNum() {
+		return prodNum;
 	}
-	public void setPRODNUM(String pRODNUM) {
-		PRODNUM = pRODNUM;
+	public void setProdNum(String prodNum) {
+		this.prodNum = prodNum;
 	}
-	public String getPCATEGORYNUM() {
-		return PCATEGORYNUM;
+	public int getPcateGoryNum() {
+		return pCategoryNum;
 	}
-	public void setPCATEGORYNUM(String pCATEGORYNUM) {
-		PCATEGORYNUM = pCATEGORYNUM;
+	public void setPcateGoryNum(int pcateGoryNum) {
+		this.pCategoryNum = pcateGoryNum;
 	}
-	public String getNAME() {
-		return NAME;
+	public String getName() {
+		return name;
 	}
-	public void setNAME(String nAME) {
-		NAME = nAME;
+	public void setName(String name) {
+		this.name = name;
 	}
-	public String getPRICE() {
-		return PRICE;
+	public String getPrice() {
+		return price;
 	}
-	public void setPRICE(String pRICE) {
-		PRICE = pRICE;
+	public void setPrice(String price) {
+		this.price = price;
 	}
-	public String getCONTENT() {
-		return CONTENT;
+	public String getContent() {
+		return content;
 	}
-	public void setCONTENT(String cONTENT) {
-		CONTENT = cONTENT;
+	public void setContent(String content) {
+		this.content = content;
 	}
-	public String getQUANTITY() {
-		return QUANTITY;
+	public String getQuantity() {
+		return quantity;
 	}
-	public void setQUANTITY(String qUANTITY) {
-		QUANTITY = qUANTITY;
+	public void setQuantity(String quantity) {
+		this.quantity = quantity;
 	}
-	public String getTYPE() {
-		return TYPE;
+	public String getType() {
+		return type;
 	}
-	public void setTYPE(String tYPE) {
-		TYPE = tYPE;
+	public void setType(String type) {
+		this.type = type;
 	}
-	public String getCREATEDAT() {
-		return CREATEDAT;
+	public String getCreateDat() {
+		return createDat;
 	}
-	public void setCREATEDAT(String cREATEDAT) {
-		CREATEDAT = cREATEDAT;
+	public void setCreateDat(String createDat) {
+		this.createDat = createDat;
 	}
-	public String getUPDATEDAT() {
-		return UPDATEDAT;
+	public String getUpdateDat() {
+		return updateDat;
 	}
-	public void setUPDATEDAT(String uPDATEDAT) {
-		UPDATEDAT = uPDATEDAT;
+	public void setUpdateDat(String updateDat) {
+		this.updateDat = updateDat;
 	}
-    
+     
+     
+     
     
 
 }

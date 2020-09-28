@@ -1,5 +1,7 @@
 package project.admin.e_p001.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import project.admin.e_p001.dao.E_p001DAO;
 import project.admin.e_p001.vo.E_p001VO;
+
 
 @Service
 //@Transactional(propagation = Propagation.REQUIRED)
@@ -29,7 +32,8 @@ public class E_p001ServiceImpl implements E_p001Service{
 		System.out.println("조건검색 들어옴:");
 		 List userList = e_p001DAO.selectUser(search);
 		return userList;
-	}
+	}	
+
 
 	@Override //회원 삭제
 	public int removeUser(String id) throws Exception {
@@ -46,7 +50,5 @@ public class E_p001ServiceImpl implements E_p001Service{
 	public int upDateUser(E_p001VO e_p001VO) throws Exception {
 		return e_p001DAO.upDaet(e_p001VO);
 	}
-
-
 
 }

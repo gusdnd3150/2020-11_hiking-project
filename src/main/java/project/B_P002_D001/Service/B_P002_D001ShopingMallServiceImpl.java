@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -61,7 +62,30 @@ public class B_P002_D001ShopingMallServiceImpl implements B_P002_D001ShopingMall
 		List<E_P002_D003ProductsVO> list = B_P002_D001ShopingMallDAO.shopListText();
 		return list;
 	}
-
+	@Override
+	public int totalCount2(Map<String, Object> info) {//dddddddddddddd
+		int totalCount = B_P002_D001ShopingMallDAO.totalCount2(info);
+		return totalCount;
+	}
+	@Override
+	public List<E_P002_D003ProductsVO> shopListTextCate(Map<String,Object> map) throws DataAccessException {
+		List<E_P002_D003ProductsVO> list= B_P002_D001ShopingMallDAO.shopListTextCate(map);
+		return list;
+	}
+	
+	
+	
+	//////////////////작업중///////////////////////////
+	@Override
+	public List<E_P002_D003ProductsVO> searchResult(Map<String, Object> info) throws DataAccessException {
+		List<E_P002_D003ProductsVO> list= B_P002_D001ShopingMallDAO.searchResult(info);
+		return list;
+	}
+	@Override
+	public int SearchTotalCount(Map<String, Object> info) {
+		int totalCount = B_P002_D001ShopingMallDAO.SearchTotalCount(info);
+		return totalCount;
+	}
 
 	
 	

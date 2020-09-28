@@ -10,7 +10,7 @@
 
 	<script>
 		alert("아이디와 비밀번호를 다시 확인해주세요");
-		self.location ="/user/logInView";
+		self.location ="/user/logInView.do";
 	</script>
 </body>
 </body>

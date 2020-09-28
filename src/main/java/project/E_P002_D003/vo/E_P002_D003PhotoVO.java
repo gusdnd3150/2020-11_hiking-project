@@ -6,42 +6,44 @@ import org.springframework.web.multipart.MultipartFile;
 @Component
 public class E_P002_D003PhotoVO {
 	
-	private int PRODNUM; //상품번호
-	private int PPHOTONUM; //사진번호
-	private String CREATEDAT;  //등록일자
-	private String UPDATEDAT; //수정일자
-	private byte[] CONTENTImage; //상품사진
+	private int prodNum; //상품번호
+	private int pPhotoNum; //사진번호
+	private String createDat;  //등록일자
+	private String upDateDat; //수정일자
+	private byte[] content; //상품사진
 	
-	public int getPRODNUM() {
-		return PRODNUM;
+	public int getProdNum() {
+		return prodNum;
 	}
-	public void setPRODNUM(int pRODNUM) {
-		PRODNUM = pRODNUM;
+	public void setProdNum(int prodNum) {
+		this.prodNum = prodNum;
 	}
-	public int getPPHOTONUM() {
-		return PPHOTONUM;
+	public int getpPhotoNum() {
+		return pPhotoNum;
 	}
-	public void setPPHOTONUM(int pPHOTONUM) {
-		PPHOTONUM = pPHOTONUM;
+	public void setpPhotoNum(int pPhotoNum) {
+		this.pPhotoNum = pPhotoNum;
 	}
-	public String getCREATEDAT() {
-		return CREATEDAT;
+	public String getCreateDat() {
+		return createDat;
 	}
-	public void setCREATEDAT(String cREATEDAT) {
-		CREATEDAT = cREATEDAT;
+	public void setCreateDat(String createDat) {
+		this.createDat = createDat;
 	}
-	public String getUPDATEDAT() {
-		return UPDATEDAT;
+	public String getUpDateDat() {
+		return upDateDat;
 	}
-	public void setUPDATEDAT(String uPDATEDAT) {
-		UPDATEDAT = uPDATEDAT;
+	public void setUpDateDat(String upDateDat) {
+		this.upDateDat = upDateDat;
 	}
-	public byte[] getCONTENTImage() {
-		return CONTENTImage;
+	public byte[] getContent() {
+		return content;
 	}
-	public void setCONTENTImage(byte[] cONTENTImage) {
-		CONTENTImage = cONTENTImage;
+	public void setContent(byte[] content) {
+		this.content = content;
 	}
+
+	
 	
 	
 

@@ -28,21 +28,23 @@
         </div>
         <nav class="menu-bar">
             <ul>
-                <li><a href="/group">산 오르기</a></li>
+                <li><a href="../group/groupMain.jsp">산 오르기</a></li>
+                
                 <li><a href="#">산 모임</a></li>
-                <li><a href="#">오름 마켓</a></li>
+                <li><a href="../shoppingMall/main.jsp">오름 마켓</a></li>
                 <li><a href="#">고객센터</a></li>
             </ul>
         </nav>
 
         <div class="login-box">
         <c:choose>
-            <c:when test="${isLogOn == true  && member!= null}">
-                <a href="${contextPath}/member/logout.do"><h3>로그아웃</h3></a>
-                <a href="${contextPath}/member/loginForm.do"><h3>로그인</h3></a>
+            <c:when test="${not empty LOGIN}">
+                <a href="${contextPath}/user/logOut"><h3>로그아웃</h3></a>
+                <a href="${contextPath}/mypage/mypageHome"><h3>마이페이지</h3></a>
             </c:when>
             <c:otherwise>
-                <a href="${contextPath}/member/loginForm.do"><h3>로그인</h3></a>
+                <a href="${contextPath}/user/logInView"><h3>로그인</h3></a>
+                <a href="${contextPath}/user/signUpView"><h3>회원가입</h3></a>
             </c:otherwise>
         </c:choose>
         </div>

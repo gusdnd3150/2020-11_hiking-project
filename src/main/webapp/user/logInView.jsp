@@ -20,6 +20,8 @@
 <!-- 합쳐지고 최소화된 최신 자바스크립트 -->
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<!--카카오sdk -->
+<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
 <title>LOGIN</title>
 </head>
 <body>
@@ -31,7 +33,7 @@
 
 				<div class="col-sm-6">
 					<h2>로그인</h2>
-					<form action="/user/logIn" method="post">
+					<form action="/user/logIn.do" method="post">
 						<table class="table table-boardered">
 
 							<tr>
@@ -57,10 +59,11 @@
 									</div></td>
 							</tr>
 							<tr>
-								<td colspan="2"><a href="${contextPath}/user/logInView">
-								<img src="/resources/img/kakao.png" alt="왓더"></a><br><br>
-								<a href="${contextPath}/user/logInView">
-								<img src="/resources/img/naver.png" alt="왓더"></a></td>
+								<td colspan="2"><br> <a href="${ naver_url }"> 
+								<img src="/resources/img/naver.png" width="200" height="45"
+										alt="왓더"></a> <a href="${ google_url }"> 
+								<img src="/resources/img/google.png" width="200" height="45"
+										alt="왓더"></a><br></td>
 							</tr>
 						</table>
 					</form>
