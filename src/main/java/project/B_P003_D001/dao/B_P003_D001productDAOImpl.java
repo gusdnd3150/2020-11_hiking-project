@@ -52,5 +52,10 @@ public class B_P003_D001productDAOImpl implements B_P003_D001productDAO {
 	public void addComent(Map<String, Object> map) throws DataAccessException {
 		sqlSession.insert("project.e_P002_D003.addComent",map);		
 	}
+	@Override
+	public int average(Map<String, Object> map) throws DataAccessException {
+        int average = sqlSession.selectOne("project.e_P002_D003.prodAverage",map);
+		return average;
+	}
 
 }

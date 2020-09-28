@@ -86,7 +86,6 @@ public class B_P002_D001ControllerImpl  implements B_P002_D001Controller{
 		}
 		search.put("listType", Integer.parseInt(listType));
 		int total = b_P002_D001ShopingMallService.totalCount2(search);
-		
 		Paging vo2 = new Paging(Integer.parseInt(listType),total, Integer.parseInt(nowPage), Integer.parseInt(cntPerPage));
 		search.put("listType", vo2.getListType());
 		search.put("start", vo2.getStart());

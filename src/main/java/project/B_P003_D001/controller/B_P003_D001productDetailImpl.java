@@ -88,14 +88,15 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 			map.put("prodNum", prodNum);
 			
 	    List<productAfterVO> afterList = b_P003_D001productService.afterList(map); //후기 리스트
+	    int average = b_P003_D001productService.average(map);
 	    System.out.println("넘어온 "+afterList.size());
 	    //이미지 출력은 메소드를 이용할것
-	    
 	    mav.addObject("images",images); //하단 제품설명 이미지
 		mav.addObject("prodDetail",vo); // 상단 제품 텍스트
 		mav.addObject("afterList",afterList); // 상품후기 리스트
 		mav.addObject("paging",page); // 상품후기 페이징
-		mav.setViewName("/shoppingMall/productDetail");
+		mav.addObject("average",average); //평균값
+		mav.setViewName("/shoppingMall/prodDetail2");
 		return mav;
 	}
 	/*
@@ -186,6 +187,7 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
         String prodNum = (String) info.get("prodNum");
         info.put("prodNum", Integer.parseInt(prodNum));
         info.put("afterType", Integer.parseInt(afterType));
+        
 		String message;
 		ResponseEntity resEnt = null;
 		HttpHeaders responseHeaders = new HttpHeaders(); // 헤더변경 시 사용
@@ -222,12 +224,14 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 	
 	
 	
-	@Override             // 결제
-	@RequestMapping(value = "/B_P003_D001/pay/{prodNum}", method = { RequestMethod.GET, RequestMethod.POST })
+	@Override             // 구매하기
+	@RequestMapping(value = "/B_P003_D001/buyProd/{prodNum}", method = { RequestMethod.GET, RequestMethod.POST })
 	public ModelAndView payProduct(@PathVariable("prodNum") int prodNum,HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("/shoppingMall/pay");
 		return mav;
 	}
+
+
 	
 }

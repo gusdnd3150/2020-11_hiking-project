@@ -140,7 +140,7 @@
 			<!-- Main content -->
 			<div class="box">
 				<!-- 게시글관리 검색창 -->
-				<%@ include file="../include/admin_csBoard_search.jsp"%>
+				<%-- <%@ include file="../include/admin_csBoard_search.jsp"%> --%>
 
 				<div class="box-header">
 					<h3 class="box-title">게시글 목록</h3>
