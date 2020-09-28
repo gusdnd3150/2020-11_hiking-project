@@ -1,6 +1,7 @@
 package project.mountain;
 
 import io.swagger.models.auth.In;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONObject;
 import org.json.XML;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,12 +13,14 @@ import org.xml.sax.InputSource;
 
 import javax.annotation.Resource;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class MountainController {
@@ -29,9 +32,12 @@ public class MountainController {
     //RequestBody 필요
     public Object mountainList() throws UnsupportedEncodingException {
 
-        Object response = mountainService.getMountainInfo();
+        List<Map<String,Object>> list = mountainService.getMountainInfo();
 
-        return response;
+        System.out.println(list.get(0).get("resultCode"));
+        System.out.println(list.toString());
+
+        return list;
 
 
     }

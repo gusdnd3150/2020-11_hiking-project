@@ -1,6 +1,8 @@
 package project.mountain;
 
 import org.apache.tools.ant.taskdefs.condition.Http;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
@@ -14,6 +16,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
 import java.util.List;
+import java.util.Map;
 
 @Service("mountainService")
 public class MountainServiceImpl implements MountainService{
@@ -39,7 +42,7 @@ public class MountainServiceImpl implements MountainService{
 
 //        System.out.println(builder.toUriString());
 
-        List<Object> list = restTemplate.getForObject(builder.toUriString(), List.class);
+        List<Map<String,Object>> list = restTemplate.getForObject(builder.toUriString(), List.class);
 
         return list;
     }
