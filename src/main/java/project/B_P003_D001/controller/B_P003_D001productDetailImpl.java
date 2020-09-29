@@ -221,17 +221,19 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 		headers.setContentType(MediaType.IMAGE_PNG);
 		return new ResponseEntity<byte[]>(imageContent, headers, HttpStatus.OK);
 		}
-	
-	
-	
-	@Override             // 구매하기
-	@RequestMapping(value = "/B_P003_D001/buyProd/{prodNum}", method = { RequestMethod.GET, RequestMethod.POST })
-	public ModelAndView payProduct(@PathVariable("prodNum") int prodNum,HttpServletRequest request, HttpServletResponse response) {
+
+	@Override
+	@RequestMapping(value = "/B_P003_D001/buyProd/{num}")
+	public ModelAndView buyProduct(@PathVariable("num") int num, HttpServletRequest req, HttpServletResponse res) throws Exception {
 		ModelAndView mav = new ModelAndView();
-		mav.setViewName("/shoppingMall/pay");
+		
+		
+		
+		//mav.addObject("", );
+		mav.setViewName("/shoppingMall/payTest");
 		return mav;
 	}
-
+	
 
 	
 }

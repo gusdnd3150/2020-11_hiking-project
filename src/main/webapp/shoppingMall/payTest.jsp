@@ -173,6 +173,11 @@ align:bottom;
             </div>
         </div>
     </form>
+    
+    <form method="post" action="/kakaoPay">
+    <button><img src="/resources/img/payment_icon_yellow_medium.png"></button>
+</form>
+</form>
  
     <div class="text-center mt-3">
         <button type="button" class="btn btn-success">결제하기</button>
