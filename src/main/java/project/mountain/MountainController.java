@@ -7,6 +7,8 @@ import org.json.XML;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.xml.sax.InputSource;
@@ -29,12 +31,13 @@ public class MountainController {
     private MountainService mountainService;
 
     @GetMapping("/apitest2")
-    //RequestBody 필요
+    @ResponseBody
+    //@RequestBody 필요
     public Object mountainList() throws UnsupportedEncodingException {
 
         List<Map<String,Object>> list = mountainService.getMountainInfo();
 
-        System.out.println(list.get(0).get("resultCode"));
+        System.out.println();
         System.out.println(list.toString());
 
         return list;

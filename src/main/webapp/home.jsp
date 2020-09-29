@@ -56,7 +56,7 @@
 						<div class="card" >
 							<img class="card-img-top" src="/group/media/${group.groupNum}" alt="..." style="width: 100%"></img>
 							<div class="card-body">
-								<h5 class="card-title">${group.name}<span class="badge badge-success" style="font-size: 10px">New</span></h5>
+								<h5 class="card-title">${group.name}</h5>
 								<p class="card-text text-muted" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">${group.detail}</p>
 								<a href="/group/${group.groupNum}" class="btn btn-info">바로가기</a>
 							</div>
@@ -77,12 +77,11 @@
 		</div>
 		<div class="col-md-6" style="width: 50%; display: inline-block;">
 			<p ><h2>이벤트</h2></p>
-			<img src="./resources/img/test/event1.jpg">
+			<img src="./resources/img/test/event1.jpg" style="max-width: 100%; height: auto">
 		</div>
 	</div>
-	<p>
+	<pre></pre>
 	<div class="memberCountCon" style="font-size:40px;text-align: center"></div>
-	</p>
 </div>
 
 <!-- js -->
@@ -133,11 +132,11 @@
 		duration: 1000,
 		step: function() {
 			var num = numberWithCommas(Math.floor(this.val));
-			$(".memberCountCon").text("현재 "+num+ "번 의 등산이 이루어졌어요");
+			$(".memberCountCon").text("현재 "+num+ "번의 등산이 이루어졌어요");
 		},
 		complete: function() {
 			var num = numberWithCommas(Math.floor(this.val));
-			$(".memberCountCon").text("현재 "+num+ "번 의 등산이 이루어졌어요" );
+			$(".memberCountCon").text("현재 "+num+ "번의 등산이 이루어졌어요" );
 		}
 	});
 

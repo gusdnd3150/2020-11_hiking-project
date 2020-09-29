@@ -1,100 +1,118 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <jsp:include page="/common/header.jsp" />
-<link rel="stylesheet" type="text/css" href="../resources/css/bootstrap-datepicker.css" />
-<style>
-    .drag_drop_zone{
-        outline: 2px solid white ;
-        outline-offset:-5px;
-        text-align: center;
-        transition: all .15s ease-in-out;
-        width: 300px;
-        height: 200px;
-        background-color: lightgrey;
-    }
-</style>
-<body class="pt-5 mt-5">
-<div class="container">
-    <h1>모임 등록</h1>
-    <form name="groupForm" id="groupForm" method="post" action="">
-        <div class="mb-3">
-            <label for="title">모임 제목</label>
-            <input type="text" class="form-control" name="title" id="title">
+<link href="//cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/css/bootstrap4-toggle.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet"> <!--CDN 링크 -->
+<link rel="stylesheet" type="text/css" href="../resources/css/views/group/form.css" />
+
+<body class="pt-5 mt-5" >
+<div id="groupForm-container" class="container" >
+    <div id="groupForm">
+    <h1 class="p-3 col-12">모임 등록</h1>
+        <pre></pre>
+        <div class="mt-3 col-12">
+            <label for="mtnm">등산로설정</label>
+            <div class="row">
+                <input type="text" class="form-control col-6" id="mtnm" readonly>
+                <button class="btn btn-info">등산로 설정</button>
+            </div>
         </div>
-        <div class="mb-3">
-            <label for="maxStaff">모임 최대 인원</label>
-            <input type="text" class="form-control" name="maxStaff" id="maxStaff">
+        <div class="mt-3 col-12">
+            <label for="name">모임 제목</label>
+            <input type="text" class="form-control" id="name">
         </div>
-        <div class="mb-3">
+        <div class="mb-3 col-6">
+            <label for="staffMax">모임 인원</label>
+            <div class="staff">
+                <i id="decrease" class="fas fa-minus"></i>
+                <h2 id="staffMax" style="margin-bottom: 0">1명</h2>
+                <i id="increase"class="fas fa-plus" ></i>
+            </div>
+        </div>
+        <div class="mb-3 col-12">
             <label for="detail">모임 상세</label>
-            <textarea class="form-control" rows="5" name="detail" id="detail"></textarea><br>
+            <textarea class="form-control" rows="6" id="detail"></textarea><br>
         </div>
-        모임 시작 날짜 :
-        <div class="mb-3">
-                <input class="datepicker form-control" type="text"/>
+        <div class="mb-3 col-6" >
+            <label for="startDay">모임 시작 날짜</label>
+            <input type="date" class="form-control" id="startDay">
         </div>
-        모임 지역 :<br><br>
-        이미지 :
-        <div class="drag_drop_zone">
+        <div class="mb-3 col-6">
+            <label for="area">모임 지역</label>
+            <select class="custom-select" id="area">
+                <option selected>지역을 선택해주세요</option>
+                <option value="Seoul">서울</option>
+                <option value="Gyeonggi">경기</option>
+                <option value="Gangwon">강원</option>
+            </select>
         </div>
-        -상세 설정-<br>
-        나이대 설정 :<br>
-        최소:<br>
-        최대:<br>
-        성별:<br>
-    </form>
+        <div class="mb-3 col-12">
+            <label for="image">이미지</label>
+            <div class="drag_drop_zone" id="image" />
+        </div>
+        <pre></pre>
+        <div class="panel-group" id="accordion">
+            <div class="panel panel-default">
+                <div class="panel-title">
+                    상세설정
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">
+                        <input class="toggle-btn" type="checkbox" data-toggle="toggle" data-onstyle="info" data-size="xs">
+                    </a>
+                </div>
+                <div id="collapse1" class="panel-collapse collapse in">
+                    <div class="panel-body">
+                        <div class="mb-3 col-6">
+                            <label for="age">나이대 설정</label>
+                            <div id="age">
+                                <select class="custom-select" id="minAge">
+                                    <option selected>최소</option>
+                                    <option value="1">1</option>
+                                    <option value="10">10</option>
+                                    <option value="20">20</option>
+                                    <option value="30">30</option>
+                                    <option value="40">40</option>
+                                    <option value="50">50</option>
+                                    <option value="60">60</option>
+                                    <option value="70">70</option>
+                                    <option value="80">80</option>
+                                </select>
+                                <select class="custom-select" id="maxAge">
+                                    <option selected>최대</option>
+                                    <option value="1">1</option>
+                                    <option value="10">10</option>
+                                    <option value="20">20</option>
+                                    <option value="30">30</option>
+                                    <option value="40">40</option>
+                                    <option value="50">50</option>
+                                    <option value="60">60</option>
+                                    <option value="70">70</option>
+                                    <option value="80">80</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="mb-3 col-6">
+                            <label for="sex">성별</label>
+                            <select class="custom-select" id="sex">
+                                <option selected>성별</option>
+                                <option value="1">남</option>
+                                <option value="2">여</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <div class="p-3" style="text-align: right">
+            <input type="reset" class="btn btn-light" style="width: 75px" value="취소">
+            <input type="button" class="btn btn-info" id="submit" style="width: 75px" value="등록">
+        </div>
+        </div>
+
+    </div>
 </div>
 <script type="text/javascript" src="../resources/js/jquery.js"></script>
 <script type="text/javascript" src="../resources/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="../resources/js/bootstrap-datepicker.js"></script>
-<script>
-    $('.datepicker').datepicker({
-        weekStart:1,
-        color: 'red'
-    })
-
-    $('.drag_drop_zone')
-        .on("dragover", dragOver)
-        .on("dragleave", dragOver)
-        .on("drop", uploadFiles);
-
-    function dragOver(e){
-        e.stopPropagation();
-        e.preventDefault();
-        if (e.type == "dragover") {
-            $(e.target).css({
-                "background-color": "black",
-                "outline-offset": "-20px"
-            });
-        } else {
-            $(e.target).css({
-                "background-color": "lightgray",
-                "outline-offset": "-5px"
-            });
-        }
-    }
-
-    function uploadFiles(e) {
-        e.stopPropagation();
-        e.preventDefault();
-        dragOver(e);
-
-        e.dataTransfer = e.originalEvent.dataTransfer;
-        var files = e.target.files || e.dataTransfer.files;
-        if (files.length > 1) {
-            alert('하나만 올려라.');
-            return;
-        }
-        if (files[0].type.match(/image.*/)) {
-            $(e.target).css({
-                "background-image": "url(" + window.URL.createObjectURL(files[0]) + ")",
-                "outline": "none",
-                "background-size": "100% 100%"
-            });
-        }else{
-            alert('이미지가 아닙니다.');
-            return;
-        }
-    }
-</script>
+<script src="//cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/js/bootstrap4-toggle.min.js"></script>
+<script type="text/javascript" src="../resources/js/view/group/form.js"></script>
 </body>
 </html>
