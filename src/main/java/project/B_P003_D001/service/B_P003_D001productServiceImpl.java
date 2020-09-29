@@ -58,4 +58,9 @@ public class B_P003_D001productServiceImpl implements B_P003_D001productService{
 		b_P003_D001productDAO.addComent(map);
 	}
 
+	@Override
+	public int average(Map<String, Object> map) throws DataAccessException {
+        int average = b_P003_D001productDAO.average(map);
+		return average;
+	}
 }

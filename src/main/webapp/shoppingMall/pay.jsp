@@ -171,9 +171,7 @@ align:bottom;
                     </table>
                 </div>
             </div>
- 
         </div>
-        
     </form>
  
     <div class="text-center mt-3">
