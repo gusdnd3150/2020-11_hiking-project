@@ -50,19 +50,17 @@
                 <c:choose>
                     <c:when test="${not empty LOGIN}">
                 <li class="nav-item">
-                        <a class="nav-link" href="${contextPath}/user/logOut">로그아웃</a>
+                        <a class="nav-link" href="/user/logOut.do">로그아웃</a>
                 </li>
                 <li class="nav-item">
-                        <a class="nav-link" href="${contextPath}/mypage/mypageHome">마이페이지</a>
+                        <a class="nav-link" href="/user/mypageHome.jsp">마이페이지</a>
                 </li>
                     </c:when>
                     <c:otherwise>
                 <li class="nav-item">
-                        <a class="nav-link" href="${contextPath}/user/logInView">로그인</a>
+                        <a class="nav-link" href="/user/logInView.do">로그인</a>
                 </li>
-                <li class="nav-item">
-                        <a class="nav-link" href="${contextPath}/user/signUpView">회원가입</a>
-                </li>
+       
                     </c:otherwise>
                 </c:choose>
                 <button class="btn my-2 my-sm-0">

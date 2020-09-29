@@ -15,6 +15,7 @@ public interface B_P003_D001productDAO {
 	public List<E_P002_D003PhotoVO> detailImages(Map<String,Object> map)throws DataAccessException;
 	public void addAfter(Map<String,Object> map)throws DataAccessException;
 	public void addComent(Map<String,Object> map)throws DataAccessException;
+	public int average(Map<String,Object> map)throws DataAccessException; //평균값 구하는 메서드
 
 	public int afterTotal(Map<String,Object> map);
 	public List<productAfterVO> afterList(Map<String,Object> map)throws DataAccessException;

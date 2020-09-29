@@ -1,8 +1,5 @@
 package project.B_P003_D001.vo;
 
-import org.springframework.stereotype.Component;
-
-@Component
 public class productAfterVO {
 	
 	private int userNum; //유저 아이디
@@ -15,6 +12,7 @@ public class productAfterVO {
 	private String updateDat;
 	private int evalue;      //평점
 	private int lvl;        //계층 구조 레벨
+	
 	
 	
 	public int getLvl() {

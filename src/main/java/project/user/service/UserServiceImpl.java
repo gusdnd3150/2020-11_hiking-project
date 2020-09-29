@@ -1,6 +1,7 @@
 package project.user.service;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -41,6 +42,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public void keepLogin(String id, String sessionId, Date sessionLimit) throws Exception {
+		logger.info("------keepLogInService------");
 		userDAO.keepLogIn(id, sessionId, sessionLimit);
 		
 	}

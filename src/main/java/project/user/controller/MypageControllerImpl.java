@@ -40,12 +40,15 @@ public class MypageControllerImpl implements MypageController {
 
 	@RequestMapping(value = "/mypage/modifyView.do", method = { RequestMethod.GET, RequestMethod.POST })
 	@ResponseBody
-	public UserVO updateUserView(HttpServletRequest request, ModelAndView mav, HttpSession httpSession)
+	public ModelAndView updateUserView(HttpServletRequest request, HttpSession httpSession)
 			throws Exception {
-		logger.info("updateUserView");
+		ModelAndView mav = new ModelAndView();
+		logger.info("modifyView.do");
 		UserVO userVO = mypageService.getUserInfo(httpSession.getId());
-		return userVO;
-
+		System.out.println(userVO);
+		mav.addObject("userVO", userVO);
+		mav.setViewName("/user/modifyView");
+		return mav;
 	}
 	@RequestMapping(value = "/mypage/modProfile.do", method = { RequestMethod.GET, RequestMethod.POST })
 	@ResponseBody
@@ -57,9 +60,10 @@ public class MypageControllerImpl implements MypageController {
 	}
 
 	@RequestMapping(value = "/mypage/updateUser.do", method = RequestMethod.POST)
-	public String updateUser(HttpSession httpSession, RedirectAttributes rttr, UserVO userVO) throws Exception {
+	public String updateUser(HttpSession httpSession, UserVO userVO) throws Exception {
 		if (userVO.getPassword() != null) {
 			logger.info("비밀번호 변경	");
+			System.out.println(userVO.getPassword());
 			String hashedPwd = BCrypt.hashpw(userVO.getPassword(), BCrypt.gensalt(10));
 			userVO.setPassword(hashedPwd);
 			userVO.setSessionId(httpSession.getId());
@@ -114,15 +118,15 @@ public class MypageControllerImpl implements MypageController {
 	
 	@RequestMapping(value = "/mypage/pwdCheck.do", method = RequestMethod.POST)
 	@ResponseBody
-	public int pwdCheck(@RequestParam("pwd") String pwd, HttpSession httpSession) throws Exception {
-		int rst = 1;
-		logger.info(pwd);
+	public String pwdCheck(@RequestParam("pwd") String pwd, HttpSession httpSession) throws Exception {
+		String rst = "1";
+		logger.info("pwdCheck   :" + pwd);
 		UserVO userVO = mypageService.pwdCheck(httpSession.getId());
+		System.out.println(userVO);
 		if (userVO == null || !BCrypt.checkpw(pwd, userVO.getPassword())) {
-		
 			return rst;
 		}
-		rst =0;
+		rst ="0";
 		return rst;
 	}
 	

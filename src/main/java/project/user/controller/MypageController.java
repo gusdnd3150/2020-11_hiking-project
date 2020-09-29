@@ -17,11 +17,11 @@ import project.user.vo.UserVO;
 public interface MypageController {
 	
 
-	public UserVO updateUserView(HttpServletRequest request, ModelAndView mav, HttpSession httpSession) throws Exception;
+	public ModelAndView updateUserView(HttpServletRequest request, HttpSession httpSession) throws Exception;
 	public UserVO modProfileView(HttpServletRequest request, ModelAndView mav, HttpSession httpSession) throws Exception;
-	public String updateUser(HttpSession httpsession, RedirectAttributes rttr, UserVO userVO) throws Exception;
+	public String updateUser(HttpSession httpsession, UserVO userVO) throws Exception;
 	public String updateUserInfo(MultipartHttpServletRequest file, HttpServletRequest request, 
 			HttpServletResponse response, HttpSession httpSession) throws Exception;
-	public int pwdCheck(@RequestParam("pwd") String pwd, HttpSession httpSession) throws Exception;
+	public String pwdCheck(@RequestParam("pwd") String pwd, HttpSession httpSession) throws Exception;
 	}
 	

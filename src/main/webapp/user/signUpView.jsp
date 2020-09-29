@@ -75,7 +75,7 @@
 
             <tr>
                 <th>이메일</th>
-                <td><input type="email" class="form-control"id="email" name="email" required><br>
+                <td><input type="email" class="form-control" id="email" name="email" required><br>
                  <div class ="check_font" id="emailCheck"></div></td>       
             </tr>
             <tr>
@@ -137,7 +137,7 @@ var phoneJ = /^01([0|1|6|7|8|9]?)?([0-9]{3,4})?([0-9]{4})$/;
 			type : "get",
 			success : function(data, textStatus) {
 				console.log("1 = 중복o / 0 = 중복x : "+ data);		
-				if (data == 1) {
+				if (data == "1") {
 						// 1 : 아이디가 중복되는 문구
 						$("#idCheck").text("사용중인 아이디입니다 :p");
 						$("#idCheck").css("color", "red");

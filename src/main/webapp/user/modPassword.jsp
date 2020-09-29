@@ -48,8 +48,7 @@
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">X
-					닫기</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">X닫기</button>
 				<button type="submit" class="btn btn-primary" id="updatePwd" disabled>변경하기</button>
 				</form>
 			</div>

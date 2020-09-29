@@ -32,6 +32,7 @@ public class UserDAOImpl implements UserDAO{
 	
 	@Override
 	public void insertUser2(Map<String, Object> snsUser) {
+		snsUser.put("randomPwd", sqlSession.selectOne("userMapper.randomPwd"));
 		sqlSession.insert("userMapper.insertUser2", snsUser);
 		sqlSession.insert("userMapper.insertUser4", snsUser);
 		
@@ -56,10 +57,10 @@ public class UserDAOImpl implements UserDAO{
 		Map<String, Object> paramMap = new HashMap<>();
 		logger.info("------keepLogInDAO------");
 		System.out.println(sessionId);
+		System.out.println(id);
 		paramMap.put("id", id);
 		paramMap.put("sessionId", sessionId);
 		paramMap.put("sessionLimit", sessionLimit);
-
 		sqlSession.update("userMapper.keepLogin", paramMap);
 	}
 	
@@ -72,7 +73,7 @@ public class UserDAOImpl implements UserDAO{
 	@Override
 	public UserVO getBySns(Map<String, Object> snsUser) {
 //		if(StringUtils.isNotEmpty(snsUser.getId())) {
-			return sqlSession.selectOne(GET_BY_SNS, snsUser.get("email"));
+			return sqlSession.selectOne(GET_BY_SNS, snsUser);
 //		} 
 //		else (StringUtils.isNotEmpty(snsUser.getId()) {
 //			return sqlSession.selectOne(GET_BY_SNS_GOOGLE, snsUser.getId());

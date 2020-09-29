@@ -250,7 +250,6 @@ function openCity(evt, cityName) {
          </c:forEach>
      </c:when>
   </c:choose>
-  <%-- <img src="data:image/jpg;base64, ${images}"  alt="" width="800" height="500" /> --%>
   <p> ${prodDetail.content }</p> 
 </div>
 
