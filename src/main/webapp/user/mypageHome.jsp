@@ -18,28 +18,7 @@
 <script src="/resources/js/bootstrap.bundle.js"></script>
 <body>
 	<div class="container">
-		<header class="blog-header py-3">
-			<div
-				class="row flex-nowrap justify-content-between align-items-center">
-				<div class="col-4 pt-1">
-					<a class="text-muted" href="#">Subscribe</a>
-				</div>
-				<div class="col-4 text-center">
-					<a class="blog-header-logo text-dark" href="#">Large</a>
-				</div>
-				<div class="col-4 d-flex justify-content-end align-items-center">
-					<a class="text-muted" href="#"> <svg
-							xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-							viewBox="0 0 24 24" fill="none" stroke="currentColor"
-							stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-							class="mx-3">
-							<circle cx="10.5" cy="10.5" r="7.5"></circle>
-							<line x1="21" y1="21" x2="15.8" y2="15.8"></line></svg>
-					</a> <a class="btn btn-sm btn-outline-secondary" href="#">Sign up</a>
-				</div>
-			</div>
-		</header>
-
+		<jsp:include page="/common/header.jsp" flush="false"/>
 		<div class="nav-scroller py-1 mb-2">
 			<nav class="nav d-flex justify-content-between">
 				<a class="p-2 text-muted" href="#">World</a> <a
@@ -82,33 +61,33 @@
 				<td colspan="2" rowspan="4">
 					<div class="card text-center">
 						<div class="card-header">
-							<ul class="nav nav-tabs card-header-tabs" id="tabs">
+							<ul class="nav nav-tabs card-header-tabs" id="tabs" role="tablist">
 								<li class="nav-item"><a class="nav-link active"
 									href="#tab1" data-toggle="tab">Link</a></li>
 								<li class="nav-item"><a class="nav-link" href="#tab2"
 									id="" data-toggle="tab">Link2</a></li>
-								<li class="nav-item"><a class="nav-link"
-									data-toggle="modal" data-target="#exampleModalCenter3">나의정보</a>
-									<jsp:include page="/user/pwdCheck.jsp" /></li>
+								<%-- <li class="nav-item"><a class="nav-link" href="#tab3"
+									data-toggle="tab"  id="myInfo" data-target="#exampleModalCenter3">나의정보</a>
+									<jsp:include page="/user/pwdCheck.jsp"/></li> --%>
 							</ul>
 						</div>
 						<div class="tab-content">
-							<div class="card-body fade in action" id="tab1">
-								<p class="card-text" id="tab1">여긴 아무것도 없었으면 해???</p>
+							<div class="card-body tab-pane active" id="tab1">
+								<p class="card-text" id="tab1">여기는 tab1</p>
 							</div>
-							<div class="card-body fade" id="tab2">
+							<div class="card-body tab-pane " id="tab2">
+							<p class="card-text" id="tab3">여기는 tab2</p>
 							</div>
-							<div class="card-body fade" id="tab3">
-								<p class="card-text" id="tab2"><jsp:include page="/user/modifyView.jsp" /></p>
-							</div>
+							<%-- <div class="card-body tab-pane " id="tab3">
+								<p class="card-text" id="tab3"><jsp:include page="/user/modifyView.jsp"/></p>
+							</div> --%>
 							<!-- 	<a href="#" class="btn btn-primary">수정하기</a> -->
 							<!-- 이거 누르면 disabled readonly 사라지게하기. -->
 						</div>
 					</div>
-
 				</td>
 			</tr>
-			<tr>
+			 <tr>
 				<td rowspan="3">
 					<!-- About Me Box -->
 					<div class="box box-primary">
@@ -148,8 +127,8 @@
 
 							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 								Etiam fermentum enim neque.</p>
-							<a href="#" id=""
-								class="btn btn-primary btn-block"> <b>나의 정보 수정하기</b>
+						
+								<a><jsp:include page="/user/pwdCheck.jsp"/>
 							</a>
 						</div>
 						<!-- /.box-body -->
@@ -210,29 +189,6 @@
 <script>
 <!-- /.container -->
 	$(document).ready(function() {
-		$("#editInfo").click(function() {
-			$.ajax({
-				url : "/mypage/modifyView.do",
-				type : "post",
-				success : function(data) {
-					console.log(data);
-					$('#id').val(data.id);
-					$('#name').val(data.name);
-					$('#email').val(data.email);
-					$('#zonecode').val(data.zonecode);
-					$('#address').val(data.address);
-					$('#address2').val(data.address2);
-					$('#phone').val(data.phone);
-					$('#sexCheck').text(data.sex2);
-				},
-				error : function(data, textStatus) {
-					console.log("실패");
-				},
-				complete : function(data, textStatus) {
-				}
-			//responsebody -> 아작스로 들어옴
-			});
-		});
 
 		$("#editProf").click(function() {
 			$.ajax({
@@ -252,9 +208,44 @@
 
 			});
 		});
+		
+		$("#checkIt").click(function() {
+			var pwd = $("#password3").val(); 
+			console.log("이벤트!!" +pwd);
+			$.ajax({
+				url : "/mypage/pwdCheck.do",
+				type : "post",
+				data: {
+					pwd:pwd
+				},
+				success : function(data) {
+				console.log(data);
+				if($('#password3').val() == ""){
+					$('#passwordCheck3').text('비밀번호를 입력해주세요.');
+					$('#passwordCheck3').css('color', 'red');
+					$("#myInfo").attr("disabled", true);		
+					} else if (data == "0"){
+							// 0 : 비밀번호 통과
+							$("#passwordCheck3").text("'정보 보기'를 클릭하세요.");
+							$('#passwordCheck3').css('color', 'green');
+							$("#myInfo").attr("disabled", false);
+						} else if (data == "1") {
+							// 1 : 	비밀번호 틀림
+							$("#passwordCheck3").text("비밀번호를 다시 확인해주세요.");
+							$("#passwordCheck3").css("color", "red");
+							$("#myInfo").attr("disabled", true);
+						}
+					},
+				error : function(data, textStatus) {
+					console.log("실패");
+				},
+				complete : function(data, textStatus) {
+				}
+			//responsebody -> 아작스로 들어옴
+			});
+		});
 	});
 
-	$('a[href="#settings"]').tab('show');
 </script>
 </body>
 </html>

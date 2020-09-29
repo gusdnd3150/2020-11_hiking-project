@@ -1,12 +1,21 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<c:set var="contextPath" value="${pageContext.request.contextPath}" />
-<%
-	request.setCharacterEncoding("UTF-8");
-%>
-<!-- 주소, 비밀번호 확인 미완성 -->
-<html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script type="text/JavaScript"
+	src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8">
+<title>mypageHome</title>
+<link href="/resources/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<!— body —>
+<script src="/resources/js/jquery.js"></script>
+<script src="/resources/js/bootstrap.bundle.js"></script>
 <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script> -->
 <script type="text/javascript">
@@ -33,7 +42,7 @@
 							<tr>
 								<th>아이디</th>
 								<td><input type="text" class="form-control" id="id"
-									name="id" placeholder="소문자와 숫자 4~12자리"
+									name="id" placeholder="소문자와 숫자 4~12자리" value="${userVO.id}"
 									readonly><br>
 									<div class="check_font" id="idCheck"></div></td>
 							</tr>
@@ -44,28 +53,28 @@
 							<tr>
 								<th>이름</th>
 								<td><input type="text" class="form-control" id="name"
-									name="name"  required ><br>
+									name="name"  value="${userVO.name}"required ><br>
 									<div class="check_font" id="nameCheck"></div></td>
 							</tr>
 							<tr>
 								<th>이메일</th>
 								<td><input type="email" class="form-control" id="email"
-									name="email" required><br>
+									name="email" value="${userVO.email}" required><br>
 									<div class="check_font" id="emailCheck"></div></td>
 							</tr>
 							<tr>
 								<th>주소</th>
-								<td><input type="text" id="zonecode" name="zonecode" style="width: 50px;"  readonly  /> &nbsp; 
+								<td><input type="text" id="zonecode" name="zonecode"  value="${userVO.zonecode}" style="width: 50px;"  readonly  /> &nbsp; 
 									<input type="button" onClick="openDaumZipAddress();" value="주소 찾기" /> &nbsp; 
-									<input type="text" id="address" name="address" style="width: 240px;" readonly /><br> 
-									<input type="text" class="form-control" id="address2" name="address2" placeholder="상세 주소를 입력해주세요."
+									<input type="text" id="address" name="address" value="${userVO.address}" style="width: 240px;" readonly /><br> 
+									<input type="text" class="form-control" id="address2" name="address2"  value="${userVO.address2}"placeholder="상세 주소를 입력해주세요."
 									 required ><br>
 									<div class="check_font" id="addressCheck"></div></td>
 							</tr>
 							<tr>
 								<th>전화번호</th>
 								<td><input type="text" class="form-control" id="phone"
-									name="phone" placeholder="'-'없이 입력해 주세요."
+									name="phone" placeholder="ex)01012345678" value="${userVO.phone}"
 									 required><br>
 									<div class="check_font" id="phoneCheck"></div></td>
 							</tr>
@@ -81,7 +90,7 @@
 								<input type="radio" name="sex" value="20">&nbsp;&nbsp;여성&nbsp;&nbsp;</td>
 								<td colspan="3" style="border: #000000 solid; border-width: 0px;"></td>
 									<td style="border: #000000 solid; border-width: 0px;">
-									<div style="color: green" class="check_font" id="sexCheck" ></div></td>
+									<div style="color: green" class="check_font" id="sexCheck">${userVO.sex2}</div></td>
 									</tr>
 									</table>
 									</td>
@@ -181,6 +190,35 @@
 				$('#sexCheck').css('color', 'green');
 			}
 		});
+		
+	$(document).ready(function() {
+			$("#editInfo").click(function() {
+				$.ajax({
+					url : "/mypage/modifyView.do",
+					type : "post",
+					success : function(data) {
+						console.log(data);
+						$('#id').val(data.id);
+						console.log("id");
+						$('#name').val(data.name);
+						console.log("name");
+						$('#email').val(data.email);
+						console.log("email");
+						$('#zonecode').val(data.zonecode);
+						$('#address').val(data.address);
+						$('#address2').val(data.address2);
+						$('#phone').val(data.phone);
+						$('#sexCheck').text(data.sex2);
+						$('#myInfo').addClass('active');
+					},
+					error : function(data, textStatus) {
+						console.log("실패");
+					},
+					complete : function(data, textStatus) {
+					}
+				});
+			});
+		}); 
 
 </script>
 </html>

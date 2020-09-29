@@ -1,76 +1,63 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
+
 <html>
 <head>
-<script src="http://code.jquery.com/jquery-latest.min.js"></script>
-<script type="text/JavaScript"
-	src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<!-- 위 3개의 메타 태그는 *반드시* head 태그의 처음에 와야합니다; 어떤 다른 콘텐츠들은 반드시 이 태그들 *다음에* 와야 합니다 -->
-<!-- 합쳐지고 최소화된 최신 CSS -->
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-<!-- 부가적인 테마 -->
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+<!-- <!— CSS only —> -->
+<link rel="stylesheet" href="/resources/css/bootstrap.min.css"/>
+<link rel="stylesheet" href="/resources/css/logIn.css"/>
 
-<!-- 합쳐지고 최소화된 최신 자바스크립트 -->
-<script
-	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-<!--카카오sdk -->
-<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
-<title>LOGIN</title>
+<!-- <!— JS, Popper.js, and jQuery —> -->
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/resources/js/bootstrap.bundle.min.js"/></script>
+	<title>LOGIN</title>
 </head>
 <body>
-<body>
-	<div class="container">
-		<div class="row">
-			<div class="col-sm-12 text-center">
-				<div class="col-sm-3"></div>
+<div class="container-fluid">
+  <div class="row no-gutter">
+    <div class="d-none d-md-flex col-md-4 col-lg-6 bg-image"></div>
+    <div class="col-md-8 col-lg-6">
+      <div class="login d-flex align-items-center py-5">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-9 col-lg-8 mx-auto">
+              <h3 class="login-heading mb-4">대한민국 대표 등산 커뮤니티<br> 
+              <strong>'산오름'</strong> 입니다.</h3> 
+             			<form action="/user/logIn.do" method="post">
+                <div class="form-label-group">
+                  <input type="text" id="id" class="form-control" name="id" placeholder="ID" required autofocus>
+                  <label for="id">아이디</label>
+                </div>
 
-				<div class="col-sm-6">
-					<h2>로그인</h2>
-					<form action="/user/logIn.do" method="post">
-						<table class="table table-boardered">
+                <div class="form-label-group">
+                  <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
+                  <label for="password">비밀번호</label>
+                </div>
 
-							<tr>
-								<th>아이디</th>
-								<td><input type="text" class="form-control" id="id"
-									name="id" required><br></td>
-							</tr>
-							<tr>
-								<th>비밀번호</th>
-								<td><input type="password" class="form-control"
-									id="password" name="password" placeholder="대소문자와 숫자 4~12자리"
-									required><br></td>
-
-							</tr>
-							<tr>
-								<td colspan="2"><input type="submit"
-									class="btn btn-primary" value="로그인">
-									<div class="col-xs-8">
-										<div class="checkbox icheck">
-											<lable> <input type="checkbox" name="useCookie">
-											자동로그인 </lable>
-										</div>
-									</div></td>
-							</tr>
-							<tr>
-								<td colspan="2"><br> <a href="${ naver_url }"> 
-								<img src="/resources/img/naver.png" width="200" height="45"
-										alt="왓더"></a> <a href="${ google_url }"> 
-								<img src="/resources/img/google.png" width="200" height="45"
-										alt="왓더"></a><br></td>
-							</tr>
-						</table>
-					</form>
-				</div>
-			</div>
-		</div>
-	</div>
-</body>
+                <div class="custom-control custom-checkbox mb-3">
+                  <input type="checkbox" name="useCookie" class="custom-control-input" id="customCheck1">
+                  <label class="custom-control-label" for="customCheck1">로그인 유지하기</label>
+                </div>
+                <button class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2" type="submit">로그인</button>
+              
+               <div class="text-center"> <a href="${ naver_url }"> 
+			<img src="/resources/img/naver.png" width="200" height="45" alt="왓더"></a></div>
+                <div class="text-center"> 
+                  <a class="small" href="#">Forgot password?</a></div>
+                  <div class="text-center"> 
+                   <a class="nav-link" href="/user/signUpView.jsp">회원가입</a>
+                   </div>
+              </form>
+              
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 </body>
 </html>
