@@ -1,26 +1,19 @@
 package project.group;
 
+import jdk.nashorn.internal.objects.annotations.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import project.groupmedia.GroupMediaService;
-import project.groupmedia.GroupMediaVO;
 import project.mountain.MountainItemDTO;
 import project.mountain.MountainResponseVO;
 import project.mountain.MountainService;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
 import java.io.UnsupportedEncodingException;
-import java.nio.ByteBuffer;
 import java.util.*;
 
 @Slf4j
@@ -59,11 +52,20 @@ public class GroupController{
     @GetMapping("/group/main1.do")
     public ModelAndView goMain1() throws UnsupportedEncodingException {
         ModelAndView mav = new ModelAndView("main1");
-        MountainResponseVO vo = mountainService.getMountainInfo("","");
+        MountainResponseVO vo = mountainService.getMountainInfo("");
 
         List<MountainItemDTO> list = new ArrayList<MountainItemDTO>();
+
         for(int i=0;i<vo.getBody().getItems().size();i++){
             MountainItemDTO mtInfo = vo.getBody().getItems().get(i);
+            MountainResponseVO vo2 = new MountainResponseVO();
+            vo2 = mountainService.getMountainImage(mtInfo.getMntilistno());
+//            mtInfo.setImgfilename(); = vo2.getBody().getItems().get(i);
+            System.out.println(vo2.getBody().getItems().get(i));
+
+
+            // 여기서 산 no를 보내서 img를 가져와야 함
+
             list.add(mtInfo);
         }
         mav.addObject("mtInfo",list);
@@ -88,10 +90,22 @@ public class GroupController{
         groupService.deleteGroup(groupNum);
     }
 
+    @GetMapping("/mountain/{mntiname}")
+    public ModelAndView mountainDetail(@PathVariable("mntiname") String mntiname) throws UnsupportedEncodingException {
+        ModelAndView mav = new ModelAndView();
+        mav.setViewName("/group/detail1");
+        MountainResponseVO vo = mountainService.getMountainInfo(mntiname);
+        MountainItemDTO dto = vo.getBody().getItems().get(0);//이거 고쳐야함 이름 겹치는산이 있다
+
+        mav.addObject("mtInfo",dto);
+
+        return mav;
+    }
+
     @GetMapping("/group/{groupNum}")
     public ModelAndView groupDetail(@PathVariable("groupNum") int groupNum){
         ModelAndView mav = new ModelAndView();
-        mav.setViewName("/group/detail");
+        mav.setViewName("/group/detail2");
         Map<String,Object> map = groupService.selectGroupDetail(groupNum);
         List<Map> list = groupService.selectGroupDetailImage(groupNum);
 

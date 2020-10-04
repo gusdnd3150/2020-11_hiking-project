@@ -14,15 +14,17 @@
     <p></p>
     <h1>등산로 리스트</h1>
     <div class="responsive">
+        <%= request.getParameter("mtImage")%>
         <div class="row">
             <c:forEach var="mtInfo" items="${mtInfo}">
                 <div class="col-lg-4 col-sm-6">
                     <div class="card" >
                         <img class="card-img-top" src="" alt="..." style="width: 100%"/>
                         <div class="card-body">
-                            <h5 class="card-title">${mtInfo.mntnm}</h5>
-                            <p class="card-text text-muted" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">${mtInfo.details}</p>
-                            <a href="/group/mnt/" class="btn btn-info">바로가기</a>
+                            <h5 class="card-title">${mtInfo.mntiname}</h5>
+                            <p class="card-text text-muted" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">${mtInfo.mntiadd}</p>
+                            <a href="/mountain/${mtInfo.mntiname}" class="btn btn-info">바로가기</a>
+                            <!--mtInfo.mntilistno-->
                         </div>
                     </div>
                 </div>

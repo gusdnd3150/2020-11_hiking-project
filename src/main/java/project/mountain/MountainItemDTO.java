@@ -6,11 +6,12 @@ import org.springframework.stereotype.Component;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-@ToString
+@Data
 @Component
 @XmlRootElement(name = "item")
 public class MountainItemDTO {
 
+    // 명산등산로(산림공간정보 1:25000)
     private String aeatreason;
     private String areanm;
     private String details;
@@ -25,107 +26,40 @@ public class MountainItemDTO {
     private String transport;
     private String videourl;
 
-    public String getAeatreason() {
-        return aeatreason;
+    // 산정보 서비스(국내 소재 3,368개 설명)
+    private String mntiadd;
+    private String mntiadmin;
+    private String mntiadminnum;
+    private String mntidetails;
+    private String mntihigh;
+    private String mntilistno;
+    private String mntiname;
+    private String mntisname;
+    private String mntisummary;
+    private String mntitop;
+
+    // 산정보 서비스(국내 소재 3,368개 설명) - 이미지
+    private String imgfilename;
+    private String imgname;
+    private String imgno;
+
+    public String getMntilistno() {
+        return mntilistno;
     }
 
-    public void setAeatreason(String aeatreason) {
-        this.aeatreason = aeatreason;
+    public String getImgfilename() {
+        return imgfilename;
     }
 
-    public String getAreanm() {
-        return areanm;
+    public void setImgfilename(String imgfilename) {
+        this.imgfilename = imgfilename;
     }
 
-    public void setAreanm(String areanm) {
-        this.areanm = areanm;
+    public String getImgno() {
+        return imgno;
     }
 
-    public String getDetails() {
-        return details;
-    }
-
-    public void setDetails(String details) {
-        this.details = details;
-    }
-
-    public String getEtccourse() {
-        return etccourse;
-    }
-
-    public void setEtccourse(String etccourse) {
-        this.etccourse = etccourse;
-    }
-
-    public String getFlashurl() {
-        return flashurl;
-    }
-
-    public void setFlashurl(String flashurl) {
-        this.flashurl = flashurl;
-    }
-
-    public String getMntheight() {
-        return mntheight;
-    }
-
-    public void setMntheight(String mntheight) {
-        this.mntheight = mntheight;
-    }
-
-    public String getMntncd() {
-        return mntncd;
-    }
-
-    public void setMntncd(String mntncd) {
-        this.mntncd = mntncd;
-    }
-
-    public String getMntnm() {
-        return mntnm;
-    }
-
-    public void setMntnm(String mntnm) {
-        this.mntnm = mntnm;
-    }
-
-    public String getOverview() {
-        return overview;
-    }
-
-    public void setOverview(String overview) {
-        this.overview = overview;
-    }
-
-    public String getSubnm() {
-        return subnm;
-    }
-
-    public void setSubnm(String subnm) {
-        this.subnm = subnm;
-    }
-
-    public String getTourisminf() {
-        return tourisminf;
-    }
-
-    public void setTourisminf(String tourisminf) {
-        this.tourisminf = tourisminf;
-    }
-
-    public String getTransport() {
-        return transport;
-    }
-
-    public void setTransport(String transport) {
-        this.transport = transport;
-    }
-
-    public String getVideourl() {
-        return videourl;
-    }
-
-    public void setVideourl(String videourl) {
-        this.videourl = videourl;
+    public void setImgno(String imgno) {
+        this.imgno = imgno;
     }
 }
