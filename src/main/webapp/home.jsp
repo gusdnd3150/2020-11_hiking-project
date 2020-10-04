@@ -4,8 +4,6 @@
 <%@ page session="false" %>
 <jsp:include page="/common/header.jsp" />
 <link rel="stylesheet" type="text/css" href="./resources/css/views/home.css">
-<link rel="stylesheet" type="text/css" href="./resources/css/slick.css">
-<link rel="stylesheet" type="text/css" href="./resources/css/slick-theme.css">
 <!-- slider -->
 <body class="pt-5">
 <header>
@@ -50,17 +48,21 @@
 </header>
 <div class="container">
 	<div class="groupList">
-		<label for="groupList"><h1>추천 등산모임</h1></label>
-		<div class="responsive" id="groupList">
+		<label for="groupList">
+			<p><h1>추천 등산모임</h1></p>
+		</label>
+		<div class="row">
 				<c:forEach var="group" items="${group}">
+					<div class="pt-3 col-lg-4 col-sm-6" id="groupList">
 						<div class="card" >
-							<img class="card-img-top" src="/group/media/${group.groupNum}" alt="..." style="width: 100%"></img>
+							<img class="card-img-top" src="http://localhost:8080/resources/img/${group.STOREDFILENAME}" alt="..." style="width: 100%"></img>
 							<div class="card-body">
-								<h5 class="card-title">${group.name}</h5>
-								<p class="card-text text-muted" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">${group.detail}</p>
-								<a href="/group/${group.groupNum}" class="btn btn-info">바로가기</a>
+								<h5 class="card-title">${group.NAME}</h5>
+								<p class="card-text text-muted" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">${group.DETAIL}</p>
+								<a href="/group/${group.GROUPNUM}" class="btn btn-info">바로가기</a>
 							</div>
 						</div>
+					</div>
 				</c:forEach>
 		</div>
 	</div>
@@ -87,45 +89,7 @@
 <!-- js -->
 <script type="text/javascript" src="./resources/js/jquery.js"></script>
 <script type="text/javascript" src="./resources/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="./resources/js/slick.js"></script>
 <script>
-	$(document).ready(function() {
-		$('.responsive').slick({
-			swipe: true,
-			speed: 300,
-			slidesToShow: 4,
-			slidesToScroll: 1,
-			autoPlay: true,
-			autoplaySpeed: 4000,
-			arrow: true,
-			responsive: [
-				{
-					breakpoint: 1024,
-					settings: {
-						slidesToShow: 3,
-						slidesToScroll: 1,
-					}
-				},
-				{
-					breakpoint: 600,
-					settings: {
-						slidesToShow: 1.3,
-						slidesToScroll: 1.3
-					}
-				},
-				{
-					breakpoint: 480,
-					settings: {
-						slidesToShow: 1,
-						slidesToScroll: 1
-					}
-				}
-				// You can unslick at a given breakpoint now by adding:
-				// settings: "unslick"
-				// instead of a settings object
-			]
-		});
-	})
 	var memberCountConTxt= 296842;
 
 	$({ val : 0 }).animate({ val : memberCountConTxt }, {

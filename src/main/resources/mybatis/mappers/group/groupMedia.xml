@@ -7,15 +7,14 @@
     <resultMap id="groupMediaResult" type="groupMediaVO">
         <result property="groupNum" column="groupNum" />
         <result property="mediaNum" column="mediaNum" />
-        <result property="type" column="type" />
-        <result property="content" column="content" jdbcType="BLOB" javaType="[B"/>
+        <result property="content" column="content" jdbcType="BLOB" />
         <result property="createdAt" column="createdAt" />
         <result property="updatedAt" column="updatedAt" />
     </resultMap>
 
-    <insert id="insertGroupMedia" parameterType="groupMediaVO">
+    <insert id="insertGroupMedia" parameterType="map">
         insert into groupsMedia
-        values (#{groupNum}, #{mediaNum}, #{type}, #{content}, sysdate, sysdate)
+        values (#{groupNum}, #{mediaNum}, #{fileSize}, #{storedFileName}, #{originalFileName}, sysdate, sysdate)
     </insert>
 
     <select id="selectGroupMedia" resultType="_byte[]" parameterType="_int">

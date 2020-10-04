@@ -13,8 +13,15 @@ public class GroupMediaDAO {
     @Autowired
     private SqlSession sqlSession;
 
-    public void insertGroupMedia(GroupMediaVO groupMediaVO){
-        sqlSession.insert("groupMedia.insertGroupMedia", groupMediaVO);
+    public int insertGroupMedia(List<Map> list){
+        int result = 0;
+        int index = 0;
+        for(Map m : list){
+            m.put("mediaNum",index);
+            result = sqlSession.insert("groupMedia.insertGroupMedia", m);
+            index++;
+        }
+        return result;
     }
 
     public byte[] selectGroupMediaOne(int groupNum){

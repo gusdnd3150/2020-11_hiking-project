@@ -65,8 +65,8 @@ $(document).ready(function (){
 
     decrease.onclick = () => {
         const current = parseInt(number.innerText, 10);
-        if(current <= 1){
-            alert("인원은 최소 1명 이상입니다");
+        if(current < 2){
+            alert("2명 이상으로 설정해주세요");
             return
         }
         number.innerText = current - 1 + "명";

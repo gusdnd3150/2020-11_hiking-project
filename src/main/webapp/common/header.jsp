@@ -33,7 +33,7 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="/group/list.do">산오르기<span class="sr-only"></span></a>
+                    <a class="nav-link" href="/group/main1.do">산오르기<span class="sr-only"></span></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">산모임</a>
@@ -64,7 +64,7 @@
                     </c:otherwise>
                 </c:choose>
                 <button class="btn my-2 my-sm-0">
-                    <img src="../resources/img/search.png" width="25" height="25" onclick="">
+                    <a href="/search/main.jsp"><img src="../resources/img/search.png" width="25" height="25"></a>
                 </button>
             </ul>
         </div>

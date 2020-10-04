@@ -15,24 +15,35 @@ public class GroupServiceImpl implements GroupService{
     @Resource(name = "groupDAO")
     private GroupDAO groupDAO;
 
-    public void insertGroup(GroupVO vo) {
-        groupDAO.insertGroup(vo);
+    @Transactional
+    public int insertGroup(Map map) {
+        return groupDAO.insertGroup(map);
     }
 
-    public List<GroupVO> selectGroupList(){
-        return groupDAO.selectGroupList();
+    public List<Map> selectMainGroupList(){
+        return groupDAO.selectMainGroupList();
     }
 
+    public List<Map> selectAllGroupList(){
+        return groupDAO.selectAllGroupList();
+    }
+
+    //아직
     public void updateGroup(GroupVO vo){
         groupDAO.updateGroup(vo);
     }
 
+    //아직
     public void deleteGroup(int groupNum){
         groupDAO.deleteGroup(groupNum);
     }
 
     public Map selectGroupDetail(int groupNum){
         return groupDAO.selectGroupDetail(groupNum);
+    }
+
+    public List<Map> selectGroupDetailImage(int groupNum){
+        return  groupDAO.selectGroupDetailImage(groupNum);
     }
 
     public List<Map> selectGroupsByKeyword(String keyword){

@@ -1,26 +1,9 @@
 package project.mountain;
 
-import io.swagger.models.auth.In;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.json.JSONObject;
-import org.json.XML;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
-import org.xml.sax.InputSource;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
 
@@ -30,18 +13,19 @@ public class MountainController {
     @Resource(name = "mountainService")
     private MountainService mountainService;
 
-    @GetMapping("/apitest2")
-    @ResponseBody
-    //@RequestBody 필요
-    public Object mountainList() throws UnsupportedEncodingException {
+    @PostMapping("/searchMt.do")
+    public MountainResponseVO mountainList(@RequestBody Map map) throws UnsupportedEncodingException {
 
-        List<Map<String,Object>> list = mountainService.getMountainInfo();
+        String mtNm = (String) map.get("mtNm");
+        String arNm = (String) map.get("arNm");
 
-        System.out.println();
-        System.out.println(list.toString());
+        MountainResponseVO vo = mountainService.getMountainInfo(mtNm, arNm);
 
-        return list;
+        System.out.println("vo : " + vo.getBody().getItems().get(0));
 
+        System.out.println(vo.toString());
+
+        return vo;
 
     }
 

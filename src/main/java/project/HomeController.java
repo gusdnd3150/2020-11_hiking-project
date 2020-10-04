@@ -20,7 +20,8 @@ public class HomeController {
 	@GetMapping("/main.do")
 	public ModelAndView home(ModelAndView mav) {
 		mav.setViewName("home");
-		mav.addObject("group", groupService.selectGroupList());
+		System.out.println(groupService.selectMainGroupList());
+		mav.addObject("group", groupService.selectMainGroupList());
 		return mav;
 	}
 

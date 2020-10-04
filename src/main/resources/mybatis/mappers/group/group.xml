@@ -19,14 +19,18 @@
         <result property="ageStart" column="ageStart" />
         <result property="ageEnd" column="ageEnd" />
         <result property="sex" column="sex" />
-        <result property="mtNum" column="mtNum" />
+        <result property="mtNm" column="mtNm" />
     </resultMap>
     
-    <insert id="insertGroup" parameterType="groupVO">
+    <insert id="insertGroup" parameterType="map">
+        <selectKey keyProperty="groupNum" resultType="_int" order="BEFORE">
+            SELECT groups_seq.nextval
+            FROM dual
+        </selectKey>
         <![CDATA[
             INSERT INTO groups
             VALUES (
-                groups_seq.nextval,
+                #{groupNum},
                 #{name},
                 1,
                 1,
@@ -40,18 +44,32 @@
                 #{ageStart},
                 #{ageEnd},
                 #{sex},
-                'mt-1'
+                #{mtNm}
                 )
         ]]>
     </insert>
 
-    <!-- 리스트 6개 불러오기 -->
-    <select id="selectGroupList" resultMap="groupResult">
+    <!-- 리스트 6개 불러오기 (최근순) -->
+    <select id="selectMainGroupList" resultType="map">
         <![CDATA[
-            SELECT *
-            FROM groups
-            WHERE rownum <= 6
-            ORDER BY groupNum ASC
+            SELECT g.*, gm.storedFileName
+            FROM groups g, groupsMedia gm
+            WHERE g.groupNum = gm.groupNum
+              AND gm.mediaNum = 0
+              AND ROWNUM <=6
+            ORDER BY g.groupNum DESC
+        ]]>
+    </select>
+
+    <!-- 산오르기 등산모임 리스트 페이지 (수정중) -->
+    <select id="selectAllGroupList" resultType="map">
+        <![CDATA[
+            SELECT g.*, gm.storedFileName
+            FROM groups g, groupsMedia gm
+            WHERE g.groupNum = gm.groupNum
+              AND gm.mediaNum = 0
+              AND ROWNUM <=10
+            ORDER BY g.groupNum DESC
         ]]>
     </select>
 
@@ -81,6 +99,14 @@
         <![CDATA[
             SELECT *
             FROM groups
+            WHERE groupNum = #{groupNum}
+        ]]>
+    </select>
+
+    <select id="selectGroupDetailImage" resultType="map" parameterType="_int">
+        <![CDATA[
+            SELECT storedFileName
+            FROM groupsMedia
             WHERE groupNum = #{groupNum}
         ]]>
     </select>

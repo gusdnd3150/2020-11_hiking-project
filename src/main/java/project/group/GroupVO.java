@@ -3,9 +3,7 @@ package project.group;
 import lombok.*;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
+import java.lang.reflect.Array;
 
 @Component
 @Data
@@ -25,6 +23,15 @@ public class GroupVO {
     private int ageStart;               // 그룹 시작 나이
     private int ageEnd;                 // 그룹 끝 나이
     private String sex;                 // 그룹 성별
-    private String mtNum;               // 등산로명
+    private String mtNm;               // 등산로명
 
+    private Object images;
+
+    public Object getImages() {
+        return images;
+    }
+
+    public void setImages(Object images) {
+        this.images = images;
+    }
 }

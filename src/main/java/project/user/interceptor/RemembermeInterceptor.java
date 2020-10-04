@@ -15,26 +15,25 @@ import project.user.service.UserService;
 import project.user.vo.UserVO;
 
 public class RemembermeInterceptor extends HandlerInterceptorAdapter{
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(RemembermeInterceptor.class);
-	
+
 	@Autowired
 	private UserService userService;
-	
+
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-		
+
 		HttpSession httpSession = request.getSession();
-		System.out.println("remembermeInterceptor:  "+ WebUtils.getCookie(request, "loginCookie"));
 		Cookie loginCookie = WebUtils.getCookie(request, "loginCookie");
 		if(loginCookie != null) {
 			UserVO userVO = userService.checkLoginBefore(loginCookie.getValue());
 			if(userVO != null)
 				httpSession.setAttribute("LOGIN", userVO);
 		}
-		
-		
-		
+
+
+
 		return true;
 	}
 

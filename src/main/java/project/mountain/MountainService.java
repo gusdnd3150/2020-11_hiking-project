@@ -4,5 +4,5 @@ import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 public interface MountainService {
-    List getMountainInfo() throws UnsupportedEncodingException;
+    MountainResponseVO getMountainInfo(String mtNm, String ArNm) throws UnsupportedEncodingException;
 }
