@@ -4,13 +4,12 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>logIn</title>
+<title>logInPost</title>
 </head>
 <body>
-
 	<script>
-		alert("아이디와 비밀번호를 다시 확인해주세요");
-		self.location ="/user/logInView.do";
+		alert("오르미의 회원 정보가 수정되었습니다.");
+		self.location ="/user/logOut.do";
 	</script>
 </body>
 </body>
