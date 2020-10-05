@@ -20,7 +20,9 @@ public class RemembermeInterceptor extends HandlerInterceptorAdapter{
 	
 	@Autowired
 	private UserService userService;
-	
+
+	private String id;
+
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 		
@@ -29,11 +31,13 @@ public class RemembermeInterceptor extends HandlerInterceptorAdapter{
 		Cookie loginCookie = WebUtils.getCookie(request, "loginCookie");
 		if(loginCookie != null) {
 			UserVO userVO = userService.checkLoginBefore(loginCookie.getValue());
-			String id = userVO.getId();
 			if(userVO != null)
+				 id = userVO.getId();
 				httpSession.setAttribute("LOGIN", id);
 		}
-
+		
+		
+		
 		return true;
 	}
 

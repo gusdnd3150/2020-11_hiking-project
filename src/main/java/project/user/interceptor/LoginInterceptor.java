@@ -1,7 +1,5 @@
 package project.user.interceptor;
 
-import java.util.LinkedHashMap;
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,15 +24,11 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 			throws Exception {
 		HttpSession httpSession = request.getSession();
 		ModelMap modelMap = mav.getModelMap();
-		System.out.println("로그인 인터쎕터" + mav);
-		System.out.println("로그인 인터쎕터" + modelMap);
 		UserVO userVO = (project.user.vo.UserVO) modelMap.get("userVO");
-		System.out.println(userVO.getId());
-		String id = userVO.getId();
-		if (id != null) {
-			System.out.println("new login Success!!!!");
+		if (userVO != null) {
+			String id = userVO.getId();
 			httpSession.setAttribute(LOGIN, id);
-			System.out.println("httpSession.getAttribute(LOGIN):     " + httpSession.getAttribute(LOGIN));
+			System.out.println("LoginInterceptor//postHandle:     " + httpSession.getAttribute(LOGIN));
 
 			if (request.getParameter("useCookie") != null) {
 				logger.info("remember me...	");
@@ -57,7 +51,6 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object Handler)
 			throws Exception {
 		HttpSession httpSession = request.getSession();
-		System.out.println("넌 언제 다녀오는데??");
 		if (httpSession.getAttribute(LOGIN) != null) {
 			httpSession.removeAttribute(LOGIN);
 			System.out.println(LOGIN);

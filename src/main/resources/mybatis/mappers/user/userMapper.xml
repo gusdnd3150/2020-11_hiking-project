@@ -41,7 +41,7 @@
 	<insert id="insertUser" parameterType="userVO">
       <![CDATA[
       INSERT INTO USERS(userNum, id , password, name, sex, phone, address, address2, zonecode, email, type, status, createdAt, sessionId, authStatus)
-      VALUES (users_SEQ.nextVal, #{id}, #{password}, #{name}, #{sex}, #{phone}, #{address}, #{address2}, #{zonecode}, #{email}, 200, 10, sysdate, #{id}, 0)
+      VALUES (users_SEQ.nextVal, #{id}, #{password}, #{name}, #{sex}, #{phone}, #{address}, #{address2}, #{zonecode}, #{email}, 200, 10, sysdate, #{id}, 1)
       ]]>
 	</insert>
 
@@ -54,30 +54,30 @@
 
 	<insert id="insertUser3" parameterType="userVO">
       <![CDATA[
-     INSERT INTO userinfo(usernum)
-	  VALUES ((SELECT max(userNum) from users))
+     INSERT INTO userinfo(usernum, content2)
+	  VALUES ((SELECT max(userNum) from users), #{content2})
       ]]>
 	</insert>
 
 	<insert id="insertUser4" parameterType="java.util.Map">
       <![CDATA[
-     INSERT INTO userinfo(usernum) 
+     INSERT INTO userinfo(usernum)
 	  VALUES ((SELECT max(userNum) from users))
       ]]>
 	</insert>
-	
+
 	<insert id="insertUser5" parameterType="userVO">
       <![CDATA[
     INSERT INTO delivery(usernum, address, zonecode, address2, delinum, type, createdAt, delibasic)
-	values ((SELECT max(userNum) from users), (SELECT address from users where usernum = (select max(usernum) from users)), (SELECT zonecode from users where usernum = (select max(usernum) from users)), 
+	values ((SELECT max(userNum) from users), (SELECT address from users where usernum = (select max(usernum) from users)), (SELECT zonecode from users where usernum = (select max(usernum) from users)),
 	(SELECT address2 from users where usernum = (select max(usernum) from users)), 0, 0, sysdate, 0)
       ]]>
 	</insert>
-	
+
 	<insert id="insertUser6" parameterType="java.util.Map">
       <![CDATA[
     INSERT INTO delivery(usernum, address, zonecode, address2, delinum, type, createdAt, delibasic)
-	values ((SELECT max(userNum) from users), (SELECT address from users where userNum = (select max(userNum) from users)), (SELECT zonecode from users where userNum = (select max(userNum) from users)), 
+	values ((SELECT max(userNum) from users), (SELECT address from users where userNum = (select max(userNum) from users)), (SELECT zonecode from users where userNum = (select max(userNum) from users)),
 	(SELECT address2 from users where userNum = (select max(userNum) from users)), 0, 0, sysdate, 0)
       ]]>
 	</insert>
@@ -87,8 +87,8 @@
 	        select floor(dbms_random.value(10000000,100000000)) from dual
 	        ]]>
 	</select>
-	
-	
+
+
 	<select id="idCheck" parameterType="String" resultType="int">
 	   <![CDATA[
 	    select count(*)
@@ -112,20 +112,20 @@
 	   where id=#{id} and status=10
 	        ]]>
 	</update>
-	
+
 	 <update id="updateUser2" parameterType="userVO">
 	  <![CDATA[
 	   update delivery
 	   set zonecode=#{zonecode}, address=#{address}, address2=#{address2}
 	   where userNum = (select userNum from users where id=#{id} and status=10)
 	        ]]>
-	</update> 
+	</update>
 
 	<update id="updatePwd" parameterType="userVO">
 	  <![CDATA[
 	   update users
 	   set password=#{password}
-	   where sessionId=#{sessionId} and status=10
+	   where id=#{id} and status=10
 	        ]]>
 	</update>
 
@@ -164,23 +164,23 @@
 	   where id = #{id} and status=10
 	   ]]>
 	</update>
-	
+
 	<select id="getUserInfo" resultMap="userResult" parameterType="int">
 	    <![CDATA[
 		select *
-		from users a, userinfo b 
+		from users a, userinfo b
 		where a.userNum = #{userNum}
 		and b.userNum = a.userNum
 		and a.status=10
 	   ]]>
 	</select>
-	
-	
+
+
 
 	<select id="checkUserWithSessionKey" resultMap="userResult"
 		parameterType="String">
 	    <![CDATA[
-		select id
+		select *
 		from users
 		where sessionId = #{value}
 		and status=10
@@ -211,8 +211,8 @@
 	    where sessionId=#{sessionId}
 	    ]]>
 	</update>
-	
-	
+
+
 	<update id="updateAuthKey" parameterType="java.util.Map">
 	   <![CDATA[
 		update users
@@ -221,7 +221,7 @@
 	    and id =#{id}
 	    ]]>
 	</update>
-	
+
 		<update id="updateAuthStatus" parameterType="java.util.Map">
 	   <![CDATA[
 		update users
@@ -230,7 +230,7 @@
 	    and email=#{email}
 	    ]]>
 	</update>
-	
+
 	<update id="withdrawal" parameterType="userVO">
 	   <![CDATA[
 		update users

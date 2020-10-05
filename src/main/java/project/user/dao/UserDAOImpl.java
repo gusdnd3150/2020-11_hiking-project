@@ -11,6 +11,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,6 +30,10 @@ public class UserDAOImpl implements UserDAO{
 	@Override
 	public void insertUser(UserVO userVO) throws Exception{
 		sqlSession.insert("userMapper.insertUser", userVO);
+		ClassPathResource resource = new ClassPathResource("image/userBasic.jpg");
+		File file = resource.getFile();
+		byte[] content2 = FileUtils.readFileToByteArray(file);
+		userVO.setContent2( content2 );
 		sqlSession.insert("userMapper.insertUser3", userVO);
 		sqlSession.insert("userMapper.insertUser5", userVO);
 	}
@@ -36,13 +41,17 @@ public class UserDAOImpl implements UserDAO{
 	@Override
 	public void insertUser2(Map<String, Object> snsUser) throws IOException {
 		sqlSession.insert("userMapper.insertUser2", snsUser);
+		ClassPathResource resource = new ClassPathResource("image/userBasic.jpg");
+		File file = resource.getFile();
+		byte[] content2 = FileUtils.readFileToByteArray(file);
+		snsUser.put("content2",content2);
 		sqlSession.insert("userMapper.insertUser4", snsUser);
 		sqlSession.insert("userMapper.insertUser6", snsUser);
 	}
 
 	@Override
 	public int idCheck(String id) throws Exception{
-		System.out.println("다오아이디: "+id);
+		System.out.println("다오아이디체크: "+id);
 		int rst = sqlSession.selectOne("userMapper.idCheck", id);
 	System.out.println("DAO : "+ rst);
 		return rst;
@@ -50,7 +59,7 @@ public class UserDAOImpl implements UserDAO{
 	
 	@Override
 	public UserVO logIn(LoginDTO loginDTO) throws Exception {
-		System.out.println("다오왔다감");
+		System.out.println("유저다오왔다감");
 		return sqlSession.selectOne("userMapper.logIn", loginDTO);
 	}
 

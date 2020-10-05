@@ -51,7 +51,6 @@ public class UserControllerImpl implements UserController {
 	@Autowired
 	private MailService mailService;
 
-
 //	@Autowired
 //	private SnsValue googleSns;
 
@@ -74,11 +73,9 @@ public class UserControllerImpl implements UserController {
 
 		// 임의의 authKey 생성 & 이메일 발송
 		String authKey = mailService.getKey(6);
+		mailService.sendAuthMail(userVO.getEmail(), authKey);
 		userVO.setAuthKey(authKey);
-		mailService.sendAuthMail(userVO.getEmail(), userVO.getAuthKey());
-		System.out.println("authKeyauthKeyauthKeyauthKeyauthKey:   " + authKey);
-		userVO.setAuthKey(authKey);
-System.out.println("userVO.getAuthKey:   " + userVO.getAuthKey());
+
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("id", userVO.getId());
 		map.put("email", userVO.getEmail());
@@ -123,7 +120,7 @@ System.out.println("userVO.getAuthKey:   " + userVO.getAuthKey());
 		int rst = userService.idCheck(id);
 		String result = "0";
 		System.out.println("유저Controller : " + rst);
-		if (rst == 1) {
+		if (rst != 0) {
 			result = "1";
 		}
 		return result;
@@ -156,7 +153,6 @@ System.out.println("userVO.getAuthKey:   " + userVO.getAuthKey());
 		UserVO snsUserInfo = userService.getBySns(snsUser);
 		System.out.println("********" + snsUserInfo);
 		if (snsUserInfo == null) {
-			System.out.println("여기는 왔겠지.");
 			httpSession.setAttribute("snsUser", snsUser);
 			return "/user/insertPwdView";
 		} else {
@@ -199,7 +195,6 @@ System.out.println("userVO.getAuthKey:   " + userVO.getAuthKey());
 			mav.setViewName("/user/logInFailed");
 			return mav;
 		}
-		System.out.println("도대체 어디로 간거니?1");
 		mav.setViewName("/home");
 		mav.addObject("userVO", userVO);
 		System.out.println("유저컨트롤러mav------" + mav);
@@ -211,8 +206,6 @@ System.out.println("userVO.getAuthKey:   " + userVO.getAuthKey());
 			userService.keepLogin(userVO.getId(), httpSession.getId(), sessionLimit);
 			System.out.println("세션아이디 저장");
 		}
-
-		System.out.println("도대체 어디로 간거니?3");
 		return mav;
 	}
 

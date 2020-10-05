@@ -21,7 +21,6 @@ public class MypageDAOImpl implements MypageDAO {
 
 	@Override
 	public void updateUser(UserVO userVO) throws Exception {
-		System.out.println("마이페이지다오업데이트:"+ userVO);
 		sqlSession.update("userMapper.updateUser", userVO);
 		sqlSession.update("userMapper.updateUser2", userVO);
 	}
@@ -39,7 +38,6 @@ public class MypageDAOImpl implements MypageDAO {
 
 	@Override
 	public void updateUserCont(Map<String, Object> contMap) {
-		ClassPathResource resource = new ClassPathResource("img/home.png");
 		contMap.put("userNum", sqlSession.selectOne("userMapper.selectUserNum", contMap));
 		sqlSession.update("userMapper.updateUserCont", contMap);			
 	}

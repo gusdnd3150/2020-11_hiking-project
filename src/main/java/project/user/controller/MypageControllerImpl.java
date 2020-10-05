@@ -43,10 +43,10 @@ public class MypageControllerImpl implements MypageController {
 	
 	@Autowired
 	UserService userService;
-	
+
 	@Autowired
 	ThumbnailMaker thumbnailMaker;
-	
+
 	@Autowired
 	UserVO userVO;
 
@@ -58,60 +58,52 @@ public class MypageControllerImpl implements MypageController {
 		logger.info("modifyView.do");
 		userVO.setId((String) httpSession.getAttribute(LOGIN));
 		userVO = mypageService.getUserInfo(userVO);
-		System.out.println(userVO);
 		mav.addObject("userVO", userVO);
 		mav.setViewName("/user/modifyView");
 		return mav;
 	}
-	
+
 	@RequestMapping(value = "/mypage/modProfile.do", produces="application/json", method = { RequestMethod.GET, RequestMethod.POST })
 	@ResponseBody
 	public UserVO modProfileView(HttpServletRequest request, ModelAndView mav, HttpSession httpSession)
 			throws Exception {
 		userVO.setId((String) httpSession.getAttribute(LOGIN));
-		System.out.println("modProfileView:   "+ userVO);
-//		Byte[] content = userVO.getContent();
+		userVO = mypageService.getUserInfo(userVO);
 		return userVO;
 	}
-	
+
 	@RequestMapping(value = "/mypage/contentView.do", method = { RequestMethod.GET, RequestMethod.POST })
-	public ResponseEntity<byte[]> contentView(HttpServletRequest req, HttpServletResponse res, 
+	public ResponseEntity<byte[]> contentView(HttpServletRequest req, HttpServletResponse res,
 			HttpSession httpSession)throws Exception {
-	userVO.setId((String) httpSession.getAttribute(LOGIN));
+		userVO.setId((String) httpSession.getAttribute(LOGIN));
 		mypageService.getUserInfo(userVO);
-		if(userVO.getContent2() == null) {
-			byte[] content2 = FileUtils.readFileToByteArray(new File("/Users/sylvia_p/eclipse-workspace/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/hiking/resources/img/userBasic.jpg"));
-			userVO.setContent2( content2 );
-		}
 		byte[] content2 = userVO.getContent2();
 		final HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.IMAGE_PNG);
 	return new ResponseEntity<byte[]>(content2, headers, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/mypage/updateUser.do", method = RequestMethod.POST)
+	@RequestMapping(value = "/mypage/updateUser.do", method = { RequestMethod.GET, RequestMethod.POST })
 	public String updateUser(HttpSession httpSession, UserVO userVO) throws Exception {
-		if (userVO.getPassword() != null) {
+		if (!userVO.getPassword().equals("")) {
 			logger.info("비밀번호 변경	");
-			System.out.println(userVO.getPassword());
+			System.out.println("바뀐 비밀번호"+userVO.getPassword());
 			String hashedPwd = BCrypt.hashpw(userVO.getPassword(), BCrypt.gensalt(10));
 			userVO.setPassword(hashedPwd);
 			userVO.setId((String) httpSession.getAttribute(LOGIN));
-			System.out.println(userVO);
 			mypageService.updatePwd(userVO);
 			httpSession.invalidate();
 			userService.removeSessionId(httpSession.getId());
 			return "/user/modifyEnd";
 		}
 		logger.info("updateUser");
-		System.out.println(userVO);
 		mypageService.updateUser(userVO);
 		httpSession.invalidate();
 		userService.removeSessionId(httpSession.getId());
 		return "/user/modifyEnd";
 	}
 
-	@RequestMapping(value = "/mypage/updateUserInfo.do", method = RequestMethod.POST)
+	@RequestMapping(value = "/mypage/updateUserInfo.do", method = { RequestMethod.GET, RequestMethod.POST })
 	public String updateUserInfo(MultipartHttpServletRequest file, HttpServletRequest request,
 			HttpServletResponse response, HttpSession httpSession) throws Exception {
 		userVO.setId((String) httpSession.getAttribute(LOGIN));
@@ -145,14 +137,13 @@ public class MypageControllerImpl implements MypageController {
 	}
 	
 
-	@RequestMapping(value = "/mypage/pwdCheck.do", method = RequestMethod.POST)
+	@RequestMapping(value = "/mypage/pwdCheck.do", method = { RequestMethod.GET, RequestMethod.POST })
 	@ResponseBody
 	public String pwdCheck(@RequestParam("pwd") String pwd, HttpSession httpSession) throws Exception {
 		String rst = "1";
 		logger.info("pwdCheck   :" + pwd);
 		userVO.setId((String) httpSession.getAttribute(LOGIN));
 		userVO = mypageService.pwdCheck(userVO);
-		System.out.println(userVO);
 		if (userVO == null || !BCrypt.checkpw(pwd, userVO.getPassword())) {
 			return rst;
 		}
