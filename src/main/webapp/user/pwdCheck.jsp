@@ -43,7 +43,7 @@
 					<button type="button" class="btn btn-secondary"
 						data-dismiss="modal" id="close">X닫기</button>
 					<a href="/mypage/modifyView.do"><button type="button" class="btn btn-primary"  
-				 disabled id="myInfo">정보 보기</button></a>
+				 disabled id="myInfo">다음</button></a>
 				</div>
 			</div>
 		</div>

@@ -11,6 +11,7 @@ import project.user.vo.UserVO;
 public interface UserService {
 
 	public void insertUser(UserVO userVO) throws Exception;
+	public void insertUser2(Map<String, Object> snsUser)throws Exception;
 
 	public int idCheck(String id) throws Exception;
 
@@ -22,9 +23,12 @@ public interface UserService {
 
 	UserVO getBySns(Map<String, Object> snsUser);
 
-	public void insertUser2(Map<String, Object> snsUser);
-
 	public void removeSessionId(String sessionId);
+
+	public void updateAuthKey(Map<String, String> map);
+
+	public void updateAuthStatus(Map<String, String> map);
+	public void withdrawal(UserVO userVO);
 
 	
 }

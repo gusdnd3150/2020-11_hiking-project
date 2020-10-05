@@ -1,9 +1,11 @@
 package project.user.dao;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Repository;
 
 import project.user.dto.LoginDTO;
@@ -21,6 +23,7 @@ public class MypageDAOImpl implements MypageDAO {
 	public void updateUser(UserVO userVO) throws Exception {
 		System.out.println("마이페이지다오업데이트:"+ userVO);
 		sqlSession.update("userMapper.updateUser", userVO);
+		sqlSession.update("userMapper.updateUser2", userVO);
 	}
 
 	@Override
@@ -36,20 +39,20 @@ public class MypageDAOImpl implements MypageDAO {
 
 	@Override
 	public void updateUserCont(Map<String, Object> contMap) {
-		System.out.println("1");
-		contMap.put("userNum", sqlSession.update("userMapper.selectUserNum", contMap));
-		System.out.println("2");
+		ClassPathResource resource = new ClassPathResource("img/home.png");
+		contMap.put("userNum", sqlSession.selectOne("userMapper.selectUserNum", contMap));
 		sqlSession.update("userMapper.updateUserCont", contMap);			
 	}
 
 	@Override
-	public UserVO getUserInfo(String sessionId) {
-		return sqlSession.selectOne("userMapper.checkUserWithSessionKey", sessionId);
+	public UserVO getUserInfo(UserVO userVO) {
+		int userNum =  sqlSession.selectOne("userMapper.selectUserNum", userVO);
+		return sqlSession.selectOne("userMapper.getUserInfo", userNum);
 	}
 
 	@Override
-	public UserVO pwdCheck(String sessionId) {
-		return sqlSession.selectOne("userMapper.pwdCheck", sessionId);
+	public UserVO pwdCheck(UserVO userVO) {
+		return sqlSession.selectOne("userMapper.pwdCheck", userVO);
 	}
 
 	@Override

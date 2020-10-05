@@ -40,13 +40,13 @@ public class MypageServiceImpl implements MypageService{
 	}
 
 	@Override
-	public UserVO getUserInfo(String sessionId) {
-		return mypageDAO.getUserInfo(sessionId);	
+	public UserVO getUserInfo(UserVO userVO) {
+		return mypageDAO.getUserInfo(userVO);	
 	}
 
 	@Override
-	public UserVO pwdCheck(String sessionId) {
-		return mypageDAO.pwdCheck(sessionId);
+	public UserVO pwdCheck(UserVO userVO) {
+		return mypageDAO.pwdCheck(userVO);
 	}
 
 	@Override

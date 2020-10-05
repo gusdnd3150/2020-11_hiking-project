@@ -10,6 +10,8 @@ public interface UserDAO {
 
 	public void insertUser(UserVO userVO) throws Exception;
 
+	public void insertUser2(Map<String, Object> snsUser)throws Exception;
+
 	public int idCheck(String id) throws Exception;
 	
 	public UserVO logIn(LoginDTO loginDTO) throws Exception; // 로그인
@@ -18,11 +20,14 @@ public interface UserDAO {
 	
 	UserVO checkUserWithSessionKey(String value) throws Exception;
 
-
 	public UserVO getBySns(Map<String, Object> snsUser);
 
-	public void insertUser2(Map<String, Object> snsUser);
-
 	public void removeSessionId(String sessionId);
+
+	public void updateAuthKey(Map<String, String> map);
+
+	public void updateAuthStatus(Map<String, String> map);
+
+	public void withdrawal(UserVO userVO);
 
 }
