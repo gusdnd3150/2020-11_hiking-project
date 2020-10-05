@@ -69,7 +69,6 @@ public class MypageControllerImpl implements MypageController {
 	public UserVO modProfileView(HttpServletRequest request, ModelAndView mav, HttpSession httpSession)
 			throws Exception {
 		userVO.setId((String) httpSession.getAttribute(LOGIN));
-		userVO = mypageService.getUserInfo(userVO);
 		System.out.println("modProfileView:   "+ userVO);
 //		Byte[] content = userVO.getContent();
 		return userVO;
@@ -78,7 +77,8 @@ public class MypageControllerImpl implements MypageController {
 	@RequestMapping(value = "/mypage/contentView.do", method = { RequestMethod.GET, RequestMethod.POST })
 	public ResponseEntity<byte[]> contentView(HttpServletRequest req, HttpServletResponse res, 
 			HttpSession httpSession)throws Exception {
-		userVO.setId((String) httpSession.getAttribute(LOGIN));
+		userVO = (UserVO) httpSession.getAttribute(LOGIN);
+	//	userVO.setId((String) httpSession.getAttribute(LOGIN));
 		mypageService.getUserInfo(userVO);
 		if(userVO.getContent2() == null) {
 			byte[] content2 = FileUtils.readFileToByteArray(new File("/Users/sylvia_p/eclipse-workspace/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/hiking/resources/img/userBasic.jpg"));

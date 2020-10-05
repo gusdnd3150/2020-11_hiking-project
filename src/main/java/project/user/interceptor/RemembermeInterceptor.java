@@ -29,11 +29,10 @@ public class RemembermeInterceptor extends HandlerInterceptorAdapter{
 		Cookie loginCookie = WebUtils.getCookie(request, "loginCookie");
 		if(loginCookie != null) {
 			UserVO userVO = userService.checkLoginBefore(loginCookie.getValue());
+			String id = userVO.getId();
 			if(userVO != null)
-				httpSession.setAttribute("LOGIN", userVO);
+				httpSession.setAttribute("LOGIN", id);
 		}
-		
-		
 		
 		return true;
 	}

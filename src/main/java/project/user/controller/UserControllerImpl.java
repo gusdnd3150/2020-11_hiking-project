@@ -51,6 +51,7 @@ public class UserControllerImpl implements UserController {
 	@Autowired
 	private MailService mailService;
 
+
 //	@Autowired
 //	private SnsValue googleSns;
 
@@ -72,9 +73,12 @@ public class UserControllerImpl implements UserController {
 		userService.insertUser(userVO);
 
 		// 임의의 authKey 생성 & 이메일 발송
-		String authKey = mailService.sendAuthMail(userVO.getEmail());
+		String authKey = mailService.getKey(6);
 		userVO.setAuthKey(authKey);
-
+		mailService.sendAuthMail(userVO.getEmail(), userVO.getAuthKey());
+		System.out.println("authKeyauthKeyauthKeyauthKeyauthKey:   " + authKey);
+		userVO.setAuthKey(authKey);
+System.out.println("userVO.getAuthKey:   " + userVO.getAuthKey());
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("id", userVO.getId());
 		map.put("email", userVO.getEmail());

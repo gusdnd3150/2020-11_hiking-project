@@ -180,7 +180,7 @@
 	<select id="checkUserWithSessionKey" resultMap="userResult"
 		parameterType="String">
 	    <![CDATA[
-		select *
+		select id
 		from users
 		where sessionId = #{value}
 		and status=10
