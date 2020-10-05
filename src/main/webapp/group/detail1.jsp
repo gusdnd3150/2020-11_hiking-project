@@ -2,30 +2,25 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <jsp:include page="/common/header.jsp" />
 <div class="container pt-5">
-    <%= request.getAttribute("mtInfo") %>
-    <!-- Portfolio Item Heading -->
-<%--    <h1 class="my-4">${mtInfo.mntiname}--%>
-<%--        <small>${mtInfo.mntisname}</small>--%>
-<%--    </h1>--%>
+    <h1 class="my-4">${mtInfo.mntiname}
+        <small>${mtInfo.mntisname}</small>
+    </h1>
     <div class="row">
         <div class="col-md-8">
-            <%--            <img class="img-fluid" src="http://placehold.it/750x500" alt="">--%>
-            <img class="img-fluid" src="http://localhost:8080/resources/img/${group.image0}" alt="">
+            <img class="img-fluid" src="${mtInfo.imgfilename}" alt="" style="width: 100%; height: 100%">
         </div>
         <div class="col-md-4">
-            <h3 class="my-3">${group.NAME}</h3>
+            <h3 class="my-3">위치</h3>
             <hr />
             <p style="height: 80px">
-                간단한 설명
+                ${mtInfo.mntiadd}
             </p>
-            <h3 class="my-3">모임 상태</h3>
+            <h3 class="my-3">산 정보</h3>
             <hr />
             <ul style="list-style: none">
-                <li>진행중</li>
-                <li>${group.STAFFCURRENT} / ${group.STAFFMAX} 명</li>
-                <li>${group.AREA}</li>
-                <li>${group.AGESTART}</li>
-                <li>${group.AGEEND}</li>
+                <li>산 높이 : ${mtInfo.mntihigh} m</li>
+                <li>관리처 : ${mtInfo.mntiadmin}</li>
+                <li>관리처 전화번호 : ${mtInfo.mntiadminnum}</li>
             </ul>
             <!--SNS 공유 버튼 넣자-->
             <div class="row col-12" style="bottom: 0px">
@@ -38,7 +33,7 @@
     <h3 class="my-4">산모임 상세내용</h3>
     <div class="row">
         <div class="col-12">
-<%--            ${mtInfo.mntidetails}--%>
+            ${mtInfo.mntidetails}
         </div>
     </div>
 

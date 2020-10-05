@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import project.groupmedia.GroupMediaService;
 import project.mountain.MountainItemDTO;
+import project.mountain.MountainItemsDTO;
 import project.mountain.MountainResponseVO;
 import project.mountain.MountainService;
 
@@ -52,21 +53,20 @@ public class GroupController{
     @GetMapping("/group/main1.do")
     public ModelAndView goMain1() throws UnsupportedEncodingException {
         ModelAndView mav = new ModelAndView("main1");
-        MountainResponseVO vo = mountainService.getMountainInfo("");
+        MountainResponseVO mountainVO = mountainService.getMountainInfo("");
 
-        List<MountainItemDTO> list = new ArrayList<MountainItemDTO>();
+        List<MountainItemDTO> list = new ArrayList<>();
 
-        for(int i=0;i<vo.getBody().getItems().size();i++){
-            MountainItemDTO mtInfo = vo.getBody().getItems().get(i);
-            MountainResponseVO vo2 = new MountainResponseVO();
-            vo2 = mountainService.getMountainImage(mtInfo.getMntilistno());
-//            mtInfo.setImgfilename(); = vo2.getBody().getItems().get(i);
-            System.out.println(vo2.getBody().getItems().get(i));
+        for(MountainItemDTO mountainDTO : mountainVO.getBody().getItems()){
 
+            MountainResponseVO imageVO = mountainService.getMountainImage(mountainDTO.getMntilistno());
 
-            // 여기서 산 no를 보내서 img를 가져와야 함
-
-            list.add(mtInfo);
+            if (imageVO.getBody().getItems()==null){
+                mountainDTO.setImgfilename("http://placehold.it/350x200");
+            }else{
+                mountainDTO.setImgfilename("http://www.forest.go.kr/images/data/down/mountain/"+imageVO.getBody().getItems().get(0).getImgfilename());
+            }
+            list.add(mountainDTO);
         }
         mav.addObject("mtInfo",list);
         return mav;
@@ -94,8 +94,15 @@ public class GroupController{
     public ModelAndView mountainDetail(@PathVariable("mntiname") String mntiname) throws UnsupportedEncodingException {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("/group/detail1");
-        MountainResponseVO vo = mountainService.getMountainInfo(mntiname);
-        MountainItemDTO dto = vo.getBody().getItems().get(0);//이거 고쳐야함 이름 겹치는산이 있다
+        MountainResponseVO mountainVO = mountainService.getMountainInfo(mntiname);
+
+//        for(int i=0;i<mountainVO.getBody().getItems().size();i++) {
+        MountainResponseVO imageVO = mountainService.getMountainImage(mountainVO.getBody().getItems().get(0).getMntilistno());
+//            System.out.println(imageVO.toString());
+//        }
+
+        MountainItemDTO dto = mountainVO.getBody().getItems().get(0);//이거 고쳐야함 이름 겹치는산이 있다
+        dto.setImgfilename("http://www.forest.go.kr/images/data/down/mountain/"+imageVO.getBody().getItems().get(0).getImgfilename());
 
         mav.addObject("mtInfo",dto);
 

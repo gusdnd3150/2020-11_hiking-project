@@ -68,7 +68,7 @@
             FROM groups g, groupsMedia gm
             WHERE g.groupNum = gm.groupNum
               AND gm.mediaNum = 0
-              AND ROWNUM <=10
+              AND ROWNUM <=9
             ORDER BY g.groupNum DESC
         ]]>
     </select>
