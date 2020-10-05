@@ -1,0 +1,36 @@
+.drag_drop_zone{
+    outline: 2px solid white ;
+    outline-offset:-5px;
+    text-align: center;
+    transition: all .15s ease-in-out;
+    width: 300px;
+    height: 200px;
+    background-color: whitesmoke;
+}
+
+#groupForm-container{
+    width: 600px;
+}
+
+div#groupForm {
+    background-color: lightgrey;
+    border-radius: 5px 5px 5px 5px;
+    /*border: grey solid 1px;*/
+}
+
+#increase{
+    border-radius: 5px 5px 5px 5px;
+}
+
+.staff > i {
+    display: inline-block;
+}
+
+.staff > h2 {
+    display: inline-block;
+}
+
+i {
+    color: dimgray;
+}
+

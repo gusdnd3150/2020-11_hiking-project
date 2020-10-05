@@ -23,7 +23,9 @@ public class GroupController{
     private GroupMediaService groupMediaService;
 
     @PostMapping("/insert.do")
-    public void insertGroup(GroupVO vo) throws Exception {
+    @ResponseBody
+    public void insertGroup(@RequestBody GroupVO vo) throws Exception {
+        System.out.println(vo.toString());
         groupService.insertGroup(vo);
     }
 

@@ -64,7 +64,24 @@
 				</c:forEach>
 		</div>
 	</div>
-	<div><h2>공지사항</h2></div>
+	<div>
+		<div class="col-md-6" style="width: 50%; display: inline-block;float: left">
+			<p><h2>공지사항</h2></p>
+			<ul class="list-group">
+				<li class="list-group-item"><a href="#" class="notice-item" style="color: black">[공지사항타입] 공지내용</a><span class="badge badge-danger">New</span></li>
+				<li class="list-group-item"><a href="#" class="notice-item" style="color: black">공지사항2</a></li>
+				<li class="list-group-item"><a href="#" class="notice-item" style="color: black">공지사항3</a></li>
+				<li class="list-group-item"><a href="#" class="notice-item" style="color: black">공지사항4</a></li>
+				<li class="list-group-item"><a href="#" class="notice-item" style="color: black">공지사항5</a></li>
+			</ul>
+		</div>
+		<div class="col-md-6" style="width: 50%; display: inline-block;">
+			<p ><h2>이벤트</h2></p>
+			<img src="./resources/img/test/event1.jpg" style="max-width: 100%; height: auto">
+		</div>
+	</div>
+	<pre></pre>
+	<div class="memberCountCon" style="font-size:40px;text-align: center"></div>
 </div>
 
 <!-- js -->
@@ -76,8 +93,8 @@
 		$('.responsive').slick({
 			swipe: true,
 			speed: 300,
-			slidesToShow: 3,
-			slidesToScroll: 3,
+			slidesToShow: 4,
+			slidesToScroll: 1,
 			autoPlay: true,
 			autoplaySpeed: 4000,
 			arrow: true,
@@ -85,8 +102,8 @@
 				{
 					breakpoint: 1024,
 					settings: {
-						slidesToShow: 2,
-						slidesToScroll: 2,
+						slidesToShow: 3,
+						slidesToScroll: 1,
 					}
 				},
 				{
@@ -109,5 +126,22 @@
 			]
 		});
 	})
+	var memberCountConTxt= 296842;
+
+	$({ val : 0 }).animate({ val : memberCountConTxt }, {
+		duration: 1000,
+		step: function() {
+			var num = numberWithCommas(Math.floor(this.val));
+			$(".memberCountCon").text("현재 "+num+ "번의 등산이 이루어졌어요");
+		},
+		complete: function() {
+			var num = numberWithCommas(Math.floor(this.val));
+			$(".memberCountCon").text("현재 "+num+ "번의 등산이 이루어졌어요" );
+		}
+	});
+
+	function numberWithCommas(x) {
+		return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	}
 </script>
 <jsp:include page="/common/footer.jsp" />
