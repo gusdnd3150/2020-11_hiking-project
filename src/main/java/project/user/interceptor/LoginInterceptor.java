@@ -1,5 +1,7 @@
 package project.user.interceptor;
 
+import java.util.LinkedHashMap;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -11,7 +13,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import project.user.dao.MypageDAO;
+import project.user.vo.UserVO;
 
 public class LoginInterceptor extends HandlerInterceptorAdapter {
 
@@ -24,13 +26,11 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 			throws Exception {
 		HttpSession httpSession = request.getSession();
 		ModelMap modelMap = mav.getModelMap();
-		System.out.println("로그인 인터쎕터" + mav);
-		System.out.println("로그인 인터쎕터" + modelMap);
-		Object userVO = modelMap.get("userVO");
+		UserVO userVO = (project.user.vo.UserVO) modelMap.get("userVO");
 		if (userVO != null) {
-			System.out.println("new login Success!!!!");
-			httpSession.setAttribute(LOGIN, userVO);
-			System.out.println("httpSession.getAttribute(LOGIN)" + httpSession.getAttribute(LOGIN));
+			String id = userVO.getId();
+			httpSession.setAttribute(LOGIN, id);
+			System.out.println("LoginInterceptor//postHandle:     " + httpSession.getAttribute(LOGIN));
 
 			if (request.getParameter("useCookie") != null) {
 				logger.info("remember me...	");
@@ -53,7 +53,6 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object Handler)
 			throws Exception {
 		HttpSession httpSession = request.getSession();
-		System.out.println("넌 언제 다녀오는데??");
 		if (httpSession.getAttribute(LOGIN) != null) {
 			httpSession.removeAttribute(LOGIN);
 			System.out.println(LOGIN);

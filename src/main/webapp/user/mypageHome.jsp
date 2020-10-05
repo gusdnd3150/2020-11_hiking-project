@@ -19,34 +19,29 @@
 <body>
 	<div class="container">
 		<jsp:include page="/common/header.jsp" flush="false"/>
-		<div class="nav-scroller py-1 mb-2">
-			<nav class="nav d-flex justify-content-between">
-				<a class="p-2 text-muted" href="#">World</a> <a
-					class="p-2 text-muted" href="#">U.S.</a> <a class="p-2 text-muted"
-					href="#">Design</a> <a class="p-2 text-muted" href="#">Culture</a>
-				<a class="p-2 text-muted" href="#">Health</a> <a
-					class="p-2 text-muted" href="#">Style</a>
-			</nav>
 		</div>
 
-		<h1>MyPage</h1>
+		
 		<!-- Profile Image -->
 		<table
 			style="width: 100%; height: 200px; table-layout: fixed; !important">
 			<tr>
 				<td>
+						<h1>MyPage</h1>
 					<div class="box box-primary">
 						<div class="box-body box-profile">
-							<img class="profile-user-img img-responsive img-circle" src=""
-								alt="프로필 사진">
+						<div style="text-align:center;">
 
-							<h3 class="profile-username text-center">개존잘</h3>
-
-							<p class="text-muted text-center">여기다가는 뭘 넣을까 그냥 뺼까</p>
+							<img class="rounded-circle" src="/mypage/contentView.do" width="100" height="100"
+								alt="프로필사진">
+							
+								</div>
+							<h3 class="profile-username text-center" id="name"></h3>
+							<!-- <p class="text-muted text-center">여기다가는 뭘 넣을까 그냥 뺼까</p> -->
 
 							<ul class="list-group list-group-unbordered">
 								<li class="list-group-item text-center">
-									<p>여기에 나의 소개글이 이렇게 들어갈거에요.</p>
+									<p id="profile1">여기에 나의 소개글이 이렇게 들어갈거에요.</p>
 								</li>
 								<li class="list-group-item"><b>내가 오른 산</b> <a
 									class="pull-right"><h5 style="text-align: right">15</h5></a></li>
@@ -174,7 +169,6 @@
 			</div>
 		</div>
 	</div>
-
 	<main role="main" class="container">
 		<div class="row">
 			<div class="col-md-8 blog-main">
@@ -189,15 +183,14 @@
 <script>
 <!-- /.container -->
 	$(document).ready(function() {
-
-		$("#editProf").click(function() {
 			$.ajax({
 				url : "/mypage/modProfile.do",
 				type : "post",
 				success : function(data) {
 					console.log(data);
-					$('#profile').text(data.profile);
-
+					$('#profile1').text(data.profile);
+					$('#profile2').text(data.profile);
+					$('#name').text(data.name);
 				},
 				error : function(data, textStatus) {
 					console.log("실패");
@@ -206,7 +199,6 @@
 
 				}
 
-			});
 		});
 		
 		$("#checkIt").click(function() {
@@ -226,11 +218,13 @@
 					$("#myInfo").attr("disabled", true);		
 					} else if (data == "0"){
 							// 0 : 비밀번호 통과
-							$("#passwordCheck3").text("'정보 보기'를 클릭하세요.");
+							$("#password3").val(""); 
+							$("#passwordCheck3").text("'다음'을 클릭하세요.");
 							$('#passwordCheck3').css('color', 'green');
 							$("#myInfo").attr("disabled", false);
 						} else if (data == "1") {
 							// 1 : 	비밀번호 틀림
+							$("#password3").val(""); 
 							$("#passwordCheck3").text("비밀번호를 다시 확인해주세요.");
 							$("#passwordCheck3").css("color", "red");
 							$("#myInfo").attr("disabled", true);
@@ -244,6 +238,10 @@
 			//responsebody -> 아작스로 들어옴
 			});
 		});
+		$("#close").click(function() {
+			console.log("close");
+			$("#password3").val(""); 
+	});
 	});
 
 </script>

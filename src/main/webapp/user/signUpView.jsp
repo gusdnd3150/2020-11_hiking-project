@@ -17,7 +17,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- 위 3개의 메타 태그는 *반드시* head 태그의 처음에 와야합니다; 어떤 다른 콘텐츠들은 반드시 이 태그들 *다음에* 와야 합니다 -->
-    <title>회원가입</title>
+    <title>산오름 회원가입</title>
 <!-- 합쳐지고 최소화된 최신 CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 <!-- 부가적인 테마 -->
@@ -29,26 +29,39 @@
 		function openDaumZipAddress() {
 			new daum.Postcode({
 				oncomplete:function(data) {
-					jQuery("#postcode1").val(data.postcode1);
-					jQuery("#postcode2").val(data.postcode2);
-					jQuery("#zonecode").val(data.zonecode);
-					jQuery("#address").val(data.address);
-					jQuery("#address_etc").focus();
+					jQuery("input[name=zonecode]").val(data.zonecode);
+					jQuery("input[name=address]").val(data.address);
+					jQuery("#address2").focus();
 					console.log(data);
 				}
 			}).open();
 		}
+		
+		function fn_insertUser() {
+			var userVO = document.frmJoin;
+			var address = userVO.address.value;
+			var zonecode = userVO.zonecode.value;
+			if((zonecode.length == 0|| zonecode =="") || (address.length ==0 || address =="")) {
+				let i = document.getElementById("addressCheck");
+				i.innerHTML = "'주소 찾기'를 완료 해주세요.";
+				i.style.color="red";
+			}else {
+				frmJoin.method="post";
+				frmJoin.action="/user/insertUser.do";
+				frmJoin.submit();
+			}
+
+		}
+			
 	</script>
 </head>
 <body>
-     <div class="container">
-    <div class="row">
-    <div class="col-sm-12 text-center" >
-    <div class="col-sm-3"></div>
-     
-    <div class="col-sm-6">
-    <h2>회원가입</h2>
-    <form action="/user/insertUser.do" method="post">
+			<div class="row text-center">
+				 <div class="col-md-3"></div>
+				<div class="col-md-6">
+					<h2>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+					산오름 회원가입</h2>
+    <form name="frmJoin" action="/user/insertUser.do" method="post">
         <table class="table table-boardered">
             <tr>
                 <th>아이디</th>
@@ -75,16 +88,17 @@
 
             <tr>
                 <th>이메일</th>
-                <td><input type="email" class="form-control" id="email" name="email" required><br>
+                <td><input type="email" class="form-control" id="email" name="email" placeholder="아이디, 비밀번호 찾기 등 고객센터를 이용하시면 해당 메일주소로 전송됩니다." required><br>
+                <p>회원가입 인증 메일이 해당 메일주소로 전송됩니다.</p>
                  <div class ="check_font" id="emailCheck"></div></td>       
             </tr>
             <tr>
                 <th>주소</th>
                 <td> 
-				<input id="zonecode" name="zonecode" type="text"  style="width:50px;" readonly/> &nbsp;
-				<input type="button" onClick="openDaumZipAddress();" value = "주소 찾기" /> &nbsp;
-                <input type="text" id="address" name="address"  style="width:240px;" readonly/><br><br>
-                <input type="text" class="form-control" id="address2" name="address2" placeholder="상세 주소를 입력해주세요."  required><br>
+				<input id="zonecode" name="zonecode" type="text"  style="width:50px;" readonly /> &nbsp;
+				<input type="button" id="addressBnt" onClick="openDaumZipAddress();" value = "주소 찾기" /> &nbsp;
+                <input type="text" id="address" name="address"  style="width:240px;" readonly /><br><br>
+                <input type="text" class="form-control" id="address2" name="address2" placeholder="상세 주소를 입력해주세요." required><br>
                 <div class ="check_font" id="addressCheck"></div></td>      
             </tr>
             <tr>
@@ -96,13 +110,14 @@
            <tr>
 								<th>성별</th>
 								<td>
-								<input type="radio" name="sex" value="10">남성&nbsp;&nbsp; 
-								<input type="radio" name="sex" value="20">여성&nbsp;&nbsp;
+								<input type="radio" name="sex" value="10" required>남성&nbsp;&nbsp; 
+								<input type="radio" name="sex" value="20" required>여성&nbsp;&nbsp;
 								<div class="check_font" id="sexCheck"></div></td>
 							</tr>
             <tr>
                 <td colspan="2">
-                <input type="submit" class="btn btn-primary" value="가입" id="insertUser" >
+               <!--  <input type="submit" class="btn btn-primary" value="가입" id="insertUser" > -->
+           <input type="button" onClick="fn_insertUser()" class="btn btn-primary" value="산오름 가입하기" />
                 </td>
             </tr>
         </table>
@@ -139,20 +154,16 @@ var phoneJ = /^01([0|1|6|7|8|9]?)?([0-9]{3,4})?([0-9]{4})$/;
 				console.log("1 = 중복o / 0 = 중복x : "+ data);		
 				if (data == "1") {
 						// 1 : 아이디가 중복되는 문구
-						$("#idCheck").text("사용중인 아이디입니다 :p");
+						$("#idCheck").text("사용중인 아이디입니다.");
 						$("#idCheck").css("color", "red");
 						$("#insertUser").attr("disabled", true);
 					} else {
 						if(idJ.test(id)){
 							// 0 : 아이디 길이 / 문자열 검사
 							$("#idCheck").text("");
-							$("#insertUser").attr("disabled", false);
-						} else if(id == ""){
-							$('#idCheck').text('아이디를 입력해주세요 :)');
-							$('#idCheck').css('color', 'red');
-							$("#insertUser").attr("disabled", true);		
+							$("#insertUser").attr("disabled", false);		
 						} else {
-							$('#idCheck').text("아이디는 소문자와 숫자 4~12자리만 가능합니다:)");
+							$('#idCheck').text("아이디는 소문자와 숫자 4~12자리만 가능합니다.");
 							$('#idCheck').css('color', 'red');
 							$("#insertUser").attr("disabled", true);
 						}
@@ -167,28 +178,36 @@ var phoneJ = /^01([0|1|6|7|8|9]?)?([0-9]{3,4})?([0-9]{4})$/;
 				}
 			});
 		});
+		
 		// 이름에 특수문자 들어가지 않도록 설정
 		$("#name").blur(function() {
 			console.log("이벤트 먹었니");	
 			if (nameJ.test($(this).val())) {
 					console.log(nameJ.test($(this).val()));
 					$("#nameCheck").text('');
+					$("#insertUser").attr("disabled", false);
+					
 			} else {
 				$('#nameCheck').text('이름을 확인해주세요 :)');
 				$('#nameCheck').css('color', 'red');
+				$("#insertUser").attr("disabled", true);
 			}
 		});
-		//비밀번호
+		
+	//비밀번호
 		$('#password').blur(function(){
 			console.log("이벤트 먹었니");	
 			if(pwdJ.test($(this).val())){
 				console.log(pwdJ.test($(this).val()));
 				$("#passwordCheck").text('');
+				$("#insertUser").attr("disabled", false);
 			} else{
 				$('#passwordCheck').text('비밀번호를 확인해주세요 :)');
 				$('#passwordCheck').css('color', 'red');
+				$("#insertUser").attr("disabled", true);
 			}
 		});
+		
 		//비밀번호 확인
 		$('#password2').blur(function(){
 			console.log("이벤트 먹었니");
@@ -198,6 +217,7 @@ var phoneJ = /^01([0|1|6|7|8|9]?)?([0-9]{3,4})?([0-9]{4})$/;
 				console.log("비밀번호 같을 때 ");
 				console.log($(this).val())
 				$("#password2Check").text('');
+				$("#insertUser").attr("disabled", false);
 			} else{
 				console.log(password)
 				console.log($(this).val())
@@ -207,50 +227,45 @@ var phoneJ = /^01([0|1|6|7|8|9]?)?([0-9]{3,4})?([0-9]{4})$/;
 				$("#insertUser").attr("disabled", true);
 			}
 		});
+		
 		// 이메일
 		$('#email').blur(function(){
 			console.log("이벤트 먹었니");	
 			if(mailJ.test($(this).val())){
 				console.log(mailJ.test($(this).val()));
 				$("#emailCheck").text('');
+				$("#insertUser").attr("disabled", false);
 			} else {
 				$('#emailCheck').text('이메일을 확인해주세요 :)');
 				$('#emailCheck').css('color', 'red');
+				$("#insertUser").attr("disabled", true);
 			}
 		});
 		
-		//주소	
-		$('#zonecode').blur(function(){
+		/* //주소	
+		$('#addressBnt').click(function(){
 			console.log("이벤트 먹었니");	
 			if($(this).val() != ""){
 				$("#addressCheck").text('');
 			} else{
 				$('#addressCheck').text('주소를 확인해주세요 :)');
 				$('#addressCheck').css('color', 'red');
+				$("#insertUser").attr("disabled", true);
 			}
-		});
+		}); */
 	// 휴대전화
 	$('#phone').blur(function(){
 		if(phoneJ.test($(this).val())){
 			console.log(phoneJ.test($(this).val()));
 			$("#phoneCheck").text('');
+			$("#insertUser").attr("disabled", false);
 		} else {
 			$('#phoneCheck').text('휴대폰번호를 확인해주세요 :)');
 			$('#phoneCheck').css('color', 'red');
+			$("#insertUser").attr("disabled", true);
 		}
 	});
-	//성별
-	$("input:radio[name=sex]").click(function() {
-		if ($("input:radio[name=sex]:checked").val()=="10") {
-			console.log($(this).val());
-			$("#sexCheck").text('남자');
-			$('#sexCheck').css('color', 'green');
-		} else {
-			console.log($(this).val());
-			$('#sexCheck').text('여자');
-			$('#sexCheck').css('color', 'green');
-		}
-	});
+	
 });
 
 	</script>

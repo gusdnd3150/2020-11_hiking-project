@@ -28,7 +28,7 @@ public interface UserController {
 	public String snsLoginCallBack(@PathVariable String snsService, @RequestParam String code, 
 			RedirectAttributes reAttr, HttpSession httpSession)throws Exception;
 	public ModelAndView logIn(HttpServletRequest request, LoginDTO loginDTO, HttpSession httpsession, ModelAndView mav) throws Exception;
-	
+	public String withdrawal(UserVO userVO, HttpSession httpSession) throws Exception;
 	public String logOut(HttpServletRequest request, HttpServletResponse response, HttpSession httpsession) throws Exception;
 
 }
