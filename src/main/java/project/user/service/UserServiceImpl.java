@@ -58,13 +58,30 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void insertUser2(Map<String, Object> snsUser) {
+	public void insertUser2(Map<String, Object> snsUser) throws Exception {
 		userDAO.insertUser2(snsUser);
 	}
 
 	@Override
 	public void removeSessionId(String sessionId) {
 		userDAO.removeSessionId(sessionId);
+		
+	}
+
+	@Override
+	public void updateAuthKey(Map<String, String> map) {
+		userDAO.updateAuthKey(map);
+		
+	}
+
+	@Override
+	public void updateAuthStatus(Map<String, String> map) {
+		userDAO.updateAuthStatus(map);
+	}
+
+	@Override
+	public void withdrawal(UserVO userVO) {
+		userDAO.withdrawal(userVO);
 		
 	}
 

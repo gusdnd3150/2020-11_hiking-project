@@ -42,7 +42,7 @@ textarea {
 								<tr>
 									<th>나의 소개글</th>
 									<td colspan="4">
-									<textarea id="profile" name="profile" 
+									<textarea id="profile2" name="profile" 
 									placeholder="당신은 어떤 사람입니까?"></textarea><br>
 									</td>
 								</tr>

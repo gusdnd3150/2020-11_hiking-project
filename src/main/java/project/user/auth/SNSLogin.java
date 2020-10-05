@@ -64,6 +64,12 @@ public class SNSLogin {
 			snsMap.put("id", resNode.get("id").asText());
 			snsMap.put("name", resNode.get("name").asText());
 			snsMap.put("email", resNode.get("email").asText());
+			System.out.println(resNode.get("gender").asText());
+			if(resNode.get("gender").asText().equals("F")){
+				snsMap.put("sex", 20);
+			}else if(resNode.get("gender").asText().equals("M")) {
+				snsMap.put("sex", 10);
+			}else {snsMap.put("sex", 30);}
 
 			System.out.println("====================\n" + snsMap + "\n===============");
 		} else if (this.sns.isGoogle()) {

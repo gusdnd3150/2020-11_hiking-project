@@ -33,10 +33,17 @@
 	}
 </script>
 <body>
-			<div class="col-sm-14 text-center">
-				<div class="col-sm-2"></div>
-				<div class="col-sm-10">
-					<h2>나의 정보</h2>
+	<div class="container">
+		<jsp:include page="/common/header.jsp" flush="false"/>
+		</div>
+		<br>
+		<br>
+		<br>
+			<div class="row text-center">
+				 <div class="col-md-3"></div>
+				<div class="col-md-6">
+					<h2>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+					나의 정보</h2>
 					<form action="/mypage/updateUser.do" method="post">
 						<table class="table table-boardered">
 							<tr>
@@ -53,7 +60,7 @@
 							<tr>
 								<th>이름</th>
 								<td><input type="text" class="form-control" id="name"
-									name="name"  value="${userVO.name}"required ><br>
+									name="name"  value="${userVO.name}" required ><br>
 									<div class="check_font" id="nameCheck"></div></td>
 							</tr>
 							<tr>
@@ -90,7 +97,6 @@
 								<input type="radio" name="sex" value="20">&nbsp;&nbsp;여성&nbsp;&nbsp;</td>
 								<td colspan="3" style="border: #000000 solid; border-width: 0px;"></td>
 									<td style="border: #000000 solid; border-width: 0px;">
-									<div style="color: green" class="check_font" id="sexCheck">${userVO.sex2}</div></td>
 									</tr>
 									</table>
 									</td>
@@ -99,12 +105,13 @@
 								<td colspan="2"><input type="submit"
 									class="btn btn-primary" value="저장하기" id="updateUser">
 						</form>
-										<input type="submit" class="btn btn-primary" value="탈퇴하기"
-											id="deleteUser">
+								<br><br><br><br><br><br>
+								<a href="/user/withdrawalCheck.jsp" id="deleteUser"><h6>탈퇴하기</h6></a>
 									</td>
 							</tr>
 						</table>
 				</div>
+				 <div class="col-md-3"></div>
 	</div>
 
 </body>
@@ -168,19 +175,6 @@
 		//성별
 		$("input:radio[name=sex]").click(function() {
 			if ($("input:radio[name=sex]:checked").val() == "10") {
-				console.log($(this).val());
-				$("#sexCheck").text('남자');
-				$('#sexCheck').css('color', 'green');
-			} else {
-				console.log($(this).val());
-				$('#sexCheck').text('여자');
-				$('#sexCheck').css('color', 'green');
-			}
-		});
-		
-		//성별
-		$("input:radio[name=sex]").click(function() {
-			if ($("input:radio[name=sex]:checked").val()=="10") {
 				console.log($(this).val());
 				$("#sexCheck").text('남자');
 				$('#sexCheck').css('color', 'green');

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.hiking</groupId>
@@ -24,7 +25,7 @@
 				<exclusion>
 					<groupId>commons-logging</groupId>
 					<artifactId>commons-logging</artifactId>
-				 </exclusion>
+				</exclusion>
 			</exclusions>
 		</dependency>
 		<dependency>
@@ -94,7 +95,7 @@
 			<artifactId>javax.inject</artifactId>
 			<version>1</version>
 		</dependency>
-				
+
 		<!-- Servlet -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -113,7 +114,7 @@
 			<artifactId>jstl</artifactId>
 			<version>1.2</version>
 		</dependency>
-	
+
 		<!-- Test -->
 		<dependency>
 			<groupId>junit</groupId>
@@ -165,21 +166,21 @@
 		</dependency>
 
 		<!-- 타일즈 관련 라이브러리 -->
-<!--		<dependency>-->
-<!--			<groupId>org.apache.tiles</groupId>-->
-<!--			<artifactId>tiles-core</artifactId>-->
-<!--			<version>3.0.7</version>-->
-<!--		</dependency>-->
-<!--		<dependency>-->
-<!--			<groupId>org.apache.tiles</groupId>-->
-<!--			<artifactId>tiles-jsp</artifactId>-->
-<!--			<version>3.0.7</version>-->
-<!--		</dependency>-->
-<!--		<dependency>-->
-<!--			<groupId>org.apache.tiles</groupId>-->
-<!--			<artifactId>tiles-servlet</artifactId>-->
-<!--			<version>3.0.7</version>-->
-<!--		</dependency>-->
+		<!-- <dependency> -->
+		<!-- <groupId>org.apache.tiles</groupId> -->
+		<!-- <artifactId>tiles-core</artifactId> -->
+		<!-- <version>3.0.7</version> -->
+		<!-- </dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>org.apache.tiles</groupId> -->
+		<!-- <artifactId>tiles-jsp</artifactId> -->
+		<!-- <version>3.0.7</version> -->
+		<!-- </dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>org.apache.tiles</groupId> -->
+		<!-- <artifactId>tiles-servlet</artifactId> -->
+		<!-- <version>3.0.7</version> -->
+		<!-- </dependency> -->
 
 		<!-- 파일 업로드 -->
 		<dependency>
@@ -212,9 +213,9 @@
 			<version>2.6.0</version>
 		</dependency>
 		<dependency>
-		    <groupId>com.fasterxml.jackson.dataformat</groupId>
-		    <artifactId>jackson-dataformat-xml</artifactId>
-		    <version>2.5.4</version>
+			<groupId>com.fasterxml.jackson.dataformat</groupId>
+			<artifactId>jackson-dataformat-xml</artifactId>
+			<version>2.5.4</version>
 		</dependency>
 		<!-- AspectJ -->
 		<dependency>
@@ -274,9 +275,9 @@
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
 		<dependency>
-		<groupId>com.google.guava</groupId>
-		<artifactId>guava</artifactId>
-		<version>19.0</version>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>19.0</version>
 		</dependency>
 		<!-- bcrypt -->
 		<dependency>
@@ -292,16 +293,16 @@
 		</dependency>
 
 		<dependency>
-		<groupId>com.github.scribejava</groupId>
-		<artifactId>scribejava-core</artifactId>
-		<version>5.6.0</version>
+			<groupId>com.github.scribejava</groupId>
+			<artifactId>scribejava-core</artifactId>
+			<version>5.6.0</version>
 		</dependency>
 
 		<!-- session redis -->
-		<!-- <dependency> <groupId>org.springframework.session</groupId> <artifactId>spring-session-data-redis</artifactId>
-			<version>1.3.1.RELEASE</version> <type>pom</type> </dependency> <dependency>
-			<groupId>biz.paluch.redis</groupId> <artifactId>lettuce</artifactId> <version>3.5.0.Final</version>
-			</dependency> <dependency> <groupId>org.springframework</groupId> <artifactId>spring-web</artifactId>
+		<!-- <dependency> <groupId>org.springframework.session</groupId> <artifactId>spring-session-data-redis</artifactId> 
+			<version>1.3.1.RELEASE</version> <type>pom</type> </dependency> <dependency> 
+			<groupId>biz.paluch.redis</groupId> <artifactId>lettuce</artifactId> <version>3.5.0.Final</version> 
+			</dependency> <dependency> <groupId>org.springframework</groupId> <artifactId>spring-web</artifactId> 
 			<version>4.3.4.RELEASE</version> </dependency> -->
 
 		<!-- https://mvnrepository.com/artifact/org.json/json -->
@@ -322,115 +323,75 @@
 			<version>1.5.4</version>
 		</dependency>
 		<dependency>
-		<groupId>com.sun.mail</groupId>
-		<artifactId>javax.mail</artifactId>
-		<version>1.5.3</version>
+			<groupId>com.sun.mail</groupId>
+			<artifactId>javax.mail</artifactId>
+			<version>1.5.3</version>
 		</dependency>
 		<dependency>
 			<groupId>com.googlecode.json-simple</groupId>
 			<artifactId>json-simple</artifactId>
 			<version>1.1</version>
 		</dependency>
+		<dependency>
+	<!-- 썸네일 thumbnailator -->
+			<groupId>net.coobird</groupId>
+			<artifactId>thumbnailator</artifactId>
+			<version>0.4.8</version>
+		</dependency>
 	</dependencies>
-	
-    <build>
-        <plugins>
-            <plugin>
-                <artifactId>maven-eclipse-plugin</artifactId>
-                <version>2.9</version>
-                <configuration>
-                    <additionalProjectnatures>
-                        <projectnature>org.springframework.ide.eclipse.core.springnature</projectnature>
-                    </additionalProjectnatures>
-                    <additionalBuildcommands>
-                        <buildcommand>org.springframework.ide.eclipse.core.springbuilder</buildcommand>
-                    </additionalBuildcommands>
-                    <downloadSources>true</downloadSources>
-                    <downloadJavadocs>true</downloadJavadocs>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.5.1</version>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                    <compilerArgument>-Xlint:all</compilerArgument>
-                    <showWarnings>true</showWarnings>
-                    <showDeprecation>true</showDeprecation>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.2.1</version>
-                <configuration>
-                    <mainClass>org.test.int1.Main</mainClass>
-                </configuration>
-            </plugin>
-			<!-- react -->
-			<!-- 
+
+	<build>
+		<plugins>
 			<plugin>
-				<groupId>com.github.eirslett</groupId>
-				<artifactId>frontend-maven-plugin</artifactId>
-				<version>1.9.1</version>
+				<artifactId>maven-eclipse-plugin</artifactId>
+				<version>2.9</version>
 				<configuration>
-					<workingDirectory>frontend</workingDirectory>
-					<installDirectory>target</installDirectory>
+					<additionalProjectnatures>
+						<projectnature>org.springframework.ide.eclipse.core.springnature</projectnature>
+					</additionalProjectnatures>
+					<additionalBuildcommands>
+						<buildcommand>org.springframework.ide.eclipse.core.springbuilder</buildcommand>
+					</additionalBuildcommands>
+					<downloadSources>true</downloadSources>
+					<downloadJavadocs>true</downloadJavadocs>
 				</configuration>
-				<executions>
-					<execution>
-						<id>install node and npm</id>
-						<goals>
-							<goal>install-node-and-npm</goal>
-						</goals>
-						<configuration>
-							<nodeVersion>v14.9.0</nodeVersion>
-							<npmVersion>6.14.7</npmVersion>
-						</configuration>
-					</execution>
-					<execution>
-						<id>npm install</id>
-						<goals>
-							<goal>npm</goal>
-						</goals>
-						<configuration>
-							<arguments>install</arguments>
-						</configuration>
-					</execution>
-					<execution>
-						<id>npm run build</id>
-						<goals>
-							<goal>npm</goal>
-						</goals>
-						<configuration>
-							<arguments>run build</arguments>
-						</configuration>
-					</execution>
-				</executions>
 			</plugin>
 			<plugin>
-				<artifactId>maven-antrun-plugin</artifactId>
-				<executions>
-					<execution>
-						<phase>generate-resources</phase>
-						<configuration>
-							<tasks>
-								<copy todir="${project.build.directory}/classes/public" overwrite="true">
-									<fileset dir="${project.basedir}/frontend/build">
-										<include name="**/*" />
-									</fileset>
-								</copy>
-							</tasks>
-						</configuration>
-						<goals>
-							<goal>run</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin> 
-			-->
-        </plugins>
-    </build>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.5.1</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+					<compilerArgument>-Xlint:all</compilerArgument>
+					<showWarnings>true</showWarnings>
+					<showDeprecation>true</showDeprecation>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.2.1</version>
+				<configuration>
+					<mainClass>org.test.int1.Main</mainClass>
+				</configuration>
+			</plugin>
+			<!-- react -->
+			<!-- <plugin> <groupId>com.github.eirslett</groupId> <artifactId>frontend-maven-plugin</artifactId> 
+				<version>1.9.1</version> <configuration> <workingDirectory>frontend</workingDirectory> 
+				<installDirectory>target</installDirectory> </configuration> <executions> 
+				<execution> <id>install node and npm</id> <goals> <goal>install-node-and-npm</goal> 
+				</goals> <configuration> <nodeVersion>v14.9.0</nodeVersion> <npmVersion>6.14.7</npmVersion> 
+				</configuration> </execution> <execution> <id>npm install</id> <goals> <goal>npm</goal> 
+				</goals> <configuration> <arguments>install</arguments> </configuration> 
+				</execution> <execution> <id>npm run build</id> <goals> <goal>npm</goal> 
+				</goals> <configuration> <arguments>run build</arguments> </configuration> 
+				</execution> </executions> </plugin> <plugin> <artifactId>maven-antrun-plugin</artifactId> 
+				<executions> <execution> <phase>generate-resources</phase> <configuration> 
+				<tasks> <copy todir="${project.build.directory}/classes/public" overwrite="true"> 
+				<fileset dir="${project.basedir}/frontend/build"> <include name="**/*" /> 
+				</fileset> </copy> </tasks> </configuration> <goals> <goal>run</goal> </goals> 
+				</execution> </executions> </plugin> -->
+		</plugins>
+	</build>
 </project>

@@ -27,5 +27,10 @@ public class UserVO {
 	private String sessionId;
 	private Date sessionLimit;
 	private String profile; //자기소개글
-	private Byte[] content; //프로필사진
+	private byte[] content; //프로필사진
+	private byte[] content2;
+	private int authStatus;
+	private String authKey;
+	private String reason;
 }
+

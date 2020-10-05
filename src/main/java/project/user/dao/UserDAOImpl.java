@@ -1,15 +1,18 @@
 package project.user.dao;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.ibatis.session.SqlSession;
-import org.codehaus.plexus.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.multipart.MultipartFile;
 
 import project.user.dto.LoginDTO;
 import project.user.vo.UserVO;
@@ -27,15 +30,14 @@ public class UserDAOImpl implements UserDAO{
 	public void insertUser(UserVO userVO) throws Exception{
 		sqlSession.insert("userMapper.insertUser", userVO);
 		sqlSession.insert("userMapper.insertUser3", userVO);
-		
+		sqlSession.insert("userMapper.insertUser5", userVO);
 	}
 	
 	@Override
-	public void insertUser2(Map<String, Object> snsUser) {
-		snsUser.put("randomPwd", sqlSession.selectOne("userMapper.randomPwd"));
+	public void insertUser2(Map<String, Object> snsUser) throws IOException {
 		sqlSession.insert("userMapper.insertUser2", snsUser);
 		sqlSession.insert("userMapper.insertUser4", snsUser);
-		
+		sqlSession.insert("userMapper.insertUser6", snsUser);
 	}
 
 	@Override
@@ -83,6 +85,22 @@ public class UserDAOImpl implements UserDAO{
 	@Override
 	public void removeSessionId(String sessionId) {
 		sqlSession.update("userMapper.removeSessionId", sessionId);
+		
+	}
+
+	@Override
+	public void updateAuthKey(Map<String, String> map) {
+		sqlSession.update("userMapper.updateAuthKey", map);		
+	}
+
+	@Override
+	public void updateAuthStatus(Map<String, String> map) {
+		sqlSession.update("userMapper.updateAuthStatus", map);
+	}
+
+	@Override
+	public void withdrawal(UserVO userVO) {
+		sqlSession.update("userMapper.withdrawal", userVO);
 		
 	}
 

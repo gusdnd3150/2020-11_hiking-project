@@ -17,9 +17,9 @@ public interface MypageService {
 
 	public void updateUserProf(Map<String, Object> profMap);
 
-	public UserVO getUserInfo(String string);
+	public UserVO getUserInfo(UserVO userVO);
 
-	public UserVO pwdCheck(String sessionId);
+	public UserVO pwdCheck(UserVO userVO);
 
 	public void updatePwd(UserVO userVO);
 
