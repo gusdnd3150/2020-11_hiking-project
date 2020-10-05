@@ -116,6 +116,10 @@ public class GroupController{
         Map<String,Object> map = groupService.selectGroupDetail(groupNum);
         List<Map> list = groupService.selectGroupDetailImage(groupNum);
 
+        //같은 산의 다른모임 찾을 것
+
+        //댓글
+
         for(int i=0;i<list.size();i++){
             map.put("image"+i , list.get(i).get("STOREDFILENAME"));
 

@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <jsp:include page="/common/header.jsp" />
+<link rel="stylesheet" type="text/css" href="/resources/css/views/group/detail.css" />
 <div class="container pt-5">
     <h1 class="my-4">${mtInfo.mntiname}
         <small>${mtInfo.mntisname}</small>

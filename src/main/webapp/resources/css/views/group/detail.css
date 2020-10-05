@@ -1,0 +1,15 @@
+ul.thumbs{
+    margin-left: 0;
+    padding-left: 0;
+}
+.photos ul.thumbs li{
+    width: 100px;
+    height: 100px;
+    float: left;
+    overflow: hidden;
+}
+.photos ul.thumbs li:hover {
+    -moz-opacity:.75;
+    filter:alpha(opacity=75);
+    opacity:.75;
+}
