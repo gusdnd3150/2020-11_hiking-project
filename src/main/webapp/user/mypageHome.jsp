@@ -17,11 +17,9 @@
 <script src="/resources/js/jquery.js"></script>
 <script src="/resources/js/bootstrap.bundle.js"></script>
 <body>
-	<div class="container">
-		<jsp:include page="/common/header.jsp" flush="false"/>
-		</div>
 
-		
+		<jsp:include page="/common/header.jsp" flush="false"/>
+		<div class="container">
 		<!-- Profile Image -->
 		<table
 			style="width: 100%; height: 200px; table-layout: fixed; !important">

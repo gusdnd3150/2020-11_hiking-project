@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface GroupMediaService {
-    int insertGroupMedia(int result, List<MultipartFile> files, String path) throws IOException;
+    void insertGroupMedia(int result, List<MultipartFile> files, String path) throws IOException;
     byte[] selectGroupMediaOne(int groupNum);
     List<byte[]> selectGroupMediaDetail(int groupNum);
 }

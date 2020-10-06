@@ -13,9 +13,11 @@ public class GroupDAO{
     @Autowired
     private SqlSession sqlSession;
 
-    public int insertGroup(Map map){
-        return sqlSession.insert("group.insertGroup", map);
+    public void insertGroup(Map map){
+        sqlSession.insert("group.insertGroup", map);
     }
+
+    public void insertGroupMaster(Map map){sqlSession.insert("group.insertGroupMaster",map);}
 
     public List<Map> selectMainGroupList(){
         return sqlSession.selectList("group.selectMainGroupList");
@@ -45,11 +47,24 @@ public class GroupDAO{
         return sqlSession.selectList("group.selectGroupsByKeyword", keyword);
     }
 
-    public void joinGroup(Map map){
-        sqlSession.insert("group.joinGroup",map);
+    public int joinGroup(Map map){
+        return sqlSession.insert("group.joinGroup",map);
     }
+    public int withdrawGroup(Map map){return sqlSession.delete("group.withdrawGroup",map);}
+    public int checkJoinedGroup(Map map){ return sqlSession.selectOne("group.checkJoinedGroup",map);}
 
     public List<Integer> listApplied(int groupNum){
         return sqlSession.selectList("group.listApplied",groupNum);
+    }
+
+    public int insertFavoriteGroup(Map map){
+        return sqlSession.insert("group.insertFavorite",map);
+    }
+
+    public int checkFavoriteGroup(Map map){
+        return sqlSession.selectOne("group.checkFavoriteGroup",map);
+    }
+    public int deleteFavoriteGroup(Map map){
+        return sqlSession.delete("group.deleteFavoriteGroup",map);
     }
 }

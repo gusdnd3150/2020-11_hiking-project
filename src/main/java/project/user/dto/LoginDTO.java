@@ -3,7 +3,6 @@ package project.user.dto;
 import lombok.Data;
 import lombok.Getter;
 
-@Data
 public class LoginDTO {
 	
 //	private int userNum;
@@ -18,7 +17,56 @@ public class LoginDTO {
 //	private int status;
 //	private Date createdAt;
 //	private Date updatedAt;
-	@Getter
 	public boolean useCookie;
 
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public int getSex() {
+		return sex;
+	}
+
+	public void setSex(int sex) {
+		this.sex = sex;
+	}
+
+	public boolean isUseCookie() {
+		return useCookie;
+	}
+
+	public void setUseCookie(boolean useCookie) {
+		this.useCookie = useCookie;
+	}
+
+	@Override
+	public String toString() {
+		return "LoginDTO{" +
+				"id='" + id + '\'' +
+				", password='" + password + '\'' +
+				", name='" + name + '\'' +
+				", sex=" + sex +
+				", useCookie=" + useCookie +
+				'}';
+	}
 }

@@ -8,7 +8,7 @@ import java.util.Map;
 
 public interface GroupService {
 
-    int insertGroup(Map map) throws Exception;
+    void insertGroup(Map map) throws Exception;
 
     List<Map> selectMainGroupList();
 
@@ -25,7 +25,13 @@ public interface GroupService {
     List<Map> selectGroupsByKeyword(String keyword);
 
     //
-    void joinGroup(Map map);
+    int joinGroup(Map map);
+    int withdrawGroup(Map map);
+    int checkJoinedGroup(Map map);
 
     List<Integer> listApplied(int groupNum);
+
+    int insertFavoriteGroup(Map map);
+    int checkFavoriteGroup(Map map);
+    int deleteFavoriteGroup(Map map);
 }

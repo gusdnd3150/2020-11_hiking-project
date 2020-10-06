@@ -7,22 +7,33 @@
 <body class="pt-5 mt-5">
 <div class="container">
     <div class="btn-group" role="group" aria-label="...">
-        <button type="button" class="btn btn-outline-secondary" id="path" onclick="goMain1()">등산로</button>
-        <button type="button" class="btn btn-info" id="group" onclick="goMain2()">등산모임</button>
+        <button type="button" class="btn btn-outline-secondary button-class2" id="group" onclick="goMain1()">등산모임</button>
+        <button type="button" class="btn btn-info button-class1" id="path" onclick="goMain2()">등산로</button>
     </div>
     <button type="button" class="btn btn-dark" id="create" style="float:right;" data-toggle="modal" data-target="#createModal">등산하기</button>
     <p></p>
-    <h1>등산모임 리스트</h1>
+    <div class="row">
+        <h1 class="col-md-8 col-lg-10 mb-0">등산로 리스트</h1>
+        <div class="col-md-4 col-lg-2 pt-2 pb-2 btn-group btn-group-toggle" data-toggle="buttons">
+            <label class="btn btn-outline-secondary active">
+                <input type="radio" name="options" id="option1" checked> 가나다순
+            </label>
+            <label class="btn btn-outline-secondary">
+                <input type="radio" name="options" id="option2"> 인기순
+            </label>
+        </div>
+    </div>
     <div class="responsive">
         <div class="row">
-            <c:forEach var="group" items="${group}">
-                <div class="pt-3 col-lg-4 col-sm-6" id="groupList">
+            <c:forEach var="mtInfo" items="${mtInfo}">
+                <div class="pt-3 col-lg-4 col-sm-6">
                     <div class="card" >
-                        <img class="card-img-top" src="http://localhost:8080/resources/img/${group.STOREDFILENAME}" alt="..." style="width: 100%"></img>
+                        <img class="card-img-top" src="${mtInfo.imgfilename}" alt="..." style="width: 100%"/>
                         <div class="card-body">
-                            <h5 class="card-title">${group.NAME}</h5>
-                            <p class="card-text text-muted" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">${group.DETAIL}</p>
-                            <a href="/group/${group.GROUPNUM}" class="btn btn-info">바로가기</a>
+                            <h5 class="card-title">${mtInfo.mntiname}</h5>
+                            <p class="card-text text-muted" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">${mtInfo.mntiadd}</p>
+                            <a href="/mountain/${mtInfo.mntiname}" class="btn btn-info">바로가기</a>
+                            <!--mtInfo.mntilistno-->
                         </div>
                     </div>
                 </div>

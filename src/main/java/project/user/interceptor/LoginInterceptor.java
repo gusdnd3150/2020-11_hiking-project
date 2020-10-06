@@ -18,7 +18,6 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 	private static final String LOGIN = "LOGIN";
 	public static final Logger logger = LoggerFactory.getLogger(LoginInterceptor.class);
 
-	
 	@Override
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object Handler, ModelAndView mav)
 			throws Exception {
@@ -28,10 +27,8 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 		if (userVO != null) {
 			String id = userVO.getId();
 			httpSession.setAttribute(LOGIN, id);
-			System.out.println("LoginInterceptor//postHandle:     " + httpSession.getAttribute(LOGIN));
 
 			if (request.getParameter("useCookie") != null) {
-				logger.info("remember me...	");
 
 				// 쿠키생성
 				Cookie loginCookie = new Cookie("loginCookie", httpSession.getId());

@@ -23,10 +23,9 @@ public class GroupMediaServiceImpl implements GroupMediaService {
     private FileUtils fileUtils;
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public int insertGroupMedia(int groupNum, List<MultipartFile> files, String path) throws IOException {
-        //groupNum이랑 file 경로는 map으로 담아서 dao에 날리고 파일을 여기서 따로 저장
+    public void insertGroupMedia(int groupNum, List<MultipartFile> files, String path) throws IOException {
         List list = fileUtils.saveFile(groupNum, files, path);
-        return groupMediaDAO.insertGroupMedia(list);
+        groupMediaDAO.insertGroupMedia(list);
     }
 
     public byte[] selectGroupMediaOne(int groupNum){

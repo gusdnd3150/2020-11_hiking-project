@@ -16,8 +16,9 @@ public class GroupServiceImpl implements GroupService{
     private GroupDAO groupDAO;
 
     @Transactional
-    public int insertGroup(Map map) {
-        return groupDAO.insertGroup(map);
+    public void insertGroup(Map map) {
+        groupDAO.insertGroup(map);
+        groupDAO.insertGroupMaster(map);
     }
 
     public List<Map> selectMainGroupList(){
@@ -50,11 +51,33 @@ public class GroupServiceImpl implements GroupService{
         return groupDAO.selectGroupsByKeyword(keyword);
     }
 
-    public void joinGroup(Map map){
-        groupDAO.joinGroup(map);
+    @Transactional
+    public int joinGroup(Map map){
+        return groupDAO.joinGroup(map);
     }
+
+    @Transactional
+    public int withdrawGroup(Map map){
+        return groupDAO.withdrawGroup(map);
+    }
+
+    public int checkJoinedGroup(Map map){return groupDAO.checkJoinedGroup(map);}
 
     public List<Integer> listApplied(int groupNum){
         return groupDAO.listApplied(groupNum);
+    }
+
+    @Transactional
+    public int insertFavoriteGroup(Map map){
+        return groupDAO.insertFavoriteGroup(map);
+    }
+
+    public int checkFavoriteGroup(Map map){
+        return groupDAO.checkFavoriteGroup(map);
+    }
+
+    @Transactional
+    public int deleteFavoriteGroup(Map map){
+        return groupDAO.deleteFavoriteGroup(map);
     }
 }

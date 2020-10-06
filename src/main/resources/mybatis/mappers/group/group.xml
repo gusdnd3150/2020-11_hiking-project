@@ -22,7 +22,7 @@
         <result property="mtNm" column="mtNm" />
     </resultMap>
     
-    <insert id="insertGroup" parameterType="map">
+    <insert id="insertGroup" useGeneratedKeys="true" keyProperty="groupNum" parameterType="map">
         <selectKey keyProperty="groupNum" resultType="_int" order="BEFORE">
             SELECT groups_seq.nextval
             FROM dual
@@ -45,6 +45,17 @@
                 #{ageEnd},
                 #{sex},
                 #{mtNm}
+                )
+        ]]>
+    </insert>
+
+    <insert id="insertGroupMaster" parameterType="map">
+        <![CDATA[
+            INSERT INTO userAllowed
+            VALUES (
+                #{groupNum},
+                #{userId},
+                1
                 )
         ]]>
     </insert>
@@ -125,21 +136,73 @@
         </where>
     </select>
 
+    <!-- 그룹 가입 -->
     <insert id="joinGroup" parameterType="map">
         <![CDATA[
-            INSERT INTO userapplied
+            INSERT INTO userApplied
             VALUES (
                     #{groupNum},
-                    #{userNum}
+                    #{userId},
+                    #{userComment}
                     )
         ]]>
+        <selectKey keyProperty="groupNum" resultType="_int" order="AFTER">
+            SELECT groupNum
+            FROM userApplied
+            WHERE userId = #{userId}
+            AND groupNum = #{groupNum}
+        </selectKey>
     </insert>
-
+    <!-- 그룹 가입 여부 체크 -->
+    <select id="checkJoinedGroup" resultType="_int" parameterType="map">
+        SELECT *
+        FROM userApplied
+        WHERE userId = #{userId}
+        AND groupNum = #{groupNum}
+    </select>
     <select id="listApplied" resultType="_int" parameterType="_int">
         <![CDATA[
             SELECT userNum
-            FROM userapplied
+            FROM userApplied
             WHERE groupNum = #{groupNum}
         ]]>
     </select>
+    <!-- 그룹 가입 요청 취소 -->
+    <delete id="withdrawGroup" parameterType="map">
+        DELETE FROM userApplied
+        WHERE userId = #{userId}
+        AND groupNum = #{groupNum}
+    </delete>
+
+    <!-- 그룹 좋아요 -->
+    <insert id="insertFavorite" parameterType="map">
+        <![CDATA[
+            INSERT INTO groupLike
+            VALUES (
+                #{groupNum},
+                #{userId},
+                1,
+                sysdate
+            )
+        ]]>
+    </insert>
+
+    <!-- 그룹 좋아요 체크 -->
+    <select id="checkFavoriteGroup" resultType="_int" parameterType="map">
+        <![CDATA[
+            SELECT LIKEYN
+            FROM GROUPLIKE
+            WHERE userId = #{userId}
+            AND groupNum = #{groupNum}
+        ]]>
+    </select>
+
+    <!-- 그룹 좋아요 해제 -->
+    <delete id="deleteFavoriteGroup" parameterType="map">
+        <![CDATA[
+            DELETE FROM grouplike
+            WHERE userId = #{userId}
+            AND groupNum = #{groupNum}
+        ]]>
+    </delete>
 </mapper>

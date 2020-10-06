@@ -47,9 +47,9 @@
 	</div>
 </header>
 <div class="container">
-	<div class="groupList">
+	<div class="pt-3 groupList">
 		<label for="groupList">
-			<p><h1>추천 등산모임</h1></p>
+			<h1>추천 등산모임</h1>
 		</label>
 		<div class="row">
 				<c:forEach var="group" items="${group}">
@@ -66,8 +66,8 @@
 				</c:forEach>
 		</div>
 	</div>
-	<div>
-		<div class="col-md-6" style="width: 50%; display: inline-block;float: left">
+	<div class="row">
+		<div class="col-md-6">
 			<p><h2>공지사항</h2></p>
 			<ul class="list-group">
 				<li class="list-group-item"><a href="#" class="notice-item" style="color: black">[공지사항타입] 공지내용</a><span class="badge badge-danger">New</span></li>
@@ -77,13 +77,13 @@
 				<li class="list-group-item"><a href="#" class="notice-item" style="color: black">공지사항5</a></li>
 			</ul>
 		</div>
-		<div class="col-md-6" style="width: 50%; display: inline-block;">
-			<p ><h2>이벤트</h2></p>
-			<img src="./resources/img/test/event1.jpg" style="max-width: 100%; height: auto">
+		<div class="col-md-6">
+			<p><h2>이벤트</h2></p>
+			<img src="./resources/img/test/event1.jpg" style="width: 100%;">
 		</div>
 	</div>
 	<pre></pre>
-	<div class="memberCountCon" style="font-size:40px;text-align: center"></div>
+	<div class="memberCountCon col-12" style="font-size:40px;text-align: center"></div>
 </div>
 
 <!-- js -->
@@ -107,5 +107,6 @@
 	function numberWithCommas(x) {
 		return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 	}
+
 </script>
 <jsp:include page="/common/footer.jsp" />

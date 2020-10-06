@@ -61,31 +61,22 @@
 		class="project.user.interceptor.LoginInterceptor" />
 	<mvc:interceptors>
 		<mvc:interceptor>
+			<mvc:mapping path="*" />
 			<mvc:mapping path="/user/logIn.do" />
 			<mvc:mapping path="/user/mypageHome.jsp" />
 			<beans:ref bean="loginInterceptor" />
 		</mvc:interceptor>
 	</mvc:interceptors>
 
-	<!-- AuthIntercept -->
-<!-- 	<beans:bean id="authInterceptor"
-		class="project.user.interceptor.AuthInterceptor" />
-	<mvc:interceptors>
-		<mvc:interceptor>
-		
-			<beans:ref bean="authInterceptor" />
-		</mvc:interceptor>
-	</mvc:interceptors> -->
-
 	<!-- RemembermeInterceptor 자동로그인 -->
-	<beans:bean id="remembermeInterceptor"
-		class="project.user.interceptor.RemembermeInterceptor" />
-	<mvc:interceptors>
-		<mvc:interceptor>
-			<mvc:mapping path="/**/" />
-			<beans:ref bean="remembermeInterceptor" />
-		</mvc:interceptor>
-	</mvc:interceptors>
+<!--	<beans:bean id="remembermeInterceptor"-->
+<!--		class="project.user.interceptor.RemembermeInterceptor" />-->
+<!--	<mvc:interceptors>-->
+<!--		<mvc:interceptor>-->
+<!--			<mvc:mapping path="/**/" />-->
+<!--			<beans:ref bean="remembermeInterceptor" />-->
+<!--		</mvc:interceptor>-->
+<!--	</mvc:interceptors>-->
 
 	<!-- SWAGGER -->
 	<beans:bean id="swagger2Config" class="springfox.documentation.swagger2.configuration.Swagger2DocumentationConfiguration" />
