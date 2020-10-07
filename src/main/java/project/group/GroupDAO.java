@@ -48,14 +48,19 @@ public class GroupDAO{
     public int withdrawGroup(Map map){
         return sqlSession.update("group.withdrawGroup",map);
     }
-    public List selectWaitingList(int groupNum){
-        return sqlSession.selectList("group.selectWaitingList",groupNum);
+    public List selectWaitingList(Map map){
+        return sqlSession.selectList("group.selectWaitingList",map);
     }
-    //userAllowed void로 괜찮을까?
+    //userAllowed void도 괜찮을까?
     public int userAllowed(Map map){
         int result = sqlSession.update("group.userAllowed",map);
 
         //여기에 모집인원 + 1 update 해줘야함 + 남은시간 자바스크립트 setInterval?
+        return result;
+    }
+    public int userDisallowed(Map map){
+        int result = sqlSession.update("group.userDisallowed",map);
+
         return result;
     }
 

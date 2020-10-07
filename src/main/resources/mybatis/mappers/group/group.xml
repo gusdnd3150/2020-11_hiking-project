@@ -138,7 +138,7 @@
         </where>
     </select>
 
-    <!-- 그룹 가입 (Merge)-->
+    <!-- 그룹 가입 -->
     <update id="joinGroup" parameterType="map">
         <![CDATA[
             MERGE INTO userWaiting
@@ -180,15 +180,33 @@
     </select>
 
     <!-- 그룹 가입 요청 리스트 불러오기 -->
-    <select id="selectWaitingList" resultType="map" parameterType="_int">
+    <select id="selectWaitingList" resultType="map" parameterType="map">
         <![CDATA[
-            SELECT userId
+            SELECT userId, userStatus
             FROM userWaiting
             WHERE groupNum = #{groupNum}
-            AND userType = 1
-            AND userStatus = 1
+            AND userStatus IN (0,1)
+            AND userId NOT IN (#{userId})
         ]]>
     </select>
+
+    <update id="userAllowed" parameterType="map">
+        <![CDATA[
+            UPDATE userWaiting
+            SET userStatus = 0
+            WHERE userId = #{userId}
+            AND groupNum = #{groupNum}
+        ]]>
+    </update>
+
+    <update id="userDisallowed" parameterType="map">
+        <![CDATA[
+            UPDATE userWaiting
+            SET userStatus = 1
+            WHERE userId = #{userId}
+            AND groupNum = #{groupNum}
+        ]]>
+    </update>
 
     <!-- 그룹 좋아요 -->
     <insert id="insertFavorite" parameterType="map">

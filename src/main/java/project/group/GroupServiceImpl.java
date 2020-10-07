@@ -60,8 +60,8 @@ public class GroupServiceImpl implements GroupService{
     public int withdrawGroup(Map map){
         return groupDAO.withdrawGroup(map);
     }
-    public List selectWaitingList(int groupNum){
-        return groupDAO.selectWaitingList(groupNum);
+    public List selectWaitingList(Map map){
+        return groupDAO.selectWaitingList(map);
     }
 
     public int selectWaiting(Map map){return groupDAO.selectWaiting(map);}
@@ -70,7 +70,8 @@ public class GroupServiceImpl implements GroupService{
     public int userAllowed(Map map){
         return groupDAO.userAllowed(map);
     }
-
+    @Transactional
+    public int userDisallowed(Map map){return groupDAO.userDisallowed(map);}
 
 
     // check

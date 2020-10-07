@@ -24,6 +24,7 @@ public class FileUtils {
         Map listMap = null;
 
         String imagePath = "/resources/img/";
+
         String savePath = requestPath + imagePath;
 
         File file = new File(savePath);

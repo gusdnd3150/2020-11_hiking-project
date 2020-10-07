@@ -158,10 +158,10 @@ public class GroupController{
         return groupService.withdrawGroup(map);
     }
 
-    @GetMapping("/group/joinList.do")
+    @PostMapping("/group/selectWaitingList.do")
     @ResponseBody
-    public List selectWaitingList(int groupNum){
-        return groupService.selectWaitingList(groupNum);
+    public List selectWaitingList(@RequestBody Map map){
+        return groupService.selectWaitingList(map);
     }
 
     // 유저 그룹 승인
@@ -169,15 +169,28 @@ public class GroupController{
     @ResponseBody
     public int userAllowed(@RequestParam("userId")String userId,
                            @RequestParam("groupNum")int groupNum){
-
         Map map = new HashMap();
         map.put("userId", userId);
         map.put("groupNum",groupNum);
-        int result = groupService.userAllowed(map);
+        int result;
+        result = groupService.userAllowed(map);
 
-        System.out.println(result);
+        System.out.println(result); //1
 
-        return 0;
+        return result;
+    }
+
+    // 유저 그룹 승인 취소
+    @GetMapping("/group/userDisallowed.do")
+    @ResponseBody
+    public int userDisallowed(@RequestParam("userId")String userId,
+                              @RequestParam("groupNum")int groupNum){
+        Map map = new HashMap();
+        map.put("userId", userId);
+        map.put("groupNum", groupNum);
+        int result = groupService.userDisallowed(map);
+
+        return result;
     }
 
     // 그룹 좋아요 등록
@@ -195,5 +208,14 @@ public class GroupController{
     public int deleteFavoriteGroup(@RequestBody Map map){
         int result = groupService.deleteFavoriteGroup(map);
         return result;
+    }
+
+
+    // 그룹 댓글
+    @PostMapping("/group/insertComment")
+    @ResponseBody
+    public int insertCommentGroup(@RequestBody Map map){
+        map.toString();
+        return 0;
     }
 }

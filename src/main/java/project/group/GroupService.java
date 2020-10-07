@@ -21,9 +21,10 @@ public interface GroupService {
     int joinGroup(Map map);
 
     int withdrawGroup(Map map);
-    List selectWaitingList(int groupNum);
+    List selectWaitingList(Map map);
     int selectWaiting(Map map);
     int userAllowed(Map map);
+    int userDisallowed(Map map);
 
     List<Integer> listApplied(int groupNum);
 

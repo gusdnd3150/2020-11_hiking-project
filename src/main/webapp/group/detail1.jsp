@@ -72,7 +72,7 @@
                     <!--favoriteResult ne 1 or-->
                     <button class="btn btn-outline-info col-6" onclick="showMtInfo()">산 정보보기</button>
                     <c:choose>
-                        <c:when test="${userGradeResult eq 0}"><button class="joinList btn btn-dark col-12" data-toggle="modal" data-target="#listModal">요청 리스트보기</button></c:when>
+                        <c:when test="${userGradeResult eq 0}"><button class="selectWaitingList btn btn-dark col-12" data-toggle="modal" data-target="#listModal">요청 리스트보기</button></c:when>
                         <c:when test="${userGradeResult eq 1}"><button class="withdrawGroupBtn btn btn-info col-12" data-toggle="modal" data-target="#cancelModal">요청 취소하기</button></c:when>
                         <c:when test="${userGradeResult eq 2}"><button class="joinButton btn btn-outline-info col-12" data-toggle="modal" data-target="#joinModal">참여 신청</button></c:when>
                     </c:choose>
@@ -115,8 +115,8 @@
         <!-- 댓글 입력 -->
         <div id="commentInput" class="row col-12 pt-3">
             <img src="..." class="col-md-1 col-xs-1" alt="...">
-            <input class="form-control form-control-lg col-md-10 col-xs-8" type="text" placeholder="내용을 입력해주세요">
-            <button class="btn btn-info col-md-1 col-xs-1">입력</button>
+            <input id="commentContent" class="form-control form-control-lg col-md-10 col-xs-8" type="text" placeholder="내용을 입력해주세요">
+            <button id="commentSubmit" class="btn btn-info col-md-1 col-xs-1">입력</button>
         </div>
     </div>
 
@@ -144,7 +144,7 @@
                 <div class="modal-header">
                     <h4 class="modal-title">참여 리스트</h4>
                     <!-- 닫기(x) 버튼 -->
-                    <button type="button" class="close" data-dismiss="modal">×</button>
+                    <button type="button" class="close" data-dismiss="modal" onclick="window.location.reload();">×</button>
                     <!-- header title -->
                 </div>
                 <!-- body -->
@@ -154,7 +154,7 @@
                 </div>
                 <!-- Footer -->
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal" onclick="window.location.reload();">닫기</button>
                 </div>
             </div>
         </div>
@@ -294,7 +294,7 @@ $(document).ready(function (){
         })
     })
 
-    $(document).on('click','.dislike',function (){
+    $(document).on('click','.dislike',function (e){
         var data = {
             "groupNum" : "${group.GROUPNUM}",
             "userId" : "<%= request.getSession().getAttribute("LOGIN")%>"
@@ -317,26 +317,37 @@ $(document).ready(function (){
         })
     })
 
-    $(document).on('click','.joinList',function (){
+    $(document).on('click','.selectWaitingList',function (){
 
         var data = {
-            groupNum : ${group.GROUPNUM}
+            "groupNum" : ${group.GROUPNUM},
+            "userId" : "<%= request.getSession().getAttribute("LOGIN")%>"
         }
 
         $.ajax({
-            type: "GET",
-            url: "/group/joinList.do",
-            data: data,
+            type: "POST",
+            url: "/group/selectWaitingList.do",
+            data: JSON.stringify(data),
             dataType: 'json',
             contentType: "application/json; charset=utf-8;",
             success: function (response){
                 $('#waitingList').empty()
+
                 for(var i=0;i<response.length;i++){
+
+                    var id = "waitingUser"+i;
+
                     $('#waitingList')
-                        .append('<li class="row pt-1" style="list-style: none">' +
-                                '<div class="col-10 pt-1" style="font-size: 22px">'+response[i].USERID+'</div><button class="approve btn btn-light col-2">승인</button>' +
-                                '</li>');
-                }
+                        .append('<li class="row pt-1" style="list-style: none"><div id="waitingUser" class="col-10 pt-1" style="font-size: 22px">'+response[i].USERID+'</div></li>');
+
+                    $('#waitingUser').attr('id',id);
+
+                        if(response[i].USERSTATUS==0){
+                            $('#'+id).after('<button class="userDisallowed btn btn-dark col-2">취소</button>');
+                        }else if(response[i].USERSTATUS==1){
+                            $('#'+id).after('<button class="userAllowed btn btn-light col-2">승인</button>');
+                        }
+                    }
             },
             error: function(response){
                 console.log("error");
@@ -345,7 +356,7 @@ $(document).ready(function (){
         })
     })
 
-    $(document).on('click','.approve',function (){
+    $(document).on('click','.userAllowed',function (e){
 
         var data = {
             userId : (this.parentNode).childNodes[0].innerHTML,
@@ -359,12 +370,48 @@ $(document).ready(function (){
             dataType: 'json',
             contentType: "application/json; charset=utf-8;",
             success: function (response){
-                console.log("success");
+                e.target.className ="userDisallowed btn btn-dark col-2";
+                e.target.innerText = "취소";
             },
             error: function(response){
                 console.log("error");
                 alert("새로고침 후 다시 시도해주세요")
             }
         })
+    })
+
+    $(document).on('click','.userDisallowed',function (e){
+        var data = {
+            userId : (this.parentNode).childNodes[0].innerHTML,
+            groupNum : ${group.GROUPNUM}
+        }
+
+        $.ajax({
+            type: "GET",
+            url: "/group/userDisallowed.do",
+            data: data,
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8;",
+            success: function (response){
+                e.target.className ="userAllowed btn btn-light col-2";
+                e.target.innerText = "승인";
+            },
+            error: function(response){
+                console.log("error");
+                alert("새로고침 후 다시 시도해주세요")
+            }
+        })
+    })
+
+    $(document).on('click','#commentSubmit',function (){
+
+        var data = {
+            "groupNum" : "${group.GROUPNUM}",
+            "userId" : "<%= request.getSession().getAttribute("LOGIN")%>",
+            "commentContent" : $('#commentContent').val(),
+        }
+
+        console.log(data);
+
     })
 </script>
