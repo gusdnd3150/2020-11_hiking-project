@@ -69,7 +69,7 @@ public class E_P002_D003ProductsControllerImpl  implements E_P002_D003ProductsCo
 			dataMap.put(name, value);                      // map에 하나씩 저장
 		}
 		
-		List<MultipartFile> test = file.getFiles("CONTENTImage"); //인풋의 파일들 정보
+		List<MultipartFile> test = file.getFiles("content"); //인풋의 파일들 정보
 		List<E_P002_D003PhotoVO> imageFileList = new ArrayList<E_P002_D003PhotoVO>(); //맵에 추가할 정보들
 		Map articleMap = new HashMap();
 		

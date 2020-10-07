@@ -12,12 +12,18 @@
 		<!-- user -->
 		<typeAlias type="project.user.vo.UserVO"  alias="userVO" />
 
-		<!-- products -->
+		<!-- products/shop -->
 		<typeAlias type="project.Paging" alias="Paging"/>
 		<typeAlias type="project.E_P002_D003.vo.E_P002_D003ProductsVO" alias="e_P002_D003ProductsVO"/>
 		<typeAlias type="project.E_P002_D003.vo.E_P002_D003PhotoVO" alias="e_P002_D003PhotoVO"/>
 		<typeAlias type="project.B_P003_D001.vo.productAfterVO" alias="productAfterVO"/>
-
+		<!-- 주문관련 -->
+		<typeAlias type="project.B_P003_D001.vo.DeliveryVO" alias="deliveryVO"/>
+		<typeAlias type="project.B_P003_D001.vo.PointVO" alias="pointVO"/>
+		<typeAlias type="project.B_P003_D001.vo.PaymentVO" alias="paymentVO"/>
+		<typeAlias type="project.B_P003_D001.vo.OrdersVO" alias="OrdersVO"/>
+        
+        
 		<!-- admin -->
 		<typeAlias type="project.admin.e_p001.vo.E_p001VO"  alias="e_p001VO" />
 		<typeAlias type="project.admin.e_p003.vo.E_p003VO"  alias="e_p003VO" />

@@ -1,5 +1,8 @@
 package project.B_P003_D001.vo;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class productAfterVO {
 	
 	private int userNum; //유저 아이디

@@ -6,15 +6,159 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>입력항목 예제1</title>
+<jsp:include page="/common/header.jsp" />
+
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
- 
+ <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js" ></script>
+<script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
- 
-<script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script> 
+<script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
+
+<!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/resources/shop/css/bootstrap.css" />
+    <link rel="stylesheet" href="/resources/shop/vendors/linericon/style.css" />
+    <link rel="stylesheet" href="/resources/shop/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="/resources/shop/css/themify-icons.css" />
+    <link rel="stylesheet" href="/resources/shop/vendors/owl-carousel/owl.carousel.min.css" />
+    <link rel="stylesheet" href="/resources/shop/vendors/lightbox/simpleLightbox.css" />
+    <link rel="stylesheet" href="/resources/shop/vendors/nice-select/css/nice-select.css" />
+    <link rel="stylesheet" href="/resources/shop/vendors/animate-css/animate.css" />
+    <link rel="stylesheet" href="/resources/shop/vendors/jquery-ui/jquery-ui.css" />
+    <!-- main css -->
+    <link rel="stylesheet" href="/resources/shop/css/style.css" />
+    <link rel="stylesheet" href="/resources/shop/css/responsive.css" />
+    
+    
+   
+ <script src="http://code.jquery.com/jquery-latest.js"></script>
 <script> 
+
+  //var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;    
+
+$(document).ready(function () {
+	
+            $("#clickUp").on("click",function(){     //업버튼 클릭 시
+         var quantity = $("#sst").val();
+         var price = $('#price').text();
+         var totalPrice = $('input[name=total]'); 
+         var totalPay = $('input[name=payTotal]');
+         var total = quantity*price;
+         $("#totalPut").text(total); //상품토탈
+         totalPrice.val(total);
+
+         $("#payTotal").text(total);  //결제 토탈
+         totalPay.val(total);
+        });
+ 
+        $("#clickDown").on("click",function(){          //다운버튼 클릭 시
+          var quantity = $("#sst").val();
+          var price = $('#price').text();
+          var totalPrice = $('input[name=total]');
+         var totalPay = $('input[name=payTotal]');
+         var total = quantity*price;
+
+         $("#totalPut").text(total); //상품토탈
+         totalPrice.val(total);
+
+         $("#payTotal").text(total);  //결제 토탈
+         totalPay.val(total);
+         
+        });
+        
+        $("input[name=card]").on("click",function(){  //카드결제
+          var account = $('input[name=account]');
+          var payType =$('input[name=payType]');
+          /* account.checked==null; */
+          account.prop("checked",false);
+          payType.val('card');
+          console.log(payType.val());
+          });
+        
+
+        $("input[name=account]").on("click",function(){  //결제 
+        var card = $('input[name=card]');
+        var payType =$('input[name=payType]');
+        card.prop("checked",false); 
+        payType.val('trans');
+        console.log(payType.val());
+        });  
+        
+        
+        
+        ////////////////////////////////////아작스 처리??
+        $("input[name=defualtAddress]").on("click",function(){  //기본배송지
+            var address = $('input[name=address]');
+            var newAddress =$('input[name=newAddress]');
+            newAddress.prop("checked",false);
+            
+            address.val('기본배송지');
+            
+            var basic = $('input[name=basicAddress]').val();
+            var basic2 =$('input[name=addressDetail]').val();
+            var zonecode =$('input[name=zonecode]').val();
+            var name =$('input[name=deliNmae]').val();
+            var deliPhonNum =$('input[name=deliPhonNum]').val();
+            
+            var put1 = $('input[name=post1]');
+            var put2 = $('input[name=address1]');
+            var put3 = $('input[name=address2]');
+            var put4 = $('input[name=tel]');
+            var put5 = $('input[name=fax]');
+            
+            put1.val(zonecode);
+            put2.val(basic);
+            put3.val(basic2);
+            put4.val(deliPhonNum);
+            put5.val(name);
+            
+            });
+        
+
+          $("input[name=newAddress]").on("click",function(){  // 변경배송지
+          var address = $('input[name=address]');
+          var defualtAddress =$('input[name=defualtAddress]');
+          defualtAddress.prop("checked",false);
+          
+          address.val('변경배송지');
+          
+          var put1 = $('input[name=post1]');
+          var put2 = $('input[name=address1]');
+          var put3 = $('input[name=address2]');
+          var put4 = $('input[name=tel]');
+          var put5 = $('input[name=fax]');
+          
+          put1.val('');
+          put2.val('');
+          put3.val('');
+          put4.val('');
+          put5.val('');
+          });
+});
+
+
+function usePoin(){                         //포인트 사용할 경우
+     var usepoint = $('input[name=usepoint]');
+     var point = $('input[name=point]'); //db 보유포인트
+     var put =  $('#minus');
+    
+     if(usepoint.val() > point.val()){
+    	 alert("보유포인트보다 많습니다");
+     }else{
+      var result ="-"+usepoint.val();
+      put.text(result);
+      put.removeAttr("style");
+      put.css("color","red");
+      point.val(usepoint.val());
+     }
+    
+}
+
+
+
+
  function sample6_execDaumPostcode() { 
  new daum.Postcode({ 
  oncomplete: function(data) { 
@@ -50,6 +194,90 @@
  } 
  }).open(); 
 } 
+ 
+
+ 
+
+ 
+ IMP.init('imp33067254');
+ function check() {
+	  var check = window.confirm("결제를 진행 하시겠습니까?");
+	  if (check == true){
+		  
+		  var chooseAddress = $('input[name=address]').val(); // 기본 혹은 변경지
+          var zoneCode = $('input[name=post1]').val();  
+          var address1 = $('input[name=address1]').val();
+          var address2 = $('input[name=address2]').val();
+          var phoneNum = $('input[name=tel]').val();
+          var custName = $('input[name=fax]').val();
+		  
+		  var payType = $('input[name=payType]').val(); // 결제타입 카드/통장
+		  var point= $('input[name=usepoint]').val();
+		  var totalPrice= $('input[name=total]').val();
+		  
+		  var prodNum = $('input[name=prodNum]').val();
+		  var quantity = $('input[name=qty]').val();
+		  var prodName = $('input[name=prodName]').val();
+		  if(point==null ||point==''){
+			  point = '0';
+		  }
+		  
+		  IMP.request_pay({
+		      pg : 'inicis', // version 1.1.0부터 지원.
+		      pay_method : payType,           //trans는 무통장
+		      merchant_uid : 'merchant_' + new Date().getTime(),
+		      name : '주문명:'+custName+'',
+		      amount : totalPrice-point, //판매 가격
+		      /* buyer_email : 'iamport@siot.do', */
+		      buyer_name : custName,
+		      buyer_tel : phoneNum,
+		      buyer_addr : address1+address2,
+		      buyer_postcode : zoneCode
+		  }, function(rsp) {
+		      if ( rsp.success ) {
+		    	  
+		    	  if(rsp.apply_num==null||rsp.apply_num==''){
+		    		  rsp.apply_num ='kakao';
+		    	  }
+		    	  
+	              $.ajax({
+	                type:"post",
+	                async:true,
+	                url:"/B_P003_D001/payInfo",
+	                data:{zoneCode:zoneCode,
+	                	address1:address1,address2:address2,
+	                	phoneNum:phoneNum,custName:custName,
+	                	payType:payType,point:point,paid_amount:rsp.paid_amount,
+	                	imp_uid:rsp.imp_uid,merchant_uid:rsp.merchant_uid,
+	                	apply_num:rsp.apply_num,prodNum:prodNum,quantity:quantity,
+	                	chooseAddress:chooseAddress,prodName:prodName
+	                },
+	                success:function(data,textStatus){
+	                	alert('결제가 완료 되었습니다.');
+	                	location.href="/B_P002_D001/shopMainCate?listType=10";
+	                },
+	                error:function(data,textStatus){
+	                }
+	              });
+	                  /* var msg = '결제가 완료되었습니다.';
+	   		          msg += '고유ID : ' + rsp.imp_uid;
+	   		          msg += '상점 거래ID : ' + rsp.merchant_uid;
+	   		          msg += '결제 금액 : ' + rsp.paid_amount;
+	   		          msg += '카드 승인번호 : ' + rsp.apply_num;
+	   		          location.href="/B_P002_D001/shopMainCate?listType=10"; */
+		         
+		      } else {
+		          var msg = '결제에 실패하였습니다.';
+		          msg += '에러내용 : ' + rsp.error_msg;
+		          window.close();
+		      }
+		      alert(msg);
+		  });
+	  }else{
+		  location.href="/B_P002_D001/shopMainCate?listType=10";
+	  }
+}
+ 
 </script>
 <style>
 
@@ -61,12 +289,23 @@ position:absolute;
 align:bottom;
 }
 
-.
 
 </style>
 
 </head>    
 <body>
+
+
+
+<input type="hidden" name="basicAddress" value="${address.address }">
+<input type="hidden" name="addressDetail" value="${address.address2 }">
+<input type="hidden" name="zonecode" value="${address.zonecode }">
+<input type="hidden" name="deliNmae" value="${address.name }">
+<input type="hidden" name="deliPhonNum" value="${address.phone }">
+
+
+<input type="hidden" name="prodNum" value="${prodDetail.prodNum }">
+<input type="hidden" name="prodName" value="${prodDetail.name }">
 
 <div class="container">
     <form name="f" method="post">
@@ -85,7 +324,8 @@ align:bottom;
                                 <td>배송지</td>
                                 <td>
                                     <input type="checkbox" name="defualtAddress" value ="기본">기본
-                                    <input type="checkbox" name="newAddress" value ="변경지">변경주소                              
+                                    <input type="checkbox" name="newAddress" value ="변경지">변경주소
+                                    <input type="hidden" name="address" value ="">                              
                                 </td>
                             </tr>  
                             <tr>
@@ -93,7 +333,7 @@ align:bottom;
                                 <td>
                                     <input type="tel" name="tel" class="form-control" value="">
                                 </td>
-                                <td>팩스</td>
+                                <td>구매자</td>
                                 <td>
                                     <input type="tel" name="fax" class="form-control" value="">
                                 </td>
@@ -104,8 +344,6 @@ align:bottom;
                                     <input type="text" name="post1" id="post1" size="5" class="form-control" readonly value="" style="display:inline-block;width:100px;"> 
                                     <i class="fas fa-search" onclick="sample6_execDaumPostcode()" style="cursor:pointer;font-size:24px;"></i>
                                 </td>
-                                <td>HP</td>
-                                <td><input type="tel" name="hp" class="form-control" value=""></td>
                             </tr>
                             <tr>
                                 <td>주소</td>
@@ -122,6 +360,88 @@ align:bottom;
  
             <div class="pt-3"></div>
  
+                 <div class="card">
+                <div class="card-header"><i class="fas fa-square"></i> 결제상품</div>
+                <div class="card-body">
+                <!-- 경계선 -->
+                
+      <div class="container">
+        <div class="cart_inner">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">상품</th>
+                  <th scope="col">가격</th>
+                  <th scope="col">수량</th>
+                  <th scope="col">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <div class="media">
+                      <div class="d-flex">
+                        <img
+                          src="/B_P002_D001/mainImage/${prodDetail.prodNum }"
+                          alt=""
+                        />
+                      </div>
+                      <div class="media-body">
+                        <p>${prodDetail.content }</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <h5 id="price">${prodDetail.price }</h5>
+                    <input type="hidden" name="prodPrice" value="${prodDetail.price }" style="border: none;">
+                  </td>
+                  <td>
+                    <div class="product_count">
+                      <input
+                        type="text"
+                        name="qty"
+                        id="sst"
+                        maxlength="12"
+                        value="${quantity }"
+                        title="Quantity:"
+                        class="input-text qty"
+                      />
+                      <button
+                        onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"
+                        class="increase items-count"
+                        type="button"
+                        id="clickUp"
+                      >
+                        <i class="lnr lnr-chevron-up"></i>
+                      </button>
+                      <button
+                        onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) &amp;&amp; sst > 0 ) result.value--;return false;"
+                        class="reduced items-count"
+                        type="button"
+                        id="clickDown"
+                      >
+                        <i class="lnr lnr-chevron-down"></i>
+                      </button>
+                    </div>
+                  </td>
+                  <td>
+                    <h5> <bold id="totalPut">${prodDetail.price * quantity }</bold>원</h5> <!--  수량 *가격 --> 
+                    <input type ="hidden" name="total" value="${prodDetail.price * quantity }">
+                  </td>
+                </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+                    
+                    <!-- 경계선 -->
+                </div>
+            </div>
+ 
+ 
+ 
+ 
             <div class="card">
                 <div class="card-header"><i class="fas fa-square"></i> 결제 진행</div>
                 <div class="card-body">
@@ -130,14 +450,26 @@ align:bottom;
                             <tr style="line-height:32px;">
                                 <td>결제 수단</td>
                                 <td>
-                                    <input type="checkbox" name="defualtAddress" value ="기본">카드
-                                    <input type="checkbox" name="newAddress" value ="변경지">무통장         
+                                    <input type="checkbox" name="card" value ="card">카드
+                                    <input type="checkbox" name="account" value ="account">계좌        
+                                    <input type="hidden" name="payType" value =""> 
                                 </td>
                             </tr>
                             <tr style="line-height:32px;">
-                                <td>결제 금액</td>
+                                <td>포인트</td>
                                 <td>
-                                    <p> <bold>222,000원</bold> </p>
+                                    <p>보유 포인트: ${point } p</p><br>
+                                    <input type="hidden" name="point" value="${point }">
+                                    <p><input type="text" name="usepoint" value="">포인트P 
+                                    <button type="button" id="poinButton" onclick="usePoin()" class="btn btn-success">포인트사용</button> </p>
+                                </td>
+                            </tr>
+                            <tr style="line-height:32px;" >
+                                <td>총 결제 금액</td>
+                                <td >
+                                    <p> <bold id="payTotal">${prodDetail.price* quantity } </bold>원  <blod id="minus" style="display: none;"></blod> </p>
+                                    <input type ="hidden" name="payTotal" value="">
+                                    
                                 </td>
                             </tr>
                         </tbody>
@@ -145,48 +477,32 @@ align:bottom;
                 </div>
             </div>
             <div class="pt-3"></div>
-            
-                        <div class="card">
-                <div class="card-header"><i class="fas fa-square"></i> 결제상품</div>
-                <div class="card-body">
-                    <table class="table">
-                        <tbody>
-                                  <div class="row">
-                                 <img class="column" src="/resources/img/images.jpg" width="150" height="150" alt="">
-                                 <div class="column" >
-                                <p class="prodtext">신상품  쫀득쫀득 고무고무 가방/ 내가 너라면 사겠어...ssssssssssssssssssssssss</p>
-                                 </div>
-                              </div>
-                        </tbody>
-                        <hr>
-                         <tbody>
-                                  <div class="row">
-                                 <img class="column" src="/resource/img/images.jpg" width="150" height="150" alt="">
-                                 <div class="column coloumncontent" >
-                                <p class="prodtext">신상품  쫀득쫀득 고무고무 가방/ 내가 너라면 사겠어...ssssssssssssssssssssssss</p>
-                                 </div>
-                              </div>
-                        </tbody>
-                        
-                    </table>
-                </div>
-            </div>
         </div>
     </form>
-    
-    <form method="post" action="/kakaoPay">
-    <button><img src="/resources/img/payment_icon_yellow_medium.png"></button>
-</form>
-</form>
- 
     <div class="text-center mt-3">
-        <button type="button" class="btn btn-success">결제하기</button>
+        <button type="button" onclick="check()" class="btn btn-success">결제하기</button>
         <button type="button" class="btn btn-info">뒤로가기</button>
     </div>
 </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <!-- <script src="/resouces/shop/js/jquery-3.2.1.min.js"></script>
+    <script src="/resouces/shop/js/popper.js"></script>
+    <script src="/resouces/shop/js/bootstrap.min.js"></script>
+    <script src="/resouces/shop/js/stellar.js"></script>
+    <script src="/resouces/shop/vendors/lightbox/simpleLightbox.min.js"></script>
+    <script src="/resouces/shop/vendors/nice-select/js/jquery.nice-select.min.js"></script>
+    <script src="/resouces/shop/vendors/isotope/imagesloaded.pkgd.min.js"></script>
+    <script src="/resouces/shop/vendors/isotope/isotope-min.js"></script>
+    <script src="/resouces/shop/vendors/owl-carousel/owl.carousel.min.js"></script>
+    <script src="/resouces/shop/js/jquery.ajaxchimp.min.js"></script>
+    <script src="/resoucesjs/mail-script.js"></script>
+    <script src="/resoucesvendors/jquery-ui/jquery-ui.js"></script>
+    <script src="/resoucesvendors/counter-up/jquery.waypoints.min.js"></script>
+    <script src="/resoucesvendors/counter-up/jquery.counterup.js"></script>
+    <script src="/resoucesjs/theme.js"></script> -->
+
 </body>
 </html>
 
-
-</body>
-</html>

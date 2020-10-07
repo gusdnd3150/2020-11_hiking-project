@@ -76,7 +76,7 @@ public class B_P002_D001ControllerImpl  implements B_P002_D001Controller{
 		String cntPerPage = (String) info.get("cntPerPage");
 		String listType = (String) info.get("listType");
 		
-		if (nowPage == null && cntPerPage == null) {
+		if (nowPage == null && cntPerPage == null ) {
 			nowPage = "1";
 			cntPerPage = "6";
 		} else if (nowPage == null) {
@@ -84,6 +84,8 @@ public class B_P002_D001ControllerImpl  implements B_P002_D001Controller{
 		} else if (cntPerPage == null) { 
 			cntPerPage = "6";
 		}
+		
+		
 		search.put("listType", Integer.parseInt(listType));
 		int total = b_P002_D001ShopingMallService.totalCount2(search);
 		Paging vo2 = new Paging(Integer.parseInt(listType),total, Integer.parseInt(nowPage), Integer.parseInt(cntPerPage));

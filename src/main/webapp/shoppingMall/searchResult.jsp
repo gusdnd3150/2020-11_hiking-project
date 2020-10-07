@@ -7,14 +7,13 @@
 <%-- <jsp:include page="/commonShop/side.jsp" />  상단의 바로 사용할 생가임 --%>
   
     <!-- Bootstrap core CSS -->
-  <link href="/resources/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/resources/shop/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <!-- Custom styles for this template -->
-  <link href="/resources/css/shop-homepage.css" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="/resources/css/views/common/header.css">
+  <link href="/resources/shop/css/shop-homepage.css" rel="stylesheet">
     <!-- Bootstrap core JavaScript -->
-  <script src="/resources/vendor/jquery/jquery.min.js"></script>
-  <script src="/resources/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
+  <script src="/resources/shop/vendor/jquery/jquery.min.js"></script>
+  <script src="/resources/shop/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  
 <style>
 
 .card-img-top{
@@ -53,6 +52,7 @@ height=350;
 </style>  
 
 <body>
+<script src="https://kit.fontawesome.com/e8913b960a.js" crossorigin="anonymous"></script>
 <div class="topnav" align="center">
   <a class="active" href="/B_P002_D001/shopMainCate?listType=10">Home</a> <!--  10은 전체목록 -->
   <a href="/B_P002_D001/shopMainCate?listType=2">등산 가방</a>  
@@ -63,6 +63,7 @@ height=350;
   <a href="/B_P002_D001/shopMainCate?listType=1">양말</a>
   <a href="/B_P002_D001/shopMainCate?listType=8">보호대</a>
   <a href="/B_P002_D001/shopMainCate/6">중고물품 등록</a>
+  <a class="fas fa-shopping-cart"></a>
 </div>
 
 

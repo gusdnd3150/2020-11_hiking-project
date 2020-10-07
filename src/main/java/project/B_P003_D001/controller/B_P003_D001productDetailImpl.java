@@ -1,6 +1,8 @@
 package project.B_P003_D001.controller;
 
+import java.net.http.HttpRequest;
 import java.util.ArrayList;
+
 
 import java.util.Base64;
 import java.util.Enumeration;
@@ -11,6 +13,7 @@ import java.util.Map;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +23,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -33,9 +38,12 @@ import project.Paging;
 import project.B_P002_D001.Controller.B_P002_D001ControllerImpl;
 import project.B_P002_D001.Service.B_P002_D001ShopingMallService;
 import project.B_P003_D001.service.B_P003_D001productService;
+import project.B_P003_D001.vo.DeliveryVO;
+import project.B_P003_D001.vo.OrdersVO;
 import project.B_P003_D001.vo.productAfterVO;
 import project.E_P002_D003.vo.E_P002_D003PhotoVO;
 import project.E_P002_D003.vo.E_P002_D003ProductsVO;
+import project.user.vo.UserVO;
 
 
 @Controller
@@ -206,9 +214,6 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 		}		
 		return resEnt;
 	}
-
-
-
 	@Override  	       //이미지 출력
 	@RequestMapping(value = "/B_P003_D001/AfterImage/{num}")
 	public ResponseEntity<byte[]> getAfterImage(@PathVariable("num") int num,
@@ -221,19 +226,246 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 		headers.setContentType(MediaType.IMAGE_PNG);
 		return new ResponseEntity<byte[]>(imageContent, headers, HttpStatus.OK);
 		}
-
-	@Override
-	@RequestMapping(value = "/B_P003_D001/buyProd/{num}")
-	public ModelAndView buyProduct(@PathVariable("num") int num, HttpServletRequest req, HttpServletResponse res) throws Exception {
+	
+	
+	@Override               //구매하기 진행중 
+	@RequestMapping(value = "/B_P003_D001/buyProd")
+	public ModelAndView buyProduct(@RequestParam Map<String,Object> info,HttpServletRequest req, HttpServletResponse res) throws Exception {
 		ModelAndView mav = new ModelAndView();
+		Map<String,Object> select = new HashMap<String,Object>();
+		//세션에 값이 있다는 가정하에  유저번호 1번으로 진행하겠다     즉, 유저번호/상품번호/수량으로 최초 시작
+		int userNum =1;
+		HttpSession session = req.getSession();
+		//String  session.getAttribute("");
 		
+		String type = (String) info.get("type");   // 1번=즉시구매 , 2번=장바구니에서 결제
+		System.out.println("파라미터 type 검사:"+type);
 		
+		select.put("userNum", userNum);
+		UserVO deli = b_P003_D001productService.getAddress(select);//주소
+		select =b_P003_D001productService.buyerinfo(select);//포인트
+		mav.addObject("address",deli );                     //기본주소
+		mav.addObject("point", select.get("point"));        //유저포인트
 		
-		//mav.addObject("", );
+		if (type.equals("1") ) {     //즉시구매
+			System.out.println("즉시구매");
+			E_P002_D003ProductsVO vo = b_P003_D001productService.topDetail(info); //상품내용
+			mav.addObject("prodDetail", vo);//상품정보
+			mav.addObject("quantity", info.get("quantity"));//상세페이지에서 선택한 수량
+			
+		}else if (type.equals("3")) {// 장바구니 물건 결제           ///////////////////////////////////////////////작업중
+			
+			System.out.println("장바구니 구매");
+			String nowPage = req.getParameter("nowPage");
+			String cntPerPage = req.getParameter("cntPerPage");
+			if (nowPage == null && cntPerPage == null) {
+				nowPage = "1";
+				cntPerPage = "6";
+			} else if (nowPage == null) {
+				nowPage = "1";
+			} else if (cntPerPage == null) { 
+				cntPerPage = "6";
+			}
+			select.put("type", type);
+			int total = b_P003_D001productService.CartTotal(select);
+			Paging page = new Paging(total, Integer.parseInt(nowPage), Integer.parseInt(cntPerPage));
+			select.put("start", page.getStart());
+			select.put("end", page.getEnd());
+			
+			List<OrdersVO> list = b_P003_D001productService.CartList(select);
+			mav.addObject("cartList", list);
+			mav.addObject("paging", page);
+		}
+		
+		mav.addObject("type",type);
 		mav.setViewName("/shoppingMall/payTest");
 		return mav;
 	}
 	
+	
+	//@Transactional(propagation = Propagation.REQUIRED)
+	@Override
+	@RequestMapping(value = "/B_P003_D001/payInfo")
+	@ResponseBody
+	public String insertPayinfo(@RequestParam Map<String, Object> info,HttpServletRequest request, HttpServletResponse response) {
+		Map<String,Object> param = new HashMap<String,Object>();
+		String result ="ss";
+		//유저 번호는 세션에서 꺼내올 예정
+		int userNum =1;
+		HttpSession session = request.getSession();
+		
+		// orders / products 테이블에 각각 내용 추가 및 수정
+        param.put("userNum",userNum);
+        param.put("prodNum", Integer.parseInt((String) info.get("prodNum")));
+        param.put("quantity", Integer.parseInt((String) info.get("quantity")));
+        param.put("price",Integer.parseInt((String) info.get("paid_amount")));
+        param.put("prodName",info.get("prodName"));
+        param.put("chooseAddress",info.get("chooseAddress"));
+        param.put("address1",info.get("address1"));
+        param.put("address2",info.get("address2"));
+        param.put("custName",info.get("custName"));
+        param.put("paid_amount",Integer.parseInt((String) info.get("paid_amount")));
+        param.put("zoneCode",Integer.parseInt((String) info.get("zoneCode")));
+        param.put("phoneNum",Integer.parseInt((String) info.get("phoneNum")));
+        param.put("payType",info.get("payType"));
+        param.put("imp_uid",info.get("imp_uid"));
+        param.put("merchant_uid",info.get("merchant_uid"));
+        param.put("point",Integer.parseInt((String) info.get("point")));	
+        param.put("apply_num", info.get("apply_num"));
+        
+        try {
+        	b_P003_D001productService.updateQuantity(param); //수량 수정
+        	b_P003_D001productService.updateOrders(param);    // 장바구니추가
+        	b_P003_D001productService.delivery(param);       //배송지 추가
+        	b_P003_D001productService.updatePoint(param);    // 포인트 차감
+        	b_P003_D001productService.insertPayment(param);   // 지불수단 추가
+        	//b_P003_D001productService.insertPaymentTest(param);
+        	
+		} catch (Exception e) {
+           e.printStackTrace();
+		}
+		return result;
+       
+        
+        // delivery에 내용 추가    기본일경우 수정  no  변경지의 경우 추가
+        // point 테이블에 사용한 만큼 차감
+        //payment에 내용 추가
+	}
+	
+	
+	@Override            //장바구니에 추가
+	@RequestMapping(value = "/B_P003_D001/addCart")
+	public void addCart(@RequestParam Map<String,Object> info, HttpServletRequest req, HttpServletResponse res) throws Exception {
+		//ModelAndView mav = new ModelAndView(); //파라미터에 prodNum , quantity,prodName 있다
+		Map<String,Object> param = new HashMap<String,Object>();
+		//세션있다는 가정
+		int userNum =1;
+		param.put("userNum", userNum);
+		 param.put("prodName", info.get("prodName"));
+		 param.put("prodNum",Integer.parseInt((String) info.get("prodNum")));
+		 param.put("quantity",Integer.parseInt((String) info.get("quantity")));
+		 param.put("prodPrice",Integer.parseInt((String) info.get("prodPrice")));
+		 b_P003_D001productService.addCart(param);
+	}
+	
+
+
+	@Override          //장바구니 상품 중복체크            (보류)
+	@RequestMapping(value = "/B_P003_D001/checkCart")
+	@ResponseBody
+	public String checkCart(Map<String, Object> info, HttpServletRequest req, HttpServletResponse res) throws Exception {
+		Map<String,Object> param = new HashMap<String,Object>();
+		String result = "";
+		int checkProdNum = Integer.parseInt((String) info.get("prodNum"));
+		param.put("prodNum", checkProdNum);
+		Integer check = b_P003_D001productService.checkCart(param);
+		if(check.equals("")||check==null) {
+			result="ok";
+		}else {
+			result="already";
+		}
+		return result;
+	}
+
+
+	
+	@Override          //세션에 아이디 불러오는 용도의 아작스
+	@RequestMapping(value = "/B_P003_D001/getSession")
+	@ResponseBody
+	public Map<String,Object> getSession(HttpServletRequest req, HttpServletResponse res) throws Exception {
+		//세션에서 아이디 정보를 꺼내온다
+		Map<String,Object> param = new HashMap<String,Object>();
+		int userNum =1;
+		param.put("userNum", userNum);
+		return param;
+	}
+
+
+	@Override           //장바구니
+	@RequestMapping(value = "/B_P003_D001/cartList")
+	public ModelAndView cartList(@RequestParam Map<String, Object> info,HttpServletRequest req, HttpServletResponse res) throws Exception {
+		ModelAndView mav = new ModelAndView(); //파라미터에 prodNum , quantity,prodName 있다
+		Map<String,Object> map = new HashMap<String,Object>();
+		//세션에서 아이디 정보를 꺼내온다
+		int userNum =1;
+		String nowPage = req.getParameter("nowPage");
+		String cntPerPage = req.getParameter("cntPerPage");
+		if (nowPage == null && cntPerPage == null) {
+			nowPage = "1";
+			cntPerPage = "6";
+		} else if (nowPage == null) {
+			nowPage = "1";
+		} else if (cntPerPage == null) { 
+			cntPerPage = "6";
+		}
+		
+		map.put("userNum", userNum);
+		int total = b_P003_D001productService.CartTotal(map);
+		Paging page = new Paging(total, Integer.parseInt(nowPage), Integer.parseInt(cntPerPage));
+		map.put("start", page.getStart());
+		map.put("end", page.getEnd());
+		
+		List<OrdersVO> list = b_P003_D001productService.CartList(map);
+		mav.addObject("cartList", list);
+		mav.addObject("paging", page);
+		
+		
+		mav.setViewName("/shoppingMall/cart");
+		return mav;
+	}
+
+
+	@Override
+	@ResponseBody
+	@RequestMapping(value = "/B_P003_D001/deleteCart")
+	public void deleteCart(@RequestParam Map<String, Object> info, HttpServletRequest req, HttpServletResponse res) throws Exception {
+		Map<String,Object> map = new HashMap<String,Object>();
+		//세션에서 값 뽑아올것
+		int userNum =1;
+		map.put("userNum", userNum);
+		map.put("prodNum",Integer.parseInt((String) info.get("deleteNum")));
+		b_P003_D001productService.deleteCart(map);
+	}
+
+
+	@Override
+	@ResponseBody
+	@RequestMapping(value = "/B_P003_D001/butProductsFromCart")
+	public String buyProductsFromCart(@RequestParam(value = "totalPrice[]") List<Integer> totalPrice,
+			@RequestParam(value = "orderNums[]")List<Integer> orderNums,@RequestParam(value = "quantities[]")List<Integer> quantities,
+			HttpServletRequest req, HttpServletResponse res)
+			throws Exception {
+		String result="";
+		int userNum = 1; //세션에서 꺼내기
+		System.out.println("합계:"+totalPrice.get(0));
+		System.out.println("주문번호:"+orderNums.get(0));
+		System.out.println("수량:"+quantities.get(0));
+		List<OrdersVO> list = new ArrayList<OrdersVO>();
+		OrdersVO vo;
+		for(int i=0; i<totalPrice.size(); i++) {
+			vo = new OrdersVO();  //new를 ㅎ
+			vo.setUserNum(userNum);
+			vo.setPrice(totalPrice.get(i));
+			vo.setOrderNum(orderNums.get(i));
+			vo.setQuantity(quantities.get(i));
+			System.out.println("값체크:"+orderNums.get(i));
+			list.add(vo);
+		}
+		try {
+			b_P003_D001productService.modifyBeforeBuy(list);
+			result="success";
+		} catch (Exception e) {
+             e.printStackTrace();
+             result="fail";
+		}
+		return result;
+	}
+
+
+	
+
+	
 
 	
 }
+
