@@ -10,8 +10,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta charset="utf-8">
-<title>mypageHome</title>
-<link href="/resources/css/bootstrap.min.css" rel="stylesheet">
+ <title>산오름</title>
+    <!-- ico,css -->
+    <link rel="icon" href="../resources/img/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" type="text/css" href="/resources/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/resources/css/views/common/header.css" />
 </head>
 <!— body —>
 <script src="/resources/js/jquery.js"></script>
@@ -32,7 +35,7 @@
 						<div class="box-body box-profile">
 						<div style="text-align:center;">
 
-							<img class="rounded-circle" src="/mypage/contentView.do" width="100" height="100"
+							<img class="rounded-circle" src="/mypage/contentView?id=${id}" width="100" height="100"
 								alt="프로필사진">
 							
 								</div>
@@ -41,7 +44,7 @@
 
 							<ul class="list-group list-group-unbordered">
 								<li class="list-group-item text-center">
-									<p id="profile1">여기에 나의 소개글이 이렇게 들어갈거에요.</p>
+									<p id="profile1"></p>
 								</li>
 								<li class="list-group-item"><b>내가 오른 산</b> <a
 									class="pull-right"><h5 style="text-align: right">15</h5></a></li>
@@ -238,8 +241,9 @@
 			//responsebody -> 아작스로 들어옴
 			});
 		});
-		$("#close").click(function() {
-			console.log("close");
+	
+		$("#myInfo").click(function() {
+			console.log("myInfo");
 			$("#password3").val(""); 
 	});
 	});

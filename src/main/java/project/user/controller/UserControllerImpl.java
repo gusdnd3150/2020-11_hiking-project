@@ -1,6 +1,5 @@
 package project.user.controller;
 
-import java.io.File;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,13 +16,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.WebUtils;
@@ -32,6 +29,7 @@ import project.user.auth.SNSLogin;
 import project.user.auth.SnsValue;
 import project.user.dto.LoginDTO;
 import project.user.service.MailService;
+import project.user.service.MypageService;
 import project.user.service.UserService;
 import project.user.vo.UserVO;
 
@@ -44,6 +42,9 @@ public class UserControllerImpl implements UserController {
 
 	@Autowired
 	UserService userService;
+
+	@Autowired
+	MypageService mypageService;
 
 	@Autowired
 	private SnsValue naverSns;
@@ -61,7 +62,7 @@ public class UserControllerImpl implements UserController {
 
 	// 회원가입 완료
 	@RequestMapping(value = "/insertUser.do", method = RequestMethod.POST)
-	public String insertUser(UserVO userVO) throws Exception {
+	public String insertUser(UserVO userVO, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		System.out.println(userVO);
 		// 비밀번호 해싱
 		String hashedPw = BCrypt.hashpw(userVO.getPassword(), BCrypt.gensalt(10));
@@ -73,6 +74,8 @@ public class UserControllerImpl implements UserController {
 
 		// 임의의 authKey 생성 & 이메일 발송
 		String authKey = mailService.getKey(6);
+		request.setCharacterEncoding("utf-8");
+		System.out.println("이메일 왜 안보내지니: " + userVO.getEmail() + "////" + authKey);
 		mailService.sendAuthMail(userVO.getEmail(), authKey);
 		userVO.setAuthKey(authKey);
 
@@ -91,14 +94,15 @@ public class UserControllerImpl implements UserController {
 	public ModelAndView signUpConfirm(@RequestParam Map<String, String> map, ModelAndView mav) {
 		// email, authKey 가 일치할경우 authStatus 업데이트
 		userService.updateAuthStatus(map);
-
-		mav.setViewName("/home");
+		logger.info("authKey update 해드림.");
+		mav.setViewName("redirect:/user/logInView.do");
 		return mav;
 	}
 
 	@RequestMapping(value = "/insertUser2.do", method = { RequestMethod.GET, RequestMethod.POST })
-	public String insertUser2(@ModelAttribute("snsUser") Map<String, Object> snsUser, LoginDTO loginDTO,
-			RedirectAttributes reAttr) throws Exception {
+	public String insertUser2(HttpSession httpSession, LoginDTO loginDTO, RedirectAttributes reAttr) throws Exception {
+		Map<String, Object> snsUser = (Map<String, Object>) httpSession.getAttribute("snsUser");
+		httpSession.removeAttribute("snsUser");
 		System.out.println("##############" + snsUser);
 		loginDTO.setId((String) snsUser.get("id"));
 		loginDTO.setPassword((String) snsUser.get("password"));
@@ -118,6 +122,19 @@ public class UserControllerImpl implements UserController {
 	public String idCheck(@RequestParam("id") String id) throws Exception {
 		System.out.println(id);
 		int rst = userService.idCheck(id);
+		String result = "0";
+		System.out.println("유저Controller : " + rst);
+		if (rst != 0) {
+			result = "1";
+		}
+		return result;
+	}
+
+	@RequestMapping(value = "/emailCheck.do", method = RequestMethod.GET)
+	@ResponseBody
+	public String emailCheck(@RequestParam("email") String email) throws Exception {
+		System.out.println(email);
+		int rst = userService.emailCheck(email);
 		String result = "0";
 		System.out.println("유저Controller : " + rst);
 		if (rst != 0) {
@@ -152,10 +169,10 @@ public class UserControllerImpl implements UserController {
 		System.out.println("Profile>>" + snsUser);
 		UserVO snsUserInfo = userService.getBySns(snsUser);
 		System.out.println("********" + snsUserInfo);
-		if (snsUserInfo == null) {
+		if (snsUserInfo == null) { // 가입하지 않은 회원
 			httpSession.setAttribute("snsUser", snsUser);
 			return "/user/insertPwdView";
-		} else {
+		} else { // 이미 가입한 회원
 			LoginDTO loginDTO = new LoginDTO();
 			loginDTO.setId(snsUserInfo.getId());
 			httpSession.setAttribute("loginDTO", loginDTO);
@@ -166,12 +183,14 @@ public class UserControllerImpl implements UserController {
 
 	@RequestMapping(value = "/insertPwd.do", method = { RequestMethod.GET, RequestMethod.POST })
 	public String insertPwd(@RequestParam("password2") String password2, HttpSession httpSession,
-			RedirectAttributes reAttr) throws Exception {
+			RedirectAttributes reAttr, HttpServletRequest request) throws Exception {
 		Map<String, Object> snsUser = (Map<String, Object>) httpSession.getAttribute("snsUser");
 		httpSession.removeAttribute("snsUser");
 		snsUser.put("password", password2);
-		reAttr.addFlashAttribute("snsUser", snsUser);
-		return "redirect:/user/insertUser2.do";
+		httpSession.setAttribute("snsUser", snsUser);
+		System.out.println(snsUser);
+		request.setAttribute("snsUser", snsUser);
+		return "/user/signUpEnd";
 	}
 
 	@RequestMapping(value = "/user/snsUserPwdCheck.do", method = { RequestMethod.GET, RequestMethod.POST })
@@ -184,20 +203,17 @@ public class UserControllerImpl implements UserController {
 	}
 
 	@RequestMapping(value = "/logIn.do", method = { RequestMethod.GET, RequestMethod.POST })
-	public ModelAndView logIn(HttpServletRequest request, LoginDTO loginDTO, HttpSession httpSession, ModelAndView mav)
-			throws Exception {
-		System.out.println("로그인디티오" + loginDTO);
+	public ModelAndView logIn(LoginDTO loginDTO, HttpSession httpSession, ModelAndView mav) throws Exception {
 		UserVO userVO = userService.logIn(loginDTO);
-		System.out.println(userVO);
 
 		if (userVO == null || !BCrypt.checkpw(loginDTO.getPassword(), userVO.getPassword())) {
-			System.out.println("널......");
+			System.out.println("로그인 실패");
 			mav.setViewName("/user/logInFailed");
 			return mav;
 		}
 		mav.setViewName("/home");
 		mav.addObject("userVO", userVO);
-		System.out.println("유저컨트롤러mav------" + mav);
+		System.out.println("로그인한 유저  :  " + mav);
 
 		// 로그인 유지를 선택할 경우
 		if (loginDTO.isUseCookie()) {
@@ -239,6 +255,39 @@ public class UserControllerImpl implements UserController {
 		httpSession.invalidate();
 		userService.removeSessionId(httpSession.getId());
 		return "/user/withdrawal";
+	}
+
+	@RequestMapping(value = "/user/searchId.do", method = { RequestMethod.GET, RequestMethod.POST })
+	public String searchId(@RequestParam("email") String email, HttpServletRequest request) throws Exception {
+		System.out.println("searchId////////    " + email);
+		UserVO userVO = new UserVO();
+		userVO.setEmail(email);
+		String id = userService.searchId(email);
+		request.setCharacterEncoding("utf-8");
+		System.out.println("이메일 왜 안보내지니11: " + userVO.getEmail() + "////");
+		mailService.sendMail(userVO.getEmail(), "산오름 아이디 찾기 안내 메일",
+				"회원님이 산오름에 요청하신 '아이디 찾기' 문의에 대해 안내 해 드립니다. \n" + "회원님의 아이디는:  " + id);
+		return "/user/sendMailEnd";
+	}
+
+	@RequestMapping(value = "/sendTempPwd.do", method = { RequestMethod.GET, RequestMethod.POST })
+	public String sendTempPwd(@RequestParam("id") String id, @RequestParam("email") String email,
+			HttpServletRequest request) throws Exception {
+		System.out.println("sendTempPwd////////    " + id + "------" + email);
+		UserVO userVO = new UserVO();
+		userVO.setEmail(email);
+		// 임의의 authKey 생성 & 이메일 발송
+		String tempPwd = mailService.getKey(8);
+		request.setCharacterEncoding("utf-8");
+		System.out.println("이메일 왜 안보내지니22: " + userVO.getEmail() + "////" + tempPwd);
+		mailService.sendMail(userVO.getEmail(), "산오름 임시 비밀번호 발급", "회원님이 산오름에 요청하신 임시비밀번호를 안내해 드립니다. \n"
+				+ "해당 비밀번호는 보안이 취약하니 로그인 후 즉시 마이페이지> 나의 정보 수정> 비밀번호변경을 권장합니다.\n " + "임시 비밀번호:  " + tempPwd);
+
+		String hashedPwd = BCrypt.hashpw(tempPwd, BCrypt.gensalt(10));
+		userVO.setPassword(hashedPwd);
+		userVO.setId(id);
+		mypageService.updatePwd(userVO);
+		return "/user/sendMailEnd";
 	}
 
 }

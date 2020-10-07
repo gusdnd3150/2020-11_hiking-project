@@ -46,11 +46,11 @@
   display: block;
   width: 100%;
   margin-bottom: 0;
-  /* Override default `<label>` margin */
+  Override default `<label>` margin
   line-height: 1.5;
   color: #495057;
   cursor: text;
-  /* Match the input under the label */
+  Match the input under the label
   border: 1px solid transparent;
   border-radius: .25rem;
   transition: all .1s ease-in-out;
@@ -88,8 +88,8 @@
   color: #777;
 }
 
-/* Fallback for Edge
--------------------------------------------------- */
+Fallback for Edge
+--------------------------------------------------
 
 @supports (-ms-ime-align: auto) {
   .form-label-group>label {
@@ -100,8 +100,8 @@
   }
 }
 
-/* Fallback for IE
--------------------------------------------------- */
+Fallback for IE
+--------------------------------------------------
 
 @media all and (-ms-high-contrast: none),
 (-ms-high-contrast: active) {

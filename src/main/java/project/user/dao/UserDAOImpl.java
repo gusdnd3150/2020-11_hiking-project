@@ -58,6 +58,14 @@ public class UserDAOImpl implements UserDAO{
 	}
 	
 	@Override
+	public int emailCheck(String email) throws Exception{
+		System.out.println("다오email체크: "+email);
+		int rst = sqlSession.selectOne("userMapper.emailCheck", email);
+	System.out.println("DAO : "+ rst);
+		return rst;
+	}
+	
+	@Override
 	public UserVO logIn(LoginDTO loginDTO) throws Exception {
 		System.out.println("유저다오왔다감");
 		return sqlSession.selectOne("userMapper.logIn", loginDTO);
@@ -112,6 +120,11 @@ public class UserDAOImpl implements UserDAO{
 		sqlSession.update("userMapper.withdrawal", userVO);
 		
 	}
+
+	@Override
+	public String searchId(String email) {
+		return sqlSession.selectOne("userMapper.searchId", email);
+		}
 
 	
 

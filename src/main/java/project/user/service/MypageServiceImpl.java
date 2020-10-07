@@ -30,12 +30,14 @@ public class MypageServiceImpl implements MypageService{
 
 	@Override
 	public void updateUserCont(Map<String, Object> contMap) {
+		System.out.println("2");
 		mypageDAO.updateUserCont(contMap);
 		
 	}
 
 	@Override
 	public void updateUserProf(Map<String, Object> profMap) {
+		System.out.println("1");
 		mypageDAO.updateUserProf(profMap);		
 	}
 

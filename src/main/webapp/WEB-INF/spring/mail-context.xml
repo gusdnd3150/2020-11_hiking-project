@@ -21,9 +21,9 @@
 
 	<!-- You can have some pre-configured messagess also which are ready to send -->
 	<bean id="preConfiguredMessage" class="org.springframework.mail.SimpleMailMessage">
-		<property name="to" value="${to}"></property> <!--받는사람 주소  -->
+		<property name="to" value="${to}"></property> <!-- 받는사람 주소  -->
 		<property name="from" value="${from}"></property> <!-- 보내는사람 메일주소 -->
-		<property name="subject" value="문의 사항" /> <!--제목  -->
+		<property name="subject" value="문의 사항" /> <!-- 제목  -->
 	</bean>
 </beans>
 

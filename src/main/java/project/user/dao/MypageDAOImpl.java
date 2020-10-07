@@ -32,13 +32,15 @@ public class MypageDAOImpl implements MypageDAO {
 
 	@Override
 	public void updateUserProf(Map<String, Object> profMap) {
-		System.out.println("3");
+		profMap.put("userNum", sqlSession.selectOne("userMapper.selectUserNum", profMap));
+		System.out.println("prof");
 		sqlSession.update("userMapper.updateUserProf", profMap);		
 	}
 
 	@Override
 	public void updateUserCont(Map<String, Object> contMap) {
 		contMap.put("userNum", sqlSession.selectOne("userMapper.selectUserNum", contMap));
+		System.out.println("cont");
 		sqlSession.update("userMapper.updateUserCont", contMap);			
 	}
 

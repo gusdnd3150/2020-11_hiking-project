@@ -22,7 +22,7 @@
 					<h5 class="modal-title" id="exampleModalCenterTitle">Modal
 						title</h5>
 					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close">
+						aria-label="Close"  id="close">
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
@@ -40,13 +40,11 @@
 					</table>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary"
-						data-dismiss="modal" id="close">X닫기</button>
 					<a href="/mypage/modifyView.do"><button type="button" class="btn btn-primary"  
 				 disabled id="myInfo">다음</button></a>
 				</div>
 			</div>
-		</div>
+		/</div>
 	</div>
 </body>
 

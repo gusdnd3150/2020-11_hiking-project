@@ -20,14 +20,17 @@
     <div class="d-none d-md-flex col-md-4 col-lg-6 bg-image"></div>
     <div class="col-md-8 col-lg-6">
       <div class="login d-flex align-items-center py-5">
-        <div class="container">
+        <div class="container text-center">
           <div class="row">
             <div class="col-md-9 col-lg-8 mx-auto">
-              <h3 class="login-heading mb-4">산오름에 오신 것을 환영합니다! <br>
-              간편 로그인을 버튼을 눌러 다시 로그인 해주세요.</h3> 
-             			<form action="/user/logInView.do" method="post">
-                <button class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2" 
-               type="submit" >로그인</button>
+              <h3 class="login-heading mb-4"><strong>산오름</strong>에 오신 것을 환영합니다!</h3> 
+              <br>
+              <div id="count"></div>
+              <br>
+             			<form action="/user/insertUser2.do" method="post" name="frm">
+             			<%-- <input type="hidden" id="hidden" name="hidden" value="${requestScope.snsUser}"> --%>
+               <button class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2">
+               산오름 지금 시작하기</button>
       
               </form>
               
@@ -40,4 +43,19 @@
   </div>
 </div>
 </body>
+<script>
+window.onload = function(){
+	let form = document.frm;
+	let time =10;  
+	 setInterval(function(){
+		 if(time==0){
+				form.submit();
+			};
+		 var time_text = time +'초 후 메인화면으로 전환됩니다.';
+			$("#count").text(time_text);
+			$("#count").css('color','gray');
+			time--;
+	 },1000); 
+};
+</script>
 </html>
