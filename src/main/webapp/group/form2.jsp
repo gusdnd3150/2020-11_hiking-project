@@ -24,7 +24,7 @@
             <label for="staffMax">모임 인원</label>
             <div class="staff">
                 <i id="decrease" class="fas fa-minus"></i>
-                <h2 id="staffMax" style="margin-bottom: 0">2명</h2>
+                <h2 id="staffMax" style="margin-bottom: 0">2</h2>명
                 <i id="increase"class="fas fa-plus" ></i>
             </div>
         </div>
@@ -162,6 +162,29 @@
 
 
     $(document).ready(function () {
+
+        var staffMax = 2;
+
+        $('#increase').on('click',function (){
+            staffMax++;
+            $('#staffMax').text(parseInt(staffMax));
+            if(staffMax>50) {
+                alert("지정 가능한 최대 인원 수를 초과 했습니다.")
+                return
+            }
+        })
+        $('#decrease').on('click',function (){
+            staffMax--;
+            $('#staffMax').text(parseInt(staffMax));
+            console.log(staffMax)
+            if(staffMax<1){
+                alert("최소 1명 이상 지정해야 합니다")
+                staffMax++;
+                $('#staffMax').text(parseInt(staffMax));
+                return
+            }
+        })
+
         // 추가입력 토글버튼
         $(function () {
             $('.toggle-btn').bootstrapToggle({
@@ -184,7 +207,7 @@
             data.append("ageStart",$('#ageStart').val());
             data.append("ageEnd",$('#ageEnd').val());
             data.append("sex",$('#sex').val());
-            data.append("staffMax",1);
+            data.append("staffMax",$('#staffMax')[0].innerText);
             data.append("userId","<%= request.getSession().getAttribute("LOGIN")%>")
 
             $.ajax({

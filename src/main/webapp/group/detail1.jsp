@@ -30,7 +30,7 @@
                     수정유무
                     이미지 너무 작은거 올리면 크게 확대 할것(썸네일화 시키자)
                 </p>
-                <h3 class="mt-3">모임 상태</h3>
+                <h3 class="mt-3">모임 정보</h3>
                 <hr />
                 <ul class="pl-0 col-12" style="list-style: none;height: auto">
                     <li>
@@ -44,17 +44,16 @@
                         <c:choose>
                             <c:when test="${(group.STAFFCURRENT / group.STAFFMAX) ne 1}">
                                 <div class="progress">
-                                    <div class="progress-bar progress-bar-striped bg-info" role="progressbar" style="width: ${(group.STAFFCURRENT / group.STAFFMAX)*100}%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">${group.STAFFCURRENT} / ${group.STAFFMAX} 명</div>
+                                    <div class="progress-bar progress-bar-striped bg-info" role="progressbar" style="width: ${(group.STAFFCURRENT*100 / group.STAFFMAX *100)/100}%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">${group.STAFFCURRENT} / ${group.STAFFMAX} 명</div>
                                 </div>
                             </c:when>
                             <c:when test="${(group.STAFFCURRENT / group.STAFFMAX) eq 1}">
                                 <div class="progress">
-                                    <div class="progress-bar progress-bar-striped bg-danger" role="progressbar" style="width: ${(group.STAFFCURRENT / group.STAFFMAX)*100}%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">${group.STAFFCURRENT} / ${group.STAFFMAX} 명</div>
+                                    <div class="progress-bar progress-bar-striped bg-danger" role="progressbar" style="width: ${(group.STAFFCURRENT*100 / group.STAFFMAX *100)/100}%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">${group.STAFFCURRENT} / ${group.STAFFMAX} 명</div>
                                 </div>
                             </c:when>
                         </c:choose>
                     </li>
-                    <li>상세 조건</li>
                     <li>${group.AREA}</li>
                     <li>${group.AGESTART}</li>
                     <li>${group.AGEEND}</li>
@@ -73,19 +72,55 @@
                     <!--favoriteResult ne 1 or-->
                     <button class="btn btn-outline-info col-6" onclick="showMtInfo()">산 정보보기</button>
                     <c:choose>
-                        <c:when test="${joinedResult ne 0}"><button class="withdrawGroupBtn btn btn-info col-12" data-toggle="modal" data-target="#cancelModal">요청 취소하기</button></c:when>
-                        <c:when test="${joinedResult eq 0}"><button class="joinButton btn btn-outline-info col-12" data-toggle="modal" data-target="#joinModal">참여 신청</button></c:when>
+                        <c:when test="${userGradeResult eq 0}"><button class="joinList btn btn-dark col-12" data-toggle="modal" data-target="#listModal">요청 리스트보기</button></c:when>
+                        <c:when test="${userGradeResult eq 1}"><button class="withdrawGroupBtn btn btn-info col-12" data-toggle="modal" data-target="#cancelModal">요청 취소하기</button></c:when>
+                        <c:when test="${userGradeResult eq 2}"><button class="joinButton btn btn-outline-info col-12" data-toggle="modal" data-target="#joinModal">참여 신청</button></c:when>
                     </c:choose>
                 </div>
             </div>
         </div>
     </div>
+
+    <hr />
+
     <h3 class="my-4">산모임 상세내용</h3>
     <div class="row">
         <div class="col-12">
             ${group.DETAIL}
         </div>
     </div>
+
+    <hr />
+
+    <div class="row">
+        <h3 class="col-12 mt-2">댓글</h3>
+        <!-- 댓글 내용 -->
+        <div class="mt-2 media col-12">
+            <img src="..." class="mr-3" alt="...">
+            <div class="media-body">
+                <h5 class="mt-0">Media heading</h5>
+                Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
+
+                <div class="media mt-3">
+                    <a class="mr-3" href="#">
+                        <img src="..." class="mr-3" alt="...">
+                    </a>
+                    <div class="media-body">
+                        <h5 class="mt-0">Media heading</h5>
+                        Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 댓글 입력 -->
+        <div id="commentInput" class="row col-12 pt-3">
+            <img src="..." class="col-md-1 col-xs-1" alt="...">
+            <input class="form-control form-control-lg col-md-10 col-xs-8" type="text" placeholder="내용을 입력해주세요">
+            <button class="btn btn-info col-md-1 col-xs-1">입력</button>
+        </div>
+    </div>
+
+    <hr />
 
     <h3 class="my-4">${group.MTNM}의 다른 모임</h3>
     <div class="row">
@@ -102,8 +137,30 @@
         <%--            </div>--%>
         <%--        </c:forEach>--%>
     </div>
-    <div class="modal fade" id="joinModal">
+    <div class="modal fade" id="listModal">
         <div class="modal-dialog" id="modal1">
+            <div class="modal-content">
+                <!-- header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">참여 리스트</h4>
+                    <!-- 닫기(x) 버튼 -->
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                    <!-- header title -->
+                </div>
+                <!-- body -->
+                <div class="modal-body">
+                    <ul id="waitingList" class="pl-3 pr-3" style="font-size: 18px">
+                    </ul>
+                </div>
+                <!-- Footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="joinModal">
+        <div class="modal-dialog" id="modal2">
             <div class="modal-content">
                 <!-- header -->
                 <div class="modal-header">
@@ -125,7 +182,7 @@
         </div>
     </div>
     <div class="modal fade" id="cancelModal">
-        <div class="modal-dialog" id="modal2">
+        <div class="modal-dialog" id="modal3">
             <div class="modal-content">
                 <!-- header -->
                 <div class="modal-header">
@@ -180,7 +237,7 @@ $(document).ready(function (){
             dataType: 'json',
             contentType: "application/json; charset=utf-8;",
             success : function (response){
-                // alert("신청 처리 되었습니다");
+                alert("신청 처리 되었습니다");
                 location.reload();
             },
             error : function (response){
@@ -231,7 +288,7 @@ $(document).ready(function (){
                     .text("좋아요 취소");
             },
             error : function (response){
-                console.log("error!")
+                console.log("error!");
                 console.log(response);
             }
         })
@@ -256,6 +313,57 @@ $(document).ready(function (){
             error : function (response){
                 alert("로그인이 필요합니다")
                 window.location.replace('/user/logInView.jsp')
+            }
+        })
+    })
+
+    $(document).on('click','.joinList',function (){
+
+        var data = {
+            groupNum : ${group.GROUPNUM}
+        }
+
+        $.ajax({
+            type: "GET",
+            url: "/group/joinList.do",
+            data: data,
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8;",
+            success: function (response){
+                $('#waitingList').empty()
+                for(var i=0;i<response.length;i++){
+                    $('#waitingList')
+                        .append('<li class="row pt-1" style="list-style: none">' +
+                                '<div class="col-10 pt-1" style="font-size: 22px">'+response[i].USERID+'</div><button class="approve btn btn-light col-2">승인</button>' +
+                                '</li>');
+                }
+            },
+            error: function(response){
+                console.log("error");
+                alert("새로고침 후 다시 시도해주세요")
+            }
+        })
+    })
+
+    $(document).on('click','.approve',function (){
+
+        var data = {
+            userId : (this.parentNode).childNodes[0].innerHTML,
+            groupNum : ${group.GROUPNUM}
+        }
+
+        $.ajax({
+            type: "GET",
+            url: "/group/userAllowed.do",
+            data: data,
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8;",
+            success: function (response){
+                console.log("success");
+            },
+            error: function(response){
+                console.log("error");
+                alert("새로고침 후 다시 시도해주세요")
             }
         })
     })

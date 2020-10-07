@@ -49,13 +49,15 @@
         ]]>
     </insert>
 
-    <insert id="insertGroupMaster" parameterType="map">
+    <insert id="insertGroupLeader" parameterType="map">
         <![CDATA[
-            INSERT INTO userAllowed
+            INSERT INTO userWaiting
             VALUES (
                 #{groupNum},
                 #{userId},
-                1
+                0,
+                null,
+                0
                 )
         ]]>
     </insert>
@@ -136,43 +138,57 @@
         </where>
     </select>
 
-    <!-- 그룹 가입 -->
-    <insert id="joinGroup" parameterType="map">
+    <!-- 그룹 가입 (Merge)-->
+    <update id="joinGroup" parameterType="map">
         <![CDATA[
-            INSERT INTO userApplied
-            VALUES (
-                    #{groupNum},
-                    #{userId},
-                    #{userComment}
-                    )
+            MERGE INTO userWaiting
+            USING DUAL
+            ON (groupNum=#{groupNum} AND userId=#{userId})
+            WHEN MATCHED THEN
+                UPDATE SET
+                userStatus = 1
+            WHEN NOT MATCHED THEN
+                INSERT (groupNum,
+                        userId,
+                        userType,
+                        userComment,
+                        userStatus)
+                VALUES (#{groupNum},
+                        #{userId},
+                        1,
+                        #{userComment},
+                        1)
         ]]>
-        <selectKey keyProperty="groupNum" resultType="_int" order="AFTER">
-            SELECT groupNum
-            FROM userApplied
+    </update>
+    <!-- 그룹 탈퇴 -->
+    <update id="withdrawGroup" parameterType="map">
+        <![CDATA[
+            UPDATE userWaiting
+            SET userStatus = 2
+            WHERE groupNum = #{groupNum}
+            AND userId = #{userId}
+        ]]>
+    </update>
+    <!-- 그룹 가입 여부 체크 -->
+    <select id="selectWaiting" resultType="_int" parameterType="map">
+        <![CDATA[
+            SELECT userStatus
+            FROM userWaiting
             WHERE userId = #{userId}
             AND groupNum = #{groupNum}
-        </selectKey>
-    </insert>
-    <!-- 그룹 가입 여부 체크 -->
-    <select id="checkJoinedGroup" resultType="_int" parameterType="map">
-        SELECT *
-        FROM userApplied
-        WHERE userId = #{userId}
-        AND groupNum = #{groupNum}
-    </select>
-    <select id="listApplied" resultType="_int" parameterType="_int">
-        <![CDATA[
-            SELECT userNum
-            FROM userApplied
-            WHERE groupNum = #{groupNum}
         ]]>
     </select>
-    <!-- 그룹 가입 요청 취소 -->
-    <delete id="withdrawGroup" parameterType="map">
-        DELETE FROM userApplied
-        WHERE userId = #{userId}
-        AND groupNum = #{groupNum}
-    </delete>
+
+    <!-- 그룹 가입 요청 리스트 불러오기 -->
+    <select id="selectWaitingList" resultType="map" parameterType="_int">
+        <![CDATA[
+            SELECT userId
+            FROM userWaiting
+            WHERE groupNum = #{groupNum}
+            AND userType = 1
+            AND userStatus = 1
+        ]]>
+    </select>
 
     <!-- 그룹 좋아요 -->
     <insert id="insertFavorite" parameterType="map">

@@ -1,0 +1,14 @@
+#mypageMain{
+    background-color: black;
+}
+
+#profilePhoto {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.center {
+    padding: 70px 0;
+    border: 3px solid green;
+}

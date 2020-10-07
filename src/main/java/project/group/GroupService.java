@@ -9,25 +9,21 @@ import java.util.Map;
 public interface GroupService {
 
     void insertGroup(Map map) throws Exception;
-
     List<Map> selectMainGroupList();
-
     List<Map> selectAllGroupList();
-
     void updateGroup(GroupVO vo);
-
     void deleteGroup(int groupNum);
-
     Map selectGroupDetail(int groupNum);
-
     List<Map> selectGroupDetailImage(int groupNum);
-
     List<Map> selectGroupsByKeyword(String keyword);
 
     //
     int joinGroup(Map map);
+
     int withdrawGroup(Map map);
-    int checkJoinedGroup(Map map);
+    List selectWaitingList(int groupNum);
+    int selectWaiting(Map map);
+    int userAllowed(Map map);
 
     List<Integer> listApplied(int groupNum);
 

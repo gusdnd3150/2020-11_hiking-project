@@ -18,7 +18,7 @@ public class GroupServiceImpl implements GroupService{
     @Transactional
     public void insertGroup(Map map) {
         groupDAO.insertGroup(map);
-        groupDAO.insertGroupMaster(map);
+        groupDAO.insertGroupLeader(map);
     }
 
     public List<Map> selectMainGroupList(){
@@ -60,8 +60,20 @@ public class GroupServiceImpl implements GroupService{
     public int withdrawGroup(Map map){
         return groupDAO.withdrawGroup(map);
     }
+    public List selectWaitingList(int groupNum){
+        return groupDAO.selectWaitingList(groupNum);
+    }
 
-    public int checkJoinedGroup(Map map){return groupDAO.checkJoinedGroup(map);}
+    public int selectWaiting(Map map){return groupDAO.selectWaiting(map);}
+
+    @Transactional
+    public int userAllowed(Map map){
+        return groupDAO.userAllowed(map);
+    }
+
+
+
+    // check
 
     public List<Integer> listApplied(int groupNum){
         return groupDAO.listApplied(groupNum);

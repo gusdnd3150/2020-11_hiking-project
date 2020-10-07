@@ -99,16 +99,16 @@ public class GroupController{
         checkMap.put("groupNum",groupNum);
         int favoriteResult;
         try{
-            favoriteResult = groupService.checkFavoriteGroup(checkMap);
+            favoriteResult = groupService.checkFavoriteGroup(checkMap);                                     //좋아요 체크
         }catch (Exception e){
             favoriteResult = 0;
         }
-
-        int joinedResult;
+        int userGradeResult;
         try{
-            joinedResult = groupService.checkJoinedGroup(checkMap);
+            userGradeResult = groupService.selectWaiting(checkMap);
+            System.out.println("userGradeResult : "+userGradeResult);
         }catch (Exception e){
-            joinedResult = 0;
+            userGradeResult = 2;                                                                        //비그룹 원
         }
 
         //같은 산의 다른모임 찾을 것
@@ -119,9 +119,10 @@ public class GroupController{
             map.put("image"+i , list.get(i).get("STOREDFILENAME"));
 
         }
+
         mav.addObject("group",map);
         mav.addObject("favoriteResult",favoriteResult);
-        mav.addObject("joinedResult",joinedResult);
+        mav.addObject("userGradeResult",userGradeResult);
         return mav;
     }
 
@@ -157,14 +158,26 @@ public class GroupController{
         return groupService.withdrawGroup(map);
     }
 
-    //
-    @PostMapping("/group/listApplied")
-    public List listApplied(@RequestParam("groupNum") int groupNum){
-        List<Integer> list = groupService.listApplied(groupNum);
-        list.forEach((v) -> {
-            System.out.println("value :" + v);
-        });
-        return null;
+    @GetMapping("/group/joinList.do")
+    @ResponseBody
+    public List selectWaitingList(int groupNum){
+        return groupService.selectWaitingList(groupNum);
+    }
+
+    // 유저 그룹 승인
+    @GetMapping("/group/userAllowed.do")
+    @ResponseBody
+    public int userAllowed(@RequestParam("userId")String userId,
+                           @RequestParam("groupNum")int groupNum){
+
+        Map map = new HashMap();
+        map.put("userId", userId);
+        map.put("groupNum",groupNum);
+        int result = groupService.userAllowed(map);
+
+        System.out.println(result);
+
+        return 0;
     }
 
     // 그룹 좋아요 등록
