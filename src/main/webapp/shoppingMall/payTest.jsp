@@ -304,8 +304,8 @@ align:bottom;
 <input type="hidden" name="deliPhonNum" value="${address.phone }">
 
 
-<input type="hidden" name="prodNum" value="${prodDetail.prodNum }">
-<input type="hidden" name="prodName" value="${prodDetail.name }">
+<input type="hidden" name="prodNum" value="${prodDetail[0].PRODNUM }">
+<input type="hidden" name="prodName" value="${prodDetail[0].NAME }">
 
 <div class="container">
     <form name="f" method="post">
@@ -383,18 +383,18 @@ align:bottom;
                     <div class="media">
                       <div class="d-flex">
                         <img
-                          src="/B_P002_D001/mainImage/${prodDetail.prodNum }"
+                          src="http://localhost:8080/resources/img/${prodDetail[0].IMAGE }"
                           alt=""
                         />
                       </div>
                       <div class="media-body">
-                        <p>${prodDetail.content }</p>
+                        <p>${prodDetail[0].CONTENT }</p>
                       </div>
                     </div>
                   </td>
                   <td>
-                    <h5 id="price">${prodDetail.price }</h5>
-                    <input type="hidden" name="prodPrice" value="${prodDetail.price }" style="border: none;">
+                    <h5 id="price">${prodDetail[0].PRICE }</h5>
+                    <input type="hidden" name="prodPrice" value="${prodDetail[0].PRICE }" style="border: none;">
                   </td>
                   <td>
                     <div class="product_count">
@@ -426,8 +426,8 @@ align:bottom;
                     </div>
                   </td>
                   <td>
-                    <h5> <bold id="totalPut">${prodDetail.price * quantity }</bold>원</h5> <!--  수량 *가격 --> 
-                    <input type ="hidden" name="total" value="${prodDetail.price * quantity }">
+                    <h5> <bold id="totalPut">${prodDetail[0].PRICE * quantity }</bold>원</h5> <!--  수량 *가격 --> 
+                    <input type ="hidden" name="total" value="${prodDetail[0].PRICE * quantity }">
                   </td>
                 </tr>
             </table>
@@ -467,7 +467,7 @@ align:bottom;
                             <tr style="line-height:32px;" >
                                 <td>총 결제 금액</td>
                                 <td >
-                                    <p> <bold id="payTotal">${prodDetail.price* quantity } </bold>원  <blod id="minus" style="display: none;"></blod> </p>
+                                    <p> <bold id="payTotal">${prodDetail[0].PRICE* quantity } </bold>원  <blod id="minus" style="display: none;"></blod> </p>
                                     <input type ="hidden" name="payTotal" value="">
                                     
                                 </td>

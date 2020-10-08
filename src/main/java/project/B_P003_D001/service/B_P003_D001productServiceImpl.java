@@ -127,8 +127,8 @@ public class B_P003_D001productServiceImpl implements B_P003_D001productService{
 	}
 
 	@Override
-	public List<OrdersVO> CartList(Map<String, Object> map) throws DataAccessException {
-		List<OrdersVO> list =  b_P003_D001productDAO.CartList(map);
+	public List<Map> CartList(Map<String, Object> map) throws DataAccessException {
+		List<Map> list =  b_P003_D001productDAO.CartList(map);
 		return list;
 	}
 
@@ -153,5 +153,22 @@ public class B_P003_D001productServiceImpl implements B_P003_D001productService{
 	public void modifyBeforeBuy(List<OrdersVO> list) throws DataAccessException {
 		b_P003_D001productDAO.modifyBeforeBuy(list);	
 	}
+	
+	
+	/////중고물품 등록
+	@Override
+	public void saveUsedImage(List<E_P002_D003PhotoVO> hmap) {
+		b_P003_D001productDAO.saveUsedImage(hmap);
+	}
+	@Override
+	public void addUsedProduct(Map<String, Object> datahMap) throws DataAccessException {
+		b_P003_D001productDAO.addUsedProduct(datahMap);
+	}
+
+	@Override
+	public List<Map> selectProductInfo(Map<String, Object> map) throws DataAccessException {
+		return b_P003_D001productDAO.selectProductInfo(map);
+	}
+	
 
 }

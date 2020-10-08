@@ -32,7 +32,7 @@ function fn_addFile(){
 <body>
 <h1>파일 업로드 하기</h1>
 
-<form name="frm" method="post" action="/E_P002_D003/addProduct.do" enctype="multipart/form-data">
+<form name="frm" method="post" action="/E_P002_D003/addUsedPro" enctype="multipart/form-data">
 	    <label>상품분류코드:</label>
     <!-- <input type="text" name="PCATEGORYNUM"><br> -->
     <select id="pCategoryNum" name="pCategoryNum">
@@ -69,7 +69,6 @@ function fn_addFile(){
 <br>
 <br>
 
- <a href="/B_P002_D001/shopMainCate?ListType=10">메인 목록</a>
 
 </body>
 </html>

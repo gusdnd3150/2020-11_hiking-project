@@ -1,5 +1,8 @@
 package project.B_P003_D001.controller;
 
+import java.io.File;
+
+import java.io.IOException;
 import java.net.http.HttpRequest;
 import java.util.ArrayList;
 
@@ -9,6 +12,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
@@ -41,6 +45,7 @@ import project.B_P003_D001.service.B_P003_D001productService;
 import project.B_P003_D001.vo.DeliveryVO;
 import project.B_P003_D001.vo.OrdersVO;
 import project.B_P003_D001.vo.productAfterVO;
+import project.E_P002_D003.Controller.E_P002_D003ProductsController;
 import project.E_P002_D003.vo.E_P002_D003PhotoVO;
 import project.E_P002_D003.vo.E_P002_D003ProductsVO;
 import project.user.vo.UserVO;
@@ -49,6 +54,8 @@ import project.user.vo.UserVO;
 @Controller
 public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 	private static final Logger logger = LoggerFactory.getLogger(B_P002_D001ControllerImpl.class);
+	
+	
 	
 	@Autowired
 	B_P003_D001productService b_P003_D001productService;
@@ -60,23 +67,13 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 		E_P002_D003ProductsVO vo = new E_P002_D003ProductsVO();
 		Map<String,Object> map = new HashMap<String,Object>();
 		
-		
 		String prodNum = (String) info.get("prodNum");
 		map.put("prodNum", Integer.parseInt(prodNum));
 		
 		vo = b_P003_D001productService.topDetail(map); //상단의 텍스트 내용
-		List<String> images = new ArrayList<String>();     // 제품 상세 다중이미지 출력
+		//List<String> images = new ArrayList<String>();     // 제품 상세 다중이미지 출력
 		List<E_P002_D003PhotoVO> list = b_P003_D001productService.detailImages(map);  
 			System.out.println("넘어온 개수"+list.size());                                  
-			try {
-			for(E_P002_D003PhotoVO item : list) {
-				byte[] encoded = Base64.getEncoder().encode(item.getContent());        
-				String encodedString = new String(encoded);		
-				images.add(encodedString);
-    			}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 			
 			String nowPage = request.getParameter("nowPage");
 			String cntPerPage = request.getParameter("cntPerPage");
@@ -98,75 +95,55 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 	    List<productAfterVO> afterList = b_P003_D001productService.afterList(map); //후기 리스트
 	    int average = b_P003_D001productService.average(map);
 	    System.out.println("넘어온 "+afterList.size());
-	    //이미지 출력은 메소드를 이용할것
-	    mav.addObject("images",images); //하단 제품설명 이미지
+	    
+	    mav.addObject("images",list); //하단 제품설명 이미지
 		mav.addObject("prodDetail",vo); // 상단 제품 텍스트
 		mav.addObject("afterList",afterList); // 상품후기 리스트
 		mav.addObject("paging",page); // 상품후기 페이징
 		mav.addObject("average",average); //평균값
-		mav.setViewName("/shoppingMall/prodDetail2");
+		mav.setViewName("/shoppingMall/prodDetail");
 		return mav;
 	}
-	/*
-	@Override         //상품 상세페이지
-	@RequestMapping(value = "/B_P003_D001/productDetail/{prodNum}", method = { RequestMethod.GET, RequestMethod.POST })
-	public ModelAndView prodDetail(@PathVariable("prodNum") int prodNum,HttpServletRequest request,HttpServletResponse response) {
-		ModelAndView mav = new ModelAndView();
-		E_P002_D003ProductsVO vo = new E_P002_D003ProductsVO();
-		Map<String,Object> map = new HashMap<String,Object>();
-		map.put("prodNum", prodNum);
-		vo = b_P003_D001productService.topDetail(map); //상단의 텍스트 내용
-		List<String> images = new ArrayList<String>();     // 제품 상세 다중이미지 출력
-		List<E_P002_D003PhotoVO> list = b_P003_D001productService.detailImages(map);  
-			System.out.println("넘어온 개수"+list.size());                                  
-			try {
-			for(E_P002_D003PhotoVO item : list) {
-				byte[] encoded = Base64.getEncoder().encode(item.getContent());        
-				String encodedString = new String(encoded);		
-				images.add(encodedString);
-    			}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			
-			String nowPage = request.getParameter("nowPage");
-			String cntPerPage = request.getParameter("cntPerPage");
-			if (nowPage == null && cntPerPage == null) {
-				nowPage = "1";
-				cntPerPage = "6";
-			} else if (nowPage == null) {
-				nowPage = "1";
-			} else if (cntPerPage == null) { 
-				cntPerPage = "6";
-			}
-			int total = b_P003_D001productService.afterTotal(map);
-			System.out.println("total:"+total);
-			Paging page = new Paging(total, Integer.parseInt(nowPage), Integer.parseInt(cntPerPage));
-			map.put("start", page.getStart());
-			map.put("end", page.getEnd());
-			map.put("prodNum", prodNum);
-			
-	    List<productAfterVO> afterList = b_P003_D001productService.afterList(map); //후기 리스트
-	    System.out.println("넘어온 "+afterList.size());
-	    //이미지 출력은 메소드를 이용할것
-	    
-	    mav.addObject("images",images); //제품 상세
-		mav.addObject("prodDetail",vo); // 상단의 제품 텍스트
-		mav.addObject("afterList",afterList); // 상품후기 리스트
-		mav.addObject("paging",page); // 상품후기 페이징
-		mav.setViewName("/shoppingMall/productDetail");
-		return mav;
-	}*/
 
 
-	@ResponseBody         //후기등록
+
+	public static String getRandomString(){  //파일업로드 시 랜덤값을 만들어줌
+        return UUID.randomUUID().toString().replaceAll("-","");
+    }
+	
+	@ResponseBody         //상품 후기등록
 	@RequestMapping(value = "/B_P003_D001/addAfter", method = { RequestMethod.GET, RequestMethod.POST })
 	public ResponseEntity addAfter(@RequestParam Map<String, Object> info ,MultipartHttpServletRequest upfile,HttpServletRequest request, HttpServletResponse response) throws Exception {
 		request.setCharacterEncoding("utf-8");
-		//회원에 관한것은 없기때문에 임의로 진행하였다  
-		MultipartFile file = upfile.getFile("photo");
-		byte[] photo = file.getBytes();
-		info.put("photo", photo);
+		//회원에 관한것은 없기때문에 임의로 진행하였다 
+		
+		List<MultipartFile> files = upfile.getFiles("photo");
+		
+		String imagePath = "/resources/img/"; 
+		String path = request.getSession().getServletContext().getRealPath("/");// locallhost8080/
+		String savePath = path + imagePath;   //두개를 합치면  :locallhost8080/resources/img/+
+		System.out.println("ddddddddddddddddddddd:"+savePath);
+        String originalFileName = null;
+        String originalFileExtension = null;
+        String storedFileName = null;
+        
+		File file = new File(savePath);    //폴더를 생성
+        if(file.exists() == false){
+            file.mkdirs();
+        }
+		for (MultipartFile mf : files) {   //넘어온 파일 개수만큼 돌리고
+	        originalFileName = mf.getOriginalFilename();
+	        originalFileExtension = mf.getOriginalFilename().substring(originalFileName.lastIndexOf("."));
+	        storedFileName = getRandomString() + originalFileExtension;   //위에 랜덤값을 뽑아주는 매소드 + 
+			System.out.println("originFileName : " + originalFileName);
+			System.out.println("originalFileExtension : " + originalFileExtension);
+			System.out.println("storedFileName : " + storedFileName);
+			file = new File(savePath + storedFileName);
+	        System.out.println(file.getAbsolutePath()); //파일 절대 경로
+	        mf.transferTo(file); // 파일들을 file 경로로 넣는다
+	        info.put("photo",storedFileName );
+	        info.put("photoName", originalFileName);
+		}
 		
 		String message;
 		ResponseEntity resEnt = null;
@@ -186,6 +163,8 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 		}		
 		return resEnt;
 	}
+	
+	
 	
 	@Override         // 댓글 등록
 	@RequestMapping(value = "/B_P003_D001/addComent", method = { RequestMethod.GET, RequestMethod.POST })
@@ -221,10 +200,10 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 		productAfterVO vo = new productAfterVO();
 		vo.setAfterNum(num);
 		vo = b_P003_D001productService.getImage(vo);
-		byte[] imageContent = (byte[])vo.getPhoto();  //가져온 데이터를 바이트로 뿌린다
+		//byte[] imageContent = (byte[])vo.getPhoto();  //가져온 데이터를 바이트로 뿌린다
 		final HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.IMAGE_PNG);
-		return new ResponseEntity<byte[]>(imageContent, headers, HttpStatus.OK);
+		return new ResponseEntity<byte[]>(/*imageContent*/ headers, HttpStatus.OK);
 		}
 	
 	
@@ -247,12 +226,16 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 		mav.addObject("address",deli );                     //기본주소
 		mav.addObject("point", select.get("point"));        //유저포인트
 		
-		if (type.equals("1") ) {     //즉시구매
+		if (type.equals("1") ) {     //즉시구매           ///////////////////////////////////////ㄹ
 			System.out.println("즉시구매");
-			E_P002_D003ProductsVO vo = b_P003_D001productService.topDetail(info); //상품내용
-			mav.addObject("prodDetail", vo);//상품정보
-			mav.addObject("quantity", info.get("quantity"));//상세페이지에서 선택한 수량
+			String prodNum = (String) info.get("prodNum");
+			info.put("prodNum", Integer.parseInt(prodNum));
+			List<Map> vo = b_P003_D001productService.selectProductInfo(info); //상품내용
+			mav.addObject("prodDetail", vo);     //상품정보
+			mav.addObject("quantity", info.get("quantity"));   //상세페이지에서 선택한 수량
 			
+			
+			   
 		}else if (type.equals("3")) {// 장바구니 물건 결제           ///////////////////////////////////////////////작업중
 			
 			System.out.println("장바구니 구매");
@@ -272,7 +255,7 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 			select.put("start", page.getStart());
 			select.put("end", page.getEnd());
 			
-			List<OrdersVO> list = b_P003_D001productService.CartList(select);
+			List<Map> list = b_P003_D001productService.CartList(select);
 			mav.addObject("cartList", list);
 			mav.addObject("paging", page);
 		}
@@ -405,11 +388,12 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 		map.put("start", page.getStart());
 		map.put("end", page.getEnd());
 		
-		List<OrdersVO> list = b_P003_D001productService.CartList(map);
+		List<Map> list = b_P003_D001productService.CartList(map);
+		
+		
+		
 		mav.addObject("cartList", list);
 		mav.addObject("paging", page);
-		
-		
 		mav.setViewName("/shoppingMall/cart");
 		return mav;
 	}
@@ -429,7 +413,7 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 
 
 	@Override
-	@ResponseBody
+	@ResponseBody             //장바구니 선택한 상품 배열로 가져오는 메소드
 	@RequestMapping(value = "/B_P003_D001/butProductsFromCart")
 	public String buyProductsFromCart(@RequestParam(value = "totalPrice[]") List<Integer> totalPrice,
 			@RequestParam(value = "orderNums[]")List<Integer> orderNums,@RequestParam(value = "quantities[]")List<Integer> quantities,
@@ -463,9 +447,66 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 
 
 	
+	@Override            //중고물품 등록
+	@RequestMapping(value = "/E_P002_D003/addUsedPro", method = { RequestMethod.GET, RequestMethod.POST })
+	public ModelAndView addUsedProduct(MultipartHttpServletRequest upfile,HttpServletRequest request, HttpServletResponse response) throws Exception {
+		ModelAndView mav = new ModelAndView();
+		Map<String, Object> dataMap = new HashMap<String, Object>();//prod 정보를 받음 Map을 선언
+		
+		String imagePath = "/resources/img/"; 
+		String path = request.getSession().getServletContext().getRealPath("/");// locallhost8080/
+		String savePath = path + imagePath;   //두개를 합치면  :locallhost8080/resources/img/
+        String originalFileName = null;
+        String originalFileExtension = null;
+        String storedFileName = null;
+		
+		Enumeration enu = request.getParameterNames();  //인풋의 name으로된 정보들을  가져와 이뮤너레이션 객체를 이용해 반복하여 map에 넣어주는 작업
+		while (enu.hasMoreElements()) {
+			String name = (String) enu.nextElement(); //name값을 돌면서 String name에 넣는것
+			String value = request.getParameter(name);  //넣을 이름을 토대로 값을 받아온 후
+			dataMap.put(name, value);                      // map에 하나씩 저장
+		}
+		
+		List<E_P002_D003PhotoVO> imageFileList = new ArrayList<E_P002_D003PhotoVO>(); //맵에 추가할 정보들
+		E_P002_D003PhotoVO vo;
 
-	
+		List<MultipartFile> files = upfile.getFiles("content");
+		File file = new File(savePath);    //폴더를 생성
+        if(file.exists() == false){
+            file.mkdirs();
+        }
+        for(int i=0;i<files.size();i++) {
+        	vo =new E_P002_D003PhotoVO();
+	        originalFileName = files.get(i).getOriginalFilename();
+	        originalFileExtension = files.get(i).getOriginalFilename().substring(originalFileName.lastIndexOf("."));
+	        storedFileName = getRandomString() + originalFileExtension;   //위에 랜덤값을 뽑아주는 매소드 + 
+			file = new File(savePath + storedFileName);
+	        System.out.println(file.getAbsolutePath()); //파일 절대 경로
+	        files.get(i).transferTo(file); // 파일들을 file 경로로 넣는다
+	        vo.setContent(storedFileName);
+	        vo.setpPhotoNum(i+1);
+	        imageFileList.add(vo);
+		}
+		
+		mav.setViewName("/shoppingMall/applyUsedPro");
+		try {
+			b_P003_D001productService.addUsedProduct(dataMap);// 상품상세내용 추가
+			b_P003_D001productService.saveUsedImage(imageFileList); //이미지 추가
+		} catch (Exception e) {
+			e.printStackTrace();
+		}		
+		return mav;
+	}
 
+
+	@Override
+	@RequestMapping(value = "/E_P003_D001/addUsedForm", method = { RequestMethod.GET, RequestMethod.POST })
+	public ModelAndView addForm(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		ModelAndView mav = new ModelAndView();
+		
+		mav.setViewName("/shoppingMall/applyUsedPro");
+		return mav;
+	}
 	
 }
 

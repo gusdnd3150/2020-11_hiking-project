@@ -1,5 +1,6 @@
 package project.B_P003_D001.dao;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import java.util.List;
@@ -28,6 +29,8 @@ public class B_P003_D001productDAOImpl implements B_P003_D001productDAO {
 		E_P002_D003ProductsVO vo = sqlSession.selectOne("project.e_P002_D003.selectProductDetail",map);
 		return vo;
 	}
+	
+	
 	@Override
 	public List<E_P002_D003PhotoVO> detailImages(Map<String, Object> map) throws DataAccessException {
           List<E_P002_D003PhotoVO> list = sqlSession.selectList("project.e_P002_D003.selectProductDetailImages",map);
@@ -105,8 +108,8 @@ public class B_P003_D001productDAOImpl implements B_P003_D001productDAO {
 		sqlSession.insert("project.e_P002_D003.addCart",map);
 	}
 	@Override
-	public List<OrdersVO> CartList(Map<String, Object> map) throws DataAccessException {
-		List<OrdersVO> list =  sqlSession.selectList("project.e_P002_D003.UserCartList",map);
+	public List<Map> CartList(Map<String, Object> map) throws DataAccessException {
+		List<Map> list =  sqlSession.selectList("project.e_P002_D003.UserCartList",map);
 		return list;
 	}
 	@Override
@@ -129,6 +132,17 @@ public class B_P003_D001productDAOImpl implements B_P003_D001productDAO {
 		
 	}
 	
-	
-
+	//////////////////중고물품 등록신청
+	@Override
+	public void saveUsedImage(List<E_P002_D003PhotoVO> hmap) {
+		sqlSession.insert("project.e_P002_D003.saveUsedImage",hmap);
+	}
+	@Override
+	public void addUsedProduct(Map<String, Object> datahMap) throws DataAccessException {
+		sqlSession.insert("project.e_P002_D003.addUsedPro",datahMap);
+	}
+	@Override   //구매페이지 상품 하나에 대한 정보
+	public List<Map> selectProductInfo(Map<String, Object> map) throws DataAccessException {
+		return sqlSession.selectList("project.e_P002_D003.selectProductInfo",map);
+	}
 }

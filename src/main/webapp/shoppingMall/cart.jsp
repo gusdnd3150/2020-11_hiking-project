@@ -198,7 +198,7 @@
             class="banner_content d-md-flex justify-content-between align-items-center"
           >
             <div class="mb-3 mb-md-0">
-              <h2>${cartList[0].userNum }님 장바구니</h2>
+              <h2>${cartList[0].USERNUM }님 장바구니</h2>
               <p></p>
             </div>
             <div class="page_link">
@@ -237,25 +237,25 @@
                      <c:forEach var="cartList" items="${cartList }">
                 <tr>
                       <td>
-                <input type="checkbox" name="buyinfo" value="${cartList.prodNum }">
-                <input type="hidden" name="orderNum" value="${cartList.orderNum }">
+                <input type="checkbox" name="buyinfo" value="${cartList.PRODNUM }">
+                <input type="hidden" name="orderNum" value="${cartList.ORDERNUM }">
                 </td>
                   <td>
                     <div class="media">
                       <div class="d-flex">
                         <img
-                          src="/B_P002_D001/mainImage/${cartList.prodNum }"
+                          src="http://localhost:8080/resources/img/${cartList.IMAGE }"
                           alt="" width="90px" height="90px"
                         />
                       </div>
                       <div class="media-body">
-                        <p>${cartList.prodName }</p>
+                        <p>${cartList.PRODNAME }</p>
                       </div>
                     </div>
                   </td>
                   <td>
-                    <h5>${cartList.price }</h5>
-                    <input type="hidden" name="perPrice" value="${cartList.price }">
+                    <h5>${cartList.PRICE }</h5>
+                    <input type="hidden" name="perPrice" value="${cartList.PRICE }">
                   </td>
                   <td>
                     <div class="product_count">
@@ -264,7 +264,7 @@
                         name="qty"
                         id="sst"
                         maxlength="12"
-                        value="${cartList.quantity }"
+                        value="${cartList.QUANTITY }"
                         title="Quantity:"
                         class="input-text qty"
                       />
@@ -288,10 +288,10 @@
                   </td>
                   <td>
                     <%-- <h5 id="totalPut">${cartList.price * cartList.quantity }</h5> --%>
-                    <input type="text" name="perTotal" value="${cartList.price * cartList.quantity }" readonly style="border: none">
+                    <input type="text" name="perTotal" value="${cartList.PRICE * cartList.QUANTITY }" readonly style="border: none">
                   </td>
                    <td>
-                    <button class="btn btn-info btn-sm" name="delete" value="${cartList.prodNum }">삭제</button>
+                    <button class="btn btn-info btn-sm" name="delete" value="${cartList.PRODNUM }">삭제</button>
                   </td>
                 </tr>
                   

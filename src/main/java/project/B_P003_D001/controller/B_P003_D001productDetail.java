@@ -29,7 +29,8 @@ public interface B_P003_D001productDetail {
 	public void deleteCart(@RequestParam Map<String,Object> info, HttpServletRequest req, HttpServletResponse res) throws Exception;
 	public String buyProductsFromCart(@RequestParam(value = "totalPrice[]") List<Integer> totalPrice,
 			@RequestParam(value = "orderNums[]")List<Integer> orderNums,@RequestParam(value = "quantities[]")List<Integer> quantities, HttpServletRequest req, HttpServletResponse res) throws Exception;
-	//List<Object> totalPrice = (List<Object>) info.get("totalPrice");
-			//List<Object> orderNums = (List<Object>) info.get("orderNums");
-			//List<Object> quantities = (List<Object>) info.get("quantities");
+	public ModelAndView addUsedProduct(MultipartHttpServletRequest file,HttpServletRequest request, HttpServletResponse response) throws Exception ;
+	public ModelAndView addForm(HttpServletRequest request, HttpServletResponse response) throws Exception ;
+	
+
 }

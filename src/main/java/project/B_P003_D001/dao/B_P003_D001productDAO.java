@@ -22,6 +22,8 @@ public interface B_P003_D001productDAO {
 	public void addComent(Map<String,Object> map)throws DataAccessException;
 	public int average(Map<String,Object> map)throws DataAccessException; //평균값 구하는 메서드
 
+	public List<Map> selectProductInfo(Map<String,Object> map) throws DataAccessException;  //즉시구매 페이지 상품 정보
+	
 	public int afterTotal(Map<String,Object> map);
 	public List<productAfterVO> afterList(Map<String,Object> map)throws DataAccessException;
 	public productAfterVO getImage(productAfterVO vo) throws DataAccessException;  //
@@ -39,8 +41,13 @@ public interface B_P003_D001productDAO {
 	//장바구니  상품 추가
 	public void addCart(Map<String, Object> map) throws DataAccessException ;
 	public Integer checkCart(Map<String, Object> map) throws DataAccessException ;
-	public List<OrdersVO> CartList(Map<String,Object> map)throws DataAccessException;
+	public List<Map> CartList(Map<String,Object> map)throws DataAccessException;
 	public int CartTotal(Map<String,Object> map)throws DataAccessException;
 	public void deleteCart(Map<String, Object> map) throws DataAccessException ;
 	public void modifyBeforeBuy(List<OrdersVO> list)throws DataAccessException; 
+	
+	//중고물품 등록신청
+	public void saveUsedImage(List<E_P002_D003PhotoVO> hmap)throws DataAccessException ;
+	public void addUsedProduct(Map<String, Object> datahMap) throws DataAccessException; 
+	
 }

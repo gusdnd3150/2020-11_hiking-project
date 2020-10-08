@@ -75,7 +75,7 @@ public class E_P002_D003ProductsControllerImpl  implements E_P002_D003ProductsCo
 		
 		for(int i=0;i<test.size();i++) {
 			E_P002_D003PhotoVO vo =new E_P002_D003PhotoVO();
-			vo.setContent(test.get(i).getBytes());
+			//vo.setContent(test.get(i).getBytes());
 			vo.setpPhotoNum(i+1);
 			imageFileList.add(vo);
 			System.out.println("파일정보"+vo.getContent());

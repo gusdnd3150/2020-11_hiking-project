@@ -12,7 +12,9 @@
 	 <result property="pPhotoNum" column="PPHOTONUM" />
 	 <result property="createDat" column="CREATEDAT" />
 	 <result property="upDateDat" column="UPDATEDAT" />
-     <result property="content" column="CONTENT" javaType="[B" jdbcType="BLOB"  />
+     <result property="content" column="CONTENT"  />
+     <result property="originalFileName" column="ORIGINALFILENAME" />
+     <result property="fileSize" column="FILESIZE" />
 	</resultMap>
 	             <!-- 상품 상세내용 -->
 	<resultMap id="e_P002_D003ProductsVO" type="e_P002_D003ProductsVO">
@@ -34,7 +36,8 @@
 		<result property="prodNum" column="PRODNUM" />
 		<result property="content" column="CONTENT" />
 		<result property="afterType" column="AFTERTYPE" />
-		<result property="photo" column="PHOTO" javaType="[B" jdbcType="BLOB" />
+		<result property="photo" column="PHOTO" />
+		<result property="photoName" column="PHOTONAME"/>
 		<result property="createDat" column="CREATEDAT" />
 		<result property="updateDat" column="UPDATEDAT" />
 		<result property="evalue" column="EVALUE" />
@@ -150,7 +153,7 @@
        </select>
        
        	<!-- 총 게시글 갯수 출력 카테고리 분류형 -->
-       <select id="countBoard2" resultType="int" parameterType="Paging">
+       <select id="countBoard2" resultType="int" parameterType="java.util.Map">
 	       <![CDATA[
 	       SELECT COUNT(*) FROM products
 	         ]]>
@@ -247,7 +250,7 @@
            <!-- 상품 후기 조회                        상품 상세페이지-->
           <select id="afterList" resultType="productAfterVO" parameterType="java.util.Map">
             <![CDATA[
-                SELECT lvl,USERNUM,AFTERNUM,prodNum,content,aftertype,createDat,evalue                
+                SELECT lvl,USERNUM,AFTERNUM,prodNum,content,aftertype,createDat,evalue,photo,photoName                
                   FROM(                             
                      SELECT ROWNUM AS recnum,
                      lvl,                          
@@ -258,7 +261,8 @@
                       aftertype,      
                       createDat,
                         evalue,
-                        photo
+                        photo,
+                        photoName
                          FROM(                              
                              SELECT LEVEL AS lvl,
                          USERNUM,
@@ -268,7 +272,8 @@
                           aftertype,      
                           createDat,
                             evalue,
-                              photo
+                              photo,
+                              photoName
                                FROM productafter
                                  where prodNum= #{prodNum}
                                  START WITH aftertype is null
@@ -280,18 +285,21 @@
        </select>
        
        
-       <!-- 페이징 처리 후 게시글 조회                      카테고리별 화면 -->
-       <select id="selectProductCate" resultType="e_P002_D003ProductsVO" parameterType="java.util.Map">
+       <!-- 페이징 처리 후 게시글 조회                메인      카테고리별 화면 -->
+       <select id="selectProductCate" resultType="map" parameterType="java.util.Map">
          <![CDATA[
-	          SELECT PRODNUM, PCATEGORYNUM,NAME,PRICE,CONTENT,QUANTITY,TYPE,CREATEDAT,UPDATEDAT
+           SELECT *
 		       FROM (
 			       SELECT ROWNUM RN, A.* 
 				     FROM (
-						SELECT * 
-						FROM products 
-						ORDER BY prodNum desc 
+					SELECT p.PRODNUM, p.PCATEGORYNUM,p.NAME,p.PRICE,p.CONTENT,p.QUANTITY
+                        ,p.TYPE,p.CREATEDAT,p.UPDATEDAT,io.content as image  
+						FROM products p,prodPhoto io
+                        where p.prodnum=io.prodnum
+                        and io.pphotonum=1
+						ORDER BY p.prodNum desc
 						) A
-				    )
+				     )
            ]]>
            <where>
            RN BETWEEN #{start} AND #{end}
@@ -301,20 +309,35 @@
            </where>
        </select>
        
+               <!-- 즉시구매 페이지 상품 정보 -->
+        <select id="selectProductInfo" resultType="map" parameterType="java.util.Map">
+         <![CDATA[
+                       SELECT p.PRODNUM, p.PCATEGORYNUM,p.NAME,p.PRICE,p.CONTENT,p.QUANTITY
+                        ,p.TYPE,p.CREATEDAT,p.UPDATEDAT,io.content as image  
+						FROM products p,prodPhoto io
+                        where p.prodnum=io.prodnum
+                        and io.pphotonum=1
+                        and p.prodnum= #{prodNum}
+           ]]>
+       </select>
+       
        
        
         <!-- 페이징 처리 후 게시글 조회                     검색 결과          -->
-       <select id="searchResult" resultType="e_P002_D003ProductsVO" parameterType="java.util.Map">
+       <select id="searchResult" resultType="map" parameterType="java.util.Map">
          <![CDATA[
-	          SELECT PRODNUM, PCATEGORYNUM,NAME,PRICE,CONTENT,QUANTITY,TYPE,CREATEDAT,UPDATEDAT
+           SELECT *
 		       FROM (
 			       SELECT ROWNUM RN, A.* 
 				     FROM (
-						SELECT * 
-						FROM products 
-						ORDER BY prodNum ASC 
+					SELECT p.PRODNUM, p.PCATEGORYNUM,p.NAME,p.PRICE,p.CONTENT,p.QUANTITY
+                        ,p.TYPE,p.CREATEDAT,p.UPDATEDAT,io.content as image  
+						FROM products p,prodPhoto io
+                        where p.prodnum=io.prodnum
+                        and io.pphotonum=1
+						ORDER BY p.prodNum desc
 						) A
-				    )
+				     )
            ]]>
            <choose>
     		  <when test="searchtype=='name'">
@@ -330,38 +353,47 @@
        
            
        
-    <!-- 페이징 처리 후 게시글 이미지 조회        사용안함 -->   
-         <select id="shopMainImage" resultMap="e_P002_D003PhotoVO" parameterType="Paging">
-        <![CDATA[
-            SELECT * 
+    <!-- 페이징 처리 후 게시글 이미지 조회       -->   
+         <select id="shopMainImage" resultMap="e_P002_D003PhotoVO" parameterType="java.util.Map">
+            <![CDATA[
+	          SELECT content
 		       FROM (
-			       SELECT  A.* 
+			       SELECT ROWNUM RN, A.* 
 				     FROM (
 						SELECT * 
-						FROM prodphoto
-						where  pphotoNum=1
-						ORDER BY prodNum ASC 
+						FROM prodphoto 
+						ORDER BY prodNum desc 
 						) A
 				    )
-	         WHERE prodNum BETWEEN #{start} AND #{end} 
-        ]]>
+           ]]>
+           <where>
+           RN BETWEEN #{start} AND #{end}
+           <if test="listType!=10">
+          AND pcategorynum = #{listType}
+           </if>
+           </where>
         </select>
         
         
             <!-- 장바구니 페이징 -->   
-         <select id="UserCartList" resultMap="OrdersVO" parameterType="java.util.Map">
+         <select id="UserCartList" resultType="map" parameterType="java.util.Map">
         <![CDATA[
-            SELECT ORDERNUM,USERNUM,CARTNUM,ORDEREDAT,PRICE,CHARGE,ORDERSTATUS,DELIVERYSTATUS,ORDERTYPE,PRODNUM,QUANTITY,PRODNAME
+      SELECT *
 		FROM (
 			SELECT ROWNUM RN, A.* 
 				FROM (
-						SELECT * 
-						FROM orders
-                        where  userNum= #{userNum} and ordertype=2 
-						ORDER BY orderedat DESC         
+				        SELECT o.ORDERNUM,o.USERNUM,o.CARTNUM,o.ORDEREDAT,o.PRICE,o.CHARGE,o.ORDERSTATUS,
+                        o.DELIVERYSTATUS,o.ORDERTYPE,o.PRODNUM,o.QUANTITY,o.PRODNAME,io.content as image
+						FROM orders o,prodPhoto io, products p
+                        where o.prodnum= io.prodnum
+                        and io.prodnum=p.prodnum
+                        and o.userNum = #{userNum}
+                        and o.ordertype=2
+                        and io.pphotonum=1
+						ORDER BY o.prodNum desc       
 						) A
 				)
-	WHERE RN BETWEEN #{start} AND #{end}
+	  WHERE RN BETWEEN #{start} AND #{end}
         ]]>
         </select>
         
@@ -554,6 +586,23 @@
       VALUES (#{prodNum}, #{item.pPhotoNum}, #{item.content}, sysdate)
     </foreach>
   </insert>
+  
+  	      <!-- 중고물품 신청 -->
+   <insert id="saveUsedImage"  parameterType="java.util.Map">
+   		<selectKey resultType="int" keyProperty="prodNum" order="BEFORE">
+	    	select prodnum
+            from products
+            where CREATEDAT in (
+               select max(CREATEDAT)
+               from products
+                  )
+	    </selectKey>
+    <foreach item="item"  collection="list"   open="INSERT ALL" 
+                  separator=" " close="SELECT * FROM DUAL" >
+      INTO prodphoto(PRODNUM,PPHOTONUM,CONTENT,CREATEDAT)
+      VALUES (#{prodNum}, #{item.pPhotoNum}, #{item.content}, sysdate)
+    </foreach>
+  </insert>
    
                 <!-- 글목록 이미지 하나 -->  
         <select id="getByteImage" resultMap="e_P002_D003PhotoVO" parameterType="e_P002_D003PhotoVO">
@@ -613,6 +662,34 @@
 		]]>
 	</insert> 
 	
+	          <!-- 중고 상세내용 등록 -->
+	 <insert id="addUsedPro" parameterType="java.util.Map"   >
+		<selectKey resultType="String" keyProperty="prodNum" order="BEFORE">
+	    	select seq_prod_prodNum.nextval from dual
+	    </selectKey>
+	    <![CDATA[
+		   insert into products(
+		                prodNum, 
+		                pCategoryNum,
+                    name,
+                    price,
+                    content,
+					Quantity,
+					type,
+					createdAt
+				    )
+					  			values(
+					  			      #{prodNum},
+					  			      #{pCategoryNum},
+					  			      #{name},
+					  			      #{price},
+					  			      #{content},
+					  			      #{quantity},
+					  			      #{type},
+					  			      sysdate)
+		]]>
+	</insert> 
+	
 	          <!-- 상품 후기 After 등록 -->
 	 <insert id="addAfter" parameterType="java.util.Map"   >
 		<selectKey resultType="int" keyProperty="afterNum" order="BEFORE">
@@ -625,6 +702,7 @@
 		                prodNum,
                     content,
                     photo,
+                    photoName,
 					createDat,
 					evalue
 				    )
@@ -634,11 +712,11 @@
 					  			      #{prodNum},
 					  			      #{content},
 					  			      #{photo},
+					  			      #{photoName},
 					  			      sysdate,
 					  			      #{evalue})
 		]]>
 	</insert> 
-	
 	      <!-- 상품 댓글 -->
 	<insert id="addComent" parameterType="java.util.Map"   >
 		<selectKey resultType="int" keyProperty="afterNum" order="BEFORE">

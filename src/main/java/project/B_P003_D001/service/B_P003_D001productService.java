@@ -22,6 +22,9 @@ public interface B_P003_D001productService {
 	public void addAfter(Map<String, Object> map) throws DataAccessException;
 	public void addComent(Map<String, Object> map) throws DataAccessException ;
 	public int average(Map<String, Object> map) throws DataAccessException;
+	
+	public List<Map> selectProductInfo(Map<String, Object> map) throws DataAccessException;
+	
 
 	public int afterTotal(Map<String,Object> map) ;
 	public List<productAfterVO> afterList(Map<String, Object> map) throws DataAccessException;
@@ -41,9 +44,13 @@ public interface B_P003_D001productService {
 	
 	//장바구니 상품 추가
 	public void addCart(Map<String, Object> map) throws DataAccessException ;
-	public List<OrdersVO> CartList(Map<String, Object> map) throws DataAccessException;
+	public List<Map> CartList(Map<String, Object> map) throws DataAccessException;
 	public int CartTotal(Map<String, Object> map)throws DataAccessException ;
 	public void deleteCart(Map<String, Object> map) throws DataAccessException;
 	public Integer checkCart(Map<String, Object> map) throws DataAccessException ;
     public void modifyBeforeBuy(List<OrdersVO> list) throws DataAccessException ;
+    
+    //중고물품 등록
+	public void saveUsedImage(List<E_P002_D003PhotoVO> hmap)throws DataAccessException ;
+	public void addUsedProduct(Map<String, Object> datahMap) throws DataAccessException ;
 }

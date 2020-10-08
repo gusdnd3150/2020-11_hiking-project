@@ -99,7 +99,7 @@
                   <div class="carousel-item active">
                     <img
                       class="d-block w-100"
-                      src="/B_P002_D001/mainImage/${prodDetail.prodNum }"
+                      src="http://localhost:8080/resources/img/${images[0].content }"
                       alt="First slide"
                     />
                   </div>
@@ -220,7 +220,7 @@
                    </c:when>
                   <c:when test="${not empty images }">
                     <c:forEach var="images" items="${images }">
-                   <img src="data:image/jpg;base64, ${images}"  alt="상" width="800" height="500"><br>
+                   <img src="http://localhost:8080/resources/img/${images.content }"  alt="상" width="800" height="500"><br>
                    </c:forEach>
             </c:when>
            </c:choose>
@@ -458,7 +458,7 @@
                       <div class="d-flex">
                        <!-- 이미지 -->
                         <img
-                          src="/B_P003_D001/AfterImage/${afterList.afterNum }"    
+                          src="http://localhost:8080/resources/img/${afterList.photo }"
                           alt=""
                           width="100px" height="100px"
                         />
