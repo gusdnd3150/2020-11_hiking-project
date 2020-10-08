@@ -15,35 +15,52 @@ public class E_p006DAOImpl implements E_p006DAO{
 	@Autowired
 	private SqlSession sqlSession;
 	
-	//샘플
-	@Override
-	public List<E_p006VO> boardChart() throws Exception {
-		return sqlSession.selectList("admin.mapper.e_p006.boardChart");
-	}
 	
-	//기간별 조회 cs 게시글 통계
+	// cs게시글 통계
 	@Override
 	public List<E_p006VO> searchDatePieChart(Map<String, String> search_keyword) throws Exception {
 		return sqlSession.selectList("admin.mapper.e_p006.searchDatePieChart",search_keyword);
 	}
-
-	//셀렉트cs게시글 통계 조회
-	@Override
-	public List<E_p006VO> selectPieChart(Map<String, String> select_keyword) throws Exception {
-		return sqlSession.selectList("admin.mapper.e_p006.selectPieChart",select_keyword);
-	}
-	
-	//기간별 조회 매출 통계
+	// 매출 통계
 	@Override
 	public List<E_p006VO> searchDateColumnChart(Map<String, String> search_keyword) throws Exception {
 		return sqlSession.selectList("admin.mapper.e_p006.searchDateColumnChart",search_keyword);
 	}
+	// 가입자 통계 라인차트
+	@Override
+	public List<E_p006VO> serchUserLineChart(Map<String, String> search_keyword) throws Exception {
+		return sqlSession.selectList("admin.mapper.e_p006.serchUserLineChart",search_keyword);
+	}
+	// 가입자 통계 바 차트
+	@Override
+	public List<E_p006VO> serchUserBarChart(Map<String, String> search_keyword) throws Exception {
+		return sqlSession.selectList("admin.mapper.e_p006.serchUserBarChart",search_keyword);
+	}
+
 	
-	//셀렉트 조회 매출통계
+//  --------------------------------------------------------------------------------------------------------           
+
+	// cs게시글 통계
+	@Override
+	public List<E_p006VO> selectPieChart(Map<String, String> select_keyword) throws Exception {
+		return sqlSession.selectList("admin.mapper.e_p006.selectPieChart",select_keyword);
+	}
+	// 매출통계
 	@Override
 	public List<E_p006VO> selectColumnChart(Map<String, String> select_keyword) throws Exception {
 		return sqlSession.selectList("admin.mapper.e_p006.selectColumnChart",select_keyword);
 	}
 
+	// 가입자 통계
+	@Override
+	public List<E_p006VO> selectUserLineChart(Map<String, String> select_keyword) throws Exception {
+		return sqlSession.selectList("admin.mapper.e_p006.selectUserLineChart",select_keyword);
+	}
 
+	// 가입자 통계 바 차트
+	@Override
+	public List<E_p006VO> selectUserBarChart(Map<String, String> select_keyword) throws Exception {
+		return sqlSession.selectList("admin.mapper.e_p006.selectUserBarChart",select_keyword);
+	}
+	
 }

@@ -19,4 +19,6 @@ public interface E_p003Service {
 
 	public int mailSending(Map<String, String> map)throws Exception;
 
+	public String viewType(int csPostNum)throws Exception;
+
 }

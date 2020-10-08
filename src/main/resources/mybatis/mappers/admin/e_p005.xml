@@ -5,143 +5,172 @@
 
 <mapper namespace="admin.mapper.e_p005">
 	<resultMap id="e_p005Result05" type="e_p005VO">
-	
-		<result property="createdateString" column="createdateString"/> <!-- 결제일자 -->
-		<result property="orderNum" column="orderNum"/> <!--주문번호  -->
-		<result property="userNum" column="userNum"/> <!--회원 번호  -->
-		<result property="pay1" column="pay1"/> <!--카드결제 -->
-		<result property="pay2" column="pay2"/> <!--무통장입금  -->
-		<result property="sumPrice" column="sumPrice"/> <!--총 매출  -->
-		<result property="avgPrice" column="avgPrice"/> <!--평균 매출  -->
-		
+
+		<result property="createdateString" column="createdateString" /> <!-- 결제일자 -->
+		<result property="orderNum" column="orderNum" /> <!--주문번호 -->
+		<result property="userNum" column="userNum" /> <!--회원 번호 -->
+		<result property="pay1" column="pay1" /> <!--카드결제 -->
+		<result property="pay2" column="pay2" /> <!--무통장입금 -->
+		<result property="sumPrice" column="sumPrice" /> <!--총 매출 -->
+		<result property="avgPrice" column="avgPrice" /> <!--평균 매출 -->
+
 	</resultMap>
 
-	<!--기준일조회  -->
-	<select id="searchPayList" resultMap="e_p005Result05" parameterType="java.util.Map">
+	<!--기준일조회 -->
+	<select id="searchPayList" resultMap="e_p005Result05"
+		parameterType="java.util.Map">
 	<![CDATA[
-	select to_char(p.CREATEDAT,'YYYY-MM-DD')AS createdateString, o.ordernum, o.usernum, DECODE(p.type,1,o.price+o.charge,0)as pay1,DECODE(p.type,2,o.price+o.charge,0)as pay2
+	select to_char(p.CREATEDAT,'YYYY-MM-DD')AS createdateString, o.ordernum, o.usernum, 
+	to_char(DECODE(p.type,1,o.price+o.charge,0),'999,999,999,999,999')as pay1,
+	to_char(DECODE(p.type,2,o.price+o.charge,0),'999,999,999,999,999')as pay2
 	FROM orders o INNER JOIN payment p
 	ON o.cartnum = p.ordernum
 	WHERE p.CREATEDAT BETWEEN TO_DATE(#{startDate},'YYYY-MM-DD') AND TO_DATE(#{endDate},'YYYY-MM-DD')
 	ORDER BY p.CREATEDAT ASC
 	]]>
 	</select>
-	
-	<select id="searchStat" resultMap="e_p005Result05"  parameterType="java.util.Map">
+
+<!-- 합계 매출 -->
+	<select id="sumPrice" resultType="string"
+		parameterType="java.util.Map">
 	<![CDATA[
-	select to_char(sum(o.price + o.charge),'999,999,999,999,999')as sumPrice, 
-			to_char(avg(o.price + o.charge), '999,999,999,999,999')as avgPrice
+	select to_char(sum(o.price + o.charge),'999,999,999,999,999')as sumPrice
 	FROM orders o INNER JOIN payment p
 	ON o.cartnum = p.ordernum
-	WHERE p.CREATEDAT BETWEEN TO_DATE(#{startDate},'YYYY-MM-DD') AND TO_DATE(#{endDate},'YYYY-MM-DD')
 	]]>
-	</select>
-	
-	
-	
-	<!-- 
-	 셀렉트 조회 
-	<select id="selectChart" resultMap="e_p006Result06" parameterType="java.util.Map">
-	<![CDATA[
-	select DECODE (CSPOSTTYPE,100,'공지글',200,'문의글', 300,'신고글')as csposttypeString, COUNT(*)as csboardcnt
-	FROM cspost
-	]]>
-	<choose>
-    		<when test="end=='all'"> 전체 조회 
-    			GROUP by DECODE (CSPOSTTYPE,100,'공지글',200,'문의글', 300,'신고글')
-	
-    		</when>
-    		<when test="end=='toDay'"> 당일 조회
-    		 	WHERE CREATEDAT >= TO_DATE(#{st},'YYYY-MM-DD')
-				GROUP by DECODE (CSPOSTTYPE,100,'공지글',200,'문의글', 300,'신고글')
-    		</when>
-    		<when test="end!='toDay'"> 1주, 2주, 1개월 조회
-    		 	 WHERE CREATEDAT BETWEEN TO_DATE(#{end},'YYYY-MM-DD') AND TO_DATE(#{st},'YYYY-MM-DD')
-				GROUP by DECODE (CSPOSTTYPE,100,'공지글',200,'문의글', 300,'신고글')
-    		</when>
-    	</choose>
-	</select>
-   
-	 -->
-	
+		<choose>
+			<when test="key_word=='all'"> <!-- 전체 조회 -->
 
-	
-	
-<!-- 
-	게시글 등록 
- 	<insert id="insertCSPost" parameterType="e_p003VO">
-		<![CDATA[
-		insert into CSPost (csPostNum,csBoardNum,userNum,title,content,createdAt,status, csPostType)
-		VALUES (CSPost_seq.nextval, CSBOARD_seq.nextval, 1, #{title}, #{content}, CURRENT_TIMESTAMP, 1, 100)
-		]]>
-	</insert>  
-	
-	조건 검색 
-	<select id="selectUser" resultMap="e_p003Result03" parameterType="java.util.Map">
-		 <![CDATA[
-        select csPostNum,csBoardNum,userNum,title,content,
-        		DECODE(status, 1, '처리대기', 2, '완료')as statusString, 
-        		DECODE(csPostType, 100, '공지사항', 200, '문의사항', 300, '신고글')as csPostTypeString, 
-        		to_char(createdAt,'YYYY-MM-DD HH24:MI:SS')as createdAtString, 
-        		to_char(updatedAt,'YYYY-MM-DD HH24:MI:SS')as updatedAtString 
-		from   CSPost
-      	]]>
-    	<choose>
-    		<when test="searchOption=='all'"> 전체 조회 
-    		where csPostNum = csPostNum
-    		</when>
-    		<when test="searchOption=='csPostType100'"> 공지 전체 조회
-    		where  csPostType = 100
-    		</when>
-    		<when test="searchOption=='csPostType200'"> 문의 전체 조회 
-    		where   csPostType = 200 
-    		</when>
-    		<when test="searchOption=='csPostType300'"> 신고 전체 조회 
-    		where   csPostType = 300 
-    		</when>
-    		<when test="searchOption=='userNum'"> 작성자 id 조회 
-    		where userNum in(SELECT userNum from users where id like '%'||#{key_word}||'%')
-    		</when>
-    		<when test="searchOption=='status'"> 처리 상태 조회  1- 처리대기, 2-완료
-    		where status= #{key_word1}
-    		</when>
-    	</choose>
+			</when>
+			<when test="key_word=='toDay'"> <!-- 당일 조회 -->
+				WHERE p.CREATEDAT >= TO_DATE(#{startDate},'YYYY-MM-DD')
+				ORDER BY
+				p.CREATEDAT ASC
+			</when>
+			<when test="key_word=='week_month'"> <!-- 1주, 2주, 1개월 조회 -->
+				WHERE p.CREATEDAT BETWEEN TO_DATE(#{startDate},'YYYY-MM-DD') AND
+				TO_DATE(#{endDate},'YYYY-MM-DD')
+			</when>
+				<when test="key_word=='null'  "> <!-- 지정일자 조회-->
+				WHERE p.CREATEDAT BETWEEN TO_DATE(#{startDate},'YYYY-MM-DD') AND
+				TO_DATE(#{endDate},'YYYY-MM-DD')
+			</when>
+			
+		</choose>
 	</select>
-	
-	
-	상세보기list
-		<select id="selectViewDetaListt" resultMap="e_p003Result03" parameterType="java.util.Map">
-		 <![CDATA[
-        select c.csPostNum,c.csBoardNum,c.userNum,c.title,c.content, 
-        		DECODE(c.csPostType, 100, '공지사항', 200, '문의사항', 300, '신고글')as csPostTypeString, 
-        		to_char(c.createdAt,'YYYY-MM-DD HH24:MI:SS')as createdAtString, 
-        		to_char(c.updatedAt,'YYYY-MM-DD HH24:MI:SS')as updatedAtString,
-                u.id,u.name,u.email
-		from   CSPost c inner JOIN USERS u
-        on c.usernum=u.usernum
-         where csPostNum = #{csPostNum}
-      	]]>
-	</select>
-	
-	글 수정
-	 <update id="upDateCsBoard" parameterType="e_p003VO">
-	  <![CDATA[
-		UPDATE CSPost
-			SET title = #{title},
-    			content= #{content},
-    			status= #{status},
-    			updatedAt= CURRENT_TIMESTAMP
-		WHERE csPostNum=#{csPostNum}
-		 ]]>
-	</update>
-	
-	<delete id="deleteUserCsboard"  parameterType="int">
+
+<!-- 평균 매출 -->
+	<select id="avgPrice" resultType="string"
+		parameterType="java.util.Map">
 	<![CDATA[
-	   delete from  CSPost
-	   where
-	   csPostNum=#{csPostNum}
-	]]>      
-  </delete> -->
-	
-	
+	SELECT  to_char(sum(a.sumPrice)/ COUNT(*),'999,999,999,999,999')as avgPrice
+	]]>
+		<choose>
+			<when test="key_word=='all'"> <!-- 전체 조회 -->
+    			<![CDATA[
+  				FROM ( SELECT TO_CHAR(p.createdat, 'YYYY-MM-DD') AS hiredate , sum(o.price + o.charge)sumPrice												
+         			FROM orders o INNER JOIN payment p 
+					 on o.ordernum=p.ordernum
+					WHERE p.createdat BETWEEN TO_DATE(( SELECT  min(to_char(createdat, 'YYYY-MM-DD')) FROM payment), 'YYYY-MM-DD')
+					                    AND TO_DATE((SELECT  max(to_char(createdat, 'YYYY-MM-DD')) FROM payment), 'YYYY-MM-DD') 
+					GROUP BY TO_CHAR(p.createdat, 'YYYY-MM-DD')
+					) a
+					 , ( SELECT TO_DATE(( SELECT  min(to_char(createdat, 'YYYY-MM-DD')) FROM payment),'YYYY-MM-DD') + LEVEL - 1 AS dt
+					     FROM dual 
+					CONNECT BY LEVEL <= (TO_DATE((SELECT  max(to_char(createdat, 'YYYY-MM-DD')) FROM payment),'YYYY-MM-DD') 
+					                     - TO_DATE(( SELECT  min(to_char(createdat, 'YYYY-MM-DD')) FROM payment),'YYYY-MM-DD') + 1)
+					) b
+					WHERE b.dt = a.hiredate(+) 
+					ORDER BY b.dt
+			]]>
+			</when>
+			<when test="key_word== 'toDay'"> <!-- 당일 조회 -->
+    		<![CDATA[
+    			 FROM ( SELECT TO_CHAR(p.createdat, 'YYYY-MM-DD') AS hiredate
+			              , sum(o.price + o.charge)sumPrice
+			           FROM orders o INNER JOIN payment p 
+			           on o.ordernum=p.ordernum
+			          WHERE p.createdat >= TO_DATE(#{startDate},'YYYY-MM-DD')
+			          GROUP BY TO_CHAR(p.createdat, 'YYYY-MM-DD')
+			        ) a
+			      , ( SELECT TO_DATE(#{startDate},'YYYY-MM-DD') + LEVEL - 1 AS dt
+			            FROM dual 
+			         CONNECT BY LEVEL <= (TO_DATE(#{startDate},'YYYY-MM-DD') 
+			                            - TO_DATE(#{startDate},'YYYY-MM-DD') + 1)
+			        ) b
+				WHERE b.dt = a.hiredate(+) 
+				ORDER BY b.dt
+				]]>
+			</when>
+			<when test="key_word== 'week_month'"> <!-- 1주, 2주, 1개월 조회 -->
+    			<![CDATA[
+    			 FROM ( SELECT TO_CHAR(p.createdat, 'YYYY-MM-DD') AS hiredate
+			              , sum(o.price + o.charge)sumPrice
+			           FROM orders o INNER JOIN payment p 
+			           on o.ordernum=p.ordernum
+			          WHERE p.createdat BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD')
+			                             AND TO_DATE(#{endDate}, 'YYYY-MM-DD') 
+			          GROUP BY TO_CHAR(p.createdat, 'YYYY-MM-DD')
+			        ) a
+			      , ( SELECT TO_DATE(#{startDate},'YYYY-MM-DD') + LEVEL - 1 AS dt
+			            FROM dual 
+			         CONNECT BY LEVEL <= (TO_DATE(#{endDate},'YYYY-MM-DD') 
+			                            - TO_DATE(#{startDate},'YYYY-MM-DD') + 1)
+			        ) b
+				WHERE b.dt = a.hiredate(+) 
+				ORDER BY b.dt
+			]]>
+			</when>
+			<when test="key_word==null"> <!-- 지정 일자 조회 -->
+    			<![CDATA[
+    			 FROM ( SELECT TO_CHAR(p.createdat, 'YYYY-MM-DD') AS hiredate
+			              , sum(o.price + o.charge)sumPrice
+			           FROM orders o INNER JOIN payment p 
+			           on o.ordernum=p.ordernum
+			          WHERE p.createdat BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD')
+			                             AND TO_DATE(#{endDate}, 'YYYY-MM-DD') 
+			          GROUP BY TO_CHAR(p.createdat, 'YYYY-MM-DD')
+			        ) a
+			      , ( SELECT TO_DATE(#{startDate},'YYYY-MM-DD') + LEVEL - 1 AS dt
+			            FROM dual 
+			         CONNECT BY LEVEL <= (TO_DATE(#{endDate},'YYYY-MM-DD') 
+			                            - TO_DATE(#{startDate},'YYYY-MM-DD') + 1)
+			        ) b
+				WHERE b.dt = a.hiredate(+) 
+				ORDER BY b.dt
+			]]>
+			</when>
+		</choose>
+	</select>
+
+
+
+	<!-- 셀렉트 페이리스트 서치 -->
+	<select id="selectSearch" resultMap="e_p005Result05"
+		parameterType="java.util.Map">
+	<![CDATA[
+	select to_char(p.CREATEDAT,'YYYY-MM-DD')AS createdateString, o.ordernum, o.usernum, 
+	to_char(DECODE(p.type,1,o.price+o.charge,0),'999,999,999,999,999')as pay1,
+	to_char(DECODE(p.type,2,o.price+o.charge,0),'999,999,999,999,999')as pay2
+	FROM orders o INNER JOIN payment p
+	ON o.cartnum = p.ordernum
+	]]>
+		<choose>
+			<when test="key_word== 'all'"> <!-- 전체 조회 -->
+				ORDER BY p.CREATEDAT ASC
+			</when>
+			<when test="key_word=='toDay'"> <!-- 당일 조회 -->
+				WHERE p.CREATEDAT >= TO_DATE(#{startDate},'YYYY-MM-DD')
+				ORDER BY
+				p.CREATEDAT ASC
+			</when>
+			<when test="key_word=='week_month'"> <!-- 1주, 2주, 1개월 조회 -->
+				WHERE p.CREATEDAT BETWEEN TO_DATE(#{startDate},'YYYY-MM-DD') AND
+				TO_DATE(#{endDate},'YYYY-MM-DD')
+				ORDER BY p.CREATEDAT ASC
+			</when>
+		</choose>
+	</select>
+
+
 </mapper>

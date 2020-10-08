@@ -13,7 +13,7 @@ public interface E_p001DAO {
 
 	public List selectUser(Map<String, String> search)throws Exception;
 
-	public int deleteUser(String userId)throws Exception;
+	public int deleteUser(int userNum)throws Exception;
 
 	public List selectUpdateUserList(String userId)throws Exception;
 

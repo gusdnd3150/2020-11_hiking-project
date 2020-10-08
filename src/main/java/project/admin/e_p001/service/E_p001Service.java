@@ -17,7 +17,7 @@ public interface E_p001Service {
 	public List userSearch(Map<String, String> search) throws Exception;
 
 	//회원 삭제
-	public int removeUser(String userId) throws Exception;
+	public int removeUser(int userNum) throws Exception;
 
 	//정보 수정전 회원정보 출력매소드
 	public List upDateUserList(String userId)throws Exception;

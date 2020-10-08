@@ -17,4 +17,6 @@ public interface E_p003DAO {
 
 	public int deleteUserCsboard(int csPostNum)throws Exception;
 
+	public String viewType(int csPostNum)throws Exception;
+
 }

@@ -38,14 +38,6 @@ public class E_p001ControllerImpl implements E_p001Controller {
 		return "admin/admin_home";
 	}
 
-	/*
-	 * //회원관리 이동 컨트롤러
-	 * 
-	 * @RequestMapping(value = "/admin/e_p001/", method = RequestMethod.GET) public
-	 * String home1(Locale locale, Model model) { //return "admin/user_main.jsp";
-	 * return "admin/admin_user_main.jsp"; }
-	 */
-
 	@Override // 회원등록
 	@RequestMapping(value = "admin/addUser.do", method = RequestMethod.POST)
 	public ModelAndView addUser(@ModelAttribute("e_p001VO") E_p001VO e_p001VO, HttpServletRequest request,
@@ -64,8 +56,6 @@ public class E_p001ControllerImpl implements E_p001Controller {
 			@RequestParam(defaultValue = "userNum") String key_word, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		
-		System.out.println("서치 옵션:" + searchOption);
-		System.out.println("키워드내용:" + key_word);
 		Map<String, String> search = new HashMap<String, String>();
 		search.put("key_word", key_word);
 		search.put("searchOption", searchOption);
@@ -79,15 +69,15 @@ public class E_p001ControllerImpl implements E_p001Controller {
 	@Override // 삭제
 	@RequestMapping(value = "admin/removeUser.do", method = RequestMethod.GET)
 	@ResponseBody
-	public int removeUser(@RequestParam("id") String id, HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public String removeUser(@RequestParam("userNum") int userNum, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
 		request.setCharacterEncoding("utf-8");
 		response.setContentType("text/html;charset=utf-8");
-		int result = e_p001Service.removeUser(id);
-		if (result == 1) {
-			return result;
-		} else {
-			return 0;
+		int result = e_p001Service.removeUser(userNum);
+		if(result == 1) {
+			return "ok";
+		}else {
+			return "x";
 		}
 
 	}

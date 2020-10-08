@@ -1,7 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-  <section class="content container-fluid">
-    	 <form action="search.do" method="post">
+    <head>
+  
+    </head>
+  
+    	 <form action="searchUser.do" method="post">
           <div class="input-group margin">
                 <div class="input-group-btn">
                 	<select name="searchOption" class="btn btn-info dropdown-toggle">
@@ -18,4 +21,3 @@
                     </span>
               </div>
              </form>
-    </section>

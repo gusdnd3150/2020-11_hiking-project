@@ -86,6 +86,7 @@
 			<beans:ref bean="remembermeInterceptor" />
 		</mvc:interceptor>
 	</mvc:interceptors>
+	
 
 	<!-- SWAGGER -->
 	<beans:bean id="swagger2Config" class="springfox.documentation.swagger2.configuration.Swagger2DocumentationConfiguration" />

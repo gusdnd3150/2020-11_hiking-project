@@ -28,11 +28,11 @@
 		<result property="email" column="email"/>
 	</resultMap>
 
-	<!-- 게시글 등록 -->
+	<!-- 공지사항  등록 -->
  	<insert id="insertCSPost" parameterType="e_p003VO">
 		<![CDATA[
 		insert into CSPost (csPostNum,csBoardNum,userNum,title,content,createdAt,status, csPostType)
-		VALUES (CSPost_seq.nextval, CSBOARD_seq.nextval, 1, #{title}, #{content}, CURRENT_TIMESTAMP, 1, 100)
+		VALUES (CSPost_seq.nextval, CSBOARD_seq.nextval, 1, #{title}, #{content}, CURRENT_TIMESTAMP, 2, 100)
 		]]>
 	</insert>  
 	
@@ -40,8 +40,8 @@
 	<select id="selectUser" resultMap="e_p003Result03" parameterType="java.util.Map">
 		 <![CDATA[
         select csPostNum,csBoardNum,userNum,title,content,
-        		DECODE(status, 1, '처리대기', 2, '완료')as statusString, 
-        		DECODE(csPostType, 100, '공지사항', 200, '문의사항', 300, '신고글')as csPostTypeString, 
+        		DECODE(status, 1, '대기', 2, '완료')as statusString, 
+        		DECODE(csPostType, 100, '공지', 200, '문의', 300, '신고')as csPostTypeString, 
         		to_char(createdAt,'YYYY-MM-DD HH24:MI:SS')as createdAtString, 
         		to_char(updatedAt,'YYYY-MM-DD HH24:MI:SS')as updatedAtString 
 		from   CSPost
@@ -73,13 +73,22 @@
 		<select id="selectViewDetaListt" resultMap="e_p003Result03" parameterType="java.util.Map">
 		 <![CDATA[
         select c.csPostNum,c.csBoardNum,c.userNum,c.title,c.content, 
-        		DECODE(c.csPostType, 100, '공지사항', 200, '문의사항', 300, '신고글')as csPostTypeString, 
+        		DECODE(c.csPostType, 100, '공지', 200, '문의', 300, '신고')as csPostTypeString, 
         		to_char(c.createdAt,'YYYY-MM-DD HH24:MI:SS')as createdAtString, 
         		to_char(c.updatedAt,'YYYY-MM-DD HH24:MI:SS')as updatedAtString,
                 u.id,u.name,u.email
 		from   CSPost c inner JOIN USERS u
         on c.usernum=u.usernum
          where csPostNum = #{csPostNum}
+      	]]>
+	</select>
+	
+	<!-- 상세보기 글 구분 가져오기 -->
+		<select id="viewType" parameterType="int" resultType="string" >
+		 <![CDATA[
+       SELECT DECODE(csPostType, 100, '공지사항', 200, '문의사항', 300, '신고글')as csPostTypeString
+		FROM cspost
+		WHERE cspostnum = #{csPostNum}
       	]]>
 	</select>
 	
@@ -102,6 +111,7 @@
 	   csPostNum=#{csPostNum}
 	]]>      
   </delete>
+  
 	
 	
 </mapper>

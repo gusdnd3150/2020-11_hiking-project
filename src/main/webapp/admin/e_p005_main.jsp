@@ -43,7 +43,6 @@
 		$('#foo-table').DataTable({
 			responsive : true,
 			"pagingType" : "full_numbers",
-
 			dom : 'Blfrtip',
 			buttons : [ {
 				extend : 'excel',
@@ -54,25 +53,54 @@
 				extend : 'copy',
 				text : 'copy',
 				title : '결제정보'
-			}, 'pdf', 'print' ]
+				}, 
+			'pdf',
+			'print' 
+			]
 		}
-		/*  "footerCallback":function(){
-	            var api = this.api(), data;
-	            var result = 0;
-	            api.column(7, {search:'applied'}).data().each(function(data,index){
-	                result += parseFloat(data);
-	            });
-	            $(api.column(3).footer()).html(result.toLocaleString()+'원');
-	        } */
-
-		);
-	});
+	);
+});
 
 	// 데이터테블 함수 끝----------------------------------------------------------------
+function selectDay(str){
+	 console.log("셀렉트 옵션값          "+str);
+	var t = new Date();
+	var _end=t.getFullYear()+'-'+(t.getMonth()+1)+'-'+t.getDate();
+	var _st;
+	var _key_word;
+	
+	if(str=="all"){
+		_key_word="all";
+	}else if(str=="toDay"){
+		_st=t.getFullYear()+'-'+(t.getMonth()+1)+'-'+t.getDate();
+		_key_word="toDay"
+	}else if(str=="1week"){
+		t.setDate(t.getDate()-7)
+		_st=t.getFullYear()+'-'+(t.getMonth()+1)+'-'+t.getDate();
+		_key_word="week_month";
+	}else if(str=="2week"){
+		t.setDate(t.getDate()-14)
+		_st=t.getFullYear()+'-'+(t.getMonth()+1)+'-'+t.getDate();
+		_key_word="week_month";
+	}else if(str=="1month"){
+		t.setMonth(t.getMonth()-1)
+		_st=t.getFullYear()+'-'+(t.getMonth()+1)+'-'+t.getDate();
+		_key_word="week_month";
+	}
+	
+	 console.log("버튼 선택후 포멧되어 나온 시작일            "+_st);
+	 console.log("버튼 선택후 포멧되어 나온 종료일            "+_end);
+	 console.log("버튼 선택후 포멧되어 나온 키워드            "+_key_word);
+	
+	 location.href="selectSearch.do?key_word="+_key_word+"&st="+_st+"&end="+_end;
+}
 
 	
-
 </script>
+
+<style>
+.basic_btn{display:inline-block;max-width:110px;width:100%;line-height:35px;font-size:15px;border:1px solid #007bff;border-radius:10px;}
+</style>
 
 <body class="hold-transition skin-blue sidebar-mini">
 	<div class="wrapper">
@@ -95,22 +123,28 @@
 
 			<!-- Main content -->
 			<div class="box">
-				<!-- 게시글관리 검색창 -->
-			<%-- 	<%@ include file="../include/admin_csBoard_search.jsp"%> --%>
+
 			 <div>
-			 <form action="searchPayList.do" mathod="get">
-			   <input type='date' name='startDate' id='startDate'/> ~ <input type='date' name='endDate' id='endDate'/> 
+			
+			<center>	
+		
+        			 <form action="searchPayList.do" mathod="get">
+			  <input type='date' name='startDate' id='startDate'/> ~ <input type='date' name='endDate' id='endDate'/> 
 			   <button type="submit"  class="btn btn-danger btn-xs" id="searchDate">조회</button>&nbsp;&nbsp;
-			   </form>
-			    	<select name="searchOption" class="btn btn-info dropdown-toggle" onchange="selectDay(this.value)">
+			   </form> 
+			   	<select name="searchOption" class="basic_btn btn-primary" onchange="selectDay(this.value)">
+            		<option value=" ">조회선택</option>
             		<option value="all">전체조회</option>
             		<option value="toDay">당일</option>
            			<option value="1week">1주</option>
             		<option value="2week">2주</option>
             		<option value="1month">1달</option>
-            		
         			</select>  
+
 			   </div>
+			   </center>
+			   
+			    
 
 				<div class="box-header">
 					<h3 class="box-title">매출 목록</h3>
@@ -154,8 +188,10 @@
 									</tbody>
 									 <tfoot>
 						                <tr>
-						                    <th colspan="2" style="text-align:right;white-space:nowrap;">TOTAL : </th>
-						                    <th colspan="6" style="text-align:left;white-space:nowrap;"></th>
+						                    <th colspan="1" style="text-align:right;white-space:nowrap;">총 매출  : </th>
+						                    <th colspan="2" style="text-align:right;white-space:nowrap;">${sumPrice}</th>
+						                    <th colspan="1" style="text-align:right;white-space:nowrap;">일평균 매출  : </th>
+						                    <th colspan="2" style="text-align:right;white-space:nowrap;">${avgPrice}</th>		                  
 						                </tr>
 						            </tfoot>
 

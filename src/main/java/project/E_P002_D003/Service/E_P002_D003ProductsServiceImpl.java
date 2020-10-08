@@ -22,7 +22,7 @@ import project.E_P002_D003.vo.E_P002_D003ProductsVO;
 
 
 //@Transactional(propagation=Propagation.REQUIRED)
-@Service
+//@Service
 public class E_P002_D003ProductsServiceImpl implements E_P002_D003ProductsService {
 	
 	@Autowired

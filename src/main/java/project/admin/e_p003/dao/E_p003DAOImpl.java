@@ -43,5 +43,9 @@ public class E_p003DAOImpl implements E_p003DAO{
 	public int deleteUserCsboard(int csPostNum) throws Exception {
 		return sqlSession.delete("admin.mapper.e_p003.deleteUserCsboard",csPostNum);
 	}
+	@Override
+	public String viewType(int csPostNum) throws Exception {
+		return sqlSession.selectOne("admin.mapper.e_p003.viewType",csPostNum);
+	}
 
 }

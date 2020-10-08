@@ -47,9 +47,8 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 		$('#foo-table').DataTable({
-			responsive : true,
-			"pagingType" : "full_numbers",
-
+			pagingType:"full_numbers",
+	    	   autoWidth: false,
 			dom : 'Blfrtip',
 			buttons : [ {
 				extend : 'excel',
@@ -78,7 +77,7 @@
 				csPostNum : _csPostNum
 			},
 			success : function(data) {
-				if (1 == (data)) {
+				if ("ok"== (data)) {
 					alert("삭제완료");
 					window.location.reload(true);
 				} else {
@@ -92,7 +91,7 @@
 	$(function upDateMsg() { // 글 수정 후 알림창
 		var upDate = "<c:out value="${upDateCsBoardMsg}" />";
 		if (upDate == 1) {
-			alert("수정완료");
+			alert("완료");
 			window.location.href = 'http://localhost:8090/admin/e_p003_main.jsp';
 		}
 	});
@@ -140,7 +139,7 @@
 			<!-- Main content -->
 			<div class="box">
 				<!-- 게시글관리 검색창 -->
-				<%-- <%@ include file="../include/admin_csBoard_search.jsp"%> --%>
+				<%@ include file="../include/admin_csBoard_search.jsp"%>
 
 				<div class="box-header">
 					<h3 class="box-title">게시글 목록</h3>
@@ -164,15 +163,15 @@
 								<table id="foo-table" class="table table-bordered">
 									<thead>
 										<tr>
-											<th>문의 번호</th>
+											<th>글 번호</th>
 											<th>게시판 번호</th>
 											<th>고객 번호</th>
 											<th>제목</th>
-											<th>문의 내용</th>
-											<th>등록 일자</th>
-											<th>수정 일자</th>
-											<th>문의 상태</th>
-											<th>글 구분</th>
+											<th>내용</th>
+											<th>등록일</th>
+											<th>수정일</th>
+											<th>상태</th>
+											<th>구분</th>
 											<th>상세보기</th>
 											<th>삭제</th>
 
@@ -202,18 +201,14 @@
 					</div>
 				</div>
 			</div>
-
 			<!-- /.content -->
 		</div>
 		<!-- /.content-wrapper -->
-
 		<!-- Main Footer -->
 		<%@ include file="../include/main_footer.jsp"%>
 	</div>
 	<!-- ./wrapper -->
-
 	<!-- REQUIRED JS SCRIPTS -->
 	<%@ include file="../include/plugin_js.jsp"%>
-
 </body>
 </html>
