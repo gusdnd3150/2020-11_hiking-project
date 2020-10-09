@@ -1,6 +1,7 @@
 package project.user.dao;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
@@ -32,17 +33,15 @@ public class MypageDAOImpl implements MypageDAO {
 
 	@Override
 	public void updateUserProf(Map<String, Object> profMap) {
-		profMap.put("userNum", sqlSession.selectOne("userMapper.selectUserNum", profMap));
-		System.out.println("prof");
 		sqlSession.update("userMapper.updateUserProf", profMap);		
 	}
 
 	@Override
-	public void updateUserCont(Map<String, Object> contMap) {
-		contMap.put("userNum", sqlSession.selectOne("userMapper.selectUserNum", contMap));
-		System.out.println("cont");
-		sqlSession.update("userMapper.updateUserCont", contMap);			
+	public int updateUserCont(Map map) {
+	            sqlSession.update("userMapper.updateUserCont", map);
+		return 0;
 	}
+
 
 	@Override
 	public UserVO getUserInfo(UserVO userVO) {
@@ -59,5 +58,7 @@ public class MypageDAOImpl implements MypageDAO {
 	public void updatePwd(UserVO userVO) {
 		sqlSession.selectOne("userMapper.updatePwd", userVO);
 	}
+
+
 
 }

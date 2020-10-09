@@ -1,6 +1,10 @@
 package project.user.service;
 
+import java.io.IOException;
+import java.util.List;
 import java.util.Map;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import project.user.dto.LoginDTO;
 import project.user.vo.UserVO;
@@ -13,7 +17,7 @@ public interface MypageService {
 	
 	public void deleteUser(LoginDTO loginDTO) throws Exception; // 회원탈퇴
 
-	public void updateUserCont(Map<String, Object> contMap);
+	public int updateUserCont(int userNum, MultipartFile fileP, String path)throws IOException;
 
 	public void updateUserProf(Map<String, Object> profMap);
 
@@ -22,6 +26,10 @@ public interface MypageService {
 	public UserVO pwdCheck(UserVO userVO);
 
 	public void updatePwd(UserVO userVO);
+
+
+
+
 
 
 

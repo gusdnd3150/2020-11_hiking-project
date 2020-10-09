@@ -36,7 +36,7 @@ public interface UserService {
 
 	public String searchId(String email);
 	
-
+	public int selectUserNum(String id);
 
 	
 }

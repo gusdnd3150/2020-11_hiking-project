@@ -24,8 +24,8 @@
 		<result property="sessionId" column="sessionId" />
 		<result property="sessionLimit" column="sessionLimit" />
 		<result property="profile" column="profile" />
-		<result property="content" column="content" javaType="[B" jdbcType="BLOB" />
-		<result property="content2" column="content2" javaType="[B" jdbcType="BLOB" />
+		<result property="content" column="content" />
+		<result property="content2" column="content2"/>
 		<result property="authStatus" column="authStatus" />
 		<result property="reason" column="reason" />
 	</resultMap>
@@ -46,15 +46,15 @@
 
 	<insert id="insertUser3" parameterType="userVO">
       <![CDATA[
-     INSERT INTO userinfo(usernum, profile, content2)
-	  VALUES ((SELECT max(userNum) from users), "안녕하세요. 산을 좋아하는 오르미입니다.", #{content2})
+     INSERT INTO userinfo(usernum, profile)
+	  VALUES ((SELECT max(userNum) from users), '안녕하세요. 산을 좋아하는 오르미입니다.')
       ]]>
 	</insert>
 
 	<insert id="insertUser4" parameterType="java.util.Map">
       <![CDATA[
-     INSERT INTO userinfo(usernum, profile, content2) 
-	  VALUES ((SELECT max(userNum) from users), "안녕하세요. 산을 좋아하는 오르미입니다.", #{content2})
+     INSERT INTO userinfo(usernum, profile) 
+	  VALUES ((SELECT max(userNum) from users), '안녕하세요. 산을 좋아하는 오르미입니다.')
       ]]>
 	</insert>
 	
@@ -141,7 +141,7 @@
 	<update id="updateUserCont" parameterType="java.util.Map">
          <![CDATA[
          update userInfo
-         set content=#{content}, content2=#{content2}
+         set content=#{originalFileName}, content2=#{storedFileName}
          where userNum=#{userNum}
         ]]>
 	</update>

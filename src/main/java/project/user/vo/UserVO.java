@@ -27,8 +27,8 @@ public class UserVO {
 	private String sessionId;
 	private Date sessionLimit;
 	private String profile; //자기소개글
-	private byte[] content; //프로필사진
-	private byte[] content2;
+	private String content; //프로필사진
+	private String content2;
 	private int authStatus;
 	private String authKey;
 	private String reason;
@@ -140,16 +140,16 @@ public class UserVO {
 	public void setProfile(String profile) {
 		this.profile = profile;
 	}
-	public byte[] getContent() {
+	public String getContent() {
 		return content;
 	}
-	public void setContent(byte[] content) {
+	public void setContent(String content) {
 		this.content = content;
 	}
-	public byte[] getContent2() {
+	public String getContent2() {
 		return content2;
 	}
-	public void setContent2(byte[] content2) {
+	public void setContent2(String content2) {
 		this.content2 = content2;
 	}
 	public int getAuthStatus() {
