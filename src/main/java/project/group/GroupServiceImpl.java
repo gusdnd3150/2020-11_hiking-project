@@ -100,6 +100,9 @@ public class GroupServiceImpl implements GroupService{
         return groupDAO.insertCommentGroup(map);
     }
 
+    @Transactional
+    public int updateSubCommentCount(int parentNum){return groupDAO.updateSubCommentCount(parentNum);}
+
     public GroupCommentVO selectCommentOne(int commentNum){return groupDAO.selectCommentOne(commentNum);}
 
     public List selectCommentByGroupNum(int groupNum){

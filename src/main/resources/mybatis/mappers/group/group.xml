@@ -265,9 +265,17 @@
         ]]>
     </insert>
 
+    <update id="updateSubCommentCount" parameterType="_int">
+        <![CDATA[
+            UPDATE groupComment
+            SET subCommentCount = subCommentCount+1
+            WHERE commentNum = #{commentNum}
+        ]]>
+    </update>
+
     <select id="selectCommentOne" parameterType="_int" resultType="groupCommentVO">
         <![CDATA[
-            SELECT COMMENTNUM, PARENTNUM, DEPTS, COMMENTORDER, CONTENT, USERID, CREATEDAT
+            SELECT COMMENTNUM, PARENTNUM, DEPTS, COMMENTORDER, CONTENT, USERID, SUBCOMMENTCOUNT,CREATEDAT
             FROM GROUPCOMMENT
             WHERE commentNum = #{commentNum}
         ]]>
@@ -275,7 +283,7 @@
 
     <select id="selectCommentByGroupNum" parameterType="_int" resultType="groupCommentVO">
         <![CDATA[
-            SELECT COMMENTNUM, PARENTNUM, DEPTS, COMMENTORDER, CONTENT, USERID, CREATEDAT
+            SELECT COMMENTNUM, PARENTNUM, DEPTS, COMMENTORDER, CONTENT, USERID, SUBCOMMENTCOUNT, CREATEDAT
             FROM (
                  GROUPCOMMENT
                  )

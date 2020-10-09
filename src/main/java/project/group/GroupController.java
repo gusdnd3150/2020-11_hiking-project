@@ -220,6 +220,15 @@ public class GroupController{
         return groupService.selectCommentOne((Integer) map.get("commentNum"));
     }
 
+    @PostMapping("/group/insertSubComment.do")
+    @ResponseBody
+    public GroupCommentVO insertSubCommentGroup(@RequestBody Map map){
+        groupService.insertCommentGroup(map);
+        int parentNum = Integer.parseInt(map.get("parentNum").toString());// 다이렉트로 casting 안됨
+        groupService.updateSubCommentCount(parentNum);
+        return groupService.selectCommentOne((Integer) map.get("commentNum"));
+    }
+
     @GetMapping("/group/selectCommentByGroupNum.do")
     @ResponseBody
     public List selectCommentByGroupNum(@RequestParam("groupNum") int groupNum){

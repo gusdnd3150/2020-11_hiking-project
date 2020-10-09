@@ -232,24 +232,38 @@
 
     function writeSubComment(e){
 
-        console.log(e.parentNode.parentNode)
+        $root = e.parentNode.parentNode;
+        $parentNum = $root.getElementsByTagName("pre")[0];
 
-        var comment = e.previousSibling.value;
+        var data = {
+            "parentNum" : $parentNum.innerHTML,
+            "depts" : 2,
+            "groupNum" : "${group.GROUPNUM}",
+            "content" : e.previousSibling.value,
+            "userId" : "<%= request.getSession().getAttribute("LOGIN")%>"
+        }
 
-        // $.ajax({
-        //     type: "POST",
-        //     url: "/group/join.do",
-        //     data: JSON.stringify(data),
-        //     dataType: 'json',
-        //     contentType: "application/json; charset=utf-8;",
-        //     success : function (response){
-        //         alert("신청 처리 되었습니다");
-        //         location.reload();
-        //     },
-        //     error : function (response){
-        //         alert("오류 발생! 다시 시도해주세요");
-        //     }
-        // })
+
+        $.ajax({
+            type: "POST",
+            url: "/group/insertSubComment.do",
+            data: JSON.stringify(data),
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8;",
+            success: function (response){
+                var id = $root.parentNode.id;
+                $('#'+id).append(
+                    '<li id="temp" class="col-12 row pt-3 ml-5 pl-2">'+
+                    '<img src="/resources/img/profile1.jpg" class="rounded-circle" style="width: 40px;height: 40px;float: left">'+
+                    '<div class="col-9">'+
+                    '<h5 class="mb-0 pl-0">'+response.userId+'</h5>'+
+                    response.content +'</div></li>'
+                );
+            },
+            error: function(response){
+                alert("다시 시도해주세요")
+            }
+        })
 
 
     }
@@ -457,9 +471,9 @@ $(document).ready(function (){
             dataType: 'json',
             contentType: "application/json; charset=utf-8;",
             success: function (response){
-                console.log(response)
 
                 var index = 0;
+                var count = response.subCommentCount;
 
                     var rootNum = response.parentNum;
 
@@ -473,8 +487,8 @@ $(document).ready(function (){
                             '<pre style="display: none">'+response.commentNum+'</pre>'+
                             '<h5>'+response.userId+'</h5>'+
                             '<div>'+response.content +'</div>' +
-                            '<button class="'+id+' p-0 btn btn-default text-muted" onclick="toggleSubComment(this)">[댓글 더보기]</button>' +
-                            '<button class="'+id+'subComment p-0 btn btn-default text-muted" onclick="toggleWriteSubComment(this)">[댓글]</button>' +
+                            '<button class="'+id+' p-0 btn btn-default text-muted" onclick="toggleSubComment(this)">[답글 '+ count +'개 더보기]</button>' +
+                            '<button class="'+id+'subComment p-0 btn btn-default text-muted" onclick="toggleWriteSubComment(this)">[답글 작성]</button>' +
                             '<p style="display: none"><input type="text" class="form-control" placeholder="댓글 내용 입력"/>' +
                             '<button id="writeSubCommentBtn" class="btn btn-info" onclick="writeSubComment(this)">작성</button>' +
                             '<button class="btn btn-light" onclick="cancelwriteSubComment(this)">취소</button>' +
@@ -508,6 +522,7 @@ $(document).ready(function (){
 
                     var commentNum = response[i].commentNum;
                     var rootNum = response[i].parentNum;
+                    var count = response[i].subCommentCount;
 
                     if (rootNum == 0) {
                         var id = 'depts' + index
@@ -519,8 +534,8 @@ $(document).ready(function (){
                             '<pre style="display: none">'+response[i].commentNum+'</pre>'+
                             '<h5>'+response[i].userId+'</h5>'+
                             '<div>'+response[i].content +'</div>' +
-                            '<button class="'+id+' p-0 btn btn-default text-muted" onclick="toggleSubComment(this)">[댓글 '+ 0 +'개 더보기]</button>' +
-                            '<button class="'+id+'subComment p-0 btn btn-default text-muted" onclick="toggleWriteSubComment(this)">[댓글]</button>' +
+                            '<button class="'+id+' p-0 btn btn-default text-muted" onclick="toggleSubComment(this)">[답글 '+ count +'개 더보기]</button>' +
+                            '<button class="'+id+'subComment p-0 btn btn-default text-muted" onclick="toggleWriteSubComment(this)">[답글 작성]</button>' +
                             '<p style="display: none"><input type="text" class="form-control" placeholder="댓글 내용 입력"/>' +
                             '<button id="writeSubCommentBtn" class="btn btn-info" onclick="writeSubComment(this)">작성</button>' +
                             '<button class="btn btn-light" onclick="cancelwriteSubComment(this)">취소</button>' +
@@ -534,8 +549,8 @@ $(document).ready(function (){
                             if (response[j].parentNum == commentNum) {
                                 $('#' + id).append(
                                     '<li id="' + id + index1 + '" class="col-12 row pt-3 ml-5 pl-2" style="display: none;">'+
-                                    '<img src="/resources/img/profile1.jpg" class="rounded-circle" style="width: 40px;height: 40px;float: left">'+
-                                    '<div class="col-9">'+
+                                    '<img src="/resources/img/profile1.jpg" class="rounded-circle" style="width: 40px; height: 40px; float: left">'+
+                                    '<div class="col-9 ml-2 pl-5">'+
                                     '<h5 class="mb-0">'+response[j].userId+'</h5>'+
                                     response[j].content +'</div></li>'
                                 );

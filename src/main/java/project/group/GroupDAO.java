@@ -83,6 +83,9 @@ public class GroupDAO{
     public int insertCommentGroup(Map map){
         return sqlSession.insert("group.insertCommentGroup",map);
     }
+    public int updateSubCommentCount(int parentNum){
+        System.out.println(parentNum);
+        return sqlSession.update("group.updateSubCommentCount",parentNum);}
     public GroupCommentVO selectCommentOne(int commentNum){
         return sqlSession.selectOne("group.selectCommentOne",commentNum);
     }
