@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -92,5 +93,14 @@ public class GroupServiceImpl implements GroupService{
     @Transactional
     public int deleteFavoriteGroup(Map map){
         return groupDAO.deleteFavoriteGroup(map);
+    }
+
+    @Transactional
+    public int insertCommentGroup(Map map){
+        return groupDAO.insertCommentGroup(map);
+    }
+
+    public List selectCommentByGroupNum(int groupNum){
+        return groupDAO.selectCommentByGroupNum(groupNum);
     }
 }

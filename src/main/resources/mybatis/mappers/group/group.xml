@@ -239,4 +239,32 @@
             AND groupNum = #{groupNum}
         ]]>
     </delete>
+
+    <!-- 그룹 댓글 작성 -->
+    <insert id="insertCommentGroup" parameterType="map">
+        <![CDATA[
+--             INSERT INTO groupComment
+--             VALUES (
+--                 commentNum_seq.nextval,
+--                 #{commentParentNum},
+--                 #{userId},
+--                 commentOrder+1,
+--                 #{groupNum},
+--                 sysdate
+            )
+        ]]>
+    </insert>
+
+    <select id="selectCommentByGroupNum" parameterType="_int" resultType="groupCommentVO">
+        <![CDATA[
+            SELECT COMMENTNUM, PARENTNUM, DEPTS, COMMENTORDER, CONTENT, USERID, CREATEDAT
+            FROM (
+                 GROUPCOMMENT
+                 )
+            WHERE GROUPNUM = #{groupNum}
+            START WITH PARENTNUM IS NULL
+            CONNECT BY PRIOR COMMENTNUM = PARENTNUM
+            ORDER SIBLINGS BY COMMENTORDER
+        ]]>
+    </select>
 </mapper>

@@ -92,32 +92,34 @@
 
     <hr />
 
-    <div class="row">
-        <h3 class="col-12 mt-2">댓글</h3>
+    ${commentList}
+    <div id="commentBoard" class="mt-3">
+        <h3 class="mt-2 pb-1">댓글</h3>
         <!-- 댓글 내용 -->
-        <div class="mt-2 media col-12">
-            <img src="..." class="mr-3" alt="...">
-            <div class="media-body">
-                <h5 class="mt-0">Media heading</h5>
-                Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-
-                <div class="media mt-3">
-                    <a class="mr-3" href="#">
-                        <img src="..." class="mr-3" alt="...">
-                    </a>
-                    <div class="media-body">
-                        <h5 class="mt-0">Media heading</h5>
-                        Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- 댓글 입력 -->
-        <div id="commentInput" class="row col-12 pt-3">
-            <img src="..." class="col-md-1 col-xs-1" alt="...">
-            <input id="commentContent" class="form-control form-control-lg col-md-10 col-xs-8" type="text" placeholder="내용을 입력해주세요">
-            <button id="commentSubmit" class="btn btn-info col-md-1 col-xs-1">입력</button>
-        </div>
+<%--        <ul id="comment_depts1" class="media-body row">--%>
+<%--            <li class="media mt-3 col-12">--%>
+<%--                <img src="/resources/img/profile1.jpg" class="rounded-circle" style="width: 50px;height: 50px" alt="...">--%>
+<%--                <div class="col-10">--%>
+<%--                    <h5>제목</h5>--%>
+<%--                    내용--%>
+<%--                </div>--%>
+<%--            </li>--%>
+<%--                <ul id="comment_depts2">--%>
+<%--                    <li class="media mt-3 col-12">--%>
+<%--                        <img src="/resources/img/profile1.jpg" class="rounded-circle" style="width: 50px;height: 50px" alt="...">--%>
+<%--                        <div class="media-body">--%>
+<%--                                <h5>제목</h5>--%>
+<%--                                내용--%>
+<%--                        </div>--%>
+<%--                    </li>--%>
+<%--                </ul>--%>
+<%--        </ul>--%>
+    </div>
+    <!-- 댓글 입력 -->
+    <div id="commentInput" class="row col-12 pt-3">
+        <img src="..." class="col-md-1 col-xs-1" alt="...">
+        <input id="commentContent" class="form-control form-control-lg col-md-10 col-xs-8" type="text" placeholder="내용을 입력해주세요">
+        <button id="commentSubmit" class="btn btn-info col-md-1 col-xs-1">입력</button>
     </div>
 
     <hr />
@@ -406,12 +408,71 @@ $(document).ready(function (){
     $(document).on('click','#commentSubmit',function (){
 
         var data = {
-            "groupNum" : "${group.GROUPNUM}",
+            "groupNum" : ${group.GROUPNUM},
             "userId" : "<%= request.getSession().getAttribute("LOGIN")%>",
             "commentContent" : $('#commentContent').val(),
         }
 
-        console.log(data);
+        $.ajax({
+            type: "POST",
+            url: "/group/insertComment.do",
+            data: JSON.stringify(data),
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8;",
+            success: function (response){
+                console.log("success");
+            },
+            error: function(response){
+                console.log("error");
+            }
+        })
+
+    })
+    $(document).ready(function (){
+
+        var data = {
+            "groupNum" : ${group.GROUPNUM}
+        }
+
+        $.ajax({
+            type: "GET",
+            url: "/group/selectCommentByGroupNum.do",
+            data: data,
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8;",
+            success: function (response){
+
+                console.log(response[i])
+
+                // 닉네임, 좋아요 숫자
+                // 유저 프로필 누르면 볼 수 있도록
+                // 수정 요망
+                // 거절? 블랙리스트? 생각해볼것
+                
+                var html = "<ul id='comment_depts1' class='media-body row'>";
+
+                for(var i=0;i<response.length;i++){
+
+                    console.log(response[i])
+
+                        html += "" +
+                                "<li class='media mt-3 col-12 pl-"+response[i].depts * 2+
+                                "'><img src='/resources/img/profile1.jpg' class='rounded-circle'style='width: 50px;height: 50px' alt='...'>" +
+                                "<div class='col-10'>" +
+                                "<h5>"+response[i].userId+"</h5>" +
+                                response[i].content+"</div></li>";
+                    }
+
+                html += "</ul>";
+
+                $('#commentBoard').append(html);
+
+            },
+            error: function(response){
+                console.log("error");
+                console.log(response)
+            }
+        })
 
     })
 </script>

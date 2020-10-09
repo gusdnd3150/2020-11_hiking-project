@@ -2,6 +2,7 @@ package project.group;
 
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.Map;
@@ -31,4 +32,7 @@ public interface GroupService {
     int insertFavoriteGroup(Map map);
     int checkFavoriteGroup(Map map);
     int deleteFavoriteGroup(Map map);
+
+    int insertCommentGroup(Map map);
+    List selectCommentByGroupNum(int groupNum);
 }

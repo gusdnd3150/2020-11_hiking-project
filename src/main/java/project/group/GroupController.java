@@ -35,7 +35,7 @@ public class GroupController{
     @PostMapping(value = "/group/insert.do")
     @ResponseBody
     public void insertGroup(@RequestParam Map map,
-                           @RequestParam(value = "file", required = false) List<MultipartFile> files,
+                            @RequestParam(value = "file", required = false) List<MultipartFile> files,
                            HttpServletRequest request) throws Exception {
 
         groupService.insertGroup(map);
@@ -111,9 +111,10 @@ public class GroupController{
             userGradeResult = 2;                                                                        //비그룹 원
         }
 
+        //댓글
+
         //같은 산의 다른모임 찾을 것
 
-        //댓글
 
         for(int i=0;i<list.size();i++){
             map.put("image"+i , list.get(i).get("STOREDFILENAME"));
@@ -212,10 +213,20 @@ public class GroupController{
 
 
     // 그룹 댓글
-    @PostMapping("/group/insertComment")
+    @PostMapping("/group/insertComment.do")
     @ResponseBody
     public int insertCommentGroup(@RequestBody Map map){
-        map.toString();
+        groupService.insertCommentGroup(map);
         return 0;
+    }
+
+    @GetMapping("/group/selectCommentByGroupNum.do")
+    @ResponseBody
+    public List selectCommentByGroupNum(@RequestParam("groupNum") int groupNum){
+
+        List<Map> list = groupService.selectCommentByGroupNum(groupNum);
+
+        System.out.println("list :"+list.toString());
+        return list;
     }
 }

@@ -79,4 +79,11 @@ public class GroupDAO{
     public int deleteFavoriteGroup(Map map){
         return sqlSession.delete("group.deleteFavoriteGroup",map);
     }
+
+    public int insertCommentGroup(Map map){
+        return sqlSession.insert("group.insertCommentGroup",map);
+    }
+    public List selectCommentByGroupNum(int groupNum){
+        return sqlSession.selectList("group.selectCommentByGroupNum",groupNum);
+    }
 }
