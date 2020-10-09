@@ -18,7 +18,7 @@ public interface E_p001Controller {
 	
 	public ModelAndView addUser(E_p001VO e_p001VO, HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public ModelAndView searchUser(String searchOption, String key_word,HttpServletRequest request, HttpServletResponse response) throws Exception;
-	public int removeUser(String userId,HttpServletRequest request, HttpServletResponse response) throws Exception;
+	public String removeUser(int userNum,HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public ModelAndView upDateUser(E_p001VO e_p001VO, HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public ModelAndView upDateUserList(String userId,HttpServletRequest request, HttpServletResponse response) throws Exception;
 }

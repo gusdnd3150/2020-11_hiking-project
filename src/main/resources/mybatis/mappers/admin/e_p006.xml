@@ -8,18 +8,18 @@
 		<result property="csposttypeString" column="csposttypeString"/> <!-- 글구분 스트링 -->
 		<result property="csboardcnt" column="csboardcnt"/> <!--글 구분 카운트  -->
 		
-	</resultMap>
-<!-- 	
-	샘플 
-	<select id="boardChart" resultMap="e_p006Result06">
-	<![CDATA[
-	select DECODE (CSPOSTTYPE,100,'공지글',200,'문의글', 300,'신고글')as csposttypeString, COUNT(*)as csboardcnt
-	FROM cspost
-	GROUP by DECODE (CSPOSTTYPE,100,'공지글',200,'문의글', 300,'신고글')
-	]]>
-	</select> -->
+		<result property="createdatString" column="createdatString"/> <!-- 매출일자 --> 
+		<result property="sumPrice" column="sumPrice"/> <!--매출 금액  -->
 	
-	<!--기준일조회 파이차트  cs 글 통계-->
+		<result property="man" column="man"/> <!--남자  -->
+		<result property="woman" column="woman"/> <!--여자  -->
+		<result property="allUser" column="allUser"/> <!--전체 회원수  -->
+		<result property="userCreatedat" column="userCreatedat"/> <!--회원 가입일자  -->
+		
+	</resultMap>
+
+	
+	<!--지정일자 조회  cs 글 통계 파이차트  -->
 	<select id="searchDatePieChart" resultMap="e_p006Result06" parameterType="java.util.Map">
 	<![CDATA[
 	select DECODE (CSPOSTTYPE,100,'공지글',200,'문의글', 300,'신고글')as csposttypeString, COUNT(*)as csboardcnt
@@ -29,7 +29,7 @@
 	]]>
 	</select>
 	
-	<!--기준일조회 컬럼차트 매출 그래프  -->
+	<!--지정일자 조회 매출 통계  컬럼차트  -->
 	<select id="searchDateColumnChart" resultMap="e_p006Result06" parameterType="java.util.Map">
 	<![CDATA[
 	select to_char(p.CREATEDAT, 'YYYY-MM-DD')as createdatString, sum(o.price)as sumPrice
@@ -40,6 +40,28 @@
 	ORDER BY createdatString ASC
 	]]>
 	</select>
+	
+	<!--지정일자 조회 가입자 현황 라인차트 -->
+	<select id="serchUserLineChart" resultMap="e_p006Result06" parameterType="java.util.Map">
+	<![CDATA[
+	select to_char(createdat, 'YYYY-MM-DD')as userCreatedat, count(DECODE(sex,1,'남자'))as man, count(DECODE(sex ,2, '여자'))as woman, COUNT(*)as allUser
+	FROM users
+	WHERE createdat BETWEEN TO_DATE(#{startDate},'YYYY-MM-DD') AND TO_DATE(#{endDate},'YYYY-MM-DD')
+	group by to_char(createdat, 'YYYY-MM-DD')
+	]]>
+	</select>
+	
+	<!--지정일자 조회 가입자 현황 바차트  -->
+	<select id="serchUserBarChart" resultMap="e_p006Result06" parameterType="java.util.Map">
+	<![CDATA[
+	select  count(DECODE(sex,1,'남자'))as man, count(DECODE(sex ,2, '여자'))as woman, COUNT(*)as allUser
+	FROM users
+	WHERE createdat BETWEEN TO_DATE(#{startDate},'YYYY-MM-DD') AND TO_DATE(#{endDate},'YYYY-MM-DD')
+	]]>
+	</select>
+	
+	
+	<!-- 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 -->
 	
 	
 	
@@ -52,7 +74,6 @@
 	<choose>
     		<when test="key_word=='all'"> <!-- 전체 조회  -->
     			GROUP by DECODE (CSPOSTTYPE,100,'공지글',200,'문의글', 300,'신고글')
-	
     		</when>
     		<when test="key_word=='toDay'"> <!-- 당일 조회 -->
     		 	WHERE CREATEDAT >= TO_DATE(#{st},'YYYY-MM-DD')
@@ -79,7 +100,7 @@
 			ORDER BY createdatString ASC
     		</when>
     		<when test="key_word=='toDay'"> <!-- 당일 조회 -->
-    		WHERE p.createdat >= TO_DATE(#{st},'YYYY-MM-DD')
+     		WHERE p.createdat >= TO_DATE(#{st},'YYYY-MM-DD')
 			GROUP BY to_char(p.CREATEDAT, 'YYYY-MM-DD')
 			ORDER BY createdatString ASC
     		</when>
@@ -91,86 +112,44 @@
     	</choose>
 	</select>
    
-	
-	
-
-	
-	
-<!-- 
-	게시글 등록 
- 	<insert id="insertCSPost" parameterType="e_p003VO">
-		<![CDATA[
-		insert into CSPost (csPostNum,csBoardNum,userNum,title,content,createdAt,status, csPostType)
-		VALUES (CSPost_seq.nextval, CSBOARD_seq.nextval, 1, #{title}, #{content}, CURRENT_TIMESTAMP, 1, 100)
-		]]>
-	</insert>  
-	
-	조건 검색 
-	<select id="selectUser" resultMap="e_p003Result03" parameterType="java.util.Map">
-		 <![CDATA[
-        select csPostNum,csBoardNum,userNum,title,content,
-        		DECODE(status, 1, '처리대기', 2, '완료')as statusString, 
-        		DECODE(csPostType, 100, '공지사항', 200, '문의사항', 300, '신고글')as csPostTypeString, 
-        		to_char(createdAt,'YYYY-MM-DD HH24:MI:SS')as createdAtString, 
-        		to_char(updatedAt,'YYYY-MM-DD HH24:MI:SS')as updatedAtString 
-		from   CSPost
-      	]]>
-    	<choose>
-    		<when test="searchOption=='all'"> 전체 조회 
-    		where csPostNum = csPostNum
+   <!-- 셀렉트 조회 가입자 통계 -->
+   	<select id="selectUserLineChart" resultMap="e_p006Result06" parameterType="java.util.Map">
+	<![CDATA[
+	select to_char(createdat, 'YYYY-MM-DD')as userCreatedat, count(DECODE(sex,1,'남자'))as man, count(DECODE(sex ,2, '여자'))as woman, COUNT(*)as allUser
+	FROM users
+	]]>
+	<choose>
+    		<when test="key_word=='all'"> <!-- 전체 조회  -->
+    		group by to_char(createdat, 'YYYY-MM-DD')
     		</when>
-    		<when test="searchOption=='csPostType100'"> 공지 전체 조회
-    		where  csPostType = 100
+    		<when test="key_word=='toDay'"> <!-- 당일 조회 -->
+			WHERE createdat >= TO_DATE(#{st},'YYYY-MM-DD')
+			group by to_char(createdat, 'YYYY-MM-DD')
     		</when>
-    		<when test="searchOption=='csPostType200'"> 문의 전체 조회 
-    		where   csPostType = 200 
-    		</when>
-    		<when test="searchOption=='csPostType300'"> 신고 전체 조회 
-    		where   csPostType = 300 
-    		</when>
-    		<when test="searchOption=='userNum'"> 작성자 id 조회 
-    		where userNum in(SELECT userNum from users where id like '%'||#{key_word}||'%')
-    		</when>
-    		<when test="searchOption=='status'"> 처리 상태 조회  1- 처리대기, 2-완료
-    		where status= #{key_word1}
+    		<when test="key_word=='week_month'"> <!-- 1주, 2주, 1개월 조회 -->
+    		WHERE createdat BETWEEN TO_DATE(#{end},'YYYY-MM-DD') AND TO_DATE(#{st},'YYYY-MM-DD')
+			group by to_char(createdat, 'YYYY-MM-DD')
     		</when>
     	</choose>
 	</select>
 	
-	
-	상세보기list
-		<select id="selectViewDetaListt" resultMap="e_p003Result03" parameterType="java.util.Map">
-		 <![CDATA[
-        select c.csPostNum,c.csBoardNum,c.userNum,c.title,c.content, 
-        		DECODE(c.csPostType, 100, '공지사항', 200, '문의사항', 300, '신고글')as csPostTypeString, 
-        		to_char(c.createdAt,'YYYY-MM-DD HH24:MI:SS')as createdAtString, 
-        		to_char(c.updatedAt,'YYYY-MM-DD HH24:MI:SS')as updatedAtString,
-                u.id,u.name,u.email
-		from   CSPost c inner JOIN USERS u
-        on c.usernum=u.usernum
-         where csPostNum = #{csPostNum}
-      	]]>
-	</select>
-	
-	글 수정
-	 <update id="upDateCsBoard" parameterType="e_p003VO">
-	  <![CDATA[
-		UPDATE CSPost
-			SET title = #{title},
-    			content= #{content},
-    			status= #{status},
-    			updatedAt= CURRENT_TIMESTAMP
-		WHERE csPostNum=#{csPostNum}
-		 ]]>
-	</update>
-	
-	<delete id="deleteUserCsboard"  parameterType="int">
+	 <!-- 셀렉트 조회 가입자 바 차트 통계 -->
+   	<select id="selectUserBarChart" resultMap="e_p006Result06" parameterType="java.util.Map">
 	<![CDATA[
-	   delete from  CSPost
-	   where
-	   csPostNum=#{csPostNum}
-	]]>      
-  </delete> -->
-	
+	select  count(DECODE(sex,1,'남자'))as man, count(DECODE(sex ,2, '여자'))as woman, COUNT(*)as allUser
+	FROM users
+	]]>
+	<choose>
+    		<when test="key_word=='all'"> <!-- 전체 조회  -->
+    	
+    		</when>
+    		<when test="key_word=='toDay'"> <!-- 당일 조회 -->
+			WHERE createdat >= TO_DATE(#{st},'YYYY-MM-DD')
+    		</when>
+    		<when test="key_word=='week_month'"> <!-- 1주, 2주, 1개월 조회 -->
+    		WHERE createdat BETWEEN TO_DATE(#{end},'YYYY-MM-DD') AND TO_DATE(#{st},'YYYY-MM-DD')
+    		</when>
+    	</choose>
+	</select>
 	
 </mapper>

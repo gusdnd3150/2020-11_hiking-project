@@ -3,7 +3,7 @@ package project.E_P002_D003.vo;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-@Component
+//@Component
 public class E_P002_D003PhotoVO {
 	
 	private int prodNum; //상품번호

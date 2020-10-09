@@ -36,8 +36,8 @@ public class E_p001ServiceImpl implements E_p001Service{
 
 
 	@Override //회원 삭제
-	public int removeUser(String id) throws Exception {
-		return e_p001DAO.deleteUser(id);
+	public int removeUser(int userNum) throws Exception {
+		return e_p001DAO.deleteUser(userNum);
 	}
 
 	@Override // 수정정 회원정보 출력 매소드

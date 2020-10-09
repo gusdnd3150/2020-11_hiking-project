@@ -15,7 +15,7 @@ import project.E_P002_D003.vo.E_P002_D003ProductsVO;
 
 
 
-@Repository
+//@Repository
 public class E_P002_D003ProductsDAOImpl  implements E_P002_D003ProductsDAO{
 	
 	@Autowired

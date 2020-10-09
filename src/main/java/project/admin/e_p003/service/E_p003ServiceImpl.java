@@ -3,6 +3,7 @@ package project.admin.e_p003.service;
 import java.util.List; 
 import java.util.Map;
 
+import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -11,8 +12,6 @@ import org.springframework.stereotype.Service;
 
 import project.admin.e_p003.dao.E_p003DAO;
 import project.admin.e_p003.vo.E_p003VO;
-
-import javax.mail.internet.MimeMessage;
 
 @Service
 public class E_p003ServiceImpl implements E_p003Service{
@@ -52,10 +51,11 @@ public class E_p003ServiceImpl implements E_p003Service{
 	//메일발송
 	@Override
 	public int mailSending(Map<String, String> map) throws Exception {
+		System.out.println("메일 발송 들어옴");
 		MimeMessage message = mailSender.createMimeMessage(); // MimeMessage타입 객체 생성
 		try {
 			MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, "utf-8"); // 메일을 보내기위한 MimeMessageHelper객체 생성
-			messageHelper.setFrom("seokhg0216@gmail.com", "산오름 관리자"); //보내는 사람 
+			messageHelper.setFrom("bithiking168@gmail.com", "산오름 관리자"); //보내는 사람 
 			messageHelper.setTo(map.get("userEmail")); // 받는사람 이메일
 			messageHelper.setSubject(map.get("title")); // 제목
 			messageHelper.setText(map.get("content")); // 내용
@@ -65,6 +65,11 @@ public class E_p003ServiceImpl implements E_p003Service{
 			return 0;
 		}
 		return 1;
+	}
+
+	@Override
+	public String viewType(int csPostNum) throws Exception {
+			return e_p003DAO.viewType(csPostNum);
 	}
 
 }

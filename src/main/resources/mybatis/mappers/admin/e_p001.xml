@@ -42,7 +42,7 @@
         		DECODE(type, 100, '관리자', 200, '회원', 300, '비회원')as usersType,  
         		to_char(createdAt,'YYYY-MM-DD HH24:MI:SS')as createdAtString,
         		to_char(updatedAt,'YYYY-MM-DD HH24:MI:SS')as updatedAtString, 
-        		DECODE(status, 10, '활동중', 20, '휴면')as statusType
+        		DECODE(status, 10, '활동', 20, '휴면')as statusType
 		from   USERS
       	]]>
     	<choose>
@@ -60,7 +60,7 @@
 	<![CDATA[
 	   delete from  USERS
 	   where
-	   id=#{id}
+	   userNum=#{userNum}
 	]]>      
   </delete>
   
@@ -73,9 +73,9 @@
         		DECODE(type, 100, '관리자', 200, '회원', 300, '비회원')as usersType,  
         		to_char(createdAt,'YYYY-MM-DD HH24:MI:SS')as createdAtString,
         		to_char(updatedAt,'YYYY-MM-DD HH24:MI:SS')as updatedAtString, 
-        		DECODE(status, 10, '활동중', 20, '휴면')as statusType
+        		DECODE(status, 10, '활동', 20, '휴면')as statusType
 		from   USERS	
-         where  userNum like '%'||#{userNum}||'%'
+         where  userNum = #{userNum}
       	]]>
 	</select>
 	

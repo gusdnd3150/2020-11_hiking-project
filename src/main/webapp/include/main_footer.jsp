@@ -7,7 +7,7 @@
       Anything you want
     </div>
     <!-- Default to the left -->
-    <strong>Copyright &copy; 2016 <a href="#">Company</a>.</strong> All rights reserved.
+    <strong>산오름 &copy; 2020 <a href="#">Company</a>.</strong> All rights reserved.
   </footer>
 
   <!-- Control Sidebar -->

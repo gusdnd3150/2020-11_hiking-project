@@ -33,11 +33,17 @@
 
 $(document).ready(function() {
     $('#foo-table').DataTable({
-    	
-    	"pagingType":"full_numbers",
-    	  "autoWidth": true,
-    	  "scrollY": true,
+    	  destroy : true,//테이블 파괴가능
+          bPaginate : true, //페이징처리
+          bLengthChange : true, // n개씩보기
+          lengthMenu : [ [ 10, 25, 50, -1 ], [ 10, 25, 50, "All" ] ], // 10/25/50/All 개씩보기
+          bAutoWidth : false, //자동너비
+          ordering : true, //칼럼별 정렬
+          searching : true, //검색기능
+    	pagingType:"full_numbers",
+    	   autoWidth: true,
         dom: 'Blfrtip',
+  
 		buttons: [
 			{
 				extend:'excel',
@@ -58,30 +64,26 @@ $(document).ready(function() {
 	 );
 });
 
-
-
 // 데이터테블 함수 끝----------------------------------------------------------------
 
-
-
-$(document).on("click", "#uesr_id", function(){// 회원삭제 알림창
-	  var id=$(this).val();
-	  console.log(id)
+$(document).on("click", "#user_Num", function(){// 회원삭제 알림창
+	  var _user_Num=$(this).val();
+	  console.log(_user_Num)
 	  $.ajax({
 			type : 'get',
 			url : 'removeUser.do',
 			data : {
-				id : id
+				userNum : _user_Num
 			},
 			success : function(data) {
-				console.log(data)
-				if (1 == (data)) {
+				if ("ok"== (data)) {
 					alert("삭제완료");
 					window.location.reload(true);
 				} else {
 					alert("다시확인해주세요");
-				};
-			 }
+				}
+				;
+			}
 		});
 	});
 	
@@ -106,6 +108,10 @@ $(document).on("click", "#uesr_id", function(){// 회원삭제 알림창
 		}
 	});
 </script>
+<style>
+
+
+</style>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
 
@@ -145,21 +151,22 @@ $(document).on("click", "#uesr_id", function(){// 회원삭제 알림창
               </div>                                        
               <div class="row">
              <div>
-            <table id="foo-table" class="table table-bordered">
+            <table id="foo-table" class="table table-bordered" >
+
+ 
 				<thead>
 			<tr>
-                <th>회원 번호</th>
-                <th>회원 아이디</th>
-                <th>회원 비밀번호</th>
-                <th>회원 이름</th>
-                <th>회원 성별</th>
-                <th>회원 전화번호</th>
-                <th>회원 주소</th>
-                <th>회원 이메일</th>
-                <th>회원 유형</th>
-                <th>회원 등록일자</th>
-                <th>회원 수정일자</th>
-                <th>회원 상태</th>
+                <th>번호</th>
+                <th>아이디</th>
+                <th>이름</th>
+                <th>성별</th>
+                <th>전화</th>
+                <th>주소</th>
+                <th>이메일</th>
+                <th>유형</th>
+                <th>등록일</th>
+                <th>수정일</th>
+                <th>상태</th>
                 <th>수정</th>
                 <th>삭제</th>
             </tr>
@@ -170,7 +177,6 @@ $(document).on("click", "#uesr_id", function(){// 회원삭제 알림창
                 <tr>
                   <td>${user.userNum}</td>
                   <td>${user.id}</td>
-                  <td>${user.password}</td>
                   <td>${user.name}</td>
                   <td>${user.sexType}</td>
                   <td>${user.phone}</td>
@@ -181,7 +187,7 @@ $(document).on("click", "#uesr_id", function(){// 회원삭제 알림창
                   <td>${user.updatedAtString}</td>
                   <td>${user.statusType}</td>
                   <td><a href="upDateUserList.do?userNum=${user.userNum}"><button class="btn btn-primary btn-xs">수정</button></a></td>
-                  <td><button class="btn btn-danger btn-xs"id="uesr_id" value="${user.id}">삭제</button></td>
+                  <td><button class="btn btn-danger btn-xs"id="user_Num" value="${user.userNum}">삭제</button></td>
                 </tr>
                  </c:forEach>
                 </tbody>

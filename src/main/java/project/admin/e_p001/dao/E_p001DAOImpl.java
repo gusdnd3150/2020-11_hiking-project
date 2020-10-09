@@ -23,14 +23,13 @@ public class E_p001DAOImpl implements E_p001DAO{
 
 	@Override //회원 조건 검색
 	public List selectUser(Map<String, String> search) throws Exception {
-		System.out.println("조건 검색들어옴");
 		 List<E_p001VO> userList=sqlSession.selectList("admin.mapper.e_p001.selectUser", search);
 		return userList;
 	}
 
 	@Override // 회원 삭제
-	public int deleteUser(String id) throws Exception {
-		return sqlSession.delete("admin.mapper.e_p001.deleteUser",id);
+	public int deleteUser(int userNum) throws Exception {
+		return sqlSession.delete("admin.mapper.e_p001.deleteUser",userNum);
 	}
 
 	@Override //회원 정보 수정전 list 출력

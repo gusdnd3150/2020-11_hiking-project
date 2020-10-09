@@ -2,7 +2,7 @@ package project.E_P002_D003.vo;
 
 import org.springframework.stereotype.Component;
 
-@Component
+//@Component
 public class E_P002_D003ProductsVO {
 	
      private String prodNum;//상품번호

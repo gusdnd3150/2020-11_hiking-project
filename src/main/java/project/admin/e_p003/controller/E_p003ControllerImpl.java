@@ -72,9 +72,11 @@ public class E_p003ControllerImpl implements E_p003Controller{
 			throws Exception {
 		
 		List viewDetaList = e_p003Service.viewDetaList(csPostNum);
+		String viewType = e_p003Service.viewType(csPostNum);
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("e_p003_viewDateList");
 		mav.addObject("viewDetaList", viewDetaList);
+		mav.addObject("viewType", viewType);
 		return mav;
 	}
 	
@@ -100,14 +102,14 @@ public class E_p003ControllerImpl implements E_p003Controller{
 	@Override
 	@RequestMapping(value = "/admin/removeCsboard.do", method = RequestMethod.GET)
 	@ResponseBody
-	public int removeCsboard(@RequestParam("csPostNum")int csPostNum, HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public String removeCsboard(@RequestParam("csPostNum")int csPostNum, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		request.setCharacterEncoding("utf-8");
 		response.setContentType("text/html;charset=utf-8");
 		int result = e_p003Service.removeCsboard(csPostNum);
 		if(result == 1) {
-			return result;
+			return "ok";
 		}else {
-			return 0;
+			return "x";
 		}
 		
 	}
@@ -125,22 +127,22 @@ public class E_p003ControllerImpl implements E_p003Controller{
 
 	//메일발송
 	@Override
-	@RequestMapping(value="/admin/mailSending.do", method=RequestMethod.POST)
-	public ModelAndView mailSending(@RequestParam Map<String, String> map, HttpServletRequest request, HttpServletResponse response) throws Exception {
+	@RequestMapping(value="/admin/sendMail.do", method=RequestMethod.POST)
+	@ResponseBody
+	public String sendMail(@RequestParam Map<String, String> map, HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
 		request.setCharacterEncoding("utf-8");
 		response.setContentType("text/html;charset=utf-8");
-		
-		ModelAndView mav = new ModelAndView();
 		int mailResult = 0;
 		mailResult=e_p003Service.mailSending(map);
 		if(mailResult==1) {
-			mav.addObject("mailResult", mailResult);
+			String msg = "ok";
+			return msg;
 		}else {
-			mav.addObject("mailResult", mailResult);
+			String msg = "x";
+			return msg;
 		}
-		mav.setViewName("e_p003_main");
 		
-		return mav;
 	}
 	
 }

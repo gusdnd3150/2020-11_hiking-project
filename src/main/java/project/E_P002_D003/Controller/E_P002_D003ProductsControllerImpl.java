@@ -41,7 +41,7 @@ import project.E_P002_D003.vo.E_P002_D003ProductsVO;
 
 
 
-@Controller
+//@Controller
 public class E_P002_D003ProductsControllerImpl  implements E_P002_D003ProductsController{
 	private static final Logger logger = LoggerFactory.getLogger(E_P002_D003ProductsControllerImpl.class);
 	//private static final String CURR_IMAGE_REPO_PATH = "C:\\shopping\\file_repo";
