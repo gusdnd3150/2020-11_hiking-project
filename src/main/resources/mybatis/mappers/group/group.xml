@@ -252,13 +252,14 @@
                     #{commentNum},
                     #{parentNum},
                     #{depts},
-                     (select MAX(commentOrder)+1
+                     (select NVL(MAX(commentOrder),0)+1
                      FROM groupComment
                      WHERE parentNum = #{parentNum}
                      AND groupNum = #{groupNum}),
                     #{groupNum},
                     #{content},
                     #{userId},
+                    0,
                     sysdate
                     )
         ]]>

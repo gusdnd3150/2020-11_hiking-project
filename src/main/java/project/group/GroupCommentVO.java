@@ -16,5 +16,6 @@ public class GroupCommentVO {
     private int groupNum;
     private String content;
     private String userId;
+    private int subCommentCount;
     private LocalDateTime createdAt;
 }

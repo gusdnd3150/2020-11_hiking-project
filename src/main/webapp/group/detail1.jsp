@@ -98,10 +98,10 @@
         </div>
     </div>
     <!-- 댓글 입력 -->
-    <div id="commentInput" class="row col-12 pt-3">
+    <div id="commentInput" class="row" style="text-align: center">
         <img src="/resources/img/profile1.jpg" class="rounded-circle" style="width: 50px;height: 50px">
-        <input id="commentContent" class="form-control form-control-lg col-md-10 col-xs-8 ml-2 mr-2" type="text" placeholder="내용을 입력해주세요">
-        <button id="commentSubmit" class="btn btn-info col-md-1 col-xs-1">입력</button>
+        <input id="commentContent" class="form-control form-control-lg col-lg-10 col-md-9 col-sm-10 col-10 ml-2 mr-2" type="text" placeholder="내용을 입력해주세요">
+        <button id="commentSubmit" class="btn btn-info col-lg-1 col-md-1 col-sm-12">입력</button>
     </div>
 
     <hr />
@@ -467,7 +467,7 @@ $(document).ready(function (){
                         var id = 'depts' + index
 
                         $('#commentBoard').append(
-                            '<ul id="' + id + '" class="col-12 row">' +
+                            '<ul id="' + id + '" class="col-12 pl-5 row">' +
                             '<img src="/resources/img/profile1.jpg" class="rounded-circle" style="width: 50px;height: 50px">'+
                             '<div class="col-10">'+
                             '<pre style="display: none">'+response.commentNum+'</pre>'+
@@ -513,13 +513,13 @@ $(document).ready(function (){
                         var id = 'depts' + index
 
                         $('#commentBoard').append(
-                            '<ul id="' + id + '" class="col-12 row">' +
+                            '<ul id="' + id + '" class="col-12 pl-5 row">' +
                             '<img src="/resources/img/profile1.jpg" class="rounded-circle" style="width: 50px;height: 50px">'+
                             '<div class="col-10">'+
                             '<pre style="display: none">'+response[i].commentNum+'</pre>'+
                             '<h5>'+response[i].userId+'</h5>'+
                             '<div>'+response[i].content +'</div>' +
-                            '<button class="'+id+' p-0 btn btn-default text-muted" onclick="toggleSubComment(this)">[댓글 더보기]</button>' +
+                            '<button class="'+id+' p-0 btn btn-default text-muted" onclick="toggleSubComment(this)">[댓글 '+ 0 +'개 더보기]</button>' +
                             '<button class="'+id+'subComment p-0 btn btn-default text-muted" onclick="toggleWriteSubComment(this)">[댓글]</button>' +
                             '<p style="display: none"><input type="text" class="form-control" placeholder="댓글 내용 입력"/>' +
                             '<button id="writeSubCommentBtn" class="btn btn-info" onclick="writeSubComment(this)">작성</button>' +
