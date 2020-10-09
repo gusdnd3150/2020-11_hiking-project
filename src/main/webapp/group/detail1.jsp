@@ -442,30 +442,45 @@ $(document).ready(function (){
             contentType: "application/json; charset=utf-8;",
             success: function (response){
 
-                console.log(response[i])
+                console.log(response)
 
-                // 닉네임, 좋아요 숫자
-                // 유저 프로필 누르면 볼 수 있도록
-                // 수정 요망
-                // 거절? 블랙리스트? 생각해볼것
-                
-                var html = "<ul id='comment_depts1' class='media-body row'>";
+                var index = 0;
+                for(var i=0;i<response.length;i++) {
 
-                for(var i=0;i<response.length;i++){
+                    var commentNum = response[i].commentNum;
+                    var rootNum = response[i].parentNum;
 
-                    console.log(response[i])
+                    if (rootNum == 0) {
+                        var id = 'depts' + index
 
-                        html += "" +
-                                "<li class='media mt-3 col-12 pl-"+response[i].depts * 2+
-                                "'><img src='/resources/img/profile1.jpg' class='rounded-circle'style='width: 50px;height: 50px' alt='...'>" +
-                                "<div class='col-10'>" +
-                                "<h5>"+response[i].userId+"</h5>" +
-                                response[i].content+"</div></li>";
+                        $('#commentBoard').append(
+                            '<ul id="' + id + '">' + response[i].content + '</ul>'
+                        );
+
+                        index++;
+
+                        for (var j = 0; j < response.length; j++) {
+
+                            if (response[j].parentNum == commentNum) {
+                                $('#' + id).append(
+                                    '<li id="' + id + j + '">' + response[j].content + '</li>'
+                                )
+                            }
+                        }
                     }
+                }
+                // var html = "<ul id='comment_depts1' class='media-body row'>";
+                //         html += "" +
+                //                 "<li class='media mt-3 col-12 pl-"+response[i].depts * 2+
+                //                 "'><img src='/resources/img/profile1.jpg' class='rounded-circle'style='width: 50px;height: 50px' alt='...'>" +
+                //                 "<div class='col-10'>" +
+                //                 "<h5>"+response[i].userId+"</h5>" +
+                //                 response[i].content+"</div></li>";
+                //     }
+                //
+                // html += "</ul>";
 
-                html += "</ul>";
-
-                $('#commentBoard').append(html);
+                // $('#commentBoard').append(html);
 
             },
             error: function(response){

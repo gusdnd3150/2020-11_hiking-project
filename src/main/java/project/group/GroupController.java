@@ -226,7 +226,6 @@ public class GroupController{
 
         List<Map> list = groupService.selectCommentByGroupNum(groupNum);
 
-        System.out.println("list :"+list.toString());
         return list;
     }
 }
