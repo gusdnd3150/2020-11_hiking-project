@@ -40,14 +40,14 @@ public class B_P002_D001ShopingMallDAOImpl implements B_P002_D001ShopingMallDAO{
 		return list;
 	}
 	@Override
-	public List<E_P002_D003PhotoVO> shopListImage(Paging vo) throws DataAccessException { //사용안함
-		List<E_P002_D003PhotoVO> list= sqlSession.selectList("project.e_P002_D003.shopMainImage",vo);
+	public List<E_P002_D003PhotoVO> shopListImage(Map<String,Object> map) throws DataAccessException { //사용안함
+		List<E_P002_D003PhotoVO> list= sqlSession.selectList("project.e_P002_D003.shopMainImage",map);
 		return list;             
 	}
 	
 	@Override
-	public List<E_P002_D003ProductsVO> shopListTextCate(Map<String,Object> map) throws DataAccessException {
-		List<E_P002_D003ProductsVO> list= sqlSession.selectList("project.e_P002_D003.selectProductCate",map);
+	public List<Map> shopListTextCate(Map<String,Object> map) throws DataAccessException {
+		List<Map> list= sqlSession.selectList("project.e_P002_D003.selectProductCate",map);
 		return list;
 	}
 	
@@ -67,8 +67,8 @@ public class B_P002_D001ShopingMallDAOImpl implements B_P002_D001ShopingMallDAO{
 	///////////////////////아래 작업중////////////////////
 	
 	@Override
-	public List<E_P002_D003ProductsVO> searchResult(Map<String, Object> info) throws DataAccessException {
-		List<E_P002_D003ProductsVO> result = sqlSession.selectList("project.e_P002_D003.searchResult",info);
+	public List<Map> searchResult(Map<String, Object> info) throws DataAccessException {
+		List<Map> result = sqlSession.selectList("project.e_P002_D003.searchResult",info);
 		return result;
 	}
 	@Override

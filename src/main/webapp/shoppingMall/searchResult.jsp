@@ -7,14 +7,13 @@
 <%-- <jsp:include page="/commonShop/side.jsp" />  상단의 바로 사용할 생가임 --%>
   
     <!-- Bootstrap core CSS -->
-  <link href="/resources/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/resources/shop/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <!-- Custom styles for this template -->
-  <link href="/resources/css/shop-homepage.css" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="/resources/css/views/common/header.css">
+  <link href="/resources/shop/css/shop-homepage.css" rel="stylesheet">
     <!-- Bootstrap core JavaScript -->
-  <script src="/resources/vendor/jquery/jquery.min.js"></script>
-  <script src="/resources/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
+  <script src="/resources/shop/vendor/jquery/jquery.min.js"></script>
+  <script src="/resources/shop/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  
 <style>
 
 .card-img-top{
@@ -53,6 +52,7 @@ height=350;
 </style>  
 
 <body>
+<script src="https://kit.fontawesome.com/e8913b960a.js" crossorigin="anonymous"></script>
 <div class="topnav" align="center">
   <a class="active" href="/B_P002_D001/shopMainCate?listType=10">Home</a> <!--  10은 전체목록 -->
   <a href="/B_P002_D001/shopMainCate?listType=2">등산 가방</a>  
@@ -62,7 +62,8 @@ height=350;
   <a href="/B_P002_D001/shopMainCate?listType=6">등산장갑</a>
   <a href="/B_P002_D001/shopMainCate?listType=1">양말</a>
   <a href="/B_P002_D001/shopMainCate?listType=8">보호대</a>
-  <a href="/B_P002_D001/shopMainCate/6">중고물품 등록</a>
+  <a href="/E_P003_D001/addUsedForm">중고물품 등록</a>
+  <a class="fas fa-shopping-cart"></a>
 </div>
 
 
@@ -127,16 +128,16 @@ height=350;
                     <c:forEach var="data" items="${viewAll }" >
                     <div class="col-lg-4 col-md-6 mb-4">
             <div class="card h-100">
-                <%-- <a href="#"><img class="card-img-top" src="data:image/jpg;base64, ${encodinglist}"  alt="" width="800" height="500"></a> --%>
-                <a href="/B_P003_D001/productDetail/${data.prodNum }"><img class="card-img-top" src="/B_P002_D001/mainImage/${data.prodNum }"  alt="" width="300" height="300"></a> 
+                <%-- <a href="/B_P003_D001/productDetail/${data.PRODNUM }"><img class="card-img-top" src="/B_P002_D001/mainImage/${data.prodNum }"  alt="" width="300" height="300"></a> --%> 
+                <a href="/B_P003_D001/productDetail?prodNum=${data.PRODNUM}"><img class="card-img-top" src="http://localhost:8080/resources/img/${data.IMAGE }"  alt="" width="300" height="300"></a>
               <div class="card-body">
                 <h4 class="card-title">
-                  <a href="/B_P003_D001/productDetail/${data.prodNum }">${data.name }</a>
-                  <c:if test="${data.type ==1 }"><p style="color:blue">[Used]</p></c:if>
-                  <c:if test="${data.type ==2 }"><p style="color:red">[New]</p></c:if>
+                  <a href="/B_P003_D001/productDetail/${data.PRODNUM }">${data.NAME }</a>
+                  <c:if test="${data.TYPE ==1 }"><p style="color:blue">[Used]</p></c:if>
+                  <c:if test="${data.TYPE ==2 }"><p style="color:red">[New]</p></c:if>
                 </h4>
-                <h5>${data.price }원</h5>
-                <p class="card-text">${data.content }</p>
+                <h5>${data.PRICE }원</h5>
+                <p class="card-text">${data.CONTENT }</p>
               </div>
               <div class="card-footer">
            

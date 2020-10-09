@@ -20,10 +20,12 @@ import project.Paging;
 import project.E_P002_D003.vo.E_P002_D003PhotoVO;
 
 public interface B_P002_D001Controller {
-     public ResponseEntity<byte[]> getByteImage(@PathVariable("num") int num,HttpServletRequest req, HttpServletResponse res)throws Exception;
      public ModelAndView shopmainCate(@RequestParam Map<String, Object> info,HttpServletRequest request, HttpServletResponse response)throws Exception;  
      public ModelAndView searchResult(@RequestParam Map<String, Object> info,HttpServletRequest request, HttpServletResponse response)throws Exception;
      //////////////아래 메소드 처리////////////////
+
      
+     
+     /*public ResponseEntity<byte[]> getByteImage(@PathVariable("num") int num,HttpServletRequest req, HttpServletResponse res)throws Exception;*/
 }
 

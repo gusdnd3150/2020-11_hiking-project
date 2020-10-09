@@ -16,7 +16,7 @@
 var cnt=1;
 function fn_addFile(){
 	  //$("#d_file").append("<br>"+"<input type='file' name='CONTENT"+cnt+"' />");
-	  $("#d_file").append("<br>"+"<input type='file' name='CONTENTImage' />");
+	  $("#d_file").append("<br>"+"<input type='file' name='content' />");
 	  //$("#d_file").append("<input type='hidden' name='PPHOTONUM' value='"+cnt+"' />"); 
 	//$("#d_file").append("<br>"+"<input type='file' name='CONTENT"+cnt+"' />");
 	  /* $("#d_file").append("<br>"+"<input multiple ='multiple' type='file' name='CONTENT1[]' />"); */
@@ -31,10 +31,11 @@ function fn_addFile(){
 </head>
 <body>
 <h1>파일 업로드 하기</h1>
-<form name="frm" method="post" action="${contextPath}/E_P002_D003/addProduct.do" enctype="multipart/form-data">
+
+<form name="frm" method="post" action="/E_P002_D003/addUsedPro" enctype="multipart/form-data">
 	    <label>상품분류코드:</label>
     <!-- <input type="text" name="PCATEGORYNUM"><br> -->
-    <select id="pcateGoryNum" name="pcateGoryNum">
+    <select id="pCategoryNum" name="pCategoryNum">
          <option value="1">양말</option>    
          <option value="2">등산 가방</option>
          <option value="3">아웃도어</option>
@@ -68,7 +69,6 @@ function fn_addFile(){
 <br>
 <br>
 
- <a href="/B_P002_D001/shopMainCate?ListType=10">메인 목록</a>
 
 </body>
 </html>

@@ -45,12 +45,10 @@ public class B_P002_D001ShopingMallServiceImpl implements B_P002_D001ShopingMall
 		return list;
 	}
 	@Override
-	public List<E_P002_D003PhotoVO> shopListImage(Paging vo) throws DataAccessException {
-		List<E_P002_D003PhotoVO> list = B_P002_D001ShopingMallDAO.shopListImage(vo);
+	public List<E_P002_D003PhotoVO> shopListImage(Map<String,Object> map) throws DataAccessException {
+		List<E_P002_D003PhotoVO> list = B_P002_D001ShopingMallDAO.shopListImage(map);
 		return list;
 	}
-	
-	
 	@Override
 	public E_P002_D003PhotoVO getImage(E_P002_D003PhotoVO vo) throws DataAccessException {
 		E_P002_D003PhotoVO result = B_P002_D001ShopingMallDAO.getImage(vo);
@@ -68,8 +66,8 @@ public class B_P002_D001ShopingMallServiceImpl implements B_P002_D001ShopingMall
 		return totalCount;
 	}
 	@Override
-	public List<E_P002_D003ProductsVO> shopListTextCate(Map<String,Object> map) throws DataAccessException {
-		List<E_P002_D003ProductsVO> list= B_P002_D001ShopingMallDAO.shopListTextCate(map);
+	public List<Map> shopListTextCate(Map<String,Object> map) throws DataAccessException {
+		List<Map> list= B_P002_D001ShopingMallDAO.shopListTextCate(map);
 		return list;
 	}
 	
@@ -77,8 +75,8 @@ public class B_P002_D001ShopingMallServiceImpl implements B_P002_D001ShopingMall
 	
 	//////////////////작업중///////////////////////////
 	@Override
-	public List<E_P002_D003ProductsVO> searchResult(Map<String, Object> info) throws DataAccessException {
-		List<E_P002_D003ProductsVO> list= B_P002_D001ShopingMallDAO.searchResult(info);
+	public List<Map> searchResult(Map<String, Object> info) throws DataAccessException {
+		List<Map> list= B_P002_D001ShopingMallDAO.searchResult(info);
 		return list;
 	}
 	@Override

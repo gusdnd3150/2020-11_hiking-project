@@ -1,5 +1,8 @@
 package project.B_P003_D001.vo;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class productAfterVO {
 	
 	private int userNum; //유저 아이디
@@ -7,7 +10,8 @@ public class productAfterVO {
 	private int prodNum;  // 상품번호
 	private String content;  //후기내용
 	private int afterType;   //후기 타입 (댓글/원글)
-	private byte[] photo;   //사진
+	private String photo;   //사진
+	private String photoName;   //사진이름
 	private String createDat; 
 	private String updateDat;
 	private int evalue;      //평점
@@ -15,18 +19,6 @@ public class productAfterVO {
 	
 	
 	
-	public int getLvl() {
-		return lvl;
-	}
-	public void setLvl(int lvl) {
-		this.lvl = lvl;
-	}
-	public int getEvalue() {
-		return evalue;
-	}
-	public void setEvalue(int evalue) {
-		this.evalue = evalue;
-	}
 	public int getUserNum() {
 		return userNum;
 	}
@@ -57,11 +49,17 @@ public class productAfterVO {
 	public void setAfterType(int afterType) {
 		this.afterType = afterType;
 	}
-	public byte[] getPhoto() {
+	public String getPhoto() {
 		return photo;
 	}
-	public void setPhoto(byte[] photo) {
+	public void setPhoto(String photo) {
 		this.photo = photo;
+	}
+	public String getPhotoName() {
+		return photoName;
+	}
+	public void setPhotoName(String photoName) {
+		this.photoName = photoName;
 	}
 	public String getCreateDat() {
 		return createDat;
@@ -75,6 +73,20 @@ public class productAfterVO {
 	public void setUpdateDat(String updateDat) {
 		this.updateDat = updateDat;
 	}
+	public int getEvalue() {
+		return evalue;
+	}
+	public void setEvalue(int evalue) {
+		this.evalue = evalue;
+	}
+	public int getLvl() {
+		return lvl;
+	}
+	public void setLvl(int lvl) {
+		this.lvl = lvl;
+	}
 	
+	
+		
 
 }

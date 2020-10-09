@@ -9,6 +9,8 @@
 %> 
 <c:set var="contextPath"  value="${pageContext.request.contextPath}"  />
 <!doctype html>
+
+
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
@@ -18,6 +20,7 @@
     <link rel="icon" href="../resources/img/favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" type="text/css" href="../resources/css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="../resources/css/views/common/header.css" />
+    
 </head>
 <body>
 <!-- Navigation -->

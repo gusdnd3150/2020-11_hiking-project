@@ -42,6 +42,46 @@
     <link rel="stylesheet" href="/resources/shop/css/responsive.css" />
   </head>
 
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script>         
+   $(document).ready(function () {
+	   
+            $("#buyProduct").on("click",function(){
+           var quantity = $("#sst").val();
+           var prodNum =  $("#prodNum").val();
+           console.log(prodNum);
+           console.log(quantity);
+           location.href="/B_P003_D001/buyProd?prodNum="+prodNum+"&quantity="+quantity+"&type=1";
+
+           });
+
+           $("#addCart").on("click",function(){
+        	   var quantity = $("#sst").val();
+               var prodNum =  $("#prodNum").val();
+               var prodName= $("#prodName").val();
+               var prodPrice = $("#prodPrice").val();
+               console.log(prodNum);
+               console.log(quantity);
+      		 $.ajax({
+ 	            type:"post",
+ 	            async:true,
+ 	            url:"/B_P003_D001/addCart",
+ 	            data:{prodNum:prodNum,quantity:quantity,prodName:prodName,prodPrice:prodPrice},
+ 	            success:function(data,textStatus){
+ 	            	alert('장바구니에 추가되었습니다.');
+ 	            	location.href="/B_P002_D001/shopMainCate?listType=10";
+ 	            },
+ 	            error:function(data,textStatus){
+ 	            }
+ 	          });
+           });
+});
+
+      
+   
+
+</script>
+
   <body>
 
     <!--================Single Product Area =================-->
@@ -59,7 +99,7 @@
                   <div class="carousel-item active">
                     <img
                       class="d-block w-100"
-                      src="/B_P002_D001/mainImage/${prodDetail.prodNum }"
+                      src="http://localhost:8080/resources/img/${images[0].content }"
                       alt="First slide"
                     />
                   </div>
@@ -70,16 +110,16 @@
           <div class="col-lg-5 offset-lg-1">
             <div class="s_product_text">
               <h3>${prodDetail.name}</h3>
-              <h2>${prodDetail.price } won</h2>
+              <h2>${prodDetail.price } 원</h2>
               <ul class="list">
                 <li>
                     <c:if test="${prodDetail.type ==1 }">
                     <a class="active" href="#">
-                    <span>Category</span> : used</a>
+                    <span>Category</span> : 중고</a>
                     </c:if>
                     <c:if test="${prodDetail.type ==2 }">
                      <a class="active" href="#">
-                    <span>Category</span> : new</a>
+                    <span>Category</span> : 신제품</a>
                     </c:if>
                     
                 </li>
@@ -94,7 +134,7 @@
                 the pleasant warm feeling during the winter.
               </p>
               <div class="product_count">    <!-- 수량클릭 -->
-                <label for="qty">Quantity:</label>
+                <label for="qty" id="quantityValue">Quantity:</label>
                 <input
                   type="text"
                   name="qty"
@@ -120,8 +160,12 @@
                 </button>
               </div>
               <div class="card_area">
-                <a class="main_btn" href="#">장바구니</a>  <!--  a tag에 수량+prodNum과 같이 보내고 서버에서 세션으로 진행할지 결정 -->
-                <a class="main_btn" href="/B_P003_D001/buyProd/${prodDetail.prodNum }">구매하기</a>
+                <p class="main_btn" id="addCart">장바구니</p>  <!--  a tag에 수량+prodNum과 같이 보내고 서버에서 세션으로 진행할지 결정 -->
+                <%-- <a class="main_btn" href="/B_P003_D001/buyProd/${prodDetail.prodNum }">구매하기</a> --%>
+                <p class="main_btn" id="buyProduct">구매하기</p> 
+                <input type="hidden" id="prodNum" value="${prodDetail.prodNum }">
+                <input type="hidden" id="prodName" value="${prodDetail.name }">
+                <input type="hidden" id="prodPrice" value="${prodDetail.price }">
                 <a class="icon_btn" href="#">
                   <i class="lnr lnr lnr-heart"></i>
                 </a>
@@ -176,7 +220,7 @@
                    </c:when>
                   <c:when test="${not empty images }">
                     <c:forEach var="images" items="${images }">
-                   <img src="data:image/jpg;base64, ${images}"  alt="상" width="800" height="500"><br>
+                   <img src="http://localhost:8080/resources/img/${images.content }"  alt="상" width="800" height="500"><br>
                    </c:forEach>
             </c:when>
            </c:choose>
@@ -414,7 +458,7 @@
                       <div class="d-flex">
                        <!-- 이미지 -->
                         <img
-                          src="/B_P003_D001/AfterImage/${afterList.afterNum }"    
+                          src="http://localhost:8080/resources/img/${afterList.photo }"
                           alt=""
                           width="100px" height="100px"
                         />

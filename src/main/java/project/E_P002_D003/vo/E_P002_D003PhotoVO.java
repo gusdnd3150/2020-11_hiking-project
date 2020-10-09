@@ -10,7 +10,9 @@ public class E_P002_D003PhotoVO {
 	private int pPhotoNum; //사진번호
 	private String createDat;  //등록일자
 	private String upDateDat; //수정일자
-	private byte[] content; //상품사진
+	private String content; //상품사진
+	private String originalFileName; //원본파일이름
+	private String fileSize; //파일 사이즈
 	
 	public int getProdNum() {
 		return prodNum;
@@ -36,15 +38,25 @@ public class E_P002_D003PhotoVO {
 	public void setUpDateDat(String upDateDat) {
 		this.upDateDat = upDateDat;
 	}
-	public byte[] getContent() {
+	public String getContent() {
 		return content;
 	}
-	public void setContent(byte[] content) {
+	public void setContent(String content) {
 		this.content = content;
 	}
-
+	public String getOriginalFileName() {
+		return originalFileName;
+	}
+	public void setOriginalFileName(String originalFileName) {
+		this.originalFileName = originalFileName;
+	}
+	public String getFileSize() {
+		return fileSize;
+	}
+	public void setFileSize(String fileSize) {
+		this.fileSize = fileSize;
+	}
 	
 	
 	
-
 }
