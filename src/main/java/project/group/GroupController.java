@@ -215,9 +215,9 @@ public class GroupController{
     // 그룹 댓글
     @PostMapping("/group/insertComment.do")
     @ResponseBody
-    public int insertCommentGroup(@RequestBody Map map){
+    public GroupCommentVO insertCommentGroup(@RequestBody Map map){
         groupService.insertCommentGroup(map);
-        return 0;
+        return groupService.selectCommentOne((Integer) map.get("commentNum"));
     }
 
     @GetMapping("/group/selectCommentByGroupNum.do")

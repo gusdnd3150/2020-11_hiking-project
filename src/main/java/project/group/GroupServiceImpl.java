@@ -100,6 +100,8 @@ public class GroupServiceImpl implements GroupService{
         return groupDAO.insertCommentGroup(map);
     }
 
+    public GroupCommentVO selectCommentOne(int commentNum){return groupDAO.selectCommentOne(commentNum);}
+
     public List selectCommentByGroupNum(int groupNum){
         return groupDAO.selectCommentByGroupNum(groupNum);
     }

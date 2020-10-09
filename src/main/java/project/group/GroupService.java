@@ -34,5 +34,6 @@ public interface GroupService {
     int deleteFavoriteGroup(Map map);
 
     int insertCommentGroup(Map map);
+    GroupCommentVO selectCommentOne(int commentNum);
     List selectCommentByGroupNum(int groupNum);
 }

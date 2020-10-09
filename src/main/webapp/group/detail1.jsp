@@ -92,33 +92,15 @@
 
     <hr />
 
-    ${commentList}
-    <div id="commentBoard" class="mt-3">
+    <div class="mt-3">
         <h3 class="mt-2 pb-1">댓글</h3>
-        <!-- 댓글 내용 -->
-<%--        <ul id="comment_depts1" class="media-body row">--%>
-<%--            <li class="media mt-3 col-12">--%>
-<%--                <img src="/resources/img/profile1.jpg" class="rounded-circle" style="width: 50px;height: 50px" alt="...">--%>
-<%--                <div class="col-10">--%>
-<%--                    <h5>제목</h5>--%>
-<%--                    내용--%>
-<%--                </div>--%>
-<%--            </li>--%>
-<%--                <ul id="comment_depts2">--%>
-<%--                    <li class="media mt-3 col-12">--%>
-<%--                        <img src="/resources/img/profile1.jpg" class="rounded-circle" style="width: 50px;height: 50px" alt="...">--%>
-<%--                        <div class="media-body">--%>
-<%--                                <h5>제목</h5>--%>
-<%--                                내용--%>
-<%--                        </div>--%>
-<%--                    </li>--%>
-<%--                </ul>--%>
-<%--        </ul>--%>
+        <div id="commentBoard" class="row">
+        </div>
     </div>
     <!-- 댓글 입력 -->
     <div id="commentInput" class="row col-12 pt-3">
-        <img src="..." class="col-md-1 col-xs-1" alt="...">
-        <input id="commentContent" class="form-control form-control-lg col-md-10 col-xs-8" type="text" placeholder="내용을 입력해주세요">
+        <img src="/resources/img/profile1.jpg" class="rounded-circle" style="width: 50px;height: 50px">
+        <input id="commentContent" class="form-control form-control-lg col-md-10 col-xs-8 ml-2 mr-2" type="text" placeholder="내용을 입력해주세요">
         <button id="commentSubmit" class="btn btn-info col-md-1 col-xs-1">입력</button>
     </div>
 
@@ -223,6 +205,59 @@
                 showObj.style.display = "none";
         }
     }
+    function toggleSubComment(e){
+        $commentRoot = e.parentNode.parentNode;
+        $subComments = $commentRoot.getElementsByTagName("li")
+
+        for(var i=0;i<$subComments.length;i++){
+            if($subComments[i].style.display == "block"){
+                $subComments[i].style.display = "none";
+            }else if($subComments[i].style.display == "none"){
+                $subComments[i].style.display = "block";
+            }
+        }
+
+    }
+
+    function toggleWriteSubComment(e){
+        $inputSubComment = e.parentNode.getElementsByTagName("p")[0]
+
+        if($inputSubComment.style.display == "block"){
+            $inputSubComment.style.display = "none";
+        }else if($inputSubComment.style.display == "none"){
+            $inputSubComment.style.display = "block";
+        }
+
+    }
+
+    function writeSubComment(e){
+
+        console.log(e.parentNode.parentNode)
+
+        var comment = e.previousSibling.value;
+
+        // $.ajax({
+        //     type: "POST",
+        //     url: "/group/join.do",
+        //     data: JSON.stringify(data),
+        //     dataType: 'json',
+        //     contentType: "application/json; charset=utf-8;",
+        //     success : function (response){
+        //         alert("신청 처리 되었습니다");
+        //         location.reload();
+        //     },
+        //     error : function (response){
+        //         alert("오류 발생! 다시 시도해주세요");
+        //     }
+        // })
+
+
+    }
+
+    function cancelwriteSubComment(e){
+        e.previousSibling.previousSibling.value=null;
+    }
+
 $(document).ready(function (){
     $(document).on('click','.joinGroupBtn',function (){
 
@@ -408,9 +443,11 @@ $(document).ready(function (){
     $(document).on('click','#commentSubmit',function (){
 
         var data = {
+            "parentNum" : 0,
+            "depts" : 1,
             "groupNum" : ${group.GROUPNUM},
-            "userId" : "<%= request.getSession().getAttribute("LOGIN")%>",
-            "commentContent" : $('#commentContent').val(),
+            "content" : $('#commentContent').val(),
+            "userId" : "<%= request.getSession().getAttribute("LOGIN")%>"
         }
 
         $.ajax({
@@ -420,10 +457,34 @@ $(document).ready(function (){
             dataType: 'json',
             contentType: "application/json; charset=utf-8;",
             success: function (response){
-                console.log("success");
+                console.log(response)
+
+                var index = 0;
+
+                    var rootNum = response.parentNum;
+
+                    if (rootNum == 0) {
+                        var id = 'depts' + index
+
+                        $('#commentBoard').append(
+                            '<ul id="' + id + '" class="col-12 row">' +
+                            '<img src="/resources/img/profile1.jpg" class="rounded-circle" style="width: 50px;height: 50px">'+
+                            '<div class="col-10">'+
+                            '<pre style="display: none">'+response.commentNum+'</pre>'+
+                            '<h5>'+response.userId+'</h5>'+
+                            '<div>'+response.content +'</div>' +
+                            '<button class="'+id+' p-0 btn btn-default text-muted" onclick="toggleSubComment(this)">[댓글 더보기]</button>' +
+                            '<button class="'+id+'subComment p-0 btn btn-default text-muted" onclick="toggleWriteSubComment(this)">[댓글]</button>' +
+                            '<p style="display: none"><input type="text" class="form-control" placeholder="댓글 내용 입력"/>' +
+                            '<button id="writeSubCommentBtn" class="btn btn-info" onclick="writeSubComment(this)">작성</button>' +
+                            '<button class="btn btn-light" onclick="cancelwriteSubComment(this)">취소</button>' +
+                            '</p></div></ul>');
+
+                        index++;
+                    }
             },
             error: function(response){
-                console.log("error");
+                alert("다시 시도해주세요")
             }
         })
 
@@ -442,8 +503,6 @@ $(document).ready(function (){
             contentType: "application/json; charset=utf-8;",
             success: function (response){
 
-                console.log(response)
-
                 var index = 0;
                 for(var i=0;i<response.length;i++) {
 
@@ -454,40 +513,43 @@ $(document).ready(function (){
                         var id = 'depts' + index
 
                         $('#commentBoard').append(
-                            '<ul id="' + id + '">' + response[i].content + '</ul>'
-                        );
+                            '<ul id="' + id + '" class="col-12 row">' +
+                            '<img src="/resources/img/profile1.jpg" class="rounded-circle" style="width: 50px;height: 50px">'+
+                            '<div class="col-10">'+
+                            '<pre style="display: none">'+response[i].commentNum+'</pre>'+
+                            '<h5>'+response[i].userId+'</h5>'+
+                            '<div>'+response[i].content +'</div>' +
+                            '<button class="'+id+' p-0 btn btn-default text-muted" onclick="toggleSubComment(this)">[댓글 더보기]</button>' +
+                            '<button class="'+id+'subComment p-0 btn btn-default text-muted" onclick="toggleWriteSubComment(this)">[댓글]</button>' +
+                            '<p style="display: none"><input type="text" class="form-control" placeholder="댓글 내용 입력"/>' +
+                            '<button id="writeSubCommentBtn" class="btn btn-info" onclick="writeSubComment(this)">작성</button>' +
+                            '<button class="btn btn-light" onclick="cancelwriteSubComment(this)">취소</button>' +
+                            '</p></div></ul>');
 
                         index++;
 
+                        var index1 = 0;
                         for (var j = 0; j < response.length; j++) {
 
                             if (response[j].parentNum == commentNum) {
                                 $('#' + id).append(
-                                    '<li id="' + id + j + '">' + response[j].content + '</li>'
-                                )
+                                    '<li id="' + id + index1 + '" class="col-12 row pt-3 ml-5 pl-2" style="display: none;">'+
+                                    '<img src="/resources/img/profile1.jpg" class="rounded-circle" style="width: 40px;height: 40px;float: left">'+
+                                    '<div class="col-9">'+
+                                    '<h5 class="mb-0">'+response[j].userId+'</h5>'+
+                                    response[j].content +'</div></li>'
+                                );
+
+                                index1++;
                             }
                         }
                     }
                 }
-                // var html = "<ul id='comment_depts1' class='media-body row'>";
-                //         html += "" +
-                //                 "<li class='media mt-3 col-12 pl-"+response[i].depts * 2+
-                //                 "'><img src='/resources/img/profile1.jpg' class='rounded-circle'style='width: 50px;height: 50px' alt='...'>" +
-                //                 "<div class='col-10'>" +
-                //                 "<h5>"+response[i].userId+"</h5>" +
-                //                 response[i].content+"</div></li>";
-                //     }
-                //
-                // html += "</ul>";
-
-                // $('#commentBoard').append(html);
-
             },
             error: function(response){
                 console.log("error");
                 console.log(response)
             }
         })
-
     })
 </script>

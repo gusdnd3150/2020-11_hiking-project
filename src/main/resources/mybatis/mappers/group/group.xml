@@ -241,19 +241,36 @@
     </delete>
 
     <!-- 그룹 댓글 작성 -->
-    <insert id="insertCommentGroup" parameterType="map">
+    <insert id="insertCommentGroup" useGeneratedKeys="true" keyProperty="commentNum" parameterType="map">
+        <selectKey keyProperty="commentNum" resultType="_int" order="BEFORE">
+            SELECT commentNum_seq.nextval
+            FROM dual
+        </selectKey>
         <![CDATA[
---             INSERT INTO groupComment
---             VALUES (
---                 commentNum_seq.nextval,
---                 #{commentParentNum},
---                 #{userId},
---                 commentOrder+1,
---                 #{groupNum},
---                 sysdate
-            )
+            INSERT INTO groupComment
+            VALUES  (
+                    #{commentNum},
+                    #{parentNum},
+                    #{depts},
+                     (select MAX(commentOrder)+1
+                     FROM groupComment
+                     WHERE parentNum = #{parentNum}
+                     AND groupNum = #{groupNum}),
+                    #{groupNum},
+                    #{content},
+                    #{userId},
+                    sysdate
+                    )
         ]]>
     </insert>
+
+    <select id="selectCommentOne" parameterType="_int" resultType="groupCommentVO">
+        <![CDATA[
+            SELECT COMMENTNUM, PARENTNUM, DEPTS, COMMENTORDER, CONTENT, USERID, CREATEDAT
+            FROM GROUPCOMMENT
+            WHERE commentNum = #{commentNum}
+        ]]>
+    </select>
 
     <select id="selectCommentByGroupNum" parameterType="_int" resultType="groupCommentVO">
         <![CDATA[
@@ -262,7 +279,7 @@
                  GROUPCOMMENT
                  )
             WHERE GROUPNUM = #{groupNum}
-            START WITH PARENTNUM IS NULL
+            START WITH PARENTNUM = 0
             CONNECT BY PRIOR COMMENTNUM = PARENTNUM
             ORDER SIBLINGS BY COMMENTORDER
         ]]>
