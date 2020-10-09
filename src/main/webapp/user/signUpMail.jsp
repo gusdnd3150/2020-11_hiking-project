@@ -21,18 +21,21 @@
     <div class="col-md-8 col-lg-6">
       <div class="login d-flex align-items-center py-5">
         <div class="container">
-          <div class="row">
+          <div class="row text-center">
             <div class="col-md-9 col-lg-8 mx-auto">
-              <h3 class="login-heading mb-4">입력하신 이메일 주소로 가입인증 메일이 발송되었습니다. <br>
-              <br >메일을 먼저 확인해주셔야 로그인이 가능합니다 :)</h3> 
-             			<form action="/user/logInView.do" method="post">
+              <h5 class="login-heading mb-4">
+               <strong>입력하신 이메일 주소</strong>로<br> 
+         		회원가입 인증 메일이 발송되었습니다. 
+              </h5><br>
+       	    <h5>메일을 확인하신 뒤에 로그인이<br>가능합니다.<h5>
+              <br>
+              <h6> <div id="count"></div><h6>
+         <form action="/user/logInView.do" method="post" name="frm">
                 <button class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2" 
-               type="submit" >로그인</button>
+               type="submit">지금 바로 로그인하기</button>
       
               </form>
-              
             </div>
-            
           </div>
         </div>
       </div>
@@ -40,4 +43,20 @@
   </div>
 </div>
 </body>
+<script>
+window.onload = function(){
+	let form = document.frm;
+	let time = 60;  
+	 setInterval(function(){
+		 if(time==0){
+				form.submit();
+			};
+		 var time_text = '('+ time +'초 후 메인화면으로 자동 전환됩니다.)';
+			$("#count").text(time_text);
+			$("#count").css('color','gray');
+			
+			time--;
+	 },1000); 
+};
+</script>
 </html>

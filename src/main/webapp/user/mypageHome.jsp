@@ -3,19 +3,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script type="text/javascript" src="../resources/js/jquery.js"></script>
 <script type="text/JavaScript"
 	src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta charset="utf-8">
-<title>mypageHome</title>
-<link href="/resources/css/bootstrap.min.css" rel="stylesheet">
+ <title>산오름</title>
+    <!-- ico,css -->
+    <link rel="icon" href="../resources/img/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" type="text/css" href="/resources/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/resources/css/views/common/header.css" />
 </head>
-<!— body —>
-<script src="/resources/js/jquery.js"></script>
-<script src="/resources/js/bootstrap.bundle.js"></script>
 <body>
 
 		<jsp:include page="/common/header.jsp" flush="false"/>
@@ -30,16 +30,16 @@
 						<div class="box-body box-profile">
 						<div style="text-align:center;">
 
-							<img class="rounded-circle" src="/mypage/contentView.do" width="100" height="100"
+							<img class="rounded-circle" src="http://localhost:8080/resources/img/${userVO.content2}" width="100" height="100"
 								alt="프로필사진">
 							
 								</div>
-							<h3 class="profile-username text-center" id="name"></h3>
+							<h3 class="profile-username text-center" id="name">${userVO.name}</h3>
 							<!-- <p class="text-muted text-center">여기다가는 뭘 넣을까 그냥 뺼까</p> -->
 
 							<ul class="list-group list-group-unbordered">
 								<li class="list-group-item text-center">
-									<p id="profile1">여기에 나의 소개글이 이렇게 들어갈거에요.</p>
+									<p id="profile1">${userVO.profile}</p>
 								</li>
 								<li class="list-group-item"><b>내가 오른 산</b> <a
 									class="pull-right"><h5 style="text-align: right">15</h5></a></li>
@@ -181,7 +181,7 @@
 <script>
 <!-- /.container -->
 	$(document).ready(function() {
-			$.ajax({
+		/* 	$.ajax({
 				url : "/mypage/modProfile.do",
 				type : "post",
 				success : function(data) {
@@ -189,6 +189,7 @@
 					$('#profile1').text(data.profile);
 					$('#profile2').text(data.profile);
 					$('#name').text(data.name);
+					var content2 =  (data.content2);
 				},
 				error : function(data, textStatus) {
 					console.log("실패");
@@ -197,7 +198,7 @@
 
 				}
 
-		});
+		}); */
 		
 		$("#checkIt").click(function() {
 			var pwd = $("#password3").val(); 
@@ -236,12 +237,22 @@
 			//responsebody -> 아작스로 들어옴
 			});
 		});
-		$("#close").click(function() {
-			console.log("close");
+	
+		$("#myInfo").click(function() {
+			console.log("myInfo");
 			$("#password3").val(""); 
 	});
 	});
 
 </script>
+	<!-- <script type="text/javascript" src="../resources/js/bootstrap.min.js"></script> -->
+	<script
+		src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+		integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+		integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+		crossorigin="anonymous"></script>
 </body>
 </html>

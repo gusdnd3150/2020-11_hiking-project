@@ -35,6 +35,13 @@ public class UserServiceImpl implements UserService {
 		return rst;
 	}
 	
+	@Override
+	public int emailCheck(String email) throws Exception {
+		int rst = userDAO.emailCheck(email);
+		System.out.println("Service : "+ rst);
+		return rst;
+	}
+	
 	public UserVO logIn(LoginDTO loginDTO) throws Exception {
 		System.out.println("서비스왔다감");
 		return userDAO.logIn(loginDTO);
@@ -85,6 +92,14 @@ public class UserServiceImpl implements UserService {
 		
 	}
 
+	@Override
+	public String searchId(String email) {
+		return userDAO.searchId(email);
+		
+	}
 
+	public int selectUserNum(String id) {
+		return userDAO.selectUserNum(id);
+	}
 	
 }

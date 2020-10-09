@@ -24,7 +24,6 @@ public class FileUtils {
         Map listMap = null;
 
         String imagePath = "/resources/img/";
-
         String savePath = requestPath + imagePath;
 
         File file = new File(savePath);
@@ -51,5 +50,40 @@ public class FileUtils {
         }
         System.out.println(list.toString());
         return list;
+    }
+    public Map saveSingleFile(int index, MultipartFile fileP, String requestPath) throws IOException {
+
+        String originalFileName = null;
+        String originalFileExtension = null;
+        String storedFileName = null;
+
+       
+        Map map = null;
+
+        String imagePath = "/resources/img/";
+        String savePath = requestPath + imagePath;
+
+        File file = new File(savePath);
+        if(file.exists() == false){
+            file.mkdirs();
+        }
+
+            originalFileName = fileP.getOriginalFilename();
+            originalFileExtension = fileP.getOriginalFilename().substring(originalFileName.lastIndexOf("."));
+            storedFileName = getRandomString() + originalFileExtension;
+
+            file = new File(savePath + storedFileName);
+            System.out.println(file.getAbsolutePath()); //파일 절대 경로
+
+            fileP.transferTo(file);
+
+            map = new HashMap();
+            map.put("userNum", index);
+            map.put("originalFileName", originalFileName);
+            map.put("storedFileName", storedFileName);
+            map.put("fileSize",map.get("Size"));
+        
+        System.out.println(map);
+        return map;
     }
 }

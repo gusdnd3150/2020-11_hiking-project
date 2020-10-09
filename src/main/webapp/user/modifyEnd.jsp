@@ -8,7 +8,7 @@
 </head>
 <body>
 	<script>
-		alert("오르미의 회원 정보가 수정되었습니다.");
+		alert("회원 정보가 수정되었습니다.");
 		self.location ="/user/logOut.do";
 	</script>
 </body>

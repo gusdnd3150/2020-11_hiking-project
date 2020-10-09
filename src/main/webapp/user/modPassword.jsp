@@ -38,7 +38,7 @@
 								<th>비밀번호 확인</th>
 								<td><input type="password" class="form-control"
 									id="password2" name="password2" placeholder="비밀번호 확인"><br>
-									<input type="button" value="확인"><br>
+									<input type="button" value="일치 여부 확인"><br>
 									<div class="check_font" id="password2Check"></div></td>
 							</tr>
 							
@@ -49,7 +49,7 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">X닫기</button>
-				<button type="submit" class="btn btn-primary" id="updatePwd" disabled>변경하기</button>
+				<button  type="submit" class="btn btn-primary" id="updatePwd" disabled>변경하기</button>
 				</form>
 			</div>
 		</div>
@@ -77,7 +77,7 @@
 		if (pwdJ.test($(this).val()) && $(this).val() == password) {
 			console.log("비밀번호 같을 때 ");
 			console.log($(this).val())
-			$('#passwordCheck').css('color', 'green');
+			$('#password2Check').css('color', 'green');
 			$("#password2Check").text('변경 가능합니다. :)');
 			$("#updatePwd").attr("disabled", false);
 		} else {

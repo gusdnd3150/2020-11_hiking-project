@@ -43,17 +43,33 @@ public class MypageControllerImpl implements MypageController {
 	
 	@Autowired
 	UserService userService;
-
+	
 	@Autowired
 	ThumbnailMaker thumbnailMaker;
-
+	
 	@Autowired
 	UserVO userVO;
 
-	@RequestMapping(value = "/mypage/modifyView.do", produces="application/json", method = { RequestMethod.GET, RequestMethod.POST })
+	@RequestMapping(value = "/mypage/mypageHomeView.do", method = { RequestMethod.GET, RequestMethod.POST })
+	public ModelAndView mypageHomeView(HttpSession httpSession) throws Exception {
+		ModelAndView mav = new ModelAndView();
+		UserVO userVO = new UserVO();
+		userVO.setId((String) httpSession.getAttribute(LOGIN));
+		userVO = mypageService.getUserInfo(userVO);
+		if(userVO.getContent2()==null || userVO.getContent2().equals("")) {
+			userVO.setContent2("userBasic.jpg");
+		}
+		mav.addObject("userVO", userVO);
+		mav.setViewName("/user/mypageHome");
+		System.out.println("갖다준당 : " + userVO);
+		return mav;
+	}
+
+	@RequestMapping(value = "/mypage/modifyView.do", produces = "application/json", method = { RequestMethod.GET,
+			RequestMethod.POST })
 	@ResponseBody
-	public ModelAndView updateUserView(HttpSession httpSession)
-			throws Exception {
+	public ModelAndView updateUserView(HttpSession httpSession) throws Exception {
+		UserVO userVO = new UserVO();
 		ModelAndView mav = new ModelAndView();
 		logger.info("modifyView.do");
 		userVO.setId((String) httpSession.getAttribute(LOGIN));
@@ -63,31 +79,24 @@ public class MypageControllerImpl implements MypageController {
 		return mav;
 	}
 
-	@RequestMapping(value = "/mypage/modProfile.do", produces="application/json", method = { RequestMethod.GET, RequestMethod.POST })
+	@RequestMapping(value = "/mypage/modProfile.do", produces = "application/json", method = { RequestMethod.GET,
+			RequestMethod.POST })
 	@ResponseBody
 	public UserVO modProfileView(HttpServletRequest request, ModelAndView mav, HttpSession httpSession)
 			throws Exception {
+		UserVO userVO = new UserVO();
 		userVO.setId((String) httpSession.getAttribute(LOGIN));
 		userVO = mypageService.getUserInfo(userVO);
 		return userVO;
 	}
+	
 
-	@RequestMapping(value = "/mypage/contentView.do", method = { RequestMethod.GET, RequestMethod.POST })
-	public ResponseEntity<byte[]> contentView(HttpServletRequest req, HttpServletResponse res,
-			HttpSession httpSession)throws Exception {
-		userVO.setId((String) httpSession.getAttribute(LOGIN));
-		mypageService.getUserInfo(userVO);
-		byte[] content2 = userVO.getContent2();
-		final HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.IMAGE_PNG);
-	return new ResponseEntity<byte[]>(content2, headers, HttpStatus.OK);
-	}
 
 	@RequestMapping(value = "/mypage/updateUser.do", method = { RequestMethod.GET, RequestMethod.POST })
 	public String updateUser(HttpSession httpSession, UserVO userVO) throws Exception {
 		if (!userVO.getPassword().equals("")) {
 			logger.info("비밀번호 변경	");
-			System.out.println("바뀐 비밀번호"+userVO.getPassword());
+			System.out.println("바뀐 비밀번호" + userVO.getPassword());
 			String hashedPwd = BCrypt.hashpw(userVO.getPassword(), BCrypt.gensalt(10));
 			userVO.setPassword(hashedPwd);
 			userVO.setId((String) httpSession.getAttribute(LOGIN));
@@ -103,53 +112,41 @@ public class MypageControllerImpl implements MypageController {
 		return "/user/modifyEnd";
 	}
 
-	@RequestMapping(value = "/mypage/updateUserInfo.do", method = { RequestMethod.GET, RequestMethod.POST })
-	public String updateUserInfo(MultipartHttpServletRequest file, HttpServletRequest request,
-			HttpServletResponse response, HttpSession httpSession) throws Exception {
-		userVO.setId((String) httpSession.getAttribute(LOGIN));
-		String id=userVO.getId();
-		Map<String, Object> profMap = new HashMap<String, Object>();
-		Enumeration enu = request.getParameterNames();
-		while (enu.hasMoreElements()) {
-			String profile = (String) enu.nextElement();
-			String profileValue = request.getParameter(profile);
-			profMap.put(profile, profileValue);
-			profMap.put("id", id);
-			logger.info("profMap");
-		}
 
-		Map<String, Object> contMap = new HashMap<String, Object>();
-		MultipartFile multiContent = file.getFile("content"); // 파일 형태로 받아서
-		byte[] content = multiContent.getBytes(); // 파일 실제 내용 풀어내기
-		byte[] content2 = thumbnailMaker.createThumbnail(multiContent, 100, 100);
-		contMap.put("content", content);
-		contMap.put("content2", content2);
-		contMap.put("id", id);
-		logger.info("contMap");
-		try {
-			mypageService.updateUserProf(profMap);
-			mypageService.updateUserCont(contMap);
-			logger.info("service go!");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return "/user/mypageHome";
+	@RequestMapping(value = "/mypage/updateUserInfo.do", method = { RequestMethod.GET, RequestMethod.POST })
+	public String updateUserInfo(@RequestParam String profile, @RequestParam(value="file", required=false) MultipartFile fileP, HttpServletRequest request,
+			HttpSession httpSession) throws Exception {
+		String id = (String) httpSession.getAttribute(LOGIN);
+		int userNum = userService.selectUserNum(id);
+		Map<String, Object> profMap = new HashMap<String, Object>();
+		profMap.put("profile", profile);
+		profMap.put("userNum", userNum);
+		mypageService.updateUserProf(profMap);
+			logger.info("profMap");
+
+				if (!fileP.isEmpty()) {
+					String path = request.getSession().getServletContext().getRealPath("/");
+					int mediaResult = mypageService.updateUserCont(userNum, fileP, path);
+					System.out.println("mediaResult: "+mediaResult);
+				}
+return "redirect:/mypage/mypageHomeView.do";
 	}
-	
 
 	@RequestMapping(value = "/mypage/pwdCheck.do", method = { RequestMethod.GET, RequestMethod.POST })
 	@ResponseBody
 	public String pwdCheck(@RequestParam("pwd") String pwd, HttpSession httpSession) throws Exception {
+		UserVO userVO = new UserVO();
 		String rst = "1";
 		logger.info("pwdCheck   :" + pwd);
+		System.out.println((String) httpSession.getAttribute(LOGIN));
 		userVO.setId((String) httpSession.getAttribute(LOGIN));
+		System.out.println(userVO.getId());
 		userVO = mypageService.pwdCheck(userVO);
 		if (userVO == null || !BCrypt.checkpw(pwd, userVO.getPassword())) {
 			return rst;
 		}
-		rst ="0";
+		rst = "0";
 		return rst;
 	}
-	
-	
+
 }

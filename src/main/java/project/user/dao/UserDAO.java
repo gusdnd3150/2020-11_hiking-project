@@ -14,6 +14,8 @@ public interface UserDAO {
 
 	public int idCheck(String id) throws Exception;
 	
+	public int emailCheck(String email) throws Exception;
+	
 	public UserVO logIn(LoginDTO loginDTO) throws Exception; // 로그인
 	
 	void keepLogIn(String id, String sessionId, Date sessionLimit) throws Exception;
@@ -29,5 +31,10 @@ public interface UserDAO {
 	public void updateAuthStatus(Map<String, String> map);
 
 	public void withdrawal(UserVO userVO);
+
+	public String searchId(String email);
+
+	public int selectUserNum(String id);
+
 
 }

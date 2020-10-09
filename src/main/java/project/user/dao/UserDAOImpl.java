@@ -30,10 +30,6 @@ public class UserDAOImpl implements UserDAO{
 	@Override
 	public void insertUser(UserVO userVO) throws Exception{
 		sqlSession.insert("userMapper.insertUser", userVO);
-		ClassPathResource resource = new ClassPathResource("image/userBasic.jpg");
-		File file = resource.getFile();
-		byte[] content2 = FileUtils.readFileToByteArray(file);
-		userVO.setContent2( content2 );
 		sqlSession.insert("userMapper.insertUser3", userVO);
 		sqlSession.insert("userMapper.insertUser5", userVO);
 	}
@@ -41,10 +37,6 @@ public class UserDAOImpl implements UserDAO{
 	@Override
 	public void insertUser2(Map<String, Object> snsUser) throws IOException {
 		sqlSession.insert("userMapper.insertUser2", snsUser);
-		ClassPathResource resource = new ClassPathResource("image/userBasic.jpg");
-		File file = resource.getFile();
-		byte[] content2 = FileUtils.readFileToByteArray(file);
-		snsUser.put("content2",content2);
 		sqlSession.insert("userMapper.insertUser4", snsUser);
 		sqlSession.insert("userMapper.insertUser6", snsUser);
 	}
@@ -53,6 +45,14 @@ public class UserDAOImpl implements UserDAO{
 	public int idCheck(String id) throws Exception{
 		System.out.println("다오아이디체크: "+id);
 		int rst = sqlSession.selectOne("userMapper.idCheck", id);
+	System.out.println("DAO : "+ rst);
+		return rst;
+	}
+	
+	@Override
+	public int emailCheck(String email) throws Exception{
+		System.out.println("다오email체크: "+email);
+		int rst = sqlSession.selectOne("userMapper.emailCheck", email);
 	System.out.println("DAO : "+ rst);
 		return rst;
 	}
@@ -111,6 +111,16 @@ public class UserDAOImpl implements UserDAO{
 	public void withdrawal(UserVO userVO) {
 		sqlSession.update("userMapper.withdrawal", userVO);
 		
+	}
+
+	@Override
+	public String searchId(String email) {
+		return sqlSession.selectOne("userMapper.searchId", email);
+		}
+
+	@Override
+	public int selectUserNum(String id) {
+		return sqlSession.selectOne("userMapper.selectUserNum", id);
 	}
 
 	

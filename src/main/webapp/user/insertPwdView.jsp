@@ -34,7 +34,7 @@
                   <input type="password" id="password2" name="password2" class="form-control" placeholder="Password" required>
                   <label for="password2">비밀번호 확인</label>
                    <div class ="check_font" id="password2Check"></div></div>
-                   <div class="text-center"><a href="#">확인</a></div>
+                   <div class="text-center"><a href="#">일치 여부 확인</a></div>
                 
                 <button class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2" 
                 id="insertPwd" type="submit" disabled >저장</button>

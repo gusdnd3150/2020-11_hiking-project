@@ -1,23 +1,33 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-    <c:set var="contextPath"  value="${pageContext.request.contextPath}"  />
-    <%
-   request.setCharacterEncoding("UTF-8");
+    pageEncoding="UTF-8"
+    isELIgnored="false" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>    
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<%
+  request.setCharacterEncoding("UTF-8");
 %> 
-<!DOCTYPE html>
-
-<!-- 주소(우편번호부터 들고오게 어떻게 함?) --> 
-
-<html>
+<c:set var="contextPath"  value="${pageContext.request.contextPath}"  />
+<!doctype html>
+<html lang="ko">
 <head>
-<script  src="http://code.jquery.com/jquery-latest.min.js"></script>
-<script type="text/JavaScript" src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script type="text/JavaScript"
+	src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
+    <title>산오름</title>
+    <!-- ico,css -->
+    <link rel="icon" href="../resources/img/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" type="text/css" href="../resources/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="../resources/css/views/common/header.css" />
+<!-- Navigation -->
+
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- 위 3개의 메타 태그는 *반드시* head 태그의 처음에 와야합니다; 어떤 다른 콘텐츠들은 반드시 이 태그들 *다음에* 와야 합니다 -->
-    <title>산오름 회원가입</title>
 <!-- 합쳐지고 최소화된 최신 CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 <!-- 부가적인 테마 -->
@@ -54,13 +64,29 @@
 		}
 			
 	</script>
+	<style>
+		.containerr{
+		
+			text-align: left;
+		}
+		
+	</style>
 </head>
 <body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+<div class="containerr ">
+		<a class="navbar-brand" href="/"> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+		<img src="../resources/img/main-icon.svg" width="30" height="30"
+			class="d-inline-block align-top" alt="" loading="lazy"> 산오름
+		</a>
+
+	</div>
+	</nav>
 			<div class="row text-center">
-				 <div class="col-md-3"></div>
-				<div class="col-md-6">
-					<h2>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-					산오름 회원가입</h2>
+				 <div class="col-md-4"></div>
+				<div class="col-md-4" >
+					<h2 class="display-3">산오름 회원가입</h2>
+					<br>
     <form name="frmJoin" action="/user/insertUser.do" method="post">
         <table class="table table-boardered">
             <tr>
@@ -88,9 +114,9 @@
 
             <tr>
                 <th>이메일</th>
-                <td><input type="email" class="form-control" id="email" name="email" placeholder="아이디, 비밀번호 찾기 등 고객센터를 이용하시면 해당 메일주소로 전송됩니다." required><br>
-                <p>회원가입 인증 메일이 해당 메일주소로 전송됩니다.</p>
-                 <div class ="check_font" id="emailCheck"></div></td>       
+                <td><input type="email" class="form-control" id="email" name="email" placeholder="ex) abc@hiking.com" required><br>
+                 <div class ="check_font" id="emailCheck"></div>     
+                <p>'회원가입 인증', '고객문의 답변' 등이 해당 메일주소로 전송됩니다.</p><p><strong>후에 변경 불가</strong>하니 정확하게 입력해 주세요.</p></td>  
             </tr>
             <tr>
                 <th>주소</th>
@@ -228,31 +254,44 @@ var phoneJ = /^01([0|1|6|7|8|9]?)?([0-9]{3,4})?([0-9]{4})$/;
 			}
 		});
 		
-		// 이메일
-		$('#email').blur(function(){
-			console.log("이벤트 먹었니");	
-			if(mailJ.test($(this).val())){
-				console.log(mailJ.test($(this).val()));
-				$("#emailCheck").text('');
-				$("#insertUser").attr("disabled", false);
-			} else {
-				$('#emailCheck').text('이메일을 확인해주세요 :)');
-				$('#emailCheck').css('color', 'red');
-				$("#insertUser").attr("disabled", true);
-			}
-		});
 		
-		/* //주소	
-		$('#addressBnt').click(function(){
-			console.log("이벤트 먹었니");	
-			if($(this).val() != ""){
-				$("#addressCheck").text('');
-			} else{
-				$('#addressCheck').text('주소를 확인해주세요 :)');
-				$('#addressCheck').css('color', 'red');
-				$("#insertUser").attr("disabled", true);
-			}
-		}); */
+		// 이메일
+		$("#email").blur(function() {
+			console.log("이벤트 먹었니");					
+			var email = $("#email").val();
+			$.ajax({
+				url : "/user/emailCheck.do?email="+email ,
+				type : "get",
+				success : function(data, textStatus) {
+					console.log("1 = 중복o / 0 = 중복x : "+ data);		
+					if (data == "1") {
+							// 1 : 이메일 중복된다는 문구
+							$("#emailCheck").text("이미 등록된 이메일입니다.");
+							$("#emailCheck").css("color", "red");
+							$("#insertUser").attr("disabled", true);
+						} else {
+							// 0 : 이메일 정규식 검사 
+							if(mailJ.test($(this).val())){
+								console.log(mailJ.test($(this).val()));
+								$("#emailCheck").text('');
+								$("#insertUser").attr("disabled", false);
+							} else {
+								$('#emailCheck').text('이메일을 확인해주세요 :)');
+								$('#emailCheck').css('color', 'red');
+								$("#insertUser").attr("disabled", true);
+							}
+						}
+					}, error : function(data, textStatus) {
+						console.log(data.readyState);
+						console.log(data.status);
+						console.log(data.responseText); 
+							console.log("실패");
+					},
+					complete : function(data, textStatus) {
+					}
+				});
+			});
+			
 	// 휴대전화
 	$('#phone').blur(function(){
 		if(phoneJ.test($(this).val())){

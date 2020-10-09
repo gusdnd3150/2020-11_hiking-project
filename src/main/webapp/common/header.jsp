@@ -53,7 +53,7 @@
                         <a class="nav-link" href="/user/logOut.do">로그아웃</a>
                 </li>
                 <li class="nav-item">
-                        <a class="nav-link" href="/user/mypageHome.jsp">마이페이지</a>
+                        <a class="nav-link" href="/mypage/mypageHomeView.do">마이페이지</a>
                 </li>
                     </c:when>
                     <c:otherwise>
