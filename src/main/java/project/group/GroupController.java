@@ -169,14 +169,20 @@ public class GroupController{
     @GetMapping("/group/userAllowed.do")
     @ResponseBody
     public int userAllowed(@RequestParam("userId")String userId,
-                           @RequestParam("groupNum")int groupNum){
+                           @RequestParam("groupNum")int groupNum,
+                           @RequestParam("action")String action){
         Map map = new HashMap();
         map.put("userId", userId);
         map.put("groupNum",groupNum);
+        map.put("action",action);
         int result;
         result = groupService.userAllowed(map);
 
-        System.out.println(result); //1
+        System.out.println(result); //1 : 진행, 0 : 마감
+
+        if(result==0){
+            groupService.expiredGroup((Integer) map.get("groupNum"));
+        }
 
         return result;
     }
@@ -185,12 +191,23 @@ public class GroupController{
     @GetMapping("/group/userDisallowed.do")
     @ResponseBody
     public int userDisallowed(@RequestParam("userId")String userId,
-                              @RequestParam("groupNum")int groupNum){
+                              @RequestParam("groupNum")int groupNum,
+                              @RequestParam("action")String action){
         Map map = new HashMap();
         map.put("userId", userId);
         map.put("groupNum", groupNum);
+        map.put("action",action);
         int result = groupService.userDisallowed(map);
 
+        return result;
+    }
+
+    //그룹 인원 만료 체크
+    @GetMapping("/group/checkGroupExpired.do")
+    @ResponseBody
+    public int checkGroupExpired(@RequestParam("groupNum")int groupNum){
+        int result = groupService.checkGroupExpired(groupNum);
+        System.out.println("checkGroupExpired : "+result);
         return result;
     }
 

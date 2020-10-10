@@ -69,11 +69,27 @@ public class GroupServiceImpl implements GroupService{
 
     @Transactional
     public int userAllowed(Map map){
-        return groupDAO.userAllowed(map);
+        int result = 0;
+        result = groupDAO.userAllowed(map);
+        result = groupDAO.checkGroupExpired((Integer) map.get("groupNum"));
+        return result;
     }
-    @Transactional
-    public int userDisallowed(Map map){return groupDAO.userDisallowed(map);}
 
+    @Transactional
+    public int userDisallowed(Map map) {
+        int result = 0;
+        result = groupDAO.userDisallowed(map);
+        result = groupDAO.checkGroupExpired((Integer) map.get("groupNum"));
+        return result;
+    }
+
+    public int checkGroupExpired(int groupNum){
+        return groupDAO.checkGroupExpired(groupNum);
+    }
+
+    public int expiredGroup(int groupNum){
+        return groupDAO.expiredGroup(groupNum);
+    }
 
     // check
 

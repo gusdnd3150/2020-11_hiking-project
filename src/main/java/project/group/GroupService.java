@@ -27,6 +27,9 @@ public interface GroupService {
     int userAllowed(Map map);
     int userDisallowed(Map map);
 
+    int checkGroupExpired(int groupNum);
+    int expiredGroup(int groupNum);
+
     List<Integer> listApplied(int groupNum);
 
     int insertFavoriteGroup(Map map);

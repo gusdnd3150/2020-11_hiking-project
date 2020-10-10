@@ -52,16 +52,34 @@ public class GroupDAO{
         return sqlSession.selectList("group.selectWaitingList",map);
     }
     //userAllowed void도 괜찮을까?
-    public int userAllowed(Map map){
-        int result = sqlSession.update("group.userAllowed",map);
 
-        //여기에 모집인원 + 1 update 해줘야함 + 남은시간 자바스크립트 setInterval?
+    public int userAllowed(Map map){
+        int result = 0;
+        result = sqlSession.update("group.userAllowed",map);
+        System.out.println("userAllowed : " + map.toString());
+        result = sqlSession.update("group.updateGroupCount",map);
+
         return result;
     }
     public int userDisallowed(Map map){
-        int result = sqlSession.update("group.userDisallowed",map);
+        int result = 0;
+        result = sqlSession.update("group.userDisallowed",map);
+        System.out.println("userDisallowed : " + map.toString());
+        result = sqlSession.update("group.updateGroupCount",map);
 
         return result;
+    }
+
+    // 1 : 가능, 0 : 만료
+    public int checkGroupExpired(int groupNum){
+        int result = 1;
+        if(sqlSession.selectOne("group.checkGroupExpired",groupNum)!=null){
+            result = 0;
+        }
+        return result;
+    }
+    public int expiredGroup(int groupNum){
+        return sqlSession.update("group.expiredGroup",groupNum);
     }
 
     public int selectWaiting(Map map){ return sqlSession.selectOne("group.selectWaiting",map);}

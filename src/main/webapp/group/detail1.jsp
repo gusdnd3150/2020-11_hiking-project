@@ -72,6 +72,7 @@
                     <!--favoriteResult ne 1 or-->
                     <button class="btn btn-outline-info col-6" onclick="showMtInfo()">산 정보보기</button>
                     <c:choose>
+                        <c:when test="${group.STATUS eq 0}"><button class="selectWaitingList btn btn-dark col-12" data-toggle="modal" data-target="#listModal">참여자 리스트</button></c:when>
                         <c:when test="${userGradeResult eq 0}"><button class="selectWaitingList btn btn-dark col-12" data-toggle="modal" data-target="#listModal">요청 리스트보기</button></c:when>
                         <c:when test="${userGradeResult eq 1}"><button class="withdrawGroupBtn btn btn-info col-12" data-toggle="modal" data-target="#cancelModal">요청 취소하기</button></c:when>
                         <c:when test="${userGradeResult eq 2}"><button class="joinButton btn btn-outline-info col-12" data-toggle="modal" data-target="#joinModal">참여 신청</button></c:when>
@@ -80,9 +81,14 @@
             </div>
         </div>
     </div>
-
+    <c:if test="${group.STATUS eq 0}">
     <hr />
-
+    <div class="pt-5 pb-5" style="text-align: center">
+        <h1>모임이 시작되었습니다!</h1>
+        <button class="selectWaitingList btn btn-outline-primary col-8" data-toggle="modal" data-target="#listModal">채팅에 참여하기</button>
+    </div>
+    </c:if>
+    <hr />
     <h3 class="my-4">산모임 상세내용</h3>
     <div class="row">
         <div class="col-12">
@@ -411,7 +417,8 @@ $(document).ready(function (){
 
         var data = {
             userId : (this.parentNode).childNodes[0].innerHTML,
-            groupNum : ${group.GROUPNUM}
+            groupNum : ${group.GROUPNUM},
+            action : "plus"
         }
 
         $.ajax({
@@ -434,7 +441,8 @@ $(document).ready(function (){
     $(document).on('click','.userDisallowed',function (e){
         var data = {
             userId : (this.parentNode).childNodes[0].innerHTML,
-            groupNum : ${group.GROUPNUM}
+            groupNum : ${group.GROUPNUM},
+            action : "minus"
         }
 
         $.ajax({

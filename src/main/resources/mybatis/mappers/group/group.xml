@@ -208,6 +208,37 @@
         ]]>
     </update>
 
+    <select id="checkGroupExpired" resultType="_int" parameterType="_int">
+        <![CDATA[
+            select STAFFCURRENT, STAFFMAX
+            from groups
+            where groupNum = #{groupNum}
+            AND STAFFCURRENT=STAFFMAX
+        ]]>
+    </select>
+    <update id="expiredGroup" parameterType="_int">
+        <![CDATA[
+            UPDATE groups
+            SET status = 0
+            WHERE groupNum = #{groupNum}
+        ]]>
+    </update>
+
+    <update id="updateGroupCount" parameterType="map">
+        <choose>
+            <when test="action.equals('plus')">
+                UPDATE groups
+                SET staffCurrent = staffCurrent + 1
+                WHERE groupNum = #{groupNum}
+            </when>
+            <when test="action.equals('minus')">
+                UPDATE groups
+                SET staffCurrent = staffCurrent - 1
+                WHERE groupNum = #{groupNum}
+            </when>
+        </choose>
+    </update>
+
     <!-- 그룹 좋아요 -->
     <insert id="insertFavorite" parameterType="map">
         <![CDATA[
