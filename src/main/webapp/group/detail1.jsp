@@ -258,6 +258,7 @@
             contentType: "application/json; charset=utf-8;",
             success: function (response){
                 var id = $root.parentNode.id;
+                console.log(id)
                 $('#'+id).append(
                     '<li id="temp" class="col-12 row pt-3 ml-5 pl-2">'+
                     '<img src="/resources/img/profile1.jpg" class="rounded-circle" style="width: 40px;height: 40px;float: left">'+

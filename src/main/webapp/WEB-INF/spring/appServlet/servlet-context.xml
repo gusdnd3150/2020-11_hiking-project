@@ -108,16 +108,14 @@
 		<beans:constructor-arg value="${auth.googleClientSecret}" />
 		<beans:constructor-arg value="${auth.googleRedirectUrl}"  />
 	</beans:bean>
-    <!-- websocket -->
-    <beans:bean id="echoHandler" class="project.chat.EchoHandler" />
 
- 	<websocket:handlers>
-		<websocket:mapping handler="echoHandler" path="/chat.do" />
-		<websocket:sockjs/>
-<!--		<websocket:handshake-interceptors>-->
-<!--		  <beans:bean class="org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor" />-->
-<!--		</websocket:handshake-interceptors>-->
-	</websocket:handlers>
+    <!-- websocket -->
+	<websocket:message-broker application-destination-prefix="/">
+		<websocket:stomp-endpoint path="/stomp">
+			<websocket:sockjs />
+		</websocket:stomp-endpoint>
+		<websocket:simple-broker prefix="/topic" />
+	</websocket:message-broker>
 
     <!-- batch -->
     <!-- 

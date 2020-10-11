@@ -8,7 +8,7 @@ import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 import java.util.Map;
 
-@Repository
+@Repository("groupDAO")
 public class GroupDAO{
 
     @Autowired
