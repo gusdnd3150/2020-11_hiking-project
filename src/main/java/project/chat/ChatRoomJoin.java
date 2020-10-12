@@ -3,8 +3,11 @@ package project.chat;
 import lombok.Data;
 import org.springframework.stereotype.Component;
 
-@Data
 @Component
-public class ChatRoom {
+@Data
+public class ChatRoomJoin {
+    private int groupNum;
     private int roomNum;
+    private String userId;
+    private int joinNum;
 }

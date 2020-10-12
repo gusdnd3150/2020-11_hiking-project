@@ -2,6 +2,7 @@ package project.chat;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -19,9 +20,16 @@ public class ChatController {
         return "chat/chat";
     }
 
-    @PostMapping("/chat/new.do")
-    public String newChat(@RequestParam("groupNum")int groupNum){
-        Long chatRoomNum = Long.valueOf(chatService.newRoom(groupNum));
-        return "redirect/chat/"+chatRoomNum;
+    @GetMapping("/chat/{groupNum}")
+    public String newChat(@PathVariable("groupNum")int groupNum){
+
+        //유저가 이방에 권한이 있는지 체크해야함
+        String chatRoomId = chatService.newChat(groupNum);
+        return "redirect:/chat/"+chatRoomId;
+    }
+
+    @GetMapping("/chat/{chatRoomId}")
+    public String goChat(@PathVariable("chatRoomId")String chatRoomId){
+        return "";
     }
 }

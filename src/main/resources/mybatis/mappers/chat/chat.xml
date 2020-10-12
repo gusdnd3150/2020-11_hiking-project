@@ -3,11 +3,31 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="chat">
-    <select id="checkExistRoom" resultType="_int" parameterType="_int">
+    <select id="checkExistRoom" resultType="string" parameterType="_int">
         <![CDATA[
-            SELECT NVL(MAX(ROOMNUM),0)
+            SELECT NVL(MAX(ROOMID),0)
             FROM chatRoomJoin
             WHERE groupNum = #{groupNum}
+        ]]>
+    </select>
+
+    <insert id="insertNewChatRoom" parameterType="map">
+        <![CDATA[
+        INSERT INTO chatRoomJoin
+        VALUES (
+                #{groupNum},
+                #{roomId},
+                #{USERID}
+                )
+        ]]>
+    </insert>
+
+    <select id="selectUserIdByGroupNum" resultType="map" parameterType="_int">
+        <![CDATA[
+            SELECT userId
+            FROM userWaiting
+            WHERE groupNum = #{groupNum}
+            AND userStatus = 0
         ]]>
     </select>
 </mapper>

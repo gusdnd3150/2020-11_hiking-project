@@ -13,8 +13,20 @@ public class ChatDao {
     @Autowired
     private SqlSession sqlSession;
 
-    public int checkExistRoom(int groupNum){
+    public String checkExistRoom(int groupNum){
         return sqlSession.selectOne("chat.checkExistRoom",groupNum);
+    }
+
+    public int insertNewChatRoom(List<Map> chatUsers){
+        int result = 0;
+        for(Map m : chatUsers){
+            result = sqlSession.insert("chat.insertNewChatRoom", m);
+        }
+        return result;
+    }
+
+    public List selectUserIdByGroupNum(int groupNum){
+        return sqlSession.selectList("chat.selectUserIdByGroupNum", groupNum);
     }
 //    public Map createRoom(int groupNum){
 //
