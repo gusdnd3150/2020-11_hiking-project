@@ -5,7 +5,7 @@
 <mapper namespace="chat">
     <select id="checkExistRoom" resultType="string" parameterType="_int">
         <![CDATA[
-            SELECT NVL(MAX(ROOMID),0)
+            SELECT NVL(MAX(ROOMID),'not_exist')
             FROM chatRoomJoin
             WHERE groupNum = #{groupNum}
         ]]>
@@ -28,6 +28,15 @@
             FROM userWaiting
             WHERE groupNum = #{groupNum}
             AND userStatus = 0
+        ]]>
+    </select>
+
+    <select id="selectChatByRoomId" resultType="map" parameterType="string">
+        <![CDATA[
+            SELECT roomId, userId, message, time
+            FROM chatMessage
+            WHERE roomId = #{roomId}
+            ORDER BY time ASC
         ]]>
     </select>
 </mapper>

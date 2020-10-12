@@ -85,7 +85,7 @@
     <hr />
     <div class="pt-5 pb-5" style="text-align: center">
         <h1>모임이 시작되었습니다!</h1>
-        <button class="selectWaitingList btn btn-outline-primary col-8" data-toggle="modal" data-target="#listModal">채팅에 참여하기</button>
+        <button class="selectWaitingList btn btn-outline-primary col-8" onclick="goChat();">채팅에 참여하기</button>
     </div>
     </c:if>
     <hr />
@@ -277,6 +277,10 @@
 
     function cancelwriteSubComment(e){
         e.previousSibling.previousSibling.value=null;
+    }
+
+    function goChat(){
+        location.href='/chat.do?groupNum=${group.GROUPNUM}';
     }
 
 $(document).ready(function (){

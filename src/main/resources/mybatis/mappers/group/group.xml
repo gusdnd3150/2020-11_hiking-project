@@ -62,7 +62,7 @@
         ]]>
     </insert>
 
-    <!-- 리스트 6개 불러오기 (최근순) -->
+    <!-- 리스트 3개 불러오기 (최근순) -->
     <select id="selectMainGroupList" resultType="map">
         <![CDATA[
             SELECT g.*, gm.storedFileName
@@ -70,7 +70,7 @@
             WHERE g.groupNum = gm.groupNum
               AND g.type = 1
               AND gm.mediaNum = 0
-              AND ROWNUM <=6
+              AND ROWNUM <=3
             ORDER BY g.groupNum DESC
         ]]>
     </select>

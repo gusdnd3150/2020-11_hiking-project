@@ -111,7 +111,7 @@
 
     <!-- websocket -->
 	<websocket:message-broker application-destination-prefix="/">
-		<websocket:stomp-endpoint path="/stomp">
+		<websocket:stomp-endpoint path="/chat">
 			<websocket:sockjs />
 		</websocket:stomp-endpoint>
 		<websocket:simple-broker prefix="/topic" />

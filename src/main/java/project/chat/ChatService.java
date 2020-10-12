@@ -24,28 +24,24 @@ public class ChatService {
 
     @Transactional
     public String newChat(int groupNum){
-        //방이 존재하는지 확인
         String existRoomId = checkExistRoom(groupNum);
-        if(existRoomId!=""){
-            System.out.println("existRoomId : " + existRoomId );
-            return existRoomId; // 존재하면 존재하는 방번호 리턴
+        if(!existRoomId.equals("not_exist")){
+            return existRoomId;
         }
 
-        //존재하지 않으면 현재 멤버로 방 새로 만듦
         List<Map> UserIds = chatDAO.selectUserIdByGroupNum(groupNum);
         String roomId = getRandomString();
-
-        System.out.println(roomId);
 
         for(Map m : UserIds){
             m.put("groupNum",groupNum);
             m.put("roomId",roomId);
-
-            System.out.println("UserIds : "+m.toString());
         }
-        int result = chatDAO.insertNewChatRoom(UserIds);
-        System.out.println("result : "+ result); //1 : 방생성 완료
+        chatDAO.insertNewChatRoom(UserIds);
 
         return roomId;
+    }
+
+    public List selectChatByRoomId(String roomId){
+        return chatDAO.selectChatByRoomId(roomId);
     }
 }

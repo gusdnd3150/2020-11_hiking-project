@@ -26,9 +26,11 @@ public class ChatDao {
     }
 
     public List selectUserIdByGroupNum(int groupNum){
-        return sqlSession.selectList("chat.selectUserIdByGroupNum", groupNum);
+        List<Map> list = sqlSession.selectList("chat.selectUserIdByGroupNum", groupNum);
+        return list;
     }
-//    public Map createRoom(int groupNum){
-//
-//    }
+
+    public List selectChatByRoomId(String roomId){
+        return sqlSession.selectList("chat.selectChatByRoomId",roomId);
+    }
 }
