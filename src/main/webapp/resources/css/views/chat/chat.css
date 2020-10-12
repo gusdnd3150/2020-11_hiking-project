@@ -1,0 +1,113 @@
+.top-header.top-header-chat{
+    background-color: skyblue;
+    color: black;
+}
+.header_bottom.chat-header-bottom{
+    display: flex;
+    font-size: 18px;
+}
+.header_text.chat-text{
+    font-weight: 600;
+}
+
+#chat-a{
+    color: black;
+}
+.chat{
+    background-color: skyblue;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+.chat-body{
+    padding-bottom: 0px;
+}
+.chat_date-devider{
+    text-align: center;
+    color: gray;
+    font-size: 14px;
+    padding: 10px;
+}
+.chat_message{
+    display: flex;
+    margin: 5px 0px;
+}
+.chat_message.chat_message-me{
+    justify-content: flex-end;
+}
+.chat_message.chat_message-from{
+    justify-content: flex-start;
+}
+.chat_message.chat_message-from img{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 5px;
+}
+.chat_message-time{
+    color: gray;
+    font-size: 12px;
+}
+.chat_message.chat_message-me .chat_message-body{
+    background-color: yellow;
+    border: gray;
+    border-radius: 2px;
+    padding: 10px 10px;
+}
+.chat_message.chat_message-from .chat_message-body{
+    background-color: white;
+    border: gray;
+    border-radius: 2px;
+    padding: 10px 10px;
+    margin: 5px;
+
+}
+.chat_message-profile{
+    padding-top: 5px;
+    display: flex;
+    flex-direction: column;
+}
+.chat_message-time{
+    align-self: flex-end;
+    padding:0px 5px;
+    margin-bottom: 8px;
+}
+.chat_bottom{
+    display: flex;
+    background-color: dimgray;
+    width: 100%;
+    position: fixed;
+    bottom: 0px;
+    height: 50px;
+    align-items: center;
+    justify-content: space-between;
+}
+.chat_bottom-column{
+    display: flex;
+    align-content: center;
+    justify-content: flex-end;
+    width: 90%;
+    position: relative;
+}
+
+.chat_bottom-column input{
+    width: 100%;
+    padding: 10px;
+    height: 100%;
+}
+
+.chat_bottom-column .chat_chatting{
+    right: 45px;
+}
+
+.chat_bottom-column > i {
+    position: absolute;
+    right: 45px;
+    margin-top: 7px;
+}
+
+.chat_bottom-column_span {
+    padding: 10px;
+    background-color: yellow;
+}
+

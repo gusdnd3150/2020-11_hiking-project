@@ -1,0 +1,105 @@
+.more_html{
+  background-color: #f2f2f2;
+}
+
+.more{
+    display: flex;
+    flex-direction: column;
+}
+.more section{
+    background-color: white;
+    margin-bottom: 15px;
+}
+.more .more_profile{
+    display: flex;
+    padding: 20px 30px 15px 20px;
+    justify-content: space-between;
+}
+.more .more_profile .more_profile-row{
+    display: flex;
+    align-items: center;
+}
+
+.more .more_profile .more_profile-row .more_profile-column{
+  margin-left: 15px;
+}
+
+.more .more_profile .more_profile-row .more_profile-column h3{
+  font-weight: 600;
+  font-size:15px;
+}
+
+.more .more_profile .more_profile-row .more_profile-column span{
+  font-size:12px;
+  color:gray;
+}
+
+.more .more_profile .more_profile-row img{
+    width: 40px;
+    border-radius: 50%;
+}
+.more_options{
+  display: flex;
+  justify-content: space-around;
+
+}
+.more_options .more_option{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 15px 0px;
+}
+
+.more_options .more_option .more_option-title{
+  margin-top: 10px;
+  font-size: 13px;
+}
+
+.more_plus .more_plus-Header{
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 20px;
+  font-weight: 600;
+}
+.more_plus .more_plus-Header .more_plus-right{
+  color:gray;
+ font-size: 14px;
+}
+
+.more_plus-links{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.more_plus-links .more_plus-link{
+  width: 50%;
+  padding: 15px 0px 20px 25px;
+}
+
+
+.more_plus-links .more_plus-link i{
+  color: rgb(200,200,0);
+  margin-right: 15px;
+}
+
+.more_kakao-apps{
+  display: flex;
+  
+}
+.more_kakao-app{
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  padding:20px 30px 0px 20px;
+}
+.more_kakao-app img{
+  box-sizing: border-box;
+  width: 60px;
+  height: 60px;
+}
+
+.more_kakao-app span{
+  width: 60px;
+  margin: 15px 0px;
+}

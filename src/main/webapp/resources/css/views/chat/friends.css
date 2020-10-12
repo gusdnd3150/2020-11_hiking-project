@@ -1,0 +1,52 @@
+.friends_section-header{
+    border-top : 1px solid #c1c1c1;
+    border-bottom : 1px solid #c1c1c1;
+    padding : 7px 15px;
+    font-size:12px;
+    color : #b1b1b1;
+}
+.friends_section-row{
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+}
+
+.friends_section-row .friends_section-name{
+    text-decoration : none;
+    color : inherit;
+    margin : 0px 10px;
+}
+
+.friends_section-row  img {
+    width: 40px;
+    border-radius: 50%;
+    animation: imganimation 1.0s ease-in-out infinite;
+}
+
+.friends_section-column{
+    display: flex;
+    align-items: center;
+}
+
+.friends_section-row.with-tagline{
+    justify-content: space-between;
+}
+.friends_section-tagline{
+    background-color: gray;
+    padding: 13px 10px;
+    border-radius: 5px;
+}
+
+
+@keyframes imganimation{
+    0%{
+        transform: rotateY(0deg);
+    }
+    50%{
+        transform: rotateY(180deg) scale(0.5);
+    
+    }
+    100%{
+        transform: rotateY(360deg);
+    }
+}

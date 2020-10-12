@@ -1,6 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <jsp:include page="/common/header.jsp" />
+<jsp:include page="/common/fixedBtn.jsp" />
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 <link rel="stylesheet" type="text/css" href="/resources/css/views/group/detail.css" />
 <div class="container pt-5">
     <!-- Portfolio Item Heading -->
@@ -111,7 +113,6 @@
     </div>
 
     <hr />
-
     <h3 class="my-4">${group.MTNM}의 다른 모임</h3>
     <div class="row">
         <%--        <c:forEach var="group" items="${group}">--%>
@@ -277,10 +278,6 @@
 
     function cancelwriteSubComment(e){
         e.previousSibling.previousSibling.value=null;
-    }
-
-    function goChat(){
-        location.href='/chat.do?groupNum=${group.GROUPNUM}';
     }
 
 $(document).ready(function (){
