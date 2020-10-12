@@ -8,6 +8,8 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 
+import java.util.Map;
+
 
 @Controller
 @RequiredArgsConstructor
@@ -21,9 +23,10 @@ public class WebSocketController {
 
     @MessageMapping("/chat/send/{roomId}")
     @SendTo("/topic/{roomId}")
-    public void sendMsg(@DestinationVariable String roomId, ChatMessage message){
+    public Map sendMsg(@DestinationVariable String roomId, Map map){
+        System.out.println("roomId : "+roomId);
+        System.out.println(map.toString());
 
+        return map;
     }
-
-
 }
