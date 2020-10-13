@@ -32,7 +32,7 @@
         <span class="chat_message-time">17:55</span>
         <span class="chat_message-body">Hello!! This is a test message.</span>
     </div>
-    <div class="chat_message chat_message-from">
+    <div id="console" class="chat_message chat_message-from">
         <img src="../resources/img/profile1.jpg" alt="" class="chat_message-profile-img">
         <div class="chat_message-profile">
             <h3 class="chat_message-name">LYNN</h3>
@@ -44,13 +44,13 @@
 <div class="chat_bottom">
     <i class="fas fa-plus fa-lg"></i>
     <div class="chat_bottom-column">
-        <input type="text" class="chat_chatting">
-        <i class="far fa-smile-wink fa-lg"></i>
-        <button style="width: 100px">보내기</button>
+        <input type="text" class="chat_chatting" id="message">
+<%--        <i class="far fa-smile-wink fa-lg"></i>--%>
+        <button onclick="send();" style="width: 100px">보내기</button>
     </div>
 </div>
 <div class="maxdang">
-    <span>창을 크게해주세요</span>
+    <span>창을 작게 해주세요</span>
 </div>
 <%--<input type="text" id="message" />--%>
 <%--<input type="button" value="전송" onclick="send();" />--%>
