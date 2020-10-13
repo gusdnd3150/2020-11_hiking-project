@@ -39,4 +39,19 @@
             ORDER BY time ASC
         ]]>
     </select>
+
+    <insert id="insertMessage" parameterType="map">
+        <![CDATA[
+            INSERT INTO chatMessage
+            VALUES (
+                    #{roomId},
+                    (SELECT NVL(MAX(chatNum)+1,0)
+                    FROM CHATMESSAGE
+                    WHERE roomId = #{roomId}),
+                    #{userId},
+                    #{message},
+                    #{time}
+            )
+        ]]>
+    </insert>
 </mapper>

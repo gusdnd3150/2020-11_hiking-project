@@ -1,3 +1,4 @@
+<%@ page import="java.time.LocalDateTime" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
@@ -24,21 +25,9 @@
         </div>
     </div>
 </header>
-<main class="chat">
+<main id="chat" class="chat">
     <div class="chat_date-devider">
         <span class="chat_date-devider-text">오늘 날짜</span>
-    </div>
-    <div class="chat_message chat_message-me">
-        <span class="chat_message-time">17:55</span>
-        <span class="chat_message-body">Hello!! This is a test message.</span>
-    </div>
-    <div id="console" class="chat_message chat_message-from">
-        <img src="../resources/img/profile1.jpg" alt="" class="chat_message-profile-img">
-        <div class="chat_message-profile">
-            <h3 class="chat_message-name">LYNN</h3>
-            <span class="chat_message-body">And this is an answer</span>
-        </div>
-        <span class="chat_message-time">19:30</span>
     </div>
 </main>
 <div class="chat_bottom">
@@ -85,18 +74,38 @@
     }
 
     function send() {
-        var data = {'roomId': '${roomId}', 'sender' :'<%= session.getAttribute("LOGIN")%>', 'message': $("#message").val()};
-        stompClient.send("/chat/send/${roomId}", {}, JSON.stringify(data));
-        // showMessage(data);
-        // $("#message").val('');
-        alertClosing('successMessage',2000);
-    }
+        var data = {
+            'roomId': '${roomId}',
+            'userId' :'<%= session.getAttribute("LOGIN")%>',
+            'message': $("#message").val(),
+            'time': '<%= LocalDateTime.now() %>'
+        };
 
-    function showMessage(e) {
-        var console = document.getElementById("console");
-        console.innerHTML = "<div class='row'> <div class='col-lg-12'> <div class='media'> <div class='media-body'> <h4 class='media-heading'>" +
-            e.sender + "</h4><h4 class='small pull-right'>방금</h4> </div> <p>" +
-            e.message + "</p> </div> </div> </div> <hr>" + console.innerHTML;
+        stompClient.send("/chat/send/${roomId}", {}, JSON.stringify(data));
+        showMyMessage(data);
+        document.getElementById("message").value = "";
+    }
+    function showMyMessage(data){
+        $('#chat').append("" +
+            "<div id=\"myMessage\" class=\"chat_message chat_message-me\">" +
+            "<span class=\"chat_message-time\">"+
+            data.time+"</span>\n" +
+            "<span class=\"chat_message-body\">" + data.message + "</span>" +
+            "</div>")
+    };
+
+    function showMessage(data) {
+        if(data.userId!='<%= session.getAttribute("LOGIN")%>'){
+            $('#chat').append(
+                "<div id=\"otherMessage\" class=\"chat_message chat_message-from\">" +
+                '<img src="../resources/img/profile1.jpg" alt="" class="chat_message-profile-img">'+
+                '<div class="chat_message-profile">' +
+                '<h3 class="chat_message-name">LYNN</h3>' +
+                '<span class="chat_message-body">' + data.message + '</span>' +
+                '</div>' +
+                '<span class="chat_message-time"></span>' +
+                '</div>');
+        }
     };
     window.onbeforeunload = function(e){
         disconnect();
@@ -109,6 +118,13 @@
             document.getElementById(selector).style.display = "none";
         },delay);
     }
+    $(document).ready(function (){
+        $('#message').keypress(function (e){
+            if(e.keyCode == 13){
+                send();
+            }
+        })
+    })
 </script>
 </body>
 </html>

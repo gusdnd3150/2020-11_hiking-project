@@ -3,13 +3,11 @@ package project.chat;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Map;
 
@@ -18,11 +16,6 @@ public class ChatController {
 
     @Resource(name = "chatService")
     private ChatService chatService;
-
-//    @GetMapping("/chat.do")
-//    public String chat(){
-//        return "chatRoom";
-//    }
 
     @GetMapping("/chat.do")
     public String newChat(@RequestParam("groupNum") int groupNum){

@@ -33,4 +33,7 @@ public class ChatDao {
     public List selectChatByRoomId(String roomId){
         return sqlSession.selectList("chat.selectChatByRoomId",roomId);
     }
+    public void insertMessage(Map map){
+        sqlSession.insert("chat.insertMessage",map);
+    }
 }
