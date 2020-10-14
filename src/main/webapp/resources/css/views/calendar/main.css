@@ -1,0 +1,27 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+}
+
+#calendar {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 0 10px;
+}
+
+.fc-day-number {
+    color: lightgrey;
+}
+
+.fc-list-heading-main {
+    color: #178396;
+}
+
+.fc-event-dot {
+    color: #178396;
+}
+
+.fc-list-heading-alt {
+    color: black;
+}

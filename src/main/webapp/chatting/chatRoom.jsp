@@ -86,7 +86,7 @@
             stompClient.subscribe('/topic/' + '${roomId}', function (e) {
                 showMessage(JSON.parse(e.body));
                 $("#chat").scrollTop($("#chat")[0].scrollHeight);
-                alertClosing('comeMessage',2000);
+                // alertClosing('comeMessage',2000);
             });
         });
     }
@@ -137,13 +137,13 @@
         disconnect();
     }
 
-    function alertClosing(selector, delay){
-        console.log(selector);
-        document.getElementById(selector).style.display = "block";
-        window.setTimeout(function(){
-            document.getElementById(selector).style.display = "none";
-        },delay);
-    }
+    // function alertClosing(selector, delay){
+    //     console.log(selector);
+    //     document.getElementById(selector).style.display = "block";
+    //     window.setTimeout(function(){
+    //         document.getElementById(selector).style.display = "none";
+    //     },delay);
+    // }
 
     $(document).ready(function (){
 
@@ -155,6 +155,7 @@
             }
         })
     })
+
 </script>
 </body>
 </html>

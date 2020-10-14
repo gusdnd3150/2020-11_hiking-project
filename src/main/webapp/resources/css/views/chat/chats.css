@@ -64,5 +64,5 @@
 .chat_btn:hover{
     color:yellowgreen;
     background-color: brown;
-    transform: rotateY(5turn);
+    transform: rotateY(1turn);
 }
