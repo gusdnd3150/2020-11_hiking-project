@@ -23,16 +23,15 @@
         <div class="container">
           <div class="row">
             <div class="col-md-9 col-lg-8 mx-auto">
-              <h3 class="login-heading mb-4">탈퇴가 무사히 완료되었습니다. <br>
-              <strong>'산오름'</strong>은 언제나 당신을 환영합니다 :) </h3> 
-             			<form action="/" method="get">
-<!--                 <div class="form-label-group">
+              <h3 class="login-heading mb-4">산오름 비밀번호 확인하기</h3> 
+             			<form action="/user/snsUserPwdCheck.do" method="post">
+                <div class="form-label-group">
                   <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
                   <label for="password">비밀번호</label>
-                </div> -->
+                </div>
              
                 <button class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2" 
-               type="submit">산오름 돌아가기</button>
+               type="submit" >로그인</button>
       
               </form>
               

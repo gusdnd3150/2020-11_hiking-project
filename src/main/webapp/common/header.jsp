@@ -42,7 +42,7 @@
                     <a class="nav-link" href="#">산모임</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/B_P002_D001/shopMainCate?listType=10">오름마켓</a>
+                    <a class="nav-link" href="/B_P002_D001/shopMainCate?listType=100">오름마켓</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">고객센터</a>
@@ -53,18 +53,18 @@
                 <c:choose>
                     <c:when test="${not empty LOGIN}">
                 <li class="nav-item">
-                        <a class="nav-link" href="${contextPath}/user/logOut">로그아웃</a>
+                        <a class="nav-link" href="/user/logOut">로그아웃</a>
                 </li>
                 <li class="nav-item">
-                        <a class="nav-link" href="${contextPath}/mypage/mypageHome">마이페이지</a>
+                        <a class="nav-link" href="/mypage/mypageHome">마이페이지</a>
                 </li>
                     </c:when>
                     <c:otherwise>
                 <li class="nav-item">
-                        <a class="nav-link" href="${contextPath}/user/logInView">로그인</a>
+                        <a class="nav-link" href="/user/logInView.do">로그인</a>
                 </li>
                 <li class="nav-item">
-                        <a class="nav-link" href="${contextPath}/user/signUpView">회원가입</a>
+                        <a class="nav-link" href="/user/signUpView">회원가입</a>
                 </li>
                     </c:otherwise>
                 </c:choose>

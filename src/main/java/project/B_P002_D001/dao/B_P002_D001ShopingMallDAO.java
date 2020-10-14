@@ -22,6 +22,9 @@ public interface B_P002_D001ShopingMallDAO {
 	public E_P002_D003PhotoVO getImage(E_P002_D003PhotoVO vo) throws DataAccessException;  // 메인 이미지
 	public List<Map> searchResult(Map<String, Object> info) throws DataAccessException;  //검색기능 	
 	public int SearchTotalCount(Map<String, Object> info); //검색토탈
+	
+	public List<Map> lastItems() throws DataAccessException;  //최신 상품 5개
+	
 	//////////////위에는 작업 완료/////////////
 	
 	

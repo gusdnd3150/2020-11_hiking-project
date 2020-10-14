@@ -20,7 +20,7 @@ public interface B_P002_D001ShopingMallService {
 	public List<E_P002_D003ProductsVO> shopListText() throws DataAccessException;
     ////////////////위에는 작업 완료/////////////
 	
-	
+	public List<Map> lastItems() throws DataAccessException;
 	
 	public int totalCount2(Map<String, Object> info);    //총 카운트 (분류별)
 	

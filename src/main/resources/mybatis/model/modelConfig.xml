@@ -16,7 +16,9 @@
 		<typeAlias type="project.Paging" alias="Paging"/>
 		<typeAlias type="project.E_P002_D003.vo.E_P002_D003ProductsVO" alias="e_P002_D003ProductsVO"/>
 		<typeAlias type="project.E_P002_D003.vo.E_P002_D003PhotoVO" alias="e_P002_D003PhotoVO"/>
+		<typeAlias type="project.E_P002_D003.vo.OptionVO" alias="OptionVO"/>
 		<typeAlias type="project.B_P003_D001.vo.productAfterVO" alias="productAfterVO"/>
+		
 		<!-- 주문관련 -->
 		<typeAlias type="project.B_P003_D001.vo.DeliveryVO" alias="deliveryVO"/>
 		<typeAlias type="project.B_P003_D001.vo.PointVO" alias="pointVO"/>

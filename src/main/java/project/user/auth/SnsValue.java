@@ -91,15 +91,17 @@ public class SnsValue implements SnsUrls {
 		return isNaver;
 	}
 
-	public void setNaver(boolean naver) {
-		isNaver = naver;
+	public void setNaver(boolean isNaver) {
+		this.isNaver = isNaver;
 	}
 
 	public boolean isGoogle() {
 		return isGoogle;
 	}
 
-	public void setGoogle(boolean google) {
-		isGoogle = google;
+	public void setGoogle(boolean isGoogle) {
+		this.isGoogle = isGoogle;
 	}
+
+
 }

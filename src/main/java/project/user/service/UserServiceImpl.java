@@ -1,6 +1,7 @@
 package project.user.service;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -34,6 +35,13 @@ public class UserServiceImpl implements UserService {
 		return rst;
 	}
 	
+	@Override
+	public int emailCheck(String email) throws Exception {
+		int rst = userDAO.emailCheck(email);
+		System.out.println("Service : "+ rst);
+		return rst;
+	}
+	
 	public UserVO logIn(LoginDTO loginDTO) throws Exception {
 		System.out.println("서비스왔다감");
 		return userDAO.logIn(loginDTO);
@@ -41,6 +49,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public void keepLogin(String id, String sessionId, Date sessionLimit) throws Exception {
+		logger.info("------keepLogInService------");
 		userDAO.keepLogIn(id, sessionId, sessionLimit);
 		
 	}
@@ -56,7 +65,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void insertUser2(Map<String, Object> snsUser) {
+	public void insertUser2(Map<String, Object> snsUser) throws Exception {
 		userDAO.insertUser2(snsUser);
 	}
 
@@ -66,6 +75,31 @@ public class UserServiceImpl implements UserService {
 		
 	}
 
+	@Override
+	public void updateAuthKey(Map<String, String> map) {
+		userDAO.updateAuthKey(map);
+		
+	}
 
+	@Override
+	public void updateAuthStatus(Map<String, String> map) {
+		userDAO.updateAuthStatus(map);
+	}
+
+	@Override
+	public void withdrawal(UserVO userVO) {
+		userDAO.withdrawal(userVO);
+		
+	}
+
+	@Override
+	public String searchId(String email) {
+		return userDAO.searchId(email);
+		
+	}
+
+	public int selectUserNum(String id) {
+		return userDAO.selectUserNum(id);
+	}
 	
 }

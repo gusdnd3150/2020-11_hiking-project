@@ -3,71 +3,43 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script type="text/javascript" src="../resources/js/jquery.js"></script>
 <script type="text/JavaScript"
 	src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta charset="utf-8">
-<title>mypageHome</title>
-<link href="/resources/css/bootstrap.min.css" rel="stylesheet">
+ <title>산오름</title>
+    <!-- ico,css -->
+    <link rel="icon" href="../resources/img/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" type="text/css" href="/resources/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/resources/css/views/common/header.css" />
 </head>
-<!— body —>
-<script src="/resources/js/jquery.js"></script>
-<script src="/resources/js/bootstrap.bundle.js"></script>
 <body>
-	<div class="container">
-		<header class="blog-header py-3">
-			<div
-				class="row flex-nowrap justify-content-between align-items-center">
-				<div class="col-4 pt-1">
-					<a class="text-muted" href="#">Subscribe</a>
-				</div>
-				<div class="col-4 text-center">
-					<a class="blog-header-logo text-dark" href="#">Large</a>
-				</div>
-				<div class="col-4 d-flex justify-content-end align-items-center">
-					<a class="text-muted" href="#"> <svg
-							xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-							viewBox="0 0 24 24" fill="none" stroke="currentColor"
-							stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-							class="mx-3">
-							<circle cx="10.5" cy="10.5" r="7.5"></circle>
-							<line x1="21" y1="21" x2="15.8" y2="15.8"></line></svg>
-					</a> <a class="btn btn-sm btn-outline-secondary" href="#">Sign up</a>
-				</div>
-			</div>
-		</header>
 
-		<div class="nav-scroller py-1 mb-2">
-			<nav class="nav d-flex justify-content-between">
-				<a class="p-2 text-muted" href="#">World</a> <a
-					class="p-2 text-muted" href="#">U.S.</a> <a class="p-2 text-muted"
-					href="#">Design</a> <a class="p-2 text-muted" href="#">Culture</a>
-				<a class="p-2 text-muted" href="#">Health</a> <a
-					class="p-2 text-muted" href="#">Style</a>
-			</nav>
-		</div>
-
-		<h1>MyPage</h1>
+		<jsp:include page="/common/header.jsp" flush="false"/>
+		<div class="container">
 		<!-- Profile Image -->
 		<table
 			style="width: 100%; height: 200px; table-layout: fixed; !important">
 			<tr>
 				<td>
+						<h1>MyPage</h1>
 					<div class="box box-primary">
 						<div class="box-body box-profile">
-							<img class="profile-user-img img-responsive img-circle" src=""
-								alt="프로필 사진">
+						<div style="text-align:center;">
 
-							<h3 class="profile-username text-center">개존잘</h3>
-
-							<p class="text-muted text-center">여기다가는 뭘 넣을까 그냥 뺼까</p>
+							<img class="rounded-circle" src="http://localhost:8080/resources/img/${userVO.content2}" width="100" height="100"
+								alt="프로필사진">
+							
+								</div>
+							<h3 class="profile-username text-center" id="name">${userVO.name}</h3>
+							<!-- <p class="text-muted text-center">여기다가는 뭘 넣을까 그냥 뺼까</p> -->
 
 							<ul class="list-group list-group-unbordered">
 								<li class="list-group-item text-center">
-									<p>여기에 나의 소개글이 이렇게 들어갈거에요.</p>
+									<p id="profile1">${userVO.profile}</p>
 								</li>
 								<li class="list-group-item"><b>내가 오른 산</b> <a
 									class="pull-right"><h5 style="text-align: right">15</h5></a></li>
@@ -82,33 +54,33 @@
 				<td colspan="2" rowspan="4">
 					<div class="card text-center">
 						<div class="card-header">
-							<ul class="nav nav-tabs card-header-tabs" id="tabs">
+							<ul class="nav nav-tabs card-header-tabs" id="tabs" role="tablist">
 								<li class="nav-item"><a class="nav-link active"
 									href="#tab1" data-toggle="tab">Link</a></li>
 								<li class="nav-item"><a class="nav-link" href="#tab2"
 									id="" data-toggle="tab">Link2</a></li>
-								<li class="nav-item"><a class="nav-link"
-									data-toggle="modal" data-target="#exampleModalCenter3">나의정보</a>
-									<jsp:include page="/user/pwdCheck.jsp" /></li>
+								<%-- <li class="nav-item"><a class="nav-link" href="#tab3"
+									data-toggle="tab"  id="myInfo" data-target="#exampleModalCenter3">나의정보</a>
+									<jsp:include page="/user/pwdCheck.jsp"/></li> --%>
 							</ul>
 						</div>
 						<div class="tab-content">
-							<div class="card-body fade in action" id="tab1">
-								<p class="card-text" id="tab1">여긴 아무것도 없었으면 해???</p>
+							<div class="card-body tab-pane active" id="tab1">
+								<p class="card-text" id="tab1">여기는 tab1</p>
 							</div>
-							<div class="card-body fade" id="tab2">
+							<div class="card-body tab-pane " id="tab2">
+							<p class="card-text" id="tab3">여기는 tab2</p>
 							</div>
-							<div class="card-body fade" id="tab3">
-								<p class="card-text" id="tab2"><jsp:include page="/user/modifyView.jsp" /></p>
-							</div>
+							<%-- <div class="card-body tab-pane " id="tab3">
+								<p class="card-text" id="tab3"><jsp:include page="/user/modifyView.jsp"/></p>
+							</div> --%>
 							<!-- 	<a href="#" class="btn btn-primary">수정하기</a> -->
 							<!-- 이거 누르면 disabled readonly 사라지게하기. -->
 						</div>
 					</div>
-
 				</td>
 			</tr>
-			<tr>
+			 <tr>
 				<td rowspan="3">
 					<!-- About Me Box -->
 					<div class="box box-primary">
@@ -148,8 +120,8 @@
 
 							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 								Etiam fermentum enim neque.</p>
-							<a href="#" id=""
-								class="btn btn-primary btn-block"> <b>나의 정보 수정하기</b>
+						
+								<a><jsp:include page="/user/pwdCheck.jsp"/>
 							</a>
 						</div>
 						<!-- /.box-body -->
@@ -195,7 +167,6 @@
 			</div>
 		</div>
 	</div>
-
 	<main role="main" class="container">
 		<div class="row">
 			<div class="col-md-8 blog-main">
@@ -210,21 +181,54 @@
 <script>
 <!-- /.container -->
 	$(document).ready(function() {
-		$("#editInfo").click(function() {
-			$.ajax({
-				url : "/mypage/modifyView.do",
+		/* 	$.ajax({
+				url : "/mypage/modProfile.do",
 				type : "post",
 				success : function(data) {
 					console.log(data);
-					$('#id').val(data.id);
-					$('#name').val(data.name);
-					$('#email').val(data.email);
-					$('#zonecode').val(data.zonecode);
-					$('#address').val(data.address);
-					$('#address2').val(data.address2);
-					$('#phone').val(data.phone);
-					$('#sexCheck').text(data.sex2);
+					$('#profile1').text(data.profile);
+					$('#profile2').text(data.profile);
+					$('#name').text(data.name);
+					var content2 =  (data.content2);
 				},
+				error : function(data, textStatus) {
+					console.log("실패");
+				},
+				complete : function(data, textStatus) {
+
+				}
+
+		}); */
+		
+		$("#checkIt").click(function() {
+			var pwd = $("#password3").val(); 
+			console.log("이벤트!!" +pwd);
+			$.ajax({
+				url : "/mypage/pwdCheck.do",
+				type : "post",
+				data: {
+					pwd:pwd
+				},
+				success : function(data) {
+				console.log(data);
+				if($('#password3').val() == ""){
+					$('#passwordCheck3').text('비밀번호를 입력해주세요.');
+					$('#passwordCheck3').css('color', 'red');
+					$("#myInfo").attr("disabled", true);		
+					} else if (data == "0"){
+							// 0 : 비밀번호 통과
+							$("#password3").val(""); 
+							$("#passwordCheck3").text("'다음'을 클릭하세요.");
+							$('#passwordCheck3').css('color', 'green');
+							$("#myInfo").attr("disabled", false);
+						} else if (data == "1") {
+							// 1 : 	비밀번호 틀림
+							$("#password3").val(""); 
+							$("#passwordCheck3").text("비밀번호를 다시 확인해주세요.");
+							$("#passwordCheck3").css("color", "red");
+							$("#myInfo").attr("disabled", true);
+						}
+					},
 				error : function(data, textStatus) {
 					console.log("실패");
 				},
@@ -233,28 +237,22 @@
 			//responsebody -> 아작스로 들어옴
 			});
 		});
-
-		$("#editProf").click(function() {
-			$.ajax({
-				url : "/mypage/modProfile.do",
-				type : "post",
-				success : function(data) {
-					console.log(data);
-					$('#profile').text(data.profile);
-
-				},
-				error : function(data, textStatus) {
-					console.log("실패");
-				},
-				complete : function(data, textStatus) {
-
-				}
-
-			});
-		});
+	
+		$("#myInfo").click(function() {
+			console.log("myInfo");
+			$("#password3").val(""); 
+	});
 	});
 
-	$('a[href="#settings"]').tab('show');
 </script>
+	<!-- <script type="text/javascript" src="../resources/js/bootstrap.min.js"></script> -->
+	<script
+		src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+		integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+		integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+		crossorigin="anonymous"></script>
 </body>
 </html>

@@ -9,7 +9,6 @@ public class DeliveryVO {
 	private String custName;
 	private int custPhonNum;
 	private int deliNum;
-	private int type;
 	private String address;
 	private String address2;
 	private int zonecode;
@@ -42,12 +41,7 @@ public class DeliveryVO {
 	public void setDeliNum(int deliNum) {
 		this.deliNum = deliNum;
 	}
-	public int getType() {
-		return type;
-	}
-	public void setType(int type) {
-		this.type = type;
-	}
+
 	public String getAddress() {
 		return address;
 	}

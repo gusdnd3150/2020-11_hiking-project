@@ -10,9 +10,9 @@
 
 <script src="http://code.jquery.com/jquery-latest.js"></script>
 <script>
-        $(document).ready(function () {
+        $(document).ready(function () {
 	
-	            $("button[name=delete]").click(function () {        // 삭제
+	            $("button[name=delete]").click(function () {        // 삭제
 		       var check = window.confirm("삭제 하시겠습니까?");
 		       
 		       if (check==true){
@@ -33,40 +33,47 @@
 		        	}
 		        });
 		       }
-	         });
+	         });
 	
 	         $("#buyProduts").click(function(){            // 구매 시 체크된 값만 받아옴
-	        	 /* var zoneCode = $('input[name=post1]').val(); */
-	        	 var totalPrice = [];
 	        	 var orderNums = [];
+	        	 var totalPrice = []; 
 	        	 var quantities = [];
+	        	 var images =[];  
+	        	 var prodNames=[];
+	        	 var prices=[];  
+	        	 var prodNums=[];  
 	        	 
 	        	 $('input[name=buyinfo]:checked').each(function (i, elements) {
 	        		    var index= $(elements).index("input:checkbox[name=buyinfo]");
-	        		    
 	        		    var perTotal =$("input[name=perTotal]").eq(index).val();//해당상품의 토탈 값
 	        		    var orderNum =$("input[name=orderNum]").eq(index).val();//해당상품의 orderNum
 	        		    var quantity =$("input[name=qty]").eq(index).val();//해당상품의 수량
+	        		    var image  =$("input[name=images]").eq(index).val();//해당상품의 수량
+	        		    var prodName=$("input[name=prodNames]").eq(index).val();//해당상품의 수량
+	        		    var price=$("input[name=perPrice]").eq(index).val();//해당상품의 수량
+	        		    var prodNum=$("input[name=prodNum]").eq(index).val();//해당상품의 상품번호
 	        		    
 	        		    console.log("총 값"+perTotal);
-	        		    totalPrice.push(Number.parseInt(perTotal));
 	        		    console.log("주문번호"+orderNum);
-	        		    orderNums.push(Number.parseInt(orderNum));
 	        		    console.log("수량"+quantity);
+	        		    totalPrice.push(Number.parseInt(perTotal));
+	        		    orderNums.push(Number.parseInt(orderNum));
 	        		    quantities.push(Number.parseInt(quantity));
+	        		    images.push(image);
+	        		    prodNames.push(prodName);
+	        		    prices.push(price);
+	        		    prodNums.push(prodNum);
+	        		    
 	        		});
-	        	 
-	        	 for(var i=0;i<quantities.length;i++){
-	        		 console.log("배열수량"+quantities[i]);
-	        		 console.log("배열 가격"+totalPrice[i]);
-	        		 console.log("배열 주문번호"+orderNums[i]);
-	        	 }
+    		    
 	     		$.ajax({
 	    			type : "post",       //응답 데이터를 텍스트로 지정
 	    			dataType : "text",    //응답 데이터를 텍스트로 지정   
 	    			async:true,           //false인경우 동기식으로 처리
 	    			url : "/B_P003_D001/butProductsFromCart",               // 전송할 서블릿을 지정
-	    			data : {totalPrice:totalPrice,orderNums:orderNums,quantities:quantities},  //서버로 매개변수와 값을 설정
+	    			data : {totalPrice:totalPrice,orderNums:orderNums,quantities:quantities,
+	    				images:images,prodNames:prodNames,prices:prices,prodNums:prodNums},  //서버로 매개변수와 값을 설정
 	    			success : function(data, textStatus) {  //전송과 응담이 성공했을 경우의 작업을 설정
 	    				$('#message').append(data);  //서버 응답 메시지를 <div> 엘리먼트에 표시
 	    			},
@@ -144,7 +151,7 @@
     	    	    var shototal =$("#showTotal");
 	          	    shototal.text(sum);
                   });
-	    });
+	    });
 </script>
 
 
@@ -238,6 +245,7 @@
                 <tr>
                       <td>
                 <input type="checkbox" name="buyinfo" value="${cartList.PRODNUM }">
+                <input type="hidden" name="prodNum" value="${cartList.PRODNUM }">
                 <input type="hidden" name="orderNum" value="${cartList.ORDERNUM }">
                 </td>
                   <td>
@@ -247,9 +255,11 @@
                           src="http://localhost:8080/resources/img/${cartList.IMAGE }"
                           alt="" width="90px" height="90px"
                         />
+                        <input type="hidden" name="images" value="${cartList.IMAGE }">
                       </div>
                       <div class="media-body">
                         <p>${cartList.PRODNAME }</p>
+                        <input type ="hidden" name="prodNames" value="${cartList.PRODNAME }">
                       </div>
                     </div>
                   </td>
@@ -291,7 +301,7 @@
                     <input type="text" name="perTotal" value="${cartList.PRICE * cartList.QUANTITY }" readonly style="border: none">
                   </td>
                    <td>
-                    <button class="btn btn-info btn-sm" name="delete" value="${cartList.PRODNUM }">삭제</button>
+                    <button class="btn btn-info btn-sm" name="delete" value="${cartList.ORDERNUM }">삭제</button>
                   </td>
                 </tr>
                   

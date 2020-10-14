@@ -5,27 +5,27 @@ import org.springframework.stereotype.Component;
 @Component
 public class E_P002_D003ProductsVO {
 	
-     private String prodNum;//상품번호
+     private int prodNum;//상품번호
      private int pCategoryNum;		//상품분류코드
      private String name;		//상품명
-     private String price;		//상품가격(단가)
+     private int price;		//상품가격(단가)
      private String content;	    	//상품내용
-     private String quantity;		//상품수량
-     private String type;		//상품구분
+     private int type;		//상품구분
      private String createDat;	//등록일자
      private String updateDat;		//수정일자
      
-	public String getProdNum() {
+     
+	public int getProdNum() {
 		return prodNum;
 	}
-	public void setProdNum(String prodNum) {
+	public void setProdNum(int prodNum) {
 		this.prodNum = prodNum;
 	}
-	public int getPcateGoryNum() {
+	public int getpCategoryNum() {
 		return pCategoryNum;
 	}
-	public void setPcateGoryNum(int pcateGoryNum) {
-		this.pCategoryNum = pcateGoryNum;
+	public void setpCategoryNum(int pCategoryNum) {
+		this.pCategoryNum = pCategoryNum;
 	}
 	public String getName() {
 		return name;
@@ -33,10 +33,10 @@ public class E_P002_D003ProductsVO {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getPrice() {
+	public int getPrice() {
 		return price;
 	}
-	public void setPrice(String price) {
+	public void setPrice(int price) {
 		this.price = price;
 	}
 	public String getContent() {
@@ -45,16 +45,11 @@ public class E_P002_D003ProductsVO {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public String getQuantity() {
-		return quantity;
-	}
-	public void setQuantity(String quantity) {
-		this.quantity = quantity;
-	}
-	public String getType() {
+
+	public int getType() {
 		return type;
 	}
-	public void setType(String type) {
+	public void setType(int type) {
 		this.type = type;
 	}
 	public String getCreateDat() {
@@ -69,9 +64,6 @@ public class E_P002_D003ProductsVO {
 	public void setUpdateDat(String updateDat) {
 		this.updateDat = updateDat;
 	}
-     
-     
-     
-    
+         
 
 }

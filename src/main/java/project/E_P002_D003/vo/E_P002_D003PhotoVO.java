@@ -10,10 +10,26 @@ public class E_P002_D003PhotoVO {
 	private int pPhotoNum; //사진번호
 	private String createDat;  //등록일자
 	private String upDateDat; //수정일자
-	private String content; //상품사진
+	private String content; //상품 상단 사진
+	private String contentDetail; //상품 상세 사진 
 	private String originalFileName; //원본파일이름
 	private String fileSize; //파일 사이즈
+	private String userId;
 	
+	
+	
+	public String getUserId() {
+		return userId;
+	}
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+	public String getContentDetail() {
+		return contentDetail;
+	}
+	public void setContentDetail(String contentDetail) {
+		this.contentDetail = contentDetail;
+	}
 	public int getProdNum() {
 		return prodNum;
 	}

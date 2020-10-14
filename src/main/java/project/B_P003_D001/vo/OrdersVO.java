@@ -7,7 +7,6 @@ public class OrdersVO {
 	
 	private int orderNum;
 	private int userNum;
-	private int cartNum;
 	private String ordereDat;
 	private int price;
 	private int charge;
@@ -17,7 +16,14 @@ public class OrdersVO {
 	private int prodNum;
     private int quantity;
     private String prodName;
+    private int payTotal;
     
+	public int getPayTotal() {
+		return payTotal;
+	}
+	public void setPayTotal(int payTotal) {
+		this.payTotal = payTotal;
+	}
 	public int getOrderNum() {
 		return orderNum;
 	}
@@ -30,12 +36,7 @@ public class OrdersVO {
 	public void setUserNum(int userNum) {
 		this.userNum = userNum;
 	}
-	public int getCartNum() {
-		return cartNum;
-	}
-	public void setCartNum(int cartNum) {
-		this.cartNum = cartNum;
-	}
+
 	public String getOrdereDat() {
 		return ordereDat;
 	}

@@ -1,5 +1,6 @@
 package project.user.dao;
 
+import java.util.List;
 import java.util.Map;
 
 import project.user.dto.LoginDTO;
@@ -13,14 +14,18 @@ public interface MypageDAO {
 	
 	public void deleteUser(LoginDTO loginDTO) throws Exception; // 회원탈퇴
 
-	public void updateUserCont(Map<String, Object> contMap);
-
+	public int updateUserCont(Map map); // 프로필 사진 등록
+	
 	public void updateUserProf(Map<String, Object> profMap);
 
-	public UserVO getUserInfo(String sessionId);
+	public UserVO getUserInfo(UserVO userVO);
 
-	public UserVO pwdCheck(String sessionId);
+	public UserVO pwdCheck(UserVO userVO);
 
 	public void updatePwd(UserVO userVO);
+
+
+
+
 
 }

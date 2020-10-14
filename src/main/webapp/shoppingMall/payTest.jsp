@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html lang="ko">
 <head>
 <meta charset="utf-8"/>
@@ -32,13 +33,27 @@
     <link rel="stylesheet" href="/resources/shop/css/responsive.css" />
     
     
-   
- <script src="http://code.jquery.com/jquery-latest.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+crossorigin="anonymous"></script><!-- jQuery CDN --->
+<script src="http://code.jquery.com/jquery-latest.js"></script>
 <script> 
 
   //var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;    
 
 $(document).ready(function () {
+	
+	
+	      // 총가격
+          var sum =0;
+          $("input[name=total]").each(function(idx){
+           var value = $(this).val();
+           var eqValue = $("input[name=total]:eq(" + idx + ")").val() ;
+           sum = sum+ Number.parseInt(eqValue);
+          });
+          var showTotalPrice =$("#payTotal");
+          var innerTotalPice=$("input[name=payTotal]");
+          showTotalPrice.text(sum);
+          innerTotalPice.val(sum);
 	
             $("#clickUp").on("click",function(){     //업버튼 클릭 시
          var quantity = $("#sst").val();
@@ -88,9 +103,13 @@ $(document).ready(function () {
         
         
         
-        ////////////////////////////////////아작스 처리??
         $("input[name=defualtAddress]").on("click",function(){  //기본배송지
             var address = $('input[name=address]');
+            if(address==null||address==''){
+            	alert("기본배송지 설정이 되어있지 않습니다.");
+            }else{
+            	
+            
             var newAddress =$('input[name=newAddress]');
             newAddress.prop("checked",false);
             
@@ -113,6 +132,7 @@ $(document).ready(function () {
             put3.val(basic2);
             put4.val(deliPhonNum);
             put5.val(name);
+            }
             
             });
         
@@ -195,9 +215,25 @@ function usePoin(){                         //포인트 사용할 경우
  }).open(); 
 } 
  
-
  
+ function cancelPay() {
+	 
+	 
+	  var test ="imp_122779319082";
+	  $.ajax({
+		 type:"post",
+	     async:true,
+	     url:"/E_P003_D001/cancelPay",
+	     data:{test:test},
+	     success:function(data,textStatus){
+	     	//alert('넘어온 토큰'+data);
+	     	console.log(data);
+	     },
+	     error:function(data,textStatus){
+	     }
+	 }); 
 
+   }
  
  IMP.init('imp33067254');
  function check() {
@@ -210,23 +246,45 @@ function usePoin(){                         //포인트 사용할 경우
           var address2 = $('input[name=address2]').val();
           var phoneNum = $('input[name=tel]').val();
           var custName = $('input[name=fax]').val();
-		  
 		  var payType = $('input[name=payType]').val(); // 결제타입 카드/통장
-		  var point= $('input[name=usepoint]').val();
-		  var totalPrice= $('input[name=total]').val();
-		  
-		  var prodNum = $('input[name=prodNum]').val();
-		  var quantity = $('input[name=qty]').val();
+		  var point= $('input[name=usepoint]').val();    //포인트 
+		  var type =$('input[name=type]').val();      // 1즉시구매 3 장바구니결제
+		  //var prodNum = $('input[name=prodNum]').val();  //물품 정보
+		  //var quantity = $('input[name=qty]').val();
+		  var totalPrice= $('input[name=payTotal]').val();//상품개수의 총 합
+		  console.log(totalPrice);
 		  var prodName = $('input[name=prodName]').val();
+		  
+		  var prodNums=[];
+		  var quantityToDB=[];
+		  var orderNums=[];
+		  var perTotals=[];
+		  var prodPrices =[];
+          $("input[name=prodNum]").each(function(idx){
+              var value = $(this).val();
+              var eqValue = $("input[name=prodNum]:eq(" + idx + ")").val() ;
+              var quan = $("input[name=qty]:eq(" + idx + ")").val() ;
+              var orderNum = $("input[name=orderNum]:eq(" + idx + ")").val() ;
+              var perTotal = $("input[name=total]:eq(" + idx + ")").val() ;
+              var prodPrice = $("input[name=prodPrice]:eq(" + idx + ")").val() ;
+              prodNums.push(Number.parseInt(eqValue));
+              quantityToDB.push(Number.parseInt(quan));
+              orderNums.push(Number.parseInt(orderNum));
+              perTotals.push(Number.parseInt(perTotal));
+              prodPrices.push(prodPrice);
+              console.log("수량:"+quan);
+              console.log("오더넘:"+orderNum);
+              console.log("프로드넘:"+eqValue);
+             });
+
 		  if(point==null ||point==''){
 			  point = '0';
 		  }
-		  
 		  IMP.request_pay({
 		      pg : 'inicis', // version 1.1.0부터 지원.
 		      pay_method : payType,           //trans는 무통장
 		      merchant_uid : 'merchant_' + new Date().getTime(),
-		      name : '주문명:'+custName+'',
+		      name : custName,
 		      amount : totalPrice-point, //판매 가격
 		      /* buyer_email : 'iamport@siot.do', */
 		      buyer_name : custName,
@@ -235,11 +293,9 @@ function usePoin(){                         //포인트 사용할 경우
 		      buyer_postcode : zoneCode
 		  }, function(rsp) {
 		      if ( rsp.success ) {
-		    	  
 		    	  if(rsp.apply_num==null||rsp.apply_num==''){
 		    		  rsp.apply_num ='kakao';
 		    	  }
-		    	  
 	              $.ajax({
 	                type:"post",
 	                async:true,
@@ -248,9 +304,9 @@ function usePoin(){                         //포인트 사용할 경우
 	                	address1:address1,address2:address2,
 	                	phoneNum:phoneNum,custName:custName,
 	                	payType:payType,point:point,paid_amount:rsp.paid_amount,
-	                	imp_uid:rsp.imp_uid,merchant_uid:rsp.merchant_uid,
-	                	apply_num:rsp.apply_num,prodNum:prodNum,quantity:quantity,
-	                	chooseAddress:chooseAddress,prodName:prodName
+	                	imp_uid:rsp.imp_uid,merchant_uid:rsp.merchant_uid,prodPrices:prodPrices,
+	                	apply_num:rsp.apply_num,prodNums:prodNums,quantityToDB:quantityToDB,type:type,
+	                	chooseAddress:chooseAddress,prodName:prodName,orderNums:orderNums,perTotals:perTotals,
 	                },
 	                success:function(data,textStatus){
 	                	alert('결제가 완료 되었습니다.');
@@ -296,16 +352,15 @@ align:bottom;
 <body>
 
 
-
+<c:if test="${not empty address.address }">
 <input type="hidden" name="basicAddress" value="${address.address }">
 <input type="hidden" name="addressDetail" value="${address.address2 }">
 <input type="hidden" name="zonecode" value="${address.zonecode }">
 <input type="hidden" name="deliNmae" value="${address.name }">
 <input type="hidden" name="deliPhonNum" value="${address.phone }">
+</c:if>
 
 
-<input type="hidden" name="prodNum" value="${prodDetail[0].PRODNUM }">
-<input type="hidden" name="prodName" value="${prodDetail[0].NAME }">
 
 <div class="container">
     <form name="f" method="post">
@@ -331,11 +386,11 @@ align:bottom;
                             <tr>
                                 <td>전화번호</td>
                                 <td>
-                                    <input type="tel" name="tel" class="form-control" value="">
+                                    <input type="text" name="tel" class="form-control" value="">
                                 </td>
                                 <td>구매자</td>
                                 <td>
-                                    <input type="tel" name="fax" class="form-control" value="">
+                                    <input type="text" name="fax" class="form-control" value="">
                                 </td>
                             </tr>
                             <tr>
@@ -368,6 +423,8 @@ align:bottom;
       <div class="container">
         <div class="cart_inner">
           <div class="table-responsive">
+          
+          
             <table class="table">
               <thead>
                 <tr>
@@ -378,36 +435,43 @@ align:bottom;
                 </tr>
               </thead>
               <tbody>
+              
+              <c:choose>
+                  <c:when test="${not empty prodDetail }">
+                    <c:forEach var="prodDetail" items="${prodDetail }">
+                  
+              <!-- 반복구간 -->
                 <tr>
                   <td>
                     <div class="media">
                       <div class="d-flex">
                         <img
-                          src="http://localhost:8080/resources/img/${prodDetail[0].IMAGE }"
-                          alt=""
+                          src="http://localhost:8080/resources/img/${prodDetail.IMAGE }"
+                          alt="" width="90px" height="90px"
                         />
                       </div>
                       <div class="media-body">
-                        <p>${prodDetail[0].CONTENT }</p>
+                        <p>${prodDetail.NAME }</p>
                       </div>
                     </div>
                   </td>
                   <td>
-                    <h5 id="price">${prodDetail[0].PRICE }</h5>
-                    <input type="hidden" name="prodPrice" value="${prodDetail[0].PRICE }" style="border: none;">
+                    <h5 id="price">${prodDetail.PRICE }</h5>
+                    <input type="hidden" name="prodPrice" value="${prodDetail.PRICE }" style="border: none;">
                   </td>
                   <td>
                     <div class="product_count">
+                    <P>${prodDetail.QUANTITY }</P>
                       <input
-                        type="text"
+                        type="hidden"
                         name="qty"
                         id="sst"
                         maxlength="12"
-                        value="${quantity }"
+                        value="${prodDetail.QUANTITY }"
                         title="Quantity:"
                         class="input-text qty"
                       />
-                      <button
+                      <!-- <button
                         onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"
                         class="increase items-count"
                         type="button"
@@ -419,17 +483,27 @@ align:bottom;
                         onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) &amp;&amp; sst > 0 ) result.value--;return false;"
                         class="reduced items-count"
                         type="button"
-                        id="clickDown"
-                      >
+                        id="clickDown"  > 
+                      
                         <i class="lnr lnr-chevron-down"></i>
-                      </button>
+                      </button> -->
+                      <p></p>
                     </div>
                   </td>
                   <td>
-                    <h5> <bold id="totalPut">${prodDetail[0].PRICE * quantity }</bold>원</h5> <!--  수량 *가격 --> 
-                    <input type ="hidden" name="total" value="${prodDetail[0].PRICE * quantity }">
+                    <h5> <bold id="totalPut">${prodDetail.PRICE * prodDetail.QUANTITY }</bold>원</h5> <!--  수량 *가격 --> 
+                    <input type ="hidden" name="total" value="${prodDetail.PRICE * prodDetail.QUANTITY }">
                   </td>
                 </tr>
+                <input type="hidden" name="prodNum" value="${prodDetail.PRODNUM }">
+                <input type="hidden" name="prodName" value="${prodDetail.NAME }">
+                <input type="hidden" name="orderNum" value="${prodDetail.ORDERNUM }">
+                <input type="hidden" name="type" value="${type }">
+                
+                    </c:forEach>
+                  </c:when>
+              </c:choose>
+               <!-- 반복구간 --> 
             </table>
           </div>
         </div>
@@ -467,7 +541,7 @@ align:bottom;
                             <tr style="line-height:32px;" >
                                 <td>총 결제 금액</td>
                                 <td >
-                                    <p> <bold id="payTotal">${prodDetail[0].PRICE* quantity } </bold>원  <blod id="minus" style="display: none;"></blod> </p>
+                                    <p> <bold id="payTotal"></bold>원  <blod id="minus" style="display: none;"></blod> </p>
                                     <input type ="hidden" name="payTotal" value="">
                                     
                                 </td>
@@ -481,7 +555,7 @@ align:bottom;
     </form>
     <div class="text-center mt-3">
         <button type="button" onclick="check()" class="btn btn-success">결제하기</button>
-        <button type="button" class="btn btn-info">뒤로가기</button>
+        <button type="button" onclick="cancelPay()" class="btn btn-info" >뒤로가기</button>
     </div>
 </div>
 
@@ -504,5 +578,6 @@ align:bottom;
     <script src="/resoucesjs/theme.js"></script> -->
 
 </body>
+<jsp:include page="/common/footer.jsp" />
 </html>
 

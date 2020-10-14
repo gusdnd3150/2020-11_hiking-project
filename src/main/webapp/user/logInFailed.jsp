@@ -4,10 +4,9 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>logIn</title>
+<title>로그인 실패</title>
 </head>
 <body>
-
 	<script>
 		alert("아이디와 비밀번호를 다시 확인해주세요");
 		self.location ="/user/logInView.do";

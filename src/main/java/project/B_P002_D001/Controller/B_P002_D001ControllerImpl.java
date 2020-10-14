@@ -59,44 +59,68 @@ public class B_P002_D001ControllerImpl  implements B_P002_D001Controller{
 	@RequestMapping(value = "/B_P002_D001/shopMainCate", method = { RequestMethod.GET, RequestMethod.POST })
 	public ModelAndView shopmainCate(@RequestParam Map<String, Object> info,HttpServletRequest request, HttpServletResponse response) throws Exception {
 		ModelAndView mav = new ModelAndView();
+		System.out.println("메인페이지 파라미터정보:"+info.toString());
+		
 		Map<String,Object> search = new HashMap<String,Object>(); //해쉬맵으로 처리할거다 
+		
 		String nowPage = (String) info.get("nowPage");
 		String cntPerPage = (String) info.get("cntPerPage");
 		String listType = (String) info.get("listType");
-		
+	
 		if (nowPage == null && cntPerPage == null ) {
 			nowPage = "1";
-			cntPerPage = "6";
+			cntPerPage = "9";
 		} else if (nowPage == null) {
 			nowPage = "1";
 		} else if (cntPerPage == null) { 
-			cntPerPage = "6";
+			cntPerPage = "9";
 		}
 		
+		if(listType.equals("200")) { //검색      파라미터정보 (search=clime, searchContent=)
+			System.out.println(info.toString());
+			String searchvalue= (String) info.get("search");
+			String searchType=(String) info.get("searchType");
+			String searchContent=(String) info.get("searchContent");
+			int total = b_P002_D001ShopingMallService.SearchTotalCount(info);
+			Paging vo2 = new Paging(Integer.parseInt(listType),total, Integer.parseInt(nowPage), 
+					Integer.parseInt(cntPerPage),searchvalue,searchType,searchContent);
+			info.put("search", searchvalue);
+			info.put("searchType", searchType);
+			info.put("searchContent", searchContent);
+			info.put("listType", vo2.getListType());
+			info.put("start", vo2.getStart());
+			info.put("end", vo2.getEnd());
+			List<Map> list = b_P002_D001ShopingMallService.searchResult(info); //검색 처리 후 
+			mav.addObject("paging",vo2);
+			mav.addObject("viewAll", list);
+			
+		}else {  //일반 분류
 		search.put("listType", Integer.parseInt(listType));
 		int total = b_P002_D001ShopingMallService.totalCount2(search);
 		Paging vo2 = new Paging(Integer.parseInt(listType),total, Integer.parseInt(nowPage), Integer.parseInt(cntPerPage));
 		search.put("listType", vo2.getListType());
 		search.put("start", vo2.getStart());
 		search.put("end", vo2.getEnd());
-		
-		List<Map> list =b_P002_D001ShopingMallService.shopListTextCate(search);  // 글만가져옴
-		
-		System.out.println("total 체크:"+total);
-		System.out.println("리스트 개수 체크:"+list.size());
+		List<Map> list =b_P002_D001ShopingMallService.shopListTextCate(search);  // 
 		
 		mav.addObject("paging",vo2);
 		mav.addObject("viewAll", list);
-		mav.setViewName("/shoppingMall/category");
+		}
+		
+		
+		
+		List<Map> lastItems = b_P002_D001ShopingMallService.lastItems();     //최신 글 5개
+		mav.addObject("lastItems", lastItems);
+		mav.setViewName("/shoppingMall/shopMain");
 		
 		return mav;
 	}
 	
 
-	
-	@Override /* 검색 결과 */ 
+	/*
+	@Override      //검색 이전버전  
 	@RequestMapping(value = "/B_P002_D001/searchResult", method = { RequestMethod.GET, RequestMethod.POST })
-	public ModelAndView searchResult(@RequestParam Map<String, Object> info, HttpServletRequest request, HttpServletResponse response)throws Exception {
+	public ModelAndView ㅊ(@RequestParam Map<String, Object> info, HttpServletRequest request, HttpServletResponse response)throws Exception {
 		ModelAndView mav= new ModelAndView();
 		String nowPage = request.getParameter("nowPage");
 		String cntPerPage = request.getParameter("cntPerPage");
@@ -148,7 +172,7 @@ public class B_P002_D001ControllerImpl  implements B_P002_D001Controller{
 		mav.setViewName("/shoppingMall/searchResult");
 		return mav;
 	}
-
+      */
 	
 	
 	
