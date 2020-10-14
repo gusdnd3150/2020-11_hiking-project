@@ -7,6 +7,7 @@ public interface ChatService {
 
     String checkExistRoom(int groupNum);
     String newChat(int groupNum);
-    List selectChatByRoomId(String roomId);
+    List<Map> selectChatByRoomId(String roomId);
     void insertMessage(Map map);
+    List checkValidUser(String roomId);
 }

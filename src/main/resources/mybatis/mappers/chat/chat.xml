@@ -33,10 +33,10 @@
 
     <select id="selectChatByRoomId" resultType="map" parameterType="string">
         <![CDATA[
-            SELECT roomId, userId, message, time
+            SELECT roomId, userId, message, messagedAt
             FROM chatMessage
             WHERE roomId = #{roomId}
-            ORDER BY time ASC
+            ORDER BY messagedAt ASC
         ]]>
     </select>
 
@@ -50,8 +50,16 @@
                     WHERE roomId = #{roomId}),
                     #{userId},
                     #{message},
-                    #{time}
+                    #{messagedAt}
             )
         ]]>
     </insert>
+
+    <select id="checkValidUser" resultType="map" parameterType="string">
+        <![CDATA[
+            SELECT userId
+            FROM chatRoomJoin
+            WHERE roomId = #{roomId}
+        ]]>
+    </select>
 </mapper>

@@ -41,12 +41,16 @@ public class ChatServiceImpl implements ChatService {
         return roomId;
     }
 
-    public List selectChatByRoomId(String roomId){
+    public List<Map> selectChatByRoomId(String roomId){
         return chatDAO.selectChatByRoomId(roomId);
     }
 
     @Transactional
     public void insertMessage(Map map){
         chatDAO.insertMessage(map);
+    }
+
+    public List checkValidUser(String roomId){
+        return chatDAO.checkValidUser(roomId);
     }
 }

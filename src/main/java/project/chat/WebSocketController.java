@@ -8,7 +8,10 @@ import org.springframework.stereotype.Controller;
 
 import javax.annotation.Resource;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Calendar;
 import java.util.Map;
 
 
@@ -22,15 +25,15 @@ public class WebSocketController {
     @MessageMapping("/chat/send/{roomId}")
     @SendTo("/topic/{roomId}")
     public Map sendMsg(@DestinationVariable String roomId, Map map){
-        System.out.println("map 1 : " + map.toString());
-
-        LocalDateTime localDateTime = LocalDateTime.parse((CharSequence) map.get("time"));
-        Timestamp timestamp = Timestamp.valueOf(localDateTime);
-        map.put("time",timestamp);
-
-        System.out.println("map 2 : " + map.toString());
-
+        LocalDateTime inputTime = LocalDateTime.parse((CharSequence) map.get("messagedAt"));
+        Timestamp insertTs = Timestamp.valueOf(inputTime);
+        map.put("messagedAt",insertTs);
         chatService.insertMessage(map);
+
+        LocalDateTime now = LocalDateTime.now();
+        Timestamp ts = Timestamp.valueOf(now);
+        long minute = (ts.getTime() - insertTs.getTime())/60000; // 이거 써먹자 ( keep )
+
         return map;
     }
 }

@@ -25,15 +25,19 @@ public class ChatDao {
         return result;
     }
 
-    public List selectUserIdByGroupNum(int groupNum){
-        List<Map> list = sqlSession.selectList("chat.selectUserIdByGroupNum", groupNum);
-        return list;
+    public List<Map> selectUserIdByGroupNum(int groupNum){
+        return sqlSession.selectList("chat.selectUserIdByGroupNum", groupNum);
     }
 
-    public List selectChatByRoomId(String roomId){
+    public List<Map> selectChatByRoomId(String roomId){
         return sqlSession.selectList("chat.selectChatByRoomId",roomId);
     }
+
     public void insertMessage(Map map){
         sqlSession.insert("chat.insertMessage",map);
+    }
+
+    public List checkValidUser(String roomId){
+        return sqlSession.selectList("chat.checkValidUser",roomId);
     }
 }
