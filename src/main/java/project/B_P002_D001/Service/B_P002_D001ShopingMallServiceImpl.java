@@ -84,6 +84,12 @@ public class B_P002_D001ShopingMallServiceImpl implements B_P002_D001ShopingMall
 		int totalCount = B_P002_D001ShopingMallDAO.SearchTotalCount(info);
 		return totalCount;
 	}
+	
+	@Override
+	public List<Map> lastItems() throws DataAccessException {
+		List<Map> list= B_P002_D001ShopingMallDAO.lastItems();
+		return list;
+	}
 
 	
 	

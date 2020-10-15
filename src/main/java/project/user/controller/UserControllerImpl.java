@@ -142,7 +142,6 @@ public class UserControllerImpl implements UserController {
 		}
 		return result;
 	}
-
 	@RequestMapping(value = "/logInView.do", method = { RequestMethod.GET, RequestMethod.POST })
 	public String logInView(Model model) {
 		System.out.println("로그인 페이지간다");

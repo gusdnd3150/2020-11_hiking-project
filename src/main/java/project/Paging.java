@@ -9,15 +9,29 @@ public class Paging {
 	private int nowPage, startPage, endPage, total, cntPerPage, lastPage, start, end;
 	private int cntPage = 7;
 	private int listType;
+	private String search;
+	private String searchType;
+	private String searchContent;
+	
+	
 
-	public int getListType() {
-		return listType;
-	}
-	public void setListType(int listType) {
-		this.listType = listType;
-	}
 	public Paging() {
 	}
+	
+	public Paging(int listType,int total, int nowPage, int cntPerPage,String search,String searchType,String searchContent) {
+		setNowPage(nowPage);
+		setCntPerPage(cntPerPage);
+		setTotal(total);
+		calcLastPage(getTotal(), getCntPerPage());
+		calcStartEndPage(getNowPage(), cntPage);
+		calcStartEnd(getNowPage(), getCntPerPage());
+		this.listType=listType;
+		this.search=search;
+		this.searchType =searchType;
+		this.searchContent =searchContent;
+		
+	}
+	
 	public Paging(int listType,int total, int nowPage, int cntPerPage) {
 		setNowPage(nowPage);
 		setCntPerPage(cntPerPage);
@@ -109,6 +123,38 @@ public class Paging {
 	}
 	public void getCntPage(int cntPage) {
 		this.cntPage = cntPage;
+	}
+	
+
+	public int getCntPage() {
+		return cntPage;
+	}
+	public void setCntPage(int cntPage) {
+		this.cntPage = cntPage;
+	}
+	public String getSearch() {
+		return search;
+	}
+	public void setSearch(String search) {
+		this.search = search;
+	}
+	public String getSearchType() {
+		return searchType;
+	}
+	public void setSearchType(String searchType) {
+		this.searchType = searchType;
+	}
+	public String getSearchContent() {
+		return searchContent;
+	}
+	public void setSearchContent(String searchContent) {
+		this.searchContent = searchContent;
+	}
+	public int getListType() {
+		return listType;
+	}
+	public void setListType(int listType) {
+		this.listType = listType;
 	}
 	@Override
 	public String toString() {

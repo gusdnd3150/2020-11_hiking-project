@@ -53,7 +53,7 @@ height=350;
 
 <body>
 <script src="https://kit.fontawesome.com/e8913b960a.js" crossorigin="anonymous"></script>
-<div class="topnav" align="center">
+<div class="topnav container" align="center">
   <a class="active" href="/B_P002_D001/shopMainCate?listType=10">Home</a> <!--  10은 전체목록 -->
   <a href="/B_P002_D001/shopMainCate?listType=2">등산 가방</a>  
   <a href="/B_P002_D001/shopMainCate?listType=3">아웃도어</a>

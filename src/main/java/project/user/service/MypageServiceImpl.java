@@ -1,18 +1,12 @@
 package project.user.service;
 
-import java.io.IOException;
-import java.util.List;
 import java.util.Map;
-
-import javax.annotation.Resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import project.common.FileUtils;
 import project.user.dao.MypageDAO;
 import project.user.dto.LoginDTO;
 import project.user.vo.UserVO;
@@ -23,9 +17,6 @@ public class MypageServiceImpl implements MypageService{
 	
 	@Autowired
 	public MypageDAO mypageDAO;
-	
-	@Resource(name = "fileUtils")
-    private FileUtils fileUtils;
 
 	@Override
 	public void updateUser(UserVO userVO) throws Exception {
@@ -38,26 +29,24 @@ public class MypageServiceImpl implements MypageService{
 	}
 
 	@Override
-	public int updateUserCont(int userNum, MultipartFile fileP, String path) throws IOException {
-		  Map map = fileUtils.saveSingleFile(userNum, fileP, path);
-		return mypageDAO.updateUserCont(map);
+	public void updateUserCont(Map<String, Object> contMap) {
+		mypageDAO.updateUserCont(contMap);
+		
 	}
-
 
 	@Override
 	public void updateUserProf(Map<String, Object> profMap) {
-		System.out.println("1");
 		mypageDAO.updateUserProf(profMap);		
 	}
 
 	@Override
-	public UserVO getUserInfo(UserVO userVO) {
-		return mypageDAO.getUserInfo(userVO);	
+	public UserVO getUserInfo(String sessionId) {
+		return mypageDAO.getUserInfo(sessionId);	
 	}
 
 	@Override
-	public UserVO pwdCheck(UserVO userVO) {
-		return mypageDAO.pwdCheck(userVO);
+	public UserVO pwdCheck(String sessionId) {
+		return mypageDAO.pwdCheck(sessionId);
 	}
 
 	@Override
@@ -66,7 +55,6 @@ public class MypageServiceImpl implements MypageService{
 		
 	}
 
-	
 	
 	
 	

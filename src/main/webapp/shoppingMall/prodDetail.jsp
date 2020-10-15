@@ -3,6 +3,7 @@
     isELIgnored="false" 
     import ="java.util.*,project.*"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />   
 <jsp:include page="/common/header.jsp" />
 
@@ -41,7 +42,6 @@
     <link rel="stylesheet" href="/resources/shop/css/style.css" />
     <link rel="stylesheet" href="/resources/shop/css/responsive.css" />
   </head>
-
 <script src="http://code.jquery.com/jquery-latest.js"></script>
 <script>         
    $(document).ready(function () {
@@ -60,16 +60,17 @@
                var prodNum =  $("#prodNum").val();
                var prodName= $("#prodName").val();
                var prodPrice = $("#prodPrice").val();
+               var addType="상품디테일";
                console.log(prodNum);
                console.log(quantity);
       		 $.ajax({
  	            type:"post",
  	            async:true,
  	            url:"/B_P003_D001/addCart",
- 	            data:{prodNum:prodNum,quantity:quantity,prodName:prodName,prodPrice:prodPrice},
+ 	            data:{prodNum:prodNum,quantity:quantity,prodName:prodName,prodPrice:prodPrice,addType:addType},
  	            success:function(data,textStatus){
  	            	alert('장바구니에 추가되었습니다.');
- 	            	location.href="/B_P002_D001/shopMainCate?listType=10";
+ 	            	location.href="/B_P002_D001/shopMainCate?listType=100";
  	            },
  	            error:function(data,textStatus){
  	            }
@@ -88,6 +89,7 @@
     <div class="product_image_area">
       <div class="container">
         <div class="row s_product_inner">
+        
           <div class="col-lg-6">
             <div class="s_product_img">
               <div
@@ -95,54 +97,152 @@
                 class="carousel slide"
                 data-ride="carousel"
               >
+               <!-- 여기서부터는 작은이미지 -->
+                <ol class="carousel-indicators">
+               <c:forEach var="showimages" items="${images }" varStatus="index">
+                  <li
+                    data-target="#carouselExampleIndicators"
+                    data-slide-to="${index.index }"
+                    class="active"
+                  >
+                    <img
+                    width="60px" height="60px"
+                      src="http://localhost:8080/resources/img/${showimages.CONTENT }"
+                      alt=""
+                    />
+                  </li>
+               </c:forEach>
+                </ol>
+                
+               <!-- 여기서부터는 큰이미지 -->
                 <div class="carousel-inner">
+                
+                
+                  
                   <div class="carousel-item active">
                     <img
+                    width="450px" height="450px"
                       class="d-block w-100"
-                      src="http://localhost:8080/resources/img/${images[0].content }"
-                      alt="First slide"
+                      src="http://localhost:8080/resources/img/${images[0].CONTENT }"
                     />
                   </div>
+                  
+   
+                  
+                  
+                  <c:if test="${fn:length(images) ==4 }">
+                           <div class="carousel-item ">
+                    <img
+                    width="450px" height="450px"
+                      class="d-block w-100"
+                      src="http://localhost:8080/resources/img/${images[1].CONTENT }"
+                    />
+                  </div>
+                           <div class="carousel-item ">
+                    <img
+                    width="450px" height="450px"
+                      class="d-block w-100"
+                      src="http://localhost:8080/resources/img/${images[2].CONTENT }"
+                    />
+                  </div>
+                           <div class="carousel-item ">
+                    <img
+                    width="450px" height="450px"
+                      class="d-block w-100"
+                      src="http://localhost:8080/resources/img/${images[3].CONTENT }"
+                    />
+                  </div>
+                  
+                  </c:if>
+                 
+                 <c:if test="${fn:length(images) ==3 }">
+                          <div class="carousel-item ">
+                    <img
+                    width="450px" height="450px"
+                      class="d-block w-100"
+                      src="http://localhost:8080/resources/img/${images[1].CONTENT }"
+                    />
+                  </div>
+                           <div class="carousel-item ">
+                    <img
+                    width="450px" height="450px"
+                      class="d-block w-100"
+                      src="http://localhost:8080/resources/img/${images[2].CONTENT }"
+                    />
+                  </div>
+                  </c:if>
+                 
+                 <c:if test="${fn:length(images) ==2 }">
+                          <div class="carousel-item ">
+                    <img
+                    width="450px" height="450px"
+                      class="d-block w-100"
+                      src="http://localhost:8080/resources/img/${images[1].CONTENT }"
+                    />
+                  </div>
+                  </c:if>
+                  
                 </div>
               </div>
             </div>
           </div>
+          
+          
+          
+          
           <div class="col-lg-5 offset-lg-1">
             <div class="s_product_text">
-              <h3>${prodDetail.name}</h3>
-              <h2>${prodDetail.price } 원</h2>
+              <h3>${prodDetail[0].NAME}</h3>
+              <h2>$ ${prodDetail[0].PRICE } 원</h2>
               <ul class="list">
                 <li>
-                    <c:if test="${prodDetail.type ==1 }">
+                    <c:if test="${prodDetail[0].TYPE ==1 }">
                     <a class="active" href="#">
                     <span>Category</span> : 중고</a>
                     </c:if>
-                    <c:if test="${prodDetail.type ==2 }">
+                    <c:if test="${prodDetail[0].TYPE ==2 }">
                      <a class="active" href="#">
                     <span>Category</span> : 신제품</a>
                     </c:if>
                     
                 </li>
                 <li>
-                  <a href="#"> <span>Availibility</span> : ${prodDetail.quantity }</a>
+                  <a href="#"> <span>Availibility</span> : ${prodDetail[0].QUANTITY } </a>
                 </li>
               </ul>
               <p>
-                Mill Oil is an innovative oil filled radiator with the most
-                modern technology. If you are looking for something that can
-                make your interior look awesome, and at the same time give you
-                the pleasant warm feeling during the winter.
+                ${prodDetail[0].CONTENT }
               </p>
-              <div class="product_count">    <!-- 수량클릭 -->
+              <hr>
+              
+              <div>   <!-- 옵션테그 -->
+               <a href="#"> <span>Options 선택</span> : </a>
+               <!-- 반복 -->
+              <table>
+              <c:forEach var="options" items="${prodDetail }">
+               <tr>
+               <td><input type="checkbox" name="optionCheck">  &nbsp; &nbsp;</td>
+               <td> <h> <span>재고 </span> : ${options.QUANTITY }  &nbsp; &nbsp; </h> </td>
+                 <td><h> <span>사이즈 </span> : ${options.PRODSIZE }  &nbsp; &nbsp;</h> </td>
+               <td> <h><span>색상</span> :  <input type="color" value="${options.COLOR }" disabled ></h></td>
+               <td>
+                </td>
+              </tr>
+              <input type="hidden" name="prodNum" value="${options.PRODNUM }">
+              <input type="hidden" name="optionNum" value="${options.OPTIONNUM }">
+              <input type="hidden" name="quantity" value="">
+              <input type="hidden" name="" value="">
+              </c:forEach>
+              </table>
+                <br>
+                <!-- 반복 끝 -->
+              </div>
+              <hr>
+ 
+              <!-- 
+              <div class="product_count">   
                 <label for="qty" id="quantityValue">Quantity:</label>
-                <input
-                  type="text"
-                  name="qty"
-                  id="sst"
-                  maxlength="12"
-                  value="1"
-                  title="Quantity:"
-                  class="input-text qty"
+                <input type="text" name="qty" id="sst" maxlength="12" value="1" title="Quantity:" class="input-text qty"
                 />
                 <button
                   onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"
@@ -155,17 +255,17 @@
                   onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) &amp;&amp; sst > 0 ) result.value--;return false;"
                   class="reduced items-count"
                   type="button"
-                >
-                  <i class="lnr lnr-chevron-down"></i>
+                ><i class="lnr lnr-chevron-down"></i>
                 </button>
-              </div>
+              </div> -->
+              
               <div class="card_area">
                 <p class="main_btn" id="addCart">장바구니</p>  <!--  a tag에 수량+prodNum과 같이 보내고 서버에서 세션으로 진행할지 결정 -->
                 <%-- <a class="main_btn" href="/B_P003_D001/buyProd/${prodDetail.prodNum }">구매하기</a> --%>
                 <p class="main_btn" id="buyProduct">구매하기</p> 
-                <input type="hidden" id="prodNum" value="${prodDetail.prodNum }">
-                <input type="hidden" id="prodName" value="${prodDetail.name }">
-                <input type="hidden" id="prodPrice" value="${prodDetail.price }">
+                <input type="hidden" id="prodNum" value="${prodDetail[0].PRODNUM }">
+                <input type="hidden" id="prodName" value="${prodDetail[0].NAME }"> 
+                <input type="hidden" id="prodPrice" value="${prodDetail[0].PRICE }">
                 <a class="icon_btn" href="#">
                   <i class="lnr lnr lnr-heart"></i>
                 </a>
@@ -213,14 +313,13 @@
             role="tabpanel"
             aria-labelledby="home-tab"
           >
-            <p> ${prodDetail.content }</p>
             <c:choose>
-                 <c:when test="${empty images }">
+                 <c:when test="${empty imagesBottom }">
                <p>이미지가 없습니다.</p>     
                    </c:when>
-                  <c:when test="${not empty images }">
-                    <c:forEach var="images" items="${images }">
-                   <img src="http://localhost:8080/resources/img/${images.content }"  alt="상" width="800" height="500"><br>
+                  <c:when test="${not empty imagesBottom }">
+                    <c:forEach var="imagesBottom" items="${imagesBottom }">
+                   <img src="http://localhost:8080/resources/img/${imagesBottom.CONTENTDETAIL }"  alt="상" width="800" height="500"><br>
                    </c:forEach>
             </c:when>
            </c:choose>
@@ -497,7 +596,7 @@
                     </p>
                     <p>${afterList.createDat }</p>
                     <form name="addComent"  method="post" action="/B_P003_D001/addComent"  >
-                                            <input type="hidden" name="prodNum" value="${prodDetail.prodNum }">
+                                            <input type="hidden" name="prodNum" value="${prodDetail[0].PRODNUM }">
                                             <input type="hidden" name="afterType" value="${afterList.afterNum }">
                                          <input type="text" name="content">
                                          <input type="submit" class="btn btn-info" value="댓글등록">
@@ -529,7 +628,7 @@
                     <!-- 페이징 -->
                 <div style="display: block; text-align: center;">
 	<c:if test="${paging.startPage != 1 }">
-			<a href="/B_P003_D001/productDetail?prodNum=${prodDetail.prodNum }&nowPage=${paging.startPage - 1 }&cntPerPage=${paging.cntPerPage}">&lt;</a>
+			<a href="/B_P003_D001/productDetail?prodNum=${prodDetail[0].PRODNUM }&nowPage=${paging.startPage - 1 }&cntPerPage=${paging.cntPerPage}">&lt;</a>
 		</c:if>
 		<c:forEach begin="${paging.startPage }" end="${paging.endPage }" var="p">
 			<c:choose>
@@ -537,12 +636,12 @@
 					<b>${p }</b>
 				</c:when>
 				<c:when test="${p != paging.nowPage }">
-					<a href="/B_P003_D001/productDetail?prodNum=${prodDetail.prodNum}&nowPage=${p }&cntPerPage=${paging.cntPerPage}">${p }</a>
+					<a href="/B_P003_D001/productDetail?prodNum=${prodDetail[0].PRODNUM}&nowPage=${p }&cntPerPage=${paging.cntPerPage}">${p }</a>
 				</c:when>
 			</c:choose>
 		</c:forEach>
 		<c:if test="${paging.endPage != paging.lastPage}">
-			<a href="/B_P003_D001/productDetail?prodNum=${prodDetail.prodNum}&nowPage=${paging.endPage+1 }&cntPerPage=${paging.cntPerPage}">&gt;</a>
+			<a href="/B_P003_D001/productDetail?prodNum=${prodDetail[0].PRODNUM}&nowPage=${paging.endPage+1 }&cntPerPage=${paging.cntPerPage}">&gt;</a>
 			<p> ${paging.listType}</p>
 		</c:if>
 	</div>
@@ -559,7 +658,7 @@
                     novalidate="novalidate"
                     enctype="multipart/form-data"
                   >
-                  <input type="hidden" name="prodNum" value="${prodDetail.prodNum }"><br>
+                  <input type="hidden" name="prodNum" value="${prodDetail[0].PRODNUM }"><br>
                   <label>평점 </label>
             <select name="evalue" id="evalue">
             <option value="1">1</option>    

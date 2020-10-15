@@ -39,10 +39,10 @@
                     <a class="nav-link" href="/group/main1.do">산오르기<span class="sr-only"></span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="../moim/gallery.jsp">산모임</a>
+                    <a class="nav-link" href="#">산모임</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/B_P002_D001/shopMainCate?listType=10">오름마켓</a>
+                    <a class="nav-link" href="/B_P002_D001/shopMainCate?listType=100">오름마켓</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">고객센터</a>
@@ -53,21 +53,23 @@
                 <c:choose>
                     <c:when test="${not empty LOGIN}">
                 <li class="nav-item">
-                        <a class="nav-link" href="/user/logOut.do">로그아웃</a>
+                        <a class="nav-link" href="/user/logOut">로그아웃</a>
                 </li>
                 <li class="nav-item">
-                        <a class="nav-link" href="/mypage/mypageHomeView.do">마이페이지</a>
+                        <a class="nav-link" href="/mypage/mypageHome">마이페이지</a>
                 </li>
                     </c:when>
                     <c:otherwise>
                 <li class="nav-item">
                         <a class="nav-link" href="/user/logInView.do">로그인</a>
                 </li>
-       
+                <li class="nav-item">
+                        <a class="nav-link" href="/user/signUpView">회원가입</a>
+                </li>
                     </c:otherwise>
                 </c:choose>
                 <button class="btn my-2 my-sm-0">
-                    <a href="/search/main.jsp"><img src="../resources/img/search.png" width="25" height="25"></a>
+                    <img src="../resources/img/search.png" width="25" height="25" onclick="">
                 </button>
             </ul>
         </div>

@@ -72,7 +72,6 @@ height=350;
                 error:function(data,textStatus){
                 }
               });
-    	   
        }); 
   });
 

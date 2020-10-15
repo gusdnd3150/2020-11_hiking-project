@@ -25,14 +25,19 @@ public class B_P003_D001productServiceImpl implements B_P003_D001productService{
 	B_P003_D001productDAO b_P003_D001productDAO;
 	
 	@Override
-	public E_P002_D003ProductsVO topDetail(Map<String, Object> map) throws DataAccessException {
-		E_P002_D003ProductsVO vo = b_P003_D001productDAO.topDetail(map);
+	public List<Map> topDetail(Map<String, Object> map) throws DataAccessException {
+		List<Map> vo = b_P003_D001productDAO.topDetail(map);
 		return vo;
 	}
 
 	@Override
-	public List<E_P002_D003PhotoVO> detailImages(Map<String, Object> map) throws DataAccessException {
-		List<E_P002_D003PhotoVO> list = b_P003_D001productDAO.detailImages(map);
+	public List<Map> detailImages(Map<String, Object> map) throws DataAccessException {
+		List<Map> list = b_P003_D001productDAO.detailImages(map);
+		return list;
+	}
+	@Override
+	public List<Map> detailImagesBottom(Map<String, Object> map) throws DataAccessException {
+		List<Map> list = b_P003_D001productDAO.detailImagesBottom(map);
 		return list;
 	}
 
@@ -83,12 +88,12 @@ public class B_P003_D001productServiceImpl implements B_P003_D001productService{
 
 	/// 아래는 구매 후
 	@Override
-	public void updateQuantity(Map<String, Object> map) throws DataAccessException {
+	public void updateQuantity(List<Map> map) throws DataAccessException {
 		b_P003_D001productDAO.updateQuantity(map);
 	}
 
 	@Override
-	public void updateOrders(Map<String, Object> map) throws DataAccessException {
+	public void updateOrders(List<Map> map) throws DataAccessException {
 		b_P003_D001productDAO.updateOrders(map);
 	}
 
@@ -104,7 +109,7 @@ public class B_P003_D001productServiceImpl implements B_P003_D001productService{
 	}
 
 	@Override
-	public void insertPayment(Map<String, Object> map) throws DataAccessException {
+	public void insertPayment(List<Map> map) throws DataAccessException {
 		b_P003_D001productDAO.insertPayment(map);
 		
 	}
@@ -113,11 +118,11 @@ public class B_P003_D001productServiceImpl implements B_P003_D001productService{
 	@Override
 	@Transactional
 	public void insertPaymentTest(Map<String, Object> map) throws DataAccessException {
-		    b_P003_D001productDAO.updateQuantity(map);
-			b_P003_D001productDAO.updateOrders(map);
+		    //b_P003_D001productDAO.updateQuantity(map);
+			//b_P003_D001productDAO.updateOrders(map);
 			b_P003_D001productDAO.delivery(map);
 			b_P003_D001productDAO.updatePoint(map);
-			b_P003_D001productDAO.insertPayment(map);
+			//b_P003_D001productDAO.insertPayment(map);
 	}
 	
 	//장바구니 상품 추가
@@ -157,7 +162,7 @@ public class B_P003_D001productServiceImpl implements B_P003_D001productService{
 	
 	/////중고물품 등록
 	@Override
-	public void saveUsedImage(List<E_P002_D003PhotoVO> hmap) {
+	public void saveUsedImage(List<Map> hmap) {
 		b_P003_D001productDAO.saveUsedImage(hmap);
 	}
 	@Override
@@ -169,6 +174,65 @@ public class B_P003_D001productServiceImpl implements B_P003_D001productService{
 	public List<Map> selectProductInfo(Map<String, Object> map) throws DataAccessException {
 		return b_P003_D001productDAO.selectProductInfo(map);
 	}
+
+	@Override
+	public List<Map> selectCartList(Map<String, Object> map) throws DataAccessException {
+		return b_P003_D001productDAO.selectCartList(map);
+	}
+
+	@Override
+	public int selectCartCount(Map<String, Object> map) {
+		return b_P003_D001productDAO.selectCartCount(map);
+	}
+	
+	@Override
+	public List test(List<Map> list) {
+		return b_P003_D001productDAO.test(list);
+	}
+
+	@Override
+	public void insertPaymentMultiple(List<Map> map) throws DataAccessException {
+		 b_P003_D001productDAO.insertPaymentMultiple(map);
+		
+	}
+
+	@Override
+	public void updateOrder(List<Map> map) throws DataAccessException {
+		b_P003_D001productDAO.updateOrder(map);
+	}
+
+	@Override
+	public void saveUsedDetailImage(List<Map> hmap) {
+		b_P003_D001productDAO.saveUsedDetailImage(hmap);
+		
+	}
+
+	@Override
+	public void addUsedCategory(Map<String, Object> datahMap) throws DataAccessException {
+		b_P003_D001productDAO.addUsedCategory(datahMap);
+	}
+
+	@Override
+	public void addOption(List<Map> hmap)throws DataAccessException {
+		b_P003_D001productDAO.addOption(hmap);
+	}
+
+	@Override
+	public int prodNum() {
+		return b_P003_D001productDAO.prodNum();
+	}
+
+	@Override
+	public int optionNum() {
+		return b_P003_D001productDAO.optionNum();
+	}
+
+	@Override
+	public String checkQuantity(Map<String, Object> map) throws DataAccessException {
+		return b_P003_D001productDAO.checkQuantity(map);
+	}
+
+	
 	
 
 }

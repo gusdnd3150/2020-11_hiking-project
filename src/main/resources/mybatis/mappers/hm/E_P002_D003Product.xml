@@ -13,8 +13,20 @@
 	 <result property="createDat" column="CREATEDAT" />
 	 <result property="upDateDat" column="UPDATEDAT" />
      <result property="content" column="CONTENT"  />
+     <result property="contentDetail" column="CONTENTDETAIL"  />
      <result property="originalFileName" column="ORIGINALFILENAME" />
      <result property="fileSize" column="FILESIZE" />
+	</resultMap>
+	
+	 <resultMap id="OptionVO" type="OptionVO">
+	 <result property="optionNum" column="OPTIONNUM" />
+	 <result property="prodNum" column="PRODNUM" />
+	 <result property="prodSize" column="PRODSIZE" />
+	 <result property="color" column="COLOR" />
+     <result property="quantity" column="QUANTITY"  />
+     <result property="prodstatus" column="PRODSTATUS"  />
+     <result property="updateDate" column="UPDATEDATE" />
+     <result property="modDate" column="MODDATE" />
 	</resultMap>
 	             <!-- 상품 상세내용 -->
 	<resultMap id="e_P002_D003ProductsVO" type="e_P002_D003ProductsVO">
@@ -23,7 +35,6 @@
 		<result property="name" column="NAME" />
 		<result property="price" column="PRICE" />
 		<result property="content" column="CONTENT"  />
-		<result property="quantity" column="QUANTITY" />
 		<result property="type" column="TYPE" />
 		<result property="createDat" column="CREATEDAT" />
 		<result property="updateDat" column="UPDATEDAT" />
@@ -48,7 +59,6 @@
 	  <resultMap type="deliveryVO" id="deliveryVO">
 	     <result property="userNum" column="USERNUM" />
 	     <result property="deliNum" column="DELINUM" />
-	     <result property="type" column="TYPE" />
 	     <result property="address" column="ADDRESS" />
 	     <result property="address2" column="ADDRESS2" />
 	     <result property="zonecode" column="ZONECODE" />
@@ -114,7 +124,6 @@
 	  <resultMap type="OrdersVO" id="OrdersVO">
 	     <result property="orderNum" column="ORDERNUM" />
 	     <result property="userNum" column="USERNUM" />
-	     <result property="cartNum" column="CARTNUM" />
 	     <result property="ordereDat" column="ORDEREDAT" />
 	     <result property="price" column="PRICE" />
 	     <result property="charge" column="CHARGE" />
@@ -124,7 +133,9 @@
 	     <result property="prodNum" column="PRODNUM" />
 	     <result property="quantity" column="QUANTITY" />
 	     <result property="prodName" column="PRODNAME" />
+	     <result property="payTotal" column="PAYTOTAL" />
 	  </resultMap>
+	  
 		  <!-- 페이징 -->
 	<resultMap id="Paging" type="Paging">
 		<result property="start"  />
@@ -158,34 +169,56 @@
 	       SELECT COUNT(*) FROM products
 	         ]]>
 	       <where>
-           <if test=" listType!='' and listType!=null and listType!=10">
-            pcategorynum = #{listType}
+           <if test=" listType!='' and listType!=null and listType!=100">
+            PRODCATEGORYNUM = #{listType}
            </if>
            </where>
        </select>
        
   	<!-- 상품상세 -->
-       <select id="selectProductDetail" resultType="e_P002_D003ProductsVO" parameterType="java.util.Map">
+       <select id="selectProductDetail" resultType="map" parameterType="java.util.Map">
 	       select *
-           from products
-           where PRODNUM = #{prodNum}
+           from products p, prodoption op
+           where p.prodnum=op.prodnum
+           and p.PRODNUM = #{prodNum}
        </select>
        
   	<!-- 상품상세페이지의 이미지들 -->
-       <select id="selectProductDetailImages" resultType="e_P002_D003PhotoVO" parameterType="java.util.Map">
-	        select *
+       <select id="selectProductDetailImages" resultType="map" parameterType="java.util.Map">
+           select *
             from prodphoto
            where PRODNUM = #{prodNum}
-       </select>   
+           and content is not null
+       </select>
+        
+        <select id="selectProductDetailImagesBottom" resultType="map" parameterType="java.util.Map">
+           select *
+            from prodphoto
+           where PRODNUM = #{prodNum}
+           and contentdetail is not null
+       </select>    
        
      <!-- 구매 성공 후 수량 빼기 -->   
-    <update id="updateQuantity"  parameterType="java.util.Map">
+    <!-- <update id="updateQuantity"  parameterType="java.util.Map">
      <![CDATA[
 	     update products
 	     set quantity = quantity- #{quantity}
 	     where prodNum = #{prodNum}
       ]]>      
-   </update>
+   </update> -->
+   
+   	    <!-- 구매 성공 후 수량 빼기 -->
+	   <update id="updateQuantity"  parameterType="java.util.List">
+        <foreach  item="item" collection="list"  index="index" 
+      separator=";" open="DECLARE BEGIN" close="; END;" >
+           UPDATE products 
+           SET quantity = quantity -#{item.quantity}
+           WHERE prodNum= #{item.prodNum}
+      </foreach>
+       </update>
+   
+   
+   
          <!-- 구매 성공 후 포인트 차감 -->
        <update id="updatePoint"  parameterType="java.util.Map">
      <![CDATA[
@@ -201,11 +234,19 @@
              from productAfter
              where prodNum = #{prodNum}
        </select> 
+       
                      <!-- 포인트-->
        <select id="getPoint" resultType="int" parameterType="java.util.Map">
              select  decode(RESULT,null,0,RESULT)
              from POINT
              where USERNUM = #{userNum}
+       </select> 
+       
+                   <!-- 수량확인-->
+       <select id="checkQuantity" resultType="String" parameterType="java.util.Map">
+             select  max(quantity)
+             from PRODOPTION
+             where prodnum= #{prodNum}
        </select> 
        
                     <!-- 배송지-->
@@ -215,20 +256,103 @@
              where USERNUM = #{userNum}
        </select> 
        
-              	<!--검색 조건에 대한              총 게시글 개수-->
+              	<!--검색 조건에 대한   파람정보  {search=clime, searchContent =''}         총 게시글 개수-->  
        <select id="searchTotal" resultType="int" parameterType="java.util.Map">
 	       <![CDATA[
-	       SELECT COUNT(*) FROM products
+	      select count(DISTINCT(b.prodnum))
+             from (select *
+                   from prodcategory
+                  start with PARENTCATEGORYNUM is null
+                  connect by prior PRODCATEGORYNUM=PARENTCATEGORYNUM
+              )a ,products b 
+	          where a.PRODCATEGORYNUM=b.PRODCATEGORYNUM
 	         ]]>
     		 <choose>
-    		  <when test="searchtype=='NAME'">
-                where name LIKE '%'||#{searchContent}||'%'
+    		  <when test="search=='total' and searchContent != null and searchType=='name'  ">
+                and b.name like '%'||#{searchContent}||'%'
               </when>
-                 <when test="searchtype=='CONTENT'">
-                where content LIKE '%'||#{searchContent}||'%'
+              <when test="search=='used' and searchContent != null and searchType=='name'  ">
+              and b.type = 1
+              and b.name like '%'||#{searchContent}||'%'
               </when>
-          </choose>
+              <when test="search=='new' and searchContent != null and searchType=='name'  ">
+              and b.type = 2
+              and b.name like '%'||#{searchContent}||'%'
+              </when>
+              <when test="search=='clothes' and searchContent != null and searchType=='name'  ">
+              and a.PARENTCATEGORYNUM =1
+              and b.name like '%'||#{searchContent}||'%'
+              </when>
+              <when test="search=='clime' and searchContent != null and searchType=='name'  ">
+              and a.PARENTCATEGORYNUM =3
+              and b.name like '%'||#{searchContent}||'%'
+              </when>
+              <when test="search=='anythings' and searchContent != null and searchType=='name'  ">
+              and a.PARENTCATEGORYNUM =2
+              and b.name like '%'||#{searchContent}||'%'
+              </when>
+               <when test="search=='total' and searchContent != null and searchType=='content'  ">
+                and b.content like '%'||#{searchContent}||'%'
+              </when>
+              <when test="search=='used' and searchContent != null and searchType=='content'  ">
+              and b.type = 1
+              and b.content like '%'||#{searchContent}||'%'
+              </when>
+              <when test="search=='new' and searchContent != null and searchType=='content'  ">
+              and b.type = 2
+              and b.content like '%'||#{searchContent}||'%'
+              </when>
+              <when test="search=='clothes' and searchContent != null and searchType=='content'  ">
+              and a.PARENTCATEGORYNUM =1
+              and b.content like '%'||#{searchContent}||'%'
+              </when>
+              <when test="search=='clime' and searchContent != null and searchType=='content'  ">
+              and a.PARENTCATEGORYNUM =3
+              and b.content like '%'||#{searchContent}||'%'
+              </when>
+              <when test="search=='anythings' and searchContent != null and searchType=='content'  ">
+              and a.PARENTCATEGORYNUM =2
+              and b.content like '%'||#{searchContent}||'%'
+              </when>
+               
+              <when test="search=='total' and searchContent == null and searchType=='name'  ">
+              </when>
+              <when test="search=='used' and searchContent == null and searchType=='name'  ">
+              and b.type = 1
+              </when>
+              <when test="search=='new' and searchContent == null and searchType=='name'  ">
+              and b.type = 2
+              </when>
+              <when test="search=='clothes' and searchContent == null and searchType=='name'  ">
+              and a.PARENTCATEGORYNUM =1
+              </when>
+              <when test="search=='clime' and searchContent == null and searchType=='name'  ">
+              and a.PARENTCATEGORYNUM =3
+              </when>
+              <when test="search=='anythings' and searchContent == null and searchType=='name'  ">
+              and a.PARENTCATEGORYNUM =2
+              </when>
+               <when test="search=='total' and searchContent == null and searchType=='content'  ">
+              </when>
+              <when test="search=='used' and searchContent == null and searchType=='content'  ">
+              and b.type = 1
+              </when>
+              <when test="search=='new' and searchContent == null and searchType=='content'  ">
+              and b.type = 2
+              </when>
+              <when test="search=='clothes' and searchContent == null and searchType=='content'  ">
+              and a.PARENTCATEGORYNUM =1
+              </when>
+              <when test="search=='clime' and searchContent == null and searchType=='content'  ">
+              and a.PARENTCATEGORYNUM =3
+              </when>
+              <when test="search=='anythings' and searchContent == null and searchType=='content'  ">
+              and a.PARENTCATEGORYNUM =2
+              </when>   
+            </choose>
        </select>
+
+
 
 
     <!-- 페이징 처리 후 게시글 조회                         메인화면-->
@@ -288,12 +412,11 @@
        <!-- 페이징 처리 후 게시글 조회                메인      카테고리별 화면 -->
        <select id="selectProductCate" resultType="map" parameterType="java.util.Map">
          <![CDATA[
-           SELECT *
+          SELECT *
 		       FROM (
 			       SELECT ROWNUM RN, A.* 
 				     FROM (
-					SELECT p.PRODNUM, p.PCATEGORYNUM,p.NAME,p.PRICE,p.CONTENT,p.QUANTITY
-                        ,p.TYPE,p.CREATEDAT,p.UPDATEDAT,io.content as image  
+					SELECT p.PRODNUM, p.PRODCATEGORYNUM,p.NAME,p.PRICE,p.CONTENT ,p.TYPE,p.CREATEDAT,p.UPDATEDAT,io.content as image
 						FROM products p,prodPhoto io
                         where p.prodnum=io.prodnum
                         and io.pphotonum=1
@@ -303,16 +426,33 @@
            ]]>
            <where>
            RN BETWEEN #{start} AND #{end}
-           <if test="listType!=10">
-          AND pcategorynum = #{listType}
+           <if test="listType!=100">
+          AND PRODCATEGORYNUM = #{listType}
            </if>
            </where>
+       </select>
+       
+       
+         <!-- 최신글 5개 -->
+       <select id="lastItems" resultType="map">
+         SELECT *
+		       FROM (
+			       SELECT ROWNUM RN, A.* 
+				     FROM (
+		   SELECT p.PRODNUM, p.PRODCATEGORYNUM,p.NAME,p.PRICE,p.CONTENT ,p.TYPE,p.CREATEDAT,p.UPDATEDAT,io.content as image
+						FROM products p,prodPhoto io
+                        where p.prodnum=io.prodnum
+                        and io.pphotonum=1
+						ORDER BY p.createdat desc
+						) A
+				     )
+           where RN BETWEEN 1 AND 8
        </select>
        
                <!-- 즉시구매 페이지 상품 정보 -->
         <select id="selectProductInfo" resultType="map" parameterType="java.util.Map">
          <![CDATA[
-                       SELECT p.PRODNUM, p.PCATEGORYNUM,p.NAME,p.PRICE,p.CONTENT,p.QUANTITY
+                         SELECT p.PRODNUM, p.PCATEGORYNUM,p.NAME,p.PRICE,p.QUANTITY
                         ,p.TYPE,p.CREATEDAT,p.UPDATEDAT,io.content as image  
 						FROM products p,prodPhoto io
                         where p.prodnum=io.prodnum
@@ -326,32 +466,110 @@
         <!-- 페이징 처리 후 게시글 조회                     검색 결과          -->
        <select id="searchResult" resultType="map" parameterType="java.util.Map">
          <![CDATA[
-           SELECT *
+       SELECT *
 		       FROM (
 			       SELECT ROWNUM RN, A.* 
 				     FROM (
-					SELECT p.PRODNUM, p.PCATEGORYNUM,p.NAME,p.PRICE,p.CONTENT,p.QUANTITY
+					   SELECT p.PRODNUM, p.PRODCATEGORYNUM,p.NAME,p.PRICE,p.CONTENT,a.PARENTCATEGORYNUM
                         ,p.TYPE,p.CREATEDAT,p.UPDATEDAT,io.content as image  
-						FROM products p,prodPhoto io
+						FROM (select *
+                               from prodcategory
+                                start with PARENTCATEGORYNUM is null
+                               connect by prior PRODCATEGORYNUM=PARENTCATEGORYNUM
+                               )a, products p,prodPhoto io
                         where p.prodnum=io.prodnum
+                        and a.PRODCATEGORYNUM =p.PRODCATEGORYNUM
                         and io.pphotonum=1
-						ORDER BY p.prodNum desc
+						ORDER BY p.CREATEDAT asc
 						) A
 				     )
+           where rn between #{start} and #{end}
            ]]>
            <choose>
-    		  <when test="searchtype=='name'">
-    		    where RN BETWEEN #{start} AND #{end}
-                and name LIKE '%'||#{searchContent}||'%'
+    		   <when test="search=='total' and searchContent != null and searchType=='name'  ">
+                and name like '%'||#{searchContent}||'%'
               </when>
-                 <when test="searchtype=='content'">
-                 where RN BETWEEN #{start} AND #{end}
-                and content LIKE '%'||#{searchContent}||'%'
+    		  <when test="search=='used' and searchContent != null and searchType=='name'  ">
+              and type = 1
+              and name like '%'||#{searchContent}||'%'
               </when>
+              <when test="search=='new' and searchContent != null and searchType=='name'  ">
+              and type = 2
+              and name like '%'||#{searchContent}||'%'
+              </when>
+              <when test="search=='clothes' and searchContent != null and searchType=='name'  ">
+              and PARENTCATEGORYNUM =1
+              and name like '%'||#{searchContent}||'%'
+              </when>
+              <when test="search=='clime' and searchContent != null and searchType=='name'  ">
+              and PARENTCATEGORYNUM =3
+              and name like '%'||#{searchContent}||'%'
+              </when>
+              <when test="search=='anythings' and searchContent != null and searchType=='name'  ">
+              and PARENTCATEGORYNUM =2
+              and name like '%'||#{searchContent}||'%'
+              </when>
+               <when test="search=='total' and searchContent != null and searchType=='content'  ">
+                and content like '%'||#{searchContent}||'%'
+              </when>
+              <when test="search=='used' and searchContent != null and searchType=='content'  ">
+              and type = 1
+              and content like '%'||#{searchContent}||'%'
+              </when>
+              <when test="search=='new' and searchContent != null and searchType=='content'  ">
+              and type = 2
+              and content like '%'||#{searchContent}||'%'
+              </when>
+              <when test="search=='clothes' and searchContent != null and searchType=='content'  ">
+              and PARENTCATEGORYNUM =1
+              and content like '%'||#{searchContent}||'%'
+              </when>
+              <when test="search=='clime' and searchContent != null and searchType=='content'  ">
+              and PARENTCATEGORYNUM =3
+              and content like '%'||#{searchContent}||'%'
+              </when>
+              <when test="search=='anythings' and searchContent != null and searchType=='content'  ">
+              and PARENTCATEGORYNUM =2
+              and content like '%'||#{searchContent}||'%'
+              </when>
+               
+              <when test="search=='total' and searchContent == null and searchType=='name'  ">
+              </when>
+              <when test="search=='used' and searchContent == null and searchType=='name'  ">
+              and type = 1
+              </when>
+              <when test="search=='new' and searchContent == null and searchType=='name'  ">
+              and type = 2
+              </when>
+              <when test="search=='clothes' and searchContent == null and searchType=='name'  ">
+              and PARENTCATEGORYNUM =1
+              </when>
+              <when test="search=='clime' and searchContent == null and searchType=='name'  ">
+              and PARENTCATEGORYNUM =3
+              </when>
+              <when test="search=='anythings' and searchContent == null and searchType=='name'  ">
+              and PARENTCATEGORYNUM =2
+              </when>
+               <when test="search=='total' and searchContent == null and searchType=='content'  ">
+              </when>
+              <when test="search=='used' and searchContent == null and searchType=='content'  ">
+              and type = 1
+              </when>
+              <when test="search=='new' and searchContent == null and searchType=='content'  ">
+              and type = 2
+              </when>
+              <when test="search=='clothes' and searchContent == null and searchType=='content'  ">
+              and PARENTCATEGORYNUM =1
+              </when>
+              <when test="search=='clime' and searchContent == null and searchType=='content'  ">
+              and PARENTCATEGORYNUM =3
+              </when>
+              <when test="search=='anythings' and searchContent == null and searchType=='content'  ">
+              and PARENTCATEGORYNUM =2
+              </when> 
           </choose>
        </select>
        
-           
        
     <!-- 페이징 처리 후 게시글 이미지 조회       -->   
          <select id="shopMainImage" resultMap="e_P002_D003PhotoVO" parameterType="java.util.Map">
@@ -382,7 +600,7 @@
 		FROM (
 			SELECT ROWNUM RN, A.* 
 				FROM (
-				        SELECT o.ORDERNUM,o.USERNUM,o.CARTNUM,o.ORDEREDAT,o.PRICE,o.CHARGE,o.ORDERSTATUS,
+				        SELECT o.ORDERNUM,o.USERNUM,o.ORDEREDAT,o.PRICE,o.CHARGE,o.ORDERSTATUS,
                         o.DELIVERYSTATUS,o.ORDERTYPE,o.PRODNUM,o.QUANTITY,o.PRODNAME,io.content as image
 						FROM orders o,prodPhoto io, products p
                         where o.prodnum= io.prodnum
@@ -406,10 +624,42 @@
 	       ]]>
        </select>
        
+            <!--구매전 선택된 장바구니 총개수 -->
+       <select id="selectCartCount" resultType="int" parameterType="java.util.Map">
+        <![CDATA[
+	      SELECT COUNT(*) FROM orders
+            where userNum = #{userNum}
+            and orderType =3
+	       ]]>
+       </select>
+       
+        <!-- 구매전 장바구니 페이징   사용안함-->   
+         <select id="selectCartList" resultType="map" parameterType="java.util.Map">
+        <![CDATA[
+      SELECT *
+		FROM (
+			SELECT ROWNUM RN, A.* 
+				FROM (
+				        SELECT o.ORDERNUM,o.USERNUM,o.ORDEREDAT,o.PRICE,o.CHARGE,o.ORDERSTATUS,
+                        o.DELIVERYSTATUS,o.ORDERTYPE,o.PRODNUM,o.QUANTITY,o.PRODNAME,io.content as image
+						FROM orders o,prodPhoto io, products p
+                        where o.prodnum= io.prodnum
+                        and io.prodnum=p.prodnum
+                        and o.userNum = #{userNum}
+                        and o.ordertype=3
+                        and io.pphotonum=1
+						ORDER BY o.prodNum desc       
+						) A
+				)
+	  WHERE RN BETWEEN #{start} AND #{end}
+        ]]>
+        </select>
+       
+       
            <!-- 장바구니 삭제 -->
        <delete id="deleteCart" parameterType="java.util.Map">
 	  delete from orders
-	  where prodNum = #{prodNum}
+	  where orderNum = #{orderNum}
 	  and userNum = #{userNum}
 	  and orderType=2
 	   </delete>
@@ -430,12 +680,41 @@
       </foreach>
        </update>
         
+            <!-- 장바구니 결제 -->
+        <update id="insertOrders"  parameterType="java.util.List">
+        <foreach  item="item" collection="list"  index="index" 
+      separator=";" open="DECLARE BEGIN" close="; END;" >
+           UPDATE orders 
+           SET PAYTOTAL = #{item.payTotal}
+           ,ORDERTYPE =3
+           ,QUANTITY = #{item.quantity}
+           ,ORDERSTATUS =2
+           ,DELIVERYSTATUS =200
+           ,ORDEREDAT =sysdate
+           WHERE USERNUM= #{item.userNum}
+           AND ORDERNUM= #{item.orderNum}
+      </foreach>
+       </update>
+
+
+               <!-- 즉시구매 -->
+        <insert id="insertOrderOne"  parameterType="java.util.List">
+        <selectKey resultType="int" keyProperty="orderNum" order="BEFORE">
+	    	 select seq_orders.nextval from dual
+	    </selectKey>
+        <foreach  item="item" collection="list"  index="index" 
+      separator=";" open="DECLARE BEGIN" close="; END;">
+      insert into orders(ORDERNUM, USERNUM,ORDEREDAT,PRICE,PAYTOTAL,CHARGE,ORDERSTATUS,DELIVERYSTATUS,ORDERTYPE,PRODNUM,PRODNAME,QUANTITY)
+      values(#{orderNum},#{item.userNum},SYSDATE,#{item.price},#{item.payTotal},3000,2,200,1,#{item.prodNum},#{item.prodName},#{item.quantity})
+      </foreach>
+       </insert>
 
 	      <!-- orders (ordertype 일반구매 = 1, 장바구니 =2, 구매전장바구니 =3)
 	                  (oderstatus 결제완료 =1, 미완료 =2)                               
 	                  (deliverystatus 배송준비 =1, 배송중 =2, 배송완료=3)
 	                  등록 -->
- <insert id="insertOrders" parameterType="java.util.Map"   >
+	              <!--     
+ <insert id="insertOrders22222222222" parameterType="java.util.List"   >
 		<selectKey resultType="int" keyProperty="orderNum" order="BEFORE">
 	    	 select seq_orders.nextval from dual
 	    </selectKey>
@@ -469,7 +748,7 @@
 					  			      #{quantity})
 		]]>
 	</insert> 
-	
+	 -->
 	       <!-- 장바구니 추가 -->
 	       <!-- orders (ordertype 일반구매 = 1, 장바구니 =2)
 	                  (oderstatus 결제완료 =1, 미완료 =2)                               
@@ -483,7 +762,6 @@
 		   insert into orders(
 		                ORDERNUM, 
 		                USERNUM,
-                    CARTNUM,
                     ORDEREDAT,
                     PRICE,
 					CHARGE,
@@ -494,22 +772,41 @@
 					PRODNAME,
 					QUANTITY
 				    )
-					  			values(
-					  			      #{orderNum},
-					  			      #{userNum},
-					  			      #{orderNum},
-					  			      SYSDATE,
-					  			      #{prodPrice},
-					  			      3000,
-					  			      1,
-					  			      100,
-					  			      2,
-					  			      #{prodNum},
-					  			      #{prodName},
-					  			      #{quantity})
+					  			
 		]]>
+		<choose>
+		  <when test="type=='main'">
+		  values(#{orderNum},#{userNum},SYSDATE,#{prodPrice},3000,1,100,2,#{prodNum},#{prodName},0)
+		  </when>
+		  <when test="type=='detail'">
+		  values(#{orderNum},#{userNum},SYSDATE,#{prodPrice},3000,1,100,2,#{prodNum},#{prodName},#{quantity})
+		  </when>
+		</choose>
 	</insert> 
 	
+	     <!-- 장바구니결제 후 payment -->
+	<insert id="insertPaymentmultiple"  parameterType="java.util.Map">
+	        <selectKey resultType="int" keyProperty="orderNum" order="BEFORE">
+	    	 	select orderNum
+            from orders
+            where orderNum in (
+               select max(orderNum)
+               from orders
+                  )
+	    </selectKey>
+    <foreach item="item"  collection="list"   open="INSERT ALL" 
+                  separator=" " close="SELECT * FROM DUAL" >
+       INTO payment(ORDERNUM,TYPE,CREATEDAT,BUYERNAME,MERCHANT_UID,IMP_UID,APPLY_NUM )
+      
+      <if test= "item.orderNum != null and item.orderNum == 0">
+	   VALUES (#{orderNum},#{item.payType},sysdate,#{item.custName},#{item.merchant_uid},#{item.imp_uid},#{item.apply_num})
+      </if>
+      <if test= "item.orderNum != null and item.orderNum != 0">
+      VALUES (#{item.orderNum},#{item.payType},sysdate,#{item.custName},#{item.merchant_uid},#{item.imp_uid},#{item.apply_num})
+      </if>
+    </foreach>
+  </insert>
+  
 	
 	<insert id="insertPayment" parameterType="java.util.Map"   >
 		<selectKey resultType="int" keyProperty="orderNum" order="BEFORE">
@@ -588,7 +885,7 @@
   </insert>
   
   	      <!-- 중고물품 신청 -->
-   <insert id="saveUsedImage"  parameterType="java.util.Map">
+   <insert id="saveUsedImage"  parameterType="java.util.List">
    		<selectKey resultType="int" keyProperty="prodNum" order="BEFORE">
 	    	select prodnum
             from products
@@ -599,10 +896,81 @@
 	    </selectKey>
     <foreach item="item"  collection="list"   open="INSERT ALL" 
                   separator=" " close="SELECT * FROM DUAL" >
-      INTO prodphoto(PRODNUM,PPHOTONUM,CONTENT,CREATEDAT)
-      VALUES (#{prodNum}, #{item.pPhotoNum}, #{item.content}, sysdate)
+      INTO prodphoto(PRODNUM,PPHOTONUM,CONTENT,ORIGINALFILENAME,CREATEDAT)
+      VALUES (#{prodNum}, #{item.pphotoNum}, #{item.content},#{item.originalFileName}, sysdate)
     </foreach>
   </insert>
+   
+      <!--     상품 디테일사진
+      <insert id="saveUsedDetailImage"  parameterType="java.util.List">
+   		<selectKey resultType="int" keyProperty="prodNum" order="BEFORE">
+	    	select prodnum
+            from products
+            where CREATEDAT in (
+               select max(CREATEDAT)
+               from products
+                  )
+	    </selectKey>
+    <foreach item="item"  collection="list"   open="INSERT ALL" 
+                  separator=" " close="SELECT * FROM DUAL" >
+      INTO prodphoto(PRODNUM,PPHOTONUM,contentDetail,CREATEDAT)
+      VALUES (#{prodNum}, #{item.pphotoNum}, #{item.contentDetail}, sysdate)
+    </foreach>
+  </insert> -->
+  
+           <!-- 상품 디테일사진 테스트 -->
+    <insert id="saveUsedDetailImage"  parameterType="java.util.List">
+    <selectKey resultType="int" keyProperty="prodNum" order="BEFORE">
+	    	select prodnum
+            from products
+            where CREATEDAT in (
+               select max(CREATEDAT)
+               from products
+                  )
+	    </selectKey>
+       <foreach item="item"  collection="list"   open="INSERT ALL" 
+                  separator=" " close="SELECT * FROM DUAL" >
+      INTO prodphoto(PRODNUM,PPHOTONUM,contentDetail,CREATEDAT)
+      VALUES (#{prodNum}, #{item.pphotoNum}, #{item.contentDetail},sysdate)
+    </foreach>
+       </insert>
+       
+       
+       
+       
+  
+  
+                  <!-- prodnum -->  
+        <select id="prodnum" resultType="int" >
+        <![CDATA[
+	    	select prodnum
+            from products
+            where CREATEDAT in (
+               select max(CREATEDAT)
+               from products
+                  )
+        ]]>
+        </select>
+            <!-- optionnum dd -->  
+        <select id="optionNum" resultType="int" >
+        <![CDATA[
+         select prodOption_seq.nextval from dual
+        ]]>
+        </select>
+        
+  
+              <!-- 옵션 등록 -->
+    <insert id="addOption"  parameterType="java.util.List">
+       <foreach item="item"  collection="list"   open="INSERT ALL" 
+                  separator=" " close="SELECT * FROM DUAL" >
+      INTO prodoption(OPTIONNUM,PRODNUM,PRODSIZE,COLOR,QUANTITY,PRODSTATUS,UPDATEDATE)
+      VALUES (#{item.optionNum},#{item.prodNum}, #{item.prodSize}, #{item.color},#{item.quantity},#{item.prodStatus},sysdate)
+    </foreach>
+     </insert>
+  
+       
+       
+   
    
                 <!-- 글목록 이미지 하나 -->  
         <select id="getByteImage" resultMap="e_P002_D003PhotoVO" parameterType="e_P002_D003PhotoVO">
@@ -642,7 +1010,6 @@
 	    <![CDATA[
 		   insert into products(
 		                prodNum, 
-		                pCategoryNum,
                     name,
                     price,
                     content,
@@ -652,43 +1019,60 @@
 				    )
 					  			values(
 					  			      #{prodNum},
-					  			      #{pCategoryNum},
 					  			      #{name},
 					  			      #{price},
 					  			      #{content},
-					  			      #{quantity},
 					  			      #{type},
 					  			      sysdate)
 		]]>
 	</insert> 
 	
+	
 	          <!-- 중고 상세내용 등록 -->
-	 <insert id="addUsedPro" parameterType="java.util.Map"   >
-		<selectKey resultType="String" keyProperty="prodNum" order="BEFORE">
+	 <insert id="addUsedPro" parameterType="java.util.Map">
+		<selectKey resultType="int" keyProperty="prodNum" order="BEFORE">
 	    	select seq_prod_prodNum.nextval from dual
 	    </selectKey>
 	    <![CDATA[
 		   insert into products(
 		                prodNum, 
-		                pCategoryNum,
+		                PRODCATEGORYNUM,
                     name,
                     price,
                     content,
-					Quantity,
 					type,
-					createdAt
+					createdAt,
+					userNum
 				    )
 					  			values(
 					  			      #{prodNum},
-					  			      #{pCategoryNum},
+					  			      #{parentCategoryNum},
 					  			      #{name},
 					  			      #{price},
 					  			      #{content},
-					  			      #{quantity},
 					  			      #{type},
-					  			      sysdate)
+					  			      sysdate,
+					  			      #{userNum})
 		]]>
 	</insert> 
+	
+          <!-- 중고 카테고리 등록 -->
+	 <insert id="addUsedCategory" parameterType="java.util.Map"   >
+		<selectKey resultType="int" keyProperty="prodCategoryNum" order="BEFORE">
+	    	select seq_category.nextval from dual
+	    </selectKey>
+	    <![CDATA[
+		   insert into prodcategory(
+		                prodCategoryNum, 
+		                PARENTCATEGORYNUM,
+		                prodNum
+				    )
+					  			values(
+					  			      #{prodCategoryNum},
+					  			      #{parentCategoryNum},
+					  			      #{prodNum})
+		]]>
+	</insert>  
 	
 	          <!-- 상품 후기 After 등록 -->
 	 <insert id="addAfter" parameterType="java.util.Map"   >
@@ -743,183 +1127,14 @@
 	</insert> 
 	
 	
-	<!--
-		<insert id="insertGoodsImageFile" parameterType="imageFileVO"   >
-		<selectKey resultType="int" keyProperty="image_id" order="BEFORE">
-	    	select seq_image_id.nextval from dual
-	    </selectKey>
-	    <![CDATA[
-		   insert into t_goods_detail_image (image_id,
-		                                     goods_id,
-																				 fileName,
-																				 fileType,
-																				 reg_id)
-											   					values(#{image_id},
-											   					 			 #{goods_id},
-											   							 	 #{fileName},
-											   								 #{fileType},
-											   								 #{reg_id} )
-		]]>
-	</insert> 
-	<select id="selectNewGoodsList" resultMap="goodsResult"   parameterType="java.util.Map"  >
-	    <![CDATA[
-		  select * from (
-			   select rowNum as recNum,
-			   		  goods_id,
-			          goods_title,
-			          goods_writer,
-			          goods_publisher,
-			          goods_sales_price,
-			          to_char(goods_creDate,'YYYY-MM-DD')  as goods_creDate,
-			          to_char(goods_published_date,'YYYY-MM-DD') as goods_published_date
-			       from (
-			             select  goods_id,
-			             		 goods_title,
-			             		 goods_writer,
-			             		 goods_publisher,
-			             		 goods_sales_price,
-			             		 goods_creDate,
-			             		 goods_published_date
-			              from t_shopping_goods 
-			                where  to_char(goods_creDate,'YYYY-MM-DD')  between #{beginDate} and #{endDate}
-			               order by goods_creDate desc
-					    )
-				)							
-			where				
-		recNum between (#{section}-1)*100+ (#{pageNum}-1)*10+1 and (#{section}-1)*100+(#{pageNum})*10				        
-    	]]>
-	</select> -->
-	<!-- 
-	<select id="selectOrderGoodsList" resultMap="orderGoodsResult"   parameterType="java.util.Map"  >
-		  select * from (
-			    select rowNum as recNum,t.*
-			       from (
-			              select  *  from t_shopping_order 
-			              where to_char(pay_order_time,'yyyy-mm-dd')  between #{beginDate} and #{endDate}
-			                <if test="search_type=='orderer_id'">
-			                  AND orderer_id=#{search_word}
-			                </if>
-			                <if test="search_type=='orderer_name'">
-			                  AND orderer_name=#{search_word}
-			                </if>
-			                <if test="search_type=='orderer_hp_num'">
-			                   AND pay_orderer_hp_num=#{search_word} 
-			                </if>
-			              order by PAY_ORDER_TIME desc
-					    ) t
-				)							
-			where				
-		recNum between (#{section}-1)*100+ (#{pageNum}-1)*10+1 and (#{section}-1)*100+(#{pageNum})*10				        
-	</select>
+	     <!-- TEST -->   
+         <select id="test" resultType="OrdersVO" parameterType="java.util.Map">
+        <![CDATA[
+      SELECT *
+		FROM orders
+		where ordernum =#{orderNum}
+        ]]>
+        </select>
 	
- 
-
-	
-	<select id="selectGoodsDetail" resultMap="goodsResult"   parameterType="String"  >
-	    <![CDATA[
-		     select g.*,to_char(g.goods_published_date,'YYYY-MM-DD') as goods_published_date, d.fileName from t_shopping_goods g, t_goods_detail_image d
-	        where g.goods_id=d.goods_id
-	        and d.filetype='main_image'
-	        and g.goods_id=#{goods_id}
-	        order by g.goods_id
-    	]]>
-	</select>
-	<select id="selectGoodsImageFileList" resultMap="imageResult"   parameterType="String"  >
-	    <![CDATA[
-		    	select * from  t_goods_detail_image 
-		    	where  
-			    goods_id=#{goods_id}
-			    order by image_id asc
-    	]]>
-	</select>	
-	
-	
-<update id="updateGoodsInfo" parameterType="java.util.HashMap" >
-	   update t_shopping_goods
-	    <set> 
-	      <if test=" goods_sort!='' and goods_sort!=null">
-	        goods_sort=#{goods_sort},
-	      </if>
-	      <if test=" goods_title!='' and goods_title!=null">
-	        goods_title=#{goods_title},
-	      </if>
-	      <if test=" goods_writer!='' and goods_writer!=null">
-	        goods_writer=#{goods_writer},
-	      </if>
-	      <if test=" goods_publisher!='' and goods_publisher!=null">
-	        goods_publisher=#{goods_publisher},
-	      </if>
-	      <if test=" goods_price!='' and goods_price!=null">
-	        goods_price=#{goods_price},
-	      </if>
-	      <if test=" goods_published_date!='' and goods_published_date!=null">
-	        goods_published_date=#{goods_published_date},
-	      </if>
-	      <if test=" goods_sales_price!='' and goods_sales_price!=null">
-	        goods_sales_price=#{goods_sales_price},
-	      </if>
-	      <if test=" goods_point!='' and goods_point!=null">
-	        goods_point=#{goods_point},
-	      </if>
-	      <if test=" goods_page_total!='' and goods_page_total!=null">
-	        goods_page_total=#{goods_page_total},
-	      </if>
-	      <if test=" goods_isbn!='' and goods_isbn!=null">
-	        goods_isbn=#{goods_isbn},
-	      </if>
-	      <if test=" goods_delivery_price!='' and goods_delivery_price!=null">
-	        goods_delivery_price=#{goods_delivery_price},
-	      </if>
-	      <if test=" goods_delivery_date!='' and goods_delivery_date!=null">
-	        goods_delivery_date=#{goods_delivery_date},
-	      </if>
-	      <if test=" goods_status!='' and goods_status!=null">
-	        goods_status=#{goods_status},
-	      </if>
-	      <if test=" goods_writer_intro!='' and goods_writer_intro!=null">
-	        goods_writer_intro=#{goods_writer_intro},
-	      </if>
-	      <if test=" goods_intro!='' and goods_intro!=null">
-	        goods_intro=#{goods_intro},
-	      </if>
-	      <if test=" publisher_comment!='' and publisher_comment!=null">
-	        publisher_comment=#{publisher_comment},
-	      </if>
-	      <if test=" recommendation!='' and recommendation!=null">
-	        recommendation=#{recommendation},
-	      </if>
-	      <if test=" goods_contents_order!='' and goods_contents_order!=null">
-	        goods_contents_order=#{goods_contents_order:VARCHAR}
-	      </if>
-	     </set>
-	    where 
-	    goods_id=#{goods_id}
-	
-	</update>	
-	<update id="updateGoodsImage" parameterType="imageFileVO">
-		update t_goods_detail_image
-		set fileName=#{fileName}
-		where	 
-		goods_id=#{goods_id} and image_id=#{image_id}
-	</update>
-	
-	<delete id="deleteGoodsImage" parameterType="String">
-	  delete from t_goods_detail_image
-	  where image_id=#{image_id}
-	</delete>
-	
-<update id="updateOrderGoods" parameterType="java.util.HashMap" >
-	   update t_shopping_order
-	    <set> 
-	      <if test=" delivery_state!='' and delivery_state!=null">
-	        delivery_state=#{delivery_state},
-	      </if>
-	      <if test=" delivery_address!='' and delivery_address!=null">
-	        delivery_address=#{delivery_address},
-	      </if>
-	    </set>
-	    where 
-	    order_id=#{order_id}
-	
-	</update> -->		
+			
 </mapper>
