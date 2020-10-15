@@ -3,6 +3,7 @@ package project.group;
 import lombok.Data;
 import org.springframework.stereotype.Component;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Component
@@ -17,5 +18,7 @@ public class GroupCommentVO {
     private String content;
     private String userId;
     private int subCommentCount;
-    private LocalDateTime createdAt;
+    private Timestamp createdAt;
+
+    private String content2;
 }

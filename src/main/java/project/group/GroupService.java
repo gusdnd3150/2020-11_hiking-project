@@ -40,4 +40,6 @@ public interface GroupService {
     int updateSubCommentCount(int parentNum);
     GroupCommentVO selectCommentOne(int commentNum);
     List selectCommentByGroupNum(int groupNum);
+
+    String selectSessionIdImage(String userId);
 }

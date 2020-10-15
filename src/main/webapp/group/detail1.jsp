@@ -23,25 +23,22 @@
         </div>
         <div class="col-md-4 col-sm-12">
             <div style="height: 80%">
-                <h3 class="mt-3">${group.NAME}</h3>
+                <h2 class="mt-3">모임 정보</h2>
                 <hr />
-                <p style="height: 80px;">
-                    주최자:
-                    집합일시:
-                    참가비:
-                    수정유무
-                    이미지 너무 작은거 올리면 크게 확대 할것(썸네일화 시키자)
-                </p>
-                <h3 class="mt-3">모임 정보</h3>
+                <h3 class="row col-12 mt-3" style="align-items: center">
+                    <img src="/resources/img/${group.CONTENT2}" class="rounded-circle" style="width: 40px;height: 40px; border: 1px solid grey">
+                    <div class="pl-2">${group.USERID}</div>
+                </h3>
                 <hr />
-                <ul class="pl-0 col-12" style="list-style: none;height: auto">
-                    <li>
-                        <c:choose>
-                            <c:when test="${group.STATUS eq 1}">진행중</c:when>
-                            <c:when test="${group.STATUS eq 0}">마감</c:when>
-                        </c:choose>
-                    </li>
-                    <li>모집 인원 ${group.STAFFMAX} 명</li>
+                <div>
+                    <c:choose>
+                        <c:when test="${group.STATUS eq 1}"><div><h3>모집중</h3></div></c:when>
+                        <c:when test="${group.STATUS eq 0}"><div><h3>모집 마감</h3></div></c:when>
+                    </c:choose>
+                </div>
+                <hr />
+                <ul class="pl-0 col-12" style="list-style: none;height: auto;font-size: 18px">
+                    <li><b>모집 인원</b></li>
                     <li>
                         <c:choose>
                             <c:when test="${(group.STAFFCURRENT / group.STAFFMAX) ne 1}">
@@ -56,12 +53,16 @@
                             </c:when>
                         </c:choose>
                     </li>
-                    <li>${group.AREA}</li>
-                    <li>${group.AGESTART}</li>
-                    <li>${group.AGEEND}</li>
-                    <li>현재 로그인된 아이디(임시): <%= request.getSession().getAttribute("LOGIN")%></li>
+                    <li>지역 : ${group.AREA}</li>
+                    <li>최소 ${group.AGESTART}살부터 ${group.AGEEND}살까지</li>
                     <li>${group.STARTDAY}</li>
-
+                    <li>현재 로그인된 아이디(임시): <%= request.getSession().getAttribute("LOGIN")%></li>
+<%--                    <li>--%>
+<%--                        집합일시:--%>
+<%--                        참가비:--%>
+<%--                        수정유무--%>
+<%--                        이미지 너무 작은거 올리면 크게 확대 할것(썸네일화 시키자)--%>
+<%--                    </li>--%>
                 </ul>
                 <!--SNS 공유 버튼 넣자-->
             </div>
@@ -74,7 +75,8 @@
                     <!--favoriteResult ne 1 or-->
                     <button class="btn btn-outline-info col-6" onclick="showMtInfo()">산 정보보기</button>
                     <c:choose>
-                        <c:when test="${group.STATUS eq 0}"><button class="selectWaitingList btn btn-dark col-12" data-toggle="modal" data-target="#listModal">참여자 리스트</button></c:when>
+                        <c:when test="${userGradeResult eq 0}"><button class="selectWaitingList btn btn-dark col-12" data-toggle="modal" data-target="#listModal">참가자 리스트</button></c:when>
+                        <c:when test="${group.STATUS eq 0}"><button class="btn btn-dark col-12">모집 종료</button></c:when>
                         <c:when test="${userGradeResult eq 0}"><button class="selectWaitingList btn btn-dark col-12" data-toggle="modal" data-target="#listModal">요청 리스트보기</button></c:when>
                         <c:when test="${userGradeResult eq 1}"><button class="withdrawGroupBtn btn btn-info col-12" data-toggle="modal" data-target="#cancelModal">요청 취소하기</button></c:when>
                         <c:when test="${userGradeResult eq 2}"><button class="joinButton btn btn-outline-info col-12" data-toggle="modal" data-target="#joinModal">참여 신청</button></c:when>
@@ -83,18 +85,19 @@
             </div>
         </div>
     </div>
-    <c:if test="${group.STATUS eq 0}">
-    <hr />
-    <div class="pt-5 pb-5" style="text-align: center">
-        <h1>모임이 시작되었습니다!</h1>
-        <button class="selectWaitingList btn btn-outline-primary col-8" onclick="goChat();">채팅에 참여하기</button>
-    </div>
-    </c:if>
+<%--    <c:if test="${group.STATUS eq 0}">--%>
+<%--    <hr />--%>
+<%--    <div class="pt-5 pb-5" style="text-align: center">--%>
+<%--        <h1>모임이 시작되었습니다!</h1>--%>
+<%--        <button class="selectWaitingList btn btn-outline-primary col-8" onclick="goChat();">채팅에 참여하기</button>--%>
+<%--    </div>--%>
+<%--    </c:if>--%>
     <hr />
     <h3 class="my-4">산모임 상세내용</h3>
     <div class="row">
         <div class="col-12">
             ${group.DETAIL}
+            ${group}
         </div>
     </div>
 
@@ -107,7 +110,7 @@
     </div>
     <!-- 댓글 입력 -->
     <div id="commentInput" class="row" style="text-align: center">
-        <img src="/resources/img/profile1.jpg" class="rounded-circle" style="width: 50px;height: 50px">
+        <img src="/resources/img/${sessionIdImage}" class="rounded-circle" style="width: 50px;height: 50px">
         <input id="commentContent" class="form-control form-control-lg col-lg-10 col-md-9 col-sm-10 col-10 ml-2 mr-2" type="text" placeholder="내용을 입력해주세요">
         <button id="commentSubmit" class="btn btn-info col-lg-1 col-md-1 col-sm-12">입력</button>
     </div>
@@ -198,6 +201,9 @@
 <script type="text/javascript" src="../resources/js/jquery.js"></script>
 <script type="text/javascript" src="../resources/js/bootstrap.min.js"></script>
 <script>
+
+    const userProfile = '${group.CONTENT2}';
+
     function showMtInfo(){
         window.open("detail_info.jsp","산 정보","width=700, height=500, left=300, top=300");
     }
@@ -262,7 +268,7 @@
                 console.log(id)
                 $('#'+id).append(
                     '<li id="temp" class="col-12 row pt-3 ml-5 pl-2">'+
-                    '<img src="/resources/img/profile1.jpg" class="rounded-circle" style="width: 40px;height: 40px;float: left">'+
+                    '<img src="/resources/img/${sessionIdImage}" class="rounded-circle" style="width: 40px;height: 40px;float: left">'+
                     '<div class="col-9">'+
                     '<h5 class="mb-0 pl-0">'+response.userId+'</h5>'+
                     response.content +'</div></li>'
@@ -492,7 +498,7 @@ $(document).ready(function (){
 
                         $('#commentBoard').append(
                             '<ul id="' + id + '" class="col-12 pl-5 row">' +
-                            '<img src="/resources/img/profile1.jpg" class="rounded-circle" style="width: 50px;height: 50px">'+
+                            '<img src="/resources/img/${sessionIdImage}" class="rounded-circle" style="width: 50px;height: 50px">'+
                             '<div class="col-10">'+
                             '<pre style="display: none">'+response.commentNum+'</pre>'+
                             '<h5>'+response.userId+'</h5>'+
@@ -539,7 +545,7 @@ $(document).ready(function (){
 
                         $('#commentBoard').append(
                             '<ul id="' + id + '" class="col-12 pl-5 row">' +
-                            '<img src="/resources/img/profile1.jpg" class="rounded-circle" style="width: 50px;height: 50px">'+
+                            '<img src="/resources/img/' + response[i].content2 + '" class="rounded-circle" style="width: 50px;height: 50px">'+
                             '<div class="col-10">'+
                             '<pre style="display: none">'+response[i].commentNum+'</pre>'+
                             '<h5>'+response[i].userId+'</h5>'+
@@ -559,7 +565,7 @@ $(document).ready(function (){
                             if (response[j].parentNum == commentNum) {
                                 $('#' + id).append(
                                     '<li id="' + id + index1 + '" class="col-12 row pt-3 ml-5 pl-2" style="display: none;">'+
-                                    '<img src="/resources/img/profile1.jpg" class="rounded-circle" style="width: 40px; height: 40px; float: left">'+
+                                    '<img src="/resources/img/'+userProfile+'" class="rounded-circle" style="width: 40px; height: 40px; float: left">'+
                                     '<div class="col-9 ml-2 pl-5">'+
                                     '<h5 class="mb-0">'+response[j].userId+'</h5>'+
                                     response[j].content +'</div></li>'

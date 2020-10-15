@@ -62,16 +62,21 @@
         ]]>
     </insert>
 
-    <!-- 리스트 6개 불러오기 (최근순) -->
+    <!-- 메인 리스트 6개 불러오기 (좋아요순) -->
     <select id="selectMainGroupList" resultType="map">
         <![CDATA[
-            SELECT g.*, gm.storedFileName
-            FROM groups g, groupsMedia gm
+            SELECT g.groupNum, g.name, g.staffCurrent, g.staffmax, g.detail, g.status, TO_CHAR(g.startDay,'yyyy"년"MM"월"dd"일"') startDay, gm.storedFileName, NVL(ui.CONTENT2,'basic_profile.PNG') content2
+            FROM groups g, groupsMedia gm, userwaiting uw, users u, userInfo ui, groupLike gl
             WHERE g.groupNum = gm.groupNum
+              And g.groupNum = uw.groupNum
+              AND uw.userId = u.id
+              AND u.userNum = ui.userNum
               AND g.type = 1
+              AND uw.userType = 0
               AND gm.mediaNum = 0
               AND ROWNUM <=6
-            ORDER BY g.groupNum DESC
+            GROUP BY g.groupNum, g.name, g.staffCurrent, g.staffmax, g.detail, g.status, g.startDay, gm.storedFileName, ui.CONTENT2
+            ORDER BY NVL(COUNT(gl.LIKEYN),0) DESC
         ]]>
     </select>
 
@@ -111,9 +116,28 @@
 
     <select id="selectGroupDetail" resultType="map" parameterType="_int">
         <![CDATA[
-            SELECT *
-            FROM groups
-            WHERE groupNum = #{groupNum}
+            SELECT g.groupNum,
+                   g.name,
+                   g.staffCurrent,
+                   g.staffMax,
+                   g.detail,
+                   g.status,
+                   g.startday,
+                   g.createdAt,
+                   g.updatedAt,
+                   g.area,
+                   g.ageStart,
+                   g.ageEnd,
+                   g.sex,
+                   g.mtNm,
+                   uw.userId,
+                   ui.content2
+            FROM groups g, userWaiting uw, users u, userInfo ui
+            WHERE g.groupNum = uw.groupNum
+              AND uw.userId = u.id
+              AND u.userNum = ui.userNum
+              AND uw.userType = 0
+              AND g.groupNum = #{groupNum}
         ]]>
     </select>
 
@@ -315,14 +339,24 @@
 
     <select id="selectCommentByGroupNum" parameterType="_int" resultType="groupCommentVO">
         <![CDATA[
-            SELECT COMMENTNUM, PARENTNUM, DEPTS, COMMENTORDER, CONTENT, USERID, SUBCOMMENTCOUNT, CREATEDAT
-            FROM (
-                 GROUPCOMMENT
-                 )
-            WHERE GROUPNUM = #{groupNum}
+            SELECT gc.commentNum, gc.parentNum, gc.depts, gc.commentOrder, gc.content, gc.userId, gc.subCommentCount, gc.createdAt, ui.content2
+            FROM groupComment gc, users u, userInfo ui
+            WHERE gc.userId = u.id
+            AND   u.userNum = ui.userNum
+            AND   GROUPNUM = #{groupNum}
             START WITH PARENTNUM = 0
             CONNECT BY PRIOR COMMENTNUM = PARENTNUM
             ORDER SIBLINGS BY COMMENTORDER
+        ]]>
+    </select>
+
+    <!-- 임시(세션으로 유저 프로필 사진 조회) -->
+    <select id="selectSessionIdImage" resultType="string" parameterType="string">
+        <![CDATA[
+            SELECT ui.CONTENT2
+            FROM users u, userInfo ui
+            WHERE u.userNum = ui.userNum
+            AND u.id = #{value}
         ]]>
     </select>
 </mapper>

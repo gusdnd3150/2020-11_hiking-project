@@ -27,3 +27,7 @@
 .slick-next.slick-arrow{ /* next 다음 */
     right: 0;
 }
+.card-img-top:hover {
+    opacity: 0.8;
+    filter: alpha(opacity=40); /* For IE8 and earlier */
+}

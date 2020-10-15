@@ -110,4 +110,8 @@ public class GroupDAO{
     public List selectCommentByGroupNum(int groupNum){
         return sqlSession.selectList("group.selectCommentByGroupNum",groupNum);
     }
+    public String selectSessionIdImage(String userId){
+        System.out.println("userId :"+ userId);
+        return sqlSession.selectOne("group.selectSessionIdImage", userId);
+    }
 }

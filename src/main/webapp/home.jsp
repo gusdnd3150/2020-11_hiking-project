@@ -49,18 +49,23 @@
 <div class="container">
 	<div class="pt-3 groupList">
 		<label for="groupList">
-			<h1>추천 등산모임</h1>
+			<h1>인기 등산모임</h1>
 		</label>
 		<div class="row">
 				<c:forEach var="group" items="${group}">
 					<div class="pt-3 col-lg-4 col-sm-6" id="groupList">
-						<div class="card" >
-							<img class="card-img-top" src="http://localhost:8080/resources/img/${group.STOREDFILENAME}" alt="..." style="width: 100%"></img>
-							<div class="card-body">
-								<h5 class="card-title">${group.NAME}</h5>
-								<p class="card-text text-muted" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">${group.DETAIL}</p>
-								<a href="/group/${group.GROUPNUM}" class="btn btn-info">바로가기</a>
-							</div>
+						<div class="card border-0" >
+							<a href="/group/${group.GROUPNUM}">
+								<img class="card-img-top" src="http://localhost:8080/resources/img/${group.STOREDFILENAME}" alt="..." style="width: 100%" />
+							</a>
+								<div class="card-body row p-3 pl-4">
+									<img src="/resources/img/${group.CONTENT2}" class="rounded-circle" style="width: 40px;height: 40px; border: 1px solid grey">
+									<div class="col-10 p-0 pl-2">
+										<h5 class="card-title m-0">${group.NAME}</h5>
+										<p class="card-text text-muted mb-1" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">${group.DETAIL}</p>
+										<p class="text-muted">${group.STARTDAY} 출발</p>
+									</div>
+								</div>
 						</div>
 					</div>
 				</c:forEach>

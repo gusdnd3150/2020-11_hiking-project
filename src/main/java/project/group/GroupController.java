@@ -88,11 +88,18 @@ public class GroupController{
     @GetMapping("/group/{groupNum}")
     public ModelAndView groupDetail(@PathVariable("groupNum") int groupNum, HttpServletRequest request){
         ModelAndView mav = new ModelAndView();
+        String userId = (String) request.getSession().getAttribute("LOGIN");
+        if(userId==null){
+            mav.setViewName("redirect:/main.do"); //인터셉터 추가후 지우기
+            return mav;
+        }
         mav.setViewName("/group/detail1");
         Map<String,Object> map = groupService.selectGroupDetail(groupNum);
         List<Map> list = groupService.selectGroupDetailImage(groupNum);
 
-        String userId = (String) request.getSession().getAttribute("LOGIN");
+        String sessionIdImage = groupService.selectSessionIdImage(userId);
+
+        System.out.println("sessionIdImage : " + sessionIdImage);
 
         Map checkMap = new HashMap();
         checkMap.put("userId", userId);
@@ -122,6 +129,7 @@ public class GroupController{
         }
 
         mav.addObject("group",map);
+        mav.addObject("sessionIdImage",sessionIdImage);
         mav.addObject("favoriteResult",favoriteResult);
         mav.addObject("userGradeResult",userGradeResult);
         return mav;
