@@ -8,7 +8,7 @@
 </head>
 <body>
 	<!-- Button trigger modal -->
-	<button type="button" class="btn btn-primary btn-block" id="editInfo"
+	<button type="button" class="btn btn-info btn-block" id="editInfo"
 	data-toggle="modal" data-target="#exampleModalCenter3">
 	<b>나의 정보 수정하기</b>
 </button>
@@ -40,7 +40,7 @@
 					</table>
 				</div>
 				<div class="modal-footer">
-					<a href="/mypage/modifyView.do"><button type="button" class="btn btn-primary"  
+					<a href="/mypage/modifyView.do"><button type="button" class="btn btn-info"
 				 disabled id="myInfo">다음</button></a>
 				</div>
 			</div>

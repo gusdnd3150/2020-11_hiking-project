@@ -16,28 +16,15 @@
         <h1 class="col-md-8 col-lg-10 mb-0">등산모임 리스트</h1>
         <div class="col-md-4 col-lg-2 pt-2 pb-2 btn-group btn-group-toggle" data-toggle="buttons">
             <label class="btn btn-outline-secondary active">
-                <input type="radio" name="options" id="option1" checked> 최신순
+                <input type="radio" name="options" id="sort_lately" checked> 최신순
             </label>
             <label class="btn btn-outline-secondary">
-                <input type="radio" name="options" id="option2"> 인기순
+                <input type="radio" name="options" id="sort_like"> 인기순
             </label>
         </div>
     </div>
     <div class="responsive">
-        <div class="row">
-            <c:forEach var="group" items="${group}">
-                <div class="pt-3 col-lg-4 col-sm-6" id="groupList">
-                    <div class="card" >
-                        <img class="card-img-top" src="http://localhost:8080/resources/img/${group.STOREDFILENAME}" alt="..." style="width: 100%"></img>
-                        <div class="card-body">
-                            <h5 class="card-title">${group.NAME}</h5>
-                            <p class="card-text text-muted" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">${group.DETAIL}</p>
-                            <a href="/group/${group.GROUPNUM}" class="btn btn-info">바로가기</a>
-                        </div>
-                    </div>
-                </div>
-            </c:forEach>
-        </div>
+        <div class="card-list row"></div>
     </div>
 </div>
 <div class="modal fade" id="createModal" role="dialog">
@@ -66,4 +53,88 @@
 <script type="text/javascript" src="../resources/js/jquery.js"></script>
 <script type="text/javascript" src="../resources/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="../resources/js/view/group/main.js"></script>
+<script>
+    $(document).ready(function (){
+        $('#sort_lately').click();
+    })
+    $('#sort_lately').on('click',function (){
+
+        var data = {
+            'keyword' : 'lately'
+        }
+
+        $.ajax({
+            type: "GET",
+            url: "/group/sortGroup.do",
+            data: data,
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8;",
+            success: function (response){
+                $('.card-list').empty();
+
+                console.log(response)
+
+                for(var i=0;i<response.length;i++){
+
+                $('.card-list').append(
+                                '<div class="pt-3 col-lg-4 col-sm-6" id="groupList">' +
+                                '<div class="card border-0" >' +
+                                '<a href="/group/'+response[i].GROUPNUM+'">' +
+                                '<img class="card-img-top" src="http://localhost:8080/resources/img/' + response[i].STOREDFILENAME + '" alt="..." style="width:100%" /></a>' +
+                                '<div class="card-body row p-1 pl-4">' +
+                                '<img src="/resources/img/' + response[i].CONTENT2 + '" class="rounded-circle" style="width: 40px;height: 40px; border: 1px solid grey">' +
+                                '<div class="col-10 p-0 pl-2 m-0">' +
+                                '<h5 class="card-title m-0" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">'+ response[i].NAME +'</h5>' +
+                                '<p class="card-text text-muted mb-1" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">'+ response[i].DETAIL +'</p>' +
+                                '<p class="text-muted">'+response[i].STARTDAY+'</p>' +
+                                '</div></div></div></div>'
+                    )
+                }
+            },
+            error: function(response){
+                console.log("error");
+            }
+        })
+    });
+
+    $('#sort_like').on('click',function (){
+
+        var data = {
+            'keyword' : 'like'
+        }
+
+        $.ajax({
+            type: "GET",
+            url: "/group/sortGroup.do",
+            data: data,
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8;",
+            success: function (response){
+                $('.card-list').empty();
+
+                console.log(response)
+
+                for(var i=0;i<response.length;i++){
+
+                    $('.card-list').append(
+                        '<div class="pt-3 col-lg-4 col-sm-6" id="groupList">' +
+                        '<div class="card border-0" >' +
+                        '<a href="/group/'+response[i].GROUPNUM+'">' +
+                        '<img class="card-img-top" src="http://localhost:8080/resources/img/' + response[i].STOREDFILENAME + '" alt="..." style="width:100%" /></a>' +
+                        '<div class="card-body row p-1 pl-4">' +
+                        '<img src="/resources/img/' + response[i].CONTENT2 + '" class="rounded-circle" style="width: 40px;height: 40px; border: 1px solid grey">' +
+                        '<div class="col-10 p-0 pl-2 m-0">' +
+                        '<h5 class="card-title m-0" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">'+ response[i].NAME +'</h5>' +
+                        '<p class="card-text text-muted mb-1" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">'+ response[i].DETAIL +'</p>' +
+                        '<p class="text-muted">'+response[i].STARTDAY+'</p>' +
+                        '</div></div></div></div>'
+                    )
+                }
+            },
+            error: function(response){
+                console.log("error");
+            }
+        })
+    });
+</script>
 </body>

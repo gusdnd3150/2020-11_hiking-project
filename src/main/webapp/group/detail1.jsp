@@ -85,19 +85,11 @@
             </div>
         </div>
     </div>
-<%--    <c:if test="${group.STATUS eq 0}">--%>
-<%--    <hr />--%>
-<%--    <div class="pt-5 pb-5" style="text-align: center">--%>
-<%--        <h1>모임이 시작되었습니다!</h1>--%>
-<%--        <button class="selectWaitingList btn btn-outline-primary col-8" onclick="goChat();">채팅에 참여하기</button>--%>
-<%--    </div>--%>
-<%--    </c:if>--%>
     <hr />
     <h3 class="my-4">산모임 상세내용</h3>
     <div class="row">
         <div class="col-12">
             ${group.DETAIL}
-            ${group}
         </div>
     </div>
 
@@ -117,19 +109,7 @@
 
     <hr />
     <h3 class="my-4">${group.MTNM}의 다른 모임</h3>
-    <div class="row">
-        <%--        <c:forEach var="group" items="${group}">--%>
-        <%--            <div class="pt-3 col-lg-4 col-sm-6" id="groupList">--%>
-        <%--                <div class="card" >--%>
-        <%--                    <img class="card-img-top" src="http://localhost:8080/resources/img/${group.STOREDFILENAME}" alt="..." style="width: 100%"></img>--%>
-        <%--                    <div class="card-body">--%>
-        <%--                        <h5 class="card-title">${group.NAME}</h5>--%>
-        <%--                        <p class="card-text text-muted" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">${group.DETAIL}</p>--%>
-        <%--                        <a href="/group/${group.GROUPNUM}" class="btn btn-info">바로가기</a>--%>
-        <%--                    </div>--%>
-        <%--                </div>--%>
-        <%--            </div>--%>
-        <%--        </c:forEach>--%>
+    <div class="recommend row">
     </div>
     <div class="modal fade" id="listModal">
         <div class="modal-dialog" id="modal1">
@@ -286,7 +266,32 @@
         e.previousSibling.previousSibling.value=null;
     }
 
+    function recommendGroup(){
+
+        var data = {
+            'mtnm' : ${group.MTNM}
+        }
+
+        console.log(data)
+
+        $.ajax({
+            type: "GET",
+            url: "/group/recommendGroup.do",
+            data: JSON.stringify(data),
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8;",
+            success : function (response){
+                alert("신청 처리 되었습니다");
+                location.reload();
+            },
+            error : function (response){
+                alert("오류 발생! 다시 시도해주세요");
+            }
+        })
+    }
+
 $(document).ready(function (){
+
     $(document).on('click','.joinGroupBtn',function (){
 
         var data = {
@@ -565,7 +570,7 @@ $(document).ready(function (){
                             if (response[j].parentNum == commentNum) {
                                 $('#' + id).append(
                                     '<li id="' + id + index1 + '" class="col-12 row pt-3 ml-5 pl-2" style="display: none;">'+
-                                    '<img src="/resources/img/'+userProfile+'" class="rounded-circle" style="width: 40px; height: 40px; float: left">'+
+                                    '<img src="/resources/img/'+response[j].content2+'" class="rounded-circle" style="width: 40px; height: 40px; float: left">'+
                                     '<div class="col-9 ml-2 pl-5">'+
                                     '<h5 class="mb-0">'+response[j].userId+'</h5>'+
                                     response[j].content +'</div></li>'

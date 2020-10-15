@@ -42,4 +42,6 @@ public interface GroupService {
     List selectCommentByGroupNum(int groupNum);
 
     String selectSessionIdImage(String userId);
+    List sortGroupByKeyword(String keyword);
+    List recommendGroup(String mtnm);
 }

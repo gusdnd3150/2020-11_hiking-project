@@ -262,4 +262,18 @@ public class GroupController{
 
         return list;
     }
+
+    @GetMapping("/group/sortGroup.do")
+    @ResponseBody
+    public List sortGroupByKeyword(@RequestParam("keyword") String keyword){
+        List<Map> list = groupService.sortGroupByKeyword(keyword);
+        return list;
+    }
+
+    @GetMapping("/group/recommendGroup.do")
+    @ResponseBody
+    public List recommendGroup(@RequestParam("mtnm")String mtnm){
+        List<Map> list = groupService.recommendGroup(mtnm);
+        return list;
+    }
 }

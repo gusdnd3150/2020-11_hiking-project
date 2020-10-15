@@ -48,8 +48,8 @@ public class GroupDAO{
     public List selectWaitingList(Map map){
         return sqlSession.selectList("group.selectWaitingList",map);
     }
-    //userAllowed void도 괜찮을까?
 
+    //userAllowed void로 수정
     public int userAllowed(Map map){
         int result = 0;
         result = sqlSession.update("group.userAllowed",map);
@@ -108,7 +108,12 @@ public class GroupDAO{
         return sqlSession.selectList("group.selectCommentByGroupNum",groupNum);
     }
     public String selectSessionIdImage(String userId){
-        System.out.println("userId :"+ userId);
         return sqlSession.selectOne("group.selectSessionIdImage", userId);
+    }
+    public List sortGroupByKeyword(String keyword){
+        return sqlSession.selectList("group.sortGroupByKeyword",keyword);
+    }
+    public List recommendGroup(String mtnm){
+        return sqlSession.selectList("group.recommendGroup",mtnm);
     }
 }

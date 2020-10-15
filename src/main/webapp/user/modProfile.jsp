@@ -9,7 +9,7 @@ textarea {
 }
 </style>
 <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary btn-block" id="editProf"
+<button type="button" class="btn btn-info btn-block" id="editProf"
 	data-toggle="modal" data-target="#exampleModalCenter">
 	<b>프로필 수정하기</b>
 </button>
@@ -51,7 +51,7 @@ textarea {
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">X
 					닫기</button>
-				<button type="submit" class="btn btn-primary">변경하기</button>
+				<button type="submit" class="btn btn-info">변경하기</button>
 				</form>
 			</div>
 		</div>

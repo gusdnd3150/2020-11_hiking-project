@@ -128,4 +128,10 @@ public class GroupServiceImpl implements GroupService{
     public String selectSessionIdImage(String userId){
         return groupDAO.selectSessionIdImage(userId);
     }
+
+    public List sortGroupByKeyword(String keyword){
+        return groupDAO.sortGroupByKeyword(keyword);
+    }
+
+    public List recommendGroup(String mtnm){return groupDAO.recommendGroup(mtnm);}
 }
