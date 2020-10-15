@@ -30,18 +30,15 @@ public class GroupDAO{
     public void deleteGroup(int groupNum){
         sqlSession.delete("group.deleteGroup", groupNum);
     }
-
     public Map selectGroupDetail(int groupNum){
         return sqlSession.selectOne("group.selectGroupDetail", groupNum);
     }
     public List<Map> selectGroupDetailImage(int groupNum){
         return sqlSession.selectList("group.selectGroupDetailImage", groupNum);
     }
-    //아직
     public List<Map> selectGroupsByKeyword(String keyword){
         return sqlSession.selectList("group.selectGroupsByKeyword", keyword);
     }
-
     public int joinGroup(Map map){
         return sqlSession.update("group.joinGroup",map);
     }

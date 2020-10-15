@@ -47,7 +47,7 @@
 <script>
 window.onload = function(){
 	let form = document.frm;
-	let time = 60;  
+	let time = 100;  
 	 setInterval(function(){
 		 if(time==0){
 				form.submit();

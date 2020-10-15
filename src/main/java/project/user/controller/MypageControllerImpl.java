@@ -1,33 +1,27 @@
 package project.user.controller;
 
-import java.io.File;
-import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.io.FileUtils;
 import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import project.common.ThumbnailMaker;
+import project.commu.CommuService;
+import project.group.GroupVO;
 import project.user.service.MypageService;
 import project.user.service.UserService;
 import project.user.vo.UserVO;
@@ -47,19 +41,30 @@ public class MypageControllerImpl implements MypageController {
 	@Autowired
 	ThumbnailMaker thumbnailMaker;
 	
+//	@Autowired
+//	UserVO userVO;
+	
 	@Autowired
-	UserVO userVO;
+	CommuService commuService;
 
 	@RequestMapping(value = "/mypage/mypageHomeView.do", method = { RequestMethod.GET, RequestMethod.POST })
 	public ModelAndView mypageHomeView(HttpSession httpSession) throws Exception {
 		ModelAndView mav = new ModelAndView();
 		UserVO userVO = new UserVO();
 		userVO.setId((String) httpSession.getAttribute(LOGIN));
+		String id = userVO.getId();
 		userVO = mypageService.getUserInfo(userVO);
 		if(userVO.getContent2()==null || userVO.getContent2().equals("")) {
 			userVO.setContent2("userBasic.jpg");
 		}
+		List<Map> CList = commuService.selectCreatedCommu(id); 
+		List<Map> JList = commuService.selectJoinedCommu(id);
+		
+		System.out.println("컨트롤러: "+CList);
+		
 		mav.addObject("userVO", userVO);
+		mav.addObject("CList", CList);
+		mav.addObject("JList", JList);
 		mav.setViewName("/user/mypageHome");
 		System.out.println("갖다준당 : " + userVO);
 		return mav;

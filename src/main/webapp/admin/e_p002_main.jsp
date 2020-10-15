@@ -45,36 +45,67 @@
 
 
 <script type="text/javascript">
-	$(document).ready(function() {
-		$('#foo-table').DataTable({
-			pagingType:"full_numbers",
-	    	   autoWidth: false,
-			dom : 'Blfrtip',
-			buttons : [ {
-				extend : 'excel',
-				text : 'excel',
-				filename : '회원정보',
-				title : '산오름 회원정보'
-			}, {
-				extend : 'copy',
-				text : 'copy',
-				title : '회원정보입니다.'
-			}, 'pdf', 'print' ]
-		}
+$(document).on("click", "#serch", function() {
+	var _searchOption = $('#searchOption').val();
+	var _key_word = $('#key_word').val();
+	
+	
 
-		);
-	});
+    $('#foo-table').DataTable({
+       destroy : true,//테이블 파괴가능
+       bPaginate : true, //페이징처리
+       bLengthChange : true, // n개씩보기
+       lengthMenu : [ [ 10, 25, 50, -1 ], [ 10, 25, 50, "All" ] ], // 10/25/50/All 개씩보기
+       bAutoWidth : false, //자동너비
+       ordering : true, //칼럼별 정렬
+       searching : true, //검색기능
+
+       dom : 'Blfrtip',
+      buttons : [ {
+			extend : 'excel',
+			text : 'excel',
+			filename : '상품정보',
+			title : ' 상품정보'
+		}, {
+			extend : 'copy',
+			text : 'copy',
+			title : '상품'
+		}, 'pdf', 'print' ],
+       ajax : {
+          method : "get",
+          url : "selectProd.do",
+          dataType: "json",
+          data :{
+        	  searchOption :$('#searchOption').val(),
+	          key_word :$('#key_word').val()
+
+			},
+          dataSrc : ""
+       },
+       columns : [ 
+          {data : "prodNum"},
+          {data : "name"},
+          {data : "priceString"},
+          {data : "quantity"},
+          {data : "typeString"},
+          {data : "pCategoryNumStirng"},
+          {data : "createdAtString"},
+          {defaultContent : "&nbsp;&nbsp;&nbsp;<button id='info' class='btn btn-primary btn-xs' onclick='remove'>상세보기</button> &nbsp;&nbsp;&nbsp;<button id='remove' class='btn btn-danger btn-xs' value='prodNum'>삭제</button> "},
+          //{defaultContent : "&nbsp;&nbsp;<button id='remove' class='btn btn-danger btn-xs' value='prodNum'>삭제</button>"}
+       ]
+    });
+});
 
 	// 데이터테블 함수 끝----------------------------------------------------------------
 
 	$(document).on("click", "#remove", function() {// 글삭제 알림창
-		var _csPostNum = $(this).val();
-
+		var num = $(this).closest('tr');
+		var num1 = num.find('td:eq(0)').text();
 		$.ajax({
 			type : 'get',
-			url : 'removeCsboard.do',
+			url : 'deleteProd.do',
 			data : {
-				csPostNum : _csPostNum
+				prodNum : num1
 			},
 			success : function(data) {
 				if ("ok"== (data)) {
@@ -129,7 +160,7 @@
 		<div class="content-wrapper">
 			<!-- Content Header (Page header) -->
 			<section class="content-header">
-				<small>게시글 관리</small>
+				<small>상품 관리</small>
 				<ol class="breadcrumb">
 					<li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
 					<li class="active">Here</li>
@@ -138,11 +169,35 @@
 
 			<!-- Main content -->
 			<div class="box">
-				<!-- 게시글관리 검색창 -->
-				<%@ include file="../include/admin_csBoard_search.jsp"%>
-
+			
+				<!-- 상품관리 검색창 -->
+         	 <div class="input-group margin">
+               			 <div class="input-group-btn">
+                	<select name="searchOption" id="searchOption"class="btn btn-info dropdown-toggle" >
+            		<option value="all">전체조회</option>
+            		<option value="name">상품명</option>
+           			<option value="type1">신제품</option>
+            		<option value="type2">중고품</option>
+            		<option value="pCategoryNum1">양말</option>
+            		<option value="pCategoryNum2">가방</option>
+            		<option value="pCategoryNum3">의류</option>
+            		<option value="pCategoryNum4">스틱</option>
+            		<option value="pCategoryNum5">신발</option>
+            		<option value="pCategoryNum6">장갑</option>
+            		<option value="pCategoryNum7">보호대</option>
+        			</select>  
+        			
+                </div> 
+                <input type="text" name="key_word" id="key_word"class="form-control" placeholder="조회내용을 입력하세요">
+                    <span class="input-group-btn">
+                      <button type="button" id="serch"class="btn btn-info btn-flat" >조회</button>            
+                    </span>
+              </div>
+              
+               <div id="radioInput"> </div> 
+         
 				<div class="box-header">
-					<h3 class="box-title">게시글 목록</h3>
+					<h3 class="box-title">상품 목록</h3>
 				</div>
 				<!-- /.box-header -->
 				<div class="box-body">
@@ -153,7 +208,7 @@
 							<div class="col-sm-6">
 								<div id="example1_filter" class="dataTables_filter">
 									<div>
-										<a href="e_p003_addCsBoardForm.jsp"><button class="btn btn-primary btn-xs">공지사항 등록</button></a>
+										<a href="e_p002_addProdForm.jsp"><button class="btn btn-primary btn-xs">상품 등록</button></a>
 									</div>
 								</div>
 							</div>
@@ -163,38 +218,16 @@
 								<table id="foo-table" class="table table-bordered">
 									<thead>
 										<tr>
-											<th>글 번호</th>
-											<th>게시판 번호</th>
-											<th>고객 번호</th>
-											<th>제목</th>
-											<th>내용</th>
-											<th>등록일</th>
-											<th>수정일</th>
-											<th>상태</th>
+											<th>번호</th>
+											<th>상품명</th>
+											<th>가격</th>
+											<th>수량</th>
 											<th>구분</th>
-											<th>상세보기</th>
-											<th>삭제</th>
-
+											<th>분류</th>
+											<th>등록일자</th>
+											<th> 설정 </th>
 										</tr>
 									</thead>
-									<tbody>
-										<c:forEach var="cs" items="${csBoardList}">
-											<tr>
-												<td>${cs.csPostNum}</td>
-												<td>${cs.csBoardNum}</td>
-												<td>${cs.userNum}</td>
-												<td>${cs.title}</td>
-												<td>${cs.content}</td>
-												<td>${cs.createdAtString}</td>
-												<td>${cs.updatedAtString}</td>
-												<td>${cs.statusString}</td>
-												<td>${cs.csPostTypeString}</td>
-												<td><a href="viewDetaList.do?csPostNum=${cs.csPostNum}"><button class="btn btn-primary btn-xs">상세보기</button></a></td>
-												<td><button class="btn btn-danger btn-xs" id="remove" value="${cs.csPostNum}">삭제</button></td>
-											</tr>
-										</c:forEach>
-									</tbody>
-
 								</table>
 							</div>
 						</div>

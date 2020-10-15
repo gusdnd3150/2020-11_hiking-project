@@ -20,13 +20,19 @@ import project.user.vo.UserVO;
 public interface UserController {
   
 	//public String signUpView() throws Exception;
-	public String insertUser(UserVO userVO, HttpServletRequest request, HttpServletResponse response) throws Exception;
+	public ModelAndView insertUser(UserVO userVO, HttpServletRequest request, HttpServletResponse response) throws Exception;
+	
+	public ModelAndView resendMail(UserVO userVO, HttpServletRequest request, HttpServletResponse response) throws Exception;
 	
 	public String insertUser2(HttpSession httpSession, LoginDTO loginDTO,  RedirectAttributes reAttr) throws Exception;
 	
 	public String idCheck(@RequestParam("id") String id) throws Exception;
 	
 	public String emailCheck(@RequestParam("email") String email) throws Exception;
+	
+	public String nickNameCheck(@RequestParam("nickName") String nickName) throws Exception;
+	
+	public String idEmailCheck(@RequestParam("email") String email, @RequestParam("id") String id) throws Exception; 
 	
 	public String insertPwd(@RequestParam("password2") String password2, HttpSession httpSession, RedirectAttributes reAttr, HttpServletRequest request)
 			throws Exception;
@@ -43,6 +49,7 @@ public interface UserController {
 	public String logOut(HttpServletRequest request, HttpServletResponse response, HttpSession httpsession) throws Exception;
 	
 	public String searchId(@RequestParam("email") String email, HttpServletRequest request) throws Exception;
+	
 	
 	public String sendTempPwd(@RequestParam("id") String id, @RequestParam("email") String email,
 			HttpServletRequest request) throws Exception ;

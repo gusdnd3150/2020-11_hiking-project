@@ -17,6 +17,10 @@ public interface UserService {
 	public int idCheck(String id) throws Exception;
 	
 	public int emailCheck(String email) throws Exception;
+	
+	public int nickNameCheck(String nickName) throws Exception;
+
+	public int idEmailCheck(Map<String, Object> map) throws Exception;
 
 	public UserVO logIn(LoginDTO loginDTO) throws Exception; // 로그인
 	
@@ -38,5 +42,5 @@ public interface UserService {
 	
 	public int selectUserNum(String id);
 
-	
+
 }

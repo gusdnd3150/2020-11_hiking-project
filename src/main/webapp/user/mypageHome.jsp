@@ -1,5 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%
+	request.setCharacterEncoding("utf-8");
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,173 +14,115 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta charset="utf-8">
- <title>산오름</title>
-    <!-- ico,css -->
-    <link rel="icon" href="../resources/img/favicon.ico" type="image/x-icon" />
-    <link rel="stylesheet" type="text/css" href="/resources/css/bootstrap.min.css" />
-    <link rel="stylesheet" type="text/css" href="/resources/css/views/common/header.css" />
-</head>
-<body>
 
-		<jsp:include page="/common/header.jsp" flush="false"/>
-		<div class="container">
+<style>
+#space {
+	width: 170px;
+}
+
+#space2 {
+	width: 400px;
+	margin: 10px;
+}
+
+#myTabContent {
+	height: 200px;
+}
+</style>
+	<jsp:include page="/common/header.jsp" flush="false" />
+	<div class="container">
 		<!-- Profile Image -->
-		<table
-			style="width: 100%; height: 200px; table-layout: fixed; !important">
-			<tr>
-				<td>
-						<h1>MyPage</h1>
-					<div class="box box-primary">
-						<div class="box-body box-profile">
-						<div style="text-align:center;">
+		<div class="row pt-5">
+			<div class="col-md-3"></div>
+			<div class="col-md-6 mt-3">
 
-							<img class="rounded-circle" src="http://localhost:8080/resources/img/${userVO.content2}" width="100" height="100"
-								alt="프로필사진">
-							
-								</div>
-							<h3 class="profile-username text-center" id="name">${userVO.name}</h3>
-							<!-- <p class="text-muted text-center">여기다가는 뭘 넣을까 그냥 뺼까</p> -->
+				<h1 style="text-align: center;">마이페이지</h1>
+				<div class="box box-primary">
+					<div class="box-body box-profile text-center">
+						<div style="text-align: center;">
 
-							<ul class="list-group list-group-unbordered">
-								<li class="list-group-item text-center">
-									<p id="profile1">${userVO.profile}</p>
-								</li>
-								<li class="list-group-item"><b>내가 오른 산</b> <a
-									class="pull-right"><h5 style="text-align: right">15</h5></a></li>
-								<li class="list-group-item"><b>오르고 싶은 산</b> <a
-									class="pull-right"><h5 style="text-align: right">50</h5></a></li>
-								<li class="list-group-item"><b>나의 산 모임</b> <a
-									class="pull-right"><h5 style="text-align: right">청솔 젊은 산모임</h5></a></li>
-								<jsp:include page="/user/modProfile.jsp" flush="false" /></ul>
+							<img class="rounded-circle mt-2"
+								src="http://localhost:8080/resources/img/${userVO.content2}"
+								width="100" height="100" alt="프로필사진">
+
 						</div>
+						<h4 class="text-center mt-2" id="nickName">${userVO.nickName}</h4>
+						<%-- 	<p class="text-muted text-center" id="name">${userVO.name}</p>  --%>
+						<p id="profile1">${userVO.profile}</p>
+						<center>
+							<div style="width: 550px;"><jsp:include
+									page="/user/modProfile.jsp" flush="false" /></div>
+						</center>
 					</div>
-				</td>
-				<td colspan="2" rowspan="4">
-					<div class="card text-center">
-						<div class="card-header">
-							<ul class="nav nav-tabs card-header-tabs" id="tabs" role="tablist">
-								<li class="nav-item"><a class="nav-link active"
-									href="#tab1" data-toggle="tab">Link</a></li>
-								<li class="nav-item"><a class="nav-link" href="#tab2"
-									id="" data-toggle="tab">Link2</a></li>
-								<%-- <li class="nav-item"><a class="nav-link" href="#tab3"
-									data-toggle="tab"  id="myInfo" data-target="#exampleModalCenter3">나의정보</a>
-									<jsp:include page="/user/pwdCheck.jsp"/></li> --%>
+				</div>
+			</div>
+			<div class="row mt-4">
+				<div id="space"></div>
+				<div id="space2">
+					<!-- 			<div class="col-md-5"> -->
+					<ul class="list-group list-group-unbordered">
+						<li class="list-group-item text-center">
+							<h4 id="shoppingMall">나의 산오름</h4>
+						</li>
+						<li class="list-group-item d-flex justify-content-between align-items-center"><b> 오른 산 길</b> 
+						<a href=""><h5 class="mt-2">15</h5></a></li>
+						<li class="list-group-item d-flex justify-content-between align-items-center"><b>오르고 싶은 산 길</b> <a
+							href=""><h5 class="mt-2">50</h5></a></li>
+						<li class="list-group-item d-flex justify-content-between align-items-center"><b>함께 했던 등산 모임</b> <a
+							href=""><h5 class="mt-2">50</h5></a></li>
+						<li class="list-group-item">
+							<ul class="nav nav-tabs" id="myTab" role="tablist">
+								<li class="nav-item" role="presentation"><a
+									class="nav-link active" id="joined-tab" data-toggle="tab"
+									href="#joined" role="tab" aria-controls="joined"
+									aria-selected="true"><b>내가 가입한 산모임</b></a></li>
+								<li class="nav-item" role="presentation"><a
+									class="nav-link" id="created-tab" data-toggle="tab"
+									href="#created" role="tab" aria-controls="created"
+									aria-selected="false"><b>내가 만든 산모임</b></a></li>
 							</ul>
-						</div>
-						<div class="tab-content">
-							<div class="card-body tab-pane active" id="tab1">
-								<p class="card-text" id="tab1">여기는 tab1</p>
+							<div class="tab-content" id="myTabContent" style="overflow:scroll;" >
+								<div class="tab-pane fade show active" id="joined"
+									data-spy="scroll" role="tabpanel" aria-labelledby="joined-tab">
+									<% %>
+									<c:forEach var="JList" items="${JList}">
+										<img class="rounded-circle mt-2"
+											src="http://localhost:8080/resources/img/${JList.STOREDFILENAME}"
+											width="50" height="50">
+										<a href="/commu/commuPageView.do?groupNum=${JList.GROUPNUM}">
+											${JList.NAME}</a>
+										<br>
+									</c:forEach>
+								</div>
+								<div class="tab-pane fade" id="created" role="tabpanel"
+									data-spy="scroll" aria-labelledby="created-tab">
+									<c:forEach var="CList" items="${CList}">
+										<img class="rounded-circle mt-2"
+											src="http://localhost:8080/resources/img/${CList.STOREDFILENAME}"
+											width="50" height="50">
+										<a href="/commu/commuPageView.do?groupNum=${CList.GROUPNUM}">
+											${CList.NAME}</a>
+										<br>
+									</c:forEach>
+								</div>
 							</div>
-							<div class="card-body tab-pane " id="tab2">
-							<p class="card-text" id="tab3">여기는 tab2</p>
-							</div>
-							<%-- <div class="card-body tab-pane " id="tab3">
-								<p class="card-text" id="tab3"><jsp:include page="/user/modifyView.jsp"/></p>
-							</div> --%>
-							<!-- 	<a href="#" class="btn btn-primary">수정하기</a> -->
-							<!-- 이거 누르면 disabled readonly 사라지게하기. -->
-						</div>
-					</div>
-				</td>
-			</tr>
-			 <tr>
-				<td rowspan="3">
-					<!-- About Me Box -->
-					<div class="box box-primary">
-						<div class="box-header with-border">
-							<h3 class="box-title">About Me</h3>
-						</div>
-						<!-- /.box-header -->
-						<div class="box-body">
-							<strong><i class="fa fa-book margin-r-5"></i> Education</strong>
-
-							<p class="text-muted">B.S. in Computer Science from the
-								University of Tennessee at Knoxville</p>
-
-							<hr>
-
-							<strong><i class="fa fa-map-marker margin-r-5"></i>
-								Location</strong>
-
-							<p class="text-muted">Malibu, California</p>
-
-							<hr>
-
-							<strong><i class="fa fa-pencil margin-r-5"></i> Skills</strong>
-
-							<p>
-								<span class="label label-danger">UI Design</span> <span
-									class="label label-success">Coding</span> <span
-									class="label label-info">Javascript</span> <span
-									class="label label-warning">PHP</span> <span
-									class="label label-primary">Node.js</span>
-							</p>
-
-							<hr>
-
-							<strong><i class="fa fa-file-text-o margin-r-5"></i>
-								Notes</strong>
-
-							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-								Etiam fermentum enim neque.</p>
-						
-								<a><jsp:include page="/user/pwdCheck.jsp"/>
-							</a>
-						</div>
-						<!-- /.box-body -->
-					</div> <!-- /.box -->
-					</div>
-				</td>
-			</tr>
-		</table>
-		<!-- /.box-body -->
-
-		<div class="row mb-2">
-			<div class="col-md-6">
-				<div class="card flex-md-row mb-4 box-shadow h-md-250">
-					<div class="card-body d-flex flex-column align-items-start">
-						<strong class="d-inline-block mb-2 text-primary">World</strong>
-						<h3 class="mb-0">
-							<a class="text-dark" href="#">Featured post</a>
-						</h3>
-						<div class="mb-1 text-muted">Nov 12</div>
-						<p class="card-text mb-auto">This is a wider card with
-							supporting text below as a natural lead-in to additional content.</p>
-						<a href="#">Continue reading</a>
-					</div>
-					<img class="card-img-right flex-auto d-none d-md-block"
-						data-src="holder.js/200x250?theme=thumb" alt="Card image cap">
+						</li>
+					</ul>
 				</div>
-			</div>
-			<div class="col-md-6">
-				<div class="card flex-md-row mb-4 box-shadow h-md-250">
-					<div class="card-body d-flex flex-column align-items-start">
-						<strong class="d-inline-block mb-2 text-success">Design</strong>
-						<h3 class="mb-0">
-							<a class="text-dark" href="#">Post title</a>
-						</h3>
-						<div class="mb-1 text-muted">Nov 11</div>
-						<p class="card-text mb-auto">This is a wider card with
-							supporting text below as a natural lead-in to additional content.</p>
-						<a href="#">Continue reading</a>
-					</div>
-					<img class="card-img-right flex-auto d-none d-md-block"
-						data-src="holder.js/200x250?theme=thumb" alt="Card image cap">
-				</div>
+
+				<jsp:include page="/user/mypageMarket.jsp" flush="false" />
 			</div>
 		</div>
+
+		<center>
+			<div class="pt-3" style="width: 550px;">
+			<jsp:include page="/user/pwdCheck.jsp" /></div>
+		</center>
 	</div>
-	<main role="main" class="container">
-		<div class="row">
-			<div class="col-md-8 blog-main">
-				<h3 class="pb-3 mb-4 font-italic border-bottom">From the
-					Firehose</h3>
 
-			</div>
-		</div>
-		<!-- /.row -->
-	</main>
+	<div class="container pt-5">
+		<jsp:include page="../common/footer.jsp" flush="false" />
+	</div>
 </body>
 <script>
 <!-- /.container -->
@@ -199,36 +145,36 @@
 				}
 
 		}); */
-		
+
 		$("#checkIt").click(function() {
-			var pwd = $("#password3").val(); 
-			console.log("이벤트!!" +pwd);
+			var pwd = $("#password3").val();
+			console.log("이벤트!!" + pwd);
 			$.ajax({
 				url : "/mypage/pwdCheck.do",
 				type : "post",
-				data: {
-					pwd:pwd
+				data : {
+					pwd : pwd
 				},
 				success : function(data) {
-				console.log(data);
-				if($('#password3').val() == ""){
-					$('#passwordCheck3').text('비밀번호를 입력해주세요.');
-					$('#passwordCheck3').css('color', 'red');
-					$("#myInfo").attr("disabled", true);		
-					} else if (data == "0"){
-							// 0 : 비밀번호 통과
-							$("#password3").val(""); 
-							$("#passwordCheck3").text("'다음'을 클릭하세요.");
-							$('#passwordCheck3').css('color', 'green');
-							$("#myInfo").attr("disabled", false);
-						} else if (data == "1") {
-							// 1 : 	비밀번호 틀림
-							$("#password3").val(""); 
-							$("#passwordCheck3").text("비밀번호를 다시 확인해주세요.");
-							$("#passwordCheck3").css("color", "red");
-							$("#myInfo").attr("disabled", true);
-						}
-					},
+					console.log(data);
+					if ($('#password3').val() == "") {
+						$('#passwordCheck3').text('비밀번호를 입력해주세요.');
+						$('#passwordCheck3').css('color', 'red');
+						$("#myInfo").attr("disabled", true);
+					} else if (data == "0") {
+						// 0 : 비밀번호 통과
+						$("#password3").val("");
+						$("#passwordCheck3").text("'다음'을 클릭하세요.");
+						$('#passwordCheck3').css('color', 'green');
+						$("#myInfo").attr("disabled", false);
+					} else if (data == "1") {
+						// 1 : 	비밀번호 틀림
+						$("#password3").val("");
+						$("#passwordCheck3").text("비밀번호를 다시 확인해주세요.");
+						$("#passwordCheck3").css("color", "red");
+						$("#myInfo").attr("disabled", true);
+					}
+				},
 				error : function(data, textStatus) {
 					console.log("실패");
 				},
@@ -237,22 +183,21 @@
 			//responsebody -> 아작스로 들어옴
 			});
 		});
-	
+
 		$("#myInfo").click(function() {
 			console.log("myInfo");
-			$("#password3").val(""); 
+			$("#password3").val("");
+		});
 	});
-	});
-
 </script>
-	<!-- <script type="text/javascript" src="../resources/js/bootstrap.min.js"></script> -->
-	<script
-		src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
-		integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
-		crossorigin="anonymous"></script>
-	<script
-		src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
-		integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
-		crossorigin="anonymous"></script>
+<script type="text/javascript" src="../resources/js/bootstrap.min.js"></script>
+<script
+	src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+	integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+	crossorigin="anonymous"></script>
+<script
+	src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+	integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+	crossorigin="anonymous"></script>
 </body>
 </html>

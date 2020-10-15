@@ -79,7 +79,7 @@ body {
 					<div class="card-body">
 						<h5 class="card-title">아이디 찾기</h5>
 						<hr class="my-4">
-						<form class="form-inline" action="/user/searchId.do" method="post">
+						 <form class="form-inline" action="/user/searchId.do" id="form1" method="post"> 
 							<table>
 								<tr>
 									<td>
@@ -92,23 +92,25 @@ body {
 								<tr>
 									<td><div class="form-group">
 											<input type="email" class=" form-control" name="email"
-												id="email" placeholder="ex) abc@hiking.com"
-												aria-describedby="emailHelp">
-										</div></td>
+												id="email1" placeholder="ex) abc@hiking.com"
+												aria-describedby="emailHelp" required>
+										</div>
+										<div class="check_font" id="emailCheck1"></div>
+										</td>
 								</tr>
+						</form> 
 								<tr>
 									<td><br>
-
-										<button type="submit" class="btn btn-primary mb-2">
+										<button type="button" id="sendMail1" class="btn btn-primary mb-2">
 											메일로 ID 확인하기</button></td>
 								</tr>
 							</table>
-						</form>
+							<br>
 						<hr class="my-4">
-						
 				<a tabindex="0"  role="button" data-toggle="popover" data-trigger="focus" 
 				data-content="고객님은 아이디가 임의로 설정되어 있습니다.
-				 따라서 로그인 서비스를 이용 사이트에 방문하셔서 정보에 등록된 이메일 주소를 확인하신 후,&nbsp&nbsp위의 '아이디 찾기'에 입력해주셔야 합니다.">저는 간편로그인(네이버, 카카오, 구글)으로 가입했어요.</a>
+				 따라서 간편로그인 이용하신 해당 포털사이트에 방문하셔서 정보에 등록된 이메일 주소를 확인하신 후,&nbsp&nbsp위의 입력칸에 입력해주셔야 합니다."><button type="button" class="btn btn-link">
+				 저는 간편로그인(네이버, 카카오, 구글)으로 가입했어요.</button></a>
 				
 					 
 					
@@ -120,8 +122,23 @@ body {
 					<div class="card-body">
 						<h5 class="card-title">비밀번호 찾기</h5>
 						<hr class="my-4">
-						<form class="form-inline" action="/user/sendTempPwd.do" method="post">
+						<form class="form-inline" action="/user/sendTempPwd.do" id="form2" method="post">
 							<table>
+							<tr>
+									<td>
+										<div class="form-group">
+											<label for="email">회원가입 때 입력한 이메일 주소</label> <br>
+											<br>
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td><div class="form-group">
+											<input type="email" class=" form-control" name="email"
+												id="email2" placeholder="ex) abc@hiking.com"
+												aria-describedby="emailHelp" required>
+										</div>
+								</tr>
 								<tr>
 									<td>
 										<div class="form-group">
@@ -133,33 +150,19 @@ body {
 									<td>
 										<div class="form-group ">
 											<input type="text" class="form-control" id="id" name="id"
-												placeholder="아이디를 입력해주세요.">
+												placeholder="아이디를 입력해주세요." required>
 										</div>
+										<div class="check_font" id="check"></div>
 									</td>
 								</tr>
-								<tr>
-									<td>
-										<div class="form-group">
-											<label for="email">회원가입 때 입력한 이메일 주소</label> <br>
-											<br>
-										</div>
-									</td>
-								</tr>
-								<tr>
-									<td><div class="form-group">
-											<input type="email" class=" form-control" name="email"
-												id="email" placeholder="ex) abc@hiking.com"
-												aria-describedby="emailHelp">
-										</div></td>
-								</tr>
+						</form>
 								<tr>
 									<td><br>
-										<button type="submit" class="btn btn-primary mb-2">임시
+										<button type="button" id="sendMail2" class="btn btn-primary mb-2">임시
 											비밀번호 발급받기</button>
 									</td>
 								</tr>
 							</table>
-						</form>
 					</div>
 				</div>
 			</div>
@@ -180,5 +183,84 @@ body {
 $(function () {
   $('[data-toggle="popover"]').popover()
 });
+
+//이메일
+$("#sendMail1").click(function() {
+	console.log("이벤트 먹었니");					
+	var email1 = $("#email1").val();
+	if (email1==""){
+		$("#emailCheck").text("메일 주소를 입력해주세요.");
+		$('#emailCheck').css('color', 'red');
+	} else{
+	$.ajax({
+		url : "/user/emailCheck.do?email="+email1 ,
+		type : "get",
+		success : function(data, textStatus) {
+			console.log("1 = 중복o / 0 = 중복x : "+ data);		
+			if (data == "1") {
+					// 1 : 이메일 있다는 문구
+					$('#emailCheck').text('입력하신 주소로 이메일 전송중입니다.');
+					$('#emailCheck').css('color', 'green');
+					$("#form1").submit();
+				} else {
+					// 0 : 이메일이 없다는 문구
+						$('#emailCheck').text('가입하지 않은 회원정보입니다.');
+						$('#emailCheck').css('color', 'red');
+				}
+			}, error : function(data, textStatus) {
+				console.log(data.readyState);
+				console.log(data.status);
+				console.log(data.responseText); 
+					console.log("실패");
+			},
+			complete : function(data, textStatus) {
+			}
+		});
+		}
+	});
+	
+	
+	$("#sendMail2").click(function() {
+		console.log("이벤트 먹었니");	
+		
+		var email2 = $("#email2").val();
+		var id = $("#id").val();
+		if (email2=="" || id==""){
+			$("#check").text("정보를 입력해주세요.");
+			$('#check').css('color', 'red');
+		} else{
+		$.ajax({
+			url : "/user/idEmailCheck.do?id="+id+"&email="+email2,
+			type : "get",
+			success : function(data, textStatus) {
+				console.log("1 = 중복o / 0 = 중복x : "+ data);		
+				if (data == "1") {
+					$('#check').text('입력하신 주소로 이메일 전송중입니다.');
+					$('#check').css('color', 'green');
+								$("#form2").submit();
+					} else {
+						// 0 : 이메일이 없다는 문구
+						$('#check').text('가입하지 않은 회원정보입니다.');
+						$('#check').css('color', 'red');
+					}
+				}, error : function(data, textStatus) {
+					console.log(data.readyState);
+					console.log(data.status);
+					console.log(data.responseText); 
+						console.log("실패");
+				},
+				complete : function(data, textStatus) {
+				}
+			});
+			}
+		
+	
+	});
+		
+	
+	
+	
+	
+	
 </script>
 </html>

@@ -39,7 +39,7 @@
                     <a class="nav-link" href="/group/main1.do">산오르기<span class="sr-only"></span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">산모임</a>
+                    <a class="nav-link" href="/commu/commuMainView.do">산모임</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/B_P002_D001/shopMainCate?listType=10">오름마켓</a>

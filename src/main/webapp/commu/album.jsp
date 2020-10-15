@@ -2,35 +2,45 @@
 	pageEncoding="UTF-8" isELIgnored="false"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<% request.setCharacterEncoding("UTF-8"); %>
+<%
+	request.setCharacterEncoding("UTF-8");
+%>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <!doctype html>
 <html lang="ko">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta charset="UTF-8">
-<title>산오름</title>
-<!-- ico,css -->
-<link rel="icon" href="../resources/img/favicon.ico" type="image/x-icon" />
-<link rel="stylesheet" type="text/css" href="../resources/css/views/common/header.css" />
-</head>
-<body>
-	<div class="container">
-		<jsp:include page="/common/header.jsp" flush="false"/>
-		</div>
+<style>
+
+ul,ol {list-style-type:none;}
+/* a {color:inherit;text-decoration:none;outline: none;cursor:pointer; }  */
+.album-cover {
+  width: 92%;
+  height: 230px;
+  background-image: url('http://localhost:8080/resources/img/test/list1.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+.album-info {
+  padding: 5px;
+}
+.album-title {
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.album-item{
+border-color: 2px solid green;
+}
+#ASpace{
+width:330px;
+}
 
 
-
-<div class="pt-5">
-<!-- Page Content -->
-<div class="container">
-
-    <h1 class="font-weight-light text-center text-lg-left mt-4 mb-0">산 후기</h1>
-
-    <hr class="mt-2 mb-5">
-
-    <div class="row text-center text-lg-left">
+</style>
+ <div class="tab-pane fade" id="album" role="tabpanel" aria-labelledby="list-album-list">
+ <div class="row pt-3">
+<h3>&nbsp&nbsp&nbsp전체 사진</h3><div id="ASpace"></div>
+<button type="file" style="float:right;"  class="btn btn-outline-success">사진 올리기</button>
+ </div>
+ <div class="row  mt-4 text-center text-lg-left">
 
         <div class="col-lg-3 col-md-4 col-6">
             <a href="#" class="d-block mb-4 h-100">
@@ -92,22 +102,49 @@
                 <img class="img-fluid img-thumbnail" src="https://source.unsplash.com/p2TQ-3Bh3Oo/400x300" alt="">
             </a>
         </div>
+</div>
+
+<!-- <br>
+<br>
+<h3>&nbsp&nbsp&nbsp사진첩</h3>
+<br>
+<ul>
+  <li>
+    <div class="album-item">
+      <div class="album-cover"></div>
+      <div class="album-info">
+        <p class="album-title">앨범1</p>
+      </div>
     </div>
+  </li>
+  <li>
+    <div class="album-item">
+      <div class="album-cover"></div>
+      <div class="album-info">
+        <p class="album-title">앨범2</p>
+      </div>
+    </div>
+  </li>
+  <li>
+    <div class="album-item">
+      <div class="album-cover"></div>
+      <div class="album-info">
+        <p class="album-title">앨범3</p>
+      </div>
+    </div>
+  </li>
+  <li>
+    <div class="album-item">
+      <div class="album-cover"></div>
+      <div class="album-info">
+        <p class="album-title">앨범4</p>
+      </div>
+    </div>
+  </li>
+</ul>
+ -->
+
 
 </div>
-<!— /.container —>
-</div>
 
-
-
-
-<div class="container">
-		<jsp:include page="/common/footer.jsp" flush="false" />
-	</div>
-	<script type="text/javascript" src="../resources/js/jquery.js"></script>
-	<!-- <script type="text/javascript" src="../resources/js/bootstrap.min.js"></script> -->
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script> 
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
-
-</body>
 </html>
