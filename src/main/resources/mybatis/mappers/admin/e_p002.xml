@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+      PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="admin.mapper.e_p002">
+	<resultMap id="e_p002Result02" type="e_p002VO">
+		<result property="prodNum" column="prodNum"/> <!--상품 번호--> 
+		<result property="priceString" column="priceString"/> <!--상품 가격 스트링--> 
+		<result property="prodsize" column="prodsize"/> <!--상품 사이즈--> 
+		<result property="color" column="color"/> <!--상품 색상--> 
+		<result property="typeString" column="typeString"/> <!--상품 타입 스트림 (1-신상품, 2-중고품)--> 
+		<result property="prodcategorynumString" column="prodcategorynumString"/> <!--상품 구분 스트링(ex-반팔,긴팔, 후드)--> 
+		<result property="prodstatusString" column="prodstatusString"/> <!--상품 상패 스르링(1-판매중,2-품절)--> 
+		<result property="createdAtString" column="createdAtString"/> <!--등록일 스트링--> 
+		<result property="quantity" column="quantity"/> <!--상품 재고--> 
+		
+	</resultMap>
+
+	<!-- 상품등록 -->
+ 	<insert id="insertProd" parameterType="map">
+ 	  <selectKey keyProperty="prodNum" resultType="_int" order="BEFORE">
+           select SEQ_PROD_PRODNUM.nextval
+			FROM dual
+        </selectKey>
+		<![CDATA[
+		INSERT INTO products (prodNum, prodcategorynum, name, price, content,  type, createdAt)
+		VALUES (#{prodNum}, #{prodcategory3}, #{name}, #{price}, #{content},  #{type}, CURRENT_TIMESTAMP)
+		]]>
+	</insert>  
+	
+	<!-- 상품등록시 카테고리 -->
+	<insert id="insertcategory" parameterType="map">
+	<choose>
+    		<when test="categoryNum==15"> <!-- 반팔 --> 
+    		<![CDATA[
+			INSERT INTO prodcategory (CATEGORYNAME, PARENTCATEGORYNUM, PRODCATEGORYNUM)
+			VALUES ( #{name}, #{categoryNum}, prodCategory_seq.nextval)
+			]]>
+    		</when>
+    		<when test="categoryNum==16"> <!-- 긴팔 --> 
+    		<![CDATA[
+			INSERT INTO prodcategory (CATEGORYNAME, PARENTCATEGORYNUM, PRODCATEGORYNUM)
+			VALUES ( #{name}, #{categoryNum}, prodCategory_seq.nextval)
+			]]>
+    		</when>
+    		<when test="categoryNum==17"> <!-- 후드 --> 
+    		<![CDATA[
+			INSERT INTO prodcategory (CATEGORYNAME, PARENTCATEGORYNUM, PRODCATEGORYNUM)
+			VALUES ( #{name}, #{categoryNum}, prodCategory_seq.nextval)
+			]]>
+    		</when>
+    		<when test="categoryNum==18"> <!-- 반바지 --> 
+    		<![CDATA[
+			INSERT INTO prodcategory (CATEGORYNAME, PARENTCATEGORYNUM, PRODCATEGORYNUM)
+			VALUES ( #{name}, #{categoryNum}, prodCategory_seq.nextval)
+			]]>
+    		</when>
+    		<when test="categoryNum==19"> <!-- 긴바지 --> 
+    		<![CDATA[
+			INSERT INTO prodcategory (CATEGORYNAME, PARENTCATEGORYNUM, PRODCATEGORYNUM)
+			VALUES ( #{name}, #{categoryNum}, prodCategory_seq.nextval)
+			]]>
+    		</when>
+    		<when test="categoryNum==20"> <!-- 패딩 --> 
+    		<![CDATA[
+			INSERT INTO prodcategory (CATEGORYNAME, PARENTCATEGORYNUM, PRODCATEGORYNUM)
+			VALUES ( #{name}, #{categoryNum}, prodCategory_seq.nextval)
+			]]>
+    		</when>
+    		<when test="categoryNum==21"> <!-- 야상 --> 
+    		<![CDATA[
+			INSERT INTO prodcategory (CATEGORYNAME, PARENTCATEGORYNUM, PRODCATEGORYNUM)
+			VALUES ( #{name}, #{categoryNum}, prodCategory_seq.nextval)
+			]]>
+    		</when>
+    		<when test="categoryNum==22"> <!-- 바람막이 --> 
+    		<![CDATA[
+			INSERT INTO prodcategory (CATEGORYNAME, PARENTCATEGORYNUM, PRODCATEGORYNUM)
+			VALUES ( #{name}, #{categoryNum}, prodCategory_seq.nextval)
+			]]>
+    		</when>
+    		<when test="categoryNum==23"> <!-- 비니 --> 
+    		<![CDATA[
+			INSERT INTO prodcategory (CATEGORYNAME, PARENTCATEGORYNUM, PRODCATEGORYNUM)
+			VALUES ( #{name}, #{categoryNum}, prodCategory_seq.nextval)
+			]]>
+    		</when>
+    		<when test="categoryNum==24"> <!-- 캡모자 --> 
+    		<![CDATA[
+			INSERT INTO prodcategory (CATEGORYNAME, PARENTCATEGORYNUM, PRODCATEGORYNUM)
+			VALUES ( #{name}, #{categoryNum}, prodCategory_seq.nextval)
+			]]>
+    		</when>
+    		<when test="categoryNum==25"> <!-- 정글모 --> 
+    		<![CDATA[
+			INSERT INTO prodcategory (CATEGORYNAME, PARENTCATEGORYNUM, PRODCATEGORYNUM)
+			VALUES ( #{name}, #{categoryNum}, prodCategory_seq.nextval)
+			]]>
+    		</when>
+    		<when test="categoryNum==26"> <!-- 썬캡 --> 
+    		<![CDATA[
+			INSERT INTO prodcategory (CATEGORYNAME, PARENTCATEGORYNUM, PRODCATEGORYNUM)
+			VALUES ( #{name}, #{categoryNum}, prodCategory_seq.nextval)
+			]]>
+    		</when>
+    		<when test="categoryNum==27"> <!-- 긴양말 --> 
+    		<![CDATA[
+			INSERT INTO prodcategory (CATEGORYNAME, PARENTCATEGORYNUM, PRODCATEGORYNUM)
+			VALUES ( #{name}, #{categoryNum}, prodCategory_seq.nextval)
+			]]>
+    		</when>
+    		<when test="categoryNum==28"> <!-- 반양말 --> 
+    		<![CDATA[
+			INSERT INTO prodcategory (CATEGORYNAME, PARENTCATEGORYNUM, PRODCATEGORYNUM)
+			VALUES ( #{name}, #{categoryNum}, prodCategory_seq.nextval)
+			]]>
+    		</when>
+    		<when test="categoryNum==29"> <!-- 발가락양말 --> 
+    		<![CDATA[
+			INSERT INTO prodcategory (CATEGORYNAME, PARENTCATEGORYNUM, PRODCATEGORYNUM)
+			VALUES ( #{name}, #{categoryNum}, prodCategory_seq.nextval)
+			]]>
+    		</when>
+    		<when test="categoryNum==30"> <!-- 백팩 --> 
+    		<![CDATA[
+			INSERT INTO prodcategory (CATEGORYNAME, PARENTCATEGORYNUM, PRODCATEGORYNUM)
+			VALUES ( #{name}, #{categoryNum}, prodCategory_seq.nextval)
+			]]>
+    		</when>
+    		<when test="categoryNum==31"> <!-- 크로스백 --> 
+    		<![CDATA[
+			INSERT INTO prodcategory (CATEGORYNAME, PARENTCATEGORYNUM, PRODCATEGORYNUM)
+			VALUES ( #{name}, #{categoryNum}, prodCategory_seq.nextval)
+			]]>
+    		</when>
+    		<when test="categoryNum==32"> <!-- 등산화 --> 
+    		<![CDATA[
+			INSERT INTO prodcategory (CATEGORYNAME, PARENTCATEGORYNUM, PRODCATEGORYNUM)
+			VALUES ( #{name}, #{categoryNum}, prodCategory_seq.nextval)
+			]]>
+    		</when>
+    		<when test="categoryNum==11"> <!-- 스틱 --> 
+    		<![CDATA[
+			INSERT INTO prodcategory (CATEGORYNAME, PARENTCATEGORYNUM, PRODCATEGORYNUM)
+			VALUES ( #{name}, #{categoryNum}, prodCategory_seq.nextval)
+			]]>
+    		</when>
+    		<when test="categoryNum==12"> <!-- 장갑 --> 
+    		<![CDATA[
+			INSERT INTO prodcategory (CATEGORYNAME, PARENTCATEGORYNUM, PRODCATEGORYNUM)
+			VALUES ( #{name}, #{categoryNum}, prodCategory_seq.nextval)
+			]]>
+    		</when>
+    		<when test="categoryNum==13"> <!-- 아이젠 --> 
+    		<![CDATA[
+			INSERT INTO prodcategory (CATEGORYNAME, PARENTCATEGORYNUM, PRODCATEGORYNUM)
+			VALUES ( #{name}, #{categoryNum}, prodCategory_seq.nextval)
+			]]>
+    		</when>
+    		<when test="categoryNum==14"> <!-- 보호대 --> 
+    		<![CDATA[
+			INSERT INTO prodcategory (CATEGORYNAME, PARENTCATEGORYNUM, PRODCATEGORYNUM)
+			VALUES ( #{name}, #{categoryNum}, prodCategory_seq.nextval)
+			]]>
+    		</when>
+    		
+    	</choose>
+		
+	</insert>  
+	
+	<!-- 상품 사진 등록 -->
+	<insert id="insertProdPhoto" parameterType="map">
+        insert into prodphoto (prodNum, pPhotoNum, content, originalFilename, fileSize, createdAt)
+        values (#{groupNum}, #{pPhotoNum},  #{storedFileName},  #{originalFileName}, #{fileSize}, CURRENT_TIMESTAMP)
+    </insert>
+    
+    <!--디테일 사진 등록  -->
+    <insert id="insertPhotoDetail" parameterType="map">
+        insert into prodphoto (prodNum, pPhotoNum, contentdetail, createdAt)
+        values (#{prodNum}, #{pPhotoNum}, #{contentdetail}, CURRENT_TIMESTAMP)
+    </insert>
+    
+    <!-- 상품 옵션 등록 -->
+	<insert id="insertProdOption" parameterType="java.util.List">
+	 insert into prodoption (
+	   			OPTIONNUM,
+		        PRODNUM, 
+		        PRODSIZE, 
+		        PRODSTATUS, 
+		        QUANTITY, 
+		        COLOR, 
+		        UPDATEDATE )
+		        select  prodOption_seq.nextval as OPTIONNUM, A .* from(
+	 	<foreach collection="list" item="item" index="index" separator="union all" >
+		        select  
+				        #{item.prodNum} as prodNum, 
+				        #{item.prodSize}as prodSize, 
+				        #{item.prodStatus}as prodStatus, 
+				        #{item.quantity}as quantity, 
+				        #{item.color}as color, 
+				        CURRENT_TIMESTAMP as UPDATEDATE
+				        from SYS.DUAL
+   		 </foreach>
+   		 )A
+    </insert>
+    
+    
+    <!-- 상품조회 -->
+    <select id="selectProd" resultMap="e_p002Result02" parameterType="java.util.Map">
+		 <![CDATA[
+      WITH prod as (
+		select p.prodNum,
+		        p.name,
+		        to_char(p.price,'999,999,999,999,999')as priceString,
+		        DECODE(type,1,'신상품',2,'중고품')as typeString,
+		        po.quantity,
+		        po.prodsize,
+		        po.color,
+		        DECODE(po.prodstatus,1,'판매중',2,'품절')as prodstatusString,
+		        to_char(p.createdat,'YYYY-MM-DD')as createdAtString,
+		        DECODE(p.prodcategorynum,15,'반팔', 16,'긴팔',17,'후드',18,'반바지',19,'긴바지',20,'패딩',21,'야상',22,'바람막이', 23,'비니'
+		        ,24,'캡모자',25,'정글모',26,'썬캡',27,'긴양말',28,'반양말',29,'발가락양말',30,'백팩',31,'크로스백',32,'등산화',11,'스틱',12,'장갑'
+		        ,13,'아이젠',14,'보호대')as prodcategorynumString,
+		        p.PRODCATEGORYNUM
+		        FROM products p INNER JOIN prodoption po
+		        ON p.prodnum = po.prodnum )
+	
+      	]]>
+ 
+    	<choose>
+    		<when test="searchOption=='all'"> <!-- 전체 조회 --> 
+    		SELECT *
+			FROM prod pr
+    		</when>
+    		<when test="searchOption =='name'"> <!-- 상품명 -->
+    		SELECT *
+			FROM prod pr
+    		where pr.name like '%'||#{key_word}||'%'
+    		</when>
+    		
+    		<when test="searchOption =='type1'"> <!-- 신상품 --> 
+    		SELECT *
+			FROM prod pr
+    		where pr.typeString = '신상품'  		
+    		</when>
+    		
+    		<when test="searchOption =='type2'"> <!-- 중고품 --> 
+    		SELECT *
+			FROM prod pr
+    		where pr.typeString = '중고품'
+    		</when>
+    		
+    		<when test="searchOption=='prodstatus1'"> <!-- 판매중 -->
+    		SELECT *
+			FROM prod pr
+    		where pr.prodstatusString = '판매중'
+    		</when>
+    		
+    		<when test="searchOption=='prodstatus2'"> <!-- 품절 --> 
+    		SELECT *
+			FROM prod pr
+    		where pr.prodstatusString = '품절' 
+    		</when>
+    		
+    		<when test="searchOption=='prodcategorynum1'"> <!-- 의류  -->
+    		SELECT *
+			FROM prod pr 
+			INNER JOIN (SELECT
+						   pt.PRODCATEGORYNUM,
+						   pt.PARENTCATEGORYNUM
+						FROM prodcategory pt
+						START WITH pt.PRODCATEGORYNUM = 1
+						CONNECT BY PRIOR pt.PRODCATEGORYNUM = pt.PARENTCATEGORYNUM)pc
+			ON pr.PRODCATEGORYNUM = pc.prodcategorynum
+    		</when>
+    		
+    		<when test="searchOption=='prodcategorynum2'"> <!-- 잡화  -->
+    		SELECT *
+			FROM prod pr 
+			INNER JOIN (SELECT
+						   pt.PRODCATEGORYNUM,
+						   pt.PARENTCATEGORYNUM
+						FROM prodcategory pt
+						START WITH pt.PRODCATEGORYNUM = 2
+						CONNECT BY PRIOR pt.PRODCATEGORYNUM = pt.PARENTCATEGORYNUM)pc
+			ON pr.PRODCATEGORYNUM = pc.prodcategorynum
+    		</when>
+    		
+    		<when test="searchOption=='prodcategorynum3'"> <!-- 등산용품  -->
+    		SELECT *
+			FROM prod pr 
+			INNER JOIN (SELECT
+						   pt.PRODCATEGORYNUM,
+						   pt.PARENTCATEGORYNUM
+						FROM prodcategory pt
+						START WITH pt.PRODCATEGORYNUM = 3
+						CONNECT BY PRIOR pt.PRODCATEGORYNUM = pt.PARENTCATEGORYNUM)pc
+			ON pr.PRODCATEGORYNUM = pc.prodcategorynum
+    		</when>
+    		
+    	</choose>
+	</select>
+	
+		
+	<!-- 상품 삭제-->
+	<delete id="deleteProd"  parameterType="int">
+	<![CDATA[
+	    delete from  products
+	   where prodnum = #{prodNum}
+	]]>      
+  </delete>
+  
+  	<!-- 상품 옵션 삭제-->
+	<delete id="deleteOtion"  parameterType="int">
+	<![CDATA[
+	    delete from  prodoption
+	   where prodnum = #{prodNum}
+	]]>      
+  </delete>
+  
+    <!-- 상품 이미지 삭제-->
+	<delete id="deletePhoto"  parameterType="int">
+	<![CDATA[
+	    delete from  prodphoto
+	   where prodnum = #{prodNum}
+	]]>      
+  </delete>
+  
+  <!-- 상품 상세페이지 -->
+   <select id="viewProdList" resultMap="e_p002Result02" parameterType="int">
+		 <![CDATA[
+      select p.prodNum, p.name,  p.quantity,
+          p.content,
+          to_char(p.price,'999,999,999,999,999')as priceString,
+          DECODE(p.type,1,'신상품',2,'중고품')as typeString,
+          DECODE(p.pCategoryNum,1,'양말',2,'가방',3,'의류',4,'스틱',5,'신발',6,'장갑',7,'보호대')as pCategoryNumStirng, 
+          to_char(p.createdAt,'YYYY-DD-MM')as createdAtString,
+          to_char(p.updatedat,'YYYY-DD-MM')as updatedatString
+      FROM products p 
+      WHERE p.prodnum = #{prodNum}
+      	]]>
+	</select>
+	
+	<!-- 상세페이지 이미지 -->
+	<select id="viewPhotoList" resultMap="e_p002Result02" parameterType="int">
+		 <![CDATA[
+		SELECT pt.content as pcontent
+		FROM prodphoto pt
+		WHERE prodnum=#{prodNum}
+      	]]>
+	</select>
+  
+</mapper>
