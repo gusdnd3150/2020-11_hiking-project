@@ -47,7 +47,7 @@
 						○ 본 방침은부터 2020년 1월 1일부터 시행됩니다.
 					</p>
 					<a href="/user/tou2.jsp">본문 살펴보기</a> <br> <br> 
-					<a href="/user/signUpView.jsp" class="btn btn-primary">이용약관에 동의하고계속하기</a>
+					<a href="/user/signUpView.jsp" class="btn btn-primary">이용약관에 동의하고 계속하기</a>
 				</div>
 			</div>
 		</div>

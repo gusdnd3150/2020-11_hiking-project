@@ -58,6 +58,22 @@ public class UserDAOImpl implements UserDAO{
 	}
 	
 	@Override
+	public int nickNameCheck(String nickName) throws Exception{
+		System.out.println("다오nickName체크: "+nickName);
+		int rst = sqlSession.selectOne("userMapper.nickNameCheck", nickName);
+	System.out.println("DAO : "+ rst);
+		return rst;
+	}
+	
+	@Override
+	public int idEmailCheck(Map<String, Object> map) throws Exception {
+		System.out.println("다오idEmailCheck: "+ map);
+		int rst = sqlSession.selectOne("userMapper.searchIdEmail", map);
+	System.out.println("DAO : "+ rst);
+		return rst;
+	}
+	
+	@Override
 	public UserVO logIn(LoginDTO loginDTO) throws Exception {
 		System.out.println("유저다오왔다감");
 		return sqlSession.selectOne("userMapper.logIn", loginDTO);
@@ -99,12 +115,14 @@ public class UserDAOImpl implements UserDAO{
 
 	@Override
 	public void updateAuthKey(Map<String, String> map) {
-		sqlSession.update("userMapper.updateAuthKey", map);		
+		sqlSession.update("userMapper.updateAuthKey", map);	
 	}
 
 	@Override
 	public void updateAuthStatus(Map<String, String> map) {
 		sqlSession.update("userMapper.updateAuthStatus", map);
+		System.out.println(map);
+		System.out.println("아우스 키 업뎃!! 했어?????? 여기 ");
 	}
 
 	@Override
@@ -123,6 +141,5 @@ public class UserDAOImpl implements UserDAO{
 		return sqlSession.selectOne("userMapper.selectUserNum", id);
 	}
 
-	
 
 }

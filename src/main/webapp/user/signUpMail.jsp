@@ -29,12 +29,15 @@
               </h5><br>
        	    <h5>메일을 확인하신 뒤에 로그인이<br>가능합니다.<h5>
               <br>
-              <h6> <div id="count"></div><h6>
-         <form action="/user/logInView.do" method="post" name="frm">
-                <button class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2" 
-               type="submit">지금 바로 로그인하기</button>
-      
-              </form>
+            <h6> <div id="count" class="mt-1"></div><h6> 
+            <form action="/user/resendMail.do" method="post">
+              <button id="reSend" class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2" 
+               type="submit" disabled>인증 메일 다시 발송받기</button>
+               <input type="hidden" name="id" value="${map.id}">
+               <input type="hidden" name="email" value="${map.email}">
+               <input type="hidden" name="authKey" value="${map.authKey}">
+               </form>
+               <a href="/user/logInView.do"> 지금 바로 로그인 하기</a>
             </div>
           </div>
         </div>
@@ -44,14 +47,14 @@
 </div>
 </body>
 <script>
-window.onload = function(){
-	let form = document.frm;
-	let time = 60;  
+ window.onload = function(){
+	let time = 180;  
 	 setInterval(function(){
 		 if(time==0){
-				form.submit();
+			 $("#reSend").attr("disabled", false);
+			 $("#count").hide();
 			};
-		 var time_text = '('+ time +'초 후 메인화면으로 자동 전환됩니다.)';
+		 var time_text = '('+ time +'초 후에도 메일이 오지 않는다면, 아래 버튼을 다시 눌러 메일을 발송받으세요.)';
 			$("#count").text(time_text);
 			$("#count").css('color','gray');
 			

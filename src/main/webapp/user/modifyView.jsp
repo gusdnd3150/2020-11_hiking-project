@@ -10,12 +10,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta charset="utf-8">
-<title>mypageHome</title>
-<link href="../resources/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<!— body —>
-<script src="../resources/js/jquery.js"></script>
-<script src="../resources/js/bootstrap.bundle.js"></script>
+<title>산오름</title>
+    <!-- ico,css -->
+    <link rel="icon" href="../resources/img/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" type="text/css" href="../resources/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="../resources/css/views/common/header.css" />
 <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script> -->
 <script type="text/javascript">
@@ -48,10 +47,10 @@
 		<br>
 			<div class="row text-center">
 				 <div class="col-md-4"></div>
-				<div class="col-md-4">
+				<div class="col-md-5">
 					<h3 class="display-4">나의 정보</h3>
 					<br>
-					<form action="/mypage/updateUser.do" method="post">
+					<form action="/mypage/updateUser.do" method="post" id="updateUserForm">
 						<table class="table table-boardered">
 							<tr>
 								<th>아이디</th>
@@ -61,14 +60,16 @@
 									<div class="check_font" id="idCheck"></div></td>
 							</tr>
 							<tr>
-								<th>비밀번호</th>
-						<td><jsp:include page="/user/modPassword.jsp" flush="false"/></td>
-							</tr>
-							<tr>
 								<th>이름</th>
 								<td><input type="text" class="form-control" id="name"
 									name="name"  value="${userVO.name}" required><br>
 									<div class="check_font" id="nameCheck"></div></td>
+							</tr>
+							<tr>
+								<th>닉네임</th>
+								<td><input type="text" class="form-control" id="nickName"
+									name="nickName"  value="${userVO.nickName}" required><br>
+								<div class="check_font" id="nickNameCheck"></div></td>
 							</tr>
 							<tr>
 								<th>이메일</th>
@@ -81,7 +82,7 @@
 								<td><input type="text" id="zonecode" name="zonecode"  value="${userVO.zonecode}" style="width: 50px;"  readonly  /> &nbsp; 
 									<input type="button" onClick="openDaumZipAddress();" value="주소 찾기" /> &nbsp; 
 									<input type="text" id="address" name="address" value="${userVO.address}" style="width: 240px;" readonly /><br> 
-									<input type="text" class="form-control" id="address2" name="address2"  value="${userVO.address2}"placeholder="상세 주소를 입력해주세요."
+									<input type="text" class="form-control" id="address2" name="address2"  value="${userVO.address2}"placeholder="상세 주소를 입력해주세요." required
 									 ><br>
 									<div class="check_font" id="addressCheck"></div></td>
 							</tr>
@@ -89,10 +90,9 @@
 								<th>전화번호</th>
 								<td><input type="text" class="form-control" id="phone"
 									name="phone" placeholder="ex)01012345678" value="${userVO.phone}"
-									 ><br>
+									 required><br>
 									<div class="check_font" id="phoneCheck"></div></td>
 							</tr>
-
 							<tr>
 								<th>성별</th>
 								<td>
@@ -108,10 +108,16 @@
 									</table>
 									</td>
 							</tr>
+							<input type="hidden" name="password" value="">
+							</form>
 							<tr>
-								<td colspan="2"><input type="submit"
-									class="btn btn-primary" value="저장하기" id="updateUser">
-						</form>
+								<th>비밀번호</th>
+						<td><jsp:include page="/user/modPassword.jsp" flush="false"/></td>
+							</tr>
+							<tr>
+								<td colspan="2">
+								<input type="button"
+									class="btn btn-primary" value="저장하기" id="updateUser" disabled >
 								<br><br><br><br><br><br>
 								<a href="/user/withdrawalCheck.jsp" id="deleteUser"><h6>탈퇴하기</h6></a>
 									</td>
@@ -120,7 +126,16 @@
 				</div>
 				 <div class="col-md-3"></div>
 	</div>
-
+<script type="text/javascript" src="../resources/js/jquery.js"></script>
+<script type="text/javascript" src="../resources/js/bootstrap.min.js"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+		integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+		integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+		crossorigin="anonymous"></script>
 </body>
 <script>
 	//모든 공백 체크 정규식
@@ -133,6 +148,8 @@
 	var mailJ = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
 	//휴대폰 번호 정규식
 	var phoneJ = /^01([0|1|6|7|8|9]?)?([0-9]{3,4})?([0-9]{4})$/;
+	//닉네임 정규식
+	var nickJ =/^[0-9]|[a-z]|[A-Z]|[가-힣]/;
 	
 		// 이름에 특수문자 들어가지 않도록 설정
 		$("#name").blur(function() {
@@ -140,52 +157,90 @@
 			if (nameJ.test($(this).val())) {
 				console.log(nameJ.test($(this).val()));
 				$("#nameCheck").text('');
+				$("#updateUser").attr("disabled", false);
 			} else {
 				$('#nameCheck').text('이름을 확인해주세요.');
 				$('#nameCheck').css('color', 'red');
+				$("#updateUser").attr("disabled", true);
 			}
 		});
-		
-		
+	
 
 		//주소	
 		$('#zonecode').blur(function() {
 			console.log("이벤트 먹었니");
 			if ($(this).val() != "") {
 				$("#addressCheck").text('');
+				$("#updateUser").attr("disabled", false);
 			} else {
 				$('#addressCheck').text('주소를 확인해주세요.');
 				$('#addressCheck').css('color', 'red');
+				$("#updateUser").attr("disabled", true);
 			}
 		});
 		
 		// 휴대전화
 		$('#phone').blur(function() {
-			if ($(this).val() != "") {
-				$("#phoneCheck").text('');
-			} else if (phoneJ.test($(this).val())) {
+			console.log("이벤트 먹었니");	
+			if (phoneJ.test($(this).val())) {
 				console.log(phoneJ.test($(this).val()));
 				$("#phoneCheck").text('');
+				$("#updateUser").attr("disabled", false);
 			} else {
 				$('#phoneCheck').text('휴대폰번호를 확인해주세요.');
 				$('#phoneCheck').css('color', 'red');
+				$("#updateUser").attr("disabled", true);
 			}
 		});
 
 		//성별
-		$("input:radio[name=sex]").click(function() {
+		$("input:radio[name=sex]").blur(function() {
 			if ($(this).val() == "") {
 				$("#sexCheck").text('성별을 선택해주세요.');
-			} else if ($("input:radio[name=sex]:checked").val() == "10") {
-				console.log($(this).val());
-				$("#sexCheck").text('남자');
-				$('#sexCheck').css('color', 'green');
+				$("#updateUser").attr("disabled", true);
 			} else {
 				console.log($(this).val());
-				$('#sexCheck').text('여자');
-				$('#sexCheck').css('color', 'green');
+				$('#sexCheck').text('');
+				$("#updateUser").attr("disabled", false);
 			}
 		});
+		
+		
+		$('#nickName').blur(function(){
+			console.log("이벤트 먹었니");					
+			var nickName = $("#nickName").val();
+			$.ajax({
+				url : "/user/nickNameCheck.do?nickName="+nickName ,
+				type : "get",
+				success : function(data, textStatus) {
+					console.log("1 = 중복o / 0 = 중복x : "+ data);		
+					if (data == "1") {
+							// 1 : 닉네임 중복된다는 문구
+							$("#nickNameCheck").text("이미 등록된 닉네임입니다.");
+							$("#nickNameCheck").css("color", "red");
+							$("#updateUser").attr("disabled", true);
+						} else {
+							// 0 : 닉네임 정규식 검사 
+							if(nickJ.test(nickName)){
+								console.log(nickJ.test(nickName));
+								$("#nickNameCheck").text('');
+								$("#updateUser").attr("disabled", false);
+							} else {
+								$('#nickNameCheck').text('닉네임을 확인해주세요.');
+								$('#nickNameCheck').css('color', 'red');
+								$("#updateUser").attr("disabled", true);
+							}
+						}
+					}, error : function(data, textStatus) {
+						console.log(data.readyState);
+						console.log(data.status);
+						console.log(data.responseText); 
+							console.log("실패");
+					},
+					complete : function(data, textStatus) {
+					}
+				});
+			});
 		
 	$(document).ready(function() {
 			$("#editInfo").click(function() {
@@ -198,6 +253,7 @@
 						console.log("id");
 						$('#name').val(data.name);
 						console.log("name");
+						$('#nickName').val(data.nickName);
 						$('#email').val(data.email);
 						console.log("email");
 						$('#zonecode').val(data.zonecode);
@@ -214,6 +270,10 @@
 					}
 				});
 			});
+			
+			$("#updateUser").click(function() {
+				$("#updateUserForm").submit();
+			}); 
 		}); 
 
 </script>

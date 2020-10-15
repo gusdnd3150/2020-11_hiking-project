@@ -22,7 +22,7 @@
         <result property="mtNm" column="mtNm" />
     </resultMap>
     
-    <insert id="insertGroup" useGeneratedKeys="true" keyProperty="groupNum" parameterType="map">
+    <insert id="insertGroup"  parameterType="map">
         <selectKey keyProperty="groupNum" resultType="_int" order="BEFORE">
             SELECT groups_seq.nextval
             FROM dual

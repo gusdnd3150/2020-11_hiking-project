@@ -64,6 +64,7 @@ public class SNSLogin {
 			snsMap.put("id", resNode.get("id").asText());
 			snsMap.put("name", resNode.get("name").asText());
 			snsMap.put("email", resNode.get("email").asText());
+			//snsMap.put("nickName", resNode.get("nickname").asText());
 			System.out.println(resNode.get("gender").asText());
 			if(resNode.get("gender").asText().equals("F")){
 				snsMap.put("sex", 20);

@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -62,7 +63,7 @@ public class UserControllerImpl implements UserController {
 
 	// 회원가입 완료
 	@RequestMapping(value = "/insertUser.do", method = RequestMethod.POST)
-	public String insertUser(UserVO userVO, HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public ModelAndView insertUser(UserVO userVO, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		System.out.println(userVO);
 		// 비밀번호 해싱
 		String hashedPw = BCrypt.hashpw(userVO.getPassword(), BCrypt.gensalt(10));
@@ -86,9 +87,30 @@ public class UserControllerImpl implements UserController {
 		System.out.println(map);
 
 		userService.updateAuthKey(map);
-
-		return "/user/signUpMail";
+		ModelAndView mav = new ModelAndView("/user/signUpMail");
+		mav.addObject("map", map);
+		return mav;
 	}
+	
+	//가입인증메일 다시 보내
+	@RequestMapping(value = "/resendMail.do", method = RequestMethod.POST)
+	public ModelAndView resendMail(UserVO userVO, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		request.setCharacterEncoding("utf-8");
+		System.out.println("이메일 왜 안보내지니: " + userVO.getEmail() + "////" + userVO.getAuthKey());
+		mailService.sendAuthMail(userVO.getEmail(), userVO.getAuthKey());
+
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("id", userVO.getId());
+		map.put("email", userVO.getEmail());
+		map.put("authKey", userVO.getAuthKey());
+		System.out.println(map);
+
+		ModelAndView mav = new ModelAndView("/user/signUpMail");
+		mav.addObject("map", map);
+		return mav;
+	}
+	
+	
 
 	@RequestMapping(value = "/signUpConfirm.do", method = { RequestMethod.GET, RequestMethod.POST })
 	public ModelAndView signUpConfirm(@RequestParam Map<String, String> map, ModelAndView mav) {
@@ -107,6 +129,7 @@ public class UserControllerImpl implements UserController {
 		loginDTO.setId((String) snsUser.get("id"));
 		loginDTO.setPassword((String) snsUser.get("password"));
 		loginDTO.setName((String) snsUser.get("name"));
+		//loginDTO.setNickName((String) snsUser.get("nickName"));
 		loginDTO.setSex((int) snsUser.get("sex"));
 		String hashedPw = BCrypt.hashpw((String) snsUser.get("password"), BCrypt.gensalt());
 		snsUser.put("password", hashedPw);
@@ -142,6 +165,36 @@ public class UserControllerImpl implements UserController {
 		}
 		return result;
 	}
+	
+	@RequestMapping(value = "/nickNameCheck.do", method = RequestMethod.GET)
+	@ResponseBody
+	public String nickNameCheck(@RequestParam("nickName") String nickName) throws Exception {
+		System.out.println(nickName);
+		int rst = userService.nickNameCheck(nickName);
+		String result = "0";
+		System.out.println("유저Controller : " + rst);
+		if (rst != 0) {
+			result = "1";
+		}
+		return result;
+	}
+	
+	@Override
+	@RequestMapping(value = "/idEmailCheck.do", method = { RequestMethod.GET, RequestMethod.POST })
+	@ResponseBody
+	public String idEmailCheck(@RequestParam("id") String id, @RequestParam("email") String email) throws Exception {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("id", id);
+		map.put("email", email);
+		int rst = userService.idEmailCheck(map);
+		String result = "0";
+		System.out.println("유저Controller : " + rst);
+		if (rst != 0) {
+			result = "1";
+		}
+		return result;
+	}
+
 	@RequestMapping(value = "/logInView.do", method = { RequestMethod.GET, RequestMethod.POST })
 	public String logInView(Model model) {
 		System.out.println("로그인 페이지간다");
@@ -255,7 +308,7 @@ public class UserControllerImpl implements UserController {
 		userService.removeSessionId(httpSession.getId());
 		return "/user/withdrawal";
 	}
-
+	
 	@RequestMapping(value = "/user/searchId.do", method = { RequestMethod.GET, RequestMethod.POST })
 	public String searchId(@RequestParam("email") String email, HttpServletRequest request) throws Exception {
 		System.out.println("searchId////////    " + email);
@@ -268,7 +321,7 @@ public class UserControllerImpl implements UserController {
 				"회원님이 산오름에 요청하신 '아이디 찾기' 문의에 대해 안내 해 드립니다. \n" + "회원님의 아이디는:  " + id);
 		return "/user/sendMailEnd";
 	}
-
+	
 	@RequestMapping(value = "/sendTempPwd.do", method = { RequestMethod.GET, RequestMethod.POST })
 	public String sendTempPwd(@RequestParam("id") String id, @RequestParam("email") String email,
 			HttpServletRequest request) throws Exception {
@@ -288,5 +341,8 @@ public class UserControllerImpl implements UserController {
 		mypageService.updatePwd(userVO);
 		return "/user/sendMailEnd";
 	}
+
+	
+
 
 }

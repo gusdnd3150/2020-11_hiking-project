@@ -13,6 +13,7 @@ public class UserVO {
 	private String id;
 	private String password;
 	private String name;
+	private String nickName;
 	private int sex;
 	private String phone;
 	private String zonecode;
@@ -27,8 +28,8 @@ public class UserVO {
 	private String sessionId;
 	private Date sessionLimit;
 	private String profile; //자기소개글
-	private String content; //프로필사진
-	private String content2;
+	private String content; //프로필사진원본이름
+	private String content2; //프로필사진저장이름
 	private int authStatus;
 	private String authKey;
 	private String reason;
@@ -169,6 +170,12 @@ public class UserVO {
 	}
 	public void setReason(String reason) {
 		this.reason = reason;
+	}
+	public String getNickName() {
+		return nickName;
+	}
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
 	}
 
 

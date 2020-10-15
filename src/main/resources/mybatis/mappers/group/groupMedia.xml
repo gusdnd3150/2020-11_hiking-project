@@ -17,7 +17,7 @@
         values (#{groupNum}, #{mediaNum}, #{fileSize}, #{storedFileName}, #{originalFileName}, sysdate, sysdate)
     </insert>
 
-    <select id="selectGroupMedia" resultType="_byte[]" parameterType="_int">
+   <!--  <select id="selectGroupMedia" resultType="_byte[]" parameterType="_int">
         <![CDATA[
             SELECT content
             FROM groupsMedia
@@ -34,5 +34,5 @@
             WHERE groupNum = #{groupNum}
             ORDER BY mediaNum
         ]]>
-    </select>
+    </select> -->
 </mapper>

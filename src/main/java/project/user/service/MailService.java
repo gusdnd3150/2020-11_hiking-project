@@ -46,15 +46,15 @@ public class MailService {
 		MimeMessage message = mailSender.createMimeMessage();
 		String mailContent = "<html><head><h1>[산오름 이메일 인증]</h1><br><p>아래 링크를 클릭하시면 이메일 인증이 완료됩니다.</p></head>"
                 + "<body><a href='http://localhost:8080/user/signUpConfirm.do?email=" 
-                + email + "&authKey=" + authKey + "' target='_blenk'>이 곳을 눌러 산오름 서비스를 마음껏 누리세요.</a></body></html>";
+                + email + "&authKey=" + authKey + "'target='_blenk'>이 곳을 눌러 산오름 서비스를 마음껏 누리세요.</a></body></html>";
 		
 		try {
 			MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, "UTF-8");
 			//message2.setContent(mailContent, "text/html");
 			messageHelper.setFrom("bithiking168@gmail.com", "산오름");
 			messageHelper.setTo(email);
-			messageHelper.setSubject("산오름에서 보내는 회원가입 이메일 인증입니다.");
-			messageHelper.setText(mailContent);
+			messageHelper.setSubject("[이메일 인증] 산오름에서 신규가입을 환영합니다.");
+			messageHelper.setText(mailContent, true);
 			mailSender.send(message);
 			sendPreConfiguredMail("회원가입 인증 메일이"+email+"(으)로 발송되었습니다.");
 		}catch(Exception e) {

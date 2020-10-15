@@ -10,6 +10,7 @@
 		<result property="id" column="id" />
 		<result property="password" column="password" />
 		<result property="name" column="name" />
+		<result property="nickName" column="nickName" />
 		<result property="sex" column="sex" />
 		<result property="phone" column="phone" />
 		<result property="address" column="address" />
@@ -32,15 +33,15 @@
 
 	<insert id="insertUser" parameterType="userVO">
       <![CDATA[
-      INSERT INTO USERS(userNum, id , password, name, sex, phone, address, address2, zonecode, email, type, status, createdAt, sessionId, authStatus)
-      VALUES (users_SEQ.nextVal, #{id}, #{password}, #{name}, #{sex}, #{phone}, #{address}, #{address2}, #{zonecode}, #{email}, 200, 10, sysdate, #{id}, 0)
+      INSERT INTO USERS(userNum, id , password, name, sex, phone, address, address2, zonecode, email, type, status, createdAt, sessionId, authStatus, nickName)
+      VALUES (users_SEQ.nextVal, #{id}, #{password}, #{name}, #{sex}, #{phone}, #{address}, #{address2}, #{zonecode}, #{email}, 200, 10, sysdate, #{id}, 0, #{nickName})
       ]]>
 	</insert>
 
 	<insert id="insertUser2" parameterType="java.util.Map">
       <![CDATA[
-      INSERT INTO USERS(userNum, id , password, name, email, type, status, createdAt, sessionId, authStatus, sex)
-      VALUES (users_SEQ.nextVal, #{id}, #{password}, #{name}, #{email}, 200, 10, sysdate, 0, 1, #{sex})
+      INSERT INTO USERS(userNum, id , password, name, email, type, status, createdAt, sessionId, authStatus, sex, nickName)
+      VALUES (users_SEQ.nextVal, #{id}, #{password}, #{name}, #{email}, 200, 10, sysdate, 0, 1, #{sex}, #{nickName})
       ]]>
 	</insert>
 
@@ -77,7 +78,7 @@
 	   <![CDATA[
 	    select count(*)
 	    from users
-	    where id = #{id} and status=10
+	    where id = #{id}
 	    ]]>
 	</select>
 
@@ -86,6 +87,14 @@
 	    select count(*)
 	    from users
 	    where email = #{email} and status=10
+	    ]]>
+	</select>
+	
+			<select id="nickNameCheck" parameterType="String" resultType="int">
+	   <![CDATA[
+	    select count(*)
+	    from users
+	    where nickName = #{nickName} and status=10
 	    ]]>
 	</select>
 
@@ -100,7 +109,7 @@
 	<update id="updateUser" parameterType="userVO">
 	  <![CDATA[
 	   update users
-	   set name=#{name}, sex=#{sex}, phone=#{phone}, zonecode=#{zonecode}, address=#{address}, address2=#{address2}, email=#{email}, updatedAt=sysdate
+	   set name=#{name}, sex=#{sex}, phone=#{phone}, zonecode=#{zonecode}, address=#{address}, address2=#{address2}, email=#{email}, updatedAt=sysdate, nickName=#{nickName}
 	   where id=#{id} and status=10
 	        ]]>
 	</update>
@@ -234,6 +243,14 @@
 	    select id
 	    from users
 	    where email=#{email} and status=10
+	    ]]>
+	</select>
+	
+	<select id="searchIdEmail" parameterType="java.util.Map" resultType="int">
+	   <![CDATA[
+	    select count(*)
+	    from users
+	    where email=#{email} and id=#{id} and status=10
 	    ]]>
 	</select>
 

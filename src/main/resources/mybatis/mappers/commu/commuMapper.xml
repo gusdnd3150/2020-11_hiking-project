@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        
+        <mapper namespace="commuMapper">
+    <resultMap id="groupResult2" type="groupVO">
+        <result property="groupNum" column="groupNum" />
+        <result property="name" column="name" />
+        <result property="type" column="type" />
+        <result property="staffCurrent" column="staffCurrent" />
+        <result property="staffMax" column="staffMax" />
+        <result property="detail" column="detail" />
+        <result property="status" column="status" />
+        <result property="startDay" column="startDay" />
+        <result property="createdAt" column="createdAt" />
+        <result property="updatedAt" column="updatedAt" />
+        <result property="area" column="area" />
+        <result property="ageStart" column="ageStart" />
+        <result property="ageEnd" column="ageEnd" />
+        <result property="sex" column="sex" />
+        <result property="mtNm" column="mtNm" />
+    </resultMap>
+    
+    
+    <insert id="insertGroup" parameterType="map">
+        <selectKey keyProperty="groupNum" resultType="_int" order="BEFORE">
+            SELECT groups_seq.nextval
+            FROM dual
+        </selectKey>
+        <![CDATA[
+            INSERT INTO groups(
+		            GROUPNUM,
+					NAME,
+					TYPE,
+					STAFFCURRENT,
+					STAFFMAX,
+					DETAIL,
+					STATUS,
+					CREATEDAT,
+					UPDATEDAT,
+					AREA,
+					AGESTART,
+					AGEEND,
+					SEX
+					)
+            VALUES (
+                #{groupNum},
+                #{name},
+                2,
+                1,
+                10000,
+                #{detail},
+                1,
+                sysdate,
+                sysdate,
+                #{area},
+                #{ageStart},
+                #{ageEnd},
+                #{sex}
+                )
+        ]]>
+    </insert>
+    
+    <select id="selectMaxGroupNum" resultType="map">
+    SELECT max(groupNum) as groupNum
+            FROM groups
+     </select>
+     
+       <insert id="insertGroupsBoard" parameterType="map">
+            INSERT INTO groupsBoard(
+		            GROUPNUM,
+					BOARDNUM,
+					BOARDACCESS,
+					CREATEDAT,
+					UPDATEDAT
+					)
+            VALUES (
+                #{GROUPNUM},
+                #{boardNum},
+                 0,
+                sysdate,
+                sysdate
+                ) 
+    			</insert>
+    
+    
+    <!-- 미완성이다아아아아아 
+          <insert id="insertGroupsBoardPost" parameterType="map">
+           <![CDATA[
+              INSERT INTO groupsBoardPost(
+                   GROUPNUM,
+                   BOARDNUM,
+                   TYPE,
+                   POSTNUM,
+                   TITLE,
+                   CONTENT,
+                   CREATEDAT,
+                   UPDATEDAT
+                  		)
+            VALUES (
+                #{groupNum},
+                   
+                #{boardNum},
+
+                 0,
+                 postNum_SEQ.nextVal
+                sysdate,
+                sysdate
+                )
+                   ]]>
+           </insert>
+           -->
+    
+     <select id="selectGroupNum" resultMap="groupResult2"
+		parameterType="String">
+	 <![CDATA[
+	    select groupNum
+        from userWaiting
+        where userId=#{id}
+	  ]]>
+	</select>
+    
+    <select id="selectCreatedGroupNum" resultMap="groupResult2"
+		parameterType="String">
+	 <![CDATA[
+	    select groupNum
+        from userWaiting
+        where userId=#{id} and userType=0 
+	  ]]>
+	</select>
+	
+	  <select id="selectJoinedGroupNum" resultMap="groupResult2"
+		parameterType="String">
+	 <![CDATA[
+	    select groupNum
+        from userWaiting
+        where userId=#{id} and userType=1
+	  ]]>
+	</select>
+    
+    <select id="selectCommu" resultType="map"
+		parameterType="java.util.List">
+	    select a.name, a.groupNum, b.storedFileName
+        from groups a, groupsmedia b
+         where a.groupNum=b.groupNum
+         and b.groupNum in 
+	 <foreach collection="list" item="list" open="(" separator="," close=")">
+     		 #{list.groupNum}
+        </foreach>
+	</select>
+	
+	<select id="selectGroups" resultType="map" parameterType="Map">
+			 <![CDATA[
+		select GROUPNUM, NAME, STAFFCURRENT, DETAIL, CREATEDAT, AREA, AGESTART, AGEEND, SEX
+        from groups
+        where groupNum=#{groupNum}
+          ]]>
+	</select>
+	
+	<select id="selectUserWaiting" resultType="map"
+		parameterType="Map">
+			 <![CDATA[
+		select GROUPNUM, USERTYPE, USERCOMMENT, USERSTATUS
+        from userWaiting
+        where groupNum=#{groupNum} and USERID=#{id}
+          ]]>
+	</select>
+	
+	<select id="selectGroupsMedia" resultType="map"
+		parameterType="Map">
+			 <![CDATA[
+		select GROUPNUM, STOREDFILENAME, MEDIANUM
+        from groupsMedia
+        where groupNum=#{groupNum}
+          ]]>
+	</select>
+	
+	<select id="selectGroupsBoard" resultType="map"
+		parameterType="Map">
+			 <![CDATA[
+		select *
+        from groupsBoard
+        where groupNum=#{groupNum}
+          ]]>
+	</select>
+	
+	<select id="selectGroupsBoardPost" resultType="map"
+		parameterType="Map">
+			 <![CDATA[
+		select *
+        from groupsBoardPost
+        where groupNum=#{groupNum}
+          ]]>
+	</select>
+	
+	 <select id="selectAllGroupList" resultType="map">
+        <![CDATA[
+            SELECT ROWNUM rn, g.*, gm.storedFileName
+            FROM groups g, groupsMedia gm
+            WHERE g.groupNum = gm.groupNum
+              AND gm.mediaNum = 0
+              AND type = 2
+              AND ROWNUM <=9
+            ORDER BY g.groupNum DESC
+        ]]>
+    </select>
+	
+    </mapper>

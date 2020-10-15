@@ -42,6 +42,20 @@ public class UserServiceImpl implements UserService {
 		return rst;
 	}
 	
+	@Override
+	public int nickNameCheck(String nickName) throws Exception {
+		int rst = userDAO.nickNameCheck(nickName);
+		System.out.println("Service : "+ rst);
+		return rst;
+	}
+
+	@Override
+	public int idEmailCheck(Map<String, Object> map) throws Exception {
+		int rst = userDAO.idEmailCheck(map);
+		System.out.println("Service : "+ rst);
+		return rst;
+	}
+	
 	public UserVO logIn(LoginDTO loginDTO) throws Exception {
 		System.out.println("서비스왔다감");
 		return userDAO.logIn(loginDTO);
@@ -84,6 +98,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void updateAuthStatus(Map<String, String> map) {
 		userDAO.updateAuthStatus(map);
+		System.out.println("아우스 키 업뎃!!!!!!!");
 	}
 
 	@Override
@@ -101,5 +116,6 @@ public class UserServiceImpl implements UserService {
 	public int selectUserNum(String id) {
 		return userDAO.selectUserNum(id);
 	}
+
 	
 }

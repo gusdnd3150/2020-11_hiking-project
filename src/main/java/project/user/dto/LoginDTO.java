@@ -2,13 +2,16 @@ package project.user.dto;
 
 import lombok.Data;
 import lombok.Getter;
+import lombok.ToString;
 
+@ToString
 public class LoginDTO {
 	
 //	private int userNum;
 	private String id;
 	private String password;
 	private String name;
+	private String nickName;
 	private int sex;
 //	private String phone;
 //	private String address;
@@ -59,14 +62,15 @@ public class LoginDTO {
 		this.useCookie = useCookie;
 	}
 
-	@Override
-	public String toString() {
-		return "LoginDTO{" +
-				"id='" + id + '\'' +
-				", password='" + password + '\'' +
-				", name='" + name + '\'' +
-				", sex=" + sex +
-				", useCookie=" + useCookie +
-				'}';
+	public String getNickName() {
+		return nickName;
 	}
+
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
+	}
+
+	
+	
+	
 }

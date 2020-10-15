@@ -25,7 +25,7 @@
 				<div class="container">
 					<div class="row">
 						<div class="col-sm-12 text-center" align="center"></div>
-						<form action="/mypage/updateUser.do" method="post">
+						<form action="/mypage/updateUser.do" method="post" id="modPwd">
 							<table>
 							<tr>
 								<th>비밀번호</th>
@@ -38,19 +38,17 @@
 								<th>비밀번호 확인</th>
 								<td><input type="password" class="form-control"
 									id="password2" name="password2" placeholder="비밀번호 확인"><br>
-									<input type="button" value="일치 여부 확인"><br>
+									<!-- <input type="button" value="일치 여부 확인"><br> -->
 									<div class="check_font" id="password2Check"></div></td>
 							</tr>
-							
-						
 						</table>
+				</form>
 					</div>
 				</div>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">X닫기</button>
-				<button  type="submit" class="btn btn-primary" id="updatePwd" disabled>변경하기</button>
-				</form>
+				<button  type="button" class="btn btn-primary" id="updatePwd" >변경하기</button>
 			</div>
 		</div>
 	</div>
@@ -59,7 +57,7 @@
 	// 비밀번호 정규식
 	var pwdJ = /^[A-Za-z0-9]{4,12}$/;
 	//비밀번호
-	$('#password').blur(function() {
+/* 	$('#password').blur(function() {
 		console.log("이벤트 먹었니");
 		if (pwdJ.test($(this).val())) {
 			console.log(pwdJ.test($(this).val()));
@@ -88,6 +86,36 @@
 			$('#password2Check').css('color', 'red');
 			$("#updatePwd").attr("disabled", true);
 		}
-	}); 
+	}); */
+	
+	$("#updatePwd").click(function() {
+		console.log("이벤트 먹었니?????");
+		var password = $("#password").val()
+		var password2 = $("#password2").val()
+		if (pwdJ.test(password)) {
+			console.log(pwdJ.test(password));
+			$("#passwordCheck").text('');
+			if (pwdJ.test(password2) && password2 == password) {
+				console.log("비밀번호 같을 때");
+				console.log(password2)
+				$('#password2Check').css('color', 'green');
+				$("#password2Check").text('변경 가능합니다. :)');
+				$("#modPwd").submit();
+		/* 		$("#updatePwd").attr("disabled", false); */
+			} else {
+				console.log(password);
+				console.log(password2);
+				console.log("비밀번호 다를 때");
+				$('#password2Check').text('비밀번호를 다시 확인해주세요.');
+				$('#password2Check').css('color', 'red');
+			/* 	$("#updatePwd").attr("disabled", true); */
+			}
+		} else {
+			$('#passwordCheck').text('대소문자와 숫자 4~12자리로 입력해주세요.');
+			$('#passwordCheck').css('color', 'gray');
+	/* 		$("#updatePwd").attr("disabled", true); */
+		}
+	});
+	
 </script>
 </html>
