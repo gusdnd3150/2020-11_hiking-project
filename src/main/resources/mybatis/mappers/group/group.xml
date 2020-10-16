@@ -147,7 +147,7 @@
                    g.ageEnd,
                    g.sex,
                    g.mtNm,
-                   uw.userId,
+                   u.nickname,
                    ui.content2
             FROM groups g, userWaiting uw, users u, userInfo ui
             WHERE g.groupNum = uw.groupNum
@@ -348,19 +348,20 @@
 
     <select id="selectCommentOne" parameterType="_int" resultType="groupCommentVO">
         <![CDATA[
-            SELECT COMMENTNUM, PARENTNUM, DEPTS, COMMENTORDER, CONTENT, USERID, SUBCOMMENTCOUNT,CREATEDAT
-            FROM GROUPCOMMENT
-            WHERE commentNum = #{commentNum}
+            SELECT gc.commentNum, gc.parentNum, gc.depts, gc.commentOrder, gc.content, u.nickname, gc.subCommentCount, gc.createdAt
+            FROM groupComment gc, users u
+            WHERE gc.userId = u.id
+              AND commentNum = #{commentNum}
         ]]>
     </select>
 
     <select id="selectCommentByGroupNum" parameterType="_int" resultType="groupCommentVO">
         <![CDATA[
-            SELECT gc.commentNum, gc.parentNum, gc.depts, gc.commentOrder, gc.content, gc.userId, gc.subCommentCount, gc.createdAt, ui.content2
+            SELECT gc.commentNum, gc.parentNum, gc.depts, gc.commentOrder, gc.content, u.nickname, gc.subCommentCount, gc.createdAt, ui.content2
             FROM groupComment gc, users u, userInfo ui
             WHERE gc.userId = u.id
-            AND   u.userNum = ui.userNum
-            AND   GROUPNUM = #{groupNum}
+              AND   u.userNum = ui.userNum
+              AND   GROUPNUM = #{groupNum}
             START WITH PARENTNUM = 0
             CONNECT BY PRIOR COMMENTNUM = PARENTNUM
             ORDER SIBLINGS BY COMMENTORDER

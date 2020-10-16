@@ -21,4 +21,5 @@ public class GroupCommentVO {
     private Timestamp createdAt;
 
     private String content2;
+    private String nickname;
 }

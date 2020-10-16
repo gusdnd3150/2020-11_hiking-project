@@ -72,8 +72,6 @@
             success: function (response){
                 $('.card-list').empty();
 
-                console.log(response)
-
                 for(var i=0;i<response.length;i++){
 
                 $('.card-list').append(
