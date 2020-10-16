@@ -92,7 +92,7 @@
 		var upDate = "<c:out value="${upDateCsBoardMsg}" />";
 		if (upDate == 1) {
 			alert("완료");
-			window.location.href = 'http://localhost:8090/admin/e_p003_main.jsp';
+			window.location.href = 'http://localhost:8080/admin/e_p003_main.jsp';
 		}
 	});
 
@@ -100,7 +100,7 @@
 		var result = "<c:out value="${result}" />";
 		if (result == 1) {
 			alert(" 공지사항  등록완료");
-			window.location.href = 'http://localhost:8090/admin/e_p003_main.jsp';
+			window.location.href = 'http://localhost:8080/admin/e_p003_main.jsp';
 		} else {
 
 		}
@@ -110,7 +110,7 @@
 		var mailResult = "<c:out value="${mailResult}" />";
 		if (mailResult == 1) {
 			alert(" 이메일 발송이 완료 되었습니다.");
-			window.location.href = 'http://localhost:8090/admin/e_p003_main.jsp';
+			window.location.href = 'http://localhost:8080/admin/e_p003_main.jsp';
 		} else {
 
 		}

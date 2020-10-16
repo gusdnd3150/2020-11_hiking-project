@@ -1,155 +1,155 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-      PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="admin.mapper.e_p006">
 	<resultMap id="e_p006Result06" type="e_p006VO">
 		<result property="csposttypeString" column="csposttypeString"/> <!-- 글구분 스트링 -->
 		<result property="csboardcnt" column="csboardcnt"/> <!--글 구분 카운트  -->
-		
-		<result property="createdatString" column="createdatString"/> <!-- 매출일자 --> 
+
+		<result property="createdatString" column="createdatString"/> <!-- 매출일자 -->
 		<result property="sumPrice" column="sumPrice"/> <!--매출 금액  -->
-	
+
 		<result property="man" column="man"/> <!--남자  -->
 		<result property="woman" column="woman"/> <!--여자  -->
 		<result property="allUser" column="allUser"/> <!--전체 회원수  -->
 		<result property="userCreatedat" column="userCreatedat"/> <!--회원 가입일자  -->
-		
+
 	</resultMap>
 
-	
+
 	<!--지정일자 조회  cs 글 통계 파이차트  -->
 	<select id="searchDatePieChart" resultMap="e_p006Result06" parameterType="java.util.Map">
-	<![CDATA[
-	select DECODE (CSPOSTTYPE,100,'공지글',200,'문의글', 300,'신고글')as csposttypeString, COUNT(*)as csboardcnt
-	FROM cspost
+   <![CDATA[
+   select DECODE (CSPOSTTYPE,100,'공지글',200,'문의글', 300,'신고글')as csposttypeString, COUNT(*)as csboardcnt
+   FROM cspost
     WHERE CREATEDAT BETWEEN TO_DATE(#{startDate},'YYYY-MM-DD') AND TO_DATE(#{endDate},'YYYY-MM-DD')
-	GROUP by DECODE (CSPOSTTYPE,100,'공지글',200,'문의글', 300,'신고글')
-	]]>
-	</select>
-	
+   GROUP by DECODE (CSPOSTTYPE,100,'공지글',200,'문의글', 300,'신고글')
+   ]]>
+   </select>
+
 	<!--지정일자 조회 매출 통계  컬럼차트  -->
 	<select id="searchDateColumnChart" resultMap="e_p006Result06" parameterType="java.util.Map">
-	<![CDATA[
-	select to_char(p.CREATEDAT, 'YYYY-MM-DD')as createdatString, sum(o.price)as sumPrice
-	from orders o INNER JOIN payment p
-	ON o.ordernum = p.ordernum
-	WHERE p.createdat BETWEEN TO_DATE (#{startDate}, 'YYYY-MM-DD') AND TO_DATE (#{endDate}, 'YYYY-MM-DD')
-	GROUP BY to_char(p.CREATEDAT, 'YYYY-MM-DD')
-	ORDER BY createdatString ASC
-	]]>
-	</select>
-	
+   <![CDATA[
+   select to_char(p.CREATEDAT, 'YYYY-MM-DD')as createdatString, sum(o.price)as sumPrice
+   from orders o INNER JOIN payment p
+   ON o.ordernum = p.ordernum
+   WHERE p.createdat BETWEEN TO_DATE (#{startDate}, 'YYYY-MM-DD') AND TO_DATE (#{endDate}, 'YYYY-MM-DD')
+   GROUP BY to_char(p.CREATEDAT, 'YYYY-MM-DD')
+   ORDER BY createdatString ASC
+   ]]>
+   </select>
+
 	<!--지정일자 조회 가입자 현황 라인차트 -->
 	<select id="serchUserLineChart" resultMap="e_p006Result06" parameterType="java.util.Map">
-	<![CDATA[
-	select to_char(createdat, 'YYYY-MM-DD')as userCreatedat, count(DECODE(sex,1,'남자'))as man, count(DECODE(sex ,2, '여자'))as woman, COUNT(*)as allUser
-	FROM users
-	WHERE createdat BETWEEN TO_DATE(#{startDate},'YYYY-MM-DD') AND TO_DATE(#{endDate},'YYYY-MM-DD')
-	group by to_char(createdat, 'YYYY-MM-DD')
-	]]>
-	</select>
-	
+   <![CDATA[
+   select to_char(createdat, 'YYYY-MM-DD')as userCreatedat, count(DECODE(sex,10,'남자'))as man, count(DECODE(sex ,20, '여자'))as woman, COUNT(*)as allUser
+   FROM users
+   WHERE createdat BETWEEN TO_DATE(#{startDate},'YYYY-MM-DD') AND TO_DATE(#{endDate},'YYYY-MM-DD')
+   group by to_char(createdat, 'YYYY-MM-DD')
+   ]]>
+   </select>
+
 	<!--지정일자 조회 가입자 현황 바차트  -->
 	<select id="serchUserBarChart" resultMap="e_p006Result06" parameterType="java.util.Map">
-	<![CDATA[
-	select  count(DECODE(sex,1,'남자'))as man, count(DECODE(sex ,2, '여자'))as woman, COUNT(*)as allUser
-	FROM users
-	WHERE createdat BETWEEN TO_DATE(#{startDate},'YYYY-MM-DD') AND TO_DATE(#{endDate},'YYYY-MM-DD')
-	]]>
-	</select>
-	
-	
+   <![CDATA[
+   select  count(DECODE(sex,10,'남자'))as man, count(DECODE(sex ,20, '여자'))as woman, COUNT(*)as allUser
+   FROM users
+   WHERE createdat BETWEEN TO_DATE(#{startDate},'YYYY-MM-DD') AND TO_DATE(#{endDate},'YYYY-MM-DD')
+   ]]>
+   </select>
+
+
 	<!-- 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 -->
-	
-	
-	
+
+
+
 	<!-- 셀렉트 조회 cs 글 통계  파이차트 -->
 	<select id="selectPieChart" resultMap="e_p006Result06" parameterType="java.util.Map">
-	<![CDATA[
-	select DECODE (CSPOSTTYPE,100,'공지글',200,'문의글', 300,'신고글')as csposttypeString, COUNT(*)as csboardcnt
-	FROM cspost
-	]]>
-	<choose>
-    		<when test="key_word=='all'"> <!-- 전체 조회  -->
-    			GROUP by DECODE (CSPOSTTYPE,100,'공지글',200,'문의글', 300,'신고글')
-    		</when>
-    		<when test="key_word=='toDay'"> <!-- 당일 조회 -->
-    		 	WHERE CREATEDAT >= TO_DATE(#{st},'YYYY-MM-DD')
+		<![CDATA[
+   select DECODE (CSPOSTTYPE,100,'공지글',200,'문의글', 300,'신고글')as csposttypeString, COUNT(*)as csboardcnt
+   FROM cspost
+   ]]>
+		<choose>
+			<when test="key_word=='all'"> <!-- 전체 조회  -->
 				GROUP by DECODE (CSPOSTTYPE,100,'공지글',200,'문의글', 300,'신고글')
-    		</when>
-    		<when test="key_word=='week_month'"> <!-- 1주, 2주, 1개월 조회 -->
-    		 	 WHERE CREATEDAT BETWEEN TO_DATE(#{end},'YYYY-MM-DD') AND TO_DATE(#{st},'YYYY-MM-DD')
+			</when>
+			<when test="key_word=='toDay'"> <!-- 당일 조회 -->
+				WHERE CREATEDAT >= TO_DATE(#{st},'YYYY-MM-DD')
 				GROUP by DECODE (CSPOSTTYPE,100,'공지글',200,'문의글', 300,'신고글')
-    		</when>
-    	</choose>
+			</when>
+			<when test="key_word=='week_month'"> <!-- 1주, 2주, 1개월 조회 -->
+				WHERE CREATEDAT BETWEEN TO_DATE(#{end},'YYYY-MM-DD') AND TO_DATE(#{st},'YYYY-MM-DD')
+				GROUP by DECODE (CSPOSTTYPE,100,'공지글',200,'문의글', 300,'신고글')
+			</when>
+		</choose>
 	</select>
-	
+
 	<!-- 셀렉트 조회  매출 통계 컬럼 차트 -->
 	<select id="selectColumnChart" resultMap="e_p006Result06" parameterType="java.util.Map">
-	<![CDATA[
-	select to_char(p.CREATEDAT, 'YYYY-MM-DD')as createdatString, sum(o.price)as sumPrice
-	from orders o INNER JOIN payment p
-	ON o.ordernum = p.ordernum
-	]]>
-	<choose>
-	
-    		<when test="key_word=='all'"> <!-- 전체 조회  -->
-    		GROUP BY to_char(p.CREATEDAT, 'YYYY-MM-DD')
-			ORDER BY createdatString ASC
-    		</when>
-    		<when test="key_word=='toDay'"> <!-- 당일 조회 -->
-     		WHERE p.createdat >= TO_DATE(#{st},'YYYY-MM-DD')
-			GROUP BY to_char(p.CREATEDAT, 'YYYY-MM-DD')
-			ORDER BY createdatString ASC
-    		</when>
-    		<when test="key_word=='week_month'"> <!-- 1주, 2주, 1개월 조회 -->
-    		WHERE p.createdat BETWEEN TO_DATE(#{end},'YYYY-MM-DD') AND TO_DATE(#{st},'YYYY-MM-DD')
-			GROUP BY to_char(p.CREATEDAT, 'YYYY-MM-DD')
-			ORDER BY createdatString ASC
-    		</when>
-    	</choose>
+		<![CDATA[
+   select to_char(p.CREATEDAT, 'YYYY-MM-DD')as createdatString, sum(o.price)as sumPrice
+   from orders o INNER JOIN payment p
+   ON o.ordernum = p.ordernum
+   ]]>
+		<choose>
+
+			<when test="key_word=='all'"> <!-- 전체 조회  -->
+				GROUP BY to_char(p.CREATEDAT, 'YYYY-MM-DD')
+				ORDER BY createdatString ASC
+			</when>
+			<when test="key_word=='toDay'"> <!-- 당일 조회 -->
+				WHERE p.createdat >= TO_DATE(#{st},'YYYY-MM-DD')
+				GROUP BY to_char(p.CREATEDAT, 'YYYY-MM-DD')
+				ORDER BY createdatString ASC
+			</when>
+			<when test="key_word=='week_month'"> <!-- 1주, 2주, 1개월 조회 -->
+				WHERE p.createdat BETWEEN TO_DATE(#{end},'YYYY-MM-DD') AND TO_DATE(#{st},'YYYY-MM-DD')
+				GROUP BY to_char(p.CREATEDAT, 'YYYY-MM-DD')
+				ORDER BY createdatString ASC
+			</when>
+		</choose>
 	</select>
-   
-   <!-- 셀렉트 조회 가입자 통계 -->
-   	<select id="selectUserLineChart" resultMap="e_p006Result06" parameterType="java.util.Map">
-	<![CDATA[
-	select to_char(createdat, 'YYYY-MM-DD')as userCreatedat, count(DECODE(sex,1,'남자'))as man, count(DECODE(sex ,2, '여자'))as woman, COUNT(*)as allUser
-	FROM users
-	]]>
-	<choose>
-    		<when test="key_word=='all'"> <!-- 전체 조회  -->
-    		group by to_char(createdat, 'YYYY-MM-DD')
-    		</when>
-    		<when test="key_word=='toDay'"> <!-- 당일 조회 -->
-			WHERE createdat >= TO_DATE(#{st},'YYYY-MM-DD')
-			group by to_char(createdat, 'YYYY-MM-DD')
-    		</when>
-    		<when test="key_word=='week_month'"> <!-- 1주, 2주, 1개월 조회 -->
-    		WHERE createdat BETWEEN TO_DATE(#{end},'YYYY-MM-DD') AND TO_DATE(#{st},'YYYY-MM-DD')
-			group by to_char(createdat, 'YYYY-MM-DD')
-    		</when>
-    	</choose>
+
+	<!-- 셀렉트 조회 가입자 통계 -->
+	<select id="selectUserLineChart" resultMap="e_p006Result06" parameterType="java.util.Map">
+		<![CDATA[
+   select to_char(createdat, 'YYYY-MM-DD')as userCreatedat, count(DECODE(sex,10,'남자'))as man, count(DECODE(sex ,20, '여자'))as woman, COUNT(*)as allUser
+   FROM users
+   ]]>
+		<choose>
+			<when test="key_word=='all'"> <!-- 전체 조회  -->
+				group by to_char(createdat, 'YYYY-MM-DD')
+			</when>
+			<when test="key_word=='toDay'"> <!-- 당일 조회 -->
+				WHERE createdat >= TO_DATE(#{st},'YYYY-MM-DD')
+				group by to_char(createdat, 'YYYY-MM-DD')
+			</when>
+			<when test="key_word=='week_month'"> <!-- 1주, 2주, 1개월 조회 -->
+				WHERE createdat BETWEEN TO_DATE(#{end},'YYYY-MM-DD') AND TO_DATE(#{st},'YYYY-MM-DD')
+				group by to_char(createdat, 'YYYY-MM-DD')
+			</when>
+		</choose>
 	</select>
-	
-	 <!-- 셀렉트 조회 가입자 바 차트 통계 -->
-   	<select id="selectUserBarChart" resultMap="e_p006Result06" parameterType="java.util.Map">
-	<![CDATA[
-	select  count(DECODE(sex,1,'남자'))as man, count(DECODE(sex ,2, '여자'))as woman, COUNT(*)as allUser
-	FROM users
-	]]>
-	<choose>
-    		<when test="key_word=='all'"> <!-- 전체 조회  -->
-    	
-    		</when>
-    		<when test="key_word=='toDay'"> <!-- 당일 조회 -->
-			WHERE createdat >= TO_DATE(#{st},'YYYY-MM-DD')
-    		</when>
-    		<when test="key_word=='week_month'"> <!-- 1주, 2주, 1개월 조회 -->
-    		WHERE createdat BETWEEN TO_DATE(#{end},'YYYY-MM-DD') AND TO_DATE(#{st},'YYYY-MM-DD')
-    		</when>
-    	</choose>
+
+	<!-- 셀렉트 조회 가입자 바 차트 통계 -->
+	<select id="selectUserBarChart" resultMap="e_p006Result06" parameterType="java.util.Map">
+		<![CDATA[
+   select  count(DECODE(sex,10,'남자'))as man, count(DECODE(sex ,20, '여자'))as woman, COUNT(*)as allUser
+   FROM users
+   ]]>
+		<choose>
+			<when test="key_word=='all'"> <!-- 전체 조회  -->
+
+			</when>
+			<when test="key_word=='toDay'"> <!-- 당일 조회 -->
+				WHERE createdat >= TO_DATE(#{st},'YYYY-MM-DD')
+			</when>
+			<when test="key_word=='week_month'"> <!-- 1주, 2주, 1개월 조회 -->
+				WHERE createdat BETWEEN TO_DATE(#{end},'YYYY-MM-DD') AND TO_DATE(#{st},'YYYY-MM-DD')
+			</when>
+		</choose>
 	</select>
-	
+
 </mapper>

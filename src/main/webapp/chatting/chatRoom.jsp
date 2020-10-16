@@ -22,7 +22,7 @@
 
     <div class="header_bottom chat-header-bottom">
         <div class="header_column">
-            <span class="header_text chat-text">${NICKNAME}채팅방 제목(그룹 이름)</span>
+            <span class="header_text chat-text">채팅방 제목(그룹 이름)</span>
         </div>
     </div>
 </header>
@@ -42,7 +42,7 @@
             </c:when>
             <c:when test="${resultList.USERID ne LOGIN}">
                 <div id="otherMessage" class="chat_message chat_message-from">
-                <img src="../resources/img/basic_profile.PNG" alt="" class="chat_message-profile-img">
+                <img src="../resources/img/${resultList.CONTENT2}" alt="" class="chat_message-profile-img">
                 <div class="chat_message-profile">
                 <h3 class="chat_message-name">${resultList.NICKNAME}</h3>
                 <span class="chat_message-body">${resultList.MESSAGE}</span>
