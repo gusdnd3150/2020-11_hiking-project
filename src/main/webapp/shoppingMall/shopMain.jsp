@@ -5,7 +5,7 @@
     import ="java.util.*,project.*"%>
 <html lang="en">
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<jsp:include page="/common/header.jsp" />
+
 
 <style>
 
@@ -345,6 +345,7 @@ $(document).ready(function () {
   </head>
 
   <body>
+  <jsp:include page="/common/header.jsp" />
     <!-- 해더 자리 -->
 
   <br><br><br>
@@ -392,20 +393,19 @@ $(document).ready(function () {
               <div class="left_dorp">
               
               <form action="/B_P002_D001/shopMainCate" method="get" name="searchForm">
+              
                 <select class="sorting" name="search">
-                  <option value="total">전체검색</option>
-                  <option value="used">중고</option>
-                  <option value="new">신품</option>
-                  <option value="clothes">의류</option>
-                  <option value="clime">등산용품</option>
-                  <option value="anythings">잡화</option>
+                  <option value="10">전체검색</option>
+                  <option value="1">의류</option>
+                  <option value="2">잡화</option>
+                  <option value="3">등산용품</option>
                 </select>
-                
                 <select class="sorting" name="searchType">
-                  <option value="content">내용</option>
                   <option value="name">제목</option>
+                  <option value="content">내용</option>
                 </select>
-                 <input type="search" name= "searchContent" placeholder="검색어를 입력해 주세요" >
+                 <input type="text" name= "searchContent" placeholder="검색어를 입력해 주세요" >
+                 
                  <input type="hidden" name= "listType" value="200" >
                  <input class="btn btn-info" type="submit" value="검색"> 
               </form>
@@ -477,7 +477,7 @@ $(document).ready(function () {
            <!-- 페이징 -->
            
            
-           <c:if test="${paging.listType != 200  }">
+           <c:if test="${paging.listType != 200  }">   <!--  검색결과가 아닌 일반 페이징 -->
             <div style="display: block; text-align: center;">
 	<c:if test="${paging.startPage != 1 }">
 			<a href="/B_P002_D001/shopMainCate?listType=${paging.listType}&nowPage=${paging.startPage - 1 }&cntPerPage=${paging.cntPerPage}">&lt;</a>
@@ -499,7 +499,7 @@ $(document).ready(function () {
 	</div>
 	       </c:if>
 	       
-	         <c:if test="${paging.listType == 200  }">
+	         <c:if test="${paging.listType == 200  }">  <!--  검색 결과 페이징 -->
 	         
             <div style="display: block; text-align: center;">
 	<c:if test="${paging.startPage != 1 }">

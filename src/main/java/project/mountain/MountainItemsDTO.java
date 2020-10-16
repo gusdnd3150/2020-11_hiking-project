@@ -1,6 +1,7 @@
 package project.mountain;
 
 import lombok.Data;
+
 import lombok.ToString;
 import org.springframework.stereotype.Component;
 
@@ -18,9 +19,10 @@ public class MountainItemsDTO {
     private String pageNo;
     private String totalCount;
 
-    @XmlElementWrapper(name = "items")
-    @XmlElement(name = "item")
-    public List<MountainItemDTO> getItems() {
+	
+	@XmlElementWrapper(name = "items")
+	@XmlElement(name = "item")
+	public List<MountainItemDTO> getItems() {
         return items;
     }
 
@@ -28,8 +30,8 @@ public class MountainItemsDTO {
         this.items = items;
     }
 
-    @XmlElement(name = "numOfRows")
-    public String getNumOfRows() {
+	@XmlElement(name = "numOfRows")
+	public String getNumOfRows() {
         return numOfRows;
     }
 
@@ -37,7 +39,7 @@ public class MountainItemsDTO {
         this.numOfRows = numOfRows;
     }
 
-    @XmlElement(name = "pageNo")
+	/* @XmlElement(name = "pageNo") */
     public String getPageNo() {
         return pageNo;
     }
@@ -46,7 +48,7 @@ public class MountainItemsDTO {
         this.pageNo = pageNo;
     }
 
-    @XmlElement(name = "totalCount")
+	/* @XmlElement(name = "totalCount") */
     public String getTotalCount() {
         return totalCount;
     }

@@ -243,8 +243,8 @@
        </select> 
        
                    <!-- 수량확인-->
-       <select id="checkQuantity" resultType="String" parameterType="java.util.Map">
-             select  max(quantity)
+       <select id="checkQuantity" resultType="int" parameterType="java.util.Map">
+             select  quantity
              from PRODOPTION
              where prodnum= #{prodNum}
        </select> 
@@ -255,6 +255,43 @@
              from users 
              where USERNUM = #{userNum}
        </select> 
+       
+                         <!-- 전체검색 카운트 (검색)-->
+       <select id="searchAllTotal" resultType="int" parameterType="java.util.Map">
+          select Count(*)
+          from products
+          <choose>
+            <when test="searchContent != 'null' and searchType=='name'">
+             where name like '%'||#{searchContent}||'%'
+            </when>
+           <when test="searchContent != 'null' and searchType=='content'">
+             where content like '%'||#{searchContent}||'%'
+            </when>
+          </choose>       
+       </select> 
+       
+                                <!-- 전체검색 결과 (검색)-->
+       <select id="searchAllResult" resultType="map" parameterType="java.util.Map">
+        SELECT * 
+		FROM (
+			SELECT ROWNUM RN, A.* 
+				FROM (
+						SELECT * 
+						FROM products 
+						ORDER BY SEQ DESC 
+						) A
+				)
+	WHERE RN BETWEEN #{start} AND #{end}
+          <choose>
+            <when test="searchContent != 'null' and searchType=='name'">
+             and name like '%'||#{searchContent}||'%'
+            </when>
+           <when test="searchContent != 'null' and searchType=='content'">
+             and content like '%'||#{searchContent}||'%'
+            </when>
+          </choose>       
+       </select> 
+       
        
               	<!--검색 조건에 대한   파람정보  {search=clime, searchContent =''}         총 게시글 개수-->  
        <select id="searchTotal" resultType="int" parameterType="java.util.Map">
@@ -268,87 +305,37 @@
 	          where a.PRODCATEGORYNUM=b.PRODCATEGORYNUM
 	         ]]>
     		 <choose>
-    		  <when test="search=='total' and searchContent != null and searchType=='name'  ">
+    		  <when test="search==10 and searchContent != null and searchType=='name'  ">
                 and b.name like '%'||#{searchContent}||'%'
               </when>
-              <when test="search=='used' and searchContent != null and searchType=='name'  ">
-              and b.type = 1
-              and b.name like '%'||#{searchContent}||'%'
-              </when>
-              <when test="search=='new' and searchContent != null and searchType=='name'  ">
-              and b.type = 2
-              and b.name like '%'||#{searchContent}||'%'
-              </when>
-              <when test="search=='clothes' and searchContent != null and searchType=='name'  ">
-              and a.PARENTCATEGORYNUM =1
-              and b.name like '%'||#{searchContent}||'%'
-              </when>
-              <when test="search=='clime' and searchContent != null and searchType=='name'  ">
-              and a.PARENTCATEGORYNUM =3
-              and b.name like '%'||#{searchContent}||'%'
-              </when>
-              <when test="search=='anythings' and searchContent != null and searchType=='name'  ">
-              and a.PARENTCATEGORYNUM =2
-              and b.name like '%'||#{searchContent}||'%'
-              </when>
-               <when test="search=='total' and searchContent != null and searchType=='content'  ">
+              <when test="search==10 and searchContent != null and searchType=='content'  ">
                 and b.content like '%'||#{searchContent}||'%'
               </when>
-              <when test="search=='used' and searchContent != null and searchType=='content'  ">
-              and b.type = 1
-              and b.content like '%'||#{searchContent}||'%'
+             <when test="search==1 and searchContent != null and searchType=='name'  ">
+             and a.PARENTCATEGORYNUM =1
+             and b.name like '%'||#{searchContent}||'%'
               </when>
-              <when test="search=='new' and searchContent != null and searchType=='content'  ">
-              and b.type = 2
-              and b.content like '%'||#{searchContent}||'%'
+                <when test="search==2 and searchContent != null and searchType=='name'  ">
+                and a.PARENTCATEGORYNUM =2
+                and b.name like '%'||#{searchContent}||'%'
               </when>
-              <when test="search=='clothes' and searchContent != null and searchType=='content'  ">
-              and a.PARENTCATEGORYNUM =1
-              and b.content like '%'||#{searchContent}||'%'
+               <when test="search==3 and searchContent != null and searchType=='name'  ">
+               and a.PARENTCATEGORYNUM =3
+                and b.name like '%'||#{searchContent}||'%'
               </when>
-              <when test="search=='clime' and searchContent != null and searchType=='content'  ">
-              and a.PARENTCATEGORYNUM =3
-              and b.content like '%'||#{searchContent}||'%'
+              
+               <when test="search==1 and searchContent != null and searchType=='content'  ">
+             and a.PARENTCATEGORYNUM =1
+             and b.content like '%'||#{searchContent}||'%'
               </when>
-              <when test="search=='anythings' and searchContent != null and searchType=='content'  ">
-              and a.PARENTCATEGORYNUM =2
-              and b.content like '%'||#{searchContent}||'%'
+                <when test="search==2 and searchContent != null and searchType=='content'  ">
+                and a.PARENTCATEGORYNUM =2
+                and b.content like '%'||#{searchContent}||'%'
               </when>
-               
-              <when test="search=='total' and searchContent == null and searchType=='name'  ">
+               <when test="search==3 and searchContent != null and searchType=='content'  ">
+               and a.PARENTCATEGORYNUM =3
+                and b.content like '%'||#{searchContent}||'%'
               </when>
-              <when test="search=='used' and searchContent == null and searchType=='name'  ">
-              and b.type = 1
-              </when>
-              <when test="search=='new' and searchContent == null and searchType=='name'  ">
-              and b.type = 2
-              </when>
-              <when test="search=='clothes' and searchContent == null and searchType=='name'  ">
-              and a.PARENTCATEGORYNUM =1
-              </when>
-              <when test="search=='clime' and searchContent == null and searchType=='name'  ">
-              and a.PARENTCATEGORYNUM =3
-              </when>
-              <when test="search=='anythings' and searchContent == null and searchType=='name'  ">
-              and a.PARENTCATEGORYNUM =2
-              </when>
-               <when test="search=='total' and searchContent == null and searchType=='content'  ">
-              </when>
-              <when test="search=='used' and searchContent == null and searchType=='content'  ">
-              and b.type = 1
-              </when>
-              <when test="search=='new' and searchContent == null and searchType=='content'  ">
-              and b.type = 2
-              </when>
-              <when test="search=='clothes' and searchContent == null and searchType=='content'  ">
-              and a.PARENTCATEGORYNUM =1
-              </when>
-              <when test="search=='clime' and searchContent == null and searchType=='content'  ">
-              and a.PARENTCATEGORYNUM =3
-              </when>
-              <when test="search=='anythings' and searchContent == null and searchType=='content'  ">
-              and a.PARENTCATEGORYNUM =2
-              </when>   
             </choose>
        </select>
 
@@ -474,7 +461,11 @@
                         ,p.TYPE,p.CREATEDAT,p.UPDATEDAT,io.content as image  
 						FROM (select *
                                from prodcategory
-                                start with PARENTCATEGORYNUM is null
+
+           ]]>
+          <choose>
+            <when test="search ==10 and searchType=='content' and searchContent != null">
+                    start with PARENTCATEGORYNUM is null
                                connect by prior PRODCATEGORYNUM=PARENTCATEGORYNUM
                                )a, products p,prodPhoto io
                         where p.prodnum=io.prodnum
@@ -484,90 +475,108 @@
 						) A
 				     )
            where rn between #{start} and #{end}
-           ]]>
-           <choose>
-    		   <when test="search=='total' and searchContent != null and searchType=='name'  ">
-                and name like '%'||#{searchContent}||'%'
-              </when>
-    		  <when test="search=='used' and searchContent != null and searchType=='name'  ">
-              and type = 1
-              and name like '%'||#{searchContent}||'%'
-              </when>
-              <when test="search=='new' and searchContent != null and searchType=='name'  ">
-              and type = 2
-              and name like '%'||#{searchContent}||'%'
-              </when>
-              <when test="search=='clothes' and searchContent != null and searchType=='name'  ">
-              and PARENTCATEGORYNUM =1
-              and name like '%'||#{searchContent}||'%'
-              </when>
-              <when test="search=='clime' and searchContent != null and searchType=='name'  ">
-              and PARENTCATEGORYNUM =3
-              and name like '%'||#{searchContent}||'%'
-              </when>
-              <when test="search=='anythings' and searchContent != null and searchType=='name'  ">
-              and PARENTCATEGORYNUM =2
-              and name like '%'||#{searchContent}||'%'
-              </when>
-               <when test="search=='total' and searchContent != null and searchType=='content'  ">
-                and content like '%'||#{searchContent}||'%'
-              </when>
-              <when test="search=='used' and searchContent != null and searchType=='content'  ">
-              and type = 1
-              and content like '%'||#{searchContent}||'%'
-              </when>
-              <when test="search=='new' and searchContent != null and searchType=='content'  ">
-              and type = 2
-              and content like '%'||#{searchContent}||'%'
-              </when>
-              <when test="search=='clothes' and searchContent != null and searchType=='content'  ">
-              and PARENTCATEGORYNUM =1
-              and content like '%'||#{searchContent}||'%'
-              </when>
-              <when test="search=='clime' and searchContent != null and searchType=='content'  ">
-              and PARENTCATEGORYNUM =3
-              and content like '%'||#{searchContent}||'%'
-              </when>
-              <when test="search=='anythings' and searchContent != null and searchType=='content'  ">
-              and PARENTCATEGORYNUM =2
-              and content like '%'||#{searchContent}||'%'
-              </when>
-               
-              <when test="search=='total' and searchContent == null and searchType=='name'  ">
-              </when>
-              <when test="search=='used' and searchContent == null and searchType=='name'  ">
-              and type = 1
-              </when>
-              <when test="search=='new' and searchContent == null and searchType=='name'  ">
-              and type = 2
-              </when>
-              <when test="search=='clothes' and searchContent == null and searchType=='name'  ">
-              and PARENTCATEGORYNUM =1
-              </when>
-              <when test="search=='clime' and searchContent == null and searchType=='name'  ">
-              and PARENTCATEGORYNUM =3
-              </when>
-              <when test="search=='anythings' and searchContent == null and searchType=='name'  ">
-              and PARENTCATEGORYNUM =2
-              </when>
-               <when test="search=='total' and searchContent == null and searchType=='content'  ">
-              </when>
-              <when test="search=='used' and searchContent == null and searchType=='content'  ">
-              and type = 1
-              </when>
-              <when test="search=='new' and searchContent == null and searchType=='content'  ">
-              and type = 2
-              </when>
-              <when test="search=='clothes' and searchContent == null and searchType=='content'  ">
-              and PARENTCATEGORYNUM =1
-              </when>
-              <when test="search=='clime' and searchContent == null and searchType=='content'  ">
-              and PARENTCATEGORYNUM =3
-              </when>
-              <when test="search=='anythings' and searchContent == null and searchType=='content'  ">
-              and PARENTCATEGORYNUM =2
-              </when> 
-          </choose>
+            and content like  '%'||#{searchContent}||'%'
+            </when>
+            
+                     <when test="search ==10 and searchType=='name' and searchContent != null">
+                    start with PARENTCATEGORYNUM is null
+                               connect by prior PRODCATEGORYNUM=PARENTCATEGORYNUM
+                               )a, products p,prodPhoto io
+                        where p.prodnum=io.prodnum
+                        and a.PRODCATEGORYNUM =p.PRODCATEGORYNUM
+                        and io.pphotonum=1
+						ORDER BY p.CREATEDAT asc
+						) A
+				     )
+           where rn between #{start} and #{end}
+            and name like  '%'||#{searchContent}||'%'
+            </when>
+            
+            <when test="search ==1 and searchType=='content' and searchContent != null">
+                    start with PARENTCATEGORYNUM = #{search}
+                               connect by prior PRODCATEGORYNUM=PARENTCATEGORYNUM
+                               )a, products p,prodPhoto io
+                        where p.prodnum=io.prodnum
+                        and a.PRODCATEGORYNUM =p.PRODCATEGORYNUM
+                        and io.pphotonum=1
+						ORDER BY p.CREATEDAT asc
+						) A
+				     )
+           where rn between #{start} and #{end}
+            and content like  '%'||#{searchContent}||'%'
+            </when>
+            
+                       <when test="search ==2 and searchType=='content' and searchContent != null">
+                    start with PARENTCATEGORYNUM = #{search}
+                               connect by prior PRODCATEGORYNUM=PARENTCATEGORYNUM
+                               )a, products p,prodPhoto io
+                        where p.prodnum=io.prodnum
+                        and a.PRODCATEGORYNUM =p.PRODCATEGORYNUM
+                        and io.pphotonum=1
+						ORDER BY p.CREATEDAT asc
+						) A
+				     )
+           where rn between #{start} and #{end}
+            and content like  '%'||#{searchContent}||'%'
+            </when>
+            
+                       <when test="search ==3 and searchType=='content' and searchContent != null">
+                    start with PARENTCATEGORYNUM = #{search}
+                               connect by prior PRODCATEGORYNUM=PARENTCATEGORYNUM
+                               )a, products p,prodPhoto io
+                        where p.prodnum=io.prodnum
+                        and a.PRODCATEGORYNUM =p.PRODCATEGORYNUM
+                        and io.pphotonum=1
+						ORDER BY p.CREATEDAT asc
+						) A
+				     )
+           where rn between #{start} and #{end}
+            and content like  '%'||#{searchContent}||'%'
+            </when>
+            
+                        
+                       <when test="search ==3 and searchType=='name' and searchContent != null">
+                    start with PARENTCATEGORYNUM = #{search}
+                               connect by prior PRODCATEGORYNUM=PARENTCATEGORYNUM
+                               )a, products p,prodPhoto io
+                        where p.prodnum=io.prodnum
+                        and a.PRODCATEGORYNUM =p.PRODCATEGORYNUM
+                        and io.pphotonum=1
+						ORDER BY p.CREATEDAT asc
+						) A
+				     )
+           where rn between #{start} and #{end}
+            and name like  '%'||#{searchContent}||'%'
+            </when>
+            
+             <when test="search ==2 and searchType=='name' and searchContent != null">
+                    start with PARENTCATEGORYNUM = #{search}
+                               connect by prior PRODCATEGORYNUM=PARENTCATEGORYNUM
+                               )a, products p,prodPhoto io
+                        where p.prodnum=io.prodnum
+                        and a.PRODCATEGORYNUM =p.PRODCATEGORYNUM
+                        and io.pphotonum=1
+						ORDER BY p.CREATEDAT asc
+						) A
+				     )
+           where rn between #{start} and #{end}
+            and name like  '%'||#{searchContent}||'%'
+            </when>
+            
+             <when test="search ==1 and searchType=='name' and searchContent != null">
+                    start with PARENTCATEGORYNUM = #{search}
+                               connect by prior PRODCATEGORYNUM=PARENTCATEGORYNUM
+                               )a, products p,prodPhoto io
+                        where p.prodnum=io.prodnum
+                        and a.PRODCATEGORYNUM =p.PRODCATEGORYNUM
+                        and io.pphotonum=1
+						ORDER BY p.CREATEDAT asc
+						) A
+				     )
+           where rn between #{start} and #{end}
+            and name like  '%'||#{searchContent}||'%'
+            </when>
+          </choose>         
        </select>
        
        
@@ -754,7 +763,7 @@
 	                  (oderstatus 결제완료 =1, 미완료 =2)                               
 	                  (deliverystatus 배송준비 =1,배송대기=2, 배송중 =3, 배송완료=4)
 	                  등록 -->
-	<insert id="addCart" parameterType="java.util.Map"   >
+	<!-- <insert id="addCart" parameterType="java.util.Map"   >
 		<selectKey resultType="int" keyProperty="orderNum" order="BEFORE">
 	    	 select seq_orders.nextval from dual
 	    </selectKey>
@@ -782,7 +791,40 @@
 		  values(#{orderNum},#{userNum},SYSDATE,#{prodPrice},3000,1,100,2,#{prodNum},#{prodName},#{quantity})
 		  </when>
 		</choose>
-	</insert> 
+	</insert>  -->
+	
+	
+	  <insert id="addCart" parameterType="java.util.List">
+	   insert into orders(
+		                ORDERNUM, 
+		                USERNUM,
+		                PRICE,
+		                OPTIONNUM,
+                    ORDEREDAT,
+					CHARGE,
+					ORDERSTATUS,
+					DELIVERYSTATUS,
+					ORDERTYPE,
+					PRODNUM,
+					QUANTITY
+				    )
+		        select  seq_orders.nextval as ORDERNUM, A .* from(
+	 	<foreach collection="list" item="item" separator="union all" >
+		        select  
+				        #{item.userNum} as USERNUM,
+				        #{item.price} as PRICE, 
+				        #{item.optionNum} as OPTIONNUM,
+				        CURRENT_TIMESTAMP as ORDEREDAT, 
+				        3000 as CHARGE,
+				        1 as ORDERSTATUS,
+				        100 as DELIVERYSTATUS,
+				        2 as ORDERTYPE,
+				        #{item.prodNum}as PRODNUM,
+				        #{item.quantity}as QUANTITY
+				        from dual
+   		 </foreach>)A
+    </insert>
+	 
 	
 	     <!-- 장바구니결제 후 payment -->
 	<insert id="insertPaymentmultiple"  parameterType="java.util.Map">
@@ -886,7 +928,7 @@
   
   	      <!-- 중고물품 신청 -->
    <insert id="saveUsedImage"  parameterType="java.util.List">
-   		<selectKey resultType="int" keyProperty="prodNum" order="BEFORE">
+   		 <selectKey resultType="int" keyProperty="prodNum" order="BEFORE">
 	    	select prodnum
             from products
             where CREATEDAT in (
@@ -945,8 +987,8 @@
         <![CDATA[
 	    	select prodnum
             from products
-            where CREATEDAT in (
-               select max(CREATEDAT)
+            where prodnum in (
+               select max(prodnum)
                from products
                   )
         ]]>
@@ -959,17 +1001,37 @@
         </select>
         
   
-              <!-- 옵션 등록 -->
-    <insert id="addOption"  parameterType="java.util.List">
+              <!-- 옵션 등록  문제는 시퀀스가 한번밖에 돌지않아 2번재부터 에러발생-->
+    <!-- <insert id="addOption"  parameterType="java.util.List">
        <foreach item="item"  collection="list"   open="INSERT ALL" 
                   separator=" " close="SELECT * FROM DUAL" >
       INTO prodoption(OPTIONNUM,PRODNUM,PRODSIZE,COLOR,QUANTITY,PRODSTATUS,UPDATEDATE)
       VALUES (#{item.optionNum},#{item.prodNum}, #{item.prodSize}, #{item.color},#{item.quantity},#{item.prodStatus},sysdate)
-    </foreach>
-     </insert>
-  
-       
-       
+    </foreach>      
+     </insert> -->
+ 
+       <insert id="addOption" parameterType="java.util.List">
+	 insert into prodoption (
+	   			OPTIONNUM,
+		        PRODNUM, 
+		        PRODSIZE,
+		        COLOR, 
+		        QUANTITY,
+		        PRODSTATUS,
+		        UPDATEDATE
+		         )
+		        select  prodOption_seq.nextval as OPTIONNUM, A .* from(
+	 	<foreach collection="list" item="item" separator="union all" >
+		        select  
+				        #{item.prodNum} as prodNum, 
+				        #{item.prodSize}as prodSize, 
+				        #{item.color}as color, 
+				        #{item.quantity}as quantity, 
+				        #{item.prodStatus}as prodStatus,
+				        CURRENT_TIMESTAMP as UPDATEDATE
+				        from dual
+   		 </foreach>)A
+    </insert>
    
    
                 <!-- 글목록 이미지 하나 -->  
@@ -1054,7 +1116,9 @@
 					  			      sysdate,
 					  			      #{userNum})
 		]]>
-	</insert> 
+	</insert>
+	
+	
 	
           <!-- 중고 카테고리 등록 -->
 	 <insert id="addUsedCategory" parameterType="java.util.Map"   >

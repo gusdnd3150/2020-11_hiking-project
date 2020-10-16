@@ -52,9 +52,8 @@ public interface B_P003_D001productDAO {
 	@Transactional
 	public void updatePoint(Map<String, Object> map) throws DataAccessException ;
 	
-	//장바구니  상품 추가
-	public String checkQuantity(Map<String, Object> map)throws DataAccessException ;
-	public void addCart(Map<String, Object> map) throws DataAccessException ;
+	public List<Integer> checkQuantity(Map<String,Object> map)throws DataAccessException ;
+	public void addCart(List<Map> map) throws DataAccessException ;
 	public Integer checkCart(Map<String, Object> map) throws DataAccessException ;
 	public List<Map> CartList(Map<String,Object> map)throws DataAccessException;
 	public int CartTotal(Map<String,Object> map)throws DataAccessException;
@@ -67,7 +66,7 @@ public interface B_P003_D001productDAO {
 	public void addUsedProduct(Map<String, Object> datahMap) throws DataAccessException;
 	public void addUsedCategory(Map<String, Object> datahMap) throws DataAccessException;
 	public int prodNum();
-	public void addOption(List<Map> hmap)throws DataAccessException ;
+	public void addOption(List<Map> addOption)throws DataAccessException ;
 	public int optionNum(); 
 	
 	public List<Map> test(List<Map> list);

@@ -90,6 +90,15 @@ public class B_P002_D001ShopingMallServiceImpl implements B_P002_D001ShopingMall
 		List<Map> list= B_P002_D001ShopingMallDAO.lastItems();
 		return list;
 	}
+	@Override
+	public List<Map> searchAllResult(Map<String, Object> info) throws DataAccessException {
+		List<Map> list= B_P002_D001ShopingMallDAO.searchAllResult(info);
+		return list;
+	}
+	@Override
+	public int SearchAllTotalCount(Map<String, Object> info) {
+		return B_P002_D001ShopingMallDAO.SearchAllTotalCount(info);
+	}
 
 	
 	

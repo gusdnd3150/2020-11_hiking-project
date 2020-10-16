@@ -9,16 +9,15 @@ public class Paging {
 	private int nowPage, startPage, endPage, total, cntPerPage, lastPage, start, end;
 	private int cntPage = 7;
 	private int listType;
-	private String search;
+	private int search;
 	private String searchType;
 	private String searchContent;
-	
 	
 
 	public Paging() {
 	}
 	
-	public Paging(int listType,int total, int nowPage, int cntPerPage,String search,String searchType,String searchContent) {
+	public Paging(int listType,int total, int nowPage, int cntPerPage,int search,String searchType,String searchContent) {
 		setNowPage(nowPage);
 		setCntPerPage(cntPerPage);
 		setTotal(total);
@@ -132,10 +131,10 @@ public class Paging {
 	public void setCntPage(int cntPage) {
 		this.cntPage = cntPage;
 	}
-	public String getSearch() {
+	public int getSearch() {
 		return search;
 	}
-	public void setSearch(String search) {
+	public void setSearch(int search) {
 		this.search = search;
 	}
 	public String getSearchType() {
@@ -156,10 +155,14 @@ public class Paging {
 	public void setListType(int listType) {
 		this.listType = listType;
 	}
+
 	@Override
 	public String toString() {
-		return "PagingVO [nowPage=" + nowPage + ", startPage=" + startPage + ", endPage=" + endPage + ", total=" + total
+		return "Paging [nowPage=" + nowPage + ", startPage=" + startPage + ", endPage=" + endPage + ", total=" + total
 				+ ", cntPerPage=" + cntPerPage + ", lastPage=" + lastPage + ", start=" + start + ", end=" + end
-				+ ", cntPage=" + cntPage + ""+", 카테고리 분류값="+listType+"]";
+				+ ", cntPage=" + cntPage + ", listType=" + listType + ", search=" + search + ", searchType="
+				+ searchType + ", searchContent=" + searchContent + "]";
 	}
+
+	
 }

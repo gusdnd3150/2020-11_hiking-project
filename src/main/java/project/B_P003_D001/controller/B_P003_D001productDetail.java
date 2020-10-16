@@ -22,7 +22,12 @@ public interface B_P003_D001productDetail {
 	public ResponseEntity addComent(@RequestParam Map<String,Object> info,HttpSession httpSession,HttpServletRequest request,HttpServletResponse response)throws Exception;
 	public ResponseEntity<byte[]> getAfterImage(@PathVariable("num") int num, HttpServletRequest req, HttpServletResponse res)throws Exception;
 	public ModelAndView buyProduct(@RequestParam Map<String,Object> info,HttpSession httpSession, HttpServletRequest req, HttpServletResponse res)throws Exception;
-	public ResponseEntity addCart(@RequestParam Map<String,Object> info, HttpServletRequest req, HttpServletResponse res,HttpSession httpSession) throws Exception;
+	public ResponseEntity addCart(@RequestParam Map<String,Object> info, 
+			@RequestParam(value = "prodNums[]")List<Integer> prodNums,
+			@RequestParam(value = "prices[]")List<Integer> prices,
+			@RequestParam(value = "optionnums[]")List<Integer> optionnums,
+			@RequestParam(value = "quantities[]")List<Integer> quantities,
+			HttpServletRequest req, HttpServletResponse res,HttpSession httpSession) throws Exception;
 	public String checkCart(@RequestParam Map<String,Object> info, HttpServletRequest req, HttpServletResponse res) throws Exception;
 	public String insertPayinfo(@RequestParam Map<String, Object> info,HttpSession httpSession,
 			@RequestParam(value = "prodNums[]") List<Integer> prodNums,

@@ -128,7 +128,7 @@ public class B_P003_D001productDAOImpl implements B_P003_D001productDAO {
 	
 	///////////////장바구니
 	@Override
-	public void addCart(Map<String, Object> map) throws DataAccessException {
+	public void addCart(List<Map> map) throws DataAccessException {
 		sqlSession.insert("project.e_P002_D003.addCart",map);
 	}
 	@Override
@@ -184,10 +184,10 @@ public class B_P003_D001productDAOImpl implements B_P003_D001productDAO {
 	
 	
 	@Override
-	public void addOption(List<Map> hmap)throws DataAccessException {
-		sqlSession.insert("project.e_P002_D003.addOption",hmap);
+	public void addOption(List<Map> addOption)throws DataAccessException {
+			sqlSession.insert("project.e_P002_D003.addOption",addOption);
 	}
-	////////////////////////////////
+	
 	
 	@Override   //구매페이지 상품 하나에 대한 정보
 	public List<Map> selectProductInfo(Map<String, Object> map) throws DataAccessException {
@@ -204,8 +204,8 @@ public class B_P003_D001productDAOImpl implements B_P003_D001productDAO {
 		return result;
 	}
 	@Override
-	public String checkQuantity(Map<String, Object> map) throws DataAccessException {
-		return sqlSession.selectOne("project.e_P002_D003.checkQuantity",map);
+	public List<Integer> checkQuantity(Map<String,Object> map) throws DataAccessException {
+		return sqlSession.selectList("project.e_P002_D003.checkQuantity",map);
 	}
 
 

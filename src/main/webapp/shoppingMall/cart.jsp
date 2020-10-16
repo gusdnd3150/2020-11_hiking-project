@@ -14,7 +14,6 @@
 	
 	            $("button[name=delete]").click(function () {        // 삭제
 		       var check = window.confirm("삭제 하시겠습니까?");
-		       
 		       if (check==true){
 		    	   
 	          	var deleteNum = $(this).val();
@@ -159,7 +158,7 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
-<jsp:include page="/common/header.jsp" />
+
     <title>Eiser ecommerce</title>
     
 <!-- Bootstrap CSS -->
@@ -179,6 +178,7 @@
     
     
   <body>
+  <jsp:include page="/common/header.jsp" />
     <!--================Header Menu Area =================-->
     <header class="header_area">
       
