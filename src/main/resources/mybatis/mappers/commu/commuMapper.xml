@@ -70,14 +70,14 @@
        <insert id="insertGroupsBoard" parameterType="map">
             INSERT INTO groupsBoard(
 		            GROUPNUM,
-					BOARDNUM,
+					BOARDTYPE,
 					BOARDACCESS,
 					CREATEDAT,
 					UPDATEDAT
 					)
             VALUES (
                 #{GROUPNUM},
-                #{boardNum},
+                #{boardType},
                  0,
                 sysdate,
                 sysdate
@@ -90,7 +90,7 @@
            <![CDATA[
               INSERT INTO groupsBoardPost(
                    GROUPNUM,
-                   BOARDNUM,
+                   BOARDTYPE,
                    TYPE,
                    POSTNUM,
                    TITLE,
@@ -124,18 +124,22 @@
     <select id="selectCreatedGroupNum" resultMap="groupResult2"
 		parameterType="String">
 	 <![CDATA[
-	    select groupNum
-        from userWaiting
-        where userId=#{id} and userType=0 
+   select u.groupNum
+        from userWaiting u, groups g
+        where u.groupNum = g.groupNum
+        and userId=#{id} and userType=0 
+        and type = 2
 	  ]]>
 	</select>
 	
 	  <select id="selectJoinedGroupNum" resultMap="groupResult2"
 		parameterType="String">
 	 <![CDATA[
-	    select groupNum
-        from userWaiting
-        where userId=#{id} and userType=1
+	  select u.groupNum
+        from userWaiting u, groups g
+        where u.groupNum = g.groupNum
+        and userId=#{id} and userType=1 and userStatus=0
+        and type = 2
 	  ]]>
 	</select>
     
@@ -196,13 +200,17 @@
 	
 	 <select id="selectAllGroupList" resultType="map">
         <![CDATA[
-            SELECT ROWNUM rn, g.*, gm.storedFileName
+           select rownum rn, a.*
+			from
+				( 
+			SELECT g.*, gm.storedFileName
             FROM groups g, groupsMedia gm
             WHERE g.groupNum = gm.groupNum
               AND gm.mediaNum = 0
               AND type = 2
-              AND ROWNUM <=9
             ORDER BY g.groupNum DESC
+				) a
+			where rownum <= 9
         ]]>
     </select>
 	

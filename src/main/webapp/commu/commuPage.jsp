@@ -77,4 +77,192 @@
 </c:if>
 	</c:otherwise>
 </c:choose>
+
+
+		</div>
+	</div>
+
+<div style="height:230px;"></div>
+
+
+	<script type="text/javascript" src="../resources/js/jquery.js"></script>
+<script type="text/javascript" src="../resources/js/bootstrap.min.js"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+		integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+		integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+		crossorigin="anonymous"></script>
+ 	
+</body>
+
+<script>
+$(document).ready(function (){
+	if(${0 eq m2.USERTYPE}){
+	var data = {
+	        "groupNum" : "${m1.GROUPNUM}",
+	        "userId" : "<%= request.getSession().getAttribute("LOGIN")%>"
+	    }
+		var selectWaitingList = document.getElementsByClassName('selectWaitingList');
+	    $.ajax({
+	        type: "POST",
+	        url: "/group/selectWaitingList.do",
+	        data: JSON.stringify(data),
+	        dataType: 'json',
+	        contentType: "application/json; charset=utf-8;",
+	        success: function (response){
+	            for(var i=0;i<response.length;i++){
+	                var id = "waitingUser"+i;
+	                if((response[i].USERSTATUS==1) == ""){
+	                	console.log("??");
+	                	selectWaitingList[0].disabled = true;
+	                	 /* $('.selectWaitingList').attr(disabled, true); */
+	                }else{
+	                	selectWaitingList[0].disabled = false;
+	                	console.log("??????");
+	                	 /* $('.selectWaitingList').attr(disabled, false); */
+	                }
+	            }
+	        }
+	     });
+	  } 
+	
+	
+    $(document).on('click','.joinGroupBtn',function (){
+        var data = {
+            "groupNum": "${m1.GROUPNUM}",
+            "userId" : "<%= request.getSession().getAttribute("LOGIN")%>",
+            "userComment" : $('#userComment').val()
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/group/join.do",
+            data: JSON.stringify(data),
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8;",
+            success : function (response){
+                alert("신청 처리 되었습니다");
+                location.reload();
+            },
+            error : function (response){
+                alert("오류 발생! 다시 시도해주세요");
+            }
+        })
+    })
+    $(document).on('click','.withdrawGroupBtn',function (){
+        $("#cancelModal").show();
+    })
+    $(document).on('click','.cancelModalBtn',function (){
+
+        var data = {
+            "groupNum": ${m1.GROUPNUM},
+            "userId" : "<%= request.getSession().getAttribute("LOGIN")%>",
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/group/withdraw.do",
+            data: JSON.stringify(data),
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8;",
+            success : function (response){
+                location.reload();
+            },
+            error : function (response){
+                console.log("error")
+            }
+        })
+    })
+
+    });
+    
+$(document).on('click','.selectWaitingList',function (){
+
+    var data = {
+        "groupNum" : "${m1.GROUPNUM}",
+        "userId" : "<%= request.getSession().getAttribute("LOGIN")%>"
+    }
+
+    $.ajax({
+        type: "POST",
+        url: "/group/selectWaitingList.do",
+        data: JSON.stringify(data),
+        dataType: 'json',
+        contentType: "application/json; charset=utf-8;",
+        success: function (response){
+            $('#waitingList').empty()
+
+            for(var i=0;i<response.length;i++){
+
+                var id = "waitingUser"+i;
+
+                if(response[i].USERSTATUS==1){
+                $('#waitingList')
+                    .append('<li class="row pt-1" style="list-style: none"><div id="waitingUser" class="col-10 pt-1" style="font-size: 22px">'+response[i].USERID+'</div></li>');
+
+                $('#waitingUser').attr('id',id);
+						
+                $('#'+id).after('<button class="userAllowed btn btn-light col-2">승인</button>');
+                    }
+                }
+        },
+        error: function(response){
+            console.log("error");
+            alert("새로고침 후 다시 시도해주세요")
+        }
+    })
+})
+
+$(document).on('click','.userAllowed',function (e){
+	
+    var data = {
+        userId : (this.parentNode).childNodes[0].innerHTML,
+        groupNum : ${m1.GROUPNUM},
+   		action : "plus"
+    }
+
+    $.ajax({
+        type: "GET",
+        url: "/group/userAllowed.do",
+        data: data,
+        dataType: 'json',
+        contentType: "application/json; charset=utf-8;",
+        success: function (response){
+            e.target.className ="userDisallowed btn btn-dark col-2";
+            e.target.innerText = "취소";
+        },
+        error: function(response){
+            console.log("error");
+            alert("새로고침 후 다시 시도해주세요")
+        }
+    })
+})
+
+$(document).on('click','.userDisallowed',function (e){
+    var data = {
+        userId : (this.parentNode).childNodes[0].innerHTML,
+        groupNum : ${m1.GROUPNUM},
+        action : "minus"
+    }
+
+    $.ajax({
+        type: "GET",
+        url: "/group/userDisallowed.do",
+        data: data,
+        dataType: 'json',
+        contentType: "application/json; charset=utf-8;",
+        success: function (response){
+            e.target.className ="userAllowed btn btn-light col-2";
+            e.target.innerText = "승인";
+        },
+        error: function(response){
+            console.log("error");
+            alert("새로고침 후 다시 시도해주세요")
+        }
+    })
+})
+		</script>  
 </html>

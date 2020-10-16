@@ -51,19 +51,21 @@ width: 100px;
 						<p class="card-text">${m1.DETAIL}</p>
 						<c:choose>
                     <c:when test="${0 eq m2.USERTYPE}">
+                    <br>
 						<a href="" style="color: gray;">관리하기></a> <br>
 					</c:when>
-                      <c:when test="${1 eq m2.USERTYPE}"><a href=""
-							style="color: gray;">탈퇴하기></a> <br> <br>
+                      <c:when test="${1 eq m2.USERTYPE}">
+                      <br>
+                      <a href="" style="color: gray;">탈퇴하기></a> <br>
 						</c:when>
 						</c:choose>
 					</div>
 				</div>
 			<center>
 				 <c:choose>
-                        <c:when test="${0 eq m2.USERTYPE}"><button class="selectWaitingList btn btn-success col-11" data-toggle="modal" data-target="#listModal">요청 리스트보기</button></c:when>
-                        <c:when test="${1 eq m2.USERSTATUS}"><button class="withdrawGroupBtn btn btn-btn-successcol-11" data-toggle="modal" data-target="#cancelModal">요청 취소하기</button></c:when>
-                        <c:when test="${empty m2.USERSTATUS}"><button class="joinButton btn btn-outline-success col-11" data-toggle="modal" data-target="#joinModal">참여 신청하기</button></c:when>
+                        <c:when test="${0 eq m2.USERTYPE}"><button class="selectWaitingList btn btn-success col-11" disabled="" data-toggle="modal" data-target="#listModal">요청 리스트보기</button></c:when>
+                        <c:when test="${1 eq m2.USERSTATUS}"><button class="withdrawGroupBtn btn btn-dark col-11" data-toggle="modal" data-target="#cancelModal">요청 취소하기</button></c:when>
+                        <c:when test="${empty m2.USERSTATUS || 2 eq m2.USERSTATUS}"><button class="joinButton btn btn-outline-info col-11" data-toggle="modal" data-target="#joinModal">참여 신청하기</button></c:when>
                     </c:choose>
 				</center>
 				</div>
@@ -77,7 +79,7 @@ width: 100px;
             <div class="modal-content">
                 <!-- header -->
                 <div class="modal-header">
-                    <h4 class="modal-title">참여 리스트</h4>
+                    <h4 class="modal-title">요청 리스트</h4>
                     <!-- 닫기(x) 버튼 -->
                     <button type="button" class="close" data-dismiss="modal" onclick="window.location.reload();">×</button>
                     <!-- header title -->

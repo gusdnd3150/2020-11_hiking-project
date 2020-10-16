@@ -19,9 +19,10 @@ public class CommuServiceImpl implements CommuService{
 
 
 	@Override
-	public void insertGroup(Map map) throws Exception {
-	    commuDAO.insertGroup(map);
-	    groupDAO.insertGroupLeader(map);
+	public Map<String, Object> insertGroup(Map map) throws Exception {
+		Map<String, Object> m = commuDAO.insertGroup(map);
+		groupDAO.insertGroupLeader(map);
+	  return  m;
 	}
 
 	@Override
