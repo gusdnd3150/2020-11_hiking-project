@@ -37,7 +37,7 @@
 	<select id="selectUser" resultMap="e_p001Result01" parameterType="java.util.Map">
 		 <![CDATA[
         select userNum, id,  password, name, 
-        		DECODE(sex,1,'남자', 2, '여자')as sexType, 
+        		DECODE(sex,10,'남자', 20, '여자')as sexType, 
        			phone, address, email, 
         		DECODE(type, 100, '관리자', 200, '회원', 300, '비회원')as usersType,  
         		to_char(createdAt,'YYYY-MM-DD HH24:MI:SS')as createdAtString,

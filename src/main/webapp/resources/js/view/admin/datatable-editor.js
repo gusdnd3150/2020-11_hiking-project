@@ -60,6 +60,8 @@ function cellClick(e, editor) {
 	e.stopPropagation();
 
 	var idx = editor.table.cell(this).index();
+	
+	
 
 	if(editor.editingCellIndex && editor.editingCellIndex.col == idx.column && editor.editingCellIndex.row == idx.row) {
 		return;

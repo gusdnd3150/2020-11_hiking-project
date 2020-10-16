@@ -13,9 +13,11 @@ import org.springframework.web.servlet.ModelAndView;
 public interface E_p002Controller {
 	
 	public ModelAndView insertProd( Map map,List<MultipartFile> files,List<MultipartFile> files2,List<Integer> quantity,List<String> color,List<String> prodSize, HttpServletRequest request) throws Exception ;
-	public String selectProd(String searchOption,String key_word , HttpServletRequest request, HttpServletResponse response)throws Exception;
+	//public String selectProd(String searchOption,String key_word , HttpServletRequest request, HttpServletResponse response)throws Exception;
+	public ModelAndView selectProd(String searchOption,String key_word , HttpServletRequest request, HttpServletResponse response)throws Exception;
 	public String deleteProd (int prodNum,  HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public ModelAndView viewProdList( int prodNum, HttpServletRequest request, HttpServletResponse response) throws Exception;
+	public String updateOption (Map map, String prodStatus, HttpServletRequest request, HttpServletResponse response) throws Exception;
 	
 }
 

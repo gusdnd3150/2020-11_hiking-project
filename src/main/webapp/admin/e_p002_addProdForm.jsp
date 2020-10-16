@@ -27,31 +27,12 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
     <style>
         .basic_btn{display:inline-block;max-width:110px;width:100%;line-height:35px;font-size:15px;border:1px solid #007bff;border-radius:10px;}
+        .basic_btn1{display:inline-block;max-width:110px;width:100%;line-height:17px;font-size:15px;border:1px solid #007bff;border-radius:10px;}
 
     </style>
 
 </head>
 <script>
-
-    // 사이즈 선택 신발 선택시 셀렉트창 보이게
-    function selectSize(value){
-        if (value=="shoes"){
-            $("#shoesSelect").append("<br>"+"<select name='shoesSize' class='basic_btn btn-primary' >"
-                +"<option value='220mm>220mm</option>"
-                +"<option value='230mm'>230mm</option>"
-                +"<option value='240mm'>240mm</option>"
-                +"<option value='250mm'>250mm</option>"
-                +"<option value='260mm'>260mm</option>"
-                +"<option value='270mm'>270mm</option>"
-                +"<option value='280mm'>280mm</option>"
-                +"<option value='290mm'>290mm</option>"
-                +"<option value='300mm'>300mm</option>"
-                +"</select>" );
-        }else{
-            $('#shoesSelect').empty();
-
-        }
-    }
 
     //1차 분류 선택시 2차 분류 셀렉트
     function selectprodcategory1(value){
@@ -155,15 +136,29 @@
         }
     };
     var cnt3=1;
+    
+    //옵션 추가
     function addOption(){
-        $("#sizeMain").append("<br><br>"+"<div id='sizeMain'>"
-            +"<label for='title'>색상:</label>"
-            +"<input type='color' name='color[]' value=''><br>"
-            +"<label for='title'>사이즈:</label>"
-            +"<input type='text' name='prodSize[]' value=''><br>"
-            +"<label for='title'>수량:</label>"
-            +"<input type='text' name='quantity[]' value=''>"
-            +"</div>"
+        $("#sizeMain").append("<br><br>"+"<select name='color[]'class='basic_btn btn-warning dropdown-toggle'>"
+                +"<option value=' '>color</option>"
+                +"<option value='white'>white</option>"
+                +"<option value='black'>black</option>"
+                +"<option value='red'>red</option>"
+                +"<option value='blue'>blue</option>"
+                +"<option value='ogrange'>ogrange</option>"
+                +"<option value='yellow'>yellow</option>"
+                +"<option value='green'>green</option>"
+                +"<option value='violet'>violet</option>"
+                +"<option value='pink'>pink</option>"
+                +"<option value='navy'>navy</option>"
+                +"<option value='gray'>gray</option>"
+                +"<option value='etc'>etc</option>"
+            +"</select>"
+           +"<label for='title'>사이즈:</label>"
+	       +"<input type='text' name='prodSize[]' value=''><br>"
+	       +"<label for='title'>수량:</label>"
+	       +"<input type='text' name='quantity[]' value=''>"
+
         );
         cnt3++;
     };
@@ -213,14 +208,26 @@
                             <td><input type="text" class="form-control" name="price"placeholder="가격"></td>
                         </tr>
                         <tr>
-
                             <th>상품 옵션 </th>
-
                             <td>
-                                <button  type="button" id="_addSize" class="btn btn-info btn-flat"  onClick="addOption()" >옵션 추가</button>
+                                <button  type="button" id="_addSize" class="basic_btn1 btn-danger btn-xs"  onClick="addOption()" >옵션 추가</button>
                                 <div id="sizeMain">
                                     <label for="title">색상:</label>
-                                    <input type="color" name="color[]" value=""><br>
+                                    <select name="color[]"class="basic_btn btn-warning dropdown-toggle">
+                                        <option value=" ">color</option>
+                                        <option value="white">white</option>
+                                        <option value="black">black</option>
+                                        <option value="red">red</option>
+                                        <option value="blue">blue</option>
+                                        <option value="ogrange">ogrange</option>
+                                        <option value="yellow">yellow</option>
+                                        <option value="green">green</option>
+                                        <option value="violet">violet</option>
+                                        <option value="pink">pink</option>
+                                        <option value="navy">navy</option>
+                                        <option value="gray">gray</option>
+                                        <option value="etc">etc</option>
+                                    </select>
                                     <label for="title">사이즈:</label>
                                     <input type="text" name="prodSize[]" value=""><br>
                                     <label for="title">수량:</label>

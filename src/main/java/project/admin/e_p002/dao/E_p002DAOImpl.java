@@ -64,9 +64,16 @@ public class E_p002DAOImpl implements E_p002DAO{
 	}
 
 	//상품 조회
+//	@Override
+//	public List<HashMap<String, String>> selectProd(Map<String, String> search) throws Exception {
+//		List<HashMap<String, String>> list= sqlSession.selectList("admin.mapper.e_p002.selectProd", search);
+//		return list;
+//	}
+	
+	//상품조회
 	@Override
-	public List<HashMap<String, String>> selectProd(Map<String, String> search) throws Exception {
-		List<HashMap<String, String>> list= sqlSession.selectList("admin.mapper.e_p002.selectProd", search);
+	public List selectProd(Map search) throws Exception {
+		List list = sqlSession.selectList("admin.mapper.e_p002.selectProd", search);
 		return list;
 	}
 
@@ -88,13 +95,21 @@ public class E_p002DAOImpl implements E_p002DAO{
 
 	@Override
 	public List viewPhotoList(int prodNum) throws Exception {
-		System.out.println("다오 prodNum     "+prodNum);
+		
 		List<E_p002VO> list = sqlSession.selectList("admin.mapper.e_p002.viewPhotoList", prodNum);
 		for(int i=0; i<list.size(); i++) {
 			
 		}
 		return list;
 	}
+	
+	//상품 옵션 수정
+	@Override
+	public int updateOption(Map map) throws Exception {
+		int result = sqlSession.update("admin.mapper.e_p002.updateOption", map);
+		return result;
+	}
+	
 	
 	
 
