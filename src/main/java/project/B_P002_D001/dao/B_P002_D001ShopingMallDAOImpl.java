@@ -81,6 +81,17 @@ public class B_P002_D001ShopingMallDAOImpl implements B_P002_D001ShopingMallDAO{
 		List<Map> result = sqlSession.selectList("project.e_P002_D003.lastItems");
 		return result;
 	}
+	
+	
+	@Override
+	public List<Map> searchAllResult(Map<String, Object> info) throws DataAccessException {
+		List<Map> result = sqlSession.selectList("project.e_P002_D003.searchAllResult");
+		return result;
+	}
+	@Override
+	public int SearchAllTotalCount(Map<String, Object> info) {
+		return sqlSession.selectOne("project.e_P002_D003.searchAllTotal",info);
+	}
 
 
 

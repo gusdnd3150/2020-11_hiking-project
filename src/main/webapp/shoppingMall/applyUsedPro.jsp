@@ -7,7 +7,7 @@
 <%
   request.setCharacterEncoding("UTF-8");
 %> 
-<jsp:include page="/common/header.jsp" />
+
 <!DOCTYPE html >
 <html>
 <head>
@@ -36,7 +36,23 @@ var cnt2=1;
  var cnt3=1;
  function addOption(){
 	  $("#addOption").append("<br>"+"<label for='title'>색상:</label>");
-	  $("#addOption").append("<input type='color' name='color[]' value=''>");
+	  //$("#addOption").append("<input type='text' name='color[]' value=''>");
+	  $("#addOption").append("<select name='color[]'class='basic_btn btn-warning dropdown-toggle'>"
+      +"<option value=' '>color</option>"
+      +"<option value='white'>white</option>"
+      +"<option value='black'>black</option>"
+      +"<option value='red'>red</option>"
+      +"<option value='blue'>blue</option>"
+      +"<option value='ogrange'>ogrange</option>"
+      +"<option value='yellow'>yellow</option>"
+      +"<option value='green'>green</option>"
+      +"<option value='violet'>violet</option>"
+      +"<option value='pink'>pink</option>"
+      +"<option value='navy'>navy</option>"
+      +"<option value='gray'>gray</option>"
+      +"<option value='etc'>etc</option>"
+  +"</select>");
+	  
 	  $("#addOption").append("<label for='title'>사이즈:</label>");
 	  $("#addOption").append("<input type='text' name='prodSize[]' value=''>");
 	  $("#addOption").append("<label for='title'>수량:</label>");
@@ -45,9 +61,12 @@ var cnt2=1;
 		cnt3++;
  }
  
+ 
+ 
 </script>
 </head>
 <body>
+<jsp:include page="/common/header.jsp" />
 
 <br>
 <br>
@@ -106,7 +125,23 @@ var cnt2=1;
          <input type="button"  value="옵션추가" onClick="addOption()"/><br>   
           <div id="addOption">
           <label for="title">색상:</label>
-          <input type="color" name="color[]" value="">
+          <!-- <input type="text" name="color[]" value=""> -->
+          <select id="color" name="color[]" class="basic_btn btn-warning dropdown-toggle">
+           <option value=' '>color</option>
+      <option value='white'>white</option>
+      <option value='black'>black</option>
+      <option value='red'>red</option>
+      <option value='blue'>blue</option>
+      <option value='ogrange'>ogrange</option>
+      <option value='yellow'>yellow</option>
+      <option value='green'>green</option>
+      <option value='violet'>violet</option>
+      <option value='pink'>pink</option>
+      <option value='navy'>navy</option>
+      <option value='gray'>gray</option>
+      <option value='etc'>etc</option>
+            </select>
+          
           <label for="title">사이즈:</label>
           <input type="text" name="prodSize[]" value="">
           <label for="title">수량:</label>

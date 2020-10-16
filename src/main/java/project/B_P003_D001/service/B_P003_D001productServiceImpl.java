@@ -127,7 +127,7 @@ public class B_P003_D001productServiceImpl implements B_P003_D001productService{
 	
 	//장바구니 상품 추가
 	
-	public void addCart(Map<String, Object> map) throws DataAccessException {
+	public void addCart(List<Map> map) throws DataAccessException {
 		b_P003_D001productDAO.addCart(map);
 	}
 
@@ -213,8 +213,8 @@ public class B_P003_D001productServiceImpl implements B_P003_D001productService{
 	}
 
 	@Override
-	public void addOption(List<Map> hmap)throws DataAccessException {
-		b_P003_D001productDAO.addOption(hmap);
+	public void addOption(List<Map> addOption)throws DataAccessException {
+		b_P003_D001productDAO.addOption(addOption);
 	}
 
 	@Override
@@ -228,7 +228,7 @@ public class B_P003_D001productServiceImpl implements B_P003_D001productService{
 	}
 
 	@Override
-	public String checkQuantity(Map<String, Object> map) throws DataAccessException {
+	public List<Integer> checkQuantity(Map<String,Object> map) throws DataAccessException {
 		return b_P003_D001productDAO.checkQuantity(map);
 	}
 

@@ -1,10 +1,11 @@
 package project.mountain;
 
 import lombok.Data;
+
 import lombok.ToString;
 import org.springframework.stereotype.Component;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.*;
 
 @Data
 @Component

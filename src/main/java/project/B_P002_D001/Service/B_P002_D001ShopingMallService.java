@@ -18,6 +18,9 @@ public interface B_P002_D001ShopingMallService {
 	public int totalCount();
 	public E_P002_D003PhotoVO getImage(E_P002_D003PhotoVO vo) throws DataAccessException;
 	public List<E_P002_D003ProductsVO> shopListText() throws DataAccessException;
+	
+	public List<Map> searchAllResult(Map<String, Object> info) throws DataAccessException ;
+	public int SearchAllTotalCount(Map<String, Object> info) ;
     ////////////////위에는 작업 완료/////////////
 	
 	public List<Map> lastItems() throws DataAccessException;

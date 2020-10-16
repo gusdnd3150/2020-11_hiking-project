@@ -76,24 +76,25 @@ public class B_P002_D001ControllerImpl  implements B_P002_D001Controller{
 			cntPerPage = "9";
 		}
 		
-		if(listType.equals("200")) { //검색      파라미터정보 (search=clime, searchContent=)
+		if(listType.equals("200")) { //검색     
 			System.out.println(info.toString());
-			String searchvalue= (String) info.get("search");
-			String searchType=(String) info.get("searchType");
-			String searchContent=(String) info.get("searchContent");
-			int total = b_P002_D001ShopingMallService.SearchTotalCount(info);
-			Paging vo2 = new Paging(Integer.parseInt(listType),total, Integer.parseInt(nowPage), 
-					Integer.parseInt(cntPerPage),searchvalue,searchType,searchContent);
+			int searchvalue= Integer.parseInt((String) info.get("search"));     //검색 조건 (전체검색,의류,등산 등등)
+			String searchType= (String)info.get("searchType");  //   검색타입 (이름/내용)
+			String searchContent=(String)info.get("searchContent");  // 검색어
 			info.put("search", searchvalue);
 			info.put("searchType", searchType);
 			info.put("searchContent", searchContent);
-			info.put("listType", vo2.getListType());
-			info.put("start", vo2.getStart());
-			info.put("end", vo2.getEnd());
-			List<Map> list = b_P002_D001ShopingMallService.searchResult(info); //검색 처리 후 
-			mav.addObject("paging",vo2);
-			mav.addObject("viewAll", list);
 			
+			   int total = b_P002_D001ShopingMallService.SearchTotalCount(info);
+				Paging vo2 = new Paging(Integer.parseInt(listType),total, Integer.parseInt(nowPage), 
+						Integer.parseInt(cntPerPage),searchvalue,searchType,searchContent);
+				info.put("listType", vo2.getListType());
+				info.put("start", vo2.getStart());
+				info.put("end", vo2.getEnd());
+				List<Map> list = b_P002_D001ShopingMallService.searchResult(info); //검색 처리 후
+				mav.addObject("paging",vo2);
+				mav.addObject("viewAll", list);
+				
 		}else {  //일반 분류
 		search.put("listType", Integer.parseInt(listType));
 		int total = b_P002_D001ShopingMallService.totalCount2(search);
@@ -106,8 +107,6 @@ public class B_P002_D001ControllerImpl  implements B_P002_D001Controller{
 		mav.addObject("paging",vo2);
 		mav.addObject("viewAll", list);
 		}
-		
-		
 		
 		List<Map> lastItems = b_P002_D001ShopingMallService.lastItems();     //최신 글 5개
 		mav.addObject("lastItems", lastItems);

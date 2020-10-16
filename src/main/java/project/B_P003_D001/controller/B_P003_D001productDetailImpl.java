@@ -13,6 +13,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.net.http.HttpRequest;
 import java.util.ArrayList;
 
 
@@ -123,7 +124,7 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 	    System.out.println("넘어온 "+afterList.size());
 	    
 	    mav.addObject("images",list); //상단 메인 이미지
-	    mav.addObject("imagesBottom",detailList); //상단 메인 이미지
+	    mav.addObject("imagesBottom",detailList); //하단 디테일 이미지
 		mav.addObject("prodDetail",options); // 상품 옵션들 이미지 X
 		
 		mav.addObject("afterList",afterList); // 상품후기 리스트
@@ -364,71 +365,93 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 	
 	@Override            // 장바구니에 추가    
 	@RequestMapping(value = "/B_P003_D001/addCart")
-	public ResponseEntity addCart(@RequestParam Map<String,Object> info, HttpServletRequest req, HttpServletResponse res,HttpSession httpSession)
+	public ResponseEntity addCart(@RequestParam Map<String,Object> info,
+			@RequestParam(value = "prodNums[]")List<Integer> prodNums,
+			@RequestParam(value = "prices[]")List<Integer> prices,
+			@RequestParam(value = "optionnums[]")List<Integer> optionnums,
+			@RequestParam(value = "quantities[]")List<Integer> quantities,
+			HttpServletRequest req, HttpServletResponse res,HttpSession httpSession)
 			throws Exception {
-			
-			String requestType = (String) info.get("addType");
-			String message;
-	        ResponseEntity resEnt = null;
-			HttpHeaders responseHeaders = new HttpHeaders(); // 헤더변경 시 사용
-			responseHeaders.add("Content-Type", "text/html; charset=utf-8");
-			/*
-			if(httpSession.getAttribute(LOGIN)==null) {
-				message = " <script>";
-				message += " alert('로그인해주세요.');";
-				message += " location.href='/B_P002_D001/shopMainCate?listType=100'; ";
-				message += " </script>";
-				resEnt = new ResponseEntity(message, responseHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
-				return resEnt; 
+		System.out.println("장바구니 추가 파람 정보들 : "+info.toString());
+		String message;
+        ResponseEntity resEnt = null;
+		HttpHeaders responseHeaders = new HttpHeaders(); // 헤더변경 시 사용
+		responseHeaders.add("Content-Type", "text/html; charset=utf-8");
+		String requestType = (String) info.get("addType"); 
+		
+		/*
+		if(httpSession.getAttribute(LOGIN)==null) {   //세션 정보
+			message = " <script>";
+			message += " alert('로그인해주세요.');";
+			message += " location.href='/B_P002_D001/shopMainCate?listType=100'; ";
+			message += " </script>";
+			resEnt = new ResponseEntity(message, responseHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
+			return resEnt; 
+		}
+		
+		String id = (String) httpSession.getAttribute(LOGIN); //아이디
+		int userNum = userService.selectUserNum(id);         //유저넘
+		*/
+		
+		int userNum2=1; //임시번호
+		
+		try {              //수량체크 로직
+			Map<String,Object> param = new HashMap<String,Object>();
+			param.put("userNum", userNum2);
+			param.put("prodNum", prodNums.get(0));
+			//param.put("prodName", info.get("prodName"));
+			//param.put("prodPrice",Integer.parseInt((String) info.get("prodPrice")));
+			param.put("type", requestType);  
+			List<Integer> quantity = b_P003_D001productService.checkQuantity(param);  //수량체크
+			if(quantity.contains(0)) {
+			System.out.println("수량부족");
+			message = " <script>";
+			message += " alert('재고가 떨어졌습니다 ');";
+			message += " location.href='/B_P002_D001/shopMainCate?listType=100'; ";
+			message += " </script>";
+			return resEnt = new ResponseEntity(message, responseHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
+		try {
+			if(requestType.equals("main")) {
+				System.out.println("메인");
+				//System.out.println(param.toString());
+				//b_P003_D001productService.addCart(param);
+				
+			}else if (requestType.equals("상품디테일")) {     //       --완료----
+				List<Map> addCart = new ArrayList<Map>(); // 상품디테일에서 가져온정보를 담을 그릇
+				for(int i=0;i<optionnums.size();i++) {
+					Map<String,Object> detailParam = new HashMap<String,Object>();
+					detailParam.put("prodNum", prodNums.get(i));
+					detailParam.put("optionNum", optionnums.get(i));
+					detailParam.put("quantity", quantities.get(i)); 
+					detailParam.put("price", prices.get(i));
+					detailParam.put("userNum", userNum2);
+					addCart.add(detailParam);
+				}
+				System.out.println("디테일 배열 정보 : "+addCart.toString());
+				b_P003_D001productService.addCart(addCart);
 			}
 			
-		String id = (String) httpSession.getAttribute(LOGIN); //아이디
-	    int userNum = userService.selectUserNum(id);         //유저넘
-	    */
-	    int userNum=1;
-		Map<String,Object> param = new HashMap<String,Object>();
-		System.out.println("장바구니 추가:"+info.toString());
 
-		  param.put("userNum", userNum);
-		  param.put("prodNum",Integer.parseInt((String) info.get("prodNum")));
-		  param.put("prodName", info.get("prodName"));
-		  param.put("prodPrice",Integer.parseInt((String) info.get("prodPrice")));
-		  param.put("type", requestType);  
-		 
-	     String quantity = b_P003_D001productService.checkQuantity(param);  //수량체크
-			try {
-				
-				
-				
-				if(quantity.equals("0")||quantity.equals("")) {
-				}else {
-					if(requestType.equals("main")) {
-						System.out.println("메인");
-						System.out.println(param.toString());
-						b_P003_D001productService.addCart(param);
-						
-					}else if (requestType.equals("상품디테일")) {
-						System.out.println("디테일");
-						param.put("quantity",Integer.parseInt((String) info.get("quantity")));
-						System.out.println(param.toString());
-						b_P003_D001productService.addCart(param);
-						
-					}
-				} 
-				message = " <script>";
-				message += " alert('추가되었습니다.');";
-				message += " location.href='/B_P002_D001/shopMainCate?listType=100'; ";
-				message += " </script>";
-				resEnt = new ResponseEntity(message, responseHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
-			} catch (Exception e) {
-				message = " <script>";
-				message += " alert('오류가 발생했습니다. 다시 시도해 주세요');";
-				message += " location.href='/B_P002_D001/shopMainCate?listType=100'; ";
-				message += " </script>";
-				resEnt = new ResponseEntity(message, responseHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
-				e.printStackTrace();
-			}		
-			return resEnt;
+			message = " <script>";
+			message += " alert('추가되었습니다.');";
+			message += " location.href='/B_P002_D001/shopMainCate?listType=100'; ";
+			message += " </script>";
+			resEnt = new ResponseEntity(message, responseHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
+		} catch (Exception e) {
+			message = " <script>";
+			message += " alert('오류가 발생했습니다. 다시 시도해 주세요');";
+			message += " location.href='/B_P002_D001/shopMainCate?listType=100'; ";
+			message += " </script>";
+			resEnt = new ResponseEntity(message, responseHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
+			e.printStackTrace();
+		}		
+		return resEnt;
 	}
 	
 
@@ -461,11 +484,14 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 		Map<String,Object> param = new HashMap<String,Object>();
 		
 		if(httpSession.getAttribute(LOGIN)==null) {
-			param.put("userNum", "no");
+			param.put("checkStatus", "empty");
 		}else {
-			//String id = (String) httpSession.getAttribute(LOGIN); //아이디
-			//int userNum = userService.selectUserNum(id);         //유저넘
-			param.put("userNum", "ok");
+			String id = (String) httpSession.getAttribute(LOGIN); //아이디
+			int userNum = userService.selectUserNum(id);         //유저넘
+			param.put("checkStatus", "notEmpty");
+			param.put("id", id);
+			param.put("userNum", userNum);
+			System.out.println("세션정보"+param.toString());
 		}
 		return param;
 	}
@@ -557,7 +583,6 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 		return result;
 	}
 
-  
 	
 	@Override            //중고물품 등록
 	@RequestMapping(value = "/E_P002_D003/addUsedPro", method = { RequestMethod.GET, RequestMethod.POST })
@@ -569,6 +594,7 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 			@RequestParam(value = "color[]")List<String> color,
 			HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
+		System.out.println("등록 넘어온 값 : "+info.toString());
 		ModelAndView mav = new ModelAndView();
 		Map<String, Object> addProd = new HashMap<String, Object>();//prod 정보를 받음 Map을 선언
 		Map<String,Object> addCate= new HashMap<String,Object>();
@@ -593,12 +619,9 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 		b_P003_D001productService.addUsedProduct(addProd);// 상품상세내용 추가
 		
 		
-		int prodNum = b_P003_D001productService.prodNum();  // 맥스값
-		//addCate.put("prodNum", prodNum);
-		//addCate.put("parentCategoryNum", Integer.parseInt((String) info.get("parentCategoryNum")));  //카테고리 테이블에 추가할 녀석
-
+		int prodNum = b_P003_D001productService.prodNum();  // prducts table prodnum 맥스값
+		//int optionNum= b_P003_D001productService.optionNum(); //시퀀스
 		
-		int optionNum= b_P003_D001productService.optionNum(); //시퀀스
 		List<Map> addOption=new ArrayList<Map>();;
 		for(int i=0;i<prodstatus.size();i++) {     //옵션 추가
 			Map<String,Object> putOption = new HashMap<String, Object>();
@@ -607,10 +630,10 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 			putOption.put("prodStatus", prodstatus.get(i));
 			putOption.put("color", color.get(i));
 			putOption.put("prodNum", prodNum);
-			putOption.put("optionNum", optionNum+i);
+			//putOption.put("optionNum", optionNum+i);
 			addOption.add(putOption);
 		}
-		
+		b_P003_D001productService.addOption(addOption);   //옵션
 		
 		List<MultipartFile> Mainfiles = upfile.getFiles("content");
 		List<MultipartFile> Detailfiles= upfile.getFiles("contentDetail");
@@ -665,9 +688,8 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 		try {
 			b_P003_D001productService.saveUsedImage(mainFileList); //메인 이미지
 			b_P003_D001productService.saveUsedDetailImage(DetailFileList); //디테일 이미지   
-			b_P003_D001productService.addOption(addOption);   // 옵션
 			
-			//b_P003_D001productService.addUsedCategory(addCate);//카테고리 보류
+			
 			
 		} catch (Exception e) {
 			e.printStackTrace();
