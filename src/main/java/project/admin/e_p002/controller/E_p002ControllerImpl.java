@@ -86,19 +86,36 @@ public class E_p002ControllerImpl implements E_p002Controller{
 
 
 	//상품 조회
-	@Override
-	@ResponseBody
-	@RequestMapping(value = "/admin/selectProd.do", method = RequestMethod.GET, produces = "application/text; charset=UTF-8" )
-	public String selectProd(@RequestParam(value="searchOption") String searchOption, @RequestParam(defaultValue = " ") String key_word,  HttpServletRequest request, HttpServletResponse response) throws Exception {
+//	@Override
+//	@ResponseBody
+//	@RequestMapping(value = "/admin/selectProd.do", method = RequestMethod.GET, produces = "application/text; charset=UTF-8" )
+//	public String selectProd(@RequestParam(value="searchOption") String searchOption, @RequestParam(defaultValue = " ") String key_word,  HttpServletRequest request, HttpServletResponse response) throws Exception {
+//	
+//		Map<String, String> search = new HashMap<String, String>();
+//		search.put("key_word",key_word);
+//		search.put("searchOption",searchOption);
+//		
+//		List<HashMap<String, String>> list = e_p002Service.selectProd(search);
+//	    String  serchList = new Gson().toJson(list);
+//	      
+//	    return serchList;
+//	}
 	
+	//상품조회
+	@Override
+	@RequestMapping(value = "/admin/selectProd.do", method = RequestMethod.GET )
+	public ModelAndView selectProd(@RequestParam(value="searchOption") String searchOption, @RequestParam(defaultValue = " ") String key_word, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
 		Map<String, String> search = new HashMap<String, String>();
 		search.put("key_word",key_word);
 		search.put("searchOption",searchOption);
 		
-		List<HashMap<String, String>> list = e_p002Service.selectProd(search);
-	    String  serchList = new Gson().toJson(list);
-	      
-	    return serchList;
+		List list = e_p002Service.selectProd(search);
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("e_p002_main");
+		mav.addObject("list",list);
+		
+		return mav;
 	}
 
 
@@ -131,6 +148,43 @@ public class E_p002ControllerImpl implements E_p002Controller{
 		mav.addObject("viewPhotoList",viewPhotoList);
 		return mav;
 	}
+
+
+	//상품 옵션 수정
+	@Override
+	@ResponseBody
+	@RequestMapping(value = "/admin/updateOption.do", method = RequestMethod.GET)
+	public String updateOption(@RequestParam Map map,@RequestParam("prodStatus") String prodStatus, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		int prodStatusInt = 2;
+		if (prodStatus=="판매중") {
+			prodStatusInt = 1;
+		}
+		
+		map.put("prodStatus", prodStatusInt);
+		
+		
+		System.out.println("prodStatus" + map.get("prodStatus"));
+		System.out.println("optionNum" + map.get("optionNum"));
+		System.out.println("변경값" + map.get("value"));
+		System.out.println("재고" + map.get("quantity"));
+		System.out.println("사이즈" + map.get("prodSize"));
+		System.out.println("컬러" + map.get("color"));
+		System.out.println("상품 번호" + map.get("prodNum"));
+	
+	
+		
+		int result = e_p002Service.updateOption(map);
+		System.out.println("result value: "+ result);
+		if(result == 1) {
+			return "ok";
+		}
+		return "x";
+	
+	}
+
+
+
 
 
 }

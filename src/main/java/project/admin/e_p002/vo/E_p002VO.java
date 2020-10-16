@@ -1,6 +1,5 @@
 package project.admin.e_p002.vo;
 
-import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Component;
 
@@ -8,6 +7,7 @@ import org.springframework.stereotype.Component;
 public class E_p002VO {
 	
 	private int prodNum;
+	private int optionNum;
 	private String name;
 	private String priceString;
 	private String prodsize;
@@ -78,6 +78,12 @@ public class E_p002VO {
 	}
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
+	}
+	public int getOptionNum() {
+		return optionNum;
+	}
+	public void setOptionNum(int optionNum) {
+		this.optionNum = optionNum;
 	}
 	
 
