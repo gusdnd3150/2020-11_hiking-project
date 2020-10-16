@@ -52,11 +52,11 @@
             </div>
             <div class="modal-body row" style="text-align: center">
                 <div class="col-6">
-                    <img src="../resources/img/select4.png" style="width: 250px; height: 250px; display: block;">
+                    <img src="../resources/img/select1.png" style="width: 250px; height: 250px; display: block;">
                     <button class="btn btn-primary" onclick="create1()">1인</button>
                 </div>
                 <div class="col-6" style="text-align: center">
-                    <img src="../resources/img/select5.png" style="width: 250px; height: 250px; display: block">
+                    <img src="../resources/img/select2.png" style="width: 250px; height: 250px; display: block">
                     <button class="btn btn-primary" onclick="create2()">2인이상</button>
                 </div>
             </div>

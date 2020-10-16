@@ -188,7 +188,7 @@
                 contentType: false,
                 cache: false,
                 success(response){
-                    location.href = "/group/result.jsp"
+                    alert("등록 성공")
                 },
                 error(response){
                     alert("등록 오류, 새로고침 후 다시 시도 해주세요")

@@ -7,7 +7,7 @@
 <body class="pt-5 mt-5" >
 <div id="groupForm-container" class="container" >
     <div id="groupForm">
-        <h1 class="p-3 col-12">여럿이서 산오르기 등록</h1>
+        <h1 class="p-3 col-12">다함께 산오르기 등록</h1>
         <pre></pre>
         <div class="mb-3 col-12">
             <label for="mtNm">등산로설정</label>

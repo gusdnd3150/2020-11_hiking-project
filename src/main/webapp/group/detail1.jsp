@@ -29,6 +29,7 @@
                     <img src="/resources/img/${group.CONTENT2}" class="rounded-circle" style="width: 40px;height: 40px; border: 1px solid grey">
                     <div class="pl-2">${group.USERID}</div>
                 </h3>
+                <div class="text-muted">${group.CREATEDAT}</div>
                 <hr />
                 <div>
                     <c:choose>
@@ -53,10 +54,18 @@
                             </c:when>
                         </c:choose>
                     </li>
-                    <li>지역 : ${group.AREA}</li>
-                    <li>최소 ${group.AGESTART}살부터 ${group.AGEEND}살까지</li>
-                    <li>${group.STARTDAY}</li>
-                    <li>현재 로그인된 아이디(임시): <%= request.getSession().getAttribute("LOGIN")%></li>
+                    <li><b>출발시각</b><div>${group.STARTDAY}</div></li>
+                    <li><b>지역</b> ${group.AREA}</li>
+                    <li><b>조건</b>
+                        <c:choose>
+                            <c:when test="${group.AGESTART eq 0 || group.AGEEND eq 0}">
+                                없음
+                            </c:when>
+                            <c:otherwise>
+                                ${group.AGESTART}세 이상 ${group.AGEEND}세 미만
+                            </c:otherwise>
+                        </c:choose>
+                    </li>
 <%--                    <li>--%>
 <%--                        집합일시:--%>
 <%--                        참가비:--%>
@@ -101,15 +110,39 @@
         </div>
     </div>
     <!-- 댓글 입력 -->
-    <div id="commentInput" class="row" style="text-align: center">
+    <div id="commentInput" class="row" style="justify-content: center">
         <img src="/resources/img/${sessionIdImage}" class="rounded-circle" style="width: 50px;height: 50px">
-        <input id="commentContent" class="form-control form-control-lg col-lg-10 col-md-9 col-sm-10 col-10 ml-2 mr-2" type="text" placeholder="내용을 입력해주세요">
-        <button id="commentSubmit" class="btn btn-info col-lg-1 col-md-1 col-sm-12">입력</button>
+        <input id="commentContent" class="form-control form-control-lg col-lg-10 col-md-9 col-10 col-10 ml-2 mr-2" type="text" placeholder="내용을 입력해주세요">
+        <button id="commentSubmit" class="btn btn-info col-lg-1 col-md-1 col-sm-11">등록</button>
     </div>
-
     <hr />
     <h3 class="my-4">${group.MTNM}의 다른 모임</h3>
     <div class="recommend row">
+        <c:choose>
+            <c:when test="${empty recommendResult}">
+                <div class="text-muted" style="width: 100%; height:200px; font-size: 20px;">
+                    <p>현재 ${group.MTNM}의 다른 모임이 없습니다</p>
+                </div>
+            </c:when>
+            <c:when test="${!empty recommendResult}">
+            <c:forEach var="recommend" items="${recommendResult}">
+                <div class="pt-3 col-lg-3 col-sm-6" id="groupList">
+                    <div class="card border-0" >
+                        <a href="/group/${recommend.GROUPNUM}">
+                            <img class="card-img-top" src="http://localhost:8080/resources/img/${recommend.STOREDFILENAME}" alt="..." style="width: 100%" />
+                        </a>
+                        <div class="card-body row p-3 pl-3">
+                            <div class="col-10 pl-2">
+                                <h5 class="card-title m-0" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">${recommend.NAME}</h5>
+                                <p class="card-text text-muted mb-1" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">${recommend.DETAIL}</p>
+                                <p class="text-muted p-0">${recommend.STARTDAY} 출발</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </c:forEach>
+            </c:when>
+        </c:choose>
     </div>
     <div class="modal fade" id="listModal">
         <div class="modal-dialog" id="modal1">
@@ -264,30 +297,6 @@
 
     function cancelwriteSubComment(e){
         e.previousSibling.previousSibling.value=null;
-    }
-
-    function recommendGroup(){
-
-        var data = {
-            'mtnm' : ${group.MTNM}
-        }
-
-        console.log(data)
-
-        $.ajax({
-            type: "GET",
-            url: "/group/recommendGroup.do",
-            data: JSON.stringify(data),
-            dataType: 'json',
-            contentType: "application/json; charset=utf-8;",
-            success : function (response){
-                alert("신청 처리 되었습니다");
-                location.reload();
-            },
-            error : function (response){
-                alert("오류 발생! 다시 시도해주세요");
-            }
-        })
     }
 
 $(document).ready(function (){
@@ -589,3 +598,4 @@ $(document).ready(function (){
         })
     })
 </script>
+<jsp:include page="/common/footer.jsp" />

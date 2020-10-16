@@ -33,16 +33,19 @@ public class GroupController{
     private MountainService mountainService;
 
     @PostMapping(value = "/group/insert.do")
-    @ResponseBody
-    public void insertGroup(@RequestParam Map map,
+    public ModelAndView insertGroup(@RequestParam Map map,
                             @RequestParam(value = "file", required = false) List<MultipartFile> files,
                            HttpServletRequest request) throws Exception {
 
+        ModelAndView mav = new ModelAndView("result");
         groupService.insertGroup(map);
 
         String path = request.getSession().getServletContext().getRealPath("/");
         int groupNum = (int) map.get("groupNum");
         groupMediaService.insertGroupMedia(groupNum,files,path);
+
+        mav.addObject("groupNum",groupNum);
+        return mav;
     }
 
     @GetMapping("/group/main1.do")
@@ -118,20 +121,21 @@ public class GroupController{
             userGradeResult = 2;                                                                        //비그룹 원
         }
 
-        //댓글
-
-        //같은 산의 다른모임 찾을 것
-
-
         for(int i=0;i<list.size();i++){
             map.put("image"+i , list.get(i).get("STOREDFILENAME"));
-
         }
+
+
+        System.out.println(map.toString());
+
+
+        List recommendResult = groupService.recommendGroup(map);
 
         mav.addObject("group",map);
         mav.addObject("sessionIdImage",sessionIdImage);
         mav.addObject("favoriteResult",favoriteResult);
         mav.addObject("userGradeResult",userGradeResult);
+        mav.addObject("recommendResult",recommendResult);
         return mav;
     }
 
@@ -267,13 +271,6 @@ public class GroupController{
     @ResponseBody
     public List sortGroupByKeyword(@RequestParam("keyword") String keyword){
         List<Map> list = groupService.sortGroupByKeyword(keyword);
-        return list;
-    }
-
-    @GetMapping("/group/recommendGroup.do")
-    @ResponseBody
-    public List recommendGroup(@RequestParam("mtnm")String mtnm){
-        List<Map> list = groupService.recommendGroup(mtnm);
         return list;
     }
 }

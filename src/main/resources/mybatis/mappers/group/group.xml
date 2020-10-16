@@ -67,19 +67,21 @@
         <![CDATA[
             SELECT g.groupNum, g.name, g.staffCurrent, g.staffmax, g.detail, g.status, TO_CHAR(g.startDay,'yyyy"년"MM"월"dd"일"') startDay, gm.storedFileName, NVL(ui.CONTENT2,'basic_profile.PNG') content2, COUNT(gl.groupNum) likeCount
             FROM groups g
-               INNER JOIN groupsMedia gm
-                ON g.groupNum = gm.groupNum
-               INNER JOIN userWaiting uw
-                ON g.groupNum = uw.groupNum
-               INNER JOIN users u
-                ON uw.userId = u.id
-               INNER JOIN userInfo ui
-                ON u.userNum = ui.userNum
-               LEFT OUTER JOIN groupLike gl
-                ON g.groupNum = gl.groupNum
+                     INNER JOIN groupsMedia gm
+                                ON g.groupNum = gm.groupNum
+                     INNER JOIN userWaiting uw
+                                ON g.groupNum = uw.groupNum
+                     INNER JOIN users u
+                                ON uw.userId = u.id
+                     INNER JOIN userInfo ui
+                                ON u.userNum = ui.userNum
+                     LEFT OUTER JOIN groupLike gl
+                                ON g.groupNum = gl.groupNum
             WHERE g.type = 1
+              AND g.status = 1
               AND uw.userType = 0
               AND gm.mediaNum = 0
+              AND g.staffMax != 1
               AND ROWNUM <=6
             GROUP BY g.groupNum, g.name, g.staffCurrent, g.staffmax, g.detail, g.status, g.startDay, gm.storedFileName, ui.CONTENT2
             ORDER BY NVL(COUNT(gl.LIKEYN),0) DESC
@@ -138,8 +140,8 @@
                    g.detail,
                    g.status,
                    TO_CHAR(g.startday,'yyyy"년" MM"월"dd"일" hh"시"mm"분"') startday,
-                   TO_CHAR(g.createdAt,'yyyy"년" MM"월"dd"일" hh"시"mm"분"') createdAt,
-                   TO_CHAR(g.updatedAt,'yyyy"년" MM"월"dd"일" hh"시"mm"분"') updatedAt,
+                   TO_CHAR(g.createdAt,'yyyy.MM.dd. hh:mm') createdAt,
+                   TO_CHAR(g.updatedAt,'yyyy.MM.dd. hh:mm') updatedAt,
                    g.area,
                    g.ageStart,
                    g.ageEnd,
@@ -391,7 +393,8 @@
                 WHERE g.type = 1
                 AND uw.userType = 0
                 AND gm.mediaNum = 0
-                AND ROWNUM <=6
+                AND g.staffMax != 1
+                AND ROWNUM <= 15
                 ORDER BY g.createdAt DESC
             ]]>
         </if>
@@ -399,30 +402,36 @@
             <![CDATA[
                 SELECT g.groupNum, g.name, g.staffCurrent, g.staffmax, g.detail, g.status, TO_CHAR(g.startDay,'yyyy"년"MM"월"dd"일"') startDay, gm.storedFileName, NVL(ui.CONTENT2,'basic_profile.PNG') content2, COUNT(gl.groupNum) likeCount
                 FROM groups g
-                   INNER JOIN groupsMedia gm
-                    ON g.groupNum = gm.groupNum
-                   INNER JOIN userWaiting uw
-                    ON g.groupNum = uw.groupNum
-                   INNER JOIN users u
-                    ON uw.userId = u.id
-                   INNER JOIN userInfo ui
-                    ON u.userNum = ui.userNum
-                   LEFT OUTER JOIN groupLike gl
-                    ON g.groupNum = gl.groupNum
+                         INNER JOIN groupsMedia gm
+                                    ON g.groupNum = gm.groupNum
+                         INNER JOIN userWaiting uw
+                                    ON g.groupNum = uw.groupNum
+                         INNER JOIN users u
+                                    ON uw.userId = u.id
+                         INNER JOIN userInfo ui
+                                    ON u.userNum = ui.userNum
+                         LEFT OUTER JOIN groupLike gl
+                                    ON g.groupNum = gl.groupNum
                 WHERE g.type = 1
                   AND uw.userType = 0
                   AND gm.mediaNum = 0
-                  AND ROWNUM <=6
+                  AND g.staffMax != 1
+                  AND ROWNUM <= 15
                 GROUP BY g.groupNum, g.name, g.staffCurrent, g.staffmax, g.detail, g.status, g.startDay, gm.storedFileName, ui.CONTENT2
-                ORDER BY NVL(COUNT(gl.LIKEYN),0) DESC
+                ORDER BY COUNT(gl.LIKEYN) DESC
             ]]>
         </if>
     </select>
-    <select id="recommendGroup" resultType="map" parameterType="string">
+    <!-- 진행중인 같은 산, 다른 그룹 추천 -->
+    <select id="recommendGroup" resultType="map" parameterType="map">
         <![CDATA[
-            SELECT *
-            FROM groups
-            WHERE mtnm = #{value}
+            SELECT g.groupNum, g.name, g.staffCurrent, g.staffMax, g.detail, TO_CHAR(g.startDay,'yyyy.mm.dd') startDay, gm.storedFileName
+            FROM groups g, groupsMedia gm
+            WHERE g.groupNum = gm.groupNum
+            AND g.status = 1
+            AND gm.mediaNum = 0
+            AND g.mtNm = #{MTNM}
+            AND g.groupNum NOT IN (#{GROUPNUM})
         ]]>
     </select>
 </mapper>

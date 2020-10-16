@@ -33,9 +33,11 @@
 
     <select id="selectChatByRoomId" resultType="map" parameterType="string">
         <![CDATA[
-            SELECT roomId, userId, message, messagedAt
-            FROM chatMessage
-            WHERE roomId = #{roomId}
+            SELECT cm.roomId, u.id USERID, u.nickName, cm.message, TO_CHAR(cm.messagedAt,'hh:mi') MESSAGEDAT, ui.content2
+            FROM chatMessage cm, users u, userInfo ui
+            WHERE u.userNum = ui.userNum
+              AND cm.userId = u.id
+              AND roomId = #{roomId}
             ORDER BY messagedAt ASC
         ]]>
     </select>

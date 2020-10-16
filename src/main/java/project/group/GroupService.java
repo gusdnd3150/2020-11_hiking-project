@@ -43,5 +43,5 @@ public interface GroupService {
 
     String selectSessionIdImage(String userId);
     List sortGroupByKeyword(String keyword);
-    List recommendGroup(String mtnm);
+    List recommendGroup(Map map);
 }

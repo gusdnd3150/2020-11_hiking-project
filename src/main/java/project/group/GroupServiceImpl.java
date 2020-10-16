@@ -133,5 +133,5 @@ public class GroupServiceImpl implements GroupService{
         return groupDAO.sortGroupByKeyword(keyword);
     }
 
-    public List recommendGroup(String mtnm){return groupDAO.recommendGroup(mtnm);}
+    public List recommendGroup(Map map){return groupDAO.recommendGroup(map);}
 }

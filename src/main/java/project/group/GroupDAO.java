@@ -113,7 +113,7 @@ public class GroupDAO{
     public List sortGroupByKeyword(String keyword){
         return sqlSession.selectList("group.sortGroupByKeyword",keyword);
     }
-    public List recommendGroup(String mtnm){
-        return sqlSession.selectList("group.recommendGroup",mtnm);
+    public List recommendGroup(Map map){
+        return sqlSession.selectList("group.recommendGroup",map);
     }
 }
