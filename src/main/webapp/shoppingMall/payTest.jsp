@@ -446,7 +446,7 @@ align:bottom;
                     <div class="media">
                       <div class="d-flex">
                         <img
-                          src="http://localhost:8080/resources/img/${prodDetail.IMAGE }"
+                          src="/resources/img/${prodDetail.IMAGE }"
                           alt="" width="90px" height="90px"
                         />
                       </div>

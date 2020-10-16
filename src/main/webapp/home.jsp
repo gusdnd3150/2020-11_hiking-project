@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ page session="false" %>
 <jsp:include page="/common/header.jsp" />
 <link rel="stylesheet" type="text/css" href="./resources/css/views/home.css">
@@ -56,7 +57,7 @@
 					<div class="pt-3 col-lg-4 col-sm-6" id="groupList">
 						<div class="card border-0" >
 							<a href="/group/${group.GROUPNUM}">
-								<img class="card-img-top" src="http://localhost:8080/resources/img/${group.STOREDFILENAME}" alt="..." style="width: 100%" />
+								<img class="card-img-top" src="/resources/img/${group.STOREDFILENAME}" alt="..." style="width: 100%" />
 							</a>
 								<div class="card-body row p-3 pl-4">
 									<img src="/resources/img/${group.CONTENT2}" class="rounded-circle" style="width: 40px;height: 40px; border: 1px solid grey">

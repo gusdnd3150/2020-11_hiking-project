@@ -95,7 +95,7 @@ $(document).on("click", "#user_Num", function(){// 회원삭제 알림창
 		console.log(upDate)
 		if(upDate==1){
 			alert("수정완료")
-			window.location.href='http://localhost:8080/admin/e_p001_main.jsp';
+			window.location.href='/admin/e_p001_main.jsp';
 		}
 	});
 	
@@ -106,7 +106,7 @@ $(document).on("click", "#user_Num", function(){// 회원삭제 알림창
 			
 		}else{
 			alert(userName+" 회원 등록완료")
-			window.location.href='http://localhost:8080/admin/e_p001_main.jsp';
+			window.location.href='/admin/e_p001_main.jsp';
 		}
 	});
 </script>

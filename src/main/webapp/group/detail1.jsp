@@ -12,13 +12,13 @@
     <div class="row" style="position: relative; height: fit-content">
         <div class="photos col-md-8 col-sm-12">
             <%--            <img class="img-fluid" src="http://placehold.it/750x500" alt="">--%>
-            <div id="photo0"><img class="img-fluid" src="http://localhost:8080/resources/img/${group.image0}" alt="" style="height: 100%;width: 100%"></div>
-            <div id="photo1" style="display: none"><img class="img-fluid" src="http://localhost:8080/resources/img/${group.image1}" alt="" style="height: 100%;width: 100%"></div>
-            <div id="photo2" style="display: none"><img class="img-fluid" src="http://localhost:8080/resources/img/${group.image2}" alt="" style="height: 100%;width: 100%"></div>
+            <div id="photo0"><img class="img-fluid" src="/resources/img/${group.image0}" alt="" style="height: 100%;width: 100%"></div>
+            <div id="photo1" style="display: none"><img class="img-fluid" src="/resources/img/${group.image1}" alt="" style="height: 100%;width: 100%"></div>
+            <div id="photo2" style="display: none"><img class="img-fluid" src="/resources/img/${group.image2}" alt="" style="height: 100%;width: 100%"></div>
             <ul class="thumbs">
-                <li><a href="javascript:void(0)" onclick="switchPhoto('photo0', 3);"><img class="img-fluid" src="http://localhost:8080/resources/img/${group.image0}" alt=""></a> </li>
-                <li><a href="javascript:void(0)" onclick="switchPhoto('photo1', 3);"><img class="img-fluid" src="http://localhost:8080/resources/img/${group.image1}" alt=""></a> </li>
-                <li><a href="javascript:void(0)" onclick="switchPhoto('photo2', 3);"><img class="img-fluid" src="http://localhost:8080/resources/img/${group.image2}" alt=""></a> </li>
+                <li><a href="javascript:void(0)" onclick="switchPhoto('photo0', 3);"><img class="img-fluid" src="/resources/img/${group.image0}" alt=""></a> </li>
+                <li><a href="javascript:void(0)" onclick="switchPhoto('photo1', 3);"><img class="img-fluid" src="/resources/img/${group.image1}" alt=""></a> </li>
+                <li><a href="javascript:void(0)" onclick="switchPhoto('photo2', 3);"><img class="img-fluid" src="/resources/img/${group.image2}" alt=""></a> </li>
             </ul>
         </div>
         <div class="col-md-4 col-sm-12">
@@ -136,7 +136,7 @@
                 <div class="pt-3 col-lg-3 col-sm-6" id="groupList">
                     <div class="card border-0" >
                         <a href="/group/${recommend.GROUPNUM}">
-                            <img class="card-img-top" src="http://localhost:8080/resources/img/${recommend.STOREDFILENAME}" alt="..." style="width: 100%" />
+                            <img class="card-img-top" src="/resources/img/${recommend.STOREDFILENAME}" alt="..." style="width: 100%" />
                         </a>
                         <div class="card-body row p-3 pl-3">
                             <div class="col-10 pl-2">

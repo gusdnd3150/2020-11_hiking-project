@@ -78,7 +78,7 @@
                                 '<div class="pt-3 col-lg-4 col-sm-6" id="groupList">' +
                                 '<div class="card border-0" >' +
                                 '<a href="/group/'+response[i].GROUPNUM+'">' +
-                                '<img class="card-img-top" src="http://localhost:8080/resources/img/' + response[i].STOREDFILENAME + '" alt="..." style="width:100%" /></a>' +
+                                '<img class="card-img-top" src="/resources/img/' + response[i].STOREDFILENAME + '" alt="..." style="width:100%" /></a>' +
                                 '<div class="card-body row p-1 pl-4">' +
                                 '<img src="/resources/img/' + response[i].CONTENT2 + '" class="rounded-circle" style="width: 40px;height: 40px; border: 1px solid grey">' +
                                 '<div class="col-10 p-0 pl-2 m-0">' +
@@ -118,7 +118,7 @@
                         '<div class="pt-3 col-lg-4 col-sm-6" id="groupList">' +
                         '<div class="card border-0" >' +
                         '<a href="/group/'+response[i].GROUPNUM+'">' +
-                        '<img class="card-img-top" src="http://localhost:8080/resources/img/' + response[i].STOREDFILENAME + '" alt="..." style="width:100%" /></a>' +
+                        '<img class="card-img-top" src="/resources/img/' + response[i].STOREDFILENAME + '" alt="..." style="width:100%" /></a>' +
                         '<div class="card-body row p-1 pl-4">' +
                         '<img src="/resources/img/' + response[i].CONTENT2 + '" class="rounded-circle" style="width: 40px;height: 40px; border: 1px solid grey">' +
                         '<div class="col-10 p-0 pl-2 m-0">' +

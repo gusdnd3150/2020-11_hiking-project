@@ -153,7 +153,7 @@ height=350;
                     <div class="col-lg-4 col-md-6 mb-4">
             <div class="card h-100">
                 <%-- <a href="#"><img class="card-img-top" src="data:image/jpg;base64, ${encodinglist}"  alt="" width="800" height="500"></a> --%>
-                 <a href="/B_P003_D001/productDetail?prodNum=${data.PRODNUM}"><img class="card-img-top" src="http://localhost:8080/resources/img/${data.IMAGE }"  alt="" width="300" height="300"></a> 
+                 <a href="/B_P003_D001/productDetail?prodNum=${data.PRODNUM}"><img class="card-img-top" src="/resources/img/${data.IMAGE }"  alt="" width="300" height="300"></a>
               <div class="card-body">                            
                 <h4 class="card-title"> 
                   <a href="/B_P003_D001/productDetail?prodNum=${data.PRODNUM}">${data.NAME }</a>

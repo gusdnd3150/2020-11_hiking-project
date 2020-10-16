@@ -42,7 +42,7 @@
 						<div style="text-align: center;">
 
 							<img class="rounded-circle mt-2"
-								src="http://localhost:8080/resources/img/${userVO.content2}"
+								src="/resources/img/${userVO.content2}"
 								width="100" height="100" alt="프로필사진">
 
 						</div>

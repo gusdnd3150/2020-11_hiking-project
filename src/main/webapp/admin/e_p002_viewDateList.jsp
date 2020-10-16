@@ -209,7 +209,7 @@ h2 {
 				<div class="mb-3">
 					<label for="content">이미지</label> 
 					<c:forEach var="viewList" items="${viewPhotoList}">
-					<img src="http://localhost:8090/resources/img/${viewList.pcontent}" alt="..." style="width: 250px; height: 250px; display: block;"> 
+					<img src="/resources/img/${viewList.pcontent}" alt="..." style="width: 250px; height: 250px; display: block;">
 				</c:forEach>
 				<tr>
 						

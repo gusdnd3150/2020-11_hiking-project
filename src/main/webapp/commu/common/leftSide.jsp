@@ -43,7 +43,7 @@ width: 100px;
 			<div class="col-md-3"  >
 			<div id="leftSide">
 				<div class="card col-sm-12" style="border: 2px solid green; width: 15rem; padding:0;">
-					<img src="http://localhost:8080/resources/img/${m3.STOREDFILENAME}" style="width:100%; height:200px;"
+					<img src="/resources/img/${m3.STOREDFILENAME}" style="width:100%; height:200px;"
 						class="card-img-top" alt="산모임 기본 이미지">
 					<div class="card-body">
 						<h5 class="card-title">${m1.NAME}</h5>
