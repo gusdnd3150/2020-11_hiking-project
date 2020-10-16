@@ -156,7 +156,7 @@
             <div class="modal-content">
                 <!-- header -->
                 <div class="modal-header">
-                    <h4 class="modal-title">참여 리스트</h4>
+                    <h4 class="modal-title">요청 리스트</h4>
                     <!-- 닫기(x) 버튼 -->
                     <button type="button" class="close" data-dismiss="modal" onclick="window.location.reload();">×</button>
                     <!-- header title -->

@@ -77,7 +77,7 @@
 					<c:forEach var="commu" items="${commu}">
 						<c:if test="${commu.RN%2==0}">
 							<a href="/commu/commuPageView.do?groupNum=${commu.GROUPNUM}"
-								style="text-decoration: none; color: black;">
+								style=" color: black;">
 								<div class="media" style=" padding: 10px 10px;">
 									<img
 										src="http://localhost:8080/resources/img/${commu.STOREDFILENAME}"
@@ -99,7 +99,7 @@
 					<c:forEach var="commu" items="${commu}">
 						<c:if test="${commu.RN%2==1}">
 							<a href="/commu/commuPageView.do?groupNum=${commu.GROUPNUM}"
-								style="text-decoration: none; color: black;">
+								style="color: black;">
 								<div class="media" style="padding: 10px 10px;">
 									<img
 										src="http://localhost:8080/resources/img/${commu.STOREDFILENAME}"

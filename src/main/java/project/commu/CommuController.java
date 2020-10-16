@@ -43,21 +43,24 @@ public class CommuController {
 //	    private MountainService mountainService;
 
 	 	@Transactional
-	    @PostMapping(value = "/insert.do")
+	    @PostMapping(value = "/insert.do", produces="application/json")
 	    @ResponseBody
-	    public void insertGroup(@RequestParam Map map,
+	    public Map<String, Object> insertGroup(@RequestParam Map map,
 	                            @RequestParam(value = "file", required = false) List<MultipartFile> files,
 	                           HttpServletRequest request) throws Exception {
-
-	    	System.out.println(map);
-	    	commuService.insertGroup(map);
+	        System.out.println("컨트롤러에 들어온 맵:    "+map);
+	        Map<String, Object> m = commuService.insertGroup(map);
 
 	        String path = request.getSession().getServletContext().getRealPath("/");
 	        System.out.println("두루"+ path);
 	        int groupNum = (int) map.get("groupNum");
 	        groupMediaService.insertGroupMedia(groupNum,files,path);
+	        
+	      
+	        return m;
 	    }
 
+	 	
 	    @GetMapping("/commuMainView.do")
 	    public ModelAndView commuMainView(){
 	        ModelAndView mav = new ModelAndView("commuMain");

@@ -205,9 +205,10 @@ i {
                 contentType: false,
                 cache: false,
                 success(response){
-                    console.log(response)
+                    console.log(response);
+                    console.log(response.GROUPNUM);
                     alert("등록완료")
-                    location.href = "/group/result.jsp"
+                    location.href = "/commu/commuPageView.do?groupNum="+(response.GROUPNUM)
                 },
                 error(response){
                     alert("등록 오류, 새로고침 후 다시 시도 해주세요")

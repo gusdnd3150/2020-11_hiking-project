@@ -22,17 +22,18 @@ public class CommuDAOImpl implements CommuDAO {
 	private SqlSession sqlSession;
 
 	@Override
-	public void insertGroup(Map map) {
+	public Map<String, Object> insertGroup(Map map) {
 		sqlSession.insert("commuMapper.insertGroup", map);
 		Map<String, Object> m = sqlSession.selectOne("commuMapper.selectMaxGroupNum");
+		Map<String, Object> mm = m;
 		for(int i=1; i<=5; i++) {
-			m.put("boardNum", i);
-			System.out.println(m);
-			sqlSession.insert("commuMapper.insertGroupsBoard", m);
+			m.put("boardType", i);
+			System.out.println(mm);
+			sqlSession.insert("commuMapper.insertGroupsBoard", mm);
 		}
 		//sqlSession.insert("commuMapper.insertGroupsBoardPost", list);
-		
-	}
+	return	m;
+	} 
 
 	@Override
 	public List<Map> selectCreatedCommu(String id) {

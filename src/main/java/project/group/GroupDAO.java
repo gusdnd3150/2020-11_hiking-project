@@ -17,7 +17,9 @@ public class GroupDAO{
     public void insertGroup(Map map){
         sqlSession.insert("group.insertGroup", map);
     }
-    public void insertGroupLeader(Map map){sqlSession.insert("group.insertGroupLeader",map);}
+    public void insertGroupLeader(Map map){
+    	sqlSession.insert("group.insertGroupLeader",map);
+    }
     public List<Map> selectMainGroupList(){
         return sqlSession.selectList("group.selectMainGroupList");
     }
