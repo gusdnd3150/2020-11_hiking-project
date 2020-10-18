@@ -219,7 +219,6 @@
                 contentType: false,
                 cache: false,
                 success(response){
-                    console.log(response)
                     alert("등록완료")
                     location.href = "/group/result.jsp"
                 },

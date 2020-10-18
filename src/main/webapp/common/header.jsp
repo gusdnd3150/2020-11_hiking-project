@@ -26,14 +26,14 @@
 <!-- Navigation -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
     <div class="container">
-        <a class="navbar-brand" href="/">
-            <img src="../resources/img/main-icon.svg" width="30" height="30" class="d-inline-block align-top" alt="" loading="lazy">
+        <a class="navbar-brand" href="/" style="font-size: 32px">
+            <img src="../resources/img/main-icon.svg" width="50" height="50" class="d-inline-block align-top" alt="" loading="lazy">
             산오름
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
+        <div class="collapse navbar-collapse" id="navbarResponsive" style="font-size: 20px">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
                     <a class="nav-link" href="/group/main1.do">산오르기<span class="sr-only"></span></a>
@@ -52,12 +52,19 @@
 
                 <c:choose>
                     <c:when test="${not empty LOGIN}">
-                <li class="nav-item">
-                        <a class="nav-link" href="/user/logOut.do">로그아웃</a>
-                </li>
-                <li class="nav-item">
-                        <a class="nav-link" href="/mypage/mypageHomeView.do">마이페이지</a>
-                </li>
+                        <c:if test="${LOGIN eq 'admin'}">
+                            <li class="nav-item">
+                                <a class="nav-link" href="/admin.do">관리자페이지</a>
+                            </li>
+                        </c:if>
+                        <c:if test="${LOGIN ne 'admin'}">
+                            <li class="nav-item">
+                                    <a class="nav-link" href="/mypage/mypageHomeView.do">마이페이지</a>
+                            </li>
+                        </c:if>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/user/logOut.do">로그아웃</a>
+                        </li>
                     </c:when>
                     <c:otherwise>
                 <li class="nav-item">
@@ -66,7 +73,9 @@
                     </c:otherwise>
                 </c:choose>
                 <button class="btn my-2 my-sm-0">
-                    <img src="../resources/img/search.png" width="25" height="25" onclick="">
+                    <a href="/search/main.jsp">
+                        <img src="../resources/img/search.png" width="25" height="25" onclick="">
+                    </a>
                 </button>
             </ul>
         </div>

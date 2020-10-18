@@ -10,7 +10,7 @@
         <img src="../resources/img/result.jpg">
         ${groupNum}
     </div>
-    <a class="btn btn-outline-info" href="redirect:/main.do">메인 페이지로</a>
+    <a class="btn btn-outline-info" href="/main.do">메인 페이지로</a>
     <a class="btn btn-danger" href="/calendar.do">나의 등산일정에 추가하기</a>
 </div>
 </body>

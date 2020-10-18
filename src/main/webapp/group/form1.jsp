@@ -189,6 +189,7 @@
                 cache: false,
                 success(response){
                     alert("등록 성공")
+                    location.href = "/group/result.jsp"
                 },
                 error(response){
                     alert("등록 오류, 새로고침 후 다시 시도 해주세요")
