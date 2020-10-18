@@ -54,7 +54,10 @@ public interface B_P003_D001productService {
 	//장바구니 상품 추가
 	public List<Integer> checkQuantity(Map<String,Object> map) throws DataAccessException ;
 	public void addCart(List<Map> map) throws DataAccessException ;
+	public void addCartOne(Map<String, Object> map) throws DataAccessException ;
 	public List<Map> CartList(Map<String, Object> map) throws DataAccessException;
+	public List<Integer> searchOption(Map<String, Object> map) throws DataAccessException;
+	
 	public int CartTotal(Map<String, Object> map)throws DataAccessException ;
 	public void deleteCart(Map<String, Object> map) throws DataAccessException;
 	public Integer checkCart(Map<String, Object> map) throws DataAccessException ;
@@ -68,5 +71,6 @@ public interface B_P003_D001productService {
 	public int prodNum() ;
 	public int optionNum() ;
 	public void addOption(List<Map> addOption)throws DataAccessException ;
+	public void modOption(Map<String, Object> map) throws DataAccessException ;
 	public List test(List<Map> list);
 }

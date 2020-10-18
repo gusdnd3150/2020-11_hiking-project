@@ -311,6 +311,13 @@ $(document).ready(function () {
              }
            });
     }); 
+    
+    
+    $("#addcart1").click(function(){
+    	
+    	console.log("dddd");
+    	
+    });
 
 	
 });
@@ -445,7 +452,7 @@ $(document).ready(function () {
                         <a href="#">
                           <i class="ti-heart"></i>
                         </a>
-                          <a  href="/B_P003_D001/addCart?prodNum=${data.PRODNUM}&prodName=${data.NAME}&prodPrice=${data.PRICE}&addType=main" > 
+                          <a id="addcart1" href="/B_P003_D001/addCartMain?prodNum=${data.PRODNUM}&prodName=${data.NAME}&prodPrice=${data.PRICE}&addType=main" > 
                            <i class="ti-shopping-cart"></i>
                           </a>
                       </div>
@@ -634,7 +641,7 @@ $(document).ready(function () {
                 <a href="#">
                   <i class="ti-heart"></i>
                 </a>
-                <a  href="/B_P003_D001/addCart?prodNum=${items.PRODNUM}&prodName=${items.NAME}&prodPrice=${items.PRICE}&addType=main" >
+                <a  href="/B_P003_D001/addCartMain?prodNum=${items.PRODNUM}&prodName=${items.NAME}&prodPrice=${items.PRICE}&addType=main" >
                   <i class="ti-shopping-cart"></i>
                 </a>
               </div>

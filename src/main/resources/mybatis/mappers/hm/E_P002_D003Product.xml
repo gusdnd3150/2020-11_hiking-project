@@ -177,11 +177,13 @@
        
   	<!-- 상품상세 -->
        <select id="selectProductDetail" resultType="map" parameterType="java.util.Map">
-	       select *
+	       select op.color,op.prodsize,op.quantity,p.prodnum,
+                   p.content,p.name,p.price,p.type,op.optionnum
            from products p, prodoption op
            where p.prodnum=op.prodnum
            and p.PRODNUM = #{prodNum}
        </select>
+       
        
   	<!-- 상품상세페이지의 이미지들 -->
        <select id="selectProductDetailImages" resultType="map" parameterType="java.util.Map">
@@ -207,15 +209,27 @@
       ]]>      
    </update> -->
    
+   
+     <!-- 구매 성공 후 수량 빼기 -->   
+    <update id="modOption"  parameterType="java.util.Map">
+     <![CDATA[
+	  update orders
+	     set quantity = #{quantity},
+          ORDERTYPE= 2,
+          optionnum = #{optionNum}
+	     where ordernum= #{ordernum}
+      ]]>      
+   </update> 
+   
    	    <!-- 구매 성공 후 수량 빼기 -->
 	   <update id="updateQuantity"  parameterType="java.util.List">
         <foreach  item="item" collection="list"  index="index" 
       separator=";" open="DECLARE BEGIN" close="; END;" >
-           UPDATE products 
+           UPDATE prodoption 
            SET quantity = quantity -#{item.quantity}
            WHERE prodNum= #{item.prodNum}
       </foreach>
-       </update>
+       </update> 
    
    
    
@@ -602,6 +616,15 @@
         </select>
         
         
+        
+        <select id="seachOptionNum" resultType="int" parameterType="java.util.Map">
+	       select optionnum
+           from prodoption
+           where PRODNUM = #{prodNum}
+       </select>
+        
+        
+        
             <!-- 장바구니 페이징 -->   
          <select id="UserCartList" resultType="map" parameterType="java.util.Map">
         <![CDATA[
@@ -609,27 +632,29 @@
 		FROM (
 			SELECT ROWNUM RN, A.* 
 				FROM (
-				        SELECT o.ORDERNUM,o.USERNUM,o.ORDEREDAT,o.PRICE,o.CHARGE,o.ORDERSTATUS,
-                        o.DELIVERYSTATUS,o.ORDERTYPE,o.PRODNUM,o.QUANTITY,o.PRODNAME,io.content as image
-						FROM orders o,prodPhoto io, products p
-                        where o.prodnum= io.prodnum
-                        and io.prodnum=p.prodnum
-                        and o.userNum = #{userNum}
-                        and o.ordertype=2
-                        and io.pphotonum=1
-						ORDER BY o.prodNum desc       
+                              select o.ordernum,o.prodnum,o.optionnum,p.name, o.price,o.quantity,op.color,op.prodsize,po.content as image
+                                from orders o, products p, prodphoto po,prodoption op
+                                where o.prodnum=p.prodnum
+                                and p.prodnum=po.prodnum
+                                and op.optionnum =o.optionnum
+                                and o.usernum= #{userNum}
+                                and  o.ordertype= #{orderType}
+                                and po.pphotonum=1
+                                order by ordernum desc     
 						) A
 				)
 	  WHERE RN BETWEEN #{start} AND #{end}
         ]]>
         </select>
         
+        
+        
                	<!--장바구니 총개수 -->
        <select id="CartCount" resultType="int" parameterType="java.util.Map">
         <![CDATA[
 	      SELECT COUNT(*) FROM orders
             where userNum = #{userNum}
-            and orderType =2
+            and orderType = #{orderType}
 	       ]]>
        </select>
        
@@ -695,7 +720,7 @@
       separator=";" open="DECLARE BEGIN" close="; END;" >
            UPDATE orders 
            SET PAYTOTAL = #{item.payTotal}
-           ,ORDERTYPE =3
+           ,ORDERTYPE =4
            ,QUANTITY = #{item.quantity}
            ,ORDERSTATUS =2
            ,DELIVERYSTATUS =200
@@ -707,17 +732,40 @@
 
 
                <!-- 즉시구매 -->
-        <insert id="insertOrderOne"  parameterType="java.util.List">
+<!--         <insert id="insertOrderOne"  parameterType="java.util.List">
         <selectKey resultType="int" keyProperty="orderNum" order="BEFORE">
 	    	 select seq_orders.nextval from dual
 	    </selectKey>
         <foreach  item="item" collection="list"  index="index" 
       separator=";" open="DECLARE BEGIN" close="; END;">
       insert into orders(ORDERNUM, USERNUM,ORDEREDAT,PRICE,PAYTOTAL,CHARGE,ORDERSTATUS,DELIVERYSTATUS,ORDERTYPE,PRODNUM,PRODNAME,QUANTITY)
-      values(#{orderNum},#{item.userNum},SYSDATE,#{item.price},#{item.payTotal},3000,2,200,1,#{item.prodNum},#{item.prodName},#{item.quantity})
+      values(#{orderNum},#{item.userNum},SYSDATE,#{item.price},#{item.payTotal},3000,2,200,4,#{item.prodNum},#{item.prodName},#{item.quantity})
       </foreach>
-       </insert>
-
+       </insert> -->
+       
+        <!-- 즉시구매 -->
+	  <insert id="insertOrderOne" parameterType="java.util.List">
+	   insert into orders(
+	ORDERNUM, USERNUM,ORDEREDAT,PRICE,PAYTOTAL,CHARGE,ORDERSTATUS,DELIVERYSTATUS,ORDERTYPE,OPTIONNUM,PRODNUM,PRODNAME,QUANTITY
+				    )
+		        select  seq_orders.nextval as ORDERNUM, A .* from(
+	 	<foreach collection="list" item="item" separator="union all" >
+		        select  
+				        #{item.userNum} as USERNUM,
+				        sysdate as ORDEREDAT,
+				        #{item.price} as PRICE,
+				        #{item.payTotal} as PAYTOTAL, 
+				        3000 as CHARGE,
+				        2 as ORDERSTATUS,
+				        200 as DELIVERYSTATUS,
+				        4 as ORDERTYPE,   
+				        #{item.optionNum} as OPTIONNUM,
+				        #{item.prodNum}as PRODNUM,
+				        #{item.prodName} as PRODNAME,
+				        #{item.quantity}as QUANTITY
+				        from dual
+   		 </foreach>)A
+    </insert>
 	      <!-- orders (ordertype 일반구매 = 1, 장바구니 =2, 구매전장바구니 =3)
 	                  (oderstatus 결제완료 =1, 미완료 =2)                               
 	                  (deliverystatus 배송준비 =1, 배송중 =2, 배송완료=3)
@@ -818,13 +866,26 @@
 				        3000 as CHARGE,
 				        1 as ORDERSTATUS,
 				        100 as DELIVERYSTATUS,
-				        2 as ORDERTYPE,
+				        #{item.orderType} as ORDERTYPE,
 				        #{item.prodNum}as PRODNUM,
 				        #{item.quantity}as QUANTITY
 				        from dual
    		 </foreach>)A
     </insert>
 	 
+	 
+	 
+	<insert id="addCartOne"  parameterType="java.util.Map">
+   		<selectKey resultType="int" keyProperty="orderNum" order="BEFORE">
+	     select seq_orders.nextval from dual
+	    </selectKey>
+     insert INTO orders(  ORDERNUM, USERNUM,PRICE, OPTIONNUM,ORDEREDAT,CHARGE,ORDERSTATUS,DELIVERYSTATUS,ORDERTYPE,PRODNUM,QUANTITY)
+      VALUES (#{orderNum}, #{userNum},#{prodPrice} ,#{optionNum} ,CURRENT_TIMESTAMP ,3000 ,1 ,100 ,#{orderType} ,#{prodNum},1)
+   </insert>
+	
+	
+	
+	
 	
 	     <!-- 장바구니결제 후 payment -->
 	<insert id="insertPaymentmultiple"  parameterType="java.util.Map">

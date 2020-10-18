@@ -215,15 +215,13 @@ function usePoin(){                         //포인트 사용할 경우
 } 
  
  
- function cancelPay() {
-	 
-	 
+ function cancelPay(imp,merchant) {
 	  var test ="imp_122779319082";
 	  $.ajax({
 		 type:"post",
 	     async:true,
 	     url:"/E_P003_D001/cancelPay",
-	     data:{test:test},
+	     data:{test:imp,merchant:merchant},
 	     success:function(data,textStatus){
 	     	//alert('넘어온 토큰'+data);
 	     	console.log(data);
@@ -259,6 +257,7 @@ function usePoin(){                         //포인트 사용할 경우
 		  var orderNums=[];
 		  var perTotals=[];
 		  var prodPrices =[];
+		  var optionNums=[];
           $("input[name=prodNum]").each(function(idx){
               var value = $(this).val();
               var eqValue = $("input[name=prodNum]:eq(" + idx + ")").val() ;
@@ -266,9 +265,12 @@ function usePoin(){                         //포인트 사용할 경우
               var orderNum = $("input[name=orderNum]:eq(" + idx + ")").val() ;
               var perTotal = $("input[name=total]:eq(" + idx + ")").val() ;
               var prodPrice = $("input[name=prodPrice]:eq(" + idx + ")").val() ;
+              var optionNum = $("input[name=optionNums]:eq(" + idx + ")").val() ;
+              
               prodNums.push(Number.parseInt(eqValue));
               quantityToDB.push(Number.parseInt(quan));
               orderNums.push(Number.parseInt(orderNum));
+              optionNums.push(Number.parseInt(optionNum));
               perTotals.push(Number.parseInt(perTotal));
               prodPrices.push(prodPrice);
               console.log("수량:"+quan);
@@ -283,7 +285,7 @@ function usePoin(){                         //포인트 사용할 경우
 		      pg : 'inicis', // version 1.1.0부터 지원.
 		      pay_method : payType,           //trans는 무통장
 		      merchant_uid : 'merchant_' + new Date().getTime(),
-		      name : custName,
+		      //name : custName,
 		      amount : totalPrice-point, //판매 가격
 		      /* buyer_email : 'iamport@siot.do', */
 		      buyer_name : custName,
@@ -302,16 +304,20 @@ function usePoin(){                         //포인트 사용할 경우
 	                data:{zoneCode:zoneCode,
 	                	address1:address1,address2:address2,
 	                	phoneNum:phoneNum,custName:custName,
-	                	payType:payType,point:point,paid_amount:rsp.paid_amount,
+	                	payType:payType,point:point,paid_amount:rsp.paid_amount,optionNums:optionNums,
 	                	imp_uid:rsp.imp_uid,merchant_uid:rsp.merchant_uid,prodPrices:prodPrices,
 	                	apply_num:rsp.apply_num,prodNums:prodNums,quantityToDB:quantityToDB,type:type,
 	                	chooseAddress:chooseAddress,prodName:prodName,orderNums:orderNums,perTotals:perTotals,
 	                },
 	                success:function(data,textStatus){
-	                	alert('결제가 완료 되었습니다.');
-	                	location.href="/B_P002_D001/shopMainCate?listType=10";
 	                },
 	                error:function(data,textStatus){
+	                	alert('결제가 실패.');
+	                	cancelPay(rsp.imp_uid,rsp.merchant_uid);
+	                },
+	                complete:function(){
+	                	alert('결제가 완료 되었습니다.');
+	                	location.href="/B_P002_D001/shopMainCate?listType=100";
 	                }
 	              });
 	                  /* var msg = '결제가 완료되었습니다.';
@@ -329,7 +335,7 @@ function usePoin(){                         //포인트 사용할 경우
 		      alert(msg);
 		  });
 	  }else{
-		  location.href="/B_P002_D001/shopMainCate?listType=10";
+		  location.href="/B_P002_D001/shopMainCate?listType=100";
 	  }
 }
  
@@ -351,7 +357,7 @@ align:bottom;
 <body>
 <jsp:include page="/common/header.jsp" />
 
-
+       <!-- user table 정보 -->
 <c:if test="${not empty address.address }">
 <input type="hidden" name="basicAddress" value="${address.address }">
 <input type="hidden" name="addressDetail" value="${address.address2 }">
@@ -431,6 +437,7 @@ align:bottom;
                   <th scope="col">상품</th>
                   <th scope="col">가격</th>
                   <th scope="col">수량</th>
+                  <th scope="col">옵션</th>
                   <th scope="col">Total</th>
                 </tr>
               </thead>
@@ -471,24 +478,13 @@ align:bottom;
                         title="Quantity:"
                         class="input-text qty"
                       />
-                      <!-- <button
-                        onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"
-                        class="increase items-count"
-                        type="button"
-                        id="clickUp"
-                      >
-                        <i class="lnr lnr-chevron-up"></i>
-                      </button>
-                      <button
-                        onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) &amp;&amp; sst > 0 ) result.value--;return false;"
-                        class="reduced items-count"
-                        type="button"
-                        id="clickDown"  > 
                       
-                        <i class="lnr lnr-chevron-down"></i>
-                      </button> -->
                       <p></p>
                     </div>
+                  </td>
+                  <td>
+                  <h> <span>색상 </span> : ${prodDetail.COLOR }  &nbsp; &nbsp; </h><br>
+                <h> <span>사이즈 </span> : ${prodDetail.PRODSIZE }  &nbsp; &nbsp;</h> 
                   </td>
                   <td>
                     <h5> <bold id="totalPut">${prodDetail.PRICE * prodDetail.QUANTITY }</bold>원</h5> <!--  수량 *가격 --> 
@@ -498,6 +494,7 @@ align:bottom;
                 <input type="hidden" name="prodNum" value="${prodDetail.PRODNUM }">
                 <input type="hidden" name="prodName" value="${prodDetail.NAME }">
                 <input type="hidden" name="orderNum" value="${prodDetail.ORDERNUM }">
+                <input type="hidden" name="optionNums" value="${prodDetail.OPTIONNUM }">
                 <input type="hidden" name="type" value="${type }">
                 
                     </c:forEach>

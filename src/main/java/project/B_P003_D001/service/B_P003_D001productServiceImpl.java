@@ -232,6 +232,23 @@ public class B_P003_D001productServiceImpl implements B_P003_D001productService{
 		return b_P003_D001productDAO.checkQuantity(map);
 	}
 
+	@Override
+	public List<Integer> searchOption(Map<String, Object> map) throws DataAccessException {
+		return b_P003_D001productDAO.searchOption(map);
+	}
+
+	@Override
+	public void addCartOne(Map<String, Object> map) throws DataAccessException {
+		b_P003_D001productDAO.addCartOne(map);
+		
+	}
+
+	@Override
+	public void modOption(Map<String, Object> map) throws DataAccessException {
+		b_P003_D001productDAO.modOption(map);
+		
+	}
+
 	
 	
 

@@ -207,6 +207,19 @@ public class B_P003_D001productDAOImpl implements B_P003_D001productDAO {
 	public List<Integer> checkQuantity(Map<String,Object> map) throws DataAccessException {
 		return sqlSession.selectList("project.e_P002_D003.checkQuantity",map);
 	}
+	@Override
+	public List<Integer> searchOption(Map<String, Object> map) throws DataAccessException {
+		return sqlSession.selectList("project.e_P002_D003.seachOptionNum",map);
+	}
+	@Override
+	public void addCartOne(Map<String, Object> map) throws DataAccessException {
+		sqlSession.insert("project.e_P002_D003.addCartOne",map);
+		
+	}
+	@Override
+	public void modOption(Map<String, Object> map) throws DataAccessException {
+		sqlSession.update("project.e_P002_D003.modOption",map);
+	}
 
 
 
