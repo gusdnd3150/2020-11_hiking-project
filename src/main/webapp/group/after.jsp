@@ -1,0 +1,147 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+         pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page session="false" %>
+<jsp:include page="/common/header.jsp" />
+<link rel="stylesheet" type="text/css" href="../resources/css/views/group/after.css">
+<body class="container pt-5">
+<div class="pt-5">
+    <h1>후기 작성</h1>
+    <form id="afterForm" class="form-group" method="POST" action="/after/insert.do" enctype="multipart/form-data">
+        <div class="p-3">
+            <label class="label control-label" for="title"><h5>후기 제목</h5></label>
+            <input id="title" name="title" type="text" class="form-control" placeholder="후기 제목 입력">
+            </div>
+        <div class="p-3">
+            <label class="label control-label" for="editor"><h5>후기 내용</h5></label>
+            <textarea name="content" id="editor">
+            </textarea>
+        </div>
+    </form>
+    <div class="p-3" style="float: right">
+        <button id="reset" class="btn btn-light">다시 작성</button>
+        <button id="submit" class="btn btn-info">작성 완료</button>
+    </div>
+</div>
+<script type="text/javascript" src="../resources/js/jquery.js"></script>
+<script src="../resources/ckeditor5/ckeditor.js"></script>
+<script>
+    ClassicEditor
+        .create( document.querySelector( '#editor' ), {
+            extraPlugins: [MyCustomUploadAdapterPlugin],
+            heading: {
+                options: [
+                    { model: 'paragraph', title: '본문', class: 'ck-heading_paragraph' },
+                    { model: 'heading1', view: 'h1', title: '제목 1', class: 'ck-heading_heading1' },
+                    { model: 'heading2', view: 'h2', title: '제목 2', class: 'ck-heading_heading2' },
+                    { model: 'heading3', view: 'h3', title: '제목 3', class: 'ck-heading_heading3' }
+                ]
+            },
+            language: 'ko',
+            image: {
+                ImageCaption: {
+
+                },
+                resizeUnit: 'px',
+                toolbar: [
+                    'imageTextAlternative',
+                    'imageStyle:alignLeft',
+                    'imageStyle:full',
+                    'imageStyle:side'
+                ],
+                styles: [ 'full','alignLeft','alignRight','side' ]
+            },
+            table: {
+                contentToolbar: [
+                    'tableColumn',
+                    'tableRow',
+                    'mergeTableCells'
+                ]
+            },
+            ckfinder: {
+                options: {
+                    uploadUrl: '/after/uploadImage.do'
+                }
+            },
+            alignment: {
+                options: [ 'left', 'center', 'right']
+            }
+        } )
+        .then( editor => {
+            window.editor = editor;
+
+        } )
+        .catch( err => {
+            console.error( err.stack );
+        } );
+
+    function MyCustomUploadAdapterPlugin(editor) {
+        editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
+            return new UploadAdapter(loader)
+        }
+    }
+
+    class UploadAdapter {
+        constructor(loader) {
+            this.loader = loader;
+        }
+
+        upload() {
+            return this.loader.file.then( file => new Promise(((resolve, reject) => {
+                this._initRequest();
+                this._initListeners( resolve, reject, file );
+                this._sendRequest( file );
+            })))
+        }
+
+        _initRequest() {
+            const xhr = this.xhr = new XMLHttpRequest();
+            xhr.open('POST', '/after/uploadImage.do', true);
+            xhr.responseType = 'json';
+        }
+
+        _initListeners(resolve, reject, file) {
+            const xhr = this.xhr;
+            const loader = this.loader;
+            const genericErrorText = '파일을 업로드 할 수 없습니다.'
+
+            xhr.addEventListener('error', () => {reject(genericErrorText)})
+            xhr.addEventListener('abort', () => reject())
+            xhr.addEventListener('load', () => {
+                const response = xhr.response
+
+                console.log(response)
+                if(!response || response.error) {
+                    return reject( response && response.error ? response.error.message : genericErrorText );
+                }
+
+                resolve({
+                    default: response.url //업로드된 파일 주소
+                })
+            })
+        }
+
+        _sendRequest(file) {
+            const data = new FormData()
+            data.append('upload',file)
+            this.xhr.send(data)
+        }
+    }
+    $('#reset').on("click",function (){
+        $('#title').val("");
+        window.editor.setData("");
+    })
+
+    $('#submit').on("click",function (){
+
+        var data = {
+            "title" : $('#title').val(),
+            "content" : window.editor.getData(),
+            "groupNum" : 
+        }
+    })
+
+
+</script>
+</body>
+</html>

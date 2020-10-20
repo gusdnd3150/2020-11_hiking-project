@@ -1,14 +1,22 @@
 package project.group;
 
 import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Array;
 
 @Component
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+@Builder
+@Document(indexName = "index01", type="groups")
 public class GroupVO {
 
+    @Id
     private int groupNum;               // 그룹 번호
     private String name;                // 그룹 이름
     private int type;                   // 그룹 타입 : 1=인스턴스, 2=산모임
@@ -25,13 +33,4 @@ public class GroupVO {
     private String sex;                 // 그룹 성별
     private String mtNm;               // 등산로명
 
-    private Object images;
-
-    public Object getImages() {
-        return images;
-    }
-
-    public void setImages(Object images) {
-        this.images = images;
-    }
 }

@@ -10,7 +10,7 @@ textarea {
 </style>
 <!-- Button trigger modal -->
 <button type="button" class="btn btn-info btn-block" id="editProf"
-	data-toggle="modal" data-target="#exampleModalCenter">
+	data-toggle="modal" data-target="#exampleModalCenter" style="text-align: center">
 	<b>프로필 수정하기</b>
 </button>
 

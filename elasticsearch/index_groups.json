@@ -1,0 +1,64 @@
+{
+  "settings": {
+    "number_of_shards": 1,
+    "number_of_replicas": 0,
+    "analysis": {
+      "tokenizer": {
+        "my_nori_tokenizer": {
+          "type": "nori_tokenizer"
+        }
+      }
+    }
+  },
+  "mappings": {
+    "properties": {
+      "groupNum": {
+        "type": "integer"
+      },
+      "name": {
+        "type": "text"
+      },
+      "type": {
+        "type": "integer",
+        "fields": {"keyword": {"type": "keyword"}}
+      },
+      "staffCurrent": {
+        "type": "integer"
+      },
+      "staffMax": {
+        "type": "integer"
+      },
+      "detail": {
+        "type": "text"
+      },
+      "status": {
+        "type": "integer"
+      },
+      "startday": {
+        "type": "date"
+      },
+      "createdAt": {
+        "type": "date"
+      },
+      "updatedAt": {
+        "type": "date"
+      },
+      "area": {
+        "type": "text"
+      },
+      "ageStart": {
+        "type": "integer"
+      },
+      "ageEnd": {
+        "type": "integer"
+      },
+      "sex": {
+        "type": "text"
+      },
+      "mtnm": {
+        "type": "text"
+      }
+    }
+  }
+}
+

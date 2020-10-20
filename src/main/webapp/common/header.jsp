@@ -9,8 +9,6 @@
 %> 
 <c:set var="contextPath"  value="${pageContext.request.contextPath}"  />
 <!doctype html>
-
-
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
@@ -22,7 +20,6 @@
     <link rel="stylesheet" type="text/css" href="../resources/css/views/common/header.css" />
     
 </head>
-<body>
 <!-- Navigation -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
     <div class="container">
@@ -45,7 +42,7 @@
                     <a class="nav-link" href="/B_P002_D001/shopMainCate?listType=100">오름마켓</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">고객센터</a>
+                    <a class="nav-link" href="../board/board.jsp">고객센터</a>
                 </li>
                 <li class="nav-item">
                 </li>
