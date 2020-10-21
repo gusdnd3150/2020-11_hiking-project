@@ -2,12 +2,12 @@ package project.after;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartRequest;
+import org.springframework.web.servlet.ModelAndView;
+import project.group.GroupService;
+import project.user.service.UserService;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -25,9 +25,30 @@ public class AfterController {
     @Resource(name = "afterService")
     private AfterService afterservice;
 
-    @PostMapping("/after/insert.do")
-    public void insertAfter(@RequestParam Map map){
-        afterservice.insertAfter(map);
+    @Resource(name = "userService")
+    private UserService userService;
+
+    @PostMapping("/after/insertAfter.do")
+    @ResponseBody
+    public int insertAfter(@RequestBody Map map){
+        /*
+         임시폴더 -> resources/img 변경 필요
+         map.put("content",map.get("content").toString().replace("/upload","/resource/img"));
+         */
+        System.out.println(map.toString());
+
+        int userNum = userService.selectUserNum(map.get("userId")+"");
+
+        map.put("userNum",userNum);
+
+        int result = 0;
+        int exist = afterservice.checkAfterExist(map);
+        if(exist!=0){
+            return result;
+        }
+        result = afterservice.insertAfter(map);
+
+        return result;
     }
 
     @PostMapping("/after/uploadImage.do")

@@ -84,10 +84,10 @@
                     <!--favoriteResult ne 1 or-->
                     <button class="btn btn-outline-info col-6" onclick="showMtInfo()">산 정보보기</button>
                     <c:choose>
+                        <c:when test="${group.STATUS eq 0 and userGradeResult eq 0}"><button class="resultWaitingBtn btn btn-dark col-12" data-toggle="modal" data-target="#resultModal">모집 종료</button></c:when>
+                        <c:when test="${group.STATUS eq 0 and userGradeResult eq 1 or userGradeResult eq 2}"><button class="resultWaitingBtn btn btn-dark col-12">모집 종료</button></c:when>
                         <c:when test="${userGradeResult eq 0}"><button class="selectWaitingList btn btn-dark col-12" data-toggle="modal" data-target="#listModal">참여 리스트</button></c:when>
-                        <c:when test="${group.STATUS eq 0}"><button class="btn btn-dark col-12">모집 종료</button></c:when>
-                        <c:when test="${userGradeResult eq 0}"><button class="selectWaitingList btn btn-dark col-12" data-toggle="modal" data-target="#listModal">요청 리스트보기</button></c:when>
-                        <c:when test="${userGradeResult eq 1}"><button class="withdrawGroupBtn btn btn-info col-12" data-toggle="modal" data-target="#cancelModal">요청 취소하기</button></c:when>
+                        <c:when test="${userGradeResult eq 1}"><button class="withdrawGroupBtn btn btn-info col-12" data-toggle="modal" data-target="#cancelModal">참여 취소</button></c:when>
                         <c:when test="${userGradeResult eq 2}"><button class="joinButton btn btn-outline-info col-12" data-toggle="modal" data-target="#joinModal">참여 신청</button></c:when>
                     </c:choose>
                 </div>
@@ -122,7 +122,17 @@
         <input id="commentContent" class="form-control form-control-lg col-lg-10 col-md-9 col-10 col-10 ml-2 mr-2" type="text" placeholder="내용을 입력해주세요">
         <button id="commentSubmit" class="btn btn-info col-lg-1 col-md-1 col-sm-11">등록</button>
     </div>
+    <c:if test="${group.STATUS eq 0 and userGradeResult eq 0}">
     <hr />
+    <div class="p-3" style="text-align: center">
+        <h3>후기를 작성해주세요</h3>
+        <h4 class="text-muted">후기를 작성해주시면 포인트를 드립니다(1회)</h4>
+        <button id="writeAfter" type="button" class="btn btn-info" onclick="writeAfter()">작성하기</button>
+    </div>
+    </c:if>
+
+    <hr />
+
     <h3 class="my-4">${group.MTNM}의 다른 모임</h3>
     <div class="recommend row">
         <c:choose>
@@ -156,7 +166,7 @@
             <div class="modal-content">
                 <!-- header -->
                 <div class="modal-header">
-                    <h4 class="modal-title">요청 리스트</h4>
+                    <h4 class="modal-title">참여 리스트</h4>
                     <!-- 닫기(x) 버튼 -->
                     <button type="button" class="close" data-dismiss="modal" onclick="window.location.reload();">×</button>
                     <!-- header title -->
@@ -213,6 +223,28 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
                     <button type="button" class="cancelModalBtn btn btn-info">확인</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="resultModal">
+        <div class="modal-dialog" id="modal3">
+            <div class="modal-content">
+                <!-- header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">출발 명단</h4>
+                    <!-- 닫기(x) 버튼 -->
+                    <button type="button" class="close" data-dismiss="modal" onclick="window.location.reload();">×</button>
+                    <!-- header title -->
+                </div>
+                <!-- body -->
+                <div class="modal-body">
+                    <ul id="resultList" class="pl-3 pr-3" style="font-size: 18px">
+                    </ul>
+                </div>
+                <!-- Footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" onclick="window.location.reload();">닫기</button>
                 </div>
             </div>
         </div>
@@ -304,6 +336,13 @@
 
     function cancelwriteSubComment(e){
         e.previousSibling.previousSibling.value=null;
+    }
+
+    function writeAfter(){
+
+        localStorage.setItem("groupNum", ${group.GROUPNUM})
+        localStorage.setItem("mtNm","${group.MTNM}")
+        location.href="../after/form.jsp"
     }
 
 $(document).ready(function (){
@@ -448,6 +487,38 @@ $(document).ready(function (){
             }
         })
     })
+    $(document).on('click','.resultWaitingBtn',function (e){
+        var data = {
+            "groupNum" : ${group.GROUPNUM},
+            "userId" : "<%= request.getSession().getAttribute("LOGIN")%>"
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/group/selectWaitingList.do",
+            data: JSON.stringify(data),
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8;",
+            success: function (response){
+
+                    for(var i=0;i<response.length;i++){
+
+                        var id = "resultUser"+i;
+
+                        $('#resultList').append(
+                            '<a href="/profile/'+response[i].USERID+'"><li class="row pt-1" style="list-style: none">' +
+                            '<div id="resultUser" class="col-10 pt-1" style="font-size: 22px">' +
+                            response[i].USERID +
+                            '</div></li></a>'
+                        );
+                    }
+            },
+            error: function(response){
+                console.log("error");
+                alert("새로고침 후 다시 시도해주세요")
+            }
+        })
+    })
 
     $(document).on('click','.userAllowed',function (e){
 
@@ -515,8 +586,6 @@ $(document).ready(function (){
             dataType: 'json',
             contentType: "application/json; charset=utf-8;",
             success: function (response){
-
-                console.log(response)
 
                 var index = 0;
                 var count = response.subCommentCount;

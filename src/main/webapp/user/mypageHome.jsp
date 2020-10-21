@@ -3,15 +3,14 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <jsp:include page="/common/header.jsp" flush="false" />
 <style>
-	#space {
-		width: 170px;
+	.list {
+		text-decoration: none; !important;
+		color: black;
 	}
-
-	#space2 {
-		width: 400px;
-		margin: 10px;
+	.list:hover {
+		text-decoration: none; !important;
+		color: black;
 	}
-
 	#myTabContent {
 		height: 200px;
 	}
@@ -43,18 +42,24 @@
 					<li class="list-group-item text-center">
 						<h4>나의 산오름</h4>
 					</li>
-					<li class="list-group-item d-flex justify-content-between align-items-center">
-						<b> 오른 산 길</b>
-						<a href=""><h5 class="mt-2">15</h5></a>
-					</li>
-					<li class="list-group-item d-flex justify-content-between align-items-center">
-						<b>오르고 싶은 산 길</b>
-						<a href=""><h5 class="mt-2">50</h5></a>
-					</li>
-					<li class="list-group-item d-flex justify-content-between align-items-center">
-						<b>함께 했던 등산 모임</b>
-						<a href=""><h5 class="mt-2">50</h5></a>
-					</li>
+					<a class="list" href="">
+						<li class="list-group-item d-flex justify-content-between align-items-center">
+							<b>나의 친구 목록</b>
+							<h5 class="mt-2">15</h5>
+						</li>
+					</a>
+					<a class="list" href="">
+						<li class="list-group-item d-flex justify-content-between align-items-center">
+							<b>나의 등산 이력</b>
+							<h5 class="mt-2">50</h5>
+						</li>
+					</a>
+					<a class="list" href="">
+						<li class="list-group-item d-flex justify-content-between align-items-center">
+							<b>나의 찜 목록</b>
+							<h5 class="mt-2">50</h5>
+						</li>
+					</a>
 					<li class="list-group-item">
 						<ul class="nav nav-tabs" id="myInfoTab" role="tablist">
 							<li class="nav-item" role="presentation">

@@ -74,19 +74,37 @@
 
                 for(var i=0;i<response.length;i++){
 
-                $('.card-list').append(
-                                '<div class="pt-3 col-lg-4 col-sm-6" id="groupList">' +
-                                '<div class="card border-0" >' +
-                                '<a href="/group/'+response[i].GROUPNUM+'">' +
-                                '<img class="card-img-top" src="/resources/img/' + response[i].STOREDFILENAME + '" alt="..." style="width:100%" /></a>' +
-                                '<div class="card-body row p-1 pl-4">' +
-                                '<img src="/resources/img/' + response[i].CONTENT2 + '" class="rounded-circle" style="width: 40px;height: 40px; border: 1px solid grey">' +
-                                '<div class="col-10 p-0 pl-2 m-0">' +
-                                '<h5 class="card-title m-0" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">'+ response[i].NAME +'</h5>' +
-                                '<p class="card-text text-muted mb-1" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">'+ response[i].DETAIL +'</p>' +
-                                '<p class="text-muted">'+response[i].STARTDAY+'</p>' +
-                                '</div></div></div></div>'
-                    )
+                    if(response[i].STATUS == '진행중'){
+                        $('.card-list').append(
+                            '<div class="pt-3 col-lg-4 col-sm-6" id="groupList">' +
+                            '<div class="card border-0" >' +
+                            '<a href="/group/'+response[i].GROUPNUM+'">' +
+                            '<img class="card-img-top" src="/resources/img/' + response[i].STOREDFILENAME + '" alt="..." style="width:100%" /></a>' +
+                            '<div class="card-body row p-1 pl-4">' +
+                            '<img src="/resources/img/' + response[i].CONTENT2 + '" class="rounded-circle" style="width: 40px;height: 40px; border: 1px solid grey">' +
+                            '<div class="col-10 p-0 pl-2 m-0">' +
+                            '<h5 class="card-title m-0" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">'+
+                            '<b style="color: limegreen">['+response[i].STATUS+']</b> ' +response[i].NAME +'</h5>' +
+                            '<p class="card-text text-muted mb-1" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">'+ response[i].DETAIL +'</p>' +
+                            '<p class="text-muted">'+response[i].STARTDAY+' 출발</p>' +
+                            '</div></div></div></div>'
+                        )
+                    }else if(response[i].STATUS == '마감'){
+                        $('.card-list').append(
+                            '<div class="pt-3 col-lg-4 col-sm-6" id="groupList">' +
+                            '<div class="card border-0" >' +
+                            '<a href="/group/'+response[i].GROUPNUM+'">' +
+                            '<img class="card-img-top" src="/resources/img/' + response[i].STOREDFILENAME + '" alt="..." style="width:100%" /></a>' +
+                            '<div class="card-body row p-1 pl-4">' +
+                            '<img src="/resources/img/' + response[i].CONTENT2 + '" class="rounded-circle" style="width: 40px;height: 40px; border: 1px solid grey">' +
+                            '<div class="col-10 p-0 pl-2 m-0">' +
+                            '<h5 class="card-title m-0" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">'+
+                            '<b style="color:red">['+response[i].STATUS+']</b> ' +response[i].NAME +'</h5>' +
+                            '<p class="card-text text-muted mb-1" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">'+ response[i].DETAIL +'</p>' +
+                            '<p class="text-muted">'+response[i].STARTDAY+' 출발</p>' +
+                            '</div></div></div></div>'
+                        )
+                    }
                 }
             },
             error: function(response){

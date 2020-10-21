@@ -59,9 +59,20 @@
 								<img class="card-img-top" src="/resources/img/${group.STOREDFILENAME}" alt="..." style="width: 100%" />
 							</a>
 								<div class="card-body row p-3 pl-4">
-									<img src="/resources/img/${group.CONTENT2}" class="rounded-circle" style="width: 40px;height: 40px; border: 1px solid grey">
+									<a href="/profile/${group.ID}">
+										<img src="/resources/img/${group.CONTENT2}" class="rounded-circle" style="width: 40px;height: 40px; border: 1px solid grey">
+									</a>
 									<div class="col-10 p-0 pl-2">
-										<h5 class="card-title m-0" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">${group.NAME}</h5>
+										<h5 class="card-title m-0" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">
+											<c:if test="${group.STATUS eq '진행중'}">
+												<b style="color: limegreen">
+											</c:if>
+											<c:if test="${group.STATUS eq '마감'}">
+												<b style="color: red">
+											</c:if>
+												[${group.STATUS}]</b>
+												${group.NAME}
+										</h5>
 										<p class="card-text text-muted mb-1" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">${group.DETAIL}</p>
 										<p class="text-muted">${group.STARTDAY} 출발</p>
 									</div>

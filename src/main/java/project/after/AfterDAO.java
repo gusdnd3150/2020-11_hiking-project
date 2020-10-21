@@ -12,7 +12,10 @@ public class AfterDAO {
     @Autowired
     private SqlSession sqlSession;
 
-    public void insertAfter(Map map){
-        sqlSession.insert("after.insertAfter",map);
+    public int insertAfter(Map map){
+        return sqlSession.insert("after.insertAfter",map);
+    }
+    public int checkAfterExist(Map map){
+        return sqlSession.selectOne("after.checkAfterExist",map);
     }
 }

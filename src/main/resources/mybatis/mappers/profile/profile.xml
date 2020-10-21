@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="profile">
+    <select id="selectUserProfileById" resultType="map" parameterType="string">
+        <![CDATA[
+            SELECT u.userNum, u.id, u.nickname, u.createdAt, ui.content2, ui.profile
+            FROM users u, userInfo ui
+            WHERE u.userNum = ui.userNum
+            AND id = #{id}
+        ]]>
+    </select>
+</mapper>

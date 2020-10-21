@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page session="false" %>
 <jsp:include page="/common/header.jsp" />
 <link rel="stylesheet" type="text/css" href="../resources/css/views/group/after.css">
 <body class="container pt-5">
@@ -26,6 +25,8 @@
 <script type="text/javascript" src="../resources/js/jquery.js"></script>
 <script src="../resources/ckeditor5/ckeditor.js"></script>
 <script>
+    var imageList;
+
     ClassicEditor
         .create( document.querySelector( '#editor' ), {
             extraPlugins: [MyCustomUploadAdapterPlugin],
@@ -110,7 +111,6 @@
             xhr.addEventListener('load', () => {
                 const response = xhr.response
 
-                console.log(response)
                 if(!response || response.error) {
                     return reject( response && response.error ? response.error.message : genericErrorText );
                 }
@@ -137,11 +137,30 @@
         var data = {
             "title" : $('#title').val(),
             "content" : window.editor.getData(),
-            "groupNum" : 
+            "groupNum" : localStorage.getItem("groupNum"),
+            "mtNm" : localStorage.getItem("mtNm"),
+            "userId" : "<%= request.getSession().getAttribute("LOGIN")%>"
         }
+
+        $.ajax({
+            type: "POST",
+            url: "/after/insertAfter.do",
+            data: JSON.stringify(data),
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8;",
+            success : function (response){
+                if(response==0){
+                    alert("회원당 후기는 1개만 작성가능합니다")
+                    return;
+                }
+                alert("작성 완료")
+                location.href="../group/main1.jsp"
+            },
+            error : function (response){
+                alert("오류 발생! 다시 시도해주세요");
+            }
+        })
     })
-
-
 </script>
 </body>
 </html>

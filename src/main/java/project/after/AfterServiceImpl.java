@@ -10,7 +10,8 @@ public class AfterServiceImpl implements AfterService {
 
     @Resource(name = "afterDAO")
     private AfterDAO afterDAO;
-    public void insertAfter(Map map) {
-        afterDAO.insertAfter(map);
+    public int insertAfter(Map map) {
+        return afterDAO.insertAfter(map);
     }
+    public int checkAfterExist(Map map){return afterDAO.checkAfterExist(map);}
 }

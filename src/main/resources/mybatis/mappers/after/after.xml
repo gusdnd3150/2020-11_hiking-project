@@ -5,19 +5,29 @@
 
 <mapper namespace="after">
     <insert id="insertAfter" parameterType="map">
+        <selectKey keyProperty="afterNum" resultType="_int" order="BEFORE">
+            SELECT AFTER_SEQ.nextval
+            FROM dual
+        </selectKey>
         <![CDATA[
             INSERT INTO groupAfter
             VALUES (
                    #{userNum},
-                   #{afterNum},
+                   AFTER_SEQ.currval,
                    #{groupNum},
                    #{mtNm},
+                   #{title},
                    #{content},
-                   #{fileSize},
-                   #{storedFileName},
-                   sysdate,
                    sysdate
                    )
         ]]>
     </insert>
+    <select id="checkAfterExist" resultType="int" parameterType="map">
+        <![CDATA[
+            SELECT userNum
+            FROM groupAfter
+            WHERE userNum = #{userNum}
+              AND groupNum = #{groupNum}
+        ]]>
+    </select>
 </mapper>

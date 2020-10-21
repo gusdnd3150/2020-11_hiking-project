@@ -65,7 +65,7 @@
     <!-- 메인 리스트 6개 불러오기 (좋아요순) -->
     <select id="selectMainGroupList" resultType="map">
         <![CDATA[
-            SELECT g.groupNum, g.name, g.staffCurrent, g.staffmax, g.detail, g.status, TO_CHAR(g.startDay,'yyyy"년"MM"월"dd"일"') startDay, gm.storedFileName, NVL(ui.CONTENT2,'basic_profile.PNG') content2, COUNT(gl.groupNum) likeCount
+            SELECT g.groupNum, g.name, g.staffCurrent, g.staffmax, g.detail, DECODE(g.status,0,'마감','진행중') status, TO_CHAR(g.startDay,'yyyy"년"MM"월"dd"일"') startDay, gm.storedFileName, u.id, NVL(ui.CONTENT2,'basic_profile.PNG') content2, COUNT(gl.groupNum) likeCount
             FROM groups g
                      INNER JOIN groupsMedia gm
                                 ON g.groupNum = gm.groupNum
@@ -83,7 +83,7 @@
               AND gm.mediaNum = 0
               AND g.staffMax != 1
               AND ROWNUM <=6
-            GROUP BY g.groupNum, g.name, g.staffCurrent, g.staffmax, g.detail, g.status, g.startDay, gm.storedFileName, ui.CONTENT2
+            GROUP BY g.groupNum, g.name, g.staffCurrent, g.staffmax, g.detail, g.status, g.startDay, gm.storedFileName, u.id, ui.CONTENT2
             ORDER BY NVL(COUNT(gl.LIKEYN),0) DESC
         ]]>
     </select>
@@ -91,7 +91,7 @@
     <!-- 산오르기 등산모임 리스트 페이지 (수정중) -->
     <select id="selectAllGroupList" resultType="map">
         <![CDATA[
-            SELECT g.groupNum, g.name, g.staffCurrent, g.staffmax, g.detail, g.status, TO_CHAR(g.startDay,'yyyy"년"MM"월"dd"일"') startDay, gm.storedFileName, NVL(ui.CONTENT2,'basic_profile.PNG') content2
+            SELECT g.groupNum, g.name, g.staffCurrent, g.staffmax, g.detail, g.status, TO_CHAR(g.startDay,'yyyy"년"MM"월"dd"일"') startDay, gm.storedFileName, u.id, NVL(ui.CONTENT2,'basic_profile.PNG') content2
             FROM groups g
             INNER JOIN groupsMedia gm
                     ON g.groupNum = gm.groupNum
@@ -381,7 +381,7 @@
     <select id="sortGroupByKeyword" resultType="map" parameterType="string">
         <if test="_parameter eq 'lately'.toString()">
             <![CDATA[
-                SELECT g.groupNum, g.name, g.staffCurrent, g.staffmax, g.detail, g.status, TO_CHAR(g.startDay,'yyyy"년"MM"월"dd"일"') startDay, gm.storedFileName, NVL(ui.CONTENT2,'basic_profile.PNG') content2
+                SELECT g.groupNum, g.name, g.staffCurrent, g.staffmax, g.detail, DECODE(g.status,0,'마감','진행중') status, TO_CHAR(g.startDay,'yyyy"년"MM"월"dd"일"') startDay, gm.storedFileName, NVL(ui.CONTENT2,'basic_profile.PNG') content2
                 FROM groups g
                 INNER JOIN groupsMedia gm
                 ON g.groupNum = gm.groupNum
@@ -401,7 +401,7 @@
         </if>
         <if test="_parameter eq 'like'.toString()">
             <![CDATA[
-                SELECT g.groupNum, g.name, g.staffCurrent, g.staffmax, g.detail, g.status, TO_CHAR(g.startDay,'yyyy"년"MM"월"dd"일"') startDay, gm.storedFileName, NVL(ui.CONTENT2,'basic_profile.PNG') content2, COUNT(gl.groupNum) likeCount
+                SELECT g.groupNum, g.name, g.staffCurrent, g.staffmax, g.detail, DECODE(g.status,0,'마감','진행중') status, TO_CHAR(g.startDay,'yyyy"년"MM"월"dd"일"') startDay, gm.storedFileName, NVL(ui.CONTENT2,'basic_profile.PNG') content2, COUNT(gl.groupNum) likeCount
                 FROM groups g
                          INNER JOIN groupsMedia gm
                                     ON g.groupNum = gm.groupNum
