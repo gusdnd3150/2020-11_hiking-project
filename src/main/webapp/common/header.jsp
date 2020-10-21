@@ -25,7 +25,7 @@
     <div class="container">
         <a class="navbar-brand" href="/" style="font-size: 32px">
             <img src="../resources/img/main-icon.svg" width="50" height="50" class="d-inline-block align-top" alt="" loading="lazy">
-            산오름
+            <b>산오름</b>
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -33,7 +33,11 @@
         <div class="collapse navbar-collapse" id="navbarResponsive" style="font-size: 20px">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="/group/main1.do">산오르기<span class="sr-only"></span></a>
+                    <a class="nav-link" href="#">산오르기<span class="sr-only"></span></a>
+                    <ul id="sub-menu">
+                        <li style="font-size: 16px"><a class="nav-link" href="/group/main1.do">등산가기<span class="sr-only"></span></a></li>
+                        <li style="font-size: 16px"><a class="nav-link" href="/after/main.do">후기<span class="sr-only"></span></a></li>
+                    </ul>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/commu/commuMainView.do">산모임</a>

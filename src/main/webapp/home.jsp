@@ -59,7 +59,7 @@
 								<img class="card-img-top" src="/resources/img/${group.STOREDFILENAME}" alt="..." style="width: 100%" />
 							</a>
 								<div class="card-body row p-3 pl-4">
-									<a href="/profile/${group.ID}">
+									<a href="/profile/${group.ID}" onclick="window.open(this.href,'','width=400, height=600'); return false;">
 										<img src="/resources/img/${group.CONTENT2}" class="rounded-circle" style="width: 40px;height: 40px; border: 1px solid grey">
 									</a>
 									<div class="col-10 p-0 pl-2">

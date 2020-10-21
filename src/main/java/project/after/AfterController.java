@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -27,6 +28,19 @@ public class AfterController {
 
     @Resource(name = "userService")
     private UserService userService;
+
+    @GetMapping("/after/main.do")
+    public ModelAndView main(){
+        ModelAndView mav = new ModelAndView("/after/main");
+
+        List list = afterservice.selectAllAfterList();
+
+        System.out.println(list.toString());
+
+        mav.addObject("after",list);
+
+        return mav;
+    }
 
     @PostMapping("/after/insertAfter.do")
     @ResponseBody

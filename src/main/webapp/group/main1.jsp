@@ -14,7 +14,7 @@
     <p></p>
     <div class="row">
         <h1 class="col-md-8 col-lg-10 mb-0">등산모임 리스트</h1>
-        <div class="col-md-4 col-lg-2 pt-2 pb-2 btn-group btn-group-toggle" data-toggle="buttons">
+        <div class="col-sm-12 col-md-4 col-lg-2 pt-2 pb-2 btn-group btn-group-toggle" data-toggle="buttons">
             <label class="btn btn-outline-secondary active">
                 <input type="radio" name="options" id="sort_lately" checked> 최신순
             </label>
@@ -81,7 +81,8 @@
                             '<a href="/group/'+response[i].GROUPNUM+'">' +
                             '<img class="card-img-top" src="/resources/img/' + response[i].STOREDFILENAME + '" alt="..." style="width:100%" /></a>' +
                             '<div class="card-body row p-1 pl-4">' +
-                            '<img src="/resources/img/' + response[i].CONTENT2 + '" class="rounded-circle" style="width: 40px;height: 40px; border: 1px solid grey">' +
+                            '<a href="/profile/'+response[i].ID+'" onclick="window.open(this.href,\'\',\'width=400, height=600\'); return false;">' +
+                            '<img src="/resources/img/' + response[i].CONTENT2 + '" class="rounded-circle" style="width: 40px;height: 40px; border: 1px solid grey"></a>' +
                             '<div class="col-10 p-0 pl-2 m-0">' +
                             '<h5 class="card-title m-0" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">'+
                             '<b style="color: limegreen">['+response[i].STATUS+']</b> ' +response[i].NAME +'</h5>' +
@@ -96,7 +97,8 @@
                             '<a href="/group/'+response[i].GROUPNUM+'">' +
                             '<img class="card-img-top" src="/resources/img/' + response[i].STOREDFILENAME + '" alt="..." style="width:100%" /></a>' +
                             '<div class="card-body row p-1 pl-4">' +
-                            '<img src="/resources/img/' + response[i].CONTENT2 + '" class="rounded-circle" style="width: 40px;height: 40px; border: 1px solid grey">' +
+                            '<a href="/profile/'+response[i].ID+'" onclick="window.open(this.href,\'\',\'width=400, height=600\'); return false;">' +
+                            '<img src="/resources/img/' + response[i].CONTENT2 + '" class="rounded-circle" style="width: 40px;height: 40px; border: 1px solid grey"></a>' +
                             '<div class="col-10 p-0 pl-2 m-0">' +
                             '<h5 class="card-title m-0" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">'+
                             '<b style="color:red">['+response[i].STATUS+']</b> ' +response[i].NAME +'</h5>' +
@@ -132,19 +134,37 @@
 
                 for(var i=0;i<response.length;i++){
 
-                    $('.card-list').append(
-                        '<div class="pt-3 col-lg-4 col-sm-6" id="groupList">' +
-                        '<div class="card border-0" >' +
-                        '<a href="/group/'+response[i].GROUPNUM+'">' +
-                        '<img class="card-img-top" src="/resources/img/' + response[i].STOREDFILENAME + '" alt="..." style="width:100%" /></a>' +
-                        '<div class="card-body row p-1 pl-4">' +
-                        '<img src="/resources/img/' + response[i].CONTENT2 + '" class="rounded-circle" style="width: 40px;height: 40px; border: 1px solid grey">' +
-                        '<div class="col-10 p-0 pl-2 m-0">' +
-                        '<h5 class="card-title m-0" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">'+ response[i].NAME +'</h5>' +
-                        '<p class="card-text text-muted mb-1" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">'+ response[i].DETAIL +'</p>' +
-                        '<p class="text-muted">'+response[i].STARTDAY+'</p>' +
-                        '</div></div></div></div>'
-                    )
+                    if(response[i].STATUS == '진행중'){
+                        $('.card-list').append(
+                            '<div class="pt-3 col-lg-4 col-sm-6" id="groupList">' +
+                            '<div class="card border-0" >' +
+                            '<a href="/group/'+response[i].GROUPNUM+'">' +
+                            '<img class="card-img-top" src="/resources/img/' + response[i].STOREDFILENAME + '" alt="..." style="width:100%" /></a>' +
+                            '<div class="card-body row p-1 pl-4">' +
+                            '<img src="/resources/img/' + response[i].CONTENT2 + '" class="rounded-circle" style="width: 40px;height: 40px; border: 1px solid grey">' +
+                            '<div class="col-10 p-0 pl-2 m-0">' +
+                            '<h5 class="card-title m-0" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">'+
+                            '<b style="color: limegreen">['+response[i].STATUS+']</b> ' +response[i].NAME +'</h5>' +
+                            '<p class="card-text text-muted mb-1" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">'+ response[i].DETAIL +'</p>' +
+                            '<p class="text-muted">'+response[i].STARTDAY+' 출발</p>' +
+                            '</div></div></div></div>'
+                        )
+                    }else if(response[i].STATUS == '마감'){
+                        $('.card-list').append(
+                            '<div class="pt-3 col-lg-4 col-sm-6" id="groupList">' +
+                            '<div class="card border-0" >' +
+                            '<a href="/group/'+response[i].GROUPNUM+'">' +
+                            '<img class="card-img-top" src="/resources/img/' + response[i].STOREDFILENAME + '" alt="..." style="width:100%" /></a>' +
+                            '<div class="card-body row p-1 pl-4">' +
+                            '<img src="/resources/img/' + response[i].CONTENT2 + '" class="rounded-circle" style="width: 40px;height: 40px; border: 1px solid grey">' +
+                            '<div class="col-10 p-0 pl-2 m-0">' +
+                            '<h5 class="card-title m-0" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">'+
+                            '<b style="color:red">['+response[i].STATUS+']</b> ' +response[i].NAME +'</h5>' +
+                            '<p class="card-text text-muted mb-1" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">'+ response[i].DETAIL +'</p>' +
+                            '<p class="text-muted">'+response[i].STARTDAY+' 출발</p>' +
+                            '</div></div></div></div>'
+                        )
+                    }
                 }
             },
             error: function(response){

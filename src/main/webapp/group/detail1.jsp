@@ -6,7 +6,7 @@
 <link rel="stylesheet" type="text/css" href="/resources/css/views/group/detail.css" />
 <div class="container pt-5">
     <!-- Portfolio Item Heading -->
-    <h1 class="my-4">${group.NAME}
+    <h1 class="my-4 pt-3">${group.NAME}
         <small class="text-muted">${group.MTNM}</small>
     </h1>
     <div class="row" style="position: relative; height: fit-content">
@@ -78,8 +78,8 @@
             <div style="height: 10%;">
                 <div class="row col-12" style="position: relative;">
                     <c:choose>
-                        <c:when test="${favoriteResult eq 1}"><button class="dislike btn btn-danger col-6">좋아요 취소</button></c:when>
-                        <c:when test="${favoriteResult ne 1}"><button class="like btn btn-outline-danger col-6" >좋아요</button></c:when>
+                        <c:when test="${favoriteResult eq 1}"><button class="dislike btn btn-danger col-6"><i class="fas fa-heart"></i> 좋아요 취소</button></c:when>
+                        <c:when test="${favoriteResult ne 1}"><button class="like btn btn-outline-danger col-6" ><i class="far fa-heart"></i> 좋아요</button></c:when>
                     </c:choose>
                     <!--favoriteResult ne 1 or-->
                     <button class="btn btn-outline-info col-6" onclick="showMtInfo()">산 정보보기</button>
@@ -138,7 +138,7 @@
         <c:choose>
             <c:when test="${empty recommendResult}">
                 <div class="text-muted" style="width: 100%; height:200px; font-size: 20px;">
-                    <p>현재 ${group.MTNM}의 다른 모임이 없습니다</p>
+                    <p class="text-center">현재 ${group.MTNM}의 다른 모임이 없습니다</p>
                 </div>
             </c:when>
             <c:when test="${!empty recommendResult}">
@@ -255,6 +255,11 @@
 <script>
 
     const userProfile = '${group.CONTENT2}';
+
+    function openProfile(){
+        window.open("/profile/${group.ID}","하하","width=700, height=500, left=300, top=300")
+    }
+
 
     function showMtInfo(){
         window.open("detail_info.jsp","산 정보","width=700, height=500, left=300, top=300");
@@ -410,7 +415,8 @@ $(document).ready(function (){
             success : function (response){
                 $('.like').removeClass("like btn btn-outline-danger col-6")
                     .addClass("dislike btn btn-danger col-6")
-                    .text("좋아요 취소");
+                    .empty()
+                    .append("<i class=\"fas fa-heart\"> 좋아요 취소")
             },
             error : function (response){
                 console.log("error!");
@@ -433,7 +439,8 @@ $(document).ready(function (){
             success : function (response){
                 $('.dislike').removeClass("dislike btn btn-danger col-6")
                     .addClass("like btn btn-outline-danger col-6")
-                    .text("좋아요");
+                    .empty()
+                    .append("<i class=\"far fa-heart\"> 좋아요")
             },
             error : function (response){
                 alert("로그인이 필요합니다")

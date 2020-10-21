@@ -1,6 +1,32 @@
 @charset "utf-8";
+@import url(http://fonts.googleapis.com/earlyaccess/notosanskr.css);
+
+:lang(ko){
+    font-family: "Noto Sans KR", sans-serif;
+}
 
 /* 레이아웃 */
 #header {
     width: 100%; height: 50px; background: rgba(0,0,0,0.4);
+}
+
+li {
+    list-style: none;
+}
+
+#sub-menu {
+    position: absolute;
+    background-color: lightgrey;
+    opacity: 0;
+    visibility: hidden;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px
+}
+
+.navbar-nav > li:hover #sub-menu {
+    padding: 10px 5px 10px 5px;
+    opacity: 1;
+    visibility: visible;
 }

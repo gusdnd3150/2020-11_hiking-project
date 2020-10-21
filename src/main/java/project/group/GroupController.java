@@ -34,8 +34,8 @@ public class GroupController{
 
     @PostMapping(value = "/group/insert.do")
     public ModelAndView insertGroup(@RequestParam Map map,
-                            @RequestParam(value = "file", required = false) List<MultipartFile> files,
-                           HttpServletRequest request) throws Exception {
+                                    @RequestParam(value = "file", required = false) List<MultipartFile> files,
+                                    HttpServletRequest request) throws Exception {
 
         ModelAndView mav = new ModelAndView("result");
         groupService.insertGroup(map);

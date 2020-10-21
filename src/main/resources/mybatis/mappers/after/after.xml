@@ -30,4 +30,13 @@
               AND groupNum = #{groupNum}
         ]]>
     </select>
+    <select id="selectAllAfterList" resultType="map">
+        <![CDATA[
+            SELECT ga.userNum, ga.mtNm, ga.title, ga.content, TO_CHAR(ga.createdAt,'yyyy-mm-dd') createdAt, ui.content2
+            FROM groupAfter ga, users u, userInfo ui
+            WHERE ga.userNum = u.userNum
+              AND u.userNum = ui.userNum
+            ORDER BY ga.afterNum DESC
+        ]]>
+    </select>
 </mapper>
