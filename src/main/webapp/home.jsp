@@ -3,9 +3,34 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page session="false" %>
 <jsp:include page="/common/header.jsp" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="./resources/css/views/home.css">
+<body class="container pt-5" style="width: 100%">
+<!-- cover -->
+<div class="cover-container row">
+	<div class="left-cover col-6 align-self-center">
+		<div class="inner-cover" style="margin-left: 20%">
+			<h1>등산 좋아하세요?</h1>
+			산모임 검색하기
+<%--			<button class="btn btn-outline-info" onclick="moveToMain();">더보기</button>--%>
+			<div class="form-inline">
+				<input type="text" class="form-control col-6">
+				<a href="#" class="pl-2">
+					<img src="../resources/img/search.png" width="25" height="25" onclick="">
+				</a>
+			</div>
+			<div onclick="moveToMain()">
+				<h1><i class="fas fa-angle-down"></i></h1>
+			</div>
+		</div>
+	</div>
+	<div class="right-cover text-right col-sm-12 col-md-6 pt-5" style="object-fit: cover">
+		<img id="cover_image" src="./resources/img/cover.png" style="height: 100%;overflow-y: hidden" >
+	</div>
+</div>
+<hr />
+<%--<div class="container">--%>
 <!-- slider -->
-<body class="pt-5">
 <header>
 	<div id="carouselExampleIndicators" class="carousel slide container" data-ride="carousel">
 		<ol class="carousel-indicators">
@@ -46,7 +71,7 @@
 		</a>
 	</div>
 </header>
-<div class="container">
+	<hr />
 	<div class="pt-3 groupList">
 		<label for="groupList">
 			<h1>인기 등산모임</h1>
@@ -59,8 +84,8 @@
 								<img class="card-img-top" src="/resources/img/${group.STOREDFILENAME}" alt="..." style="width: 100%" />
 							</a>
 								<div class="card-body row p-3 pl-4">
-									<a href="/profile/${group.ID}" onclick="window.open(this.href,'','width=400, height=600'); return false;">
-										<img src="/resources/img/${group.CONTENT2}" class="rounded-circle" style="width: 40px;height: 40px; border: 1px solid grey">
+									<a href="/profile/${group.ID}" onclick="window.open(this.href,'','width=450, height=600'); return false;">
+										<img src="/resources/img/${group.CONTENT2}" class="rounded-circle" style="width: 40px;height: 40px;">
 									</a>
 									<div class="col-10 p-0 pl-2">
 										<h5 class="card-title m-0" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">
@@ -82,6 +107,29 @@
 				</c:forEach>
 		</div>
 	</div>
+	<hr />
+	<div class="row">
+	<div class="col-6">
+		<div><h1>인기 등산후기</h1></div>
+		<div class="afterList">
+			<c:forEach var="after" items="${after}">
+			<div class="media">
+				<img src="/resources/img/basic_profile.PNG" class="mr-3 rounded-circle" style="width: 50px;height: 50px">
+				<div class="media-body">
+					<h5 class="mt-2">
+						<h4 class="m-0">[${after.MTNM}] ${after.TITLE}</h4>
+						<div class="text-muted">${after.CREATEDAT}</div>
+					</h5>
+				</div>
+			</div>
+			</c:forEach>
+		</div>
+	</div>
+	<div class="col-6">
+		<div><h1>인기 산모임</h1></div>
+	</div>
+	</div>
+	<hr />
 	<div class="row">
 		<div class="col-md-6">
 			<p><h2>공지사항</h2></p>
@@ -90,7 +138,7 @@
 				<li class="list-group-item"><a href="#" class="notice-item" style="color: black">공지사항2</a></li>
 				<li class="list-group-item"><a href="#" class="notice-item" style="color: black">공지사항3</a></li>
 				<li class="list-group-item"><a href="#" class="notice-item" style="color: black">공지사항4</a></li>
-				<li class="list-group-item"><a href="#" class="notice-item" style="color: black">공지사항5</a></li>
+				<li class="list-group-item p-0 text-center text-muted"><a href="#" class="notice-item" style="color: black">더보기</a></li>
 			</ul>
 		</div>
 		<div class="col-md-6">
@@ -98,9 +146,9 @@
 			<img src="./resources/img/test/event1.jpg" style="width: 100%;">
 		</div>
 	</div>
-	<pre></pre>
+	<hr />
 	<div class="memberCountCon col-12" style="font-size:40px;text-align: center"></div>
-</div>
+<%--</div>--%>
 
 <!-- js -->
 <script type="text/javascript" src="./resources/js/jquery.js"></script>
@@ -122,6 +170,11 @@
 
 	function numberWithCommas(x) {
 		return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	}
+
+	function moveToMain(){
+		var location = document.querySelector('header').offsetTop;
+		window.scrollTo({top:location, behavior:"smooth"})
 	}
 
 </script>

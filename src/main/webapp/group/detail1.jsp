@@ -85,7 +85,8 @@
                     <button class="btn btn-outline-info col-6" onclick="showMtInfo()">산 정보보기</button>
                     <c:choose>
                         <c:when test="${group.STATUS eq 0 and userGradeResult eq 0}"><button class="resultWaitingBtn btn btn-dark col-12" data-toggle="modal" data-target="#resultModal">모집 종료</button></c:when>
-                        <c:when test="${group.STATUS eq 0 and userGradeResult eq 1 or userGradeResult eq 2}"><button class="resultWaitingBtn btn btn-dark col-12">모집 종료</button></c:when>
+                        <c:when test="${group.STATUS eq 0 and userGradeResult eq 1}"><button class="resultWaitingBtn btn btn-dark col-12">모집 종료</button></c:when>
+                        <c:when test="${group.STATUS eq 0 and userGradeResult eq 2}"><button class="resultWaitingBtn btn btn-dark col-12">모집 종료</button></c:when>
                         <c:when test="${userGradeResult eq 0}"><button class="selectWaitingList btn btn-dark col-12" data-toggle="modal" data-target="#listModal">참여 리스트</button></c:when>
                         <c:when test="${userGradeResult eq 1}"><button class="withdrawGroupBtn btn btn-info col-12" data-toggle="modal" data-target="#cancelModal">참여 취소</button></c:when>
                         <c:when test="${userGradeResult eq 2}"><button class="joinButton btn btn-outline-info col-12" data-toggle="modal" data-target="#joinModal">참여 신청</button></c:when>
@@ -262,7 +263,7 @@
 
 
     function showMtInfo(){
-        window.open("detail_info.jsp","산 정보","width=700, height=500, left=300, top=300");
+        window.open("/mountain/detail/${group.MTNM}","산 정보","width=700, height=500, left=300, top=300");
     }
 
     function switchPhoto(divName, totalImgs){

@@ -81,8 +81,8 @@
                             '<a href="/group/'+response[i].GROUPNUM+'">' +
                             '<img class="card-img-top" src="/resources/img/' + response[i].STOREDFILENAME + '" alt="..." style="width:100%" /></a>' +
                             '<div class="card-body row p-1 pl-4">' +
-                            '<a href="/profile/'+response[i].ID+'" onclick="window.open(this.href,\'\',\'width=400, height=600\'); return false;">' +
-                            '<img src="/resources/img/' + response[i].CONTENT2 + '" class="rounded-circle" style="width: 40px;height: 40px; border: 1px solid grey"></a>' +
+                            '<a href="/profile/'+response[i].ID+'" onclick="window.open(this.href,\'\',\'width=450, height=600\'); return false;">' +
+                            '<img src="/resources/img/' + response[i].CONTENT2 + '" class="rounded-circle" style="width: 40px;height: 40px;"></a>' +
                             '<div class="col-10 p-0 pl-2 m-0">' +
                             '<h5 class="card-title m-0" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">'+
                             '<b style="color: limegreen">['+response[i].STATUS+']</b> ' +response[i].NAME +'</h5>' +
@@ -97,8 +97,8 @@
                             '<a href="/group/'+response[i].GROUPNUM+'">' +
                             '<img class="card-img-top" src="/resources/img/' + response[i].STOREDFILENAME + '" alt="..." style="width:100%" /></a>' +
                             '<div class="card-body row p-1 pl-4">' +
-                            '<a href="/profile/'+response[i].ID+'" onclick="window.open(this.href,\'\',\'width=400, height=600\'); return false;">' +
-                            '<img src="/resources/img/' + response[i].CONTENT2 + '" class="rounded-circle" style="width: 40px;height: 40px; border: 1px solid grey"></a>' +
+                            '<a href="/profile/'+response[i].ID+'" onclick="window.open(this.href,\'\',\'width=450, height=600\'); return false;">' +
+                            '<img src="/resources/img/' + response[i].CONTENT2 + '" class="rounded-circle" style="width: 40px;height: 40px;"></a>' +
                             '<div class="col-10 p-0 pl-2 m-0">' +
                             '<h5 class="card-title m-0" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">'+
                             '<b style="color:red">['+response[i].STATUS+']</b> ' +response[i].NAME +'</h5>' +

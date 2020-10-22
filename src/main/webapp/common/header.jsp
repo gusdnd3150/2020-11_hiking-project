@@ -21,11 +21,11 @@
     
 </head>
 <!-- Navigation -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top p-0">
     <div class="container">
-        <a class="navbar-brand" href="/" style="font-size: 32px">
-            <img src="../resources/img/main-icon.svg" width="50" height="50" class="d-inline-block align-top" alt="" loading="lazy">
-            <b>산오름</b>
+        <a class="navbar-brand" href="/">
+            <img src="../resources/img/main-icon.svg" width="50" height="50" class="d-inline-block align-top" alt="" loading="lazy" style="float: left">
+            <p class="m-0 p-1" style="font: 30pt 'fromdamiM'; float: left">산오름</p>
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>

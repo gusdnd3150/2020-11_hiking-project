@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>산 정보보기</title>
     <link rel="icon" href="../resources/img/doraemon.ico" type="image/x-icon" />
-    <link rel="stylesheet" type="text/css" href="../resources/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/resources/css/bootstrap.min.css" />
 </head>
 <body>
 <ul class="nav nav-tabs">
@@ -30,7 +30,7 @@
         잘못된 정보 신고
     </div>
 </div>
-<script type="text/javascript" src="../resources/js/jquery.js"></script>
-<script type="text/javascript" src="../resources/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/resources/js/jquery.js"></script>
+<script type="text/javascript" src="/resources/js/bootstrap.min.js"></script>
 </body>
 </html>

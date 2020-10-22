@@ -28,6 +28,20 @@
     right: 0;
 }
 .card-img-top:hover {
-    opacity: 0.8;
+    opacity: 0.5;
     filter: alpha(opacity=40); /* For IE8 and earlier */
+}
+
+@media screen and (max-width: 992px){
+    .cover-container {
+        width: 0; !important;
+        display: none; !important;
+    }
+
+}
+@media screen and (min-width: 993px) {
+    .cover-container {
+
+    }
+    
 }

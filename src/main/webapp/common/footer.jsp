@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"   isELIgnored="false"
  %>
 <link rel="stylesheet" type="text/css" href="../resources/css/views/common/footer.css">
-<footer>
+<footer class="">
     <ul>
      <li><a href="#">사이트 도움말</a></li>
      <li><a href="#">사이트 이용약관</a></li>

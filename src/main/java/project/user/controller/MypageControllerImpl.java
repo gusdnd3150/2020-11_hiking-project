@@ -60,13 +60,10 @@ public class MypageControllerImpl implements MypageController {
 		List<Map> CList = commuService.selectCreatedCommu(id); 
 		List<Map> JList = commuService.selectJoinedCommu(id);
 		
-		System.out.println("컨트롤러: "+CList);
-		
 		mav.addObject("userVO", userVO);
 		mav.addObject("CList", CList);
 		mav.addObject("JList", JList);
 		mav.setViewName("/user/mypageHome");
-		System.out.println("갖다준당 : " + userVO);
 		return mav;
 	}
 

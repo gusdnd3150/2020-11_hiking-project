@@ -3,6 +3,7 @@ package project;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import project.after.AfterService;
 import project.group.GroupService;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
@@ -14,11 +15,15 @@ public class HomeController {
 
 	@Resource(name = "groupService")
 	private GroupService groupService;
+
+	@Resource(name = "afterService")
+	private AfterService afterService;
 	
 	@GetMapping("/main.do")
 	public ModelAndView home(ModelAndView mav) {
 		mav.setViewName("home");
 		mav.addObject("group", groupService.selectMainGroupList());
+		mav.addObject("after", afterService.selectMainAfterList());
 		return mav;
 	}
 

@@ -22,4 +22,7 @@ public class AfterDAO {
     public List selectAllAfterList(){
         return sqlSession.selectList("after.selectAllAfterList");
     }
+    public List selectMainAfterList(){
+        return sqlSession.selectList("after.selectMainAfterList");
+    }
 }

@@ -7,4 +7,5 @@ public interface AfterService {
     int insertAfter(Map map);
     int checkAfterExist(Map map);
     List selectAllAfterList();
+    List selectMainAfterList();
 }

@@ -1,6 +1,7 @@
 package project.mountain;
 
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import java.io.UnsupportedEncodingException;
@@ -40,6 +41,16 @@ public class MountainController {
         MountainResponseVO vo = mountainService.getMountainImage(mntilistno);
 
         return vo;
+    }
+
+    @GetMapping("/mountain/detail/{mtNm}")
+    public ModelAndView mountainDetail(@PathVariable("mtNm")String mtNm){
+        ModelAndView mav = new ModelAndView("/mountain/detail");
+
+        
+
+        System.out.println("okay mt detail");
+        return mav;
     }
 
 }

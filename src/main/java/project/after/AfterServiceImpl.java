@@ -18,4 +18,7 @@ public class AfterServiceImpl implements AfterService {
     public List selectAllAfterList(){
         return afterDAO.selectAllAfterList();
     }
+    public List selectMainAfterList(){
+        return afterDAO.selectMainAfterList();
+    }
 }
