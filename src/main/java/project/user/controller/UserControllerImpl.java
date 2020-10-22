@@ -76,7 +76,6 @@ public class UserControllerImpl implements UserController {
 		// 임의의 authKey 생성 & 이메일 발송
 		String authKey = mailService.getKey(6);
 		request.setCharacterEncoding("utf-8");
-		System.out.println("이메일 왜 안보내지니: " + userVO.getEmail() + "////" + authKey);
 		mailService.sendAuthMail(userVO.getEmail(), authKey);
 		userVO.setAuthKey(authKey);
 
@@ -96,7 +95,6 @@ public class UserControllerImpl implements UserController {
 	@RequestMapping(value = "/resendMail.do", method = RequestMethod.POST)
 	public ModelAndView resendMail(UserVO userVO, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		request.setCharacterEncoding("utf-8");
-		System.out.println("이메일 왜 안보내지니: " + userVO.getEmail() + "////" + userVO.getAuthKey());
 		mailService.sendAuthMail(userVO.getEmail(), userVO.getAuthKey());
 
 		Map<String, String> map = new HashMap<String, String>();
@@ -316,7 +314,6 @@ public class UserControllerImpl implements UserController {
 		userVO.setEmail(email);
 		String id = userService.searchId(email);
 		request.setCharacterEncoding("utf-8");
-		System.out.println("이메일 왜 안보내지니11: " + userVO.getEmail() + "////");
 		mailService.sendMail(userVO.getEmail(), "산오름 아이디 찾기 안내 메일",
 				"회원님이 산오름에 요청하신 '아이디 찾기' 문의에 대해 안내 해 드립니다. \n" + "회원님의 아이디는:  " + id);
 		return "/user/sendMailEnd";
@@ -325,13 +322,11 @@ public class UserControllerImpl implements UserController {
 	@RequestMapping(value = "/sendTempPwd.do", method = { RequestMethod.GET, RequestMethod.POST })
 	public String sendTempPwd(@RequestParam("id") String id, @RequestParam("email") String email,
 			HttpServletRequest request) throws Exception {
-		System.out.println("sendTempPwd////////    " + id + "------" + email);
 		UserVO userVO = new UserVO();
 		userVO.setEmail(email);
 		// 임의의 authKey 생성 & 이메일 발송
 		String tempPwd = mailService.getKey(8);
 		request.setCharacterEncoding("utf-8");
-		System.out.println("이메일 왜 안보내지니22: " + userVO.getEmail() + "////" + tempPwd);
 		mailService.sendMail(userVO.getEmail(), "산오름 임시 비밀번호 발급", "회원님이 산오름에 요청하신 임시비밀번호를 안내해 드립니다. \n"
 				+ "해당 비밀번호는 보안이 취약하니 로그인 후 즉시 마이페이지> 나의 정보 수정> 비밀번호변경을 권장합니다.\n " + "임시 비밀번호:  " + tempPwd);
 

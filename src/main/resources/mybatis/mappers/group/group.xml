@@ -185,6 +185,7 @@
                         1)
         ]]>
     </update>
+   
     <!-- 그룹 탈퇴 -->
     <update id="withdrawGroup" parameterType="map">
         <![CDATA[
@@ -194,6 +195,7 @@
             AND userId = #{userId}
         ]]>
     </update>
+   
     <!-- 그룹 가입 여부 체크 -->
     <select id="selectWaiting" resultType="_int" parameterType="map">
         <![CDATA[
@@ -241,6 +243,7 @@
             AND STAFFCURRENT=STAFFMAX
         ]]>
     </select>
+  
     <update id="expiredGroup" parameterType="_int">
         <![CDATA[
             UPDATE groups
@@ -316,7 +319,8 @@
                     #{content},
                     #{userId},
                     0,
-                    sysdate
+                    sysdate,
+                    NVL(#{postNum}, 0)
                     )
         ]]>
     </insert>
@@ -344,6 +348,19 @@
             WHERE gc.userId = u.id
             AND   u.userNum = ui.userNum
             AND   GROUPNUM = #{groupNum}
+            START WITH PARENTNUM = 0
+            CONNECT BY PRIOR COMMENTNUM = PARENTNUM
+            ORDER SIBLINGS BY COMMENTORDER
+        ]]>
+    </select>
+    
+    <select id="selectCommentByPostNum" parameterType="_int" resultType="groupCommentVO">
+        <![CDATA[
+            SELECT gc.commentNum, gc.parentNum, gc.depts, gc.commentOrder, gc.content, gc.userId, gc.subCommentCount, gc.createdAt, ui.content2
+            FROM groupComment gc, users u, userInfo ui
+            WHERE gc.userId = u.id
+            AND   u.userNum = ui.userNum
+            AND   POSTNUM = #{postNum}
             START WITH PARENTNUM = 0
             CONNECT BY PRIOR COMMENTNUM = PARENTNUM
             ORDER SIBLINGS BY COMMENTORDER

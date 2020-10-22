@@ -241,6 +241,7 @@ public class GroupController{
     @PostMapping("/group/insertComment.do")
     @ResponseBody
     public GroupCommentVO insertCommentGroup(@RequestBody Map map){
+    	System.out.println("insertCommentGroup map:" + map);
         groupService.insertCommentGroup(map);
         return groupService.selectCommentOne((Integer) map.get("commentNum"));
     }
@@ -257,9 +258,14 @@ public class GroupController{
     @GetMapping("/group/selectCommentByGroupNum.do")
     @ResponseBody
     public List selectCommentByGroupNum(@RequestParam("groupNum") int groupNum){
-
         List<Map> list = groupService.selectCommentByGroupNum(groupNum);
-
+        return list;
+    }
+    
+    @GetMapping("/group/selectCommentByPostNum.do")
+    @ResponseBody
+    public List selectCommentByPostNum(@RequestParam("postNum") int postNum){
+        List<Map> list = groupService.selectCommentByPostNum(postNum);
         return list;
     }
 }

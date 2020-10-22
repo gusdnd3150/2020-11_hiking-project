@@ -314,7 +314,6 @@
               and a.PARENTCATEGORYNUM =2
               and b.content like '%'||#{searchContent}||'%'
               </when>
-               
               <when test="search=='total' and searchContent == null and searchType=='name'  ">
               </when>
               <when test="search=='used' and searchContent == null and searchType=='name'  ">

@@ -84,7 +84,6 @@
 							<div class="tab-content" id="myTabContent" style="overflow:scroll;" >
 								<div class="tab-pane fade show active" id="joined"
 									data-spy="scroll" role="tabpanel" aria-labelledby="joined-tab">
-									<% %>
 									<c:forEach var="JList" items="${JList}">
 										<img class="rounded-circle mt-2"
 											src="http://localhost:8080/resources/img/${JList.STOREDFILENAME}"

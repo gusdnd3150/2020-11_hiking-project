@@ -2,32 +2,47 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-        
-        <mapper namespace="commuMapper">
-    <resultMap id="groupResult2" type="groupVO">
-        <result property="groupNum" column="groupNum" />
-        <result property="name" column="name" />
-        <result property="type" column="type" />
-        <result property="staffCurrent" column="staffCurrent" />
-        <result property="staffMax" column="staffMax" />
-        <result property="detail" column="detail" />
-        <result property="status" column="status" />
-        <result property="startDay" column="startDay" />
-        <result property="createdAt" column="createdAt" />
-        <result property="updatedAt" column="updatedAt" />
-        <result property="area" column="area" />
-        <result property="ageStart" column="ageStart" />
-        <result property="ageEnd" column="ageEnd" />
-        <result property="sex" column="sex" />
-        <result property="mtNm" column="mtNm" />
-    </resultMap>
-    
-    
-    <insert id="insertGroup" parameterType="map">
-        <selectKey keyProperty="groupNum" resultType="_int" order="BEFORE">
-            SELECT groups_seq.nextval
-            FROM dual
-        </selectKey>
+
+<mapper namespace="commuMapper">
+	<resultMap id="groupResult2" type="groupVO">
+		<result property="groupNum" column="groupNum" />
+		<result property="name" column="name" />
+		<result property="type" column="type" />
+		<result property="staffCurrent" column="staffCurrent" />
+		<result property="staffMax" column="staffMax" />
+		<result property="detail" column="detail" />
+		<result property="status" column="status" />
+		<result property="startDay" column="startDay" />
+		<result property="createdAt" column="createdAt" />
+		<result property="updatedAt" column="updatedAt" />
+		<result property="area" column="area" />
+		<result property="ageStart" column="ageStart" />
+		<result property="ageEnd" column="ageEnd" />
+		<result property="sex" column="sex" />
+		<result property="mtNm" column="mtNm" />
+	</resultMap>
+	
+		<resultMap id="postResult1" type="commuVO">
+		<result property="groupNum" column="groupNum" />
+		<result property="nickName" column="nickName" />
+		<result property="createdAt" column="createdAt" />
+		<result property="content" column="content" />
+		<result property="content2" column="content2" />
+		<result property="groupNum" column="groupNum" />
+		<result property="boardType" column="boardType" />
+		<result property="rn" column="rn" />
+		<result property="postNum" column="postNum" />
+		<result property="type" column="type" />
+		<result property="userNum" column="userNum" />
+	</resultMap>
+
+
+	<insert id="insertGroup" parameterType="map">
+		<selectKey keyProperty="groupNum" resultType="_int"
+			order="BEFORE">
+			SELECT groups_seq.nextval
+			FROM dual
+		</selectKey>
         <![CDATA[
             INSERT INTO groups(
 		            GROUPNUM,
@@ -60,59 +75,34 @@
                 #{sex}
                 )
         ]]>
-    </insert>
-    
-    <select id="selectMaxGroupNum" resultType="map">
-    SELECT max(groupNum) as groupNum
-            FROM groups
-     </select>
-     
-       <insert id="insertGroupsBoard" parameterType="map">
-            INSERT INTO groupsBoard(
-		            GROUPNUM,
-					BOARDTYPE,
-					BOARDACCESS,
-					CREATEDAT,
-					UPDATEDAT
-					)
-            VALUES (
-                #{GROUPNUM},
-                #{boardType},
-                 0,
-                sysdate,
-                sysdate
-                ) 
-    			</insert>
-    
-    
-    <!-- 미완성이다아아아아아 
-          <insert id="insertGroupsBoardPost" parameterType="map">
-           <![CDATA[
-              INSERT INTO groupsBoardPost(
-                   GROUPNUM,
-                   BOARDTYPE,
-                   TYPE,
-                   POSTNUM,
-                   TITLE,
-                   CONTENT,
-                   CREATEDAT,
-                   UPDATEDAT
-                  		)
-            VALUES (
-                #{groupNum},
-                   
-                #{boardNum},
+	</insert>
 
-                 0,
-                 postNum_SEQ.nextVal
-                sysdate,
-                sysdate
-                )
-                   ]]>
-           </insert>
-           -->
-    
-     <select id="selectGroupNum" resultMap="groupResult2"
+	<select id="selectMaxGroupNum" resultType="map">
+		SELECT max(groupNum)
+		as groupNum
+		FROM groups
+	</select>
+
+	<insert id="insertGroupsBoard" parameterType="map">
+		INSERT INTO
+		groupsBoard(
+		GROUPNUM,
+		BOARDTYPE,
+		BOARDACCESS,
+		CREATEDAT,
+		UPDATEDAT
+		)
+		VALUES
+		(
+		#{GROUPNUM},
+		#{boardType},
+		0,
+		sysdate,
+		sysdate
+		)
+	</insert>
+
+	<select id="selectGroupNum" resultMap="groupResult2"
 		parameterType="String">
 	 <![CDATA[
 	    select groupNum
@@ -120,8 +110,8 @@
         where userId=#{id}
 	  ]]>
 	</select>
-    
-    <select id="selectCreatedGroupNum" resultMap="groupResult2"
+
+	<select id="selectCreatedGroupNum" resultMap="groupResult2"
 		parameterType="String">
 	 <![CDATA[
    select u.groupNum
@@ -131,8 +121,8 @@
         and type = 2
 	  ]]>
 	</select>
-	
-	  <select id="selectJoinedGroupNum" resultMap="groupResult2"
+
+	<select id="selectJoinedGroupNum" resultMap="groupResult2"
 		parameterType="String">
 	 <![CDATA[
 	  select u.groupNum
@@ -142,18 +132,20 @@
         and type = 2
 	  ]]>
 	</select>
-    
-    <select id="selectCommu" resultType="map"
+
+	<select id="selectCommu" resultType="map"
 		parameterType="java.util.List">
-	    select a.name, a.groupNum, b.storedFileName
-        from groups a, groupsmedia b
-         where a.groupNum=b.groupNum
-         and b.groupNum in 
-	 <foreach collection="list" item="list" open="(" separator="," close=")">
-     		 #{list.groupNum}
-        </foreach>
+		select a.name, a.groupNum, b.storedFileName
+		from groups a, groupsmedia
+		b
+		where a.groupNum=b.groupNum
+		and b.groupNum in
+		<foreach collection="list" item="list" open="(" separator=","
+			close=")">
+			#{list.groupNum}
+		</foreach>
 	</select>
-	
+
 	<select id="selectGroups" resultType="map" parameterType="Map">
 			 <![CDATA[
 		select GROUPNUM, NAME, STAFFCURRENT, DETAIL, CREATEDAT, AREA, AGESTART, AGEEND, SEX
@@ -161,7 +153,7 @@
         where groupNum=#{groupNum}
           ]]>
 	</select>
-	
+
 	<select id="selectUserWaiting" resultType="map"
 		parameterType="Map">
 			 <![CDATA[
@@ -170,7 +162,7 @@
         where groupNum=#{groupNum} and USERID=#{id}
           ]]>
 	</select>
-	
+
 	<select id="selectGroupsMedia" resultType="map"
 		parameterType="Map">
 			 <![CDATA[
@@ -179,7 +171,7 @@
         where groupNum=#{groupNum}
           ]]>
 	</select>
-	
+
 	<select id="selectGroupsBoard" resultType="map"
 		parameterType="Map">
 			 <![CDATA[
@@ -188,17 +180,39 @@
         where groupNum=#{groupNum}
           ]]>
 	</select>
-	
-	<select id="selectGroupsBoardPost" resultType="map"
-		parameterType="Map">
+
+	<select id="selectCommuPosts" resultType="map"
+		parameterType="java.util.List">
 			 <![CDATA[
-		select *
-        from groupsBoardPost
-        where groupNum=#{groupNum}
+		select g.*, i.content2, u.nickname
+        from groupsBoardPost g, userInfo i, users u
+         where g.userNum = #{userNum}
+        and i.userNum = #{userNum}
+        and u.userNum = #{userNum}
+        and g.groupNum=#{groupNum}
+        and g.BOARDTYPE=1
+        ORDER BY g.POSTNUM DESC
           ]]>
 	</select>
 	
-	 <select id="selectAllGroupList" resultType="map">
+	<select id="selectAlbumPosts" resultType="map"
+		parameterType="java.util.List">
+			 <![CDATA[
+		select A.*
+		from(
+		select g.*, i.content2, u.nickname
+        from groupsBoardPost g, userInfo i, users u
+        where g.userNum = #{userNum}
+        and i.userNum = #{userNum}
+        and u.userNum = #{userNum}
+        and g.groupNum = #{groupNum}
+        and g.BOARDTYPE=3
+        ORDER BY g.POSTNUM DESC) A
+        where ROWNUM < 5
+          ]]>
+	</select>
+
+	<select id="selectAllGroupList" resultType="map">
         <![CDATA[
            select rownum rn, a.*
 			from
@@ -212,6 +226,99 @@
 				) a
 			where rownum <= 9
         ]]>
-    </select>
+	</select>
+
+	<update id="updateBoardAccess" parameterType="map">
+    <![CDATA[
+    update groupsboard
+	  	set boardAccess=#{boardAccess}
+	    where groupNum = #{groupNum}
+        ]]>
+	</update>
+
+	<update id="updateGroup" parameterType="map">
+    <![CDATA[
+    update groups
+	  	set detail=#{detail}, area=#{area}, ageStart=#{ageStart}, ageEnd=#{ageEnd}, sex=#{sex} 
+	    where groupNum = #{groupNum}
+        ]]>
+	</update>
+
+	<insert id="insertAlbum" parameterType="map">
+	 <![CDATA[
+            INSERT INTO groupsBoardPost(
+            GROUPNUM,
+            BOARDTYPE,
+		    POSTNUM,
+    		TYPE,
+			CONTENT,
+		    CREATEDAT,
+		    USERNUM
+					)
+            VALUES (
+            #{groupNum},
+            3,
+       	    POSTNUM_seq.nextval,
+            0,
+            #{storedFileName},
+            sysdate,
+            #{userNum}
+            )
+              ]]>
+	</insert>
+
+	<insert id="insertPost" parameterType="map">
+        <![CDATA[
+            INSERT INTO groupsBoardPost(
+            GROUPNUM,
+            BOARDTYPE,
+		    POSTNUM,
+    		TYPE,
+			CONTENT,
+		    CREATEDAT,
+		    USERNUM
+					)
+            VALUES (
+             #{groupNum},
+             1,
+             POSTNUM_seq.nextval,
+             0,
+             #{feedContent},
+             sysdate,
+             #{userNum}
+            )
+              ]]>
+	</insert>
 	
-    </mapper>
+		<select id="countAlbumPosts" resultType="int"
+		parameterType="map">
+			 <![CDATA[
+		select count(*)
+        from groupsBoardPost
+        where userNum = #{userNum}
+        and groupNum = #{groupNum}
+        and BOARDTYPE=3
+          ]]>
+	</select>
+    <!-- 페이징 처리 -->
+	 <select id="selectPgAlbumPosts" resultMap="postResult1" parameterType="map">
+            <![CDATA[
+              SELECT *
+		FROM (
+             SELECT ROWNUM RN, A.*
+		       FROM (
+        select g.*, i.content2, u.nickname
+        from groupsBoardPost g, userInfo i, users u
+         where g.userNum = #{userNum}
+        and i.userNum = #{userNum}
+        and u.userNum = #{userNum}
+        and g.groupNum=#{groupNum}
+        and g.BOARDTYPE=3
+        ORDER BY g.POSTNUM DESC
+        ) A
+      )
+        where RN BETWEEN #{start} AND #{end}
+	            ]]>
+       </select>
+       
+</mapper>

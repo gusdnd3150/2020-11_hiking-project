@@ -35,4 +35,11 @@ public class GroupMediaServiceImpl implements GroupMediaService {
     public List<byte[]> selectGroupMediaDetail(int groupNum){
         return groupMediaDAO.selectGroupMediaDetail(groupNum);
     }
+
+  //그룹 사진 수정
+    @Transactional(propagation = Propagation.REQUIRED)
+	public void updateGroupMedia(int groupNum, List<MultipartFile> files, String path) throws IOException {
+    	   List list = fileUtils.saveFile(groupNum, files, path);
+           groupMediaDAO.updateGroupMedia(list);
+	}
 }

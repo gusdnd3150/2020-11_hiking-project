@@ -34,16 +34,16 @@ public class MypageControllerImpl implements MypageController {
 
 	@Autowired
 	MypageService mypageService;
-	
+
 	@Autowired
 	UserService userService;
-	
+
 	@Autowired
 	ThumbnailMaker thumbnailMaker;
-	
+
 //	@Autowired
 //	UserVO userVO;
-	
+
 	@Autowired
 	CommuService commuService;
 
@@ -54,14 +54,14 @@ public class MypageControllerImpl implements MypageController {
 		userVO.setId((String) httpSession.getAttribute(LOGIN));
 		String id = userVO.getId();
 		userVO = mypageService.getUserInfo(userVO);
-		if(userVO.getContent2()==null || userVO.getContent2().equals("")) {
+		if (userVO.getContent2() == null || userVO.getContent2().equals("")) {
 			userVO.setContent2("userBasic.jpg");
 		}
-		List<Map> CList = commuService.selectCreatedCommu(id); 
+		List<Map> CList = commuService.selectCreatedCommu(id);
 		List<Map> JList = commuService.selectJoinedCommu(id);
-		
-		System.out.println("컨트롤러: "+CList);
-		
+
+		System.out.println("컨트롤러: " + CList);
+
 		mav.addObject("userVO", userVO);
 		mav.addObject("CList", CList);
 		mav.addObject("JList", JList);
@@ -94,8 +94,6 @@ public class MypageControllerImpl implements MypageController {
 		userVO = mypageService.getUserInfo(userVO);
 		return userVO;
 	}
-	
-
 
 	@RequestMapping(value = "/mypage/updateUser.do", method = { RequestMethod.GET, RequestMethod.POST })
 	public String updateUser(HttpSession httpSession, UserVO userVO) throws Exception {
@@ -117,9 +115,9 @@ public class MypageControllerImpl implements MypageController {
 		return "/user/modifyEnd";
 	}
 
-
 	@RequestMapping(value = "/mypage/updateUserInfo.do", method = { RequestMethod.GET, RequestMethod.POST })
-	public String updateUserInfo(@RequestParam String profile, @RequestParam(value="file", required=false) MultipartFile fileP, HttpServletRequest request,
+	public String updateUserInfo(@RequestParam String profile,
+			@RequestParam(value = "file", required = false) MultipartFile fileP, HttpServletRequest request,
 			HttpSession httpSession) throws Exception {
 		String id = (String) httpSession.getAttribute(LOGIN);
 		int userNum = userService.selectUserNum(id);
@@ -127,14 +125,14 @@ public class MypageControllerImpl implements MypageController {
 		profMap.put("profile", profile);
 		profMap.put("userNum", userNum);
 		mypageService.updateUserProf(profMap);
-			logger.info("profMap");
+		logger.info("profMap");
 
-				if (!fileP.isEmpty()) {
-					String path = request.getSession().getServletContext().getRealPath("/");
-					int mediaResult = mypageService.updateUserCont(userNum, fileP, path);
-					System.out.println("mediaResult: "+mediaResult);
-				}
-return "redirect:/mypage/mypageHomeView.do";
+		if (!fileP.isEmpty()) {
+			String path = request.getSession().getServletContext().getRealPath("/");
+			int mediaResult = mypageService.updateUserCont(userNum, fileP, path);
+			System.out.println("mediaResult: " + mediaResult);
+		}
+		return "redirect:/mypage/mypageHomeView.do";
 	}
 
 	@RequestMapping(value = "/mypage/pwdCheck.do", method = { RequestMethod.GET, RequestMethod.POST })

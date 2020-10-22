@@ -57,7 +57,7 @@ public class B_P002_D001ControllerImpl  implements B_P002_D001Controller{
 	               //상품 카테고리별 페이징
 	@Override
 	@RequestMapping(value = "/B_P002_D001/shopMainCate", method = { RequestMethod.GET, RequestMethod.POST })
-	public ModelAndView shopmainCate(@RequestParam Map<String, Object> info,HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public ModelAndView shopmainCate(@RequestParam Map<String, Object> info, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		ModelAndView mav = new ModelAndView();
 		System.out.println("메인페이지 파라미터정보:"+info.toString());
 		
@@ -97,7 +97,7 @@ public class B_P002_D001ControllerImpl  implements B_P002_D001Controller{
 		}else {  //일반 분류
 		search.put("listType", Integer.parseInt(listType));
 		int total = b_P002_D001ShopingMallService.totalCount2(search);
-		Paging vo2 = new Paging(Integer.parseInt(listType),total, Integer.parseInt(nowPage), Integer.parseInt(cntPerPage));
+		Paging vo2 = new Paging(Integer.parseInt(listType), total, Integer.parseInt(nowPage), Integer.parseInt(cntPerPage));
 		search.put("listType", vo2.getListType());
 		search.put("start", vo2.getStart());
 		search.put("end", vo2.getEnd());
