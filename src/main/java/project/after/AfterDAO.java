@@ -17,7 +17,10 @@ public class AfterDAO {
         return sqlSession.insert("after.insertAfter",map);
     }
     public int checkAfterExist(Map map){
-        return sqlSession.selectOne("after.checkAfterExist",map);
+        if(sqlSession.selectOne("after.checkAfterExist",map)==null){
+            return 0;
+        }
+        return 1;
     }
     public List selectAllAfterList(){
         return sqlSession.selectList("after.selectAllAfterList");

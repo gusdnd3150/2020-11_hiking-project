@@ -25,7 +25,7 @@
 <script type="text/javascript" src="../resources/js/jquery.js"></script>
 <script src="../resources/ckeditor5/ckeditor.js"></script>
 <script>
-    var imageList;
+    // var imageList;
 
     ClassicEditor
         .create( document.querySelector( '#editor' ), {
@@ -137,7 +137,7 @@
         var data = {
             "title" : $('#title').val(),
             "content" : window.editor.getData(),
-            "groupNum" : localStorage.getItem("groupNum"),
+            "groupNum" : localStorage.getItem("groupNum")*1,
             "mtNm" : localStorage.getItem("mtNm"),
             "userId" : "<%= request.getSession().getAttribute("LOGIN")%>"
         }
@@ -149,6 +149,8 @@
             dataType: 'json',
             contentType: "application/json; charset=utf-8;",
             success : function (response){
+                console.log(response);
+
                 if(response==0){
                     alert("회원당 후기는 1개만 작성가능합니다")
                     return;

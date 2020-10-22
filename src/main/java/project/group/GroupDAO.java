@@ -112,8 +112,8 @@ public class GroupDAO{
     public String selectSessionIdImage(String userId){
         return sqlSession.selectOne("group.selectSessionIdImage", userId);
     }
-    public List sortGroupByKeyword(String keyword){
-        return sqlSession.selectList("group.sortGroupByKeyword",keyword);
+    public List sortGroupByKeyword(Map map){
+        return sqlSession.selectList("group.sortGroupByKeyword",map);
     }
     public List recommendGroup(Map map){
         return sqlSession.selectList("group.recommendGroup",map);

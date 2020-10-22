@@ -7,18 +7,21 @@
 <body class="pt-5 mt-5" >
 <div id="groupForm-container" class="container" >
     <div id="groupForm">
-        <h1 class="p-3 col-12">다함께 산오르기 등록</h1>
-        <pre></pre>
-        <div class="mb-3 col-12">
-            <label for="mtNm">등산로설정</label>
-            <div class="mb-3 col-6 row">
-                <input type="text" class="form-control mb-3 col-6" id="mtNm" readonly>
-                <button id="setPath" class="btn btn-info mb-3" data-toggle="modal" data-target="#pathModal">등산로 설정</button>
+        <h1 class="p-3">다함께 산오르기 등록</h1>
+        <div class="m-3">
+            <label for="mtNm">산/등산로 설정</label>
+            <div class="form-inline">
+                <input type="text" class="form-control col-6" id="mtNm" readonly>
+                <button id="setPath" class="btn btn-info " data-toggle="modal" data-target="#pathModal">산/등산로 찾기</button>
             </div>
         </div>
-        <div class="mb-3 col-12">
+        <div class="m-3">
             <label for="name">모임 제목</label>
             <input type="text" class="form-control" id="name">
+        </div>
+        <div class="m-3">
+            <label for="detail">모임 상세</label>
+            <textarea class="form-control" rows="12" id="detail"></textarea><br>
         </div>
         <div class="mb-3 col-6">
             <label for="staffMax">모임 인원</label>
@@ -27,10 +30,6 @@
                 <h2 id="staffMax" style="margin-bottom: 0">2</h2>명
                 <i id="increase"class="fas fa-plus" ></i>
             </div>
-        </div>
-        <div class="mb-3 col-12">
-            <label for="detail">모임 상세</label>
-            <textarea class="form-control" rows="6" id="detail"></textarea><br>
         </div>
         <div class="mb-3 col-6" >
             <label for="startDay">모임 시작 날짜</label>
@@ -41,8 +40,22 @@
             <select class="custom-select" id="area">
                 <option value="0" selected>지역을 선택해주세요</option>
                 <option value="서울">서울</option>
+                <option value="부산">부산</option>
+                <option value="대구">대구</option>
+                <option value="인천">인천</option>
+                <option value="광주">광주</option>
+                <option value="대전">대전</option>
+                <option value="울산">울산</option>
+                <option value="세종">세종</option>
                 <option value="경기">경기</option>
                 <option value="강원">강원</option>
+                <option value="충북">충북</option>
+                <option value="충남">충남</option>
+                <option value="전북">전북</option>
+                <option value="전남">전남</option>
+                <option value="경북">경북</option>
+                <option value="경남">경남</option>
+                <option value="제주">제주</option>
             </select>
         </div>
         <div class="mb-3 col-12">
@@ -140,8 +153,49 @@
 <script type="text/javascript" src="../resources/js/jquery.js"></script>
 <script type="text/javascript" src="../resources/js/bootstrap.min.js"></script>
 <script src="//cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/js/bootstrap4-toggle.min.js"></script>
+<script src="../resources/ckeditor5/ckeditor.js"></script>
 <script type="text/javascript" src="../resources/js/view/group/searchMt.js"></script>
 <script>
+    ClassicEditor
+        .create( document.querySelector( '#detail' ), {
+            heading: {
+                options: [
+                    { model: 'paragraph', title: '본문', class: 'ck-heading_paragraph' },
+                    { model: 'heading1', view: 'h1', title: '제목 1', class: 'ck-heading_heading1' },
+                    { model: 'heading2', view: 'h2', title: '제목 2', class: 'ck-heading_heading2' },
+                    { model: 'heading3', view: 'h3', title: '제목 3', class: 'ck-heading_heading3' }
+                ]
+            },
+            language: 'ko',
+            image: {
+                resizeUnit: 'px',
+                toolbar: [
+                    'imageTextAlternative',
+                    'imageStyle:alignLeft',
+                    'imageStyle:full',
+                    'imageStyle:side'
+                ],
+                styles: [ 'full','alignLeft','alignRight','side' ]
+            },
+            table: {
+                contentToolbar: [
+                    'tableColumn',
+                    'tableRow',
+                    'mergeTableCells'
+                ]
+            },
+            alignment: {
+                options: [ 'left', 'center', 'right']
+            }
+        } )
+        .then( editor => {
+            window.editor = editor;
+
+        } )
+        .catch( err => {
+            console.error( err.stack );
+        } );
+
     function fileUploadAction() {
         $('#uploadFile').trigger('click');
     }

@@ -129,8 +129,8 @@ public class GroupServiceImpl implements GroupService{
         return groupDAO.selectSessionIdImage(userId);
     }
 
-    public List sortGroupByKeyword(String keyword){
-        return groupDAO.sortGroupByKeyword(keyword);
+    public List sortGroupByKeyword(Map map){
+        return groupDAO.sortGroupByKeyword(map);
     }
 
     public List recommendGroup(Map map){return groupDAO.recommendGroup(map);}

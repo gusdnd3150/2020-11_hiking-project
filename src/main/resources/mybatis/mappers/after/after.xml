@@ -22,7 +22,7 @@
                    )
         ]]>
     </insert>
-    <select id="checkAfterExist" resultType="int" parameterType="map">
+    <select id="checkAfterExist" resultType="_int" parameterType="map">
         <![CDATA[
             SELECT userNum
             FROM groupAfter
@@ -41,7 +41,7 @@
     </select>
     <select id="selectMainAfterList" resultType="map">
         <![CDATA[
-            SELECT ga.afterNum, ga.mtNm, ga.title, TO_CHAR(sysdate-ga.createdAt,'dd hh:mm') createdAt, ui.content2
+            SELECT ga.afterNum, ga.mtNm, ga.title, TO_CHAR(ga.createdAt,'yyyy-mm-dd') createdAt, ui.content2
             FROM groupAfter ga, userInfo ui
             WHERE ga.userNum = ui.userNum
         ]]>

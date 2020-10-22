@@ -267,10 +267,9 @@ public class GroupController{
         return list;
     }
 
-    @GetMapping("/group/sortGroup.do")
+    @PostMapping("/group/sortGroup.do")
     @ResponseBody
-    public List sortGroupByKeyword(@RequestParam("keyword") String keyword){
-        List<Map> list = groupService.sortGroupByKeyword(keyword);
-        return list;
+    public List sortGroupByKeyword(@RequestBody Map map){
+        return groupService.sortGroupByKeyword(map);
     }
 }

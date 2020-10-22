@@ -25,3 +25,9 @@ i {
     color: dimgray;
 }
 
+.ck.ck-editor{
+    max-width: 100%;
+}
+.ck-editor__editable{
+    min-height: 500px;
+}

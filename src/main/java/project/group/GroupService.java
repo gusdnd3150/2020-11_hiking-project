@@ -42,6 +42,6 @@ public interface GroupService {
     List selectCommentByGroupNum(int groupNum);
 
     String selectSessionIdImage(String userId);
-    List sortGroupByKeyword(String keyword);
+    List sortGroupByKeyword(Map map);
     List recommendGroup(Map map);
 }

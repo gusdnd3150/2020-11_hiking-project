@@ -57,9 +57,11 @@ public class AfterController {
 
         int result = 0;
         int exist = afterservice.checkAfterExist(map);
+        System.out.println("exist : "+ exist);
         if(exist!=0){
             return result;
         }
+        System.out.println("여기 체크");
         result = afterservice.insertAfter(map);
 
         return result;

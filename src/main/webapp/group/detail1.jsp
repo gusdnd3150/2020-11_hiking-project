@@ -33,8 +33,8 @@
                 <hr />
                 <div>
                     <c:choose>
-                        <c:when test="${group.STATUS eq 1}"><div><h3>모집중</h3></div></c:when>
-                        <c:when test="${group.STATUS eq 0}"><div><h3>모집 마감</h3></div></c:when>
+                        <c:when test="${group.STATUS eq 1}"><div><h3 style="color: limegreen;">모집중</h3></div></c:when>
+                        <c:when test="${group.STATUS eq 0}"><div><h3 style="color: red;">모집 마감</h3></div></c:when>
                     </c:choose>
                 </div>
                 <hr />
@@ -54,7 +54,7 @@
                             </c:when>
                         </c:choose>
                     </li>
-                    <li><b>출발시각</b><div>${group.STARTDAY}</div></li>
+                    <li><b>출발일자</b><div>${group.STARTDAY}</div></li>
                     <li><b>지역</b> ${group.AREA}</li>
                     <li><b>조건</b>
                         <c:choose>

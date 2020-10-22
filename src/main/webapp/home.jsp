@@ -90,12 +90,12 @@
 									<div class="col-10 p-0 pl-2">
 										<h5 class="card-title m-0" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">
 											<c:if test="${group.STATUS eq '진행중'}">
-												<b style="color: limegreen">
+												<span style="color: limegreen">
 											</c:if>
 											<c:if test="${group.STATUS eq '마감'}">
-												<b style="color: red">
+												<span style="color: red">
 											</c:if>
-												[${group.STATUS}]</b>
+												[${group.STATUS}]</span>
 												${group.NAME}
 										</h5>
 										<p class="card-text text-muted mb-1" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">${group.DETAIL}</p>
@@ -113,13 +113,13 @@
 		<div><h1>인기 등산후기</h1></div>
 		<div class="afterList">
 			<c:forEach var="after" items="${after}">
-			<div class="media">
-				<img src="/resources/img/basic_profile.PNG" class="mr-3 rounded-circle" style="width: 50px;height: 50px">
+			<div class="media p-1">
+				<img src="/resources/img/${after.CONTENT2}" class="mr-3 rounded" style="width: 50px;height: 50px">
 				<div class="media-body">
-					<h5 class="mt-2">
-						<h4 class="m-0">[${after.MTNM}] ${after.TITLE}</h4>
+					<span>
+						<h4 class="m-0" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">[${after.MTNM}] ${after.TITLE}</h4>
 						<div class="text-muted">${after.CREATEDAT}</div>
-					</h5>
+					</span>
 				</div>
 			</div>
 			</c:forEach>
@@ -138,7 +138,7 @@
 				<li class="list-group-item"><a href="#" class="notice-item" style="color: black">공지사항2</a></li>
 				<li class="list-group-item"><a href="#" class="notice-item" style="color: black">공지사항3</a></li>
 				<li class="list-group-item"><a href="#" class="notice-item" style="color: black">공지사항4</a></li>
-				<li class="list-group-item p-0 text-center text-muted"><a href="#" class="notice-item" style="color: black">더보기</a></li>
+				<li class="list-group-item p-0 text-center text-muted" style="background-color: "><a href="#" class="notice-item" style="color: black">더보기</a></li>
 			</ul>
 		</div>
 		<div class="col-md-6">

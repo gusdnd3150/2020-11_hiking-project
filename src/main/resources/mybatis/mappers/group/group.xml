@@ -139,7 +139,7 @@
                    g.staffMax,
                    g.detail,
                    g.status,
-                   TO_CHAR(g.startday,'yyyy"년" MM"월"dd"일" hh"시"mm"분"') startday,
+                   TO_CHAR(g.startday,'yyyy"년" MM"월"dd"일"') startday,
                    TO_CHAR(g.createdAt,'yyyy.MM.dd. hh:mm') createdAt,
                    TO_CHAR(g.updatedAt,'yyyy.MM.dd. hh:mm') updatedAt,
                    g.area,
@@ -333,7 +333,8 @@
                     #{content},
                     #{userId},
                     0,
-                    sysdate
+                    sysdate,
+                    null
                     )
         ]]>
     </insert>
@@ -378,48 +379,72 @@
         ]]>
     </select>
 
-    <select id="sortGroupByKeyword" resultType="map" parameterType="string">
-        <if test="_parameter eq 'lately'.toString()">
+    <select id="sortGroupByKeyword" resultType="map" parameterType="map">
+        <if test='keyword.equals("lately")'>
             <![CDATA[
-                SELECT g.groupNum, g.name, g.staffCurrent, g.staffmax, g.detail, DECODE(g.status,0,'마감','진행중') status, TO_CHAR(g.startDay,'yyyy"년"MM"월"dd"일"') startDay, gm.storedFileName, NVL(ui.CONTENT2,'basic_profile.PNG') content2, u.id
-                FROM groups g
-                         INNER JOIN groupsMedia gm
-                                    ON g.groupNum = gm.groupNum
-                         INNER JOIN userWaiting uw
-                                    ON g.groupNum = uw.groupNum
-                         INNER JOIN users u
-                                    ON uw.userId = u.id
-                         INNER JOIN userInfo ui
-                                    ON u.userNum = ui.userNum
-                WHERE g.type = 1
-                  AND uw.userType = 0
-                  AND gm.mediaNum = 0
-                  AND g.staffMax != 1
-                  AND ROWNUM <= 15
-                ORDER BY g.createdAt DESC
+                SELECT *  FROM (
+                    SELECT rowNum as rnum , data.* FROM (
+                         SELECT g.groupNum, g.name,
+                                g.staffCurrent,
+                                g.staffmax,
+                                g.detail,
+                                DECODE(g.status, 0, '마감', '진행중')         status,
+                                TO_CHAR(g.startDay, 'yyyy"년"MM"월"dd"일"') startDay,
+                                gm.storedFileName,
+                                NVL(ui.CONTENT2, 'basic_profile.PNG')    content2,
+                                u.id
+                             FROM groups g
+                                      INNER JOIN groupsMedia gm
+                                                 ON g.groupNum = gm.groupNum
+                                      INNER JOIN userWaiting uw
+                                                 ON g.groupNum = uw.groupNum
+                                      INNER JOIN users u
+                                                 ON uw.userId = u.id
+                                      INNER JOIN userInfo ui
+                                                 ON u.userNum = ui.userNum
+                             WHERE g.type = 1
+                               AND uw.userType = 0
+                               AND gm.mediaNum = 0
+                               AND g.staffMax != 1
+                             ORDER BY g.createdAt DESC
+                         )data)
+                    WHERE rnum >= ((#{rowNum}-1)*9)+1
+                      AND rnum <= (#{rowNum}*9)
             ]]>
         </if>
-        <if test="_parameter eq 'like'.toString()">
+        <if test='keyword.equals("like")'>
             <![CDATA[
-                SELECT g.groupNum, g.name, g.staffCurrent, g.staffmax, g.detail, DECODE(g.status,0,'마감','진행중') status, TO_CHAR(g.startDay,'yyyy"년"MM"월"dd"일"') startDay, gm.storedFileName, NVL(ui.CONTENT2,'basic_profile.PNG') content2, COUNT(gl.groupNum) likeCount
-                FROM groups g
-                         INNER JOIN groupsMedia gm
-                                    ON g.groupNum = gm.groupNum
-                         INNER JOIN userWaiting uw
-                                    ON g.groupNum = uw.groupNum
-                         INNER JOIN users u
-                                    ON uw.userId = u.id
-                         INNER JOIN userInfo ui
-                                    ON u.userNum = ui.userNum
-                         LEFT OUTER JOIN groupLike gl
-                                    ON g.groupNum = gl.groupNum
-                WHERE g.type = 1
-                  AND uw.userType = 0
-                  AND gm.mediaNum = 0
-                  AND g.staffMax != 1
-                  AND ROWNUM <= 15
-                GROUP BY g.groupNum, g.name, g.staffCurrent, g.staffmax, g.detail, g.status, g.startDay, gm.storedFileName, ui.CONTENT2
-                ORDER BY COUNT(gl.LIKEYN) DESC
+                SELECT * FROM (
+                    SELECT rowNum as rnum, data.* FROM (
+                           SELECT g.groupNum,
+                                  g.name,
+                                  g.staffCurrent,
+                                  g.staffmax,
+                                  g.detail,
+                                  DECODE(g.status,0,'마감','진행중') status,
+                                  TO_CHAR(g.startDay,'yyyy"년"MM"월"dd"일"') startDay,
+                                  gm.storedFileName, NVL(ui.CONTENT2,'basic_profile.PNG') content2,
+                                  COUNT(gl.groupNum) likeCount
+                           FROM groups g
+                                    INNER JOIN groupsMedia gm
+                                               ON g.groupNum = gm.groupNum
+                                    INNER JOIN userWaiting uw
+                                               ON g.groupNum = uw.groupNum
+                                    INNER JOIN users u
+                                               ON uw.userId = u.id
+                                    INNER JOIN userInfo ui
+                                               ON u.userNum = ui.userNum
+                                    LEFT OUTER JOIN groupLike gl
+                                                    ON g.groupNum = gl.groupNum
+                           WHERE g.type = 1
+                             AND uw.userType = 0
+                             AND gm.mediaNum = 0
+                             AND g.staffMax != 1
+                           GROUP BY g.groupNum, g.name, g.staffCurrent, g.staffmax, g.detail, g.status, g.startDay, gm.storedFileName, ui.CONTENT2
+                           ORDER BY COUNT(gl.LIKEYN) DESC
+                            ) data )
+                WHERE rnum >= ((#{rowNum}-1)*9)+1
+                  AND rnum <= (#{rowNum}*9)
             ]]>
         </if>
     </select>
