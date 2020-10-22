@@ -90,7 +90,8 @@
                     <div class="media">
                       <div class="d-flex">
                         <img
-                          src="http://localhost:8080/resources/img/${payDetailList.CONTENT }"
+                          src="/resources/img/${payDetailList.CONTENT }"
+                          <%-- src="http://localhost:8080/resources/img/${payDetailList.CONTENT }" --%>
                           alt="" width="90px" height="90px"
                         />
                       </div>

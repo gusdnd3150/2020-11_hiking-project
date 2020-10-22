@@ -313,7 +313,7 @@
                     <div class="media">
                       <div class="d-flex">
                         <img
-                          src="http://localhost:8080/resources/img/${cartList.IMAGE }"
+                          src="/resources/img/${cartList.IMAGE }"
                           alt="" width="90px" height="90px"
                         />
                         <input type="hidden" name="images" value="${cartList.IMAGE }">

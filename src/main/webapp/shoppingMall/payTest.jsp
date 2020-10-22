@@ -486,6 +486,7 @@ align:bottom;
                       <div class="d-flex">
                         <img
                           src="/resources/img/${prodDetail.IMAGE }"
+                          <%-- src="/resources/img/${prodDetail.IMAGE }" --%>
                           alt="" width="90px" height="90px"
                         />
                       </div>
