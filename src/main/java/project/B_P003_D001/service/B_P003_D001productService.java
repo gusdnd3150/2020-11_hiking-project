@@ -34,8 +34,13 @@ public interface B_P003_D001productService {
 	
 	///
 	public Map<String, Object> buyerinfo(Map<String, Object> map) throws DataAccessException ;
-	public UserVO getAddress(Map<String, Object> map) throws DataAccessException;
+	public Map<String,Object> getAddress(Map<String, Object> map) throws DataAccessException;
+	public void addAddress(Map<String, Object> info) throws DataAccessException;
 	public List<Map> selectCartList(Map<String, Object> map) throws DataAccessException;
+	public List<Map> paymentList(Map<String, Object> map) throws DataAccessException ;
+	public List<Map> payDetailList(Map<String, Object> map) throws DataAccessException ;
+	public int totalPaymentCount(Map<String, Object> map) throws DataAccessException ;
+
 	public int selectCartCount(Map<String, Object> map);
 	
 	//구매성공 후
@@ -43,10 +48,12 @@ public interface B_P003_D001productService {
 	public void updateOrders(List<Map> map) throws DataAccessException;
 	public void insertPaymentMultiple(List<Map> map) throws DataAccessException ;
 	public void updateOrder(List<Map> map) throws DataAccessException ;
-	
+	public List<Map> checkPointTable(Map<String, Object> map) throws DataAccessException ;
+	public int getDelibasic(Map<String, Object> map) throws DataAccessException;
+	public List<Map> getDelibasicSize(Map<String, Object> map) throws DataAccessException;
 	
 	public void delivery(Map<String, Object> map) throws DataAccessException ;
-	public void updatePoint(Map<String, Object> map) throws DataAccessException ;
+	public void updatePoint(List<Map> map) throws DataAccessException ;
 	public void insertPayment(List<Map> map) throws DataAccessException ;
 	//트랜잭션 테스트용
 	public void insertPaymentTest(Map<String, Object> map) throws DataAccessException ;
@@ -70,7 +77,19 @@ public interface B_P003_D001productService {
 	public void addUsedCategory(Map<String, Object> datahMap) throws DataAccessException;
 	public int prodNum() ;
 	public int optionNum() ;
+	public int ordernum() throws DataAccessException;
 	public void addOption(List<Map> addOption)throws DataAccessException ;
 	public void modOption(Map<String, Object> map) throws DataAccessException ;
 	public List test(List<Map> list);
+	
+	//마이페이지 구매내역, 위시리스트
+	public int buyCount(int userNum) throws DataAccessException ;
+	public int wishCount(int userNum) throws DataAccessException ;
+	public void addprodLike(Map<String, Object> map) throws DataAccessException ;
+	public List<Map> selectWishList(Map<String, Object> map) throws DataAccessException;
+	public void updateMemo(Map<String, Object> map) throws DataAccessException ;
+	public void addCartFromWish(List<Map> wish) throws DataAccessException;
+	public void deleteWish(List<Map> wish) throws DataAccessException;
+	public void deleteWishOne(Map<String, Object> likenum) throws DataAccessException;
+
 }

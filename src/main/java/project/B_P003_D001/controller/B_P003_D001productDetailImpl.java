@@ -146,11 +146,16 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
         return UUID.randomUUID().toString().replaceAll("-","");
     }
 	
+	
+	
 	@ResponseBody         //상품 후기등록
 	@RequestMapping(value = "/B_P003_D001/addAfter", method = { RequestMethod.GET, RequestMethod.POST })
-	public ResponseEntity addAfter(@RequestParam Map<String,Object> info,HttpSession httpSession, MultipartHttpServletRequest upfile,HttpServletRequest request,HttpServletResponse response) throws Exception {
+	public ResponseEntity<String> addAfter(@RequestParam Map<String,Object> info,HttpSession httpSession, MultipartHttpServletRequest upfile,HttpServletRequest request,HttpServletResponse response) throws Exception {
 		request.setCharacterEncoding("utf-8");
-		//회원에 관한것은 없기때문에 임의로 진행하였다 
+		
+        String id = (String) httpSession.getAttribute(LOGIN); //아이디
+        int userNum = userService.selectUserNum(id);         //유저넘
+		info.put("userNum", userNum);
 		
 		List<MultipartFile> files = upfile.getFiles("photo");
 		
@@ -181,7 +186,7 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 		}
 		
 		String message;
-		ResponseEntity resEnt = null;
+		ResponseEntity<String> resEnt = null;
 		HttpHeaders responseHeaders = new HttpHeaders(); // 헤더변경 시 사용
 		responseHeaders.add("Content-Type", "text/html; charset=utf-8");		
 		try {
@@ -193,7 +198,7 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 			message += " alert('오류가 발생했습니다. 다시 시도해 주세요');";
 			message += " location.href='" + request.getContextPath() + "/B_P003_D001/addAfter'; ";
 			message += " </script>";
-			resEnt = new ResponseEntity(message, responseHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
+			resEnt = new ResponseEntity<String>(message, responseHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
 			e.printStackTrace();
 		}		
 		return resEnt;
@@ -203,15 +208,19 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 	
 	@Override         // 댓글 등록
 	@RequestMapping(value = "/B_P003_D001/addComent", method = { RequestMethod.GET, RequestMethod.POST })
-	public ResponseEntity addComent(@RequestParam Map<String, Object> info, HttpSession httpSession,HttpServletRequest request, HttpServletResponse response)
+	public ResponseEntity<String> addComent(@RequestParam Map<String, Object> info, HttpSession httpSession,HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
         String afterType = (String) info.get("afterType");
         String prodNum = (String) info.get("prodNum");
+        
+        String id = (String) httpSession.getAttribute(LOGIN); //아이디
+        int userNum = userService.selectUserNum(id);         //유저넘
+        info.put("userNum", userNum);
         info.put("prodNum", Integer.parseInt(prodNum));
         info.put("afterType", Integer.parseInt(afterType));
         
 		String message;
-		ResponseEntity resEnt = null;
+		ResponseEntity<String> resEnt = null;
 		HttpHeaders responseHeaders = new HttpHeaders(); // 헤더변경 시 사용
 		responseHeaders.add("Content-Type", "text/html; charset=utf-8");		
 		try {
@@ -223,7 +232,7 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 			message += " alert('오류가 발생했습니다. 다시 시도해 주세요');";
 			message += " location.href='" + request.getContextPath() + "/B_P003_D001/addAfter'; ";
 			message += " </script>";
-			resEnt = new ResponseEntity(message, responseHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
+			resEnt = new ResponseEntity<String>(message, responseHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
 			e.printStackTrace();
 		}		
 		return resEnt;
@@ -242,6 +251,7 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 		}
 	
 	
+	
 	@Override               //구매하기 진행중 
 	@RequestMapping(value = "/B_P003_D001/buyProd")
 	public ModelAndView buyProduct(@RequestParam Map<String,Object> info,
@@ -249,15 +259,15 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 		ModelAndView mav = new ModelAndView();
 		Map<String,Object> select = new HashMap<String,Object>();
 		//세션에 값이 있다는 가정하에  유저번호 1번으로 진행하겠다     즉, 유저번호/상품번호/수량으로 최초 시작
-		int userNum =1;
+		String id = (String) httpSession.getAttribute(LOGIN); //아이디
+		int userNum = userService.selectUserNum(id);         //유저넘
 		HttpSession session = req.getSession();
-		//String  session.getAttribute("");
 		
 		
 		String type = (String) info.get("type");   // 1번=즉시구매 , 3번=장바구니에서 결제
-		
 		select.put("userNum", userNum);
-		UserVO deli = b_P003_D001productService.getAddress(select);//주소
+		Map<String,Object> deli = b_P003_D001productService.getAddress(select);//             작업중
+		
 		select =b_P003_D001productService.buyerinfo(select);//포인트
 		mav.addObject("address",deli );                     //기본주소
 		mav.addObject("point", select.get("point"));        //유저포인트
@@ -295,74 +305,124 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 			HttpServletRequest request, HttpServletResponse response) {
 		Map<String,Object> param2 = new HashMap<String,Object>();
         List<Map> list = new ArrayList<Map>();
+        System.out.println("info에 담긴 정보들:"+info.toString());
         
-        String type = (String) info.get("type");  //일반구매 1   장바구니결제 3
+        String type = (String) info.get("type");  //즉시구매 1   장바구니결제 3
         String point=(String) info.get("point");
-		String result ="";
-		//유저 번호는 세션에서 꺼내올 예정
-		int userNum =1;
-		HttpSession session = request.getSession();
+        String result ="";
+        int deliveryType =0;
+        
+        try {
+        	
+		String id = (String) httpSession.getAttribute(LOGIN); //아이디
+		int userNum = userService.selectUserNum(id);         //유저넘
 		
-		for(int i=0;i<orderNums.size();i++) {
-			Map<String,Object> param = new HashMap<String,Object>();
-			param.put("userNum",userNum);
-			param.put("prodNum", prodNums.get(i));
-			param.put("quantity", quantityToDB.get(i));  //
-			param.put("orderNum", orderNums.get(i));
-			param.put("optionNum", optionNums.get(i));
-			param.put("payTotal", perTotals.get(i));
-			param.put("price", prodPrices.get(i));
-			param.put("prodName",info.get("prodName"));
-			param.put("custName",info.get("custName"));
-			param.put("payType",info.get("payType"));
-			param.put("imp_uid",info.get("imp_uid"));
-			param.put("merchant_uid",info.get("merchant_uid"));
-			param.put("apply_num", info.get("apply_num"));
-			list.add(param);
+		
+		    param2.put("userNum", userNum);
+	        param2.put("price",Integer.parseInt((String) info.get("paid_amount")));
+	        param2.put("prodName",info.get("prodName"));
+	        param2.put("chooseAddress",info.get("chooseAddress")); 
+	        param2.put("address1",info.get("address1"));
+	        param2.put("address2",info.get("address2"));
+	        param2.put("paid_amount",Integer.parseInt((String) info.get("paid_amount")));
+	        param2.put("zoneCode",Integer.parseInt((String) info.get("zoneCode")));
+	        param2.put("point",Integer.parseInt((String) info.get("point")));
+	        param2.put("phoneNum",info.get("phoneNum"));
+	        param2.put("custName",info.get("custName"));
+		
+	     //   delivery
+		  if(info.get("chooseAddress").equals("변경배송지")) {
+			  
+			    List<Map> delisize = b_P003_D001productService.getDelibasicSize(param2);
+			    if(delisize.size()==0) { //delivery 테이블에 row가 없으면 기본배송지로 추가
+			    	deliveryType=1;
+			    }else {
+			    	deliveryType = b_P003_D001productService.getDelibasic(param2)+1;
+			    }
+		        param2.put("deliBasic", deliveryType);
+		        b_P003_D001productService.delivery(param2);
+		        
+	        }else {  //기본배송지
+	        	deliveryType = 1;
+	        }
+		
+		
+		if(type.equals("1")) {
+			System.out.println("즉시구매");
+			
+			int totalPrice =Integer.parseInt((String) info.get("totalPrice")); //결제 총금액
+	    	 
+			for(int i=0;i<orderNums.size();i++) {
+				Map<String,Object> param = new HashMap<String,Object>();
+				int orderNum= b_P003_D001productService.ordernum(); //시퀀스번호  
+				param.put("userNum",userNum);
+				param.put("prodNum", prodNums.get(i));
+				param.put("quantity", quantityToDB.get(i));  
+				param.put("orderNum",orderNum);
+				param.put("optionNum", optionNums.get(i));
+				param.put("payTotal", perTotals.get(i));
+				param.put("price", prodPrices.get(i));
+				param.put("deliveryType",deliveryType  );
+				param.put("prodName",info.get("prodName"));
+				param.put("custName",info.get("custName"));
+				param.put("payType",info.get("payType"));
+				param.put("imp_uid",info.get("imp_uid"));
+				param.put("merchant_uid",info.get("merchant_uid"));
+				param.put("apply_num", info.get("apply_num"));
+				
+				param.put("getPoint", (totalPrice*0.05));  //총금액 5% - 사용포인트
+				param.put("used", Integer.parseInt(point));  //사용한 포인트
+				
+				list.add(param);
+			}
+			  //orders 에  delieryType 추가해주어야함
+			b_P003_D001productService.updateOrder(list);   //  (즉시구매)   insert orders
+			b_P003_D001productService.updatePoint(list);   // point 테이블에 추가
+			
+		}else if(type.equals("3")) {
+			System.out.println("장바구니 결제");
+			
+			int totalPrice =Integer.parseInt((String) info.get("totalPrice")); //결제 총금액
+			for(int i=0;i<orderNums.size();i++) {
+				Map<String,Object> param = new HashMap<String,Object>();
+				param.put("userNum",userNum);
+				param.put("prodNum", prodNums.get(i));
+				param.put("quantity", quantityToDB.get(i));  //
+				param.put("orderNum", orderNums.get(i));   //
+				param.put("optionNum", optionNums.get(i));
+				param.put("payTotal", perTotals.get(i));
+				param.put("price", prodPrices.get(i));
+				param.put("deliveryType", deliveryType );
+				param.put("prodName",info.get("prodName"));
+				param.put("custName",info.get("custName"));
+				param.put("payType",info.get("payType"));  //
+				param.put("imp_uid",info.get("imp_uid"));
+				param.put("merchant_uid",info.get("merchant_uid"));
+				param.put("apply_num", info.get("apply_num"));
+				
+				param.put("getPoint", (totalPrice*0.05));  //총금액 5% - 사용포인트
+				param.put("used", Integer.parseInt(point));  //사용한 포인트
+				list.add(param);
+			}
+			
+        	b_P003_D001productService.updateOrders(list);    // (장바구니) update  orders
+		    b_P003_D001productService.updatePoint(list);
+        	
 		}
+		
         System.out.println("리스트 정보:"+list.toString());
         
-        param2.put("userNum", userNum);
-        param2.put("price",Integer.parseInt((String) info.get("paid_amount")));
-        param2.put("prodName",info.get("prodName"));
-        param2.put("chooseAddress",info.get("chooseAddress")); //기본배송지 or 변경배송지
-        param2.put("address1",info.get("address1"));
-        param2.put("address2",info.get("address2"));
-        param2.put("paid_amount",Integer.parseInt((String) info.get("paid_amount")));
-        param2.put("zoneCode",Integer.parseInt((String) info.get("zoneCode")));
-        param2.put("point",Integer.parseInt((String) info.get("point")));
-        param2.put("phoneNum",info.get("phoneNum"));
-        param2.put("custName",info.get("custName"));
-        try {
-
-		if(type.equals("3")) { //장바구니
-			System.out.println("장바구니 결제");
-        	b_P003_D001productService.updateOrders(list);    // (장바구니) update  orders       
-		}else if(type.equals("1")) { //즉시구매   옵션번호 필요
-			System.out.println("즉시구매");
-			b_P003_D001productService.updateOrder(list);   //  (즉시구매)   insert orders
-		}
-		
-		
-		    b_P003_D001productService.updateQuantity(list); //update prodoption 수량 차감 
-		    b_P003_D001productService.insertPaymentMultiple(list);  //insert payment   
-        	
-		    if(!point.equals("0")&&!point.equals("")) {
-		    	b_P003_D001productService.updatePoint(param2);    // update point 포인트 차감
-		    }
+             //update  prodoption 수량 차감 
+		    b_P003_D001productService.updateQuantity(list);
+		    //insert payment   
+		    b_P003_D001productService.insertPaymentMultiple(list); 
 		    
-        if(info.get("chooseAddress").equals("변경배송지")) {
-        	b_P003_D001productService.delivery(param2);       //배송지 추가
-        }
-        
-        	 
         result ="seccess";
         	 
 		} catch (Exception e) {
            e.printStackTrace();
            result="fail";
 		}
-		
 		return result;
 	}
 	
@@ -371,38 +431,56 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 	
 	@Override              // 장바구니 추가    메인 ->장바구니        오더타입 3
 	@RequestMapping(value = "/B_P003_D001/addCartMain")
-	public ResponseEntity<String> addCartMain(@RequestParam Map<String, Object> info) throws Exception {
+	public ResponseEntity<String> addCartMain(@RequestParam Map<String, Object> info,HttpSession httpSession) throws Exception {
 		System.out.println("장바구니 추가 메인---> 장바구니"+info.toString()); //  prodNum=117, prodName=테스트, prodPrice=12, addType=main
 		String message;
         ResponseEntity<String> resEnt = null;
 		HttpHeaders responseHeaders = new HttpHeaders(); // 헤더변경 시 사용
 		responseHeaders.add("Content-Type", "text/html; charset=utf-8");
 		
-		int userNum2=1; //임시번호
+		String id = (String) httpSession.getAttribute(LOGIN); //아이디
+		int userNum2 = userService.selectUserNum(id);         //유저넘
+		
 		int orderType=3; // 장바구니2 (메인화면에서 수량선택없이 추가한 애들)
+		
+		String addType= (String) info.get("addType");
+		String message2=null;
+		
 		Map<String,Object> param = new HashMap<String,Object>();
-		//int prodNum = Integer.parseInt((String) info.get("prodNum"));
+		
 		List<Integer> result= b_P003_D001productService.searchOption(info);
 		
 		param.put("optionNum", result.get(0));
 		param.put("userNum", userNum2);
 		param.put("prodNum", Integer.parseInt((String) info.get("prodNum")));
 		param.put("prodName", info.get("prodName"));
-		param.put("prodPrice", Integer.parseInt((String) info.get("prodPrice")));		
+		param.put("prodPrice", Integer.parseInt((String) info.get("prodPrice")));	
+		
 		try {
-		    if(result.size()==1) { //옵션이 하나이므로 그냥 장바구니에 추가 (번호 2)
+			
+		    if(result.size()==1&&addType.equals("cart")) { //옵션이 하나이므로 그냥 장바구니에 추가 (번호 2)
 		    orderType=2;
 			param.put("orderType", orderType);
 			System.out.println("인설트전 정보"+param.toString());
 			b_P003_D001productService.addCartOne(param);
+			message2="장바구니";
 			
-		}else {   //옵션이 2개이상  (번호3)
+		    }else if(result.size()>1&&addType.equals("cart")) {   //옵션이 2개이상  (번호3)
 				orderType=3;
 				param.put("orderType", orderType);
-			b_P003_D001productService.addCartOne(param);
-		  }
+			 b_P003_D001productService.addCartOne(param);
+			 message2="장바구니";
+			 
+		    }else if(addType.equals("wish")) {  //위시리스트    prodlike table에 insert
+		    	Map<String,Object> wish = new HashMap<String,Object>();
+		    	wish.put("userNum", userNum2);
+				wish.put("prodNum", Integer.parseInt((String) info.get("prodNum")));
+				b_P003_D001productService.addprodLike(wish);
+				message2="위시리스트";
+		    }
+		    
 			message = " <script>";
-			message += " alert('장바구니 추가완료.');";
+			message += " alert('"+message2+" 추가완료.');";
 			message += " location.href='/B_P002_D001/shopMainCate?listType=100'; ";
 			message += " </script>";
 			resEnt = new ResponseEntity<String>(message, responseHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -435,22 +513,21 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 		HttpHeaders responseHeaders = new HttpHeaders(); // 헤더변경 시 사용
 		responseHeaders.add("Content-Type", "text/html; charset=utf-8");
 		String requestType = (String) info.get("addType"); 
-		
-		/*
+
+	
 		if(httpSession.getAttribute(LOGIN)==null) {   //세션 정보
 			message = " <script>";
 			message += " alert('로그인해주세요.');";
 			message += " location.href='/B_P002_D001/shopMainCate?listType=100'; ";
 			message += " </script>";
-			resEnt = new ResponseEntity(message, responseHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
+			resEnt = new ResponseEntity<String>(message, responseHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
 			return resEnt; 
 		}
 		
 		String id = (String) httpSession.getAttribute(LOGIN); //아이디
-		int userNum = userService.selectUserNum(id);         //유저넘
-		*/
+		int userNum2 = userService.selectUserNum(id);         //유저넘
 		
-		int userNum2=1; //임시번호
+	
 		int orderType=2; // 장바구니2 (디테일화면에서  수량선택 후 추가한 애들)
 		
 		try {              //수량체크 로직
@@ -510,7 +587,7 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 
 
 
-	@Override          //장바구니 상품 중복체크            (보류)
+	@Override       //장바구니 상품 중복체크            (보류)   
 	@RequestMapping(value = "/B_P003_D001/checkCart")
 	@ResponseBody
 	public String checkCart(Map<String, Object> info, HttpServletRequest req, HttpServletResponse res) throws Exception {
@@ -549,15 +626,97 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 		return param;
 	}
 
+	
+	
+	@Override               //위시리스트
+	@RequestMapping(value = "/B_P003_D001/wishList")
+	public ModelAndView wishList(Map<String, Object> info, HttpSession httpSession, HttpServletRequest req,
+			HttpServletResponse res) throws Exception {
+		ModelAndView mav = new ModelAndView(); //파라미터에 prodNum , quantity,prodName 있다
+		
+		Map<String,Object> map = new HashMap<String,Object>();
+
+		String id = (String) httpSession.getAttribute(LOGIN); //아이디
+		int userNum = userService.selectUserNum(id);         //유저넘
+		
+		
+		String nowPage = req.getParameter("nowPage");
+		String cntPerPage = req.getParameter("cntPerPage");
+		if (nowPage == null && cntPerPage == null) {
+			nowPage = "1";
+			cntPerPage = "6";
+		} else if (nowPage == null) {
+			nowPage = "1";
+		} else if (cntPerPage == null) { 
+			cntPerPage = "6";
+		}
+		
+		int total = b_P003_D001productService.wishCount(userNum);
+		Paging page = new Paging(total, Integer.parseInt(nowPage), Integer.parseInt(cntPerPage));
+		map.put("userNum", userNum); //유저 번호
+		map.put("start", page.getStart());
+		map.put("end", page.getEnd());
+		List<Map> list = b_P003_D001productService.selectWishList(map);  // prodlike,products,prodphoto,productafter 테이블 조인 결과물 
+		
+		mav.addObject("userId", id); // 아이디
+		mav.addObject("cartList", list); // prodlike 테이블
+		mav.addObject("paging", page);
+		
+		mav.setViewName("/shoppingMall/wishList");
+		return mav;
+	}
+
+	
+
+	@Override            //구매내역
+	@RequestMapping(value = "/B_P003_D001/paymentList")
+	public ModelAndView paymentList(Map<String, Object> info, HttpSession httpSession, HttpServletRequest req,
+			HttpServletResponse res) throws Exception {
+		
+	ModelAndView mav = new ModelAndView(); //파라미터에 prodNum , quantity,prodName 있다
+		Map<String,Object> map = new HashMap<String,Object>();
+
+		String id = (String) httpSession.getAttribute(LOGIN); //아이디
+		int userNum = userService.selectUserNum(id);         //유저넘
+		map.put("userNum", userNum); //유저 번호
+		
+		String nowPage = req.getParameter("nowPage");
+		String cntPerPage = req.getParameter("cntPerPage");
+		if (nowPage == null && cntPerPage == null) {
+			nowPage = "1";
+			cntPerPage = "6";
+		} else if (nowPage == null) {
+			nowPage = "1";
+		} else if (cntPerPage == null) { 
+			cntPerPage = "6";
+		}
+		int total = b_P003_D001productService.totalPaymentCount(map);
+		Paging page = new Paging(total, Integer.parseInt(nowPage), Integer.parseInt(cntPerPage));
+		map.put("start", page.getStart());
+		map.put("end", page.getEnd());
+		List<Map> list =b_P003_D001productService.paymentList(map);
+		mav.addObject("userId", id); // 아이디
+		mav.addObject("payList", list); //장바구니 4번 (주문조회)
+		mav.addObject("paging", page);
+		
+		System.out.println("구매내역:"+list.toString());
+		
+		mav.setViewName("/shoppingMall/paymentList");
+		return mav;
+	}
+
+
 
 	@Override           //장바구니
 	@RequestMapping(value = "/B_P003_D001/cartList")
-	public ModelAndView cartList(@RequestParam Map<String, Object> info,HttpSession httpSession,HttpServletRequest req, HttpServletResponse res) throws Exception {
+	public ModelAndView cartList(@RequestParam Map<String, Object> info,HttpSession httpSession,
+			HttpServletRequest req, HttpServletResponse res) throws Exception {
 		ModelAndView mav = new ModelAndView(); //파라미터에 prodNum , quantity,prodName 있다
 		Map<String,Object> map = new HashMap<String,Object>();
 		Map<String,Object> map2 = new HashMap<String,Object>();
-		//세션에서 아이디 정보를 꺼내온다
-		int userNum =1;
+
+		String id = (String) httpSession.getAttribute(LOGIN); //아이디
+		int userNum = userService.selectUserNum(id);         //유저넘
 		map.put("userNum", userNum); //유저 번호
 		map2.put("userNum", userNum); //유저 번호
 		
@@ -599,11 +758,11 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 		System.out.println("옵션서택안한애들 :"+list2.size());
 				
 		
-		
-		mav.addObject("cartList", list); //장바구니 2번
+		mav.addObject("userId", id); // 아이디
+		mav.addObject("cartList", list); //장바구니 2번 (옵션이 선택된 상품들)
 		mav.addObject("paging", page);
 		
-		mav.addObject("cartList2", list2); //장바구니 3번
+		mav.addObject("cartList2", list2); //장바구니 3번 (옵션이 선택되지 않은 상품들)
 		mav.addObject("paging2", page2);
 		
 		mav.setViewName("/shoppingMall/cart");
@@ -651,10 +810,14 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 	@Override
 	@ResponseBody
 	@RequestMapping(value = "/B_P003_D001/deleteCart")
-	public void deleteCart(@RequestParam Map<String, Object> info, HttpServletRequest req, HttpServletResponse res) throws Exception {
+	public void deleteCart(@RequestParam Map<String, Object> info, HttpServletRequest req, HttpServletResponse res,HttpSession httpSession)
+			throws Exception {
 		Map<String,Object> map = new HashMap<String,Object>();
 		//세션에서 값 뽑아올것
-		int userNum =1;
+		
+		String id = (String) httpSession.getAttribute(LOGIN); //아이디
+		int userNum = userService.selectUserNum(id);         //유저넘
+		
 		map.put("userNum", userNum);
 		map.put("orderNum",Integer.parseInt((String) info.get("deleteNum")));     //상품번호로 바꿀것 orderNum
 		b_P003_D001productService.deleteCart(map);
@@ -717,11 +880,15 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 			@RequestParam(value = "sizes[]")List<String> sizes,
 			@RequestParam(value = "prices[]")List<Integer> prices,
 			@RequestParam(value = "prodNums[]")List<Integer> prodNums,
-			HttpServletRequest req, HttpServletResponse res)
+			HttpServletRequest req, HttpServletResponse res,HttpSession httpSession)
 			throws Exception {
 		
 		String result="";
-		int userNum = 1; //세션에서 꺼내기
+		
+		
+		//String id = (String) httpSession.getAttribute(LOGIN); //아이디
+		//int userNum = userService.selectUserNum(id);         //유저넘
+
 		
 		List<Map> list = new ArrayList<Map>();
 		for(int i=0; i<totalPrice.size(); i++) {
@@ -760,12 +927,14 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 		ModelAndView mav = new ModelAndView();
 		Map<String, Object> addProd = new HashMap<String, Object>();//prod 정보를 받음 Map을 선언
 		Map<String,Object> addCate= new HashMap<String,Object>();
+		
+		String id = (String) httpSession.getAttribute(LOGIN); //아이디
+		int userNum = userService.selectUserNum(id);         //유저넘
 
-		int userNum=1; //세션에서 가져오자
 		
 		String imagePath = "/resources/img/"; 
-		String path = request.getSession().getServletContext().getRealPath("/");// locallhost8080/
-		String savePath = path + imagePath;   //두개를 합치면  :locallhost8080/resources/img/
+		String path = request.getSession().getServletContext().getRealPath("/");// 실제경로
+		String savePath = path + imagePath;   //두개를 합치면  :locallhost8080~~~~~~~~/resources/img/
         String originalFileName = null;
         String storedFileName = null;
         String originalFileExtension = null;
@@ -811,8 +980,9 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 	        originalFileName = Mainfiles.get(i).getOriginalFilename();
 	        originalFileExtension = Mainfiles.get(i).getOriginalFilename().substring(originalFileName.lastIndexOf("."));//파일 확장자
 	        storedFileName = getRandomString() + originalFileExtension;   // 랜덤값 + 확장자          wqdnwq.png 등등
+	        
 			file = new File(savePath + storedFileName);
-	        System.out.println(file.getAbsolutePath()); //파일 절대 경로
+	        System.out.println(file.getAbsolutePath()); //파일 절대 경로(실제저장된 주소)
 	        Mainfiles.get(i).transferTo(file); // 파일들을 file 경로로 넣는다
 	        
 	        main.put("content", storedFileName);
@@ -938,8 +1108,8 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 	public String test(@RequestParam Map<String,Object> info) throws Exception {
 		System.out.println(info.toString());
 		JSONObject json = new JSONObject();
-		
-	    String result ="";	
+	    String result ="";
+	    
 	    String test= (String) info.get("test");  //merchant_uid 아이디를 보낼것
 	    String merchant= (String) info.get("merchant"); 
 	    String token = getToken();     
@@ -958,8 +1128,9 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 			connection.setRequestMethod("POST");  //요청
 			connection.setRequestProperty("Content-Type", "application/json"); //해더설정
 			connection.setRequestProperty("Authorization", token);             //해더설정
+			
 			OutputStream os= connection.getOutputStream();
-			os.write(json.toString().getBytes());
+			os.write(json.toString().getBytes());  //입력정보를 보내는작업
 			connection.connect();
 			StringBuilder sb = new StringBuilder(); 
 			if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
@@ -969,14 +1140,16 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 					sb.append(line + "\n");  
 				}
 				br.close();
-				requestString = sb.toString();     //전달된 값을 String이다
+				requestString = sb.toString();     //전달된 값은 json형태의 String값
 				System.out.println("취소결과:"+requestString.toString());
 			}
 			os.flush();
-			connection.disconnect(); 
-			JSONParser parser = new JSONParser();
+			connection.disconnect(); //연결을 끊어줌 
+			
+			
+			JSONParser parser = new JSONParser(); // 전달받은 json형식의 문자열을 파싱하기위함
 			JSONObject obj = (JSONObject) parser.parse(requestString);
-			if((Long)obj.get("code")  == 0){
+			if((Long)obj.get("code")  == 0){      //key ,value이기때문에 Map에서 값을 뽑아쓰듯 사용
 				//JSONObject getToken = (JSONObject) obj.get("response");
 				//System.out.println("getToken==>>"+getToken.get("access_token"));
 			}
@@ -1029,7 +1202,7 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 			JSONParser parser = new JSONParser();
 			JSONObject obj = (JSONObject) parser.parse(requestString);
 			if((Long)obj.get("code")  == 0){
-				JSONObject getToken = (JSONObject) obj.get("response");
+				JSONObject getToken = (JSONObject) obj.get("response");// key,value로 들어옴
 				System.out.println("getToken==>>"+getToken.get("access_token"));
 				_token = (String)getToken.get("access_token");
 			}
@@ -1039,6 +1212,193 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 		}
 		return _token;
 	}
+
+
+
+
+
+
+
+	@Override
+	@ResponseBody
+	@RequestMapping(value = "/E_P003_D001/updateMemo", method = { RequestMethod.GET, RequestMethod.POST })
+	public String updateMemo(@RequestParam Map<String, Object> info, HttpServletResponse response, HttpServletRequest request,
+			HttpSession httpSession) throws Exception {
+		String result ="";
+		
+		try {
+			
+		String id = (String) httpSession.getAttribute(LOGIN); 
+		int userNum = userService.selectUserNum(id);         
+		System.out.println(info.toString());  //{commentText=zzzz, addCommentgo=1}
+		
+			b_P003_D001productService.updateMemo(info);
+			result="success";
+		} catch (Exception e) {
+             e.printStackTrace();
+             result="fail";
+		}
+		
+		return result;
+	}
+
+
+
+
+
+
+
+	@Override
+	@ResponseBody
+	@RequestMapping(value = "/E_P003_D001/addCartFromWish", method = { RequestMethod.GET, RequestMethod.POST })
+	public String addCartFromWish(		
+			@RequestParam(value = "likenums[]")List<Integer> likenums,
+			@RequestParam(value = "quantities[]")List<Integer> quantities,
+			@RequestParam(value = "optionNums[]")List<Integer> optionNums,
+			@RequestParam(value = "prodNames[]")List<String> prodNames,
+			@RequestParam(value = "prices[]")List<Integer> prices,
+			@RequestParam(value = "prodNums[]")List<Integer> prodNums,
+			HttpServletRequest req,HttpServletResponse res, HttpSession httpSession) throws Exception {
+		//userNum=22, prodNum=116, quantity=1, price=35000, prodName=모자, likeNum=9, optionNum=104
+		String result ="";
+		List<Map> param = new ArrayList<Map>();
+		
+		try {
+			String id = (String) httpSession.getAttribute(LOGIN); //아이디
+			int userNum = userService.selectUserNum(id);         //유저넘
+			
+			for(int i=0;i<prodNums.size();i++) {
+				Map<String,Object> info = new HashMap<String,Object>();
+				info.put("likeNum", likenums.get(i));
+				info.put("quantity", quantities.get(i));
+				info.put("optionNum", optionNums.get(i));
+				info.put("prodName", prodNames.get(i));
+				info.put("price", prices.get(i));
+				info.put("prodNum", prodNums.get(i));
+				info.put("userNum", userNum);
+				param.add(info);
+			}
+			
+			b_P003_D001productService.addCartFromWish(param);
+			b_P003_D001productService.deleteWish(param);
+			
+			
+			
+			result="success";
+			System.out.println("위시 -> 장바구니:"+param.toString());		
+		} catch (Exception e) {
+			e.printStackTrace();
+			result="fail";
+			
+		}
+		
+		
+		return result;
+	}
+
+
+
+
+
+
+
+	@Override
+	@ResponseBody
+	@RequestMapping(value = "/E_P003_D001/deleteWish", method = { RequestMethod.GET, RequestMethod.POST })
+	public String deleteWish(@RequestParam Map<String, Object> info, HttpServletResponse response, HttpServletRequest request,
+			HttpSession httpSession) {
+		String result="";
+		
+		try {
+			
+			String id = (String) httpSession.getAttribute(LOGIN); //아이디
+			int userNum = userService.selectUserNum(id);         //유저넘
+			
+			b_P003_D001productService.deleteWishOne(info);
+			result="success";
+		} catch (Exception e) {
+			e.printStackTrace();
+			result="fail";
+		}
+		return result;
+	}
+
+
+
+
+
+
+	@Override
+	@RequestMapping(value = "/E_P003_D001/addDeliveryForm", method = { RequestMethod.GET, RequestMethod.POST })
+	public ModelAndView addDeliveryForm(Map<String, Object> info, HttpServletResponse response, HttpServletRequest request,
+			HttpSession httpSession) {
+		
+		ModelAndView mav= new ModelAndView();
+		
+			String id = (String) httpSession.getAttribute(LOGIN); //아이디
+			int userNum = userService.selectUserNum(id);         //유저넘
+			
+		
+		mav.addObject("userNum", userNum);
+		mav.setViewName("/shoppingMall/addDeliveryForm");
+		return mav;
+	}
+
+	@Override
+	@ResponseBody
+	@RequestMapping(value = "/E_P003_D001/addDelivery", method = { RequestMethod.GET, RequestMethod.POST })
+	public String addDelivery(@RequestParam Map<String, Object> info, HttpServletResponse response, HttpServletRequest request,
+			HttpSession httpSession) {
+        String result="";
+       try {
+    	   b_P003_D001productService.addAddress(info);
+    	   result="success";
+	   } catch (Exception e) {
+		e.printStackTrace();
+		result="fail";
+	   }
+		return result;
+	}
+
+
+
+
+
+
+
+	@Override
+	@RequestMapping(value = "/E_P003_D001/payListDetail", method = { RequestMethod.GET, RequestMethod.POST })
+	public ModelAndView payListDetail(@RequestParam Map<String, Object> info, HttpServletResponse response,
+			HttpServletRequest request, HttpSession httpSession) {
+		ModelAndView mav= new ModelAndView();
+		System.out.println("구매내역 상세보기:"+info.toString());
+		try {
+			String id = (String) httpSession.getAttribute(LOGIN); //아이디
+			int userNum = userService.selectUserNum(id);         //유저넘
+			
+			info.put("userNum", userNum);
+			List<Map> list =b_P003_D001productService.payDetailList(info);
+			System.out.println("구매 상세페이지"+list.toString());
+			mav.addObject("payDetailList", list);
+		} catch (Exception e) {
+		    e.printStackTrace();
+		}
+		mav.setViewName("/shoppingMall/payListDetail");
+		return mav;
+	}
+	
+	
+	
+
+
+
+
+
+
+
+
+
+
 
 
 

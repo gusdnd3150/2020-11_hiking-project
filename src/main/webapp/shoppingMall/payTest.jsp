@@ -102,13 +102,11 @@ $(document).ready(function () {
         
         
         
+       
+        
         $("input[name=defualtAddress]").on("click",function(){  //기본배송지
             var address = $('input[name=address]');
-            if(address==null||address==''){
-            	alert("기본배송지 설정이 되어있지 않습니다.");
-            }else{
-            	
-            
+            var defualtAddress =$('input[name=defualtAddress]'); 
             var newAddress =$('input[name=newAddress]');
             newAddress.prop("checked",false);
             
@@ -118,7 +116,27 @@ $(document).ready(function () {
             var basic2 =$('input[name=addressDetail]').val();
             var zonecode =$('input[name=zonecode]').val();
             var name =$('input[name=deliNmae]').val();
-            var deliPhonNum =$('input[name=deliPhonNum]').val();
+            var custName =$('input[name=DBcustName]').val();
+            var custPhone =$('input[name=DBcustPhone]').val();
+            var type =$('input[name=type]').val();   
+            
+            //var deliPhonNum =$('input[name=deliPhonNum]').val();
+            
+            if(basic==''||basic==null){  //테스트로 name으로 진행 완료 후 basic 로 바꾸자
+            	alert("기본배송지가 없습니다.");
+            	var check = window.confirm("배송지를 추가하시겠습니까?");
+            	
+            	if(check==true){ //예 누르면
+            		//아작스
+            		
+            		window.open("/E_P003_D001/addDeliveryForm",
+                            "childForm", "width=700, height=450, resizable = no, scrollbars = no");
+            	}else{//아니면
+            		defualtAddress.prop("checked",false);
+            		return;
+            	}
+           
+            }else{
             
             var put1 = $('input[name=post1]');
             var put2 = $('input[name=address1]');
@@ -126,12 +144,16 @@ $(document).ready(function () {
             var put4 = $('input[name=tel]');
             var put5 = $('input[name=fax]');
             
+            
+            
             put1.val(zonecode);
             put2.val(basic);
             put3.val(basic2);
-            put4.val(deliPhonNum);
-            put5.val(name);
+            put4.val(custPhone);
+            put5.val(custName);
             }
+            
+            
             
             });
         
@@ -223,7 +245,7 @@ function usePoin(){                         //포인트 사용할 경우
 	     url:"/E_P003_D001/cancelPay",
 	     data:{test:imp,merchant:merchant},
 	     success:function(data,textStatus){
-	     	//alert('넘어온 토큰'+data);
+	     	alert('결제취소 결과:'+data);
 	     	console.log(data);
 	     },
 	     error:function(data,textStatus){
@@ -304,20 +326,26 @@ function usePoin(){                         //포인트 사용할 경우
 	                data:{zoneCode:zoneCode,
 	                	address1:address1,address2:address2,
 	                	phoneNum:phoneNum,custName:custName,
-	                	payType:payType,point:point,paid_amount:rsp.paid_amount,optionNums:optionNums,
+	                	payType:payType,totalPrice:totalPrice,point:point,paid_amount:rsp.paid_amount,optionNums:optionNums,
 	                	imp_uid:rsp.imp_uid,merchant_uid:rsp.merchant_uid,prodPrices:prodPrices,
 	                	apply_num:rsp.apply_num,prodNums:prodNums,quantityToDB:quantityToDB,type:type,
 	                	chooseAddress:chooseAddress,prodName:prodName,orderNums:orderNums,perTotals:perTotals,
 	                },
 	                success:function(data,textStatus){
+	                    alert(data);
+	                    if(data =='fail'){
+	                    	cancelPay(rsp.imp_uid,rsp.merchant_uid);
+	                    	alert('결제 취소실행.');
+	                    }else{
+	                    	alert('결제가 완료 되었습니다.');
+		                	location.href="/B_P002_D001/shopMainCate?listType=100";
+	                    }
 	                },
 	                error:function(data,textStatus){
-	                	alert('결제가 실패.');
+	                	alert('결제 실패.');
 	                	cancelPay(rsp.imp_uid,rsp.merchant_uid);
 	                },
 	                complete:function(){
-	                	alert('결제가 완료 되었습니다.');
-	                	location.href="/B_P002_D001/shopMainCate?listType=100";
 	                }
 	              });
 	                  /* var msg = '결제가 완료되었습니다.';
@@ -358,16 +386,20 @@ align:bottom;
 <jsp:include page="/common/header.jsp" />
 
        <!-- user table 정보 -->
-<c:if test="${not empty address.address }">
-<input type="hidden" name="basicAddress" value="${address.address }">
-<input type="hidden" name="addressDetail" value="${address.address2 }">
-<input type="hidden" name="zonecode" value="${address.zonecode }">
-<input type="hidden" name="deliNmae" value="${address.name }">
-<input type="hidden" name="deliPhonNum" value="${address.phone }">
+<c:if test="${not empty address.ADDRESS }">
+<input type="hidden" name="basicAddress" value="${address.ADDRESS }">
+<input type="hidden" name="addressDetail" value="${address.ADDRESS2 }">
+<input type="hidden" name="zonecode" value="${address.ZONECODE }">
+<input type="hidden" name="delibasic" value="${address.DELIBASIC }">
+<input type="hidden" name="DBcustName" value="${address.CUSTNAME }">
+<input type="hidden" name="DBcustPhone" value="${address.CUSTPHONE }">
 </c:if>
 
 
-
+<br>
+<br>
+<br>
+<br>
 <div class="container">
     <form name="f" method="post">
  
@@ -385,7 +417,7 @@ align:bottom;
                                 <td>배송지</td>
                                 <td>
                                     <input type="checkbox" name="defualtAddress" value ="기본">기본
-                                    <input type="checkbox" name="newAddress" value ="변경지">변경주소
+                                    <input type="checkbox" name="newAddress" value ="변경지"> 변경배송지
                                     <input type="hidden" name="address" value ="">                              
                                 </td>
                             </tr>  

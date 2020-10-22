@@ -124,13 +124,6 @@ $("#buyProduct").on("click",function(){
     
 });
            
-           
-           
-           
-           
-           
-           
-
 
              $("#addCart").on("click",function(){     //장바구니에 추가
                var prodNums = []; 
@@ -379,6 +372,8 @@ $("#buyProduct").on("click",function(){
                <td> <h> <span>재고 </span> : ${options.QUANTITY }  &nbsp; &nbsp; </h> </td>
                  <td><h> <span>사이즈 </span> : ${options.PRODSIZE }  &nbsp; &nbsp;</h> </td>
                <td> <h><span>색상</span> :  ${options.COLOR }  &nbsp;</h></td>
+               
+               
                <td>
                  <!-- <h><input type="text" name="inputquantity" placeholder="수량 입력 " style="display: none" value="" size=6></h> -->
                     <div class="product_count" style="margin-top: 10px;margin-bottom: 6px"  >
@@ -433,7 +428,8 @@ $("#buyProduct").on("click",function(){
                 <input type="hidden" id="prodNum" value="${prodDetail[0].PRODNUM }">
                 <input type="hidden" id="prodName" value="${prodDetail[0].NAME }"> 
                 <input type="hidden" id="prodPrice" value="${prodDetail[0].PRICE }">
-                <a class="icon_btn" href="#">
+                
+                <a class="icon_btn" href="/B_P003_D001/addCartMain?prodNum=${prodDetail[0].PRODNUM}&prodName=${prodDetail[0].NAME}&prodPrice=${prodDetail[0].PRICE}&addType=wish">
                   <i class="lnr lnr lnr-heart"></i>
                 </a>
               </div>
@@ -731,6 +727,7 @@ $("#buyProduct").on("click",function(){
                       </div>
                       <div class="media-body">
                         <h4>${afterList.userNum }</h4>    <!-- 유저아이디 -->
+                        
                         <c:if test="${afterList.evalue ==1 }">
                         <i class="fa fa-star"></i>        <!-- 평점 -->
                         </c:if>
@@ -762,7 +759,7 @@ $("#buyProduct").on("click",function(){
                        ${afterList.content }
                     </p>
                     <p>${afterList.createDat }</p>
-                    <form name="addComent"  method="post" action="/B_P003_D001/addComent"  >
+                                       <form name="addComent"  method="post" action="/B_P003_D001/addComent"  >
                                             <input type="hidden" name="prodNum" value="${prodDetail[0].PRODNUM }">
                                             <input type="hidden" name="afterType" value="${afterList.afterNum }">
                                          <input type="text" name="content">
@@ -870,7 +867,7 @@ $("#buyProduct").on("click",function(){
       </div>
     </section>
     <!--================End Product Description Area =================-->
-
+<jsp:include page="../common/footer.jsp" flush="false" />
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

@@ -81,8 +81,8 @@ public class B_P003_D001productServiceImpl implements B_P003_D001productService{
 	}
 
 	@Override
-	public UserVO getAddress(Map<String, Object> map) throws DataAccessException {
-		UserVO vo = b_P003_D001productDAO.getAddress(map);
+	public Map<String,Object> getAddress(Map<String, Object> map) throws DataAccessException {
+		Map<String,Object> vo = b_P003_D001productDAO.getAddress(map);
 		return vo;
 	}
 
@@ -104,7 +104,7 @@ public class B_P003_D001productServiceImpl implements B_P003_D001productService{
 	}
 
 	@Override
-	public void updatePoint(Map<String, Object> map) throws DataAccessException {
+	public void updatePoint(List<Map> map) throws DataAccessException {
 		b_P003_D001productDAO.updatePoint(map);
 	}
 
@@ -120,8 +120,8 @@ public class B_P003_D001productServiceImpl implements B_P003_D001productService{
 	public void insertPaymentTest(Map<String, Object> map) throws DataAccessException {
 		    //b_P003_D001productDAO.updateQuantity(map);
 			//b_P003_D001productDAO.updateOrders(map);
-			b_P003_D001productDAO.delivery(map);
-			b_P003_D001productDAO.updatePoint(map);
+			//b_P003_D001productDAO.delivery(map);
+			//b_P003_D001productDAO.updatePoint(map);
 			//b_P003_D001productDAO.insertPayment(map);
 	}
 	
@@ -247,6 +247,94 @@ public class B_P003_D001productServiceImpl implements B_P003_D001productService{
 	public void modOption(Map<String, Object> map) throws DataAccessException {
 		b_P003_D001productDAO.modOption(map);
 		
+	}
+
+	@Override
+	public int ordernum() throws DataAccessException {
+		return b_P003_D001productDAO.ordernum();
+	}
+
+	@Override
+	public int buyCount(int userNum) throws DataAccessException {
+		return b_P003_D001productDAO.buyCount(userNum);
+	}
+
+	@Override
+	public int wishCount(int userNum) throws DataAccessException {
+		return b_P003_D001productDAO.wishCount(userNum);
+	}
+
+	@Override
+	public void addprodLike(Map<String, Object> map) throws DataAccessException {
+		b_P003_D001productDAO.addprodLike(map);
+		
+	}
+
+	@Override
+	public List<Map> selectWishList(Map<String, Object> map) throws DataAccessException {
+		return b_P003_D001productDAO.selectWishList(map);
+	}
+
+	@Override
+	public void updateMemo(Map<String, Object> map) throws DataAccessException {
+		b_P003_D001productDAO.updateMemo(map);
+		
+	}
+
+	@Override
+	public void addCartFromWish(List<Map> wish) throws DataAccessException {
+		b_P003_D001productDAO.addCartFromWish(wish);
+		
+	}
+
+	@Override
+	public void deleteWish(List<Map> wish) throws DataAccessException {
+		b_P003_D001productDAO.deleteWish(wish);
+		
+	}
+
+	@Override
+	public void deleteWishOne(Map<String, Object> likenum) throws DataAccessException {
+		b_P003_D001productDAO.deleteWishOne(likenum);
+		
+	}
+
+	@Override
+	public void addAddress(Map<String, Object> info) throws DataAccessException {
+		b_P003_D001productDAO.addAddress(info);
+		
+	}
+
+	@Override
+	public int getDelibasic(Map<String, Object> map) throws DataAccessException {
+		return b_P003_D001productDAO.getDelibasic(map);
+	}
+
+	@Override
+	public List<Map> checkPointTable(Map<String, Object> map) throws DataAccessException {
+		return b_P003_D001productDAO.checkPointTable(map);
+	}
+
+	@Override
+	public List<Map> getDelibasicSize(Map<String, Object> map) throws DataAccessException {
+		return b_P003_D001productDAO.getDelibasicSize(map);
+	}
+
+	@Override
+	public List<Map> paymentList(Map<String, Object> map) throws DataAccessException {
+		// TODO Auto-generated method stub
+		return b_P003_D001productDAO.paymentList(map);
+	}
+
+	@Override
+	public int totalPaymentCount(Map<String, Object> map) throws DataAccessException {
+		// TODO Auto-generated method stub
+		return b_P003_D001productDAO.totalPaymentCount(map);
+	}
+
+	@Override
+	public List<Map> payDetailList(Map<String, Object> map) throws DataAccessException {
+		return b_P003_D001productDAO.payDetailList(map);
 	}
 
 	
