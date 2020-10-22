@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import project.admin.e_p002.vo.E_p002VO;
 
@@ -14,16 +15,12 @@ public interface E_p002Service {
 	int insertProd(Map map)throws Exception;
 
 	int insertProdPhoto(int index, List<MultipartFile> files, String path)throws IOException;
-
-	//List<HashMap<String, String>> selectProd(Map<String, String> search)throws Exception;
 	
 	List selectProd(Map search)throws Exception;
-
-	int deleteProd(int prodNum)throws Exception;
-
-	List viewProdList(int prodNum)throws Exception;
-
-	List<E_p002VO> viewPhotoList(int prodNum)throws Exception;
+	
+	List viewPhotoMainList(int prodNum)throws Exception;
+	
+	List viewPhotoDetail(int prodNum)throws Exception;
 
 	void insertcategory(Map<String, Object> categoryMap)throws Exception;
 
@@ -33,6 +30,23 @@ public interface E_p002Service {
 
 	int updateOption(Map map)throws Exception;
 
-	
+	int updateDateProdOption(Map map)throws Exception;
+
+	int updateDateProd(Map map)throws Exception;
+
+	List viewProdList(int optionNum)throws Exception;
+
+	List viewList(int optionNum)throws Exception;
+
+	int upDateMainPhoto(int prodNum,Map<String, MultipartFile> fileMap, String path, int pphotonum)throws IOException;
+
+	int upDateDetailPhoto(int prodNum, Map<String, MultipartFile> fileMap, String path, int pphotonum)throws IOException;
+
+	int deleteImg(Map map)throws Exception;
+
+	int upDateAddMainImg(List<MultipartFile> files, String path, int prodNum)throws IOException;
+
+	int upDateAddDetailImg(List<MultipartFile> files, String path, int prodNum)throws IOException;
+
 
 }

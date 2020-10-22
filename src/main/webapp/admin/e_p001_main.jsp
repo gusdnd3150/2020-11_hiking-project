@@ -11,22 +11,29 @@
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 
 <!-- 데이터 테이블 -->
+<!-- 데이터 테이블 css -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css" />
 
+<script src="https://cdn.datatables.net/t/bs-3.3.6/jqc-1.12.0,dt-1.10.11/datatables.min.js"></script>
 
-	<link rel="stylesheet" href="https://cdn.datatables.net/t/bs-3.3.6/jqc-1.12.0,dt-1.10.11/datatables.min.css"/> 
-	<script src="https://cdn.datatables.net/t/bs-3.3.6/jqc-1.12.0,dt-1.10.11/datatables.min.js"></script>
-	<script src=https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js></script> <!--  이거 없으면 버튼 안생김  -->
-	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script><!--  //엑셀 -->
-	<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.html5.min.js"></script> <!-- // 카피+ pdf -->
-	<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"></script><!--  // 프린트 -->
-	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script> <!--  // pdf -->
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script><!--  //pdf -->
-    
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
-    
-    
-   
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 
+<script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+
+<script src=https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js></script>
+<!--  이거 없으면 버튼 안생김  -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<!--  //엑셀 -->
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.html5.min.js"></script>
+<!-- // 카피+ pdf -->
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"></script>
+<!--  // 프린트 -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
+<!--  // pdf -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
+<!--  //pdf -->
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
 
 
 	
@@ -34,15 +41,11 @@
 <script type="text/javascript">
 
 $(document).ready(function() {
-    $('#foo-table').DataTable({
-    	  destroy : true,//테이블 파괴가능
-          bPaginate : true, //페이징처리
-          bLengthChange : true, // n개씩보기
-          lengthMenu : [ [ 10, 25, 50, -1 ], [ 10, 25, 50, "All" ] ], // 10/25/50/All 개씩보기
+	var	table = null;
+	  table= $('#foo-table').DataTable({
           bAutoWidth : false, //자동너비
           ordering : true, //칼럼별 정렬
-          searching : true, //검색기능
-    	pagingType:"full_numbers",
+    		pagingType:"full_numbers",
     	   autoWidth: true,
         dom: 'Blfrtip',
   
@@ -60,55 +63,44 @@ $(document).ready(function() {
 			},			
                 'pdf', 'print'
             ]
-    	}
-	
-	
-	 );
+    	});
+    
+    $('#foo-table tbody').on( 'click', 'tr', function () {
+	    if ( $(this).hasClass('selected') ) {
+	        $(this).removeClass('selected');
+	    }
+	    else {
+	        table.$('tr.selected').removeClass('selected');
+	        $(this).addClass('selected');
+	    }
+	}); 
+
 });
+
+
 
 // 데이터테블 함수 끝----------------------------------------------------------------
 
-$(document).on("click", "#user_Num", function(){// 회원삭제 알림창
-	  var _user_Num=$(this).val();
-	  console.log(_user_Num)
-	  $.ajax({
+function user_status(value,_userNum){
+	 $.ajax({
 			type : 'get',
-			url : 'removeUser.do',
+			url : 'upDateUser.do',
 			data : {
-				userNum : _user_Num
+				userNum : _userNum,
+				status : value
 			},
 			success : function(data) {
 				if ("ok"== (data)) {
-					alert("삭제완료");
-					window.location.reload(true);
+					console.log("수정완료");
 				} else {
 					alert("다시확인해주세요");
 				}
 				;
 			}
-		});
-	});
+		}); 
+	}
 	
 
-	$(function msg(){ // 회원 수정 완료후 알림창
-		var upDate="<c:out value="${upDateMsg}" />";
-		console.log(upDate)
-		if(upDate==1){
-			alert("수정완료")
-			window.location.href='http://localhost:8090/admin/e_p001_main.jsp';
-		}
-	});
-	
-	$(function msg(){ // 회원 등록완료
-		var userName="<c:out value="${userName}" />";
-		console.log(userName)
-		if(userName==""||userName == null ||typeof userName == "undefined"){
-			
-		}else{
-			alert(userName+" 회원 등록완료")
-			window.location.href='http://localhost:8090/admin/e_p001_main.jsp';
-		}
-	});
 </script>
 <style>
 
@@ -140,22 +132,14 @@ $(document).on("click", "#user_Num", function(){// 회원삭제 알림창
             <div class="box-header">
               <h3 class="box-title">회원 목록</h3>
             </div>
+       
             <!-- /.box-header -->
             <div class="box-body">
-              <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
-              <div class="row">
-           
-              <div class="col-sm-6"><div id="example1_filter" class="dataTables_filter">
-              
-              <a href="e_p001_addUserForm.jsp"><button class="btn btn-primary btn-xs">회원등록</button></a>
-              </div>
-              </div>
-              </div>                                        
+              <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">                           
               <div class="row">
              <div>
-            <table id="foo-table" class="table table-bordered" >
+            <table id="foo-table"  class="display" style="width:100%" >
 
- 
 				<thead>
 			<tr>
                 <th>번호</th>
@@ -165,12 +149,8 @@ $(document).on("click", "#user_Num", function(){// 회원삭제 알림창
                 <th>전화</th>
                 <th>주소</th>
                 <th>이메일</th>
-                <th>유형</th>
-                <th>등록일</th>
-                <th>수정일</th>
                 <th>상태</th>
-                <th>수정</th>
-                <th>삭제</th>
+                <th>상세보기</th>
             </tr>
             </thead>
    
@@ -184,17 +164,19 @@ $(document).on("click", "#user_Num", function(){// 회원삭제 알림창
                   <td>${user.phone}</td>
                   <td>${user.address}</td>
                   <td>${user.email}</td>
-                  <td>${user.usersType}</td>
-                  <td>${user.createdAtString}</td>
-                  <td>${user.updatedAtString}</td>
-                  <td>${user.statusType}</td>
-                  <td><a href="upDateUserList.do?userNum=${user.userNum}"><button class="btn btn-primary btn-xs">수정</button></a></td>
-                  <td><button class="btn btn-danger btn-xs"id="user_Num" value="${user.userNum}">삭제</button></td>
+                  <td>
+                  <select  id="userStatus" class="basic_btn btn btn-default" onchange="user_status(this.value,${user.userNum})">
+						<option value="10" ${user.statusType == '황동중' ? 'selected="selected"' : ''}>활동중</option>
+						<option value="20" ${user.statusType == '휴면' ? 'selected="selected"' : ''}>휴면</option>
+					</select>
+				</td>
+                  <td><a href="userView.do?userNum=${user.userNum}" onclick="window.open(this.href,'','width=450, height=800'); return false;">	
+					<button type="button" class="basic_btn btn-primary">상세보기</button></a></td>
                 </tr>
                  </c:forEach>
-                </tbody>
-
+                </tbody>         
               </table>
+            
               </div>
               </div>
             </div>

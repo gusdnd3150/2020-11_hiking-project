@@ -21,12 +21,11 @@
 		parameterType="java.util.Map">
 	<![CDATA[
 	select to_char(p.CREATEDAT,'YYYY-MM-DD')AS createdateString, o.ordernum, o.usernum, 
-	to_char(DECODE(p.type,1,o.price+o.charge,0),'999,999,999,999,999')as pay1,
-	to_char(DECODE(p.type,2,o.price+o.charge,0),'999,999,999,999,999')as pay2
+	to_char(DECODE(p.type,'card',o.price+o.charge,0),'999,999,999,999,999')as pay1,
+	to_char(DECODE(p.type,'trans',o.price+o.charge,0),'999,999,999,999,999')as pay2
 	FROM orders o INNER JOIN payment p
-	ON o.cartnum = p.ordernum
-	WHERE p.CREATEDAT BETWEEN TO_DATE(#{startDate},'YYYY-MM-DD') AND TO_DATE(#{endDate},'YYYY-MM-DD')
-	ORDER BY p.CREATEDAT ASC
+	ON o.ordernum = p.ordernum
+    ORDER BY p.CREATEDAT ASC
 	]]>
 	</select>
 
@@ -36,7 +35,7 @@
 	<![CDATA[
 	select to_char(sum(o.price + o.charge),'999,999,999,999,999')as sumPrice
 	FROM orders o INNER JOIN payment p
-	ON o.cartnum = p.ordernum
+	ON o.ordernum = p.ordernum
 	]]>
 		<choose>
 			<when test="key_word=='all'"> <!-- 전체 조회 -->
@@ -150,10 +149,10 @@
 		parameterType="java.util.Map">
 	<![CDATA[
 	select to_char(p.CREATEDAT,'YYYY-MM-DD')AS createdateString, o.ordernum, o.usernum, 
-	to_char(DECODE(p.type,1,o.price+o.charge,0),'999,999,999,999,999')as pay1,
-	to_char(DECODE(p.type,2,o.price+o.charge,0),'999,999,999,999,999')as pay2
+	to_char(DECODE(p.type,'card',o.price+o.charge,0),'999,999,999,999,999')as pay1,
+	to_char(DECODE(p.type,'trans',o.price+o.charge,0),'999,999,999,999,999')as pay2
 	FROM orders o INNER JOIN payment p
-	ON o.cartnum = p.ordernum
+	ON o.ordernum = p.ordernum
 	]]>
 		<choose>
 			<when test="key_word== 'all'"> <!-- 전체 조회 -->

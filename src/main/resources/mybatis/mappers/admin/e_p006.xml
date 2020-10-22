@@ -44,7 +44,7 @@
 	<!--지정일자 조회 가입자 현황 라인차트 -->
 	<select id="serchUserLineChart" resultMap="e_p006Result06" parameterType="java.util.Map">
 	<![CDATA[
-	select to_char(createdat, 'YYYY-MM-DD')as userCreatedat, count(DECODE(sex,1,'남자'))as man, count(DECODE(sex ,2, '여자'))as woman, COUNT(*)as allUser
+	select to_char(createdat, 'YYYY-MM-DD')as userCreatedat, count(DECODE(sex,10,'남자'))as man, count(DECODE(sex ,20, '여자'))as woman, COUNT(*)as allUser
 	FROM users
 	WHERE createdat BETWEEN TO_DATE(#{startDate},'YYYY-MM-DD') AND TO_DATE(#{endDate},'YYYY-MM-DD')
 	group by to_char(createdat, 'YYYY-MM-DD')
@@ -54,7 +54,7 @@
 	<!--지정일자 조회 가입자 현황 바차트  -->
 	<select id="serchUserBarChart" resultMap="e_p006Result06" parameterType="java.util.Map">
 	<![CDATA[
-	select  count(DECODE(sex,1,'남자'))as man, count(DECODE(sex ,2, '여자'))as woman, COUNT(*)as allUser
+	select  count(DECODE(sex,10,'남자'))as man, count(DECODE(sex ,20, '여자'))as woman, COUNT(*)as allUser
 	FROM users
 	WHERE createdat BETWEEN TO_DATE(#{startDate},'YYYY-MM-DD') AND TO_DATE(#{endDate},'YYYY-MM-DD')
 	]]>
@@ -115,7 +115,7 @@
    <!-- 셀렉트 조회 가입자 통계 -->
    	<select id="selectUserLineChart" resultMap="e_p006Result06" parameterType="java.util.Map">
 	<![CDATA[
-	select to_char(createdat, 'YYYY-MM-DD')as userCreatedat, count(DECODE(sex,1,'남자'))as man, count(DECODE(sex ,2, '여자'))as woman, COUNT(*)as allUser
+	select to_char(createdat, 'YYYY-MM-DD')as userCreatedat, count(DECODE(sex,10,'남자'))as man, count(DECODE(sex ,20, '여자'))as woman, COUNT(*)as allUser
 	FROM users
 	]]>
 	<choose>
@@ -136,7 +136,7 @@
 	 <!-- 셀렉트 조회 가입자 바 차트 통계 -->
    	<select id="selectUserBarChart" resultMap="e_p006Result06" parameterType="java.util.Map">
 	<![CDATA[
-	select  count(DECODE(sex,1,'남자'))as man, count(DECODE(sex ,2, '여자'))as woman, COUNT(*)as allUser
+	select  count(DECODE(sex,10,'남자'))as man, count(DECODE(sex ,20, '여자'))as woman, COUNT(*)as allUser
 	FROM users
 	]]>
 	<choose>

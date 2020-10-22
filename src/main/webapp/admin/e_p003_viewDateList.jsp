@@ -158,10 +158,9 @@ h2{font-size:1.8rem;}
 					</div>
 					<div class="mb-3">
 						<label for="content">내용</label>
-						<textarea class="form-control" rows="5" name="content" id="content" value="${viewList.content}"></textarea>
+						<textarea class="form-control" rows="5" name="content" id="content" placeholder="${viewList.content}"></textarea>
 					</div>
 					<div class="mb-3">
-					
 						<input type="hidden" name="csPostNum" value="${viewList.csPostNum}">
 					</div>
 				</form>
@@ -245,7 +244,7 @@ h2{font-size:1.8rem;}
 					</div>
 					<div class="mb-3">
 						<label for="content">내용</label>
-						<textarea class="form-control" rows="5" name="content" id="content" value="${viewList.content}"></textarea>
+						<textarea class="form-control" rows="5" name="content" id="content" value="${viewList.content}" placeholder="${viewList.content}" ></textarea>
 					</div>
 					<div class="mb-3">
 						<label for="content">문의상태</label> 
@@ -340,7 +339,7 @@ h2{font-size:1.8rem;}
 					</div>
 					<div class="mb-3">
 						<label for="content">내용</label>
-						<textarea class="form-control" rows="5" name="content" id="content" value="${viewList.content}"></textarea>
+						<textarea class="form-control" rows="5" name="content" id="content" value="${viewList.content}" placeholder="${viewList.content}"></textarea>
 					</div>
 					<div class="mb-3">
 						<label for="content">문의상태</label> 

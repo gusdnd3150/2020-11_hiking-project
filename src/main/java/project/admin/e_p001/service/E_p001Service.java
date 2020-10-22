@@ -16,13 +16,12 @@ public interface E_p001Service {
 	//회원 조건별 검색
 	public List userSearch(Map<String, String> search) throws Exception;
 
-	//회원 삭제
-	public int removeUser(int userNum) throws Exception;
+	//회원 정보 (상태) 수정
+	public int upDateUser(Map map)throws Exception;
 
-	//정보 수정전 회원정보 출력매소드
-	public List upDateUserList(String userId)throws Exception;
-	
-	//회원 정보 수정
-	public int upDateUser(E_p001VO e_p001VO)throws Exception;
+	//상세보기
+	public List userView(int userNum)throws Exception;
+
+
 
 }

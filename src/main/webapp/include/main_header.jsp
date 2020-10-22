@@ -6,9 +6,9 @@
     <!-- Logo -->
     <a href="/admin/admin_home.jsp" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini"><b>A</b>LT</span>
+      <span class="logo-mini"><b>산</b></span>
       <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg"><b>산오름</b>Admin</span>
+      <span class="logo-lg"><b>산오름</b>관리자</span>
     </a>
 
     <!-- Header Navbar -->

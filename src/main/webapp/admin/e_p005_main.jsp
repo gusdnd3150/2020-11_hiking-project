@@ -11,54 +11,65 @@
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 
 <!-- 데이터 테이블 -->
-<link rel="stylesheet"
-	href="https://cdn.datatables.net/t/bs-3.3.6/jqc-1.12.0,dt-1.10.11/datatables.min.css" />
-<script
-	src="https://cdn.datatables.net/t/bs-3.3.6/jqc-1.12.0,dt-1.10.11/datatables.min.js"></script>
-<script
-	src=https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js></script>
+<!-- 데이터 테이블 css -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css" />
+
+<script src="https://cdn.datatables.net/t/bs-3.3.6/jqc-1.12.0,dt-1.10.11/datatables.min.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+
+<script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+
+<script src=https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js></script>
 <!--  이거 없으면 버튼 안생김  -->
-<script type="text/javascript"
-	src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
 <!--  //엑셀 -->
-<script type="text/javascript"
-	src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.html5.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.html5.min.js"></script>
 <!-- // 카피+ pdf -->
-<script type="text/javascript"
-	src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"></script>
 <!--  // 프린트 -->
-<script type="text/javascript"
-	src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
 <!--  // pdf -->
-<script type="text/javascript"
-	src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
 <!--  //pdf -->
 
-<script type="text/javascript"
-	src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
-
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
 
 <script type="text/javascript">
 	$(document).ready(function() {
-		$('#foo-table').DataTable({
-			responsive : true,
-			"pagingType" : "full_numbers",
-			dom : 'Blfrtip',
-			buttons : [ {
-				extend : 'excel',
-				text : 'excel',
-				filename : '결제정보',
-				title : '산오름 결제정보'
-			}, {
-				extend : 'copy',
-				text : 'copy',
-				title : '결제정보'
-				}, 
-			'pdf',
-			'print' 
-			]
-		}
-	);
+		var	table = null;
+		table=$('#foo-table').DataTable({
+			  bAutoWidth : false, //자동너비
+	          ordering : true, //칼럼별 정렬
+	    		pagingType:"full_numbers",
+	    	   autoWidth: true,
+	        dom: 'Blfrtip',
+	  
+			buttons: [
+				{
+					extend:'excel',
+					text:'excel',
+					filename:'결제정보',
+					title:'오름마켓 결제정보'
+				},
+				{
+					extend:'copy',
+					text:'copy',
+					title:'결제목록'
+				},			
+	                'pdf', 'print'
+	            ]
+	    	});
+		
+	    $('#foo-table tbody').on( 'click', 'tr', function () {
+		    if ( $(this).hasClass('selected') ) {
+		        $(this).removeClass('selected');
+		    }
+		    else {
+		        table.$('tr.selected').removeClass('selected');
+		        $(this).addClass('selected');
+		    }
+		}); 
 });
 
 	// 데이터테블 함수 끝----------------------------------------------------------------
@@ -123,15 +134,15 @@ function selectDay(str){
 
 			<!-- Main content -->
 			<div class="box">
-
+		
 			 <div>
 			
-			<center>	
+					<center>
 		
         			 <form action="searchPayList.do" mathod="get">
-			  <input type='date' name='startDate' id='startDate'/> ~ <input type='date' name='endDate' id='endDate'/> 
-			   <button type="submit"  class="btn btn-danger btn-xs" id="searchDate">조회</button>&nbsp;&nbsp;
-			   </form> 
+			  		<input type='date' name='startDate' id='startDate'/> ~ <input type='date' name='endDate' id='endDate'/> 
+			  		 <button type="submit"  class="btn btn-danger btn-xs" id="searchDate">조회</button>&nbsp;&nbsp;
+			   		</form> 
 			   	<select name="searchOption" class="basic_btn btn-primary" onchange="selectDay(this.value)">
             		<option value=" ">조회선택</option>
             		<option value="all">전체조회</option>
@@ -162,7 +173,7 @@ function selectDay(str){
 						</div>
 						<div class="row">
 							<div>
-								<table id="foo-table" class="table table-bordered">
+								<table id="foo-table" class="display" style="width:100%">
 									<thead>
 										<tr>
 											<th>주문번호</th>

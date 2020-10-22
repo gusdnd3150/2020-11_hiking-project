@@ -20,6 +20,11 @@
 		<result property="sexType" column="sexType" /> <!--성별 유형 담을 객체   -->
 		<result property="usersType" column="usersType" /> <!--유저 타입 담을 객체  -->
 		<result property="statusType" column="statusType" /> <!--유저 상태 담을 객체  -->
+		<result property="nickname" column="nickname" /> <!--닉네임  -->
+		<result property="content2" column="content2" /> <!--프로필 사진  -->
+		<result property="profile" column="profile" /> <!--프로필 내용  -->
+		<result property="address2" column="address2" /> <!--상세주소  -->
+		<result property="zoneCode" column="zoneCode" /> <!--우편번호  -->
 		
 		<result property="createdAtString" column="createdAtString" /> <!--날짜 스트링 -->
 		<result property="updatedAtString" column="updatedAtString" /> <!--날짜 스트링 -->
@@ -39,10 +44,7 @@
         select userNum, id,  password, name, 
         		DECODE(sex,10,'남자', 20, '여자')as sexType, 
        			phone, address, email, 
-        		DECODE(type, 100, '관리자', 200, '회원', 300, '비회원')as usersType,  
-        		to_char(createdAt,'YYYY-MM-DD HH24:MI:SS')as createdAtString,
-        		to_char(updatedAt,'YYYY-MM-DD HH24:MI:SS')as updatedAtString, 
-        		DECODE(status, 10, '활동', 20, '휴면')as statusType
+        		DECODE(status, 10, '활동중', 20, '휴면')as statusType
 		from   USERS
       	]]>
     	<choose>
@@ -54,45 +56,41 @@
     		</when>
     	</choose>
 	</select>
-	
-	<!-- 회원 삭제 -->
-	<delete id="deleteUser"  parameterType="int">
-	<![CDATA[
-	   delete from  USERS
-	   where
-	   userNum=#{userNum}
-	]]>      
-  </delete>
-  
-  <!--수정전 회원정보 출력-->
-  	<select id="selectUpdateUserList" resultMap="e_p001Result01" parameterType="java.util.Map">
-		 <![CDATA[
-        select userNum, id,  password, name, 
-        		DECODE(sex,1,'남자', 2, '여자')as sexType, 
-       			phone, address, email, 
-        		DECODE(type, 100, '관리자', 200, '회원', 300, '비회원')as usersType,  
-        		to_char(createdAt,'YYYY-MM-DD HH24:MI:SS')as createdAtString,
-        		to_char(updatedAt,'YYYY-MM-DD HH24:MI:SS')as updatedAtString, 
-        		DECODE(status, 10, '활동', 20, '휴면')as statusType
-		from   USERS	
-         where  userNum = #{userNum}
-      	]]>
-	</select>
-	
+
 	<!-- 회원정보 수정 -->
-	 <update id="updateUser" parameterType="e_p001VO">
+	 <update id="upDateUser"   parameterType="java.util.Map">
 	  <![CDATA[
 		UPDATE USERS
-		SET name = #{name},
-			sex = #{sex},
-			phone = #{phone},
-			address = #{address},
-			email = #{email},
-			type = #{type},
-			status = #{status},
+		SET status = #{status},
 			updatedAt = CURRENT_TIMESTAMP
-		WHERE id = #{id}
+		WHERE userNum = #{userNum}
 		 ]]>
 	</update>
+	
+		<!-- 상세보기 -->
+	<select id="usetView" resultMap="e_p001Result01" parameterType="int">
+		 <![CDATA[
+     	 SELECT 
+		    u.userNum,
+		    u.id,
+		    u.name,
+		    u.nickname,
+		    DECODE(u.sex,10,'남자', 20, '여자')as sexType,
+		    u.phone,
+		    u.zoneCode,
+		    u.address,
+		    u.address2,
+		    u.email,
+		    to_char(u.createdAt,'YYYY-MM-DD')as createdAtString,
+		    DECODE(u.status, 10, '활동중', 20, '휴면')as statusType,
+		    ui.profile,
+		    ui.content2,
+		    DECODE(u.type, 100, '관리자', 200, '회원', 300, '비회원')as usersType 
+		FROM users u INNER JOIN userinfo ui
+		ON u.usernum = ui.usernum
+		WHERE u.usernum = #{userNum}
+      	]]>
+    	
+	</select>
 	
 </mapper>

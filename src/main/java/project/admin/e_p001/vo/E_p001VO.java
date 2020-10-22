@@ -6,24 +6,32 @@ import org.springframework.stereotype.Component;
 @Component
 public class E_p001VO  {
 
-	 int userNum;
-	 String id;
-	 String password;
-	 String name;  
-	 int sex;   //(남자 1 / 여자 2)
-	 String phone;   
-	 String address;  
-	 String email;   
-	 int type;   	//고객유형 (관리자 100 / 회원 200 / 비회원 300)
-	 LocalDateTime createdAt; //등록일자
-	 LocalDateTime updatedAt; //수정일자
-	 int status; 	//고객상태 (활동 10 / 휴면 20)
-	 String sexType; // 성별 유형 담을 객체  
-	 String usersType;  //유저 타입 담을 객체
-	 String statusType;  // 유저 상태 담을 객체
+	 private int userNum;
+	 private String id;
+	 private String password;
+	 private String name;  
+	 private int sex;   //(남자 1 / 여자 2)
+	 private String phone;   
+	 private String address;  
+	 private String email;   
+	 private int type;   	//고객유형 (관리자 100 / 회원 200 / 비회원 300)
+	 private LocalDateTime createdAt; //등록일자
+	 private LocalDateTime updatedAt; //수정일자
 	 
-	 String createdAtString;
-	 String updatedAtString;
+	 private int status; 	//고객상태 (활동 10 / 휴면 20)
+	 
+	 private String sexType; // 성별 유형 담을 객체  
+	 private String usersType;  //유저 타입 담을 객체
+	 private String statusType;  // 유저 상태 담을 객체
+	 
+	 private String createdAtString;// 등록일자 스트링 변환
+	 private String updatedAtString; // 수정일자 스트링 변환
+	 
+	 private String zoneCode; //우편번호 
+	 private String address2; //상세 주고
+	 private String profile; //자기소개
+	 private String content2; //프로필사진
+	 private String nickname; //닉네임
 	 
 	 
 	 
@@ -129,6 +137,36 @@ public class E_p001VO  {
 	}
 	public void setUpdatedAtString(String updatedAtString) {
 		this.updatedAtString = updatedAtString;
+	}
+	public String getZoneCode() {
+		return zoneCode;
+	}
+	public void setZoneCode(String zoneCode) {
+		this.zoneCode = zoneCode;
+	}
+	public String getAddress2() {
+		return address2;
+	}
+	public void setAddress2(String address2) {
+		this.address2 = address2;
+	}
+	public String getProfile() {
+		return profile;
+	}
+	public void setProfile(String profile) {
+		this.profile = profile;
+	}
+	public String getContent2() {
+		return content2;
+	}
+	public void setContent2(String content2) {
+		this.content2 = content2;
+	}
+	public String getNickname() {
+		return nickname;
+	}
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
 	}
 	
 	 

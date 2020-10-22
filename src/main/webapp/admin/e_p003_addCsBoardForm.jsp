@@ -13,7 +13,7 @@
 <!-- Bootstrap CSS -->
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
 
-<title>공지사항등록</title>
+<title>게시글 등록</title>
 
 <script>
 	$(document).on('click', '#btnSave', function(e){
@@ -44,8 +44,11 @@ body {
 					<label for="content">내용</label>
 					<textarea class="form-control" rows="5" name="content" id="content" placeholder="내용을 입력해 주세요" ></textarea>
 				</div>
+				 <input type="radio" name="csPostType" value="100">공지사항 &nbsp;&nbsp;
+                <input type="radio"  name="csPostType" value="400">이벤트&nbsp;&nbsp;
 			</form>
-			<div >
+	
+			<div>
 				<button type="button" class="btn btn-sm btn-primary" id="btnSave">저장</button>
 			</div>
 		</div>

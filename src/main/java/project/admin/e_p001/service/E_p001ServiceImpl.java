@@ -16,7 +16,7 @@ import project.admin.e_p001.vo.E_p001VO;
 
 
 @Service
-//@Transactional(propagation = Propagation.REQUIRED)
+
 public class E_p001ServiceImpl implements E_p001Service{
 	
 	@Autowired
@@ -29,26 +29,24 @@ public class E_p001ServiceImpl implements E_p001Service{
 
 	@Override //회원 조건검색
 	public List userSearch(Map<String, String> search) throws Exception {
-		System.out.println("조건검색 들어옴:");
 		 List userList = e_p001DAO.selectUser(search);
 		return userList;
+	}
+
+	//회원 정보 수정 (상태)
+	@Override
+	public int upDateUser(Map map) throws Exception {
+		// TODO Auto-generated method stub
+		return e_p001DAO.upDateUser(map);
+	}
+
+	//상세보시
+	@Override
+	public List userView(int userNum) throws Exception {
+		List list = e_p001DAO.userView(userNum); 
+		return list;
 	}	
 
 
-	@Override //회원 삭제
-	public int removeUser(int userNum) throws Exception {
-		return e_p001DAO.deleteUser(userNum);
-	}
-
-	@Override // 수정정 회원정보 출력 매소드
-	public List upDateUserList(String userNum) throws Exception {
-		List upDeteUser = e_p001DAO.selectUpdateUserList(userNum);
-		return upDeteUser;
-	}
-
-	@Override //회원 정보 수정 메소드
-	public int upDateUser(E_p001VO e_p001VO) throws Exception {
-		return e_p001DAO.upDaet(e_p001VO);
-	}
-
+	
 }
