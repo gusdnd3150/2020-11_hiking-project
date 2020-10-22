@@ -211,6 +211,7 @@
 		 <![CDATA[
       WITH prod as (
 		select p.prodNum,
+				po.optionNum,
 		        p.name,
 		        to_char(p.price,'999,999,999,999,999')as priceString,
 		        DECODE(type,1,'신상품',2,'중고품')as typeString,
@@ -232,35 +233,41 @@
     		<when test="searchOption=='all'"> <!-- 전체 조회 --> 
     		SELECT *
 			FROM prod pr
+			ORDER BY pr.prodnum
     		</when>
     		<when test="searchOption =='name'"> <!-- 상품명 -->
     		SELECT *
 			FROM prod pr
     		where pr.name like '%'||#{key_word}||'%'
+    		ORDER BY pr.prodnum
     		</when>
     		
     		<when test="searchOption =='type1'"> <!-- 신상품 --> 
     		SELECT *
 			FROM prod pr
-    		where pr.typeString = '신상품'  		
+    		where pr.typeString = '신상품'
+    		ORDER BY pr.prodnum  		
     		</when>
     		
     		<when test="searchOption =='type2'"> <!-- 중고품 --> 
     		SELECT *
 			FROM prod pr
     		where pr.typeString = '중고품'
+    		ORDER BY pr.prodnum
     		</when>
     		
     		<when test="searchOption=='prodstatus1'"> <!-- 판매중 -->
     		SELECT *
 			FROM prod pr
     		where pr.prodstatusString = '판매중'
+    		ORDER BY pr.prodnum
     		</when>
     		
     		<when test="searchOption=='prodstatus2'"> <!-- 품절 --> 
     		SELECT *
 			FROM prod pr
-    		where pr.prodstatusString = '품절' 
+    		where pr.prodstatusString = '품절'
+    		ORDER BY pr.prodnum 
     		</when>
     		
     		<when test="searchOption=='prodcategorynum1'"> <!-- 의류  -->
@@ -273,6 +280,7 @@
 						START WITH pt.PRODCATEGORYNUM = 1
 						CONNECT BY PRIOR pt.PRODCATEGORYNUM = pt.PARENTCATEGORYNUM)pc
 			ON pr.PRODCATEGORYNUM = pc.prodcategorynum
+			ORDER BY pr.prodnum
     		</when>
     		
     		<when test="searchOption=='prodcategorynum2'"> <!-- 잡화  -->
@@ -285,6 +293,7 @@
 						START WITH pt.PRODCATEGORYNUM = 2
 						CONNECT BY PRIOR pt.PRODCATEGORYNUM = pt.PARENTCATEGORYNUM)pc
 			ON pr.PRODCATEGORYNUM = pc.prodcategorynum
+			ORDER BY pr.prodnum
     		</when>
     		
     		<when test="searchOption=='prodcategorynum3'"> <!-- 등산용품  -->
@@ -297,6 +306,7 @@
 						START WITH pt.PRODCATEGORYNUM = 3
 						CONNECT BY PRIOR pt.PRODCATEGORYNUM = pt.PARENTCATEGORYNUM)pc
 			ON pr.PRODCATEGORYNUM = pc.prodcategorynum
+			ORDER BY pr.prodnum
     		</when>
     		
     	</choose>
@@ -350,5 +360,21 @@
 		WHERE prodnum=#{prodNum}
       	]]>
 	</select>
+	
+	<!-- 상품 옵션 수정 -->
+	 <update id="updateOption" parameterType="java.util.Map">
+	  <![CDATA[
+		UPDATE prodoption
+			SET 
+		        quantity = #{quantity},
+		        prodNum = #{prodNum},
+		        prodSize = #{prodSize},
+		        color = #{color},
+		        prodStatus = #{prodStatus},
+		        MODDATE = CURRENT_TIMESTAMP
+		WHERE OPTIONNUM = #{optionNum}
+		 ]]>
+	
+	</update>
   
 </mapper>

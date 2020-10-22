@@ -24,9 +24,22 @@
 		<div class="pt-5" style="text-align: center;">
 			<h1>마이페이지</h1>
 				<div class="box box-primary">
+<<<<<<< HEAD
 					<div class="box-body box-profile">
 						<img class="rounded-circle mt-2" src="/resources/img/${userVO.content2}" width="100px" height="100px" alt="프로필사진">
 						<h4 class="mt-2" id="nickName">${userVO.nickName}</h4>
+=======
+					<div class="box-body box-profile text-center">
+						<div style="text-align: center;">
+
+							<img class="rounded-circle mt-2"
+								src="/resources/img/${userVO.content2}"
+								width="100" height="100" alt="프로필사진">
+
+						</div>
+						<h4 class="text-center mt-2" id="nickName">${userVO.nickName}</h4>
+						<%-- 	<p class="text-muted text-center" id="name">${userVO.name}</p>  --%>
+>>>>>>> refs/heads/master
 						<p id="profile1">${userVO.profile}</p>
 						<button type="button" class="btn btn-info col-md-4 col-sm-12" id="editProf" data-toggle="modal" data-target="#exampleModalCenter">
 						<b>프로필 수정하기</b>

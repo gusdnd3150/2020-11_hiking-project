@@ -100,9 +100,16 @@ public class E_p002ServiceImpl implements E_p002Service{
 	}
 
 	//상품 조회
+//	@Override
+//	public List<HashMap<String, String>> selectProd(Map<String, String> search) throws Exception {
+//		List<HashMap<String, String>> list = e_p002DAO.selectProd(search);
+//		return list;
+//	}
+	
+	//상품조회
 	@Override
-	public List<HashMap<String, String>> selectProd(Map<String, String> search) throws Exception {
-		List<HashMap<String, String>> list = e_p002DAO.selectProd(search);
+	public List selectProd(Map search) throws Exception {
+		List list =  e_p002DAO.selectProd(search);
 		return list;
 	}
 	
@@ -125,6 +132,15 @@ public class E_p002ServiceImpl implements E_p002Service{
 		List<E_p002VO> list1 = e_p002DAO.viewPhotoList(prodNum);
 		return list1;
 	}
+
+	//상품 옵션 수정
+	@Override
+	public int updateOption(Map map) throws Exception {
+		int result = e_p002DAO.updateOption(map);
+		return result;
+	}
+
+	
 
 	
 

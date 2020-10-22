@@ -14,7 +14,9 @@ public interface E_p002DAO {
 	
 	int insertPhotoDetail(List<Map> list2, int photoNum);
 
-	List<HashMap<String, String>> selectProd(Map<String, String> search)throws Exception;
+	//List<HashMap<String, String>> selectProd(Map<String, String> search)throws Exception;
+	
+	List selectProd(Map search)throws Exception;
 
 	int deleteProd(int prodNum)throws Exception;
 
@@ -25,6 +27,8 @@ public interface E_p002DAO {
 	void insertcategory(Map<String, Object> categoryMap)throws Exception;
 
 	int insertProdOption(List<Map<String, Object>> optionListMap)throws Exception;
+
+	int updateOption(Map map)throws Exception;
 
 	
 

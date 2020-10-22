@@ -42,9 +42,9 @@
             </c:when>
             <c:when test="${resultList.USERID ne LOGIN}">
                 <div id="otherMessage" class="chat_message chat_message-from">
-                <img src="../resources/img/basic_profile.PNG" alt="" class="chat_message-profile-img">
+                <img src="../resources/img/${resultList.CONTENT2}" alt="" class="chat_message-profile-img">
                 <div class="chat_message-profile">
-                <h3 class="chat_message-name">${resultList.USERID}</h3>
+                <h3 class="chat_message-name">${resultList.NICKNAME}</h3>
                 <span class="chat_message-body">${resultList.MESSAGE}</span>
                 </div>
                 <span class="chat_message-time">${resultList.MESSAGEDAT}</span>
@@ -73,7 +73,6 @@
 <script type="text/javascript" src="/resources/js/sockjs.js"></script>
 <script type="text/javascript" src="/resources/js/stomp.js"></script>
 <script type="text/javascript">
-    console.log('${resultList}')
 
     var stompClient = null;
 
@@ -102,7 +101,8 @@
             'roomId': '${roomId}',
             'userId' :'<%= session.getAttribute("LOGIN")%>',
             'message': $("#message").val(),
-            'messagedAt': '<%= LocalDateTime.now() %>'
+            'messagedAt': '<%= LocalDateTime.now() %>',
+            'nickname' : '${nickname}'
         };
 
         stompClient.send("/chat/send/${roomId}", {}, JSON.stringify(data));
@@ -114,22 +114,23 @@
         $('#chat').append("" +
             "<div id=\"myMessage\" class=\"chat_message chat_message-me\">" +
             "<span class=\"chat_message-time\">"+
-            data.messagedAt+"</span>\n" +
+            '방금'+"</span>\n" +
             "<span class=\"chat_message-body\">" + data.message + "</span>" +
             "</div>")
     };
 
 
     function showMessage(data) {
+        console.log(data)
         if(data.userId!='<%= session.getAttribute("LOGIN")%>'){
             $('#chat').append(
                 "<div id=\"otherMessage\" class=\"chat_message chat_message-from\">" +
                 '<img src="../resources/img/basic_profile.PNG" alt="" class="chat_message-profile-img">'+
                 '<div class="chat_message-profile">' +
-                '<h3 class="chat_message-name">' + data.userId +'</h3>' +
+                '<h3 class="chat_message-name">' + data.nickname +'</h3>' +
                 '<span class="chat_message-body">' + data.message + '</span>' +
                 '</div>' +
-                '<span class="chat_message-time">' + data.messagedAt + '</span>' +
+                '<span class="chat_message-time">' + '방금' + '</span>' +
                 '</div>')
         }
     };

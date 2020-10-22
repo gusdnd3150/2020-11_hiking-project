@@ -442,7 +442,7 @@ $(document).ready(function () {
                     <div class="product-img">
                       <a href="/B_P003_D001/productDetail?prodNum=${data.PRODNUM}"><img
                         class="card-img"
-                        src="http://localhost:8080/resources/img/${data.IMAGE }"
+                        src="/resources/img/${data.IMAGE }"
                         alt=""
                       /></a>
                       <div class="p_icon">
@@ -634,7 +634,7 @@ $(document).ready(function () {
         <div class="col-lg-3 col-md-6">
           <div class="single-product">
             <div class="product-img">
-            <a href="/B_P003_D001/productDetail?prodNum=${items.PRODNUM}"><img class="img-fluid w-100" src="http://localhost:8080/resources/img/${items.IMAGE }" alt=""/></a>
+            <a href="/B_P003_D001/productDetail?prodNum=${items.PRODNUM}"><img class="img-fluid w-100" src="/resources/img/${items.IMAGE }" alt=""/></a>
               <div class="p_icon">
                 <a href="#">
                   <i class="ti-eye"></i>

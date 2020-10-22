@@ -28,7 +28,7 @@
 						<form action="/mypage/updateUser.do" method="post" id="modPwd">
 							<table>
 							<tr>
-								<th>비밀번호</th>
+								<th>변경 비밀번호</th>
 								<td><input type="password" class="form-control"
 									id="password" name="password" placeholder="대소문자와 숫자 4~12자리"
 									 ><br>

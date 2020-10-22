@@ -15,7 +15,7 @@
 			<div class="row row-cols-1 row-cols-md-2">
 				<div class="col mb-4">
 					<div class="card"  style="border: 1px solid green;">
-						<img src="http://localhost:8080/resources/img/home.png" class="card-img-top" alt="...">
+						<img src="/resources/img/home.png" class="card-img-top" alt="...">
 						<div class="card-body">
 							<h5 class="card-title">Card title</h5>
 							<p class="card-text">This is a longer card with supporting
@@ -26,7 +26,7 @@
 				</div>
 				<div class="col mb-4">
 					<div class="card" style="border: 1px solid green;">
-						<img src="http://localhost:8080/resources/img/home.png" class="card-img-top" alt="...">
+						<img src="/resources/img/home.png" class="card-img-top" alt="...">
 						<div class="card-body">
 							<h5 class="card-title">Card title</h5>
 							<p class="card-text">This is a longer card with supporting
@@ -77,10 +77,10 @@
 					<c:forEach var="commu" items="${commu}">
 						<c:if test="${commu.RN%2==0}">
 							<a href="/commu/commuPageView.do?groupNum=${commu.GROUPNUM}"
-								style="text-decoration: none; color: black;">
+								style=" color: black;">
 								<div class="media" style=" padding: 10px 10px;">
 									<img
-										src="http://localhost:8080/resources/img/${commu.STOREDFILENAME}"
+										src="/resources/img/${commu.STOREDFILENAME}"
 										style="width: 120px; height: 100px;" class="mr-3" alt="...">
 									<div class="media-body" style="width:100px;">
 										<h6 class="mt-0 mb-1">
@@ -99,10 +99,10 @@
 					<c:forEach var="commu" items="${commu}">
 						<c:if test="${commu.RN%2==1}">
 							<a href="/commu/commuPageView.do?groupNum=${commu.GROUPNUM}"
-								style="text-decoration: none; color: black;">
+								style="color: black;">
 								<div class="media" style="padding: 10px 10px;">
 									<img
-										src="http://localhost:8080/resources/img/${commu.STOREDFILENAME}"
+										src="/resources/img/${commu.STOREDFILENAME}"
 										style="width: 120px; height: 100px;" class="mr-3" alt="...">
 									<div class="media-body" style="width:100px;">
 										<h6 class="mt-0 mb-1">

@@ -6,7 +6,7 @@ import java.util.Map;
 
 public interface CommuService {
 
-	 void insertGroup(Map map) throws Exception;
+	Map<String, Object> insertGroup(Map map) throws Exception;
 
 	 List<Map> selectCreatedCommu(String Id);
 	 List<Map> selectJoinedCommu(String Id);

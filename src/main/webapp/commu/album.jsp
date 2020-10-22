@@ -15,7 +15,7 @@ ul,ol {list-style-type:none;}
 .album-cover {
   width: 92%;
   height: 230px;
-  background-image: url('http://localhost:8080/resources/img/test/list1.jpg');
+  background-image: url('/resources/img/test/list1.jpg');
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;

@@ -13,3 +13,7 @@ ul.thumbs{
     filter:alpha(opacity=75);
     opacity:.75;
 }
+
+b{
+    font-size: 24px;
+}

@@ -48,177 +48,145 @@
 <script type="text/javascript" src="../resources/js/view/admin/datatable-editor.js"></script>
 
 <script type="text/javascript">
-	var table = "";
-	$(document).on("click", "#serch", function() {
-		var _searchOption = $('#searchOption').val();
-		var _key_word = $('#key_word').val();
-
-
-		table = $('#foo-table').DataTable({
-
-			dom : 'Blfrtip',
-			buttons : [ {
-				extend : 'excel',
-				text : 'excel',
-				filename : '상품정보',
-				title : ' 상품정보'
-			}, {
-				extend : 'copy',
-				text : 'copy',
-				title : '상품'
-			}, 'pdf', 'print' ],
-			ajax : {
-				method : "get",
-				url : "selectProd.do",
-				dataType: "json",
-				data :{
-					searchOption :$('#searchOption').val(),
-					key_word :$('#key_word').val()
-
-				},
-				dataSrc : ""
+var	table = null;
+$(document).ready(function() {
+   table= $('#foo-table').DataTable({
+    	"scrollY":        "200px",
+        "scrollCollapse": true,
+        "paging":         false,
+        dom: 'Blfrtip',
+  
+		buttons: [
+			{
+				extend:'excel',
+				text:'excel',
+				filename:'회원정보',
+				title:'산오름 회원정보'
 			},
-			columns : [
-				{data : "prodNum"},
-				{data : "name"},
-				{data : "priceString"},
-				{data : "quantity"},
-				{data : "prodsize"},
-				{data : "color"},
-				{data : "typeString"},
-				{data : "prodcategorynumString"},
-				{data : "prodstatusString"},
-				{data : "createdAtString"},
-				{defaultContent : "&nbsp;&nbsp;&nbsp;<button id='info' class='btn btn-primary btn-xs'>상세보기</button> "}
-
-			]
-		});
-
-		console.log(table);
-		datatableEdit({
-			dataTable : table,
-			columnDefs : [
-				{
-					targets : 1
-				},
-				{
-					targets : 2
-				},
-				{
-					targets : 3
-				},
-				{
-					targets : 4
-				},
-				{
-					targets : 5
-				},
-				{
-					targets : 6
-				},
-				{
-					targets : 8
-				}
-			],
-			onEdited : function(prev, changed, index, cell) {
-				console.log(prev, changed, index, cell);
-				console.log(prev );
-				console.log(changed);
-				console.log(index);
-				console.log(index['column']);
-				var result = null;
-				if(index['column']==1){
-					result='name';
-				}else if (index['column']==2){
-					result='price';
-				}else if (index['column']==3){
-					result='quantity';
-				}else if (index['column']==4){
-					result='prodSize';
-				}else if (index['column']==5){
-					result='color';
-				}else if (index['column']==6){
-					result='type';
-				}else if (index['column']==8){
-					result='prodstatus';
-				}
-				console.log("리전트 변환 값 :"+result);
-
+			{
+				extend:'copy',
+				text:'copy',
+				title:'회원정보입니다.'
+			},			
+                'pdf', 'print'
+            ]
+    	}
+	
+	 );
+   datatableEdit({
+		dataTable : table,
+		columnDefs : [
+			
+			{
+				targets : 4
+			},
+			{
+				targets : 5
+			},
+			{
+				targets : 6
+			},
+			{
+				targets : 9
 			}
-		});
-
-
-
-		$('#foo-table tbody').on( 'click', 'tr', function () {
-			if ( $(this).hasClass('selected') ) {
-				$(this).removeClass('selected');
-			}
-			else {
-				table.$('tr.selected').removeClass('selected');
-				$(this).addClass('selected');
-			}
-		});
-
-		$('#button').click( function () { //삭제
-			var num = document.querySelector('.selected').childNodes[0].innerText;
-			console.log(document.querySelector('.selected'));
-			console.log(document.querySelector('.selected').childNodes);
-			console.log(document.querySelector('.selected').childNodes[0].innerText);
-			$.ajax({
-				type : 'get',
-				url : 'deleteProd.do',
-				data : {
-					prodNum : num
-				},
-				success : function(data) {
-					if ("ok"== (data)) {
-						alert("삭제완료");
+		],
+		onEdited : function(prev, changed, index, cell) {
+		
+           console.log(prev, changed, index, cell);
+           console.log(prev );
+           console.log(changed);
+           console.log(index);
+           console.log(index['column']);
+           
+           var _value = changed;
+           var _result = null;
+           
+           if(index['column']==4){
+           	_result='quantity';
+           }else if (index['column']==5){
+           	_result='prodSize';
+           }else if (index['column']==6){
+           	_result='color';
+           }else if (index['column']==9){
+           	_result='prodstatus';
+           }
+          
+           var  date =  index['row'];
+           
+           var date1 = date+2;
+           
+           var tr = $("tr:eq("+date1+")");
+           var _prodNum = tr.find('td:eq(0)').text();
+           var _optionNum = tr.find('td:eq(1)').text();
+           var _quantity = tr.find('td:eq(4)').text();
+           var _prodSize = tr.find('td:eq(5)').text();
+           var _color = tr.find('td:eq(6)').text();
+           var _prodStatus = tr.find('td:eq(9)').text();
+         
+           console.log("변경할 컬럼 이름     :"+_result);
+           console.log("변경값           :"+_value);
+           console.log("상품 번호 :    "+_prodNum);
+           console.log("옵션 번호       :"+_optionNum);
+           console.log("재고        :"+_quantity);
+           console.log("사이즈          :"+_prodSize);
+           console.log("컬러       :"+_color);
+           console.log("상태     :"+_prodStatus);
+                 
+           
+            $.ajax({
+               type : 'get',
+               url : 'updateOption.do',
+               data : {
+               	result : _result,
+               	optionNum : _optionNum,
+               	prodNum : _prodNum,
+               	quantity : _quantity,
+               	prodSize : _prodSize,
+               	color : _color,
+               	prodStatus : _prodStatus,
+               	value : _value
+               	
+               },
+               success : function(data) {
+               	if ("ok"== (data)) {
+               		console.log("수정완료");
 
 					} else {
-						alert("다시확인해주세요");
+						console.log("수정 실패");
 					};
-				}
-			})
-			table.row('.selected').remove().draw( false );
-		});
-
+               	
+               }
+            })  
+		}
+	});
+   
+   $('#foo-table tbody').on( 'click', 'tr', function () {
+	    if ( $(this).hasClass('selected') ) {
+	        $(this).removeClass('selected');
+	    }
+	    else {
+	        table.$('tr.selected').removeClass('selected');
+	        $(this).addClass('selected');
+	    }
 	});
 
+   
+});
 
-
+		
 
 
 
 
 	// 데이터테블 함수 끝----------------------------------------------------------------
-	/*
-       $(document).on("click", "#remove", function() {// 상품 삭제
-          var num = $(this).closest('tr');
-          var num1 = num.find('td:eq(0)').text();
-          $.ajax({
-             type : 'get',
-             url : 'deleteProd.do',
-             data : {
-                prodNum : num1
-             },
-             success : function(data) {
-                if ("ok"== (data)) {
-                   alert("삭제완료");
-                    window.location.reload(true);
-                } else {
-                   alert("다시확인해주세요");
-                }
-                ;
-             }
-          })
-       });
-     */
+
 	$(function insertProdMsg() { // 상품등록알림창
 		var insertMsg = "<c:out value="${msg}" />";
 		if (insertMsg == "ok") {
 			alert("상품 등록 완료");
 		}
 	});
+
 
 
 </script>
@@ -247,6 +215,7 @@
 		<div class="box">
 
 			<!-- 상품관리 검색창 -->
+		<form action="selectProd.do" method="get">
 			<div class="input-group margin">
 				<div class="input-group-btn">
 					<select name="searchOption" id="searchOption"class="btn btn-info dropdown-toggle" >
@@ -264,9 +233,10 @@
 				</div>
 				<input type="text" name="key_word" id="key_word"class="form-control" placeholder="조회내용을 입력하세요">
 				<span class="input-group-btn">
-                      <button type="button" id="serch"class="btn btn-info btn-flat" >조회</button>
+                      <button type="submit" id="serch"class="btn btn-info btn-flat" >조회</button>
                     </span>
 			</div>
+			</form>
 
 			<div id="radioInput"> </div>
 
@@ -289,11 +259,14 @@
 					</div>
 					<div class="row">
 						<div>
-							<button id="button" class='btn btn-danger btn-xs'>Delete</button>
+						
+						<!-- 	<button id="button" class='btn btn-danger btn-xs'>Delete</button> -->
+						
 							<table id="foo-table" class="display" style="width:100%">
 								<thead>
 								<tr>
 									<th>번호</th>
+									<th>옵션번호</th>
 									<th>상품명</th>
 									<th>가격</th>
 									<th>재고</th>
@@ -305,8 +278,25 @@
 									<th>등록일</th>
 									<th>상세 보기 </th>
 								</tr>
-
 								</thead>
+								 <tbody>
+					                <c:forEach var="prod" items="${list}" >   
+					                <tr>
+					                  <td>${prod.prodNum}</td>
+					                  <td>${prod.optionNum}</td>
+					                  <td>${prod.name}</td>
+					                  <td>${prod.priceString}</td>
+					                  <td>${prod.quantity}</td>
+					                  <td>${prod.prodsize}</td>
+					                  <td>${prod.color}</td>
+					                  <td>${prod.typeString}</td>
+					                  <td>${prod.prodcategorynumString}</td>
+					                  <td>${prod.prodstatusString}</td>
+					                  <td>${prod.createdAtString}</td>
+					                  <td><a href="upDateUserList.do?userNum=${user.userNum}"><button class="btn btn-primary btn-xs">상세보기</button></a></td>
+					                </tr>
+					                 </c:forEach>
+					                </tbody>
 							</table>
 						</div>
 					</div>

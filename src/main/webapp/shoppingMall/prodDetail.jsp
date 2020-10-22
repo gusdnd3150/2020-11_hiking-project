@@ -252,7 +252,7 @@ $("#buyProduct").on("click",function(){
                   >
                     <img
                     width="60px" height="60px"
-                      src="http://localhost:8080/resources/img/${showimages.CONTENT }"
+                      src="/resources/img/${showimages.CONTENT }"
                       alt=""
                     />
                   </li>
@@ -268,7 +268,7 @@ $("#buyProduct").on("click",function(){
                     <img
                     width="450px" height="450px"
                       class="d-block w-100"
-                      src="http://localhost:8080/resources/img/${images[0].CONTENT }"
+                      src="/resources/img/${images[0].CONTENT }"
                     />
                   </div>
                   
@@ -280,21 +280,21 @@ $("#buyProduct").on("click",function(){
                     <img
                     width="450px" height="450px"
                       class="d-block w-100"
-                      src="http://localhost:8080/resources/img/${images[1].CONTENT }"
+                      src="/resources/img/${images[1].CONTENT }"
                     />
                   </div>
                            <div class="carousel-item ">
                     <img
                     width="450px" height="450px"
                       class="d-block w-100"
-                      src="http://localhost:8080/resources/img/${images[2].CONTENT }"
+                      src="/resources/img/${images[2].CONTENT }"
                     />
                   </div>
                            <div class="carousel-item ">
                     <img
                     width="450px" height="450px"
                       class="d-block w-100"
-                      src="http://localhost:8080/resources/img/${images[3].CONTENT }"
+                      src="/resources/img/${images[3].CONTENT }"
                     />
                   </div>
                   
@@ -305,14 +305,14 @@ $("#buyProduct").on("click",function(){
                     <img
                     width="450px" height="450px"
                       class="d-block w-100"
-                      src="http://localhost:8080/resources/img/${images[1].CONTENT }"
+                      src="/resources/img/${images[1].CONTENT }"
                     />
                   </div>
                            <div class="carousel-item ">
                     <img
                     width="450px" height="450px"
                       class="d-block w-100"
-                      src="http://localhost:8080/resources/img/${images[2].CONTENT }"
+                      src="/resources/img/${images[2].CONTENT }"
                     />
                   </div>
                   </c:if>
@@ -322,7 +322,7 @@ $("#buyProduct").on("click",function(){
                     <img
                     width="450px" height="450px"
                       class="d-block w-100"
-                      src="http://localhost:8080/resources/img/${images[1].CONTENT }"
+                      src="/resources/img/${images[1].CONTENT }"
                     />
                   </div>
                   </c:if>
@@ -482,7 +482,7 @@ $("#buyProduct").on("click",function(){
                    </c:when>
                   <c:when test="${not empty imagesBottom }">
                     <c:forEach var="imagesBottom" items="${imagesBottom }">
-                   <img src="http://localhost:8080/resources/img/${imagesBottom.CONTENTDETAIL }"  alt="상" width="800" height="500"><br>
+                   <img src="/resources/img/${imagesBottom.CONTENTDETAIL }"  alt="상" width="800" height="500"><br>
                    </c:forEach>
             </c:when>
            </c:choose>
@@ -720,7 +720,7 @@ $("#buyProduct").on("click",function(){
                       <div class="d-flex">
                        <!-- 이미지 -->
                         <img
-                          src="http://localhost:8080/resources/img/${afterList.photo }"
+                          src="/resources/img/${afterList.photo }"
                           alt=""
                           width="100px" height="100px"
                         />

@@ -6,7 +6,7 @@ import java.util.Map;
 
 public interface CommuDAO {
 
-	public void insertGroup(Map map);
+	public Map<String, Object> insertGroup(Map map);
 
 	public List<Map> selectCreatedCommu(String id);
 

@@ -28,6 +28,7 @@ public class WebSocketController {
         LocalDateTime inputTime = LocalDateTime.parse((CharSequence) map.get("messagedAt"));
         Timestamp insertTs = Timestamp.valueOf(inputTime);
         map.put("messagedAt",insertTs);
+        System.out.println(map.toString());//여기 로직 수정
         chatService.insertMessage(map);
 
         LocalDateTime now = LocalDateTime.now();

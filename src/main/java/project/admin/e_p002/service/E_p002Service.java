@@ -15,7 +15,9 @@ public interface E_p002Service {
 
 	int insertProdPhoto(int index, List<MultipartFile> files, String path)throws IOException;
 
-	List<HashMap<String, String>> selectProd(Map<String, String> search)throws Exception;
+	//List<HashMap<String, String>> selectProd(Map<String, String> search)throws Exception;
+	
+	List selectProd(Map search)throws Exception;
 
 	int deleteProd(int prodNum)throws Exception;
 
@@ -28,6 +30,8 @@ public interface E_p002Service {
 	int insertProdOption(List<Map<String, Object>> optionListMap)throws Exception;
 
 	int insertPhotoDetail(int index, List<MultipartFile> files2, String path, int insertProdPhoto)throws IOException;
+
+	int updateOption(Map map)throws Exception;
 
 	
 

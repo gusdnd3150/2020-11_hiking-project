@@ -65,15 +65,23 @@
     <!-- 메인 리스트 6개 불러오기 (좋아요순) -->
     <select id="selectMainGroupList" resultType="map">
         <![CDATA[
-            SELECT g.groupNum, g.name, g.staffCurrent, g.staffmax, g.detail, g.status, TO_CHAR(g.startDay,'yyyy"년"MM"월"dd"일"') startDay, gm.storedFileName, NVL(ui.CONTENT2,'basic_profile.PNG') content2
-            FROM groups g, groupsMedia gm, userwaiting uw, users u, userInfo ui, groupLike gl
-            WHERE g.groupNum = gm.groupNum
-              And g.groupNum = uw.groupNum
-              AND uw.userId = u.id
-              AND u.userNum = ui.userNum
-              AND g.type = 1
+            SELECT g.groupNum, g.name, g.staffCurrent, g.staffmax, g.detail, g.status, TO_CHAR(g.startDay,'yyyy"년"MM"월"dd"일"') startDay, gm.storedFileName, NVL(ui.CONTENT2,'basic_profile.PNG') content2, COUNT(gl.groupNum) likeCount
+            FROM groups g
+                     INNER JOIN groupsMedia gm
+                                ON g.groupNum = gm.groupNum
+                     INNER JOIN userWaiting uw
+                                ON g.groupNum = uw.groupNum
+                     INNER JOIN users u
+                                ON uw.userId = u.id
+                     INNER JOIN userInfo ui
+                                ON u.userNum = ui.userNum
+                     LEFT OUTER JOIN groupLike gl
+                                ON g.groupNum = gl.groupNum
+            WHERE g.type = 1
+              AND g.status = 1
               AND uw.userType = 0
               AND gm.mediaNum = 0
+              AND g.staffMax != 1
               AND ROWNUM <=6
             GROUP BY g.groupNum, g.name, g.staffCurrent, g.staffmax, g.detail, g.status, g.startDay, gm.storedFileName, ui.CONTENT2
             ORDER BY NVL(COUNT(gl.LIKEYN),0) DESC
@@ -83,12 +91,21 @@
     <!-- 산오르기 등산모임 리스트 페이지 (수정중) -->
     <select id="selectAllGroupList" resultType="map">
         <![CDATA[
-            SELECT g.*, gm.storedFileName
-            FROM groups g, groupsMedia gm
-            WHERE g.groupNum = gm.groupNum
+            SELECT g.groupNum, g.name, g.staffCurrent, g.staffmax, g.detail, g.status, TO_CHAR(g.startDay,'yyyy"년"MM"월"dd"일"') startDay, gm.storedFileName, NVL(ui.CONTENT2,'basic_profile.PNG') content2
+            FROM groups g
+            INNER JOIN groupsMedia gm
+                    ON g.groupNum = gm.groupNum
+            INNER JOIN userWaiting uw
+                    ON g.groupNum = uw.groupNum
+            INNER JOIN users u
+                    ON uw.userId = u.id
+            INNER JOIN userInfo ui
+                    ON u.userNum = ui.userNum
+            WHERE g.type = 1
+              AND uw.userType = 0
               AND gm.mediaNum = 0
-              AND ROWNUM <=9
-            ORDER BY g.groupNum DESC
+              AND ROWNUM <=6
+            ORDER BY g.createdAt DESC
         ]]>
     </select>
 
@@ -122,15 +139,15 @@
                    g.staffMax,
                    g.detail,
                    g.status,
-                   g.startday,
-                   g.createdAt,
-                   g.updatedAt,
+                   TO_CHAR(g.startday,'yyyy"년" MM"월"dd"일" hh"시"mm"분"') startday,
+                   TO_CHAR(g.createdAt,'yyyy.MM.dd. hh:mm') createdAt,
+                   TO_CHAR(g.updatedAt,'yyyy.MM.dd. hh:mm') updatedAt,
                    g.area,
                    g.ageStart,
                    g.ageEnd,
                    g.sex,
                    g.mtNm,
-                   uw.userId,
+                   u.nickname,
                    ui.content2
             FROM groups g, userWaiting uw, users u, userInfo ui
             WHERE g.groupNum = uw.groupNum
@@ -331,32 +348,91 @@
 
     <select id="selectCommentOne" parameterType="_int" resultType="groupCommentVO">
         <![CDATA[
-            SELECT COMMENTNUM, PARENTNUM, DEPTS, COMMENTORDER, CONTENT, USERID, SUBCOMMENTCOUNT,CREATEDAT
-            FROM GROUPCOMMENT
-            WHERE commentNum = #{commentNum}
+            SELECT gc.commentNum, gc.parentNum, gc.depts, gc.commentOrder, gc.content, u.nickname, gc.subCommentCount, gc.createdAt
+            FROM groupComment gc, users u
+            WHERE gc.userId = u.id
+              AND commentNum = #{commentNum}
         ]]>
     </select>
 
     <select id="selectCommentByGroupNum" parameterType="_int" resultType="groupCommentVO">
         <![CDATA[
-            SELECT gc.commentNum, gc.parentNum, gc.depts, gc.commentOrder, gc.content, gc.userId, gc.subCommentCount, gc.createdAt, ui.content2
+            SELECT gc.commentNum, gc.parentNum, gc.depts, gc.commentOrder, gc.content, u.nickname, gc.subCommentCount, gc.createdAt, ui.content2
             FROM groupComment gc, users u, userInfo ui
             WHERE gc.userId = u.id
-            AND   u.userNum = ui.userNum
-            AND   GROUPNUM = #{groupNum}
+              AND   u.userNum = ui.userNum
+              AND   GROUPNUM = #{groupNum}
             START WITH PARENTNUM = 0
             CONNECT BY PRIOR COMMENTNUM = PARENTNUM
             ORDER SIBLINGS BY COMMENTORDER
         ]]>
     </select>
 
-    <!-- 임시(세션으로 유저 프로필 사진 조회) -->
+    <!-- 세션사용 유저 프로필 사진 조회 -->
     <select id="selectSessionIdImage" resultType="string" parameterType="string">
         <![CDATA[
             SELECT ui.CONTENT2
             FROM users u, userInfo ui
             WHERE u.userNum = ui.userNum
             AND u.id = #{value}
+        ]]>
+    </select>
+
+    <select id="sortGroupByKeyword" resultType="map" parameterType="string">
+        <if test="_parameter eq 'lately'.toString()">
+            <![CDATA[
+                SELECT g.groupNum, g.name, g.staffCurrent, g.staffmax, g.detail, g.status, TO_CHAR(g.startDay,'yyyy"년"MM"월"dd"일"') startDay, gm.storedFileName, NVL(ui.CONTENT2,'basic_profile.PNG') content2
+                FROM groups g
+                INNER JOIN groupsMedia gm
+                ON g.groupNum = gm.groupNum
+                INNER JOIN userWaiting uw
+                ON g.groupNum = uw.groupNum
+                INNER JOIN users u
+                ON uw.userId = u.id
+                INNER JOIN userInfo ui
+                ON u.userNum = ui.userNum
+                WHERE g.type = 1
+                AND uw.userType = 0
+                AND gm.mediaNum = 0
+                AND g.staffMax != 1
+                AND ROWNUM <= 15
+                ORDER BY g.createdAt DESC
+            ]]>
+        </if>
+        <if test="_parameter eq 'like'.toString()">
+            <![CDATA[
+                SELECT g.groupNum, g.name, g.staffCurrent, g.staffmax, g.detail, g.status, TO_CHAR(g.startDay,'yyyy"년"MM"월"dd"일"') startDay, gm.storedFileName, NVL(ui.CONTENT2,'basic_profile.PNG') content2, COUNT(gl.groupNum) likeCount
+                FROM groups g
+                         INNER JOIN groupsMedia gm
+                                    ON g.groupNum = gm.groupNum
+                         INNER JOIN userWaiting uw
+                                    ON g.groupNum = uw.groupNum
+                         INNER JOIN users u
+                                    ON uw.userId = u.id
+                         INNER JOIN userInfo ui
+                                    ON u.userNum = ui.userNum
+                         LEFT OUTER JOIN groupLike gl
+                                    ON g.groupNum = gl.groupNum
+                WHERE g.type = 1
+                  AND uw.userType = 0
+                  AND gm.mediaNum = 0
+                  AND g.staffMax != 1
+                  AND ROWNUM <= 15
+                GROUP BY g.groupNum, g.name, g.staffCurrent, g.staffmax, g.detail, g.status, g.startDay, gm.storedFileName, ui.CONTENT2
+                ORDER BY COUNT(gl.LIKEYN) DESC
+            ]]>
+        </if>
+    </select>
+    <!-- 진행중인 같은 산, 다른 그룹 추천 -->
+    <select id="recommendGroup" resultType="map" parameterType="map">
+        <![CDATA[
+            SELECT g.groupNum, g.name, g.staffCurrent, g.staffMax, g.detail, TO_CHAR(g.startDay,'yyyy.mm.dd') startDay, gm.storedFileName
+            FROM groups g, groupsMedia gm
+            WHERE g.groupNum = gm.groupNum
+            AND g.status = 1
+            AND gm.mediaNum = 0
+            AND g.mtNm = #{MTNM}
+            AND g.groupNum NOT IN (#{GROUPNUM})
         ]]>
     </select>
 </mapper>

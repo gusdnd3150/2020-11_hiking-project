@@ -40,7 +40,12 @@ public class ChatController {
             mav.addObject("roomId",roomId);
             return mav;
         }
-
+        for(int j=0;j<list.size();j++){
+            if(list.get(j).get("USERID").equals(sessionId)){
+                mav.addObject("nickname",list.get(j).get("NICKNAME"));
+                break;
+            }
+        }
         mav.addObject("resultList", list);
 
         List<Map> validUserList = chatService.checkValidUser(roomId);
