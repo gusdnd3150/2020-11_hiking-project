@@ -9,21 +9,33 @@
     <h1 class="my-4 pt-3">${group.NAME}
         <small class="text-muted">${group.MTNM}</small>
     </h1>
-    <div class="row" style="position: relative; height: fit-content">
-        <div class="photos col-md-8 col-sm-12">
+    <div class="row">
+        <div class="photos col-lg-8 col-md-8 col-sm-12">
             <%--            <img class="img-fluid" src="http://placehold.it/750x500" alt="">--%>
-            <div id="photo0"><img class="img-fluid" src="/resources/img/${group.image0}" alt="" style="height: 100%;width: 100%"></div>
-            <div id="photo1" style="display: none"><img class="img-fluid" src="/resources/img/${group.image1}" alt="" style="height: 100%;width: 100%"></div>
-            <div id="photo2" style="display: none"><img class="img-fluid" src="/resources/img/${group.image2}" alt="" style="height: 100%;width: 100%"></div>
+            <div id="photo0">
+                <div class="centered">
+                    <img class="img-fluid" src="/resources/img/${group.image0}" alt="">
+                </div>
+            </div>
+            <div id="photo1" style="display: none">
+                <div class="centered">
+                <img class="img-fluid" src="/resources/img/${group.image1}" alt="">
+                </div>
+            </div>
+            <div id="photo2" style="display: none">
+                <div class="centered">
+                <img class="img-fluid" src="/resources/img/${group.image2}" alt="">
+                </div>
+            </div>
             <ul class="thumbs">
-                <li><a href="javascript:void(0)" onclick="switchPhoto('photo0', 3);"><img class="img-fluid" src="/resources/img/${group.image0}" alt=""></a> </li>
-                <li><a href="javascript:void(0)" onclick="switchPhoto('photo1', 3);"><img class="img-fluid" src="/resources/img/${group.image1}" alt=""></a> </li>
-                <li><a href="javascript:void(0)" onclick="switchPhoto('photo2', 3);"><img class="img-fluid" src="/resources/img/${group.image2}" alt=""></a> </li>
+                <li><a href="javascript:void(0)" onclick="switchPhoto('photo0', 3);"><img class="thumb img-fluid" src="/resources/img/${group.image0}" alt=""></a> </li>
+                <li><a href="javascript:void(0)" onclick="switchPhoto('photo1', 3);"><img class="thumb img-fluid" src="/resources/img/${group.image1}" alt=""></a> </li>
+                <li><a href="javascript:void(0)" onclick="switchPhoto('photo2', 3);"><img class="thumb img-fluid" src="/resources/img/${group.image2}" alt=""></a> </li>
             </ul>
         </div>
-        <div class="col-md-4 col-sm-12">
+        <div class="col-lg-4 col-md-4 col-sm-12">
             <div style="height: 80%">
-                <h2 class="mt-3">모임 정보</h2>
+                <h2>모임 정보</h2>
                 <hr />
                 <h3 class="row col-12 mt-3" style="align-items: center">
                     <img src="/resources/img/${group.CONTENT2}" class="rounded-circle" style="width: 40px;height: 40px; border: 1px solid grey">
@@ -147,7 +159,7 @@
                 <div class="pt-3 col-lg-3 col-sm-6" id="groupList">
                     <div class="card border-0" >
                         <a href="/group/${recommend.GROUPNUM}">
-                            <img class="card-img-top" src="/resources/img/${recommend.STOREDFILENAME}" alt="..." style="width: 100%" />
+                            <img class="card-img-top" src="/resources/img/${recommend.STOREDFILENAME}" alt="..." style="max-width: 100%;height: auto" />
                         </a>
                         <div class="card-body row p-3 pl-3">
                             <div class="col-10 pl-2">

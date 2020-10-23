@@ -130,20 +130,20 @@
 	</div>
 	</div>
 	<hr />
-	<div class="row">
-		<div class="col-md-6">
+	<div class="row" style="display: table">
+		<div class="m-1" style="display: table-cell;width: 50%">
 			<p><h2>공지사항</h2></p>
 			<ul class="list-group">
 				<li class="list-group-item"><a href="#" class="notice-item" style="color: black">[공지사항타입] 공지내용</a><span class="badge badge-danger">New</span></li>
 				<li class="list-group-item"><a href="#" class="notice-item" style="color: black">공지사항2</a></li>
 				<li class="list-group-item"><a href="#" class="notice-item" style="color: black">공지사항3</a></li>
 				<li class="list-group-item"><a href="#" class="notice-item" style="color: black">공지사항4</a></li>
-				<li class="list-group-item p-0 text-center text-muted" style="background-color: "><a href="#" class="notice-item" style="color: black">더보기</a></li>
+				<li class="list-group-item p-0 text-center text-muted"><a href="#" class="notice-item" style="color: black">더보기</a></li>
 			</ul>
 		</div>
-		<div class="col-md-6">
+		<div class="m-1" style="display: table-cell;width: 50%">
 			<p><h2>이벤트</h2></p>
-			<img src="./resources/img/test/event1.jpg" style="width: 100%;">
+			<img src="./resources/img/test/event1.jpg" style="width: 100%">
 		</div>
 	</div>
 	<hr />

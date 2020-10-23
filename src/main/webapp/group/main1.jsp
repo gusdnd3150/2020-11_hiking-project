@@ -57,40 +57,65 @@
 <script type="text/javascript" src="../resources/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="../resources/js/view/group/main.js"></script>
 <script>
+    var loading = true;
+    var rowNum = 2;
+    var keyword = '';
+
     $(document).ready(function (){
-        window.addEventListener('scroll',function (){
-        });
         $('#sort_lately').click();
+    })
+    $(document).scroll(function (){
+        var curHeight = $(window).height() + $(window).scrollTop();
+        var docHeight = $(document).height();
+
+        console.log(curHeight)
+        console.log(docHeight)
+
+        if (curHeight > docHeight-1) {
+
+            setTimeout(function (){
+                loadingImage();
+
+                setTimeout(function (){
+                    if(loading){
+                        sortList(keyword,rowNum)
+                        rowNum += 1;
+                        closeLoading();
+                    }else{
+                        $(document).removeEventListener('scroll',function(){
+                            closeLoading();
+                            loadingEndImage();
+                        })
+                    }
+                },3000)
+
+            },1000)
+        }
     })
 
     $('#sort_lately').on('click',function (){
         $('.card-list').empty();
 
-        var data = {
-            'keyword' : 'lately',
-            'rowNum' : 1
-        }
+        keyword = 'lately';
+        var rowNum = 1;
 
-        sortList(data);
-        infiniteScroll(data);
+        sortList(keyword, rowNum);
     });
 
     $('#sort_like').on('click',function (){
         $('.card-list').empty();
 
-        var data = {
-            'keyword' : 'like',
-            'rowNum' : 1
-        }
+        keyword = 'like';
+        var rowNum = 1;
 
-        sortList(data);
-        infiniteScroll(data);
+        sortList(keyword, rowNum);
     });
     var isEnd = false;
 
-    function sortList(data){
-        if(isEnd == true){
-            return ;
+    function sortList(keyword, rowNum){
+        var data = {
+            'keyword' : keyword,
+            'rowNum' : rowNum
         }
         $.ajax({
             type: "POST",
@@ -99,15 +124,12 @@
             dataType: 'json',
             contentType: "application/json; charset=utf-8;",
             success: function (response){
-                if(response.length!=0){
-                    appendSortList(response);
-                }else if(response.length==0) {
-                    isEnd = true;
-                    window.removeEventListener('scroll', function (){
-                    //
-                        $('#result')
-                            .append('<div>없어요</div>');
-                    })
+                console.log(response)
+                appendSortList(response);
+                if(response.length==0){
+                    loading = false;
+                    closeLoading();
+                    loadingEndImage();
                 }
             },
             error: function(response){
@@ -115,8 +137,12 @@
             }
         })
     };
+
     function appendSortList(response){
         for(var i=0;i<response.length;i++){
+
+            var editorContent = response[i].DETAIL;
+            var covertContent = editorContent.replace(/(<([^>]+)>)/ig,"");
 
             var status1 =  '<div class="pt-3 col-lg-4 col-sm-6" id="groupList">' +
                             '<div class="card border-0" >' +
@@ -127,7 +153,7 @@
                             '<div class="col-10 p-0 pl-2 m-0">' +
                             '<h5 class="card-title m-0" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">'+
                             '<span style="color: limegreen">['+response[i].STATUS+']</span> ' +response[i].NAME +'</h5>' +
-                            '<p class="card-text text-muted mb-1" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">'+ response[i].DETAIL +'</p>' +
+                            '<p class="card-text text-muted text- mb-1" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">'+ covertContent +'</p>' +
                             '<p class="m-0 text-muted">'+response[i].STARTDAY+' 출발</p>' +
                             '</div></div></div></div>';
 
@@ -140,7 +166,7 @@
                             '<div class="col-10 p-0 pl-2 m-0">' +
                             '<h5 class="card-title m-0" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">'+
                             '<span style="color:red">['+response[i].STATUS+']</span> ' +response[i].NAME +'</h5>' +
-                            '<p class="card-text text-muted mb-1" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">'+ response[i].DETAIL +'</p>' +
+                            '<p class="card-text text-muted mb-1" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">'+ covertContent +'</p>' +
                             '<p class="m-0 text-muted">'+response[i].STARTDAY+' 출발</p>' +
                             '</div></div></div></div>';
 
@@ -150,20 +176,6 @@
                 $('.card-list').append(status2)
             }
         }
-    }
-    function infiniteScroll(data){
-            var curHeight = $(window).height() + $(window).scrollTop();
-            var docHeight = $(document).height();
-
-            if (curHeight == docHeight) {
-                closeLoading();
-                loadingImage();
-
-                setTimeout(function (){
-                    data.rowNum += 1;
-                    sortList(data);
-                },1500)
-            }
     }
 
     function loadingImage() {
@@ -179,6 +191,10 @@
 
     function closeLoading() {
         $('#loadingImg').remove();
+    }
+
+    function loadingEndImage() {
+        $('#result').append('<div class="text-center">더이상 결과가 없습니다</div>')
     }
 
 </script>
