@@ -54,11 +54,9 @@ public class CommuDAOImpl implements CommuDAO {
 	@Override
 	public List<Map> selectJoinedCommu(String id) {
 		List<GroupVO> list = sqlSession.selectList("commuMapper.selectJoinedGroupNum", id);
-		System.out.println("여긴 올걸??222");
 		List<Map> list2 = new ArrayList<Map>();
 		if(!list.isEmpty()) {
 			list2 = sqlSession.selectList("commuMapper.selectCommu", list);
-			System.out.println("이거 뭔데????" +list2);
 		}else {
 			Map map = new HashMap();
 			map.put("NAME", "내가 가입한 산모임이 아직 없습니다.");
@@ -76,13 +74,57 @@ public class CommuDAOImpl implements CommuDAO {
 		list.add(sqlSession.selectOne("commuMapper.selectUserWaiting", map));
 		list.add(sqlSession.selectOne("commuMapper.selectGroupsMedia", map));
 		list.addAll(sqlSession.selectList("commuMapper.selectGroupsBoard", map));
-		list.addAll(sqlSession.selectList("commuMapper.selectGroupsBoardPost", map));
+		//list.addAll(sqlSession.selectList("commuMapper.selectGroupsBoardPost", map));
 		return list;
 	}
 
 	@Override
 	public List<Map> selectAllGroupList() {
 		return sqlSession.selectList("commuMapper.selectAllGroupList");
+	}
+
+	@Override
+	public void updateBoardAccess(int groupNum, int boardAccess) {
+		Map<String, Object> m = new HashMap<String, Object>();
+		m.put("groupNum",groupNum);
+		m.put("boardAccess",boardAccess);
+		sqlSession.update("commuMapper.updateBoardAccess", m);		
+	}
+
+	@Override
+	public void updateGroup(Map map) {
+		sqlSession.update("commuMapper.updateGroup", map);
+	}
+
+	@Override
+	public void insertAlbum(Map m) {
+		System.out.println("m:  "+ m);
+		sqlSession.insert("commuMapper.insertAlbum",m);
+	}
+
+	@Override
+	public void insertPost(Map m) {
+		sqlSession.insert("commuMapper.insertPost", m);
+	}
+
+	@Override
+	public List<Map> selectCommuPosts(Map<String, Object> m) {
+		return sqlSession.selectList("commuMapper.selectCommuPosts", m);
+	}
+
+	@Override
+	public List<Map> selectAlbumPosts(Map<String, Object> m) {
+		return sqlSession.selectList("commuMapper.selectAlbumPosts", m);
+	}
+
+	@Override
+	public int countAlbumPosts(Map<String, Object> m) {
+		return sqlSession.selectOne("commuMapper.countAlbumPosts", m);
+	}
+
+	@Override
+	public List<CommuVO> selectPgAlbumPosts(Map<String, Object> vM) {
+		return sqlSession.selectList("commuMapper.selectPgAlbumPosts", vM);
 	}
 
 }

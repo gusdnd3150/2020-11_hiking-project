@@ -7,7 +7,6 @@
 <%
   request.setCharacterEncoding("UTF-8");
 %> 
-<c:set var="contextPath"  value="${pageContext.request.contextPath}"  />
 <jsp:include page="/common/header.jsp" flush="false" />
     <style>
 		.card {
@@ -47,12 +46,26 @@ width: 100px;
 						class="card-img-top" alt="산모임 기본 이미지">
 					<div class="card-body">
 						<h5 class="card-title">${m1.NAME}</h5>
-						<small>멤버</small><small>${m1.STAFFCURRENT}</small> <br> <br>
+						<small>멤버 ${m1.STAFFCURRENT}</small> <br>
+						<small>지역 ${m1.AREA}</small> <br> 
+						<small>성별 ${m1.SEX}</small> <br>
+						<c:choose>
+						   <c:when test="${0 eq m1.AGESTART && 0 eq m1.AGEEND}">
+						   <small>연령 무관</small> <br> <br>
+						   </c:when>
+						   <c:otherwise>
+						<small>연령 ${m1.AGESTART}~${m1.AGEEND}</small> <br> <br>
+						</c:otherwise>
+						</c:choose>
 						<p class="card-text">${m1.DETAIL}</p>
+						<small>시작일 ${m1.CREATEDAT}</small> <br>
 						<c:choose>
                     <c:when test="${0 eq m2.USERTYPE}">
                     <br>
-						<a href="" style="color: gray;">관리하기></a> <br>
+<!-- 						<a href="" style="color: gray;">관리하기></a> <br> -->
+				<div class="list-group" >
+					  <a style=" color: gray;" id="list-setting-list" data-toggle="list" href="#setting" role="tab" aria-controls="setting" > 관리하기> </a><br>
+					</div>
 					</c:when>
                       <c:when test="${1 eq m2.USERTYPE}">
                       <br>
@@ -60,10 +73,11 @@ width: 100px;
 						</c:when>
 						</c:choose>
 					</div>
+				<div style="height:5px"></div>
 				</div>
 			<center>
 				 <c:choose>
-                        <c:when test="${0 eq m2.USERTYPE}"><button class="selectWaitingList btn btn-success col-11" disabled="" data-toggle="modal" data-target="#listModal">요청 리스트보기</button></c:when>
+                        <c:when test="${0 eq m2.USERTYPE}"><button class="selectWaitingList btn btn-success col-11" disabled="" data-toggle="modal" data-target="#listModal">새로운 가입 요청</button></c:when>
                         <c:when test="${1 eq m2.USERSTATUS}"><button class="withdrawGroupBtn btn btn-dark col-11" data-toggle="modal" data-target="#cancelModal">요청 취소하기</button></c:when>
                         <c:when test="${empty m2.USERSTATUS || 2 eq m2.USERSTATUS}"><button class="joinButton btn btn-outline-info col-11" data-toggle="modal" data-target="#joinModal">참여 신청하기</button></c:when>
                     </c:choose>

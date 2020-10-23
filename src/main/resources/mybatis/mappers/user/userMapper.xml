@@ -61,16 +61,16 @@
 	
 	<insert id="insertUser5" parameterType="userVO">
       <![CDATA[
-    INSERT INTO delivery(usernum, address, zonecode, address2, delinum, createdAt, delibasic)
+    INSERT INTO delivery(usernum, address, zonecode, address2, delinum, createdAt, delibasic, CUSTNAME, CUSTPHONE)
 	values ((SELECT max(userNum) from users), (SELECT address from users where usernum = (select max(usernum) from users)), (SELECT zonecode from users where usernum = (select max(usernum) from users)),
-	(SELECT address2 from users where usernum = (select max(usernum) from users)), 0, sysdate, 1)
+	(SELECT address2 from users where usernum = (select max(usernum) from users)), delinum_SEQ.nextVal, sysdate, 1, (SELECT name from users where usernum = (select max(usernum) from users)), (SELECT phone from users where usernum = (select max(usernum) from users)))
       ]]>
 	</insert>
 	
 	<insert id="insertUser6" parameterType="java.util.Map">
       <![CDATA[
-    INSERT INTO delivery(usernum, delinum, createdAt, delibasic)
-	values ((SELECT max(userNum) from users), 0,  sysdate, 1)
+    INSERT INTO delivery(usernum, delinum, createdAt, delibasic, CUSTNAME)
+	values ((SELECT max(userNum) from users), delinum_SEQ.nextVal,  sysdate, 1, (SELECT name from users where usernum = (select max(usernum) from users)))
       ]]>
 	</insert>
 
@@ -174,7 +174,15 @@
 	   ]]>
 	</select>
 	
-	
+	<select id="getWriterInfo" resultType="map" parameterType="map">
+	    <![CDATA[
+		select a.nickName, b.content2
+		from users a, userinfo b 
+		where a.userNum = #{userNum}
+		and b.userNum = a.userNum
+		and a.status=10
+	   ]]>
+	</select>
 
 	<select id="checkUserWithSessionKey" resultMap="userResult"
 		parameterType="String">

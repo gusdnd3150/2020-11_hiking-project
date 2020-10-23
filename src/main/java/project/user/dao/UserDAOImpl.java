@@ -43,32 +43,25 @@ public class UserDAOImpl implements UserDAO {
 
 	@Override
 	public int idCheck(String id) throws Exception {
-		System.out.println("다오아이디체크: " + id);
 		int rst = sqlSession.selectOne("userMapper.idCheck", id);
-		System.out.println("DAO : " + rst);
 		return rst;
 	}
 
 	@Override
 	public int emailCheck(String email) throws Exception {
-		System.out.println("다오email체크: " + email);
 		int rst = sqlSession.selectOne("userMapper.emailCheck", email);
-		System.out.println("DAO : " + rst);
 		return rst;
 	}
 
 	@Override
 	public int nickNameCheck(String nickName) throws Exception {
-		System.out.println("다오nickName체크: " + nickName);
 		int rst = sqlSession.selectOne("userMapper.nickNameCheck", nickName);
-		System.out.println("DAO : " + rst);
 		return rst;
 	}
 
 	@Override
 	public int idEmailCheck(Map<String, Object> map) throws Exception {
 		int rst = sqlSession.selectOne("userMapper.searchIdEmail", map);
-		System.out.println("DAO : " + rst);
 		return rst;
 	}
 

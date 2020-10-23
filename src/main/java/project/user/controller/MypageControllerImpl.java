@@ -38,9 +38,6 @@ public class MypageControllerImpl implements MypageController {
 	@Autowired
 	UserService userService;
 	
-	@Autowired        //쇼핑몰관련
-	B_P003_D001productService b_P003_D001productService;
-
 	@Autowired
 	ThumbnailMaker thumbnailMaker;
 	
@@ -62,22 +59,8 @@ public class MypageControllerImpl implements MypageController {
 		}
 		List<Map> CList = commuService.selectCreatedCommu(id); 
 		List<Map> JList = commuService.selectJoinedCommu(id);
+		
 		System.out.println("컨트롤러: "+CList);
-
-		//////쇼핑몰관련///
-		int userNum = userService.selectUserNum(id);         //유저넘
-		Map<String,Object> map = new HashMap<String,Object>();
-		map.put("userNum", userNum);
-		map.put("orderType", 2);
-        int wishCount =b_P003_D001productService.wishCount(userNum);
-        int cartCount = b_P003_D001productService.CartTotal(map);
-    	int total = b_P003_D001productService.totalPaymentCount(map);
-        Map<String,Object> point =b_P003_D001productService.buyerinfo(map);
-        mav.addObject("buyCount",total); //구매수량
-        mav.addObject("point",point);  //보유포인트
-        mav.addObject("cartCount",cartCount); // 장바구니 수량
-        mav.addObject("wishCount",wishCount); // 위시리스트 수량
-      	////쇼핑몰관련///
 		
 		mav.addObject("userVO", userVO);
 		mav.addObject("CList", CList);
@@ -111,8 +94,6 @@ public class MypageControllerImpl implements MypageController {
 		userVO = mypageService.getUserInfo(userVO);
 		return userVO;
 	}
-	
-
 
 	@RequestMapping(value = "/mypage/updateUser.do", method = { RequestMethod.GET, RequestMethod.POST })
 	public String updateUser(HttpSession httpSession, UserVO userVO) throws Exception {
@@ -134,9 +115,9 @@ public class MypageControllerImpl implements MypageController {
 		return "/user/modifyEnd";
 	}
 
-
 	@RequestMapping(value = "/mypage/updateUserInfo.do", method = { RequestMethod.GET, RequestMethod.POST })
-	public String updateUserInfo(@RequestParam String profile, @RequestParam(value="file", required=false) MultipartFile fileP, HttpServletRequest request,
+	public String updateUserInfo(@RequestParam String profile,
+			@RequestParam(value = "file", required = false) MultipartFile fileP, HttpServletRequest request,
 			HttpSession httpSession) throws Exception {
 		String id = (String) httpSession.getAttribute(LOGIN);
 		int userNum = userService.selectUserNum(id);
@@ -144,14 +125,14 @@ public class MypageControllerImpl implements MypageController {
 		profMap.put("profile", profile);
 		profMap.put("userNum", userNum);
 		mypageService.updateUserProf(profMap);
-			logger.info("profMap");
+		logger.info("profMap");
 
-				if (!fileP.isEmpty()) {
-					String path = request.getSession().getServletContext().getRealPath("/");
-					int mediaResult = mypageService.updateUserCont(userNum, fileP, path);
-					System.out.println("mediaResult: "+mediaResult);
-				}
-return "redirect:/mypage/mypageHomeView.do";
+		if (!fileP.isEmpty()) {
+			String path = request.getSession().getServletContext().getRealPath("/");
+			int mediaResult = mypageService.updateUserCont(userNum, fileP, path);
+			System.out.println("mediaResult: " + mediaResult);
+		}
+		return "redirect:/mypage/mypageHomeView.do";
 	}
 
 	@RequestMapping(value = "/mypage/pwdCheck.do", method = { RequestMethod.GET, RequestMethod.POST })

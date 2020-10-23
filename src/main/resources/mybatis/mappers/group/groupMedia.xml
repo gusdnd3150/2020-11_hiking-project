@@ -17,6 +17,14 @@
         values (#{groupNum}, #{mediaNum}, #{fileSize}, #{storedFileName}, #{originalFileName}, sysdate, sysdate)
     </insert>
 
+
+   <update id="updateGroupMedia" parameterType="map" >
+    <![CDATA[
+    update groupsMedia
+	  	set mediaNum=#{mediaNum}, fileSize=#{fileSize}, storedFileName=#{storedFileName}, originalFileName=#{originalFileName}, updatedAt=sysdate
+	    where groupNum = #{groupNum}
+        ]]>
+    </update>
    <!--  <select id="selectGroupMedia" resultType="_byte[]" parameterType="_int">
         <![CDATA[
             SELECT content

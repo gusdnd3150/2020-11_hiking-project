@@ -90,9 +90,11 @@ public class GroupDAO{
     public int insertFavoriteGroup(Map map){
         return sqlSession.insert("group.insertFavorite",map);
     }
+    
     public int checkFavoriteGroup(Map map){
         return sqlSession.selectOne("group.checkFavoriteGroup",map);
     }
+    
     public int deleteFavoriteGroup(Map map){
         return sqlSession.delete("group.deleteFavoriteGroup",map);
     }
@@ -100,15 +102,23 @@ public class GroupDAO{
     public int insertCommentGroup(Map map){
         return sqlSession.insert("group.insertCommentGroup",map);
     }
+    
     public int updateSubCommentCount(int parentNum){
-        System.out.println(parentNum);
-        return sqlSession.update("group.updateSubCommentCount",parentNum);}
+        return sqlSession.update("group.updateSubCommentCount",parentNum);
+    }
+    
     public GroupCommentVO selectCommentOne(int commentNum){
         return sqlSession.selectOne("group.selectCommentOne",commentNum);
     }
+    
     public List selectCommentByGroupNum(int groupNum){
         return sqlSession.selectList("group.selectCommentByGroupNum",groupNum);
     }
+    
+    public List selectCommentByPostNum(int postNum){
+       return sqlSession.selectList("group.selectCommentByGroupNum",postNum);
+   }
+    
     public String selectSessionIdImage(String userId){
         return sqlSession.selectOne("group.selectSessionIdImage", userId);
     }

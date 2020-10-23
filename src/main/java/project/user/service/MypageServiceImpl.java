@@ -18,7 +18,7 @@ import project.user.dto.LoginDTO;
 import project.user.vo.UserVO;
 
 @Service
-public class MypageServiceImpl implements MypageService{
+public class MypageServiceImpl implements MypageService {
 	public static final Logger logger = LoggerFactory.getLogger(MypageServiceImpl.class);
 
 	@Autowired
@@ -43,7 +43,6 @@ public class MypageServiceImpl implements MypageService{
 		return mypageDAO.updateUserCont(map);
 	}
 
-
 	@Override
 	public void updateUserProf(Map<String, Object> profMap) {
 		System.out.println("1");
@@ -65,10 +64,5 @@ public class MypageServiceImpl implements MypageService{
 		mypageDAO.updatePwd(userVO);
 
 	}
-
-
-
-
-
 
 }

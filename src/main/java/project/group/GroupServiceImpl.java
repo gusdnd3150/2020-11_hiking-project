@@ -124,6 +124,10 @@ public class GroupServiceImpl implements GroupService{
     public List selectCommentByGroupNum(int groupNum){
         return groupDAO.selectCommentByGroupNum(groupNum);
     }
+    
+    public List selectCommentByPostNum(int postNum){
+        return groupDAO.selectCommentByPostNum(postNum);
+    }
 
     public String selectSessionIdImage(String userId){
         return groupDAO.selectSessionIdImage(userId);

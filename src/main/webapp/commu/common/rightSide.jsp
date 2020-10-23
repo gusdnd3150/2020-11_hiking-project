@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <div class="col-md-2 text-center pt-5" >
-				<div class="list-group" style="border: 2px solid green;"id="rightSide" >
+	<div class="list-group" style="border: 2px solid green;" id="rightSide" >
 				
 			
 <a class="list-group-item list-group-item-action active" id="list-commuPage-list" data-toggle="list" href="#commuPage" role="tab" aria-controls="commuPage">

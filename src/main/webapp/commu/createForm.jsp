@@ -9,7 +9,8 @@
 }
 
 div#groupForm {
-    background-color: #E0F8E6;
+border: 2px solid #04B4AE;
+    background-color: #EFFBF8;
     border-radius: 5px 5px 5px 5px;
     /*border: grey solid 1px;*/
 }
@@ -40,14 +41,14 @@ i {
             <input type="text" class="form-control" id="name">
         </div>
         <div class="mb-3 col-12">
-            <label for="detail">모임 상세</label>
+            <label for="detail">모임 소개</label>
             <textarea class="form-control" rows="6" id="detail"></textarea><br>
         </div>
         <div class="mb-3 col-6">
             <label for="area">모임 지역</label>
             <select class="custom-select" id="area">
                 <option value="0" selected>지역을 선택해주세요</option>
-                 <option value="전체">전체</option>
+                <option value="전체">전체</option>
                 <option value="서울">서울</option>
                 <option value="경기">경기</option>
                 <option value="강원">강원</option>
@@ -56,9 +57,8 @@ i {
         <div class="mb-3 col-12">
             <label for="image">이미지</label>
             <div id="image" class="input_wrap">
-                <a href="javascript:" onclick="fileUploadAction();" class="my_button btn btn-light ml-3">파일 업로드</a>
-                <form id="filesForm" method="post" enctype="multipart/form-data" style="display: none">
-                    <input type="file" accept="image/*" id="uploadFile" name="file" onchange="setPreview(event);" multiple>
+                <form id="filesForm" method="post" enctype="multipart/form-data" >
+               <input type="file" name="file" />
                 </form>
                 <div class="preview pt-3 row">
                 </div>
@@ -129,7 +129,7 @@ i {
 <script src="//cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/js/bootstrap4-toggle.min.js"></script>
 <script type="text/javascript" src="../resources/js/view/group/searchMt.js"></script>
 <script>
-    function fileUploadAction() {
+/*     function fileUploadAction() {
         $('#uploadFile').trigger('click');
     }
 
@@ -146,31 +146,9 @@ i {
             reader.readAsDataURL(image);
         }
     }
-
+ */
 
     $(document).ready(function () {
-
-        var staffMax = 2;
-
-        $('#increase').on('click',function (){
-            staffMax++;
-            $('#staffMax').text(parseInt(staffMax));
-            if(staffMax>50) {
-                alert("지정 가능한 최대 인원 수를 초과 했습니다.")
-                return
-            }
-        })
-        $('#decrease').on('click',function (){
-            staffMax--;
-            $('#staffMax').text(parseInt(staffMax));
-            console.log(staffMax)
-            if(staffMax<1){
-                alert("최소 1명 이상 지정해야 합니다")
-                staffMax++;
-                $('#staffMax').text(parseInt(staffMax));
-                return
-            }
-        })
 
         // 추가입력 토글버튼
         $(function () {
