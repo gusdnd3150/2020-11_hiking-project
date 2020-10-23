@@ -22,26 +22,18 @@
 
 <script src=https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js></script>
 <!--  이거 없으면 버튼 안생김  -->
-<script type="text/javascript"
-		src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
 <!--  //엑셀 -->
-<script type="text/javascript"
-		src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.html5.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.html5.min.js"></script>
 <!-- // 카피+ pdf -->
-<script type="text/javascript"
-		src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"></script>
 <!--  // 프린트 -->
-<script type="text/javascript"
-		src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
 <!--  // pdf -->
-<script type="text/javascript"
-		src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
 <!--  //pdf -->
 
-<script type="text/javascript"
-		src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
-
-
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
 
 
 <!-- datatable-editor js 파일 -->
@@ -60,19 +52,18 @@ $(document).ready(function() {
 			{
 				extend:'excel',
 				text:'excel',
-				filename:'회원정보',
-				title:'산오름 회원정보'
+				filename:'상품관리',
+				title:'오름마켓 상품목록'
 			},
 			{
 				extend:'copy',
 				text:'copy',
-				title:'회원정보입니다.'
+				title:'상품목록'
 			},			
                 'pdf', 'print'
             ]
-    	}
-	
-	 );
+    	});
+   
    datatableEdit({
 		dataTable : table,
 		columnDefs : [
@@ -82,13 +73,8 @@ $(document).ready(function() {
 			},
 			{
 				targets : 5
-			},
-			{
-				targets : 6
-			},
-			{
-				targets : 9
 			}
+			
 		],
 		onEdited : function(prev, changed, index, cell) {
 		
@@ -120,31 +106,18 @@ $(document).ready(function() {
            var _optionNum = tr.find('td:eq(1)').text();
            var _quantity = tr.find('td:eq(4)').text();
            var _prodSize = tr.find('td:eq(5)').text();
-           var _color = tr.find('td:eq(6)').text();
-           var _prodStatus = tr.find('td:eq(9)').text();
-         
-           console.log("변경할 컬럼 이름     :"+_result);
-           console.log("변경값           :"+_value);
-           console.log("상품 번호 :    "+_prodNum);
-           console.log("옵션 번호       :"+_optionNum);
-           console.log("재고        :"+_quantity);
-           console.log("사이즈          :"+_prodSize);
-           console.log("컬러       :"+_color);
-           console.log("상태     :"+_prodStatus);
-                 
+ 
+          
            
             $.ajax({
                type : 'get',
                url : 'updateOption.do',
                data : {
-               	result : _result,
                	optionNum : _optionNum,
                	prodNum : _prodNum,
                	quantity : _quantity,
-               	prodSize : _prodSize,
-               	color : _color,
-               	prodStatus : _prodStatus,
-               	value : _value
+               	prodSize : _prodSize
+
                	
                },
                success : function(data) {
@@ -160,7 +133,7 @@ $(document).ready(function() {
 		}
 	});
    
-   $('#foo-table tbody').on( 'click', 'tr', function () {
+     $('#foo-table tbody').on( 'click', 'tr', function () {
 	    if ( $(this).hasClass('selected') ) {
 	        $(this).removeClass('selected');
 	    }
@@ -168,16 +141,12 @@ $(document).ready(function() {
 	        table.$('tr.selected').removeClass('selected');
 	        $(this).addClass('selected');
 	    }
-	});
+	}); 
 
    
 });
 
 		
-
-
-
-
 	// 데이터테블 함수 끝----------------------------------------------------------------
 
 	$(function insertProdMsg() { // 상품등록알림창
@@ -189,6 +158,59 @@ $(document).ready(function() {
 
 
 
+
+	//상품 상태 수정
+	function prodStatus1(value, optionNum){
+		var _result = 'prodStatus';
+		var _optionNum = optionNum;
+		var _prodStatus = value;
+	$.ajax({
+        type : 'get',
+        url : 'updateDateProdOption.do',
+        data : {
+        	result : _result,
+        	optionNum : _optionNum,
+        	prodStatus : _prodStatus
+        },
+        success : function(data) {
+        	if ("ok"== (data)) {
+        		console.log("수정완료");
+        		//window.location.reload(true);
+				} else {
+					console.log("수정 실패");
+				};
+       	 }
+     })   
+	
+	};
+	
+	//상품 색상 수정
+	function prodColor1(value, optionNum){
+		var _result = 'color';
+		var _optionNum = optionNum;
+		var _color = value;
+	$.ajax({
+        type : 'get',
+        url : 'updateDateProdOption.do',
+        data : {
+        	result : _result,
+        	optionNum : _optionNum,
+        	color : _color
+        },
+        success : function(data) {
+        	if ("ok"== (data)) {
+        		console.log("수정완료");
+        		//window.location.reload(true);
+				} else {
+					console.log("수정 실패");
+				};
+       	 }
+     })   
+	
+	};
+	
+	
+	
 </script>
 
 
@@ -252,7 +274,7 @@ $(document).ready(function() {
 						<div class="col-sm-6">
 							<div id="example1_filter" class="dataTables_filter">
 								<div>
-									<a href="e_p002_addProdForm.jsp"><button class="btn btn-primary btn-xs">상품 등록</button></a>
+									<a href="e_p002_addProdForm.jsp"><button class="btn btn-danger btn-xs">상품 등록</button></a>
 								</div>
 							</div>
 						</div>
@@ -288,12 +310,33 @@ $(document).ready(function() {
 					                  <td>${prod.priceString}</td>
 					                  <td>${prod.quantity}</td>
 					                  <td>${prod.prodsize}</td>
-					                  <td>${prod.color}</td>
+									  <td>
+					                   <select  id="prodStatus1" class="basic_btn btn btn-default" onchange="prodColor1(this.value,${prod.optionNum})">
+											<option value="white" ${prod.color == 'white' ? 'selected="selected"' : ''}>white</option>
+											<option value="black" ${prod.color == 'black' ? 'selected="selected"' : ''}>black</option>
+											<option value="red" ${prod.color == 'red' ? 'selected="selected"' : ''}>red</option>
+											<option value="blue" ${prod.color == 'blue' ? 'selected="selected"' : ''}>blue</option>
+											<option value="ogrange" ${prod.color == 'ogrange' ? 'selected="selected"' : ''}>ogrange</option>
+											<option value="yellow" ${prod.color == 'yellow' ? 'selected="selected"' : ''}>yellow</option>
+											<option value="green" ${prod.color == 'green' ? 'selected="selected"' : ''}>green</option>
+											<option value="violet" ${prod.color == 'violet' ? 'selected="selected"' : ''}>violet</option>
+											<option value="pink" ${prod.color == 'pink' ? 'selected="selected"' : ''}>pink</option>
+											<option value="navy" ${prod.color == 'navy' ? 'selected="selected"' : ''}>navy</option>
+											<option value="gray" ${prod.color == 'gray' ? 'selected="selected"' : ''}>gray</option>
+											<option value="etc" ${prod.color == 'etc' ? 'selected="selected"' : ''}>etc</option>
+										</select>
+										</td>
 					                  <td>${prod.typeString}</td>
 					                  <td>${prod.prodcategorynumString}</td>
-					                  <td>${prod.prodstatusString}</td>
+					                 <td>
+					                 	<select  id="prodStatus1" class="basic_btn btn btn-default" onchange="prodStatus1(this.value,${prod.optionNum})">
+											<option value="1" ${prod.prodstatusString == '판매중' ? 'selected="selected"' : ''}>판매중</option>
+											<option value="2"${prod.prodstatusString == '품절' ? 'selected="selected"' : ''}>품절</option>
+										</select>
+									</td>
+									
 					                  <td>${prod.createdAtString}</td>
-					                  <td><a href="upDateUserList.do?userNum=${user.userNum}"><button class="btn btn-primary btn-xs">상세보기</button></a></td>
+					                  <td><button class="btn btn-primary btn-xs" id ="view" onclick="location.href='viewProdList.do?optionNum=${prod.optionNum}&prodNum=${prod.prodNum}'">상세보기</button></td> 		
 					                </tr>
 					                 </c:forEach>
 					                </tbody>
@@ -312,8 +355,6 @@ $(document).ready(function() {
 <!-- ./wrapper -->
 <!-- REQUIRED JS SCRIPTS -->
 <%@ include file="../include/plugin_js.jsp"%>
-
-
 
 </body>
 </html>

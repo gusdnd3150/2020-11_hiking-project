@@ -27,22 +27,18 @@ public class E_p001DAOImpl implements E_p001DAO{
 		return userList;
 	}
 
-	@Override // 회원 삭제
-	public int deleteUser(int userNum) throws Exception {
-		return sqlSession.delete("admin.mapper.e_p001.deleteUser",userNum);
+	//회원 정보 수정 (상태)
+	@Override
+	public int upDateUser(Map map) throws Exception {
+		return sqlSession.update("admin.mapper.e_p001.upDateUser", map);
 	}
 
-	@Override //회원 정보 수정전 list 출력
-	public List selectUpdateUserList(String userNum) throws Exception {
-		List upDateUserList=sqlSession.selectList("admin.mapper.e_p001.selectUpdateUserList",userNum);
-		return upDateUserList;
+	//상세보기
+	@Override
+	public List userView(int userNum) throws Exception {
+		List list = sqlSession.selectList("admin.mapper.e_p001.usetView", userNum);
+		return list;
 	}
 
-	@Override //회원 정보 수정
-	public int upDaet(E_p001VO e_p001VO) throws Exception {
-		int result = 0;
-		result=sqlSession.update("admin.mapper.e_p001.updateUser", e_p001VO);
-		return result;
-	}
 
 }

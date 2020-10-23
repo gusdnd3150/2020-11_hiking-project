@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+      PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="admin.mapper.e_p005">
 	<resultMap id="e_p005Result05" type="e_p005VO">
@@ -18,26 +18,25 @@
 
 	<!--기준일조회 -->
 	<select id="searchPayList" resultMap="e_p005Result05"
-			parameterType="java.util.Map">
-   <![CDATA[
-   select to_char(p.CREATEDAT,'YYYY-MM-DD')AS createdateString, o.ordernum, o.usernum,
-   to_char(DECODE(p.type,1,o.price+o.charge,0),'999,999,999,999,999')as pay1,
-   to_char(DECODE(p.type,2,o.price+o.charge,0),'999,999,999,999,999')as pay2
-   FROM orders o INNER JOIN payment p
-   ON o.ordernum = p.ordernum
-   WHERE p.CREATEDAT BETWEEN TO_DATE(#{startDate},'YYYY-MM-DD') AND TO_DATE(#{endDate},'YYYY-MM-DD')
-   ORDER BY p.CREATEDAT ASC
-   ]]>
-   </select>
+		parameterType="java.util.Map">
+	<![CDATA[
+	select to_char(p.CREATEDAT,'YYYY-MM-DD')AS createdateString, o.ordernum, o.usernum, 
+	to_char(DECODE(p.type,'card',o.price+o.charge,0),'999,999,999,999,999')as pay1,
+	to_char(DECODE(p.type,'trans',o.price+o.charge,0),'999,999,999,999,999')as pay2
+	FROM orders o INNER JOIN payment p
+	ON o.ordernum = p.ordernum
+    ORDER BY p.CREATEDAT ASC
+	]]>
+	</select>
 
-	<!-- 합계 매출 -->
+<!-- 합계 매출 -->
 	<select id="sumPrice" resultType="string"
-			parameterType="java.util.Map">
-		<![CDATA[
-   select to_char(sum(o.price + o.charge),'999,999,999,999,999')as sumPrice
-   FROM orders o INNER JOIN payment p
-   ON o.ordernum = p.ordernum
-   ]]>
+		parameterType="java.util.Map">
+	<![CDATA[
+	select to_char(sum(o.price + o.charge),'999,999,999,999,999')as sumPrice
+	FROM orders o INNER JOIN payment p
+	ON o.ordernum = p.ordernum
+	]]>
 		<choose>
 			<when test="key_word=='all'"> <!-- 전체 조회 -->
 
@@ -51,94 +50,94 @@
 				WHERE p.CREATEDAT BETWEEN TO_DATE(#{startDate},'YYYY-MM-DD') AND
 				TO_DATE(#{endDate},'YYYY-MM-DD')
 			</when>
-			<when test="key_word=='null'  "> <!-- 지정일자 조회-->
+				<when test="key_word=='null'  "> <!-- 지정일자 조회-->
 				WHERE p.CREATEDAT BETWEEN TO_DATE(#{startDate},'YYYY-MM-DD') AND
 				TO_DATE(#{endDate},'YYYY-MM-DD')
 			</when>
-
+			
 		</choose>
 	</select>
 
-	<!-- 평균 매출 -->
+<!-- 평균 매출 -->
 	<select id="avgPrice" resultType="string"
-			parameterType="java.util.Map">
-		<![CDATA[
-   SELECT  to_char(sum(a.sumPrice)/ COUNT(*),'999,999,999,999,999')as avgPrice
-   ]]>
+		parameterType="java.util.Map">
+	<![CDATA[
+	SELECT  to_char(sum(a.sumPrice)/ COUNT(*),'999,999,999,999,999')as avgPrice
+	]]>
 		<choose>
 			<when test="key_word=='all'"> <!-- 전체 조회 -->
-				<![CDATA[
-              FROM ( SELECT TO_CHAR(p.createdat, 'YYYY-MM-DD') AS hiredate , sum(o.price + o.charge)sumPrice
-                  FROM orders o INNER JOIN payment p
-                on o.ordernum=p.ordernum
-               WHERE p.createdat BETWEEN TO_DATE(( SELECT  min(to_char(createdat, 'YYYY-MM-DD')) FROM payment), 'YYYY-MM-DD')
-                                   AND TO_DATE((SELECT  max(to_char(createdat, 'YYYY-MM-DD')) FROM payment), 'YYYY-MM-DD')
-               GROUP BY TO_CHAR(p.createdat, 'YYYY-MM-DD')
-               ) a
-                , ( SELECT TO_DATE(( SELECT  min(to_char(createdat, 'YYYY-MM-DD')) FROM payment),'YYYY-MM-DD') + LEVEL - 1 AS dt
-                    FROM dual
-               CONNECT BY LEVEL <= (TO_DATE((SELECT  max(to_char(createdat, 'YYYY-MM-DD')) FROM payment),'YYYY-MM-DD')
-                                    - TO_DATE(( SELECT  min(to_char(createdat, 'YYYY-MM-DD')) FROM payment),'YYYY-MM-DD') + 1)
-               ) b
-               WHERE b.dt = a.hiredate(+)
-               ORDER BY b.dt
-         ]]>
+    			<![CDATA[
+  				FROM ( SELECT TO_CHAR(p.createdat, 'YYYY-MM-DD') AS hiredate , sum(o.price + o.charge)sumPrice												
+         			FROM orders o INNER JOIN payment p 
+					 on o.ordernum=p.ordernum
+					WHERE p.createdat BETWEEN TO_DATE(( SELECT  min(to_char(createdat, 'YYYY-MM-DD')) FROM payment), 'YYYY-MM-DD')
+					                    AND TO_DATE((SELECT  max(to_char(createdat, 'YYYY-MM-DD')) FROM payment), 'YYYY-MM-DD') 
+					GROUP BY TO_CHAR(p.createdat, 'YYYY-MM-DD')
+					) a
+					 , ( SELECT TO_DATE(( SELECT  min(to_char(createdat, 'YYYY-MM-DD')) FROM payment),'YYYY-MM-DD') + LEVEL - 1 AS dt
+					     FROM dual 
+					CONNECT BY LEVEL <= (TO_DATE((SELECT  max(to_char(createdat, 'YYYY-MM-DD')) FROM payment),'YYYY-MM-DD') 
+					                     - TO_DATE(( SELECT  min(to_char(createdat, 'YYYY-MM-DD')) FROM payment),'YYYY-MM-DD') + 1)
+					) b
+					WHERE b.dt = a.hiredate(+) 
+					ORDER BY b.dt
+			]]>
 			</when>
 			<when test="key_word== 'toDay'"> <!-- 당일 조회 -->
-				<![CDATA[
-              FROM ( SELECT TO_CHAR(p.createdat, 'YYYY-MM-DD') AS hiredate
-                       , sum(o.price + o.charge)sumPrice
-                    FROM orders o INNER JOIN payment p
-                    on o.ordernum=p.ordernum
-                   WHERE p.createdat >= TO_DATE(#{startDate},'YYYY-MM-DD')
-                   GROUP BY TO_CHAR(p.createdat, 'YYYY-MM-DD')
-                 ) a
-               , ( SELECT TO_DATE(#{startDate},'YYYY-MM-DD') + LEVEL - 1 AS dt
-                     FROM dual
-                  CONNECT BY LEVEL <= (TO_DATE(#{startDate},'YYYY-MM-DD')
-                                     - TO_DATE(#{startDate},'YYYY-MM-DD') + 1)
-                 ) b
-            WHERE b.dt = a.hiredate(+)
-            ORDER BY b.dt
-            ]]>
+    		<![CDATA[
+    			 FROM ( SELECT TO_CHAR(p.createdat, 'YYYY-MM-DD') AS hiredate
+			              , sum(o.price + o.charge)sumPrice
+			           FROM orders o INNER JOIN payment p 
+			           on o.ordernum=p.ordernum
+			          WHERE p.createdat >= TO_DATE(#{startDate},'YYYY-MM-DD')
+			          GROUP BY TO_CHAR(p.createdat, 'YYYY-MM-DD')
+			        ) a
+			      , ( SELECT TO_DATE(#{startDate},'YYYY-MM-DD') + LEVEL - 1 AS dt
+			            FROM dual 
+			         CONNECT BY LEVEL <= (TO_DATE(#{startDate},'YYYY-MM-DD') 
+			                            - TO_DATE(#{startDate},'YYYY-MM-DD') + 1)
+			        ) b
+				WHERE b.dt = a.hiredate(+) 
+				ORDER BY b.dt
+				]]>
 			</when>
 			<when test="key_word== 'week_month'"> <!-- 1주, 2주, 1개월 조회 -->
-				<![CDATA[
-              FROM ( SELECT TO_CHAR(p.createdat, 'YYYY-MM-DD') AS hiredate
-                       , sum(o.price + o.charge)sumPrice
-                    FROM orders o INNER JOIN payment p
-                    on o.ordernum=p.ordernum
-                   WHERE p.createdat BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD')
-                                      AND TO_DATE(#{endDate}, 'YYYY-MM-DD')
-                   GROUP BY TO_CHAR(p.createdat, 'YYYY-MM-DD')
-                 ) a
-               , ( SELECT TO_DATE(#{startDate},'YYYY-MM-DD') + LEVEL - 1 AS dt
-                     FROM dual
-                  CONNECT BY LEVEL <= (TO_DATE(#{endDate},'YYYY-MM-DD')
-                                     - TO_DATE(#{startDate},'YYYY-MM-DD') + 1)
-                 ) b
-            WHERE b.dt = a.hiredate(+)
-            ORDER BY b.dt
-         ]]>
+    			<![CDATA[
+    			 FROM ( SELECT TO_CHAR(p.createdat, 'YYYY-MM-DD') AS hiredate
+			              , sum(o.price + o.charge)sumPrice
+			           FROM orders o INNER JOIN payment p 
+			           on o.ordernum=p.ordernum
+			          WHERE p.createdat BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD')
+			                             AND TO_DATE(#{endDate}, 'YYYY-MM-DD') 
+			          GROUP BY TO_CHAR(p.createdat, 'YYYY-MM-DD')
+			        ) a
+			      , ( SELECT TO_DATE(#{startDate},'YYYY-MM-DD') + LEVEL - 1 AS dt
+			            FROM dual 
+			         CONNECT BY LEVEL <= (TO_DATE(#{endDate},'YYYY-MM-DD') 
+			                            - TO_DATE(#{startDate},'YYYY-MM-DD') + 1)
+			        ) b
+				WHERE b.dt = a.hiredate(+) 
+				ORDER BY b.dt
+			]]>
 			</when>
 			<when test="key_word==null"> <!-- 지정 일자 조회 -->
-				<![CDATA[
-              FROM ( SELECT TO_CHAR(p.createdat, 'YYYY-MM-DD') AS hiredate
-                       , sum(o.price + o.charge)sumPrice
-                    FROM orders o INNER JOIN payment p
-                    on o.ordernum=p.ordernum
-                   WHERE p.createdat BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD')
-                                      AND TO_DATE(#{endDate}, 'YYYY-MM-DD')
-                   GROUP BY TO_CHAR(p.createdat, 'YYYY-MM-DD')
-                 ) a
-               , ( SELECT TO_DATE(#{startDate},'YYYY-MM-DD') + LEVEL - 1 AS dt
-                     FROM dual
-                  CONNECT BY LEVEL <= (TO_DATE(#{endDate},'YYYY-MM-DD')
-                                     - TO_DATE(#{startDate},'YYYY-MM-DD') + 1)
-                 ) b
-            WHERE b.dt = a.hiredate(+)
-            ORDER BY b.dt
-         ]]>
+    			<![CDATA[
+    			 FROM ( SELECT TO_CHAR(p.createdat, 'YYYY-MM-DD') AS hiredate
+			              , sum(o.price + o.charge)sumPrice
+			           FROM orders o INNER JOIN payment p 
+			           on o.ordernum=p.ordernum
+			          WHERE p.createdat BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD')
+			                             AND TO_DATE(#{endDate}, 'YYYY-MM-DD') 
+			          GROUP BY TO_CHAR(p.createdat, 'YYYY-MM-DD')
+			        ) a
+			      , ( SELECT TO_DATE(#{startDate},'YYYY-MM-DD') + LEVEL - 1 AS dt
+			            FROM dual 
+			         CONNECT BY LEVEL <= (TO_DATE(#{endDate},'YYYY-MM-DD') 
+			                            - TO_DATE(#{startDate},'YYYY-MM-DD') + 1)
+			        ) b
+				WHERE b.dt = a.hiredate(+) 
+				ORDER BY b.dt
+			]]>
 			</when>
 		</choose>
 	</select>
@@ -147,14 +146,14 @@
 
 	<!-- 셀렉트 페이리스트 서치 -->
 	<select id="selectSearch" resultMap="e_p005Result05"
-			parameterType="java.util.Map">
-		<![CDATA[
-   select to_char(p.CREATEDAT,'YYYY-MM-DD')AS createdateString, o.ordernum, o.usernum,
-   to_char(DECODE(p.type,1,o.price+o.charge,0),'999,999,999,999,999')as pay1,
-   to_char(DECODE(p.type,2,o.price+o.charge,0),'999,999,999,999,999')as pay2
-   FROM orders o INNER JOIN payment p
-   ON o.ordernum = p.ordernum
-   ]]>
+		parameterType="java.util.Map">
+	<![CDATA[
+	select to_char(p.CREATEDAT,'YYYY-MM-DD')AS createdateString, o.ordernum, o.usernum, 
+	to_char(DECODE(p.type,'card',o.price+o.charge,0),'999,999,999,999,999')as pay1,
+	to_char(DECODE(p.type,'trans',o.price+o.charge,0),'999,999,999,999,999')as pay2
+	FROM orders o INNER JOIN payment p
+	ON o.ordernum = p.ordernum
+	]]>
 		<choose>
 			<when test="key_word== 'all'"> <!-- 전체 조회 -->
 				ORDER BY p.CREATEDAT ASC

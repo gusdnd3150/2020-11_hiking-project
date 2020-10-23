@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+      PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="admin.mapper.e_p004">
+	<resultMap id="e_p004Result04" type="e_p004VO">
+		<result property="orderNum" column="orderNum"/> <!--주문번호-->
+		<result property="orderDatString" column="orderDatString"/> <!--주문시간 String-->
+		<result property="orderStatus" column="orderStatus"/> <!--주문상태 (1.결제전   2.결제완료  3.결제취소)-->
+		<result property="orderStatusString" column="orderStatusString"/> <!--주문상태 (1.결제전   2.결제완료  3.결제취소) 스트링 변환-->
+		<result property="deliverystatus" column="deliverystatus"/> <!--배송상태(100.입금대기  200.입금완료   300.배송준비  400.배송완료)-->
+		<result property="prodName" column="prodName"/> <!--상품명-->
+		<result property="prodSize" column="prodSize"/> <!--상품 사이즈-->
+		<result property="color" column="color"/> <!--상품 컬러-->
+		<result property="quantity" column="quantity"/> <!--주문수량-->
+		<result property="content" column="content"/> <!--주문상품 이미지-->
+		<result property="custName" column="custName"/> <!--주문자이름-->
+		<result property="custPhone" column="custPhone"/> <!--주문자 전화번호-->
+		<result property="zoneCode" column="zoneCode"/> <!--우편번호-->
+		<result property="address" column="address"/> <!--주소-->
+		<result property="address2" column="address2"/> <!--상세주소-->
+		
+	</resultMap>
+
+
+	<!--조건 검색  -->
+	<select id="selectOrder" resultMap="e_p004Result04" parameterType="java.util.Map">
+		 <![CDATA[
+        SELECT 
+			    o.orderNum, 
+			    to_char(o.ordereDat,'YYYY-MM-DD HH:MM.SS')AS orderDatString,
+			    DECODE(o.orderStatus, 1,'결제전', 2,'결제완료',3,'결제취소')AS orderStatusString,
+			    o.deliverystatus,
+			    o.prodName, 
+			    po.prodSize, 
+			    po.color, 
+			    o.quantity,
+			    pt.content,
+			    d.custname,
+			    d.custphone,
+			    d.zonecode,
+			    d.address,
+			    d.address2
+		FROM orders o 
+			INNER JOIN prodoption po
+				ON o.prodnum = po.prodnum
+			INNER JOIN prodphoto pt 
+				ON pt.prodnum = po.prodnum
+			INNER JOIN users u
+				ON u.usernum = o.usernum
+			INNER JOIN delivery d
+				ON d.usernum = u.usernum
+		WHERE pt.pphotonum = 1
+			AND o.optionnum = po.optionnum
+			AND d.delibasic = o.deliverytype
+      	]]>
+    	<choose>
+    		<when test="searchOption=='all'"> <!-- 전체 조회  -->
+    		
+    		</when>
+    		<when test="searchOption=='orderNum'"> <!-- 주문 번호 조회  -->
+    			AND o.ordernum = #{key_word}
+    		</when>
+    		<when test="searchOption=='userName'"> <!-- 고객이름  -->
+    			AND  d.custname like '%'||#{key_word}||'%'
+    		</when>
+    		<when test="searchOption=='prodName'"> <!-- 상품명  -->
+    			AND  o.prodName like '%'||#{key_word}||'%'
+    		</when>
+    		<when test="searchOption=='address'"> <!-- 주소  -->
+    			AND  d.address like '%'||#{key_word}||'%'
+    		</when>
+    		<when test="searchOption=='zoneCode'"> <!-- 우편번호 -->
+    			AND  d.zonecode like '%'||#{key_word}||'%'
+    		</when>
+    		<when test="searchOption=='address2'"> <!-- 상세주소  -->
+    			AND  d.address2 like '%'||#{key_word}||'%'
+    		</when>
+    	
+    	</choose>
+	</select>
+	
+	<!-- 배송 상태 수정 -->
+	 <update id="updateDelivery" parameterType="java.util.Map">
+	  <![CDATA[
+		UPDATE orders
+			SET deliverystatus = #{deliverystatus}
+		WHERE ordernum = #{orderNum}
+		 ]]>
+	</update>
+	
+	<!--셀렉트 일자 조회 (전체, 당일, 1주, 2주, 1달) -->
+	<select id="selectOrderDay" resultMap="e_p004Result04" parameterType="java.util.Map">
+		 <![CDATA[
+        SELECT 
+			    o.orderNum, 
+			    to_char(o.ordereDat,'YYYY-MM-DD HH:MM.SS')AS orderDatString,
+			    DECODE(o.orderStatus, 1,'결제전', 2,'결제완료',3,'결제취소')AS orderStatusString,
+			    o.deliverystatus,
+			    o.prodName, 
+			    po.prodSize, 
+			    po.color, 
+			    o.quantity,
+			    pt.content,
+			    d.custname,
+			    d.custphone,
+			    d.zonecode,
+			    d.address,
+			    d.address2
+		FROM orders o 
+			INNER JOIN prodoption po
+				ON o.prodnum = po.prodnum
+			INNER JOIN prodphoto pt 
+				ON pt.prodnum = po.prodnum
+			INNER JOIN users u
+				ON u.usernum = o.usernum
+			INNER JOIN delivery d
+				ON d.usernum = u.usernum
+		WHERE pt.pphotonum = 1
+			AND o.optionnum = po.optionnum
+			AND d.delibasic = o.deliverytype
+      	]]>
+    	<choose>
+			<when test="key_word== 'all'"> <!-- 전체 조회 -->
+				ORDER BY o.ordereDat DESC
+			</when>
+			<when test="key_word=='toDay'"> <!-- 당일 조회 -->
+				AND o.ordereDat >= TO_DATE(#{startDate},'YYYY-MM-DD')
+				ORDER BY o.ordereDat DESC
+			</when>
+			<when test="key_word=='week_month'"> <!-- 1주, 2주, 1개월 조회 -->
+				AND o.ordereDat BETWEEN TO_DATE(#{startDate},'YYYY-MM-DD') 
+				AND TO_DATE(#{endDate},'YYYY-MM-DD')
+				ORDER BY o.ordereDat DESC
+			</when>
+		</choose>
+	</select>
+	
+		<!--지정일자 조회 (ex 2020-02-16 ~ 2020-10-11) -->
+	<select id="searchOrderDay" resultMap="e_p004Result04" parameterType="java.util.Map">
+		 <![CDATA[
+        SELECT 
+			    o.orderNum, 
+			    to_char(o.ordereDat,'YYYY-MM-DD HH:MM.SS')AS orderDatString,
+			    DECODE(o.orderStatus, 1,'결제전', 2,'결제완료',3,'결제취소')AS orderStatusString,
+			    o.deliverystatus,
+			    o.prodName, 
+			    po.prodSize, 
+			    po.color, 
+			    o.quantity,
+			    pt.content,
+			    d.custname,
+			    d.custphone,
+			    d.zonecode,
+			    d.address,
+			    d.address2
+		FROM orders o 
+			INNER JOIN prodoption po
+				ON o.prodnum = po.prodnum
+			INNER JOIN prodphoto pt 
+				ON pt.prodnum = po.prodnum
+			INNER JOIN users u
+				ON u.usernum = o.usernum
+			INNER JOIN delivery d
+				ON d.usernum = u.usernum
+		WHERE pt.pphotonum = 1
+			AND o.optionnum = po.optionnum
+			AND d.delibasic = o.deliverytype
+			AND o.ordereDat BETWEEN TO_DATE(#{startDate},'YYYY-MM-DD') AND TO_DATE(#{endDate},'YYYY-MM-DD')
+			ORDER BY o.ordereDat ASC
+      	]]>
+    	
+	</select>
+	
+		<!--주문상태별 조회 -->
+	<select id="selectOrderStatus" resultMap="e_p004Result04" parameterType="int">
+		 <![CDATA[
+        SELECT 
+			    o.orderNum, 
+			    to_char(o.ordereDat,'YYYY-MM-DD HH:MM.SS')AS orderDatString,
+			    DECODE(o.orderStatus, 1,'결제전', 2,'결제완료',3,'결제취소')AS orderStatusString,
+			    o.deliverystatus,
+			    o.prodName, 
+			    po.prodSize, 
+			    po.color, 
+			    o.quantity,
+			    pt.content,
+			    d.custname,
+			    d.custphone,
+			    d.zonecode,
+			    d.address,
+			    d.address2
+		FROM orders o 
+			INNER JOIN prodoption po
+				ON o.prodnum = po.prodnum
+			INNER JOIN prodphoto pt 
+				ON pt.prodnum = po.prodnum
+			INNER JOIN users u
+				ON u.usernum = o.usernum
+			INNER JOIN delivery d
+				ON d.usernum = u.usernum
+		WHERE pt.pphotonum = 1
+			AND o.optionnum = po.optionnum
+			AND d.delibasic = o.deliverytype
+			AND o.orderStatus = #{orderStatus}
+      	]]>
+    	
+	</select>
+	
+	
+		<!--배송상태별 조회 -->
+	<select id="selectDeliveryStatus" resultMap="e_p004Result04" parameterType="int">
+		 <![CDATA[
+        SELECT 
+			    o.orderNum, 
+			    to_char(o.ordereDat,'YYYY-MM-DD HH:MM.SS')AS orderDatString,
+			    DECODE(o.orderStatus, 1,'결제전', 2,'결제완료',3,'결제취소')AS orderStatusString,
+			    o.deliverystatus,
+			    o.prodName, 
+			    po.prodSize, 
+			    po.color, 
+			    o.quantity,
+			    pt.content,
+			    d.custname,
+			    d.custphone,
+			    d.zonecode,
+			    d.address,
+			    d.address2
+		FROM orders o 
+			INNER JOIN prodoption po
+				ON o.prodnum = po.prodnum
+			INNER JOIN prodphoto pt 
+				ON pt.prodnum = po.prodnum
+			INNER JOIN users u
+				ON u.usernum = o.usernum
+			INNER JOIN delivery d
+				ON d.usernum = u.usernum
+		WHERE pt.pphotonum = 1
+			AND o.optionnum = po.optionnum
+			AND d.delibasic = o.deliverytype
+			AND o.deliverystatus = #{deliverystatus}
+      	]]>
+    	
+	</select>
+	     
+	
+	
+</mapper>

@@ -39,11 +39,10 @@
 	<!--조건 검색  -->
 	<select id="selectUser" resultMap="e_p003Result03" parameterType="java.util.Map">
 		 <![CDATA[
-        select csPostNum,csBoardNum,userNum,title,content,
+        select csPostNum,userNum,title,content,
         		DECODE(status, 1, '대기', 2, '완료')as statusString, 
         		DECODE(csPostType, 100, '공지', 200, '문의', 300, '신고')as csPostTypeString, 
-        		to_char(createdAt,'YYYY-MM-DD HH24:MI:SS')as createdAtString, 
-        		to_char(updatedAt,'YYYY-MM-DD HH24:MI:SS')as updatedAtString 
+        		to_char(createdAt,'YYYY-MM-DD HH24:MI:SS')as createdAtString 
 		from   CSPost
       	]]>
     	<choose>

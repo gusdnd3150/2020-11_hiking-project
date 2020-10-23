@@ -14,7 +14,6 @@
 		<result property="prodstatusString" column="prodstatusString"/> <!--상품 상패 스르링(1-판매중,2-품절)--> 
 		<result property="createdAtString" column="createdAtString"/> <!--등록일 스트링--> 
 		<result property="quantity" column="quantity"/> <!--상품 재고--> 
-		
 	</resultMap>
 
 	<!-- 상품등록 -->
@@ -164,9 +163,7 @@
 			VALUES ( #{name}, #{categoryNum}, prodCategory_seq.nextval)
 			]]>
     		</when>
-    		
     	</choose>
-		
 	</insert>  
 	
 	<!-- 상품 사진 등록 -->
@@ -213,7 +210,7 @@
 		select p.prodNum,
 				po.optionNum,
 		        p.name,
-		        to_char(p.price,'999,999,999,999,999')as priceString,
+		       	TRIM(to_char(p.price,'999,999,999,999,999'))as priceString,
 		        DECODE(type,1,'신상품',2,'중고품')as typeString,
 		        po.quantity,
 		        po.prodsize,
@@ -312,69 +309,186 @@
     	</choose>
 	</select>
 	
-		
-	<!-- 상품 삭제-->
-	<delete id="deleteProd"  parameterType="int">
-	<![CDATA[
-	    delete from  products
-	   where prodnum = #{prodNum}
-	]]>      
-  </delete>
-  
-  	<!-- 상품 옵션 삭제-->
-	<delete id="deleteOtion"  parameterType="int">
-	<![CDATA[
-	    delete from  prodoption
-	   where prodnum = #{prodNum}
-	]]>      
-  </delete>
-  
-    <!-- 상품 이미지 삭제-->
-	<delete id="deletePhoto"  parameterType="int">
-	<![CDATA[
-	    delete from  prodphoto
-	   where prodnum = #{prodNum}
-	]]>      
-  </delete>
   
   <!-- 상품 상세페이지 -->
    <select id="viewProdList" resultMap="e_p002Result02" parameterType="int">
 		 <![CDATA[
-      select p.prodNum, p.name,  p.quantity,
-          p.content,
-          to_char(p.price,'999,999,999,999,999')as priceString,
-          DECODE(p.type,1,'신상품',2,'중고품')as typeString,
-          DECODE(p.pCategoryNum,1,'양말',2,'가방',3,'의류',4,'스틱',5,'신발',6,'장갑',7,'보호대')as pCategoryNumStirng, 
-          to_char(p.createdAt,'YYYY-DD-MM')as createdAtString,
-          to_char(p.updatedat,'YYYY-DD-MM')as updatedatString
-      FROM products p 
-      WHERE p.prodnum = #{prodNum}
+     select 
+		p.name,
+		TRIM(to_char(p.price,'999,999,999,999,999'))as priceString,
+		po.quantity,
+		po.prodsize,
+		po.color,
+		p.type,
+		po.prodStatus,
+		p.content,
+		DECODE(p.prodcategorynum,15,'반팔', 16,'긴팔',17,'후드',18,'반바지',19,'긴바지',20,'패딩',21,'야상',22,'바람막이', 23,'비니'
+		        ,24,'캡모자',25,'정글모',26,'썬캡',27,'긴양말',28,'반양말',29,'발가락양말',30,'백팩',31,'크로스백',32,'등산화',11,'스틱',12,'장갑'
+		        ,13,'아이젠',14,'보호대')as prodcategorynumString
+	
+	FROM products p INNER JOIN prodoption po
+	ON p.prodnum = po.prodnum
+	WHERE po.optionnum=#{optionNum}
       	]]>
 	</select>
 	
-	<!-- 상세페이지 이미지 -->
-	<select id="viewPhotoList" resultMap="e_p002Result02" parameterType="int">
+		 <!-- 상품 상세페이지 메인이미지 리스트 -->
+   <select id="viewPhotoMainList" resultMap="e_p002Result02" parameterType="int">
 		 <![CDATA[
-		SELECT pt.content as pcontent
-		FROM prodphoto pt
+		SELECT content as pcontent,
+		pphotonum
+		FROM prodphoto
 		WHERE prodnum=#{prodNum}
+		AND content is NOT NULL
       	]]>
 	</select>
 	
-	<!-- 상품 옵션 수정 -->
+		 <!-- 상품 상세페이지  디테일 이미지-->
+   <select id="viewPhotoDetail" resultMap="e_p002Result02" parameterType="int">
+		 <![CDATA[
+		SELECT 
+		CONTENTDETAIL as pcontentDetail,
+		pphotonum
+		FROM prodphoto 
+		WHERE prodnum=#{prodNum}
+		AND CONTENTDETAIL is NOT NULL
+      	]]>
+	</select>
+	
+	 <!-- 상품 상세페이지  상단 고정값-->
+   <select id="viewList" resultMap="e_p002Result02" parameterType="int">
+		 <![CDATA[
+     select 
+		p.prodnum, 
+		po.optionnum, 
+		to_char(p.createdAt,'YYYY-DD-MM')as createdAtString,
+		to_char(p.updatedat,'YYYY-DD-MM')as updatedatString
+	FROM products p INNER JOIN prodoption po
+	ON p.prodnum = po.prodnum
+	WHERE po.optionnum=#{optionNum}
+      	]]>
+	</select>
+	
+	<!-- 상품 옵션 수정 (사이즈,  재고 수정) -->
 	 <update id="updateOption" parameterType="java.util.Map">
 	  <![CDATA[
 		UPDATE prodoption
 			SET 
 		        quantity = #{quantity},
-		        prodNum = #{prodNum},
 		        prodSize = #{prodSize},
-		        color = #{color},
-		        prodStatus = #{prodStatus},
 		        MODDATE = CURRENT_TIMESTAMP
 		WHERE OPTIONNUM = #{optionNum}
 		 ]]>
 	
 	</update>
-  
+	
+	
+	<!-- 상품 옵션 수정 -->
+	 <update id="updateDateProdOption" parameterType="java.util.Map">
+		 <![CDATA[
+			UPDATE prodoption
+			SET 
+			]]>
+	<choose>
+    	<when test="result =='prodStatus'"> <!-- 상태 수정 --> 
+    	prodStatus = #{prodStatus},
+    	</when>
+    	<when test="result =='quantity'"> <!-- 재고 수정 --> 
+    	quantity = #{quantity},
+    	</when>
+    	<when test="result =='prodsize'"> <!-- 사이즈 수정 --> 
+    	prodsize = #{prodsize},
+    	</when>
+    	<when test="result =='color'"> <!-- 색상 수정 --> 
+    	color = #{color},
+    	</when>
+    </choose>
+    	MODDATE = CURRENT_TIMESTAMP  
+	  	WHERE OPTIONNUM = #{optionNum}
+	</update>
+	
+	
+	<!-- 상품 수정 -->
+	 <update id="updateDateProd" parameterType="java.util.Map">
+		 <![CDATA[
+			UPDATE products
+			SET 
+			]]>
+	<choose>
+    	<when test="result =='prodcategory'"> <!-- 상품 카테고리 수정--> 
+    	prodcategorynum = #{prodcategorynum},
+    	</when>
+    	<when test="result =='prodName'"> <!-- 상품 이름 수정--> 
+    	name = #{name},
+    	</when>
+    	<when test="result =='price'"> <!-- 상품 가격 수정--> 
+    	price = #{price},
+    	</when>
+    	<when test="result =='type'"> <!-- 상품 구분 수정--> 
+    	type = #{type},
+    	</when>
+    	<when test="result =='prodContent'"> <!-- 상품 구분 수정--> 
+    	content = #{content},
+    	</when>
+    </choose>
+    	UPDATEDAT=CURRENT_TIMESTAMP
+		WHERE prodnum=#{prodNum}
+	</update>
+	
+	
+	<!-- 상품 메인이지미 수정 -->
+	 <update id="upDateMainPhoto" parameterType="java.util.Map">
+		 <![CDATA[
+		UPDATE prodphoto
+		    set
+		        content = #{content},
+		        UPDATEDAT = CURRENT_TIMESTAMP
+		  	 WHERE prodnum = #{prodNum}
+   			 AND PPHOTONUM = #{pphotonum}
+			]]>
+	
+	</update>
+	
+	<!-- 상품 디테일이미지 수정 -->
+	 <update id="upDateDetailPhoto" parameterType="java.util.Map">
+		 <![CDATA[
+		UPDATE prodphoto
+		    set
+		        contentdetail = #{contentdetail},
+		        UPDATEDAT = CURRENT_TIMESTAMP
+		  	 WHERE prodnum = #{prodNum}
+   			 AND PPHOTONUM = #{pphotonum}
+			]]>
+	
+	</update>
+	
+	 <!-- 상품 메인 이지미 선택 삭제-->
+	<delete id="deleteImg"  parameterType="java.util.Map">
+	<![CDATA[
+	   DELETE prodphoto
+		WHERE prodnum = #{prodNum}
+		AND pphotonum = #{pphotonum}
+	]]>      
+  </delete>
+   <!-- 상품 이미지 추가 번호 추출-->
+   <select id="selectMaxNum"  resultType="_int" parameterType="int">
+		 <![CDATA[
+	   SELECT max(pphotonum)
+		FROM prodphoto
+		WHERE prodnum = #{prodNum}
+		]]> 
+	</select>
+	
+		<!-- 상품 메인 이미지 추가-->
+	<insert id="upDateAddMainImg" parameterType="map">
+        insert into prodphoto (prodNum, pPhotoNum, content, createdAt)
+        values (#{prodNum}, #{pPhotoNum},  #{content},  CURRENT_TIMESTAMP)
+    </insert>
+    
+    	<!-- 상품 디테일 이미지 추가-->
+	<insert id="upDateAddDetailImg" parameterType="map">
+        insert into prodphoto (prodNum, pPhotoNum, contentdetail, createdAt)
+        values (#{prodNum}, #{pPhotoNum},  #{contentdetail},  CURRENT_TIMESTAMP)
+    </insert>
+
 </mapper>

@@ -1,5 +1,6 @@
 package project.admin.e_p002.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,12 +18,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.google.gson.Gson;
 
 import project.admin.e_p002.service.E_p002Service;
-import project.admin.e_p002.vo.E_p002VO;
 
 
 @Controller
@@ -34,7 +34,7 @@ public class E_p002ControllerImpl implements E_p002Controller{
 	@Autowired
 	private E_p002Service e_p002Service;
 
-	//상품 등록 + 사진 등록
+	//상품 등록 + 사진 등록 + 카테고리 + 옵션
 	@Override
 	@RequestMapping(value = "/admin/insertProd.do", method = RequestMethod.POST)
 	public ModelAndView insertProd(@RequestParam Map map,  
@@ -45,7 +45,7 @@ public class E_p002ControllerImpl implements E_p002Controller{
 			@RequestParam(value = "prodSize[]", required = false)List<String> prodSize, HttpServletRequest request)
 			throws Exception {
 		
-		
+		//상품등록
 		e_p002Service.insertProd(map);
 		
 		//상품등록 카테고리
@@ -53,7 +53,6 @@ public class E_p002ControllerImpl implements E_p002Controller{
 		categoryMap.put("categoryNum", map.get("prodcategory3"));
 		categoryMap.put("name", map.get("name"));
 		e_p002Service.insertcategory(categoryMap);
-		
 		int index = (int) map.get("prodNum"); 
 		
 		//상품 메인,디테일 사진 등록
@@ -83,29 +82,13 @@ public class E_p002ControllerImpl implements E_p002Controller{
 		}
 		return mav;
 	}
-
-
-	//상품 조회
-//	@Override
-//	@ResponseBody
-//	@RequestMapping(value = "/admin/selectProd.do", method = RequestMethod.GET, produces = "application/text; charset=UTF-8" )
-//	public String selectProd(@RequestParam(value="searchOption") String searchOption, @RequestParam(defaultValue = " ") String key_word,  HttpServletRequest request, HttpServletResponse response) throws Exception {
-//	
-//		Map<String, String> search = new HashMap<String, String>();
-//		search.put("key_word",key_word);
-//		search.put("searchOption",searchOption);
-//		
-//		List<HashMap<String, String>> list = e_p002Service.selectProd(search);
-//	    String  serchList = new Gson().toJson(list);
-//	      
-//	    return serchList;
-//	}
 	
 	//상품조회
 	@Override
 	@RequestMapping(value = "/admin/selectProd.do", method = RequestMethod.GET )
 	public ModelAndView selectProd(@RequestParam(value="searchOption") String searchOption, @RequestParam(defaultValue = " ") String key_word, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
+		
 		Map<String, String> search = new HashMap<String, String>();
 		search.put("key_word",key_word);
 		search.put("searchOption",searchOption);
@@ -119,63 +102,35 @@ public class E_p002ControllerImpl implements E_p002Controller{
 	}
 
 
-	//삭제
-	@Override
-	@ResponseBody
-	@RequestMapping(value = "/admin/deleteProd.do", method = RequestMethod.GET)
-	public String deleteProd(@RequestParam(value="prodNum") int prodNum, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		int result = e_p002Service.deleteProd(prodNum);
-		if(result == 1) {
-			return "ok";
-		}
-		return "x";
-	}
-
 	//상세보기
 	@Override
 	@RequestMapping(value = "/admin/viewProdList.do", method = RequestMethod.GET)
-	public ModelAndView viewProdList(@RequestParam("prodNum")int prodNum, HttpServletRequest request, HttpServletResponse response)throws Exception {
+	public ModelAndView viewProdList(@RequestParam("optionNum")int optionNum,@RequestParam("prodNum") int prodNum, HttpServletRequest request, HttpServletResponse response)throws Exception {
 		
-		List viewDetaList = e_p002Service.viewProdList(prodNum);
-		List<E_p002VO> viewPhotoList = e_p002Service.viewPhotoList(prodNum);
-		
-		System.out.println("viewPhotoList 사이즈"+viewPhotoList.size());
-		System.out.println("viewDetaList 사이즈"+viewPhotoList.size());
+		List viewDetaList = e_p002Service.viewProdList(optionNum);
+		List viewList = e_p002Service.viewList(optionNum);
+		List viewPhotoMainList = e_p002Service.viewPhotoMainList(prodNum);
+		List viewPhotoDetail = e_p002Service.viewPhotoDetail(prodNum);
 		
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("e_p002_viewDateList");
 		mav.addObject("viewDetaList",viewDetaList);
-		mav.addObject("viewPhotoList",viewPhotoList);
+		mav.addObject("viewPhotoMainList",viewPhotoMainList);
+		mav.addObject("viewPhotoDetail",viewPhotoDetail);
+		mav.addObject("viewList",viewList);
+	
 		return mav;
 	}
 
 
-	//상품 옵션 수정
+	//상품 옵션 수정 (재고, 사이즈, 색상 변경 ) 데이터 테이블 안에서 사용
 	@Override
 	@ResponseBody
 	@RequestMapping(value = "/admin/updateOption.do", method = RequestMethod.GET)
-	public String updateOption(@RequestParam Map map,@RequestParam("prodStatus") String prodStatus, HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
-		int prodStatusInt = 2;
-		if (prodStatus=="판매중") {
-			prodStatusInt = 1;
-		}
-		
-		map.put("prodStatus", prodStatusInt);
-		
-		
-		System.out.println("prodStatus" + map.get("prodStatus"));
-		System.out.println("optionNum" + map.get("optionNum"));
-		System.out.println("변경값" + map.get("value"));
-		System.out.println("재고" + map.get("quantity"));
-		System.out.println("사이즈" + map.get("prodSize"));
-		System.out.println("컬러" + map.get("color"));
-		System.out.println("상품 번호" + map.get("prodNum"));
-	
-	
-		
+	public String updateOption(@RequestParam Map map, HttpServletRequest request, HttpServletResponse response) throws Exception {
+
 		int result = e_p002Service.updateOption(map);
-		System.out.println("result value: "+ result);
+		
 		if(result == 1) {
 			return "ok";
 		}
@@ -183,8 +138,113 @@ public class E_p002ControllerImpl implements E_p002Controller{
 	
 	}
 
+	//상품 옵션 수정
+	@Override
+	@ResponseBody
+	@RequestMapping(value = "/admin/updateDateProdOption.do", method = RequestMethod.GET)
+	public String updateDateProdOption(@RequestParam Map map, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		
+		int result = e_p002Service.updateDateProdOption(map);
+		
+		if(result == 1) {
+			return "ok";
+		}
+		return "x";
+	
+	}
 
+	//상품 수정
+	@Override
+	@ResponseBody
+	@RequestMapping(value = "/admin/updateDateProd.do", method = RequestMethod.GET)
+	public String updateDateProd(@RequestParam Map map, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		
+	
+		int result = e_p002Service.updateDateProd(map);
+		
+		if(result == 1) {
+			return "ok";
+		}
+		return "x";
+	}
 
+	//상품 메인사진 수정
+	@Override
+	@ResponseBody
+	@RequestMapping(value = "/admin/upDateMainPhoto.do", method = RequestMethod.POST)
+	public String upDateMainPhoto(MultipartHttpServletRequest request, HttpServletResponse response,
+			@RequestParam(value="prodNum")int prodNum,@RequestParam(value="pphotonum") int pphotonum)throws IOException {
+		
+		  Map<String, MultipartFile> fileMap = request.getFileMap();
+		  String path = request.getSession().getServletContext().getRealPath("/");
+	      int result = e_p002Service.upDateMainPhoto(prodNum, fileMap, path, pphotonum);
+		
+	      if(result != 0) {
+			return "ok";
+	      }
+		return "x";
+		
+	}
+
+	//상품 디테일 사진 수정
+	@Override
+	@ResponseBody
+	@RequestMapping(value = "/admin/upDateDetailPhoto.do", method = RequestMethod.POST)
+	public String upDateDetailPhoto(MultipartHttpServletRequest request, HttpServletResponse response,
+			@RequestParam(value="prodNum")int prodNum,@RequestParam(value="pphotonum") int pphotonum) throws IOException {
+		
+		  Map<String, MultipartFile> fileMap = request.getFileMap();
+		  String path = request.getSession().getServletContext().getRealPath("/");
+	      int result = e_p002Service.upDateDetailPhoto(prodNum, fileMap, path, pphotonum);
+	      
+	      if(result != 0) {
+			return "ok";
+	      }
+		return "x";
+	}
+
+	//상세페이지 이미지 선택 삭제
+	@Override
+	@ResponseBody
+	@RequestMapping(value = "/admin/deleteImg.do", method = RequestMethod.GET)
+	public String deleteImg(@RequestParam Map map, HttpServletRequest request, HttpServletResponse response)throws Exception {
+	
+		int result = e_p002Service.deleteImg(map);
+		if(result == 1) {
+			return "ok";
+		}
+		return "x";
+	}
+
+	//상세페이지 메인 이미지 추가
+	@Override
+	@ResponseBody
+	@RequestMapping(value = "/admin/upDateAddMainImg.do", method = RequestMethod.POST)
+	public String upDateAddMainImg(@RequestParam(value = "file", required = false)List<MultipartFile> files,@RequestParam(value="prodNum") int prodNum,HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		
+		String path = request.getSession().getServletContext().getRealPath("/");
+		int result = e_p002Service.upDateAddMainImg(files,path,prodNum);
+		if(result != 0) {
+			return "ok";
+		}
+		return "x";
+	}
+
+	//상세페이지 디테일 이미지 추가
+	@Override
+	@ResponseBody
+	@RequestMapping(value = "/admin/upDateAddDetailImg.do", method = RequestMethod.POST)
+	public String upDateAddDetailImg(@RequestParam(value = "file2", required = false)List<MultipartFile> files,@RequestParam(value="prodNum") int prodNum, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		
+		String path = request.getSession().getServletContext().getRealPath("/");
+		int result = e_p002Service.upDateAddDetailImg(files,path,prodNum);
+		if(result != 0) {
+			return "ok";
+		}
+		return "x";
+	}
 
 
 }

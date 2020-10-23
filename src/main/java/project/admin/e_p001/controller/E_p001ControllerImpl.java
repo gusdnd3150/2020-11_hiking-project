@@ -66,49 +66,35 @@ public class E_p001ControllerImpl implements E_p001Controller {
 		return mav;
 	}
 
-	@Override // 삭제
-	@RequestMapping(value = "admin/removeUser.do", method = RequestMethod.GET)
+	//데이터 테이블 (회원 상태 수정)
+	@Override
 	@ResponseBody
-	public String removeUser(@RequestParam("userNum") int userNum, HttpServletRequest request, HttpServletResponse response) throws Exception {
+	@RequestMapping(value = "admin/upDateUser.do", method = RequestMethod.GET)
+	public String upDateUser(@RequestParam Map map, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
-		request.setCharacterEncoding("utf-8");
-		response.setContentType("text/html;charset=utf-8");
-		int result = e_p001Service.removeUser(userNum);
-		if(result == 1) {
+		int result = e_p001Service.upDateUser(map);
+		if (result != 0) {
 			return "ok";
-		}else {
-			return "x";
 		}
-
+		return "x";
 	}
 
-	@Override // 회원정보 수정
-	@RequestMapping(value = "admin/upDate.do", method = RequestMethod.POST)
-	public ModelAndView upDateUser(@ModelAttribute("e_p001VO") E_p001VO e_p001VO, HttpServletRequest request,HttpServletResponse response) throws Exception {
+	//고객정보 상세보기
+	@Override
+	@RequestMapping(value = "admin/userView.do", method = RequestMethod.GET)
+	public ModelAndView userView(@RequestParam(value="userNum") int userNum, HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		System.out.println("상세보기 회원 번호           "+userNum);
 		
-		request.setCharacterEncoding("utf-8");
-		int result = 0;
-		result = e_p001Service.upDateUser(e_p001VO);
+		List list = e_p001Service.userView(userNum);
+		
 		ModelAndView mav = new ModelAndView();
-		if (result == 1) {
-			mav.addObject("upDateMsg", result);
-		} else {
-			mav.addObject("upDateMsg", result);
-		}
-		mav.setViewName("e_p001_main");
+		mav.setViewName("e_p001_userView");
+		//mav.setViewName("e_p001_main");
+		mav.addObject("list", list);
 		return mav;
 	}
 
-	@Override // 수정전 회원 정보 출력
-	@RequestMapping(value = "admin/upDateUserList.do", method = RequestMethod.GET)
-	public ModelAndView upDateUserList(@RequestParam("userNum") String userNum, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		
-		List upDateUser = e_p001Service.upDateUserList(userNum);
-		ModelAndView mav = new ModelAndView();
-		mav.setViewName("e_p001_upDateUserForm");
-		mav.addObject("upDateUser", upDateUser);
-		return mav;
-	}
 
 
 }

@@ -31,6 +31,7 @@
 		<typeAlias type="project.admin.e_p001.vo.E_p001VO"  alias="e_p001VO" />
 		<typeAlias type="project.admin.e_p002.vo.E_p002VO"  alias="e_p002VO" />
 		<typeAlias type="project.admin.e_p003.vo.E_p003VO"  alias="e_p003VO" />
+		<typeAlias type="project.admin.e_p004.vo.E_p004VO"  alias="e_p004VO" />
 		<typeAlias type="project.admin.e_p005.vo.E_p005VO"  alias="e_p005VO" />
 		<typeAlias type="project.admin.e_p006.vo.E_p006VO"  alias="e_p006VO" />
 
