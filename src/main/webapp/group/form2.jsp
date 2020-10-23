@@ -158,6 +158,7 @@
 <script>
     ClassicEditor
         .create( document.querySelector( '#detail' ), {
+            removePlugins: ['ImageUpload'],
             heading: {
                 options: [
                     { model: 'paragraph', title: '본문', class: 'ck-heading_paragraph' },
@@ -255,7 +256,7 @@
 
             data.append("mtNm",$('#mtNm').val());
             data.append("name",$('#name').val());
-            data.append("detail",$('#detail').val());
+            data.append("detail",window.editor.getData()),
             data.append("startDay",$('#startDay').val());
             data.append("area",$('#area').val());
             data.append("ageStart",$('#ageStart').val());

@@ -128,7 +128,7 @@
                             '<h5 class="card-title m-0" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">'+
                             '<span style="color: limegreen">['+response[i].STATUS+']</span> ' +response[i].NAME +'</h5>' +
                             '<p class="card-text text-muted mb-1" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">'+ response[i].DETAIL +'</p>' +
-                            '<p class="text-muted">'+response[i].STARTDAY+' 출발</p>' +
+                            '<p class="m-0 text-muted">'+response[i].STARTDAY+' 출발</p>' +
                             '</div></div></div></div>';
 
             var status2 = '<div class="pt-3 col-lg-4 col-sm-6" id="groupList">' +
@@ -141,7 +141,7 @@
                             '<h5 class="card-title m-0" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">'+
                             '<span style="color:red">['+response[i].STATUS+']</span> ' +response[i].NAME +'</h5>' +
                             '<p class="card-text text-muted mb-1" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">'+ response[i].DETAIL +'</p>' +
-                            '<p class="text-muted">'+response[i].STARTDAY+' 출발</p>' +
+                            '<p class="m-0 text-muted">'+response[i].STARTDAY+' 출발</p>' +
                             '</div></div></div></div>';
 
             if(response[i].STATUS == '진행중'){
