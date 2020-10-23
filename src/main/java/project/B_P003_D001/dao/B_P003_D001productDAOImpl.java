@@ -77,8 +77,8 @@ public class B_P003_D001productDAOImpl implements B_P003_D001productDAO {
 		return result;
 	}
 	@Override
-	public UserVO getAddress(Map<String, Object> map) throws DataAccessException {
-		UserVO vo = sqlSession.selectOne("project.e_P002_D003.getAddress",map);
+	public Map<String,Object> getAddress(Map<String, Object> map) throws DataAccessException {
+		Map<String,Object> vo = sqlSession.selectOne("project.e_P002_D003.getAddress",map);
 		return vo;
 	}
 	@Override
@@ -122,8 +122,8 @@ public class B_P003_D001productDAOImpl implements B_P003_D001productDAO {
 		sqlSession.insert("project.e_P002_D003.insertDelivery",map);
 	}
 	@Override
-	public void updatePoint(Map<String, Object> map) throws DataAccessException {
-		sqlSession.update("project.e_P002_D003.updatePoint",map);
+	public void updatePoint(List<Map> map) throws DataAccessException {
+		sqlSession.insert("project.e_P002_D003.updatePoint",map);
 	}
 	
 	///////////////장바구니
@@ -207,7 +207,95 @@ public class B_P003_D001productDAOImpl implements B_P003_D001productDAO {
 	public List<Integer> checkQuantity(Map<String,Object> map) throws DataAccessException {
 		return sqlSession.selectList("project.e_P002_D003.checkQuantity",map);
 	}
+	@Override
+	public List<Integer> searchOption(Map<String, Object> map) throws DataAccessException {
+		return sqlSession.selectList("project.e_P002_D003.seachOptionNum",map);
+	}
+	@Override
+	public void addCartOne(Map<String, Object> map) throws DataAccessException {
+		sqlSession.insert("project.e_P002_D003.addCartOne",map);
+		
+	}
+	@Override
+	public void modOption(Map<String, Object> map) throws DataAccessException {
+		sqlSession.update("project.e_P002_D003.modOption",map);
+	}
+	@Override
+	public int ordernum() throws DataAccessException {
+		return sqlSession.selectOne("project.e_P002_D003.selectOrderNum");
+	}
+	
+	@Override
+	public int buyCount(int userNum) throws DataAccessException {
+		return sqlSession.selectOne("project.e_P002_D003.buyCount",userNum);
+	}
+	
+	
+	//관심상품
+	@Override
+	public void addprodLike(Map<String, Object> map) throws DataAccessException {
+		sqlSession.insert("project.e_P002_D003.addProdLike",map);
+		
+	}
 
+	@Override
+	public int wishCount(int userNum) throws DataAccessException {
+		return sqlSession.selectOne("project.e_P002_D003.wishCount",userNum);
+	}
+	@Override
+	public List<Map> selectWishList(Map<String, Object> map) throws DataAccessException {
+		return sqlSession.selectList("project.e_P002_D003.selectWishList",map);
+	}
+	
+	@Override
+	public void updateMemo(Map<String, Object> map) throws DataAccessException {
+		sqlSession.update("project.e_P002_D003.updateMemo",map);
+		
+	}
+	@Override
+	public void addCartFromWish(List<Map> wish) throws DataAccessException {
+		sqlSession.insert("project.e_P002_D003.addCartFromWish",wish);
+		
+	}
+	@Override
+	public void deleteWish(List<Map> wish) throws DataAccessException {
+		sqlSession.delete("project.e_P002_D003.deleteWish",wish);
+		
+	}
+	@Override
+	public void deleteWishOne(Map<String, Object> likenum) throws DataAccessException {
+		sqlSession.delete("project.e_P002_D003.deleteWishOne",likenum);
+	}
+	@Override
+	public void addAddress(Map<String, Object> info) throws DataAccessException {
+		sqlSession.insert("project.e_P002_D003.addDelivery",info);
+	}
+	@Override
+	public int getDelibasic(Map<String, Object> map) throws DataAccessException {
+		return sqlSession.selectOne("project.e_P002_D003.getDelibasic",map);
+	}
+	@Override
+	public List<Map> checkPointTable(Map<String, Object> map) throws DataAccessException {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList("project.e_P002_D003.checkPointTable",map);
+	}
+	@Override
+	public List<Map> getDelibasicSize(Map<String, Object> map) throws DataAccessException {
+		return sqlSession.selectList("project.e_P002_D003.getDelibasicSize",map);
+	}
+	@Override
+	public List<Map> paymentList(Map<String, Object> map) throws DataAccessException {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList("project.e_P002_D003.paymentList",map);
+	}
+	@Override
+	public int totalPaymentCount(Map<String, Object> map) throws DataAccessException {
+		return sqlSession.selectOne("project.e_P002_D003.totalPaymentListCount",map);
+	}
+	@Override
+	public List<Map> payDetailList(Map<String, Object> map) throws DataAccessException {
+		return sqlSession.selectList("project.e_P002_D003.payDetailList",map);
+	}
 
 
 

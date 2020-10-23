@@ -46,16 +46,84 @@
 <script>         
    $(document).ready(function () {
 	   
-            $("#buyProduct").on("click",function(){
-           var quantity = $("#sst").val();
-           var prodNum =  $("#prodNum").val();
-           console.log(prodNum);
-           console.log(quantity);
-           location.href="/B_P003_D001/buyProd?prodNum="+prodNum+"&quantity="+quantity+"&type=1";
 
-           });
            
+           
+           
+$("#buyProduct").on("click",function(){     
+    var prodNums = []; 
+    var optionnums =[];
+    var quantities =[];
+    var prices =[];
+    
+    var prodSizes =[];
+    var prodColors=[];
+    var prodNames=[];
+    var prodImages=[];
+    var optionNums=[];
+    
+    var prodPrice =$("input[name=addPrice]").val();
+    
+    var Type ="상품디테일";
+    
+	 $('input[name=optionCheck]:checked').each(function (i, elements) {
+	    var index= $(elements).index("input:checkbox[name=optionCheck]");
+	   var prodNum =$("input[name=prodNum]").eq(index).val();
+	    var optioNnum =$("input[name=optionNum]").eq(index).val();
+	    var quantity =$("input[name=qty]").eq(index).val();
+	    var prodColor =$("input[name=prodColor]").eq(index).val();
+	    var prodSize =$("input[name=prodSize]").eq(index).val();
+	    var prodName =$("input[name=prodName]").eq(index).val();
+	    var prodImage =$("input[name=buyImage]").eq(index).val();
+	    var optionNum =$("input[name=optionNum]").eq(index).val();
+	    
+	    
+	    prodSizes.push(prodSize); 
+	    prodColors.push(prodColor);
+	    prodNames.push(prodName);
+	    prodImages.push(prodImage);
+	    
+	    optionNums.push(Number.parseInt(optionNum));
+	    prodNums.push(Number.parseInt(prodNum));
+	    optionnums.push(Number.parseInt(optioNnum));
+	    quantities.push(Number.parseInt(quantity));
+	    prices.push(prodPrice);
+	});
+	 for(var i=0;i<prodNums.length;i++){
+		 console.log("프로드넘"+prodNums[i]);
+		console.log("옵션"+optionnums[i]);
+		console.log("수량"+quantities[i]);
+		console.log("체크된 수량*제품가격"+prices[i]);
+		 console.log("사이즈"+prodSizes[i]);
+	   console.log("색상"+prodColors[i]);
+			console.log("이름"+prodNames[i]);
+			console.log("이미지"+prodImages[i]);
+			console.log("옵션번호"+optionNums[i]);
+	 }
+	 
+	 for(var i=0;i< quantities.length;i++){
+		 if(quantities[i] <1){
+           alert("수량을 입력해 주세요");
+     }
+	 }
 
+     $.ajax({
+      type:"post",
+      async:true,
+      url:"/B_P003_D001/buyProdFromDetail",
+      data:{prodNums:prodNums,optionnums:optionnums,quantities:quantities,Type:Type,prices:prices,
+    	  prodSizes:prodSizes,prodColors:prodColors,prodNames:prodNames,prodImages:prodImages,optionNums:optionNums},
+      success:function(data,textStatus){
+          	location.href="/B_P003_D001/buyProd?type=1";
+      },
+      error:function(data,textStatus){
+      },
+      complete:function(){
+      }
+    });   
+    
+});
+           
 
              $("#addCart").on("click",function(){     //장바구니에 추가
                var prodNums = []; 
@@ -72,11 +140,12 @@
      		  var optioNnum =$("input[name=optionNum]").eq(index).val();
      		    var quantity =$("input[name=qty]").eq(index).val();
      		   
-     		   var vcalcul=  Number.parseInt(quantity) * Number.parseInt(prodPrice);
+     		   //var vcalcul=  Number.parseInt(quantity) * Number.parseInt(prodPrice);
+     		   
      		    prodNums.push(Number.parseInt(prodNum));
      		    optionnums.push(Number.parseInt(optioNnum));
      		    quantities.push(Number.parseInt(quantity));
-     		   prices.push(vcalcul);
+     		    prices.push(prodPrice);
      		});
            	 for(var i=0;i<prodNums.length;i++){
            		 console.log("프로드넘"+prodNums[i]);
@@ -90,18 +159,18 @@
                       alert("수량을 입력해 주세요");
                 }
            	 }
-           	 
-        
       		  $.ajax({
  	            type:"post",
  	            async:true,
  	            url:"/B_P003_D001/addCart",
  	            data:{prodNums:prodNums,optionnums:optionnums,quantities:quantities,addType:addType,prices:prices},
  	            success:function(data,textStatus){
- 	            	alert('장바구니에 추가되었습니다.');
- 	            	location.href="/B_P002_D001/shopMainCate?listType=100";
  	            },
  	            error:function(data,textStatus){
+ 	            },
+ 	            complete:function(){
+ 	            	alert('장바구니에 추가되었습니다.');
+ 	            	location.href="/B_P002_D001/shopMainCate?listType=100";
  	            }
  	          }); 
  	          
@@ -303,6 +372,8 @@
                <td> <h> <span>재고 </span> : ${options.QUANTITY }  &nbsp; &nbsp; </h> </td>
                  <td><h> <span>사이즈 </span> : ${options.PRODSIZE }  &nbsp; &nbsp;</h> </td>
                <td> <h><span>색상</span> :  ${options.COLOR }  &nbsp;</h></td>
+               
+               
                <td>
                  <!-- <h><input type="text" name="inputquantity" placeholder="수량 입력 " style="display: none" value="" size=6></h> -->
                     <div class="product_count" style="margin-top: 10px;margin-bottom: 6px"  >
@@ -335,8 +406,13 @@
                 </td>
               </tr>
               <input type="hidden" name="quantity" value="${options.QUANTITY }">
+              <input type="hidden" name="perPrice" value="${options.PRICE }">
               <input type="hidden" name="prodNum" value="${options.PRODNUM }">
               <input type="hidden" name="optionNum" value="${options.OPTIONNUM }">
+              <input type="hidden" name="prodSize" value="${options.PRODSIZE }">
+              <input type="hidden" name="prodColor" value="${options.COLOR }">
+              <input type="hidden" name="buyImage" value="${images[0].CONTENT }">
+              <input type="hidden" name="prodName" value="${prodDetail[0].NAME }">
               </c:forEach>
               </table>
                 <br>
@@ -352,7 +428,8 @@
                 <input type="hidden" id="prodNum" value="${prodDetail[0].PRODNUM }">
                 <input type="hidden" id="prodName" value="${prodDetail[0].NAME }"> 
                 <input type="hidden" id="prodPrice" value="${prodDetail[0].PRICE }">
-                <a class="icon_btn" href="#">
+                
+                <a class="icon_btn" href="/B_P003_D001/addCartMain?prodNum=${prodDetail[0].PRODNUM}&prodName=${prodDetail[0].NAME}&prodPrice=${prodDetail[0].PRICE}&addType=wish">
                   <i class="lnr lnr lnr-heart"></i>
                 </a>
               </div>
@@ -650,6 +727,7 @@
                       </div>
                       <div class="media-body">
                         <h4>${afterList.userNum }</h4>    <!-- 유저아이디 -->
+                        
                         <c:if test="${afterList.evalue ==1 }">
                         <i class="fa fa-star"></i>        <!-- 평점 -->
                         </c:if>
@@ -681,7 +759,7 @@
                        ${afterList.content }
                     </p>
                     <p>${afterList.createDat }</p>
-                    <form name="addComent"  method="post" action="/B_P003_D001/addComent"  >
+                                       <form name="addComent"  method="post" action="/B_P003_D001/addComent"  >
                                             <input type="hidden" name="prodNum" value="${prodDetail[0].PRODNUM }">
                                             <input type="hidden" name="afterType" value="${afterList.afterNum }">
                                          <input type="text" name="content">
@@ -789,7 +867,7 @@
       </div>
     </section>
     <!--================End Product Description Area =================-->
-
+<jsp:include page="../common/footer.jsp" flush="false" />
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

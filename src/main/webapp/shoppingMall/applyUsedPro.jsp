@@ -51,7 +51,7 @@ var cnt2=1;
       +"<option value='navy'>navy</option>"
       +"<option value='gray'>gray</option>"
       +"<option value='etc'>etc</option>"
-  +"</select>");
+      +"</select>");
 	  
 	  $("#addOption").append("<label for='title'>사이즈:</label>");
 	  $("#addOption").append("<input type='text' name='prodSize[]' value=''>");
@@ -150,7 +150,7 @@ var cnt2=1;
          <br>
           </div>   
           <hr>
-        <input type="button"  value="섬네일 사진추가" onClick="fn_addFile()"/><br>
+        <input type="button"  class=".btn-primary" value="섬네일 사진추가" onClick="fn_addFile()"/><br>
            <div id="d_file">
          <br>
           </div>

@@ -34,6 +34,164 @@
 		       }
 	         });
 	
+	           
+	            
+	            
+	            
+	            $("button[name=chooseOption]").click(function () {        // 옵션보기
+	 		       
+	 	          	var prodNum = $(this).val(); //프로드넘  putOption
+	 	          	var index = $("button[name=chooseOption]").index(this); //인덱스
+	 	          	var ordernum =$("input[name=orderNum]").eq(index).val(); //오더넘
+	 	          	var putter =$("div #putOption").eq(index); //푸터 태그 선택
+	 		        console.log(prodNum);
+	 		       console.log("인덱스값"+index);
+	 		      console.log("푸터인덱스"+putter.index());
+	 		     console.log("오더넘"+ordernum);
+	 		      
+	 		        $.ajax({
+	 		        	type:"get",
+	 		        	url:"/E_P003_D001/chooseOption",
+	 		        	dataType:"JSON", 
+	 		        	data:{prodNum:prodNum},
+	 		        	contentType: "application/json; charset=utf-8;",
+	 		        	success:function(data){
+	                    console.log(data[0].NAME);
+	                    console.log(data.length);
+	                   
+	                    for(var i ;i<data.length ; i++){
+	                          console.log(data[i].NAME);
+	                    }
+	                    
+	                    var put = "<table style='border-style:solid'>";
+	                    
+	                    put += "<tr>";
+	                    put += "<th>재고</th>";
+	                    put += "<th>사이즈</th>";
+	                    put += "<th>색상</th>";
+	                    put += "<th>수량</th>";
+	                    put += "<th></th>";
+	                    put += "</tr>";
+	                    for(var i=0 ;i<data.length ; i++){
+	                    	put += "<tr>";
+	                    	
+	                    	//put += "<td><input type='checkbox' name='optionCheck'>  &nbsp; &nbsp;</td>";
+	                    	put += "<td> <h>   "+data[i].QUANTITY+" &nbsp; &nbsp; </h> </td>";
+	                    	put += "<td> <h>   "+data[i].PRODSIZE+"  &nbsp; &nbsp;</h> </td>";
+	                    	put += "<td> <h>   "+data[i].COLOR+"  &nbsp;</h></td>";
+	                    	put += "<td>";
+	                    	put += "<div class='product_count' style='margin-top: 10px;margin-bottom: 6px'  >";
+	                    	put += "<input type='text' name='qty2' id='sst2' maxlength='12' value='1' title='Quantity:' class='input-text qty' style='height: 36px'/>";
+	                    	put += "<button onclick='' class='increase items-count' type='button' name='upNum2'> <i class='lnr lnr-chevron-up'></i> </button>";
+	                    	put += "<button onclick='' class='reduced items-count' type='button' name='downNum2'> <i class='lnr lnr-chevron-down'></i> </button>";
+	                    	put += "</div>";
+	                    	put += "</td>";
+	                    	put += "<td>";
+	                        put += "<button class='btn btn-info btn-sm' name='modOption' value='"+data[i].OPTIONNUM+"'>추가하기</button>";
+	                    	put += "</td>";
+	                    	put += "</tr>";
+	                    	put += "<input type='hidden' name='quantity2' value='"+data[i].QUANTITY+"'>";
+	                    	put += "<input type='hidden' name='orderNum2' value='"+ordernum+"'>";
+	                    	put += "<input type='hidden' name='perPrice2' value='"+data[i].PRICE+"'>";
+	                    	put += "<input type='hidden' name='prodNum2' value='"+data[i].PRODNUM+"'>";
+	                    	put += "<input type='hidden' name='optionNum2' value='"+data[i].OPTIONNUM+"'>";
+	                    	
+	                    }
+	                    put += "</table>";
+	                    console.log(put);
+	                    putter.html(put);
+	                    
+	                    
+	                    
+	                    $("button[name=upNum2]").click(function() {           //수량업 클릭 시 
+	       				 var index = $("button[name=upNum2]").index(this); //인덱스 값 (이벤트를 발생시킨 태그의 index)
+	       				 var dbquantity = $("input[name=quantity2]").eq(index).val(); 
+	       	        	 console.log(index);
+	       	        	 var quantity =$("input[name=qty2]").eq(index); // 값
+	       	        	 var sst = quantity.val();
+	       	        	 
+	       	        	 if(sst == dbquantity ) {
+	       	        		 alert("재고량을 초과할 수 없습니다.");
+	       	        	 }else if(!isNaN(sst)){
+	       	        		 sst++;
+	       	        	 }
+	       	        	 quantity.val(sst);
+	       	             var quantity2 =quantity.val();
+	       	        	 var perPrice =$("input[name=perPrice2]").eq(index).val(); // 값
+	       	        	 var calcul = quantity2* perPrice;
+	       	        	 var perTotal =$("input[name=perTotal2]").eq(index);  //태그만 선택
+	       	        	 quantity.val(quantity2);
+	       	        	 perTotal.val(calcul);
+	       	        	 
+	                    });
+	                    
+	                    $("button[name=downNum2]").click(function() {                  //수량다운 클릭 시 
+	                    	var index = $("button[name=downNum2]").index(this); //인덱스 값 (이벤트를 발생시킨 태그의 index)
+	            		        	 console.log(index);
+	            		        	 var quantity =$("input[name=qty2]").eq(index); // 값 인덱스번호에 맞는 qty태그를 선택
+	            		        	 var sst = quantity.val();
+	            		        	 if(!isNaN(sst)){
+	            		        		 sst--;
+	            		        	 }
+	            		        	 quantity.val(sst);
+	            		             var quantity2 =quantity.val();
+	            		        	 var perPrice =$("input[name=perPrice2]").eq(index).val(); // 값
+	            		        	 var calcul = quantity2* perPrice;
+	            		        	 var perTotal =$("input[name=perTotal2]").eq(index);  //태그만 선택
+	            		        	 quantity.val(quantity2);
+	            		        	 perTotal.val(calcul);
+	                    });
+	                   
+	                    
+	                    $("button[name=modOption]").click(function() {           //수량업 클릭 시 
+		       				 var index = $("button[name=modOption]").index(this); //인덱스 값 (이벤트를 발생시킨 태그의 index)
+		       	        	 console.log(index);
+		       				 var add=$(this);
+		       	        	 var quantity =$("input[name=qty2]").eq(index).val(); // 값
+		       	        	var ordernum =$("input[name=orderNum2]").eq(index).val(); // 값
+		       	        	var perPrice =$("input[name=perPrice2]").eq(index).val(); // 값
+		       	        	var optionNum =$("input[name=optionNum2]").eq(index).val(); // 값
+		       	        	var sear =$("input[name=qty2]").eq(index); // 값
+		       	        	
+		       	        	console.log("오더넘:"+ordernum);
+		       	        	console.log("옵션넘:"+optionNum);
+		       	        	console.log("수량:"+quantity);
+		       	        	console.log("가격(하나당):"+perPrice);
+		       	        	
+		       	        	
+		       	        	//내일 아침에 아작스로 처리하면 끝
+		       	        	          $.ajax({
+		       	        		            type: "get",
+		       	        		            url: "/E_P003_D001/modOption",
+		       	        		            data: {ordernum:ordernum,optionNum:optionNum,quantity:quantity,perPrice:perPrice},
+		       	        		            dataType: "json",
+		       	        		            success: function( responseData, status , xhr ){
+		       	        		            },
+		       	        		            error:function(xhr, status, error){
+		       	        		                console.log(error);
+		       	        		            },
+		       	        		            complete:function(){
+		       	        		            	alert("옵션이 등록되었습니다.");
+		       	        		            	location.href="/B_P003_D001/cartList";
+		       	        		            }
+		       	        		        });
+		       	        	
+		                    });
+	                      
+	                    
+	                    
+	 		        	},
+	 		        	error:function(data){
+	 		        		alert("옵션보기 실패");
+	 		        	}
+	 		        }); 
+	 	         });
+	            
+	      
+	            
+	              
+	              
+	            
 	         $("#buyProduts").click(function(){            // 구매 시 체크된 값만 받아옴
 	        	 var orderNums = [];
 	        	 var totalPrice = []; 
@@ -42,6 +200,9 @@
 	        	 var prodNames=[];
 	        	 var prices=[];  
 	        	 var prodNums=[];  
+	        	 var colors=[];
+	        	 var sizes=[];
+	        	 var optionNums=[];
 	        	 
 	        	 $('input[name=buyinfo]:checked').each(function (i, elements) {
 	        		    var index= $(elements).index("input:checkbox[name=buyinfo]");
@@ -52,27 +213,35 @@
 	        		    var prodName=$("input[name=prodNames]").eq(index).val();//해당상품의 수량
 	        		    var price=$("input[name=perPrice]").eq(index).val();//해당상품의 수량
 	        		    var prodNum=$("input[name=prodNum]").eq(index).val();//해당상품의 상품번호
+	        		    var optionNum=$("input[name=optionNums]").eq(index).val();//해당상품의 옵션번호
+	        		    
+	        		    var color=$("input[name=colors]").eq(index).val();//해당상품의 옵션 색상
+	        		    var size=$("input[name=sizes]").eq(index).val();//해당상품의 옵션 사이즈
 	        		    
 	        		    console.log("총 값"+perTotal);
 	        		    console.log("주문번호"+orderNum);
 	        		    console.log("수량"+quantity);
+	        		    console.log("색상"+color);
+	        		    console.log("사이즈"+size);
+	        		    optionNums.push(Number.parseInt(optionNum));
 	        		    totalPrice.push(Number.parseInt(perTotal));
 	        		    orderNums.push(Number.parseInt(orderNum));
 	        		    quantities.push(Number.parseInt(quantity));
+	        			colors.push(color);
+	    	        	sizes.push(size);
 	        		    images.push(image);
 	        		    prodNames.push(prodName);
 	        		    prices.push(price);
 	        		    prodNums.push(prodNum);
 	        		    
 	        		});
-    		    
 	     		$.ajax({
 	    			type : "post",       //응답 데이터를 텍스트로 지정
 	    			dataType : "text",    //응답 데이터를 텍스트로 지정   
 	    			async:true,           //false인경우 동기식으로 처리
-	    			url : "/B_P003_D001/butProductsFromCart",               // 전송할 서블릿을 지정
-	    			data : {totalPrice:totalPrice,orderNums:orderNums,quantities:quantities,
-	    				images:images,prodNames:prodNames,prices:prices,prodNums:prodNums},  //서버로 매개변수와 값을 설정
+	    			url : "/B_P003_D001/butProductsFromCart",               // 서버에서 세션으로 상품을 담는다
+	    			data : {totalPrice:totalPrice,orderNums:orderNums,quantities:quantities,optionNums:optionNums,
+	    				images:images,prodNames:prodNames,prices:prices,prodNums:prodNums,colors:colors,sizes:sizes},  //서버로 매개변수와 값을 설정
 	    			success : function(data, textStatus) {  //전송과 응담이 성공했을 경우의 작업을 설정
 	    				$('#message').append(data);  //서버 응답 메시지를 <div> 엘리먼트에 표시
 	    			},
@@ -82,7 +251,7 @@
 	    			complete : function(data, textStatus) {  //완료 시 수행
 	    				location.href="/B_P003_D001/buyProd?type=3";
 	    			}
-	    		});
+	    		}); 
 	        	 
 	         });
 	         
@@ -151,6 +320,17 @@
 	          	    shototal.text(sum);
                   });
 	    });
+        
+        
+        
+        
+        
+
+	         
+	
+        
+        
+        
 </script>
 
 
@@ -182,18 +362,7 @@
     <!--================Header Menu Area =================-->
     <header class="header_area">
       
-<div  class="topnav container" align="center">
-  <a class="active" href="/B_P002_D001/shopMainCate?listType=10">Home</a> <!--  10은 전체목록 -->
-  <a href="/B_P002_D001/shopMainCate?listType=2">등산 가방</a>  
-  <a href="/B_P002_D001/shopMainCate?listType=3">아웃도어</a>
-  <a href="/B_P002_D001/shopMainCate?listType=4">등산스틱</a>
-  <a href="/B_P002_D001/shopMainCate?listType=5">등산화</a>
-  <a href="/B_P002_D001/shopMainCate?listType=6">등산장갑</a>
-  <a href="/B_P002_D001/shopMainCate?listType=1">양말</a>
-  <a href="/B_P002_D001/shopMainCate?listType=7">보호대</a>
-  <a href="/B_P002_D001/shopMainCate/6">중고물품 등록</a>
-  <a class="fas fa-shopping-cart" id="getSession"></a>
-</div>
+
     </header>
     <!--================Header Menu Area =================-->
 
@@ -205,7 +374,7 @@
             class="banner_content d-md-flex justify-content-between align-items-center"
           >
             <div class="mb-3 mb-md-0">
-              <h2>${cartList[0].USERNUM }님 장바구니</h2>
+              <h2>${userId }님 장바구니</h2>
               <p></p>
             </div>
             <div class="page_link">
@@ -217,7 +386,83 @@
       </div>
     </section>
     <!--================End Home Banner Area =================-->
-
+    <!-- /////////////옵션 선택 안한애들 시작 -->
+	      <div class="container">
+        <div class="cart_inner">
+          <div class="table-responsive">
+            <table class="table">
+	              <c:choose>
+                <c:when test="${not empty cartList2 }">
+                     <c:forEach var="cartList" items="${cartList2 }">
+                <tr>
+                      <td id="locationOrderNum">
+                      <h>옵션 선택</h>
+                <input type="hidden" name="prodNum" value="${cartList.PRODNUM }">
+                <input type="hidden" name="orderNum" value="${cartList.ORDERNUM }">
+                </td>
+                  <td>
+                    <div class="media">
+                      <div class="d-flex">
+                        <img
+                          src="/resources/img/${cartList.IMAGE }"
+                          <%-- src="http://localhost:8080/resources/img/${cartList.IMAGE }" --%>
+                          alt="" width="90px" height="90px"
+                        />
+                        <input type="hidden" name="images" value="${cartList.IMAGE }">
+                      </div>
+                      <div class="media-body">
+                        <p>${cartList.NAME }</p>
+                        <input type ="hidden" name="prodNames" value="${cartList.NAME }">
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <h5>${cartList.PRICE } &nbsp; 원</h5>
+                    <input type="hidden" name="perPrice" value="${cartList.PRICE }">
+                  </td>
+                  <td colspan="3">
+                  <div id="putOption">   <!-- 아작스로 처리 -->
+                    
+                    </div>
+                  </td>
+                  <td></td>
+                   <td>
+                    <button class="btn btn-info btn-sm" name="chooseOption" value="${cartList.PRODNUM }">옵션 보기</button>
+                  </td>
+                </tr>
+                     </c:forEach>
+                </c:when>              
+              </c:choose>
+                  <!-- 반복구간  -->
+                                  
+                
+                <tr>      <!-- 페이징 자리 -->
+                  <td colspan="6">
+          <div style="display: block; text-align: center;">
+	     <c:if test="${paging2.startPage != 1 }">
+			<a href="/B_P003_D001/cartList?nowPage2=${paging2.startPage - 1 }&cntPerPage2=${paging2.cntPerPage}">&lt;</a>
+		</c:if>
+		<c:forEach begin="${paging2.startPage }" end="${paging2.endPage }" var="p">
+			<c:choose>
+				<c:when test="${p == paging2.nowPage }">
+					<b>${p }</b>
+				</c:when>
+				<c:when test="${p != paging2.nowPage }">
+					<a href="/B_P003_D001/cartList?nowPage2=${p }&cntPerPage2=${paging2.cntPerPage}">${p }</a>
+				</c:when>
+			</c:choose>
+		</c:forEach>
+		<c:if test="${paging2.endPage != paging2.lastPage}">
+			<a href="/B_P003_D001/cartList?nowPage2=${paging2.endPage+1 }&cntPerPage2=${paging2.cntPerPage}">&gt;</a>
+			<p> ${paging2.listType}</p>
+		</c:if>
+	    </div>        
+	              </table>
+          </div>
+        </div>
+      </div>
+	    <!-- ///////////// -->
+	    
     <!--================Cart Area =================-->
     <section class="cart_area">
       <div class="container">
@@ -227,11 +472,12 @@
               <thead>
                 <tr>
                   <th scope="col"><input type="checkbox" id="selectAll" value=""></th>
-                  <th scope="col">Product</th>
-                  <th scope="col">Price</th>
-                  <th scope="col">Quantity</th>
+                  <th scope="col">상품</th>
+                  <th scope="col">가격</th>
+                  <th scope="col">수량</th>
                   <th scope="col">Total</th>
-                  <th scope="col">delete</th>
+                  <th scope="col">옵션</th>
+                  <th scope="col">삭제</th>
                 </tr>
               </thead>
               <tbody>
@@ -258,13 +504,13 @@
                         <input type="hidden" name="images" value="${cartList.IMAGE }">
                       </div>
                       <div class="media-body">
-                        <p>${cartList.PRODNAME }</p>
-                        <input type ="hidden" name="prodNames" value="${cartList.PRODNAME }">
+                        <p>${cartList.NAME }</p>
+                        <input type ="hidden" name="prodNames" value="${cartList.NAME }">
                       </div>
                     </div>
                   </td>
                   <td>
-                    <h5>${cartList.PRICE }</h5>
+                    <h5>${cartList.PRICE } &nbsp; 원</h5>
                     <input type="hidden" name="perPrice" value="${cartList.PRICE }">
                   </td>
                   <td>
@@ -300,12 +546,21 @@
                     <%-- <h5 id="totalPut">${cartList.price * cartList.quantity }</h5> --%>
                     <input type="text" name="perTotal" value="${cartList.PRICE * cartList.QUANTITY }" readonly style="border: none">
                   </td>
+                  <td>
+                  <div>
+                    <ul>
+                    <li>색상: &nbsp;&nbsp;${cartList.COLOR }</li>
+                    <li>사이즈 : ${cartList.PRODSIZE }</li>
+                    </ul>
+                    </div>
+                  </td>
                    <td>
                     <button class="btn btn-info btn-sm" name="delete" value="${cartList.ORDERNUM }">삭제</button>
                   </td>
                 </tr>
-                  
-                     
+                     <input type="hidden" name="colors" value="${cartList.COLOR }">
+                     <input type="hidden" name="sizes" value="${cartList.PRODSIZE }">
+                     <input type="hidden" name="optionNums" value="${cartList.OPTIONNUM }">
                      </c:forEach>
                 </c:when>              
               </c:choose>
@@ -332,7 +587,10 @@
 			<a href="/B_P003_D001/cartList?nowPage=${paging.endPage+1 }&cntPerPage=${paging.cntPerPage}">&gt;</a>
 			<p> ${paging.listType}</p>
 		</c:if>
-	    </div>                  
+	    </div>        
+	    
+	
+	              
                   </td>
                 </tr>
                 
@@ -372,76 +630,7 @@
     <!--================End Cart Area =================-->
 
     <!--================ start footer Area  =================-->
-    <footer class="footer-area section_gap">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-2 col-md-6 single-footer-widget">
-            <h4>Top Products</h4>
-            <ul>
-              <li><a href="#">Managed Website</a></li>
-              <li><a href="#">Manage Reputation</a></li>
-              <li><a href="#">Power Tools</a></li>
-              <li><a href="#">Marketing Service</a></li>
-            </ul>
-          </div>
-          <div class="col-lg-2 col-md-6 single-footer-widget">
-            <h4>Quick Links</h4>
-            <ul>
-              <li><a href="#">Jobs</a></li>
-              <li><a href="#">Brand Assets</a></li>
-              <li><a href="#">Investor Relations</a></li>
-              <li><a href="#">Terms of Service</a></li>
-            </ul>
-          </div>
-          <div class="col-lg-2 col-md-6 single-footer-widget">
-            <h4>Features</h4>
-            <ul>
-              <li><a href="#">Jobs</a></li>
-              <li><a href="#">Brand Assets</a></li>
-              <li><a href="#">Investor Relations</a></li>
-              <li><a href="#">Terms of Service</a></li>
-            </ul>
-          </div>
-          <div class="col-lg-2 col-md-6 single-footer-widget">
-            <h4>Resources</h4>
-            <ul>
-              <li><a href="#">Guides</a></li>
-              <li><a href="#">Research</a></li>
-              <li><a href="#">Experts</a></li>
-              <li><a href="#">Agencies</a></li>
-            </ul>
-          </div>
-          <div class="col-lg-4 col-md-6 single-footer-widget">
-            <h4>Newsletter</h4>
-            <p>You can trust us. we only send promo offers,</p>
-            <div class="form-wrap" id="mc_embed_signup">
-              <form target="_blank" action="https://spondonit.us12.list-manage.com/subscribe/post?u=1462626880ade1ac87bd9c93a&amp;id=92a4423d01"
-                method="get" class="form-inline">
-                <input class="form-control" name="EMAIL" placeholder="Your Email Address" onfocus="this.placeholder = ''"
-                  onblur="this.placeholder = 'Your Email Address '" required="" type="email">
-                <button class="click-btn btn btn-default">Subscribe</button>
-                <div style="position: absolute; left: -5000px;">
-                  <input name="b_36c4fd991d266f23781ded980_aefe40901a" tabindex="-1" value="" type="text">
-                </div>
-  
-                <div class="info"></div>
-              </form>
-            </div>
-          </div>
-        </div>
-        <div class="footer-bottom row align-items-center">
-          <p class="footer-text m-0 col-lg-8 col-md-12"><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
-          <div class="col-lg-4 col-md-12 footer-social">
-            <a href="#"><i class="fa fa-facebook"></i></a>
-            <a href="#"><i class="fa fa-twitter"></i></a>
-            <a href="#"><i class="fa fa-dribbble"></i></a>
-            <a href="#"><i class="fa fa-behance"></i></a>
-          </div>
-        </div>
-      </div>
-    </footer>
+   <jsp:include page="../common/footer.jsp" flush="false" />
     <!--================ End footer Area  =================-->
 
     <!-- Optional JavaScript -->

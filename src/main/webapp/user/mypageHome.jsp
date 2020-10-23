@@ -101,13 +101,44 @@
 						<h4 id="shoppingMall">나의 오름마켓</h4>
 					</li>
 					<li class="list-group-item d-flex justify-content-between align-items-center">
-						<b>위시리스트</b> <a href=""><h5 class="mt-2">15</h5></a></li>
+						<b>보유포인트 P</b>
+						<c:if test="${empty point }">
+							<h5 class="mt-2">0 </h5>
+						</c:if>
+						<c:if test="${not empty point }">
+							<h5 class="mt-2">${point.point } P</h5>
+						</c:if>
+					</li>
 
 					<li class="list-group-item d-flex justify-content-between align-items-center">
-						<b>장바구니</b> <a href=""><h5 class="mt-2">15</h5></a></li>
+						<b>위시리스트</b>
+						<c:if test="${wishCount == 0 }">
+							<a href="/B_P003_D001/wishList"><h5 class="mt-2">0 </h5></a>
+						</c:if>
+						<c:if test="${wishCount != 0 }">
+							<a href="/B_P003_D001/wishList"><h5 class="mt-2">${wishCount } </h5></a>
+						</c:if>
+					</li>
 
 					<li class="list-group-item d-flex justify-content-between align-items-center">
-						<b>구매내역</b> <a href=""><h5 class="mt-2">15</h5></a></li>
+						<b>장바구니</b>
+						<c:if test="${cartCount == 0 }">
+							<a href="/B_P003_D001/cartList"><h5 class="mt-2">0 </h5></a>
+						</c:if>
+						<c:if test="${cartCount != 0 }">
+							<a href="/B_P003_D001/cartList"><h5 class="mt-2">${cartCount } </h5></a>
+						</c:if>
+					</li>
+
+					<li class="list-group-item d-flex justify-content-between align-items-center">
+						<b>구매내역</b>
+						<c:if test="${buyCount == 0 }">
+							<a href="/B_P003_D001/paymentList"><h5 class="mt-2">0 </h5></a>
+						</c:if>
+						<c:if test="${buyCount != 0 }">
+							<a href="/B_P003_D001/paymentList"><h5 class="mt-2">${buyCount } </h5></a>
+						</c:if>
+					</li>
 
 					<li class="list-group-item">
 						<nav id="scroll">

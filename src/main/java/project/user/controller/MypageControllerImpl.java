@@ -38,6 +38,9 @@ public class MypageControllerImpl implements MypageController {
 	@Autowired
 	UserService userService;
 	
+	@Autowired        //쇼핑몰관련
+	B_P003_D001productService b_P003_D001productService;
+
 	@Autowired
 	ThumbnailMaker thumbnailMaker;
 	
@@ -59,11 +62,28 @@ public class MypageControllerImpl implements MypageController {
 		}
 		List<Map> CList = commuService.selectCreatedCommu(id); 
 		List<Map> JList = commuService.selectJoinedCommu(id);
+		System.out.println("컨트롤러: "+CList);
+
+		//////쇼핑몰관련///
+		int userNum = userService.selectUserNum(id);         //유저넘
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("userNum", userNum);
+		map.put("orderType", 2);
+        int wishCount =b_P003_D001productService.wishCount(userNum);
+        int cartCount = b_P003_D001productService.CartTotal(map);
+    	int total = b_P003_D001productService.totalPaymentCount(map);
+        Map<String,Object> point =b_P003_D001productService.buyerinfo(map);
+        mav.addObject("buyCount",total); //구매수량
+        mav.addObject("point",point);  //보유포인트
+        mav.addObject("cartCount",cartCount); // 장바구니 수량
+        mav.addObject("wishCount",wishCount); // 위시리스트 수량
+      	////쇼핑몰관련///
 		
 		mav.addObject("userVO", userVO);
 		mav.addObject("CList", CList);
 		mav.addObject("JList", JList);
 		mav.setViewName("/user/mypageHome");
+		System.out.println("갖다준당 : " + userVO);
 		return mav;
 	}
 

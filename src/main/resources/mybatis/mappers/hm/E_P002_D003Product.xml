@@ -177,11 +177,13 @@
        
   	<!-- 상품상세 -->
        <select id="selectProductDetail" resultType="map" parameterType="java.util.Map">
-	       select *
+	       select op.color,op.prodsize,op.quantity,p.prodnum,
+                   p.content,p.name,p.price,p.type,op.optionnum
            from products p, prodoption op
            where p.prodnum=op.prodnum
            and p.PRODNUM = #{prodNum}
        </select>
+       
        
   	<!-- 상품상세페이지의 이미지들 -->
        <select id="selectProductDetailImages" resultType="map" parameterType="java.util.Map">
@@ -207,26 +209,92 @@
       ]]>      
    </update> -->
    
+   
+     <!-- 구매 성공 후 수량 빼기 -->   
+    <update id="modOption"  parameterType="java.util.Map">
+     <![CDATA[
+	  update orders
+	     set quantity = #{quantity},
+          ORDERTYPE= 2,
+          optionnum = #{optionNum}
+	     where ordernum= #{ordernum}
+      ]]>      
+   </update> 
+   
+        <!-- 위시리스트 메모 업데이트 -->
+    <update id="updateMemo"  parameterType="java.util.Map">
+     <![CDATA[
+	  update prodlike
+	     set PRODCOMMENT = #{prodComment}
+	     where likenum= #{likeNum}
+      ]]>      
+   </update> 
+   
    	    <!-- 구매 성공 후 수량 빼기 -->
 	   <update id="updateQuantity"  parameterType="java.util.List">
         <foreach  item="item" collection="list"  index="index" 
       separator=";" open="DECLARE BEGIN" close="; END;" >
-           UPDATE products 
+           UPDATE prodoption 
            SET quantity = quantity -#{item.quantity}
            WHERE prodNum= #{item.prodNum}
+           and optionNum=#{item.optionNum}
       </foreach>
-       </update>
+       </update> 
    
    
    
          <!-- 구매 성공 후 포인트 차감 -->
-       <update id="updatePoint"  parameterType="java.util.Map">
+      <!--   <insert id="updatePoint"  parameterType="java.util.Map">
      <![CDATA[
-	     update point
-	     set result = result- #{point}
-	     where userNum = #{userNum}
+	     MERGE INTO point
+         USING dual
+         ON (USERNUM = #{userNum} )
+         WHEN MATCHED THEN
+         UPDATE SET
+          result= result+ #{totalPrice}
+           WHERE usernum=#{userNum}
+         
+         WHEN NOT MATCHED THEN
+         INSERT (USERNUM,STARTDATE,ENDDATE,USED,RESULT,ORDERNUM,CREATEDAT,PAYTYPE)
+         VALUES (#{userNum},sysdate,'9999-12-31',0,#{point},#{orderNum},sysdate,'card')
       ]]>      
-   </update>  
+   </insert> -->   
+   
+<!--         <insert id="updatePoint"  parameterType="java.util.Map">
+     <![CDATA[
+         INSERT into point (POINTNUM,USERNUM,STARTDATE,ENDDATE,USED,RESULT,ORDERNUM,CREATEDAT,PAYTYPE)
+         VALUES (#{poinNum},#{userNum},sysdate,'9999-12-31',0,#{result},#{orderNum},sysdate,'card')
+      ]]>      
+      </insert>  
+    -->
+    
+    
+      <insert id="updatePoint" parameterType="java.util.List">
+	   insert into POINT(
+	    POINTNUM,USERNUM,usedDay,USED,getpoint,ORDERNUM,UPDATEDAT,PAYTYPE
+				    )
+		        select  seq_point.nextval as POINTNUM, A.* from(
+	 	<foreach collection="list" item="item" separator="union all" >
+		        select  
+				        #{item.userNum} as USERNUM,
+				        sysdate as usedDay,
+				        #{item.used} as  USED,
+				        #{item.getPoint} as getpoint,
+				        #{item.orderNum} as ORDERNUM,
+				        sysdate as UPDATEDAT,
+				        #{item.payType} as PAYTYPE
+				        from dual
+   		 </foreach>)A
+     </insert>
+   
+   
+   
+   
+          <select id="checkPointTable" resultType="map" parameterType="java.util.Map">
+	      SELECT * FROM point
+	      where userNum= #{userNum}
+       </select>
+       
        
               <!-- 상품 평균점수 -->
        <select id="prodAverage" resultType="int" parameterType="java.util.Map">
@@ -237,9 +305,12 @@
        
                      <!-- 포인트-->
        <select id="getPoint" resultType="int" parameterType="java.util.Map">
-             select  decode(RESULT,null,0,RESULT)
-             from POINT
-             where USERNUM = #{userNum}
+                   select sum(getpoint) -sum(used)
+                 from(
+                  select distinct updatedat,getpoint,used
+                  from point
+                  where usernum=#{userNum}
+                  ) 
        </select> 
        
                    <!-- 수량확인-->
@@ -250,10 +321,11 @@
        </select> 
        
                     <!-- 배송지-->
-       <select id="getAddress" resultType="userVO" parameterType="java.util.Map">
+       <select id="getAddress" resultType="map" parameterType="java.util.Map">
              select   *
-             from users 
+             from delivery 
              where USERNUM = #{userNum}
+             and  delibasic =1
        </select> 
        
                          <!-- 전체검색 카운트 (검색)-->
@@ -580,6 +652,31 @@
        </select>
        
        
+         <!-- 관심상품 추가 -->
+        <insert id="addProdLike"  parameterType="java.util.Map">
+        <selectKey resultType="int" keyProperty="likeNum" order="BEFORE">
+	    	 select seq_prodLike.nextval from dual
+	    </selectKey>
+        <![CDATA[
+      insert into prodlike(LIKENUM,USERNUM,PRODNUM,PICKDATE)
+      values(#{likeNum},#{userNum},#{prodNum},sysdate)
+          ]]>
+       </insert> 
+       
+       
+       
+             <!-- 기본배송지 추가 -->
+        <insert id="addDelivery"  parameterType="java.util.Map">
+        <selectKey resultType="int" keyProperty="deliNum" order="BEFORE">
+	    	 select deliNum_SEQ.nextval from dual
+	    </selectKey>
+        <![CDATA[
+      insert into delivery(DELINUM,USERNUM,ADDRESS,ADDRESS2,CREATEDAT,DELIBASIC,ZONECODE,CUSTNAME,CUSTPHONE)
+      values(#{deliNum},#{userNum},#{address1},#{address2},sysdate,1,#{post},#{userName},#{phonNum})
+          ]]>
+       </insert> 
+       
+       
     <!-- 페이징 처리 후 게시글 이미지 조회       -->   
          <select id="shopMainImage" resultMap="e_P002_D003PhotoVO" parameterType="java.util.Map">
             <![CDATA[
@@ -602,6 +699,15 @@
         </select>
         
         
+        
+        <select id="seachOptionNum" resultType="int" parameterType="java.util.Map">
+	       select optionnum
+           from prodoption
+           where PRODNUM = #{prodNum}
+       </select>
+        
+        
+        
             <!-- 장바구니 페이징 -->   
          <select id="UserCartList" resultType="map" parameterType="java.util.Map">
         <![CDATA[
@@ -609,27 +715,98 @@
 		FROM (
 			SELECT ROWNUM RN, A.* 
 				FROM (
-				        SELECT o.ORDERNUM,o.USERNUM,o.ORDEREDAT,o.PRICE,o.CHARGE,o.ORDERSTATUS,
-                        o.DELIVERYSTATUS,o.ORDERTYPE,o.PRODNUM,o.QUANTITY,o.PRODNAME,io.content as image
-						FROM orders o,prodPhoto io, products p
-                        where o.prodnum= io.prodnum
-                        and io.prodnum=p.prodnum
-                        and o.userNum = #{userNum}
-                        and o.ordertype=2
-                        and io.pphotonum=1
-						ORDER BY o.prodNum desc       
+                              select o.ordernum,o.prodnum,o.optionnum,p.name, o.price,o.quantity,op.color,op.prodsize,po.content as image
+                                from orders o, products p, prodphoto po,prodoption op
+                                where o.prodnum=p.prodnum
+                                and p.prodnum=po.prodnum
+                                and op.optionnum =o.optionnum
+                                and o.usernum= #{userNum}
+                                and  o.ordertype= #{orderType}
+                                and po.pphotonum=1
+                                order by ordernum desc     
 						) A
 				)
 	  WHERE RN BETWEEN #{start} AND #{end}
         ]]>
         </select>
         
+        
+             <!-- 구매내역 페이징 -->   
+         <select id="paymentList" resultType="map" parameterType="java.util.Map">
+        <![CDATA[
+     SELECT *
+		FROM (
+			SELECT ROWNUM RN, A.*                                    
+				FROM (
+                           select pay.createdat, min(pay.buyername) as buyername,count(pay.ordernum) as count,
+                min(pay.imp_uid) as imp_uid, min(pay.merchant_uid) as merchant_uid,min(pay.ordernum),
+                min(pay.type) as type ,min(pay.apply_num) as apply_num ,min(p.name) as name,
+                sum(o.payTotal) as totalPrice ,min(used) as used,min(o.deliverytype) as delivery
+                
+                from payment pay, orders o,products p,point poin
+                where pay.ordernum =o.ordernum
+                and p.prodnum=o.prodnum
+                and poin.ordernum=pay.ordernum
+                and o.usernum=#{userNum}
+                 and o.ordertype=4
+                 group by pay.createdat
+                 order by pay.createdat desc
+						) A
+				)
+	  WHERE RN BETWEEN #{start} AND #{end}
+        ]]>
+        </select>
+        
+              <select id="payDetailList" resultType="map" parameterType="java.util.Map">
+        <![CDATA[
+      select pay.ordernum,o.usernum,o.prodnum,o.optionnum,o.quantity,o.price,o.orderstatus,o.deliverystatus,
+      p.name,p.type ,po.content,
+      d.address,d.address2,d.custname,d.custphone,d.delinum,d.zonecode,
+      op.color,op.prodsize
+      
+       from payment pay,orders o,products p,prodphoto po ,
+           delivery d,point poin ,prodoption op
+      where pay.ordernum=o.ordernum
+      and o.prodnum=p.prodnum
+      and p.prodnum=po.prodnum
+      and pay.ordernum = poin.ordernum
+      and d.usernum = poin.usernum
+       and o.optionnum= op.optionnum
+       
+      and po.pphotonum=1
+      and o.ordertype=4
+      
+      and o.usernum=#{userNum}
+      and d.delibasic =#{delivery}
+      and pay.createdat =#{createDat}
+        ]]>
+        </select>
+        
+         <select id="totalPaymentListCount" resultType="int" parameterType="java.util.Map">
+        <![CDATA[
+     SELECT count(*)
+		FROM (
+                select pay.createdat, min(pay.buyername),count(pay.ordernum),min(pay.imp_uid),min(pay.merchant_uid),
+                min(pay.ordernum),min(pay.type),min(pay.apply_num),min(p.name),sum(o.price),min(used)
+                from payment pay, orders o,products p,point poin
+               where pay.ordernum =o.ordernum
+               and p.prodnum=o.prodnum
+                and poin.ordernum=pay.ordernum
+                and o.usernum=#{userNum}
+                and o.ordertype=4
+                 group by pay.createdat
+				)
+        ]]>
+        </select>
+        
+        
+        
                	<!--장바구니 총개수 -->
        <select id="CartCount" resultType="int" parameterType="java.util.Map">
         <![CDATA[
 	      SELECT COUNT(*) FROM orders
             where userNum = #{userNum}
-            and orderType =2
+            and orderType = #{orderType}
 	       ]]>
        </select>
        
@@ -657,10 +834,43 @@
                         and o.userNum = #{userNum}
                         and o.ordertype=3
                         and io.pphotonum=1
-						ORDER BY o.prodNum desc       
+						ORDER BY o.ordernum desc       
 						) A
 				)
 	  WHERE RN BETWEEN #{start} AND #{end}
+        ]]>
+        </select>
+       
+       
+       
+               <!-- 위시리스트 -->   
+         <select id="selectWishList" resultType="map" parameterType="java.util.Map">
+        <![CDATA[
+	 	        SELECT *
+		FROM (
+			SELECT ROWNUM RN, C.* 
+				FROM (
+                          select B.*,op.optionnum
+                          from (select A.*,af.value, af.totalcount
+                                 from (select  pl.prodnum,pl.usernum,pl.LIKENUM,to_char(pl.PICKDATE,'yyyy-mm-dd')as pickdate,pl.PRODCOMMENT
+                                ,p.name,po.content as image,p.price
+                                 from prodlike pl,products p,prodphoto po
+                                  where  pl.prodnum=p.prodnum
+                                  and p.prodnum=po.prodnum
+                                  and po.pphotonum=1
+                                  and pl.usernum = #{userNum}
+                                 ORDER BY pl.likenum desc   
+                                                       ) A left outer join (  select prodnum, round(avg(evalue),1) as value,count(*) as totalcount
+                                                                              from productafter
+                                                                              where aftertype is null
+                                                                              group by prodnum) af on A.prodnum=af.prodnum) B left outer join (
+                                                                                           select prodnum, min(optionnum) as optionnum
+                                                                                           from prodoption
+                                                                                           group by prodnum     
+                                                                                                 ) op on B.prodnum=op.prodnum  
+						) C
+				)
+	 WHERE RN BETWEEN #{start} AND #{end}
         ]]>
         </select>
        
@@ -689,17 +899,36 @@
       </foreach>
        </update>
         
+        
+	    <!--위시리스트->장바구니 후 위시리스트 내용 삭제-->
+	   <delete id="deleteWish"  parameterType="java.util.List">
+        <foreach  item="item" collection="list"  index="index" 
+      separator=";" open="DECLARE BEGIN" close="; END;" >
+           DELETE from prodlike
+           WHERE likenum= #{item.likeNum}
+      </foreach>
+       </delete>
+        
+           <!--위시리스트 삭제-->
+	   <delete id="deleteWishOne"  parameterType="java.util.Map">
+           DELETE from prodlike
+           WHERE likenum= #{likeNum}
+       </delete>
+        
+        
+        
             <!-- 장바구니 결제 -->
         <update id="insertOrders"  parameterType="java.util.List">
         <foreach  item="item" collection="list"  index="index" 
       separator=";" open="DECLARE BEGIN" close="; END;" >
            UPDATE orders 
            SET PAYTOTAL = #{item.payTotal}
-           ,ORDERTYPE =3
+           ,ORDERTYPE =4
            ,QUANTITY = #{item.quantity}
            ,ORDERSTATUS =2
            ,DELIVERYSTATUS =200
            ,ORDEREDAT =sysdate
+           ,DELIVERYTYPE = #{item.deliveryType}
            WHERE USERNUM= #{item.userNum}
            AND ORDERNUM= #{item.orderNum}
       </foreach>
@@ -708,16 +937,41 @@
 
                <!-- 즉시구매 -->
         <insert id="insertOrderOne"  parameterType="java.util.List">
-        <selectKey resultType="int" keyProperty="orderNum" order="BEFORE">
-	    	 select seq_orders.nextval from dual
-	    </selectKey>
         <foreach  item="item" collection="list"  index="index" 
       separator=";" open="DECLARE BEGIN" close="; END;">
-      insert into orders(ORDERNUM, USERNUM,ORDEREDAT,PRICE,PAYTOTAL,CHARGE,ORDERSTATUS,DELIVERYSTATUS,ORDERTYPE,PRODNUM,PRODNAME,QUANTITY)
-      values(#{orderNum},#{item.userNum},SYSDATE,#{item.price},#{item.payTotal},3000,2,200,1,#{item.prodNum},#{item.prodName},#{item.quantity})
+      insert into orders(ORDERNUM, USERNUM,ORDEREDAT,PRICE,PAYTOTAL,CHARGE,ORDERSTATUS,DELIVERYSTATUS,ORDERTYPE,OPTIONNUM,PRODNUM,PRODNAME,QUANTITY,DELIVERYTYPE)
+      values(#{item.orderNum},#{item.userNum},SYSDATE,#{item.price},
+      #{item.payTotal},3000,2,200,4,#{item.optionNum},#{item.prodNum},#{item.prodName},#{item.quantity},#{item.deliveryType})
       </foreach>
-       </insert>
-
+       </insert> 
+       
+        <!-- 즉시구매 -->
+	<!--   <insert id="insertOrderOne" parameterType="java.util.List">
+	   insert into orders(
+	ORDERNUM, USERNUM,ORDEREDAT,PRICE,PAYTOTAL,CHARGE,ORDERSTATUS,DELIVERYSTATUS,ORDERTYPE,OPTIONNUM,PRODNUM,PRODNAME,QUANTITY
+				    )
+		        select  seq_orders.nextval as ORDERNUM, A .* from(
+	 	<foreach collection="list" item="item" separator="union all" >
+		        select  
+				        #{item.userNum} as USERNUM,
+				        sysdate as ORDEREDAT,
+				        #{item.price} as PRICE,
+				        #{item.payTotal} as PAYTOTAL, 
+				        3000 as CHARGE, 
+				        2 as ORDERSTATUS,
+				        200 as DELIVERYSTATUS,
+				        4 as ORDERTYPE,   
+				        #{item.optionNum} as OPTIONNUM,
+				        #{item.prodNum} as PRODNUM,
+				        #{item.prodName} as PRODNAME,
+				        #{item.quantity} as QUANTITY
+				        from dual
+   		 </foreach>)A
+    </insert> -->
+    
+    
+    
+	 
 	      <!-- orders (ordertype 일반구매 = 1, 장바구니 =2, 구매전장바구니 =3)
 	                  (oderstatus 결제완료 =1, 미완료 =2)                               
 	                  (deliverystatus 배송준비 =1, 배송중 =2, 배송완료=3)
@@ -808,7 +1062,7 @@
 					PRODNUM,
 					QUANTITY
 				    )
-		        select  seq_orders.nextval as ORDERNUM, A .* from(
+		        select  orders_seq.nextval as ORDERNUM, A .* from(
 	 	<foreach collection="list" item="item" separator="union all" >
 		        select  
 				        #{item.userNum} as USERNUM,
@@ -818,16 +1072,29 @@
 				        3000 as CHARGE,
 				        1 as ORDERSTATUS,
 				        100 as DELIVERYSTATUS,
-				        2 as ORDERTYPE,
+				        #{item.orderType} as ORDERTYPE,
 				        #{item.prodNum}as PRODNUM,
 				        #{item.quantity}as QUANTITY
 				        from dual
    		 </foreach>)A
     </insert>
 	 
+	 
+	 
+	<insert id="addCartOne"  parameterType="java.util.Map">
+   		<selectKey resultType="int" keyProperty="orderNum" order="BEFORE">
+	     select orders_seq.nextval from dual
+	    </selectKey>
+     insert INTO orders(  ORDERNUM, USERNUM,PRICE, OPTIONNUM,ORDEREDAT,CHARGE,ORDERSTATUS,DELIVERYSTATUS,ORDERTYPE,PRODNUM,QUANTITY)
+      VALUES (#{orderNum}, #{userNum},#{prodPrice} ,#{optionNum} ,CURRENT_TIMESTAMP ,3000 ,1 ,100 ,#{orderType} ,#{prodNum},1)
+   </insert>
 	
+	
+	
+	
+	 
 	     <!-- 장바구니결제 후 payment -->
-	<insert id="insertPaymentmultiple"  parameterType="java.util.Map">
+<!-- 	<insert id="insertPaymentmultiple"  parameterType="java.util.Map">
 	        <selectKey resultType="int" keyProperty="orderNum" order="BEFORE">
 	    	 	select orderNum
             from orders
@@ -843,12 +1110,20 @@
       <if test= "item.orderNum != null and item.orderNum == 0">
 	   VALUES (#{orderNum},#{item.payType},sysdate,#{item.custName},#{item.merchant_uid},#{item.imp_uid},#{item.apply_num})
       </if>
-      <if test= "item.orderNum != null and item.orderNum != 0">
+      <if test= "item.orderNum != null and item.orderNum != 0">  장바구니
       VALUES (#{item.orderNum},#{item.payType},sysdate,#{item.custName},#{item.merchant_uid},#{item.imp_uid},#{item.apply_num})
       </if>
     </foreach>
-  </insert>
+  </insert> -->
   
+   <!-- 장바구니결제 후 payment -->
+  <insert id="insertPaymentmultiple"  parameterType="java.util.Map">
+    <foreach item="item"  collection="list"   open="INSERT ALL" 
+                  separator=" " close="SELECT * FROM DUAL" >
+       INTO payment(ORDERNUM,TYPE,CREATEDAT,BUYERNAME,MERCHANT_UID,IMP_UID,APPLY_NUM )
+      VALUES (#{item.orderNum},#{item.payType},sysdate,#{item.custName},#{item.merchant_uid},#{item.imp_uid},#{item.apply_num})
+    </foreach>
+  </insert>
 	
 	<insert id="insertPayment" parameterType="java.util.Map"   >
 		<selectKey resultType="int" keyProperty="orderNum" order="BEFORE">
@@ -883,13 +1158,12 @@
 	
 	<insert id="insertDelivery" parameterType="java.util.Map"   >
    		<selectKey resultType="int" keyProperty="deliNum" order="BEFORE">
-         select seq_delivery.nextval from dual
+         select deliNum_SEQ.nextval from dual
 	    </selectKey>
 	    <![CDATA[
 		   insert into delivery(
 		                 USERNUM,
 		                DELINUM, 
-		                TYPE,
                     ADDRESS,
                     CREATEDAT,
                     DELIBASIC,
@@ -898,15 +1172,8 @@
                   CUSTNAME,
                    CUSTPHONE
 				    )
+                values(#{userNum},#{deliNum},#{address1},sysdate,#{deliBasic},#{zoneCode},#{address2},#{custName},#{phoneNum})
 		]]>
-		<choose>
-		 <when test="chooseAddress=='기본배송지'">
-                values(#{userNum},#{deliNum},1,#{address1},sysdate,1,#{zoneCode},#{address2},#{custName},#{phoneNum})
-              </when>
-                 <when test="chooseAddress=='변경배송지'">
-                values(#{userNum},#{deliNum},2,#{address1},sysdate,1,#{zoneCode},#{address2},#{custName},#{phoneNum})
-              </when>
-		</choose>
 	</insert> 
 
 	      <!-- 상품등록 -->
@@ -979,8 +1246,22 @@
        
        
        
-       
-  
+          <!-- delibasic -->  
+        <select id="getDelibasic" resultType="int" parameterType="java.util.Map" >
+        <![CDATA[
+	    	select  max(delibasic) 
+            from delivery
+            where usernum = #{userNum}
+        ]]>
+        </select>
+            <!-- delibasic 사이즈 -->  
+        <select id="getDelibasicSize" resultType="map" parameterType="java.util.Map" >
+        <![CDATA[
+	    	select  * 
+            from delivery
+            where usernum = #{userNum}
+        ]]>
+        </select>
   
                   <!-- prodnum -->  
         <select id="prodnum" resultType="int" >
@@ -1000,6 +1281,13 @@
         ]]>
         </select>
         
+        
+            <!-- optionnum dd -->  
+        <select id="selectOrderNum" resultType="int" >
+        <![CDATA[
+         select orders_seq.nextval from dual
+        ]]>
+        </select>
   
               <!-- 옵션 등록  문제는 시퀀스가 한번밖에 돌지않아 2번재부터 에러발생-->
     <!-- <insert id="addOption"  parameterType="java.util.List">
@@ -1032,6 +1320,39 @@
 				        from dual
    		 </foreach>)A
     </insert>
+    
+    
+  
+     <insert id="addCartFromWish" parameterType="java.util.List">
+	   insert into orders(
+		                ORDERNUM, 
+		                USERNUM,
+		                PRICE,
+		                OPTIONNUM,
+                    ORDEREDAT,
+					CHARGE,
+					ORDERSTATUS,
+					DELIVERYSTATUS,
+					ORDERTYPE,
+					PRODNUM,
+					QUANTITY
+				    )
+		        select  orders_seq.nextval as ORDERNUM, A .* from(
+	 	<foreach collection="list" item="item" separator="union all" >
+		        select  
+				        #{item.userNum} as USERNUM,
+				        #{item.price} as PRICE, 
+				        #{item.optionNum} as OPTIONNUM,
+				        CURRENT_TIMESTAMP as ORDEREDAT, 
+				        3000 as CHARGE,
+				        1 as ORDERSTATUS,
+				        100 as DELIVERYSTATUS,
+				        3 as ORDERTYPE,
+				        #{item.prodNum}as PRODNUM,
+				        #{item.quantity}as QUANTITY
+				        from dual
+   		 </foreach>)A
+    </insert>  
    
    
                 <!-- 글목록 이미지 하나 -->  
@@ -1155,7 +1476,7 @@
 					evalue
 				    )
 					  			values(
-					  			       #{afterNum},
+					  			       #{userNum},
 					  			      #{afterNum},
 					  			      #{prodNum},
 					  			      #{content},
@@ -1181,7 +1502,7 @@
 				    )
 					  			values(
 					  			     #{afterType},
-					  			      #{afterNum},
+					  			      #{userNum},
 					  			      #{afterNum},
 					  			      #{prodNum},
 					  			      #{content},
@@ -1189,8 +1510,6 @@
 					  			      )
 		]]>
 	</insert> 
-	
-	
 	     <!-- TEST -->   
          <select id="test" resultType="OrdersVO" parameterType="java.util.Map">
         <![CDATA[
@@ -1199,6 +1518,27 @@
 		where ordernum =#{orderNum}
         ]]>
         </select>
+        
+        
+        <!-- 결제완료 주문내역 -->
+        <select id="buyCount" resultType="int" parameterType="int">
+        <![CDATA[
+        SELECT count(*)
+		FROM orders
+		where userNum =#{userNum}
+		and orderType=4
+        ]]>
+        </select>
+        
+        <!-- 위시리스트 -->
+       <select id="wishCount" resultType="int" parameterType="int">
+        <![CDATA[
+        SELECT count(*)
+		FROM prodlike
+		where userNum =#{userNum}
+        ]]>
+        </select>
+        
 	
 			
 </mapper>
