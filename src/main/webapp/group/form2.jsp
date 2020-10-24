@@ -8,55 +8,54 @@
 <div id="groupForm-container" class="container" >
     <div id="groupForm">
         <h1 class="p-3">다함께 산오르기 등록</h1>
-        <div class="m-3">
-            <label for="mtNm">산/등산로 설정</label>
+        <div class="col-12">
             <div class="form-inline">
-                <input type="text" class="form-control col-6" id="mtNm" readonly>
-                <button id="setPath" class="btn btn-info " data-toggle="modal" data-target="#pathModal">산/등산로 찾기</button>
+                <input type="text" class="form-control" id="mtNm" placeholder="산/등산로" readonly>
+                <button id="setPath" class="btn btn-info ml-1" data-toggle="modal" data-target="#pathModal">검색</button>
             </div>
         </div>
-        <div class="m-3">
-            <label for="name">모임 제목</label>
-            <input type="text" class="form-control" id="name">
+        <div class="col-12 pt-3">
+            <input type="text" class="form-control" id="name" placeholder="모임 제목">
+        </div>
+        <div class="row p-3">
+            <div class="col-12">
+                <select class="custom-select" id="area">
+                    <option value="0" selected>모임 지역</option>
+                    <option value="서울">서울</option>
+                    <option value="부산">부산</option>
+                    <option value="대구">대구</option>
+                    <option value="인천">인천</option>
+                    <option value="광주">광주</option>
+                    <option value="대전">대전</option>
+                    <option value="울산">울산</option>
+                    <option value="세종">세종</option>
+                    <option value="경기">경기</option>
+                    <option value="강원">강원</option>
+                    <option value="충북">충북</option>
+                    <option value="충남">충남</option>
+                    <option value="전북">전북</option>
+                    <option value="전남">전남</option>
+                    <option value="경북">경북</option>
+                    <option value="경남">경남</option>
+                    <option value="제주">제주</option>
+                </select>
+                <input id="area-detail"type="text" class="form-control" placeholder="상세 집합 장소를 입력해주세요(선택)">
+            </div>
+        </div>
+        <div class="col-6">
+            <input type="text" class="form-control pr-3" id="startDay" placeholder="모임 시작 날짜">
+        </div>
+        <div class="col-6 p-3">
+            <label for="staffMax">출발 인원</label>
+            <div class="staff form-inline">
+                <i id="decrease" class="fas fa-minus"></i>
+                <h2 id="staffMax" class="m-0">2</h2><h2 class="m-0">인 출발</h2>
+                <i id="increase"class="fas fa-plus" ></i>
+            </div>
         </div>
         <div class="m-3">
             <label for="detail">모임 상세</label>
             <textarea class="form-control" rows="12" id="detail"></textarea><br>
-        </div>
-        <div class="mb-3 col-6">
-            <label for="staffMax">모임 인원</label>
-            <div class="staff">
-                <i id="decrease" class="fas fa-minus"></i>
-                <h2 id="staffMax" style="margin-bottom: 0">2</h2>명
-                <i id="increase"class="fas fa-plus" ></i>
-            </div>
-        </div>
-        <div class="mb-3 col-6" >
-            <label for="startDay">모임 시작 날짜</label>
-            <input type="date" class="form-control" id="startDay">
-        </div>
-        <div class="mb-3 col-6">
-            <label for="area">모임 지역</label>
-            <select class="custom-select" id="area">
-                <option value="0" selected>지역을 선택해주세요</option>
-                <option value="서울">서울</option>
-                <option value="부산">부산</option>
-                <option value="대구">대구</option>
-                <option value="인천">인천</option>
-                <option value="광주">광주</option>
-                <option value="대전">대전</option>
-                <option value="울산">울산</option>
-                <option value="세종">세종</option>
-                <option value="경기">경기</option>
-                <option value="강원">강원</option>
-                <option value="충북">충북</option>
-                <option value="충남">충남</option>
-                <option value="전북">전북</option>
-                <option value="전남">전남</option>
-                <option value="경북">경북</option>
-                <option value="경남">경남</option>
-                <option value="제주">제주</option>
-            </select>
         </div>
         <div class="mb-3 col-12">
             <label for="image">이미지</label>
@@ -73,18 +72,17 @@
         <div class="panel-group" id="accordion">
             <div class="panel panel-default">
                 <div class="panel-title col-12">
-                    상세설정
+                    상세 조건설정
                     <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">
                         <input class="toggle-btn" type="checkbox" data-toggle="toggle" data-onstyle="info" data-size="xs">
                     </a>
                 </div>
                 <div id="collapse1" class="panel-collapse collapse in">
                     <div class="panel-body">
-                        <div class="mb-3 col-6">
-                            <pre></pre>
-                            <label for="age">나이대 설정</label>
-                            <div id="age">
-                                <select class="custom-select" id="ageStart">
+                        <div class="col-12 p-3">
+                            <label for="age">나이</label>
+                            <div id="age" class="row col-12">
+                                <select class="custom-select col-6" id="ageStart">
                                     <option value="0" selected>최소</option>
                                     <option value="10">10</option>
                                     <option value="20">20</option>
@@ -95,7 +93,7 @@
                                     <option value="70">70</option>
                                     <option value="80">80</option>
                                 </select>
-                                <select class="custom-select" id="ageEnd">
+                                <select class="custom-select col-6" id="ageEnd">
                                     <option value="0" selected>최대</option>
                                     <option value="10">10</option>
                                     <option value="20">20</option>
@@ -113,9 +111,9 @@
                         <div class="mb-3 col-6">
                             <label for="sex">성별</label>
                             <select class="custom-select" id="sex">
-                                <option value="무관" selected>성별</option>
-                                <option value="남자">남자</option>
-                                <option value="여자">여자</option>
+                                <option value="무관" selected>무관</option>
+                                <option value="남자">남자만</option>
+                                <option value="여자">여자만</option>
                             </select>
                         </div>
                     </div>
@@ -134,16 +132,18 @@
                 <!-- Modal content-->
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title">등산로 설정하기</h4>
+                        <h4 class="modal-title">산/등산로 찾기</h4>
                         <button type="button" class="close" data-dismiss="modal">x</button>
                     </div>
                     <div class="modal-body row">
-                        <input type="text" class="form-control ml-3 col-6" placeholder="산/등산로 이름 입력" id="mountainName">
-                        <button id="searchByMtnm" class="btn btn-info">검색</button>
+                        <select class="custom-select col-3 ml-3" id="searchType">
+                            <option value="mtnm" selected>산</option>
+                            <option value="nmtnm">등산로</option>
+                        </select>
+                        <input type="text" class="form-control col-6" placeholder="산/등산로 이름 입력" id="mountainName">
+                        <button id="searchByMtnm" class="btn btn-info ml-3">검색</button>
                     </div>
-                    <div class="modal-content">
-                        <ul class="mountainList"></ul>
-                    </div>
+                    <ul class="mountainList"></ul>
                 </div>
 
             </div>
@@ -218,6 +218,10 @@
 
     $(document).ready(function () {
 
+        $('#startDay').click(function (){
+            $(this).attr({type: 'datetime-local'});
+        })
+
         var staffMax = 2;
 
         $('#increase').on('click',function (){
@@ -231,12 +235,11 @@
         $('#decrease').on('click',function (){
             staffMax--;
             $('#staffMax').text(parseInt(staffMax));
-            console.log(staffMax)
-            if(staffMax<1){
-                alert("최소 1명 이상 지정해야 합니다")
+            if(staffMax<2){
+                alert("2인 이상 지정해야 합니다")
                 staffMax++;
                 $('#staffMax').text(parseInt(staffMax));
-                return
+                return;
             }
         })
 
@@ -258,12 +261,13 @@
             data.append("name",$('#name').val());
             data.append("detail",window.editor.getData()),
             data.append("startDay",$('#startDay').val());
-            data.append("area",$('#area').val());
+            data.append("area",$('#area').val() + ' ' +$('#area-detail').val());
             data.append("ageStart",$('#ageStart').val());
             data.append("ageEnd",$('#ageEnd').val());
             data.append("sex",$('#sex').val());
             data.append("staffMax",$('#staffMax')[0].innerText);
             data.append("userId","<%= request.getSession().getAttribute("LOGIN")%>")
+
 
             $.ajax({
                 type: "POST",

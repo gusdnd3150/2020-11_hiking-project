@@ -72,66 +72,30 @@
 	</div>
 </header>
 	<hr />
-	<div class="pt-3 groupList">
+	<div class="pt-3">
 		<label for="groupList">
 			<h1>인기 등산모임</h1>
 		</label>
-		<div class="row">
-				<c:forEach var="group" items="${group}">
-					<div class="pt-3 col-lg-4 col-sm-6" id="groupList">
-						<div class="card border-0" >
-							<a href="/group/${group.GROUPNUM}">
-								<img class="card-img-top" src="/resources/img/${group.STOREDFILENAME}" alt="..." style="width: 100%" />
-							</a>
-								<div class="card-body row p-3 pl-4">
-									<a href="/profile/${group.ID}" onclick="window.open(this.href,'','width=450, height=600'); return false;">
-										<img src="/resources/img/${group.CONTENT2}" class="rounded-circle" style="width: 40px;height: 40px;">
-									</a>
-									<div class="col-10 p-0 pl-2">
-										<h5 class="card-title m-0" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">
-											<c:if test="${group.STATUS eq '진행중'}">
-												<span style="color: limegreen">
-											</c:if>
-											<c:if test="${group.STATUS eq '마감'}">
-												<span style="color: red">
-											</c:if>
-												[${group.STATUS}]</span>
-												${group.NAME}
-										</h5>
-										<p class="card-text text-muted mb-1" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">${group.DETAIL}</p>
-										<p class="text-muted">${group.STARTDAY} 출발</p>
-									</div>
-								</div>
-						</div>
-					</div>
-				</c:forEach>
+		<div id="groupList" class="row"></div>
+	</div>
+	<hr />
+	<div class="row">
+		<div class="col-sm-12 col-md-6">
+			<label for="afterList">
+				<h1>인기 등산후기</h1>
+			</label>
+			<div id="afterList"></div>
+		</div>
+		<div class="col-sm-12 col-md-6">
+			<label for="afterList">
+				<h1>인기 산모임</h1>
+			</label>
+			<div id="moinList"></div>
 		</div>
 	</div>
 	<hr />
 	<div class="row">
-	<div class="col-6">
-		<div><h1>인기 등산후기</h1></div>
-		<div class="afterList">
-			<c:forEach var="after" items="${after}">
-			<div class="media p-1">
-				<img src="/resources/img/${after.CONTENT2}" class="mr-3 rounded" style="width: 50px;height: 50px">
-				<div class="media-body">
-					<span>
-						<h4 class="m-0" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">[${after.MTNM}] ${after.TITLE}</h4>
-						<div class="text-muted">${after.CREATEDAT}</div>
-					</span>
-				</div>
-			</div>
-			</c:forEach>
-		</div>
-	</div>
-	<div class="col-6">
-		<div><h1>인기 산모임</h1></div>
-	</div>
-	</div>
-	<hr />
-	<div class="row" style="display: table">
-		<div class="m-1" style="display: table-cell;width: 50%">
+		<div class="col-sm-12 col-md-6">
 			<p><h2>공지사항</h2></p>
 			<ul class="list-group">
 				<li class="list-group-item"><a href="#" class="notice-item" style="color: black">[공지사항타입] 공지내용</a><span class="badge badge-danger">New</span></li>
@@ -141,9 +105,9 @@
 				<li class="list-group-item p-0 text-center text-muted"><a href="#" class="notice-item" style="color: black">더보기</a></li>
 			</ul>
 		</div>
-		<div class="m-1" style="display: table-cell;width: 50%">
+		<div class="col-sm-12 col-md-6">
 			<p><h2>이벤트</h2></p>
-			<img src="./resources/img/test/event1.jpg" style="width: 100%">
+			<img src="./resources/img/test/event1.jpg" style="max-width: 100%">
 		</div>
 	</div>
 	<hr />
@@ -154,6 +118,10 @@
 <script type="text/javascript" src="./resources/js/jquery.js"></script>
 <script type="text/javascript" src="./resources/js/bootstrap.min.js"></script>
 <script>
+	$(document).ready(function (){
+		mainGroupList();
+		mainAfterList();
+	})
 	var memberCountConTxt= 296842;
 
 	$({ val : 0 }).animate({ val : memberCountConTxt }, {
@@ -177,5 +145,84 @@
 		window.scrollTo({top:location, behavior:"smooth"})
 	}
 
+	function mainGroupList(){
+
+		$.ajax({
+			type: "GET",
+			url: "/main/groupList.do",
+			dataType: 'json',
+			contentType: "application/json; charset=utf-8;",
+			success: function (response){
+				for(var i=0;i<response.length;i++) {
+
+					var editorContent = response[i].DETAIL;
+					var covertContent = editorContent.replace(/(<([^>]+)>)/ig,"");
+
+					var html = '';
+
+					html += '<div class="pt-3 col-lg-4 col-sm-6" id="groupList">';
+					html += '<div class="card border-0" >';
+					html += '<a href="/group/' + response[i].GROUPNUM + '">';
+					html += '<img class="card-img-top" src="/resources/img/' + response[i].STOREDFILENAME + '" alt="..." style="width: 100%" />'
+					html += '</a>';
+					html += '<div class="card-body row p-3 pl-4">';
+					html += '<a href="/profile/' + response[i].ID + '" onclick=\"window.open(this.href,\'\',\'width=500, height=600\'); return false;">';
+					html += '<img src="/resources/img/' + response[i].CONTENT2 + '" class="rounded-circle" style="width: 40px;height: 40px;">';
+					html += '</a>';
+					html += '<div class="col-10 p-0 pl-2">';
+					html += '<h5 class="card-title m-0" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">';
+
+					if (response[i].STATUS == '모집중') {
+						html += '<span style="color: limegreen">';
+					} else if (response[i].STATUS == '마감') {
+						html += '<span style="color: red">';
+					}
+
+					html += '[' + response[i].STATUS + ']</span>';
+					html += response[i].NAME;
+					html += '</h5>';
+					html += '<p class="card-text text-muted mb-1" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">' + covertContent + '</p>';
+					html += '<p class="text-muted">' + response[i].STARTDAY + ' 출발</p>'
+					html += '</div></div></div></div>';
+
+					$('#groupList').append(html);
+				}
+			},
+			error: function(response){
+				console.log("error");
+			}
+		})
+	}
+
+	function mainAfterList(){
+		$.ajax({
+			type: "GET",
+			url: "/main/afterList.do",
+			dataType: 'json',
+			contentType: "application/json; charset=utf-8;",
+			success: function (response){
+
+				for(var i=0;i<response.length;i++){
+
+					var html = '';
+
+					html += '<div class="media p-1">';
+					html += '<img src="/resources/img/'+response[i].CONTENT2+'" class="mr-3 rounded" style="width: 50px;height: 50px">';
+					html += '<div class="media-body">';
+					html += '<span>';
+					html += '<h4 class="m-0" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">['+response[i].MTNM+'] '+response[i].TITLE+'</h4>';
+					html += '<div class="text-muted">'+response[i].CREATEDAT+'</div>'
+					html += '</span></div></div>';
+
+					$('#afterList').append(html);
+				}
+
+
+			},
+			error: function(response){
+				console.log("error");
+			}
+		})
+	}
 </script>
 <jsp:include page="/common/footer.jsp" />

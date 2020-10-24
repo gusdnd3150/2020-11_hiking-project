@@ -38,7 +38,7 @@
                 <h2>모임 정보</h2>
                 <hr />
                 <h3 class="row col-12 mt-3" style="align-items: center">
-                    <img src="/resources/img/${group.CONTENT2}" class="rounded-circle" style="width: 40px;height: 40px; border: 1px solid grey">
+                    <img src="/resources/img/${group.CONTENT2}" class="rounded-circle" style="width: 40px;height: 40px;">
                     <div class="pl-2">${group.NICKNAME}</div>
                 </h3>
                 <div class="text-muted">${group.CREATEDAT}</div>
@@ -66,9 +66,13 @@
                             </c:when>
                         </c:choose>
                     </li>
-                    <li><b>출발일자</b><div>${group.STARTDAY}</div></li>
-                    <li><b>지역</b> ${group.AREA}</li>
-                    <li><b>조건</b>
+                    <li><b>출발시간</b><div>${group.STARTDAY}</div></li>
+                    <li>
+                        <b>지역/장소</b>
+                        <div>${group.AREA}</div>
+                    </li>
+                    <li><b>모임 제한</b>
+                        <div>
                         <c:choose>
                             <c:when test="${group.AGESTART eq 0 || group.AGEEND eq 0}">
                                 없음
@@ -77,24 +81,19 @@
                                 ${group.AGESTART}세 이상 ${group.AGEEND}세 미만
                             </c:otherwise>
                         </c:choose>
+                        </div>
                     </li>
-<%--                    <li>--%>
-<%--                        집합일시:--%>
-<%--                        참가비:--%>
-<%--                        수정유무--%>
-<%--                        이미지 너무 작은거 올리면 크게 확대 할것(썸네일화 시키자)--%>
-<%--                    </li>--%>
                 </ul>
                 <!--SNS 공유 버튼 넣자-->
             </div>
-            <div style="height: 10%;">
+            <div class="p-1" style="height: 20%;">
                 <div class="row col-12" style="position: relative;">
                     <c:choose>
-                        <c:when test="${favoriteResult eq 1}"><button class="dislike btn btn-danger col-6"><i class="fas fa-heart"></i> 좋아요 취소</button></c:when>
-                        <c:when test="${favoriteResult ne 1}"><button class="like btn btn-outline-danger col-6" ><i class="far fa-heart"></i> 좋아요</button></c:when>
+                        <c:when test="${favoriteResult eq 1}"><button class="dislike btn btn-outline-danger col-6"><i class="fas fa-heart"></i></button></c:when>
+                        <c:when test="${favoriteResult ne 1}"><button class="like btn btn-outline-danger col-6" ><i class="far fa-heart"></i></button></c:when>
                     </c:choose>
                     <!--favoriteResult ne 1 or-->
-                    <button class="btn btn-outline-info col-6" onclick="showMtInfo()">산 정보보기</button>
+                    <button class="btn btn-outline-info col-6" onclick="showMtInfo()">추가 정보</button>
                     <c:choose>
                         <c:when test="${group.STATUS eq 0 and userGradeResult eq 0}"><button class="resultWaitingBtn btn btn-dark col-12" data-toggle="modal" data-target="#resultModal">모집 종료</button></c:when>
                         <c:when test="${group.STATUS eq 0 and userGradeResult eq 1}"><button class="resultWaitingBtn btn btn-dark col-12">모집 종료</button></c:when>
@@ -150,22 +149,21 @@
     <div class="recommend row">
         <c:choose>
             <c:when test="${empty recommendResult}">
-                <div class="text-muted" style="width: 100%; height:200px; font-size: 20px;">
-                    <p class="text-center">현재 ${group.MTNM}의 다른 모임이 없습니다</p>
+                <div class="text-center text-muted" style="width:100%; height: 150px; font-size: 20px;display: flex;justify-content: center;flex-direction: column">
+                        <p>현재 ${group.MTNM}의 다른 모임이 없습니다</p>
                 </div>
             </c:when>
             <c:when test="${!empty recommendResult}">
             <c:forEach var="recommend" items="${recommendResult}">
                 <div class="pt-3 col-lg-3 col-sm-6" id="groupList">
-                    <div class="card border-0" >
+                    <div class="card border-0">
                         <a href="/group/${recommend.GROUPNUM}">
-                            <img class="card-img-top" src="/resources/img/${recommend.STOREDFILENAME}" alt="..." style="max-width: 100%;height: auto" />
+                            <img class="card-img-top" src="/resources/img/${recommend.STOREDFILENAME}" alt="..."/>
                         </a>
                         <div class="card-body row p-3 pl-3">
                             <div class="col-10 pl-2">
                                 <h5 class="card-title m-0" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">${recommend.NAME}</h5>
-                                <p class="card-text text-muted mb-1" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">${recommend.DETAIL}</p>
-                                <p class="text-muted p-0">${recommend.STARTDAY} 출발</p>
+                                <p class="text-muted">${recommend.STARTDAY} 출발</p>
                             </div>
                         </div>
                     </div>
@@ -275,7 +273,7 @@
 
 
     function showMtInfo(){
-        window.open("/mountain/detail/${group.MTNM}","산 정보","width=700, height=500, left=300, top=300");
+        window.open("/mountain/detail/${group.MTNM}","상세 정보","width=800, height=900, left=300, top=300");
     }
 
     function switchPhoto(divName, totalImgs){
@@ -323,7 +321,8 @@
             "depts" : 2,
             "groupNum" : "${group.GROUPNUM}",
             "content" : e.previousSibling.value,
-            "userId" : "<%= request.getSession().getAttribute("LOGIN")%>"
+            "userId" : "<%= request.getSession().getAttribute("LOGIN")%>",
+            "postNum": 0
         }
 
 
@@ -427,9 +426,9 @@ $(document).ready(function (){
             contentType: "application/json; charset=utf-8;",
             success : function (response){
                 $('.like').removeClass("like btn btn-outline-danger col-6")
-                    .addClass("dislike btn btn-danger col-6")
+                    .addClass("dislike btn btn-outline-danger col-6")
                     .empty()
-                    .append("<i class=\"fas fa-heart\"> 좋아요 취소")
+                    .append("<i class=\"fas fa-heart\">")
             },
             error : function (response){
                 console.log("error!");
@@ -453,7 +452,7 @@ $(document).ready(function (){
                 $('.dislike').removeClass("dislike btn btn-danger col-6")
                     .addClass("like btn btn-outline-danger col-6")
                     .empty()
-                    .append("<i class=\"far fa-heart\"> 좋아요")
+                    .append("<i class=\"far fa-heart\">")
             },
             error : function (response){
                 alert("로그인이 필요합니다")
@@ -596,7 +595,8 @@ $(document).ready(function (){
             "depts" : 1,
             "groupNum" : ${group.GROUPNUM},
             "content" : $('#commentContent').val(),
-            "userId" : "<%= request.getSession().getAttribute("LOGIN")%>"
+            "userId" : "<%= request.getSession().getAttribute("LOGIN")%>",
+            "postNum": 0
         }
 
         $.ajax({

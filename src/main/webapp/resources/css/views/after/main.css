@@ -1,7 +1,15 @@
+html {
+    background-color: lightgrey;
+}
 .afterBox {
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
     border: solid 1px lightgrey;
+}
+
+.after-content img {
+    max-width: 100%;
+    height: auto;
 }

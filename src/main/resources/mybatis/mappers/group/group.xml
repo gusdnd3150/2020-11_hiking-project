@@ -4,25 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="group">
-    <resultMap id="groupResult" type="groupVO">
-        <result property="groupNum" column="groupNum" />
-        <result property="name" column="name" />
-        <result property="type" column="type" />
-        <result property="staffCurrent" column="staffCurrent" />
-        <result property="staffMax" column="staffMax" />
-        <result property="detail" column="detail" />
-        <result property="status" column="status" />
-        <result property="startDay" column="startDay" />
-        <result property="createdAt" column="createdAt" />
-        <result property="updatedAt" column="updatedAt" />
-        <result property="area" column="area" />
-        <result property="ageStart" column="ageStart" />
-        <result property="ageEnd" column="ageEnd" />
-        <result property="sex" column="sex" />
-        <result property="mtNm" column="mtNm" />
-    </resultMap>
-    
-    <insert id="insertGroup"  parameterType="map">
+    <insert id="insertGroup" parameterType="map">
         <selectKey keyProperty="groupNum" resultType="_int" order="BEFORE">
             SELECT groups_seq.nextval
             FROM dual
@@ -37,7 +19,7 @@
                 #{staffMax},
                 #{detail},
                 1,
-                #{startDay},
+                REPLACE(#{startDay},'T',''),
                 sysdate,
                 sysdate,
                 #{area},
@@ -65,7 +47,7 @@
     <!-- 메인 리스트 6개 불러오기 (좋아요순) -->
     <select id="selectMainGroupList" resultType="map">
         <![CDATA[
-            SELECT g.groupNum, g.name, g.staffCurrent, g.staffmax, g.detail, DECODE(g.status,0,'마감','진행중') status, TO_CHAR(g.startDay,'yyyy"년"MM"월"dd"일"') startDay, gm.storedFileName, u.id, NVL(ui.CONTENT2,'basic_profile.PNG') content2, COUNT(gl.groupNum) likeCount
+            SELECT g.groupNum, g.name, g.staffCurrent, g.staffmax, g.detail, DECODE(g.status,0,'마감','모집중') status, TO_CHAR(g.startDay,'yyyy"년"MM"월"dd"일"') startDay, gm.storedFileName, u.id, NVL(ui.CONTENT2,'basic_profile.PNG') content2, COUNT(gl.groupNum) likeCount
             FROM groups g
                      INNER JOIN groupsMedia gm
                                 ON g.groupNum = gm.groupNum
@@ -87,28 +69,7 @@
             ORDER BY NVL(COUNT(gl.LIKEYN),0) DESC
         ]]>
     </select>
-
-    <!-- 산오르기 등산모임 리스트 페이지 (수정중) -->
-    <select id="selectAllGroupList" resultType="map">
-        <![CDATA[
-            SELECT g.groupNum, g.name, g.staffCurrent, g.staffmax, g.detail, g.status, TO_CHAR(g.startDay,'yyyy"년"MM"월"dd"일"') startDay, gm.storedFileName, u.id, NVL(ui.CONTENT2,'basic_profile.PNG') content2
-            FROM groups g
-            INNER JOIN groupsMedia gm
-                    ON g.groupNum = gm.groupNum
-            INNER JOIN userWaiting uw
-                    ON g.groupNum = uw.groupNum
-            INNER JOIN users u
-                    ON uw.userId = u.id
-            INNER JOIN userInfo ui
-                    ON u.userNum = ui.userNum
-            WHERE g.type = 1
-              AND uw.userType = 0
-              AND gm.mediaNum = 0
-              AND ROWNUM <=6
-            ORDER BY g.createdAt DESC
-        ]]>
-    </select>
-
+    
     <update id="updateGroup" parameterType="groupVO">
             UPDATE groups
             SET name = #{name},
@@ -139,7 +100,7 @@
                    g.staffMax,
                    g.detail,
                    g.status,
-                   TO_CHAR(g.startday,'yyyy"년" MM"월"dd"일"') startday,
+                   TO_CHAR(g.startday,'yyyy"년" MM"월"dd"일" hh"시"mm"분"') startday,
                    TO_CHAR(g.createdAt,'yyyy.MM.dd. hh:mm') createdAt,
                    TO_CHAR(g.updatedAt,'yyyy.MM.dd. hh:mm') updatedAt,
                    g.area,
@@ -401,7 +362,7 @@
                                 g.staffCurrent,
                                 g.staffmax,
                                 g.detail,
-                                DECODE(g.status, 0, '마감', '진행중')         status,
+                                DECODE(g.status, 0, '마감', '모집중')         status,
                                 TO_CHAR(g.startDay, 'yyyy"년"MM"월"dd"일"') startDay,
                                 gm.storedFileName,
                                 NVL(ui.CONTENT2, 'basic_profile.PNG')    content2,
@@ -434,7 +395,7 @@
                                   g.staffCurrent,
                                   g.staffmax,
                                   g.detail,
-                                  DECODE(g.status,0,'마감','진행중') status,
+                                  DECODE(g.status,0,'마감','모집중') status,
                                   TO_CHAR(g.startDay,'yyyy"년"MM"월"dd"일"') startDay,
                                   gm.storedFileName, NVL(ui.CONTENT2,'basic_profile.PNG') content2,
                                   COUNT(gl.groupNum) likeCount
@@ -461,10 +422,10 @@
             ]]>
         </if>
     </select>
-    <!-- 진행중인 같은 산, 다른 그룹 추천 -->
+    <!-- 모집중인 같은 산, 다른 그룹 추천 -->
     <select id="recommendGroup" resultType="map" parameterType="map">
         <![CDATA[
-            SELECT g.groupNum, g.name, g.staffCurrent, g.staffMax, g.detail, TO_CHAR(g.startDay,'yyyy.mm.dd') startDay, gm.storedFileName
+            SELECT g.groupNum, g.name, g.staffCurrent, g.staffMax, TO_CHAR(g.startDay,'yyyy.mm.dd') startDay, gm.storedFileName
             FROM groups g, groupsMedia gm
             WHERE g.groupNum = gm.groupNum
             AND g.status = 1

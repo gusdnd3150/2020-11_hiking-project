@@ -43,11 +43,11 @@
             <div class="modal-body row" style="text-align: center">
                 <div class="col-6">
                     <img src="../resources/img/select1.png" style="width: 250px; height: 250px; display: block;">
-                    <button class="btn btn-primary" onclick="create1()">1인</button>
+                    <button class="btn btn-primary" onclick="create1()">혼자 가기</button>
                 </div>
                 <div class="col-6" style="text-align: center">
                     <img src="../resources/img/select2.png" style="width: 250px; height: 250px; display: block">
-                    <button class="btn btn-primary" onclick="create2()">2인이상</button>
+                    <button class="btn btn-primary" onclick="create2()">다른사람과 가기</button>
                 </div>
             </div>
         </div>
@@ -68,9 +68,6 @@
         var curHeight = $(window).height() + $(window).scrollTop();
         var docHeight = $(document).height();
 
-        console.log(curHeight)
-        console.log(docHeight)
-
         if (curHeight > docHeight-1) {
 
             setTimeout(function (){
@@ -82,14 +79,11 @@
                         rowNum += 1;
                         closeLoading();
                     }else{
-                        $(document).removeEventListener('scroll',function(){
-                            closeLoading();
-                            loadingEndImage();
-                        })
+                        closeLoading();
                     }
-                },3000)
+                },4000)
 
-            },1000)
+            },3000)
         }
     })
 
@@ -124,7 +118,6 @@
             dataType: 'json',
             contentType: "application/json; charset=utf-8;",
             success: function (response){
-                console.log(response)
                 appendSortList(response);
                 if(response.length==0){
                     loading = false;
@@ -144,37 +137,33 @@
             var editorContent = response[i].DETAIL;
             var covertContent = editorContent.replace(/(<([^>]+)>)/ig,"");
 
-            var status1 =  '<div class="pt-3 col-lg-4 col-sm-6" id="groupList">' +
-                            '<div class="card border-0" >' +
-                            '<a href="/group/'+response[i].GROUPNUM+'">' +
-                            '<img class="card-img-top" src="/resources/img/' + response[i].STOREDFILENAME + '" alt="..." style="width:100%" /></a>' +
-                            '<div class="card-body row p-1 pl-4">' +
-                            '<img src="/resources/img/' + response[i].CONTENT2 + '" class="rounded-circle" style="width: 40px;height: 40px; border: 1px solid grey">' +
-                            '<div class="col-10 p-0 pl-2 m-0">' +
-                            '<h5 class="card-title m-0" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">'+
-                            '<span style="color: limegreen">['+response[i].STATUS+']</span> ' +response[i].NAME +'</h5>' +
-                            '<p class="card-text text-muted text- mb-1" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">'+ covertContent +'</p>' +
-                            '<p class="m-0 text-muted">'+response[i].STARTDAY+' 출발</p>' +
-                            '</div></div></div></div>';
+            var html = '';
 
-            var status2 = '<div class="pt-3 col-lg-4 col-sm-6" id="groupList">' +
-                            '<div class="card border-0" >' +
-                            '<a href="/group/'+response[i].GROUPNUM+'">' +
-                            '<img class="card-img-top" src="/resources/img/' + response[i].STOREDFILENAME + '" alt="..." style="width:100%" /></a>' +
-                            '<div class="card-body row p-1 pl-4">' +
-                            '<img src="/resources/img/' + response[i].CONTENT2 + '" class="rounded-circle" style="width: 40px;height: 40px; border: 1px solid grey">' +
-                            '<div class="col-10 p-0 pl-2 m-0">' +
-                            '<h5 class="card-title m-0" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">'+
-                            '<span style="color:red">['+response[i].STATUS+']</span> ' +response[i].NAME +'</h5>' +
-                            '<p class="card-text text-muted mb-1" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">'+ covertContent +'</p>' +
-                            '<p class="m-0 text-muted">'+response[i].STARTDAY+' 출발</p>' +
-                            '</div></div></div></div>';
-
-            if(response[i].STATUS == '진행중'){
-                $('.card-list').append(status1);
+            html += '<div class="pt-3 col-lg-4 col-sm-6" id="groupList">';
+            html += '<div class="card border-0" >';
+            html += '<a href="/group/'+response[i].GROUPNUM+'">';
+            html += '<img class="card-img-top" src="/resources/img/' + response[i].STOREDFILENAME + '" alt="..." style="width:100%" /></a>'
+            html += '<div class="card-body row p-1 pl-4">';
+            html += '<a href="/profile/' + response[i].ID + '" onclick="window.open(this.href,\'\',\'width = 500, height = 600\'); return false;">';
+            html += '<img src="/resources/img/' + response[i].CONTENT2 + '" class="rounded-circle" style="width: 40px;height: 40px; border: 1px solid grey"></a>';
+            html += '<div class="col-10 p-0 pl-2 m-0">';
+            html += '<h5 class="card-title m-0" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">';
+            if(response[i].STATUS == '모집중'){
+                html += '<span style="color: limegreen">';
             }else if(response[i].STATUS == '마감'){
-                $('.card-list').append(status2)
+                html += '<span style="color:red">';
             }
+            html += '['+response[i].STATUS+']</span>' +response[i].NAME +'</h5>';
+            html += '<p class="card-text text-muted text- mb-1" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">'+ covertContent +'</p>';
+            html += '<p class="m-0 text-muted">'+response[i].STARTDAY+' 출발';
+            if(response[i].LIKECOUNT!=null){
+                html += ' / 좋아요 '+ response[i].LIKECOUNT +'</p>';
+            }else if(response[i].LIKECOUNT==undefined){
+                html += '</p>';
+            }
+            html += '</div></div></div></div>';
+
+                $('.card-list').append(html);
         }
     }
 
@@ -194,7 +183,13 @@
     }
 
     function loadingEndImage() {
-        $('#result').append('<div class="text-center">더이상 결과가 없습니다</div>')
+        var endHtml = '';
+
+        endHtml +=  '<div class="text-center" style="width:100%; height: 200px; display: flex;justify-content: center;flex-direction: column">' +
+                    '<p>더이상 결과가 없습니다</p>' +
+                    '</div>';
+
+        $('#result').append(endHtml)
     }
 
 </script>

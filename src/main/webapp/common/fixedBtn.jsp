@@ -8,7 +8,7 @@
     </c:if>
 <script>
     function goChat(){
-        var newWindow = window.open("about:blank","채팅","width=400, height=600, left=300, top=300");
+        var newWindow = window.open("about:blank","채팅","width=500, height=700, left=300, top=300");
         newWindow.location.href='/chat.do?groupNum=${group.GROUPNUM}';
     }
 </script>

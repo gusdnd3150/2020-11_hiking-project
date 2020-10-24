@@ -23,20 +23,21 @@
 li {
     list-style: none;
 }
+@media screen and (min-width: 993px) {
+    #sub-menu {
+        position: absolute;
+        background-color: lightgrey;
+        opacity: 0;
+        visibility: hidden;
+        border-top-left-radius: 5px;
+        border-bottom-left-radius: 5px;
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px
+    }
 
-#sub-menu {
-    position: absolute;
-    background-color: lightgrey;
-    opacity: 0;
-    visibility: hidden;
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px
-}
-
-.navbar-nav > li:hover #sub-menu {
-    padding: 10px 5px 10px 5px;
-    opacity: 1;
-    visibility: visible;
+    .navbar-nav > li:hover #sub-menu {
+        padding: 10px 5px 10px 5px;
+        opacity: 1;
+        visibility: visible;
+    }
 }

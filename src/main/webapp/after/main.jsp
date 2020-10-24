@@ -5,7 +5,7 @@
 <jsp:include page="/common/header.jsp" />
 <link rel="stylesheet" type="text/css" href="../resources/css/views/after/main.css" />
 <body class="container pt-5">
-    <div class="pt-5">
+    <div class="col-12 pt-5">
         <c:forEach var="after" items="${after}">
         <div class="afterBox" style="width: 100%">
             <div class="after-title row m-3">

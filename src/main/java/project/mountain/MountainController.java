@@ -5,6 +5,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -44,12 +45,15 @@ public class MountainController {
     }
 
     @GetMapping("/mountain/detail/{mtNm}")
-    public ModelAndView mountainDetail(@PathVariable("mtNm")String mtNm){
+    public ModelAndView mountainDetail(@PathVariable("mtNm")String mtNm) throws UnsupportedEncodingException {
         ModelAndView mav = new ModelAndView("/mountain/detail");
-
-        
-
-        System.out.println("okay mt detail");
+        MountainResponseVO vo = mountainService.get100MountainInfo(mtNm,"");
+        List<MountainItemDTO> list = new ArrayList<>();
+        for(int i=0;i<vo.getBody().getItems().size();i++){
+            list.add(vo.getBody().getItems().get(i));
+            System.out.println(vo.getBody().getItems().get(i));
+        }
+        mav.addObject("mountain",list);
         return mav;
     }
 

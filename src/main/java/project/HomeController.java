@@ -8,6 +8,7 @@ import project.group.GroupService;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Controller
 @EnableSwagger2
@@ -20,11 +21,20 @@ public class HomeController {
 	private AfterService afterService;
 	
 	@GetMapping("/main.do")
-	public ModelAndView home(ModelAndView mav) {
-		mav.setViewName("home");
-		mav.addObject("group", groupService.selectMainGroupList());
-		mav.addObject("after", afterService.selectMainAfterList());
-		return mav;
+	public String home(ModelAndView mav) {
+		return "home";
+	}
+
+	@GetMapping("/main/groupList.do")
+	@ResponseBody
+	public List mainGroupList(){
+		return groupService.selectMainGroupList();
+	}
+
+	@GetMapping("/main/afterList.do")
+	@ResponseBody
+	public List mainAfterList(){
+		return afterService.selectMainAfterList();
 	}
 
 	@RequestMapping(value = "/admin", method = RequestMethod.GET)

@@ -49,11 +49,8 @@ public class GroupController{
     }
 
     @GetMapping("/group/main1.do")
-    public ModelAndView goMain1(){
-        ModelAndView mav = new ModelAndView("main1");
-        List<Map> list = groupService.selectAllGroupList();
-        mav.addObject("group",list);
-        return mav;
+    public String goMain1(){
+        return "main1";
     }
 
     @GetMapping("/group/main2.do")

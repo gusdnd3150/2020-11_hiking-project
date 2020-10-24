@@ -45,12 +45,7 @@
 <script src="http://code.jquery.com/jquery-latest.js"></script>
 <script>         
    $(document).ready(function () {
-	   
-
-           
-           
-           
-$("#buyProduct").on("click",function(){     
+$("#buyProduct").on("click",function(){
     var prodNums = []; 
     var optionnums =[];
     var quantities =[];

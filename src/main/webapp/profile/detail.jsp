@@ -37,7 +37,7 @@
     </div>
     <div class="row">
         <div class="col-12 pt-3">
-                <h5 class="mt-2">${userInfo.NICKNAME}이 작성한 글</h5>
+                <h5 class="mt-2">${userInfo.NICKNAME}님이 작성한 글</h5>
                 <div class="">작성한 글이 없습니다</div>
     </div>
         <div class="p-3 col-12 text-muted" style="text-align:right">
