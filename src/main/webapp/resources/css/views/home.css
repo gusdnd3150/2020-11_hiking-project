@@ -55,3 +55,11 @@
     }
     
 }
+
+#afterList > a {
+    color: black;
+}
+
+#afterList > a:hover {
+    text-decoration: none;
+}

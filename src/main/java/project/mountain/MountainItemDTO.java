@@ -44,6 +44,9 @@ public class MountainItemDTO {
     private String imgname;
     private String imgno;
 
+    private String likeYN;
+    private int countLike;
+
     public String getMntilistno() {
         return mntilistno;
     }
@@ -62,5 +65,21 @@ public class MountainItemDTO {
 
     public void setImgno(String imgno) {
         this.imgno = imgno;
+    }
+
+    public String getLikeYN() {
+        return likeYN;
+    }
+
+    public void setLikeYN(String likeYN) {
+        this.likeYN = likeYN;
+    }
+
+    public int getCountLike() {
+        return countLike;
+    }
+
+    public void setCountLike(int countLike) {
+        this.countLike = countLike;
     }
 }

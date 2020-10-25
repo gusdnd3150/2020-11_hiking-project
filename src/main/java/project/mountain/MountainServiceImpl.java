@@ -6,6 +6,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.annotation.Resource;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.List;
@@ -27,6 +28,9 @@ public class MountainServiceImpl implements MountainService{
     private String mountainImageURL;
 
     private RestTemplate restTemplate = new RestTemplate();
+
+    @Resource(name = "mountainDAO")
+    private MountainDAO mountainDAO;
 
 
     public MountainResponseVO get100MountainInfo(String mtNm, String ArNm) throws UnsupportedEncodingException {
@@ -72,5 +76,19 @@ public class MountainServiceImpl implements MountainService{
         MountainResponseVO vo = restTemplate.getForObject(builder.toUriString(), MountainResponseVO.class);
 
         return vo;
+    }
+
+    public List selectMountainByRank(int rowNum){
+        return mountainDAO.selectMountainByRank(rowNum);
+    }
+    public int followMountainFunction(Map map){
+        return mountainDAO.followMountainFunction(map);
+    }
+
+    public String checkMtLike(Map map){
+        return mountainDAO.checkMtLike(map);
+    }
+    public int followMountainCount(String mntilistno){
+        return mountainDAO.followMountainCount(mntilistno);
     }
 }

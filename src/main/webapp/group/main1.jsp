@@ -16,10 +16,10 @@
         <h1 class="col-md-8 col-lg-10 mb-0">등산모임 리스트</h1>
         <div class="col-sm-12 col-md-4 col-lg-2 pt-2 pb-2 btn-group btn-group-toggle" data-toggle="buttons">
             <label class="btn btn-outline-secondary active">
-                <input type="radio" name="options" id="sort_lately" checked> 최신순
+                <input type="radio" name="options" id="sort_like" checked> 인기순
             </label>
             <label class="btn btn-outline-secondary">
-                <input type="radio" name="options" id="sort_like"> 인기순
+                <input type="radio" name="options" id="sort_lately"> 최신순
             </label>
         </div>
     </div>
@@ -62,7 +62,7 @@
     var keyword = '';
 
     $(document).ready(function (){
-        $('#sort_lately').click();
+        $('#sort_like').click();
     })
     $(document).scroll(function (){
         var curHeight = $(window).height() + $(window).scrollTop();

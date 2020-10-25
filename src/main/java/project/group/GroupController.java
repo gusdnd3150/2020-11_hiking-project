@@ -1,15 +1,11 @@
 package project.group;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import project.groupmedia.GroupMediaService;
-import project.mountain.MountainItemDTO;
-import project.mountain.MountainResponseVO;
-import project.mountain.MountainService;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -20,17 +16,11 @@ import java.util.*;
 @Controller
 public class GroupController{
 
-    @Value("${mountainImagePath}")
-    private String mountainImagePath;
-
     @Resource(name = "groupService")
     private GroupService groupService;
 
     @Resource(name = "groupMediaService")
     private GroupMediaService groupMediaService;
-
-    @Resource(name = "mountainService")
-    private MountainService mountainService;
 
     @PostMapping(value = "/group/insert.do")
     public ModelAndView insertGroup(@RequestParam Map map,
@@ -54,25 +44,25 @@ public class GroupController{
     }
 
     @GetMapping("/group/main2.do")
-    public ModelAndView goMain2() throws UnsupportedEncodingException {
-        ModelAndView mav = new ModelAndView("main2");
-        MountainResponseVO mountainVO = mountainService.getMountainInfo("");
-
-        List<MountainItemDTO> list = new ArrayList<>();
-
-        for(MountainItemDTO mountainDTO : mountainVO.getBody().getItems()){
-
-            MountainResponseVO imageVO = mountainService.getMountainImage(mountainDTO.getMntilistno());
-
-            if (imageVO.getBody().getItems()==null){
-                mountainDTO.setImgfilename("http://placehold.it/350x200");
-            }else{
-                mountainDTO.setImgfilename(mountainImagePath+imageVO.getBody().getItems().get(0).getImgfilename());
-            }
-            list.add(mountainDTO);
-        }
-        mav.addObject("mtInfo",list);
-        return mav;
+    public String goMain2() throws UnsupportedEncodingException {
+//        ModelAndView mav = new ModelAndView("main2");
+//        MountainResponseVO mountainVO = mountainService.getMountainInfo("");
+//
+//        List<MountainItemDTO> list = new ArrayList<>();
+//
+//        for(MountainItemDTO mountainDTO : mountainVO.getBody().getItems()){
+//
+//            MountainResponseVO imageVO = mountainService.getMountainImage(mountainDTO.getMntilistno());
+//
+//            if (imageVO.getBody().getItems()==null){
+//                mountainDTO.setImgfilename("http://placehold.it/350x200");
+//            }else{
+//                mountainDTO.setImgfilename(mountainImagePath+imageVO.getBody().getItems().get(0).getImgfilename());
+//            }
+//            list.add(mountainDTO);
+//        }
+//        mav.addObject("mtInfo",list);
+        return "main2";
     }
 
     @PostMapping("/group/update.do")
@@ -93,7 +83,7 @@ public class GroupController{
             mav.setViewName("redirect:/main.do"); //인터셉터 추가후 지우기
             return mav;
         }
-        mav.setViewName("/group/detail1");
+        mav.setViewName("detail");
         Map<String,Object> map = groupService.selectGroupDetail(groupNum);
         List<Map> list = groupService.selectGroupDetailImage(groupNum);
 
@@ -133,26 +123,6 @@ public class GroupController{
         mav.addObject("favoriteResult",favoriteResult);
         mav.addObject("userGradeResult",userGradeResult);
         mav.addObject("recommendResult",recommendResult);
-        return mav;
-    }
-
-    @GetMapping("/mountain/{mntiname}")
-    public ModelAndView mountainDetail(@PathVariable("mntiname") String mntiname) throws UnsupportedEncodingException {
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName("/group/detail2");
-        MountainResponseVO mountainVO = mountainService.getMountainInfo(mntiname);
-
-        // 등산로 상세사진 1개만
-//        for(int i=0;i<mountainVO.getBody().getItems().size();i++) {
-        MountainResponseVO imageVO = mountainService.getMountainImage(mountainVO.getBody().getItems().get(0).getMntilistno());
-//            System.out.println(imageVO.toString());
-//        }
-
-        MountainItemDTO dto = mountainVO.getBody().getItems().get(0);//이거 고쳐야함 이름 겹치는산이 있다
-        dto.setImgfilename(mountainImagePath+imageVO.getBody().getItems().get(0).getImgfilename());
-
-        mav.addObject("mtInfo",dto);
-
         return mav;
     }
 

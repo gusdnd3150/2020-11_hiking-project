@@ -111,8 +111,13 @@
 		</div>
 	</div>
 	<hr />
-	<div class="memberCountCon col-12" style="font-size:40px;text-align: center"></div>
-<%--</div>--%>
+	<div class="text-center" style="width:100%; height: 150px; display: flex;justify-content: center;flex-direction: column">
+		<div>
+			<div class="memberCountCon col-12" style="font-size:40px;"></div>
+		</div>
+	</div>
+	<hr />
+</div>
 
 <!-- js -->
 <script type="text/javascript" src="./resources/js/jquery.js"></script>
@@ -202,17 +207,20 @@
 			contentType: "application/json; charset=utf-8;",
 			success: function (response){
 
+				console.log(response)
+
 				for(var i=0;i<response.length;i++){
 
 					var html = '';
 
+					html += '<a href="'+response[i].AFTERNUM+'">';
 					html += '<div class="media p-1">';
 					html += '<img src="/resources/img/'+response[i].CONTENT2+'" class="mr-3 rounded" style="width: 50px;height: 50px">';
 					html += '<div class="media-body">';
 					html += '<span>';
 					html += '<h4 class="m-0" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">['+response[i].MTNM+'] '+response[i].TITLE+'</h4>';
 					html += '<div class="text-muted">'+response[i].CREATEDAT+'</div>'
-					html += '</span></div></div>';
+					html += '</span></div></div></a>';
 
 					$('#afterList').append(html);
 				}
@@ -225,4 +233,5 @@
 		})
 	}
 </script>
+</body>
 <jsp:include page="/common/footer.jsp" />
