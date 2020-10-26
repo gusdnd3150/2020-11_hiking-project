@@ -12,7 +12,7 @@
  	<div style="border: 1px solid green;" >
 		<!-- <div style="padding:30px;">
 		</div> -->
-				<h3 class="mt-3">&nbsp&nbsp&nbsp산모임 설정</h3>
+				<h3 class="mt-3">&nbsp&nbsp&nbsp산모임 관리하기</h3>
 		<div class="container3 row text-center">
 		<div style="width:20px;"></div>
 			<h5 class="mt-2">산모임 공개</h5>
@@ -93,6 +93,9 @@
                 <input type="reset" class="btn btn-light" style="width: 75px" value="취소">
                 <input type="button" class="btn btn-primary" id="update" style="width: 75px" value="등록">
             </div>
+             <div class="p-3" style="text-align: right">
+              <button type="button" id="deleteCommu" class="btn btn-link"  data-toggle="modal" data-target="#deleteAskModal" style="color: lightGray;">산모임 지우기</button><br>
+             </div>
         </div>
    </div>
 

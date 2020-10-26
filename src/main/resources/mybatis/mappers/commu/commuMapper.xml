@@ -184,31 +184,47 @@
 	<select id="selectCommuPosts" resultType="map"
 		parameterType="java.util.List">
 			 <![CDATA[
-		select g.*, i.content2, u.nickname
-        from groupsBoardPost g, userInfo i, users u
-         where g.userNum = #{userNum}
-        and i.userNum = #{userNum}
-        and u.userNum = #{userNum}
-        and g.groupNum=#{groupNum}
-        and g.BOARDTYPE=1
-        ORDER BY g.POSTNUM DESC
+		select a.*, i.content2, u.id, u.nickName 
+		from 
+		(
+		    select GROUPNUM, POSTNUM, CONTENT, USERNUM, CREATEDAT, UPDATEDAT
+		    from groupsBoardPost g
+		    where g.groupNum=#{groupNum}
+		    and g.BOARDTYPE=1
+		 ) a ,
+		    userinfo i, 
+		    users u
+		where a.usernum = i.usernum
+		and i.usernum = u.usernum
+		ORDER BY a.POSTNUM DESC
           ]]>
 	</select>
 	
-	<select id="selectAlbumPosts" resultType="map"
-		parameterType="java.util.List">
+	<select id="selectACommuPost" resultType="String" parameterType="int">
 			 <![CDATA[
-		select A.*
-		from(
-		select g.*, i.content2, u.nickname
-        from groupsBoardPost g, userInfo i, users u
-        where g.userNum = #{userNum}
-        and i.userNum = #{userNum}
-        and u.userNum = #{userNum}
-        and g.groupNum = #{groupNum}
-        and g.BOARDTYPE=3
-        ORDER BY g.POSTNUM DESC) A
-        where ROWNUM < 5
+		   select content
+		    from groupsBoardPost
+		    where postNum=#{postNum}
+		    and BOARDTYPE=1
+          ]]>
+	</select>
+	
+		<select id="selectImportantPost" resultType="map"
+		parameterType="map">
+			 <![CDATA[
+		select a.*, i.content2, u.id, u.nickName 
+		from 
+		(
+		    select GROUPNUM, POSTNUM, CONTENT, USERNUM, CREATEDAT, UPDATEDAT
+		    from groupsBoardPost g
+		    where g.groupNum=#{groupNum}
+		    and g.BOARDTYPE=1
+		    and g.TYPE=1
+		 ) a ,
+		    userinfo i, 
+		    users u
+		where a.usernum = i.usernum
+		and i.usernum = u.usernum
           ]]>
 	</select>
 
@@ -241,6 +257,15 @@
     update groups
 	  	set detail=#{detail}, area=#{area}, ageStart=#{ageStart}, ageEnd=#{ageEnd}, sex=#{sex} 
 	    where groupNum = #{groupNum}
+        ]]>
+	</update>
+	
+	<update id="updatePostType" parameterType="map">
+    <![CDATA[
+    update groupsBoardPost
+	  	set type=0 
+	    where groupNum = #{groupNum}
+	    and type=1
         ]]>
 	</update>
 
@@ -282,7 +307,7 @@
              #{groupNum},
              1,
              POSTNUM_seq.nextval,
-             0,
+              NVL(#{type}, 0),
              #{feedContent},
              sysdate,
              #{userNum}
@@ -307,18 +332,29 @@
 		FROM (
              SELECT ROWNUM RN, A.*
 		       FROM (
-        select g.*, i.content2, u.nickname
-        from groupsBoardPost g, userInfo i, users u
-         where g.userNum = #{userNum}
-        and i.userNum = #{userNum}
-        and u.userNum = #{userNum}
-        and g.groupNum=#{groupNum}
-        and g.BOARDTYPE=3
-        ORDER BY g.POSTNUM DESC
+			        select a.*, i.content2, u.nickName 
+					from 
+					(
+					    select GROUPNUM, POSTNUM, CONTENT, USERNUM, CREATEDAT, UPDATEDAT
+					    from groupsBoardPost g
+					    where g.groupNum=#{groupNum}
+					    and g.BOARDTYPE=3
+					) a ,
+					    userinfo i, 
+					    users u
+					where a.usernum = i.usernum
+					and i.usernum = u.usernum
+					ORDER BY a.POSTNUM DESC
         ) A
       )
         where RN BETWEEN #{start} AND #{end}
 	            ]]>
        </select>
+       
+       
+        <delete id="deletePost" parameterType="int">
+        DELETE FROM groupsBoardPost
+        WHERE postNum = #{postNum}
+    </delete>
        
 </mapper>

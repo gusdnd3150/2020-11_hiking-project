@@ -202,6 +202,7 @@
                         1)
         ]]>
     </update>
+    
     <!-- 그룹 탈퇴 -->
     <update id="withdrawGroup" parameterType="map">
         <![CDATA[
@@ -368,10 +369,11 @@
             ORDER SIBLINGS BY COMMENTORDER
         ]]>
     </select>
+    
     <!-- 산모임 페이지 댓글 -->
     <select id="selectCommentByPostNum" parameterType="_int" resultType="groupCommentVO">
         <![CDATA[
-            SELECT gc.commentNum, gc.parentNum, gc.depts, gc.commentOrder, gc.content, gc.userId, gc.subCommentCount, gc.createdAt, ui.content2
+            SELECT gc.commentNum, gc.parentNum, gc.depts, gc.commentOrder, gc.content, u.nickname, gc.subCommentCount, gc.createdAt, ui.content2
             FROM groupComment gc, users u, userInfo ui
             WHERE gc.userId = u.id
             AND   u.userNum = ui.userNum

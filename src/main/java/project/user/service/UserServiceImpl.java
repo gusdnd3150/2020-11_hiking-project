@@ -117,5 +117,4 @@ public class UserServiceImpl implements UserService {
 		return userDAO.selectUserNum(id);
 	}
 
-	
 }

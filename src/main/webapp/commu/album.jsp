@@ -67,7 +67,7 @@ ul, ol {
 			<img class="col-sm-7" id="OContent" src="">
 			<!--  </div> -->
 			<div class="card scroll"
-				style="width: 30rem; height: 45rem; margin-left: 0px; margin-right: 50px;">
+				style="width: 30rem; height: 55rem; margin-left: 0px; margin-right: 50px;">
 				<button type="button" class="close" data-dismiss="modal"
 					aria-label="Close" style="text-align: right; margin-right: 10px;">
 					<span aria-hidden="true">&times;</span>
@@ -75,20 +75,23 @@ ul, ol {
 				<div class="card-body">
 					<div class="card-title">
 						<div class=" row text-left">
-							<img class="rounded-circle mt-1" id="content2" style="margin-left: 10px" src="" width="50" height="50" alt="프로필사진"> &nbsp
+							<img class="rounded-circle mt-1" id="profilePic" style="margin-left: 10px" src='' width="50" height="50" alt="프로필사진"> &nbsp
 							<h6 style="margin-top: 25px" id="nickName"></h6>
 							&nbsp&nbsp&nbsp&nbsp
 							<h6 style="margin-top: 25px;">
 								<small id="createdAt"></small>
 							</h6>
+							<div style="width:150px;"></div>
+							<button type="button" id="removeBtn" class="btn btn-link" style="margin-top: 17px;">삭제</button>
+							<button type="button" id="AreportBtn" class="btn btn-link" style="margin-top: 17px;">신고</button>
 						</div>
 					</div>
 					<hr />
 
 					<div class="mt-3">
 						<h6 class="mt-2 pb-1">댓글</h6>
-						<div id="commentBoard" class="row"></div>
-						<div style="width: 28rem; height: 30rem; overflow:scroll;">
+						<div style="width: 28rem; height: 35rem; overflow:scroll;">
+							<div id="commentBoard" class="row"></div>
 						</div>
 					</div>
 					<hr />

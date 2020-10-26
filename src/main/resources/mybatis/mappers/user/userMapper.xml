@@ -40,8 +40,8 @@
 
 	<insert id="insertUser2" parameterType="java.util.Map">
       <![CDATA[
-      INSERT INTO USERS(userNum, id , password, name, email, type, status, createdAt, sessionId, authStatus, sex, nickName)
-      VALUES (users_SEQ.nextVal, #{id}, #{password}, #{name}, #{email}, 200, 10, sysdate, 0, 1, #{sex}, #{nickName})
+      INSERT INTO USERS(userNum, id, password, name, email, type, status, createdAt, sessionId, authStatus, sex)
+      VALUES (users_SEQ.nextVal, #{id}, #{password}, #{name}, #{email}, 200, 10, sysdate, 0, 1, #{sex})
       ]]>
 	</insert>
 

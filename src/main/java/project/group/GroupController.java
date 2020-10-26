@@ -1,20 +1,31 @@
 package project.group;
 
-import lombok.extern.slf4j.Slf4j;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+
+import lombok.extern.slf4j.Slf4j;
 import project.groupmedia.GroupMediaService;
 import project.mountain.MountainItemDTO;
 import project.mountain.MountainResponseVO;
 import project.mountain.MountainService;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import java.io.UnsupportedEncodingException;
-import java.util.*;
 
 @Slf4j
 @Controller
@@ -245,7 +256,6 @@ public class GroupController{
     @PostMapping("/group/insertComment.do")
     @ResponseBody
     public GroupCommentVO insertCommentGroup(@RequestBody Map map){
-    	System.out.println("insertCommentGroup map:" + map);
         groupService.insertCommentGroup(map);
         return groupService.selectCommentOne((Integer) map.get("commentNum"));
     }

@@ -33,4 +33,10 @@ public interface CommuDAO {
 
 	public List<CommuVO> selectPgAlbumPosts(Map<String, Object> vM);
 
+	public int deletePost(int postNum);
+
+	public void updatePostType(Map m);
+
+	public String selectACommuPost(int postNum);
+
 }

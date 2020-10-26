@@ -37,4 +37,10 @@ public interface CommuService {
 
 	void insertAlbum(int userNum, List<MultipartFile> files, String path, Map<String, Object> m) throws Exception;
 
+	int deletePost(int postNum);
+
+	void updatePostType(Map m);
+
+	String selectACommuPost(int postNum);
+
 }

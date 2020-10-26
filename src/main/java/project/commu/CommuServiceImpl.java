@@ -95,13 +95,28 @@ public class CommuServiceImpl implements CommuService {
 	@Override
 	public void insertAlbum(int groupNum, List<MultipartFile> files, String path, Map<String, Object> m)
 			throws Exception {
-		List<Map> list = fileUtils.saveCKFile(groupNum, files, path);
+		List<Map> list = fileUtils.saveFile(groupNum, files, path);
 		Map<String, Object> map = m;
 		for (Map mm : list) {
 			map.putAll(mm);
 			commuDAO.insertAlbum(map);
 		}
 
+	}
+
+	@Override
+	public int deletePost(int postNum) {
+		return commuDAO.deletePost(postNum);
+	}
+
+	@Override
+	public void updatePostType(Map m) {
+		commuDAO.updatePostType(m);		
+	}
+
+	@Override
+	public String selectACommuPost(int postNum) {
+		return commuDAO.selectACommuPost(postNum);
 	}
 
 }

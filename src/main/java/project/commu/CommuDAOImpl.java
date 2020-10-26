@@ -74,7 +74,7 @@ public class CommuDAOImpl implements CommuDAO {
 		list.add(sqlSession.selectOne("commuMapper.selectUserWaiting", map));
 		list.add(sqlSession.selectOne("commuMapper.selectGroupsMedia", map));
 		list.addAll(sqlSession.selectList("commuMapper.selectGroupsBoard", map));
-		//list.addAll(sqlSession.selectList("commuMapper.selectGroupsBoardPost", map));
+		list.add(sqlSession.selectOne("commuMapper.selectImportantPost", map));
 		return list;
 	}
 
@@ -104,6 +104,7 @@ public class CommuDAOImpl implements CommuDAO {
 
 	@Override
 	public void insertPost(Map m) {
+		System.out.println(",....m,........"+ m);
 		sqlSession.insert("commuMapper.insertPost", m);
 	}
 
@@ -125,6 +126,23 @@ public class CommuDAOImpl implements CommuDAO {
 	@Override
 	public List<CommuVO> selectPgAlbumPosts(Map<String, Object> vM) {
 		return sqlSession.selectList("commuMapper.selectPgAlbumPosts", vM);
+	}
+
+	@Override
+	public int deletePost(int postNum) {
+		sqlSession.delete("commuMapper.deletePost", postNum);
+		return 1;
+		
+	}
+
+	@Override
+	public void updatePostType(Map m) {
+		sqlSession.update("commuMapper.updatePostType", m);
+	}
+
+	@Override
+	public String selectACommuPost(int postNum) {
+		return sqlSession.selectOne("commuMapper.selectACommuPost", postNum);
 	}
 
 }

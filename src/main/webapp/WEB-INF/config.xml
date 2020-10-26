@@ -68,8 +68,8 @@
 			<deniedExtensions></deniedExtensions>
 		</type>
 		<type name="Images">
-			<url>%BASE_URL%images/</url>
-			<directory>%BASE_DIR%images</directory>
+			<url>%BASE_URL%</url>
+			<directory>%BASE_DIR%</directory>
 			<maxSize>0</maxSize>
 			<allowedExtensions>bmp,gif,jpeg,jpg,png</allowedExtensions>
 			<deniedExtensions></deniedExtensions>

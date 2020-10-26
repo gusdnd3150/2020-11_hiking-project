@@ -105,6 +105,7 @@ public class CommuController {
 		} else {
 			Map<String, Object> map = new HashMap<String, Object>();
 			String id = (String) httpSession.getAttribute(LOGIN);
+			System.out.println("userNum??"+ id);
 			int userNum = userService.selectUserNum(id);
 			map.put("id", id);
 			map.put("groupNum", groupNum);
@@ -113,7 +114,7 @@ public class CommuController {
 			int i = 1;
 			for (Map m : list) {
 				String s = "m" + i;
-				// System.out.println(s + ">>>>>" + m);
+				 System.out.println(s + ">>>>>" + m);
 				mav.addObject(s, m);
 				i++;
 			}
@@ -183,12 +184,19 @@ public class CommuController {
 		Enumeration enu = multipartRequest.getParameterNames();
 
 		int groupNum = Integer.parseInt(multipartRequest.getParameter("groupNum"));
-		System.out.println("groupNum:   " + groupNum);
+		int type = 0;
+		if(multipartRequest.getParameter("type") != null) {
+			type = Integer.parseInt(multipartRequest.getParameter("type")); 
+			Map mmm = new HashMap();
+			mmm.put("groupNum", groupNum);
+			mmm.put("type", type);
+			commuService.updatePostType(mmm);
+		}
+		
+		
 		while (enu.hasMoreElements()) {
 			String name = (String) enu.nextElement();
-
 			String value = multipartRequest.getParameter(name);
-
 			Matcher matcher = nonValidPattern.matcher(value);
 			String path = request.getSession().getServletContext().getRealPath("/");
 			while (matcher.find()) {
@@ -202,6 +210,7 @@ public class CommuController {
 			}
 			m.put("userNum", userNum);
 			m.put(name, value);
+			m.put("type", type);
 		}
 		commuService.insertPost(m);
 		ModelAndView mav = new ModelAndView("redirect:commuPageView.do?groupNum=" + groupNum);
@@ -230,5 +239,31 @@ public class CommuController {
 
 		return total;
 	}
+	
+	@GetMapping("/commu/checkWriter.do")
+    @ResponseBody
+    public int checkWriter(@RequestParam String userId){
+        return userService.selectUserNum(userId);
+    }
+	
+	@Transactional
+	@GetMapping("/commu/deletePost.do")
+	@ResponseBody
+	public int deletePost(@RequestParam int postNum){
+		int i =  commuService.deletePost(postNum);
+		 System.out.println("포스트 삭제 완룡:   "+i);
+		return i;
+	}
+	
+	
+	@GetMapping(value="/commu/selectACommuPost.do", produces = "application/text; charset=UTF-8")
+	@ResponseBody
+	public String selectACommuPost(@RequestParam int postNum, HttpServletResponse response){
+		response.setCharacterEncoding("UTF-8");
+		String str = commuService.selectACommuPost(postNum);
+	System.out.println("commuService.selectACommuPost(postNum):"+ str );
+		return str;
+	}
+
 
 }

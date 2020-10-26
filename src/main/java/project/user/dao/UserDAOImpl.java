@@ -112,7 +112,6 @@ public class UserDAOImpl implements UserDAO {
 	@Override
 	public void updateAuthStatus(Map<String, String> map) {
 		sqlSession.update("userMapper.updateAuthStatus", map);
-		System.out.println(map);
 	}
 
 	@Override

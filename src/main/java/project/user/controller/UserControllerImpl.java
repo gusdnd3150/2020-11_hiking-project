@@ -60,283 +60,282 @@ public class UserControllerImpl implements UserController {
 	public UserControllerImpl(UserService userService) {
 		this.userService = userService;
 	}
-
+	
 	// 회원가입 완료
-	@RequestMapping(value = "/insertUser.do", method = RequestMethod.POST)
-	public ModelAndView insertUser(UserVO userVO, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		System.out.println(userVO);
-		// 비밀번호 해싱
-		String hashedPw = BCrypt.hashpw(userVO.getPassword(), BCrypt.gensalt(10));
-		userVO.setPassword(hashedPw);
+		@RequestMapping(value = "/insertUser.do", method = RequestMethod.POST)
+		public ModelAndView insertUser(UserVO userVO, HttpServletRequest request, HttpServletResponse response) throws Exception {
+			System.out.println(userVO);
+			// 비밀번호 해싱
+			String hashedPw = BCrypt.hashpw(userVO.getPassword(), BCrypt.gensalt(10));
+			userVO.setPassword(hashedPw);
 
-		logger.info("insertUser");
-		// DB에 기본정보 추가
-		userService.insertUser(userVO);
+			logger.info("insertUser");
+			// DB에 기본정보 추가
+			userService.insertUser(userVO);
 
-		// 임의의 authKey 생성 & 이메일 발송
-		String authKey = mailService.getKey(6);
-		request.setCharacterEncoding("utf-8");
-		mailService.sendAuthMail(userVO.getEmail(), authKey);
-		userVO.setAuthKey(authKey);
+			// 임의의 authKey 생성 & 이메일 발송
+			String authKey = mailService.getKey(6);
+			request.setCharacterEncoding("utf-8");
+			mailService.sendAuthMail(userVO.getEmail(), authKey);
+			userVO.setAuthKey(authKey);
 
-		Map<String, String> map = new HashMap<String, String>();
-		map.put("id", userVO.getId());
-		map.put("email", userVO.getEmail());
-		map.put("authKey", userVO.getAuthKey());
-		System.out.println(map);
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("id", userVO.getId());
+			map.put("email", userVO.getEmail());
+			map.put("authKey", userVO.getAuthKey());
+			System.out.println(map);
 
-		userService.updateAuthKey(map);
-		ModelAndView mav = new ModelAndView("/user/signUpMail");
-		mav.addObject("map", map);
-		return mav;
-	}
-	
-	//가입인증메일 다시 보내
-	@RequestMapping(value = "/resendMail.do", method = RequestMethod.POST)
-	public ModelAndView resendMail(UserVO userVO, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		request.setCharacterEncoding("utf-8");
-		mailService.sendAuthMail(userVO.getEmail(), userVO.getAuthKey());
-
-		Map<String, String> map = new HashMap<String, String>();
-		map.put("id", userVO.getId());
-		map.put("email", userVO.getEmail());
-		map.put("authKey", userVO.getAuthKey());
-		System.out.println(map);
-
-		ModelAndView mav = new ModelAndView("/user/signUpMail");
-		mav.addObject("map", map);
-		return mav;
-	}
-	
-	
-
-	@RequestMapping(value = "/signUpConfirm.do", method = { RequestMethod.GET, RequestMethod.POST })
-	public ModelAndView signUpConfirm(@RequestParam Map<String, String> map, ModelAndView mav) {
-		// email, authKey 가 일치할경우 authStatus 업데이트
-		userService.updateAuthStatus(map);
-		logger.info("authKey update 해드림.");
-		mav.setViewName("redirect:/user/logInView.do");
-		return mav;
-	}
-
-	@RequestMapping(value = "/insertUser2.do", method = { RequestMethod.GET, RequestMethod.POST })
-	public String insertUser2(HttpSession httpSession, LoginDTO loginDTO, RedirectAttributes reAttr) throws Exception {
-		Map<String, Object> snsUser = (Map<String, Object>) httpSession.getAttribute("snsUser");
-		httpSession.removeAttribute("snsUser");
-		System.out.println("##############" + snsUser);
-		loginDTO.setId((String) snsUser.get("id"));
-		loginDTO.setPassword((String) snsUser.get("password"));
-		loginDTO.setName((String) snsUser.get("name"));
-		//loginDTO.setNickName((String) snsUser.get("nickName"));
-		loginDTO.setSex((int) snsUser.get("sex"));
-		String hashedPw = BCrypt.hashpw((String) snsUser.get("password"), BCrypt.gensalt());
-		snsUser.put("password", hashedPw);
-		logger.info("insertUser2");
-		userService.insertUser2(snsUser);
-		reAttr.addFlashAttribute("loginDTO", loginDTO);
-
-		return "redirect:/user/logIn.do";
-	}
-
-	@RequestMapping(value = "/idCheck.do", method = RequestMethod.GET)
-	@ResponseBody
-	public String idCheck(@RequestParam("id") String id) throws Exception {
-		System.out.println(id);
-		int rst = userService.idCheck(id);
-		String result = "0";
-		System.out.println("유저Controller : " + rst);
-		if (rst != 0) {
-			result = "1";
-		}
-		return result;
-	}
-
-	@RequestMapping(value = "/emailCheck.do", method = RequestMethod.GET)
-	@ResponseBody
-	public String emailCheck(@RequestParam("email") String email) throws Exception {
-		System.out.println(email);
-		int rst = userService.emailCheck(email);
-		String result = "0";
-		System.out.println("유저Controller : " + rst);
-		if (rst != 0) {
-			result = "1";
-		}
-		return result;
-	}
-	
-	@RequestMapping(value = "/nickNameCheck.do", method = RequestMethod.GET)
-	@ResponseBody
-	public String nickNameCheck(@RequestParam("nickName") String nickName) throws Exception {
-		System.out.println(nickName);
-		int rst = userService.nickNameCheck(nickName);
-		String result = "0";
-		System.out.println("유저Controller : " + rst);
-		if (rst != 0) {
-			result = "1";
-		}
-		return result;
-	}
-	
-	@Override
-	@RequestMapping(value = "/idEmailCheck.do", method = { RequestMethod.GET, RequestMethod.POST })
-	@ResponseBody
-	public String idEmailCheck(@RequestParam("id") String id, @RequestParam("email") String email) throws Exception {
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("id", id);
-		map.put("email", email);
-		int rst = userService.idEmailCheck(map);
-		String result = "0";
-		System.out.println("유저Controller : " + rst);
-		if (rst != 0) {
-			result = "1";
-		}
-		return result;
-	}
-
-	@RequestMapping(value = "/logInView.do", method = { RequestMethod.GET, RequestMethod.POST })
-	public String logInView(Model model) {
-		System.out.println("로그인 페이지간다");
-		SNSLogin naverLogin = new SNSLogin(naverSns);
-//		SNSLogin googleLogin = new SNSLogin(googleSns);
-		model.addAttribute("naver_url", naverLogin.getNaverAuthURL());
-//		model.addAttribute("google_url", googleLogin.getGoogleAuthURL());
-		return "/user/logInView";
-
-	}
-
-	@RequestMapping(value = "{snsService}/callback", method = { RequestMethod.GET, RequestMethod.POST })
-	public String snsLoginCallBack(@PathVariable String snsService, @RequestParam String code,
-			RedirectAttributes reAttr, HttpSession httpSession) throws Exception {
-		logger.info("snsLoginCallback: service={}", snsService);
-		SnsValue sns = null;
-		if (StringUtils.equals("naver", snsService))
-			sns = naverSns;
-//		else 
-//			sns = googleSns;
-
-		SNSLogin snsLogin = new SNSLogin(sns);
-		Map<String, Object> snsUser = snsLogin.getUserProfile(code);
-		System.out.println("Profile>>" + snsUser);
-		UserVO snsUserInfo = userService.getBySns(snsUser);
-		System.out.println("********" + snsUserInfo);
-		if (snsUserInfo == null) { // 가입하지 않은 회원
-			httpSession.setAttribute("snsUser", snsUser);
-			return "/user/insertPwdView";
-		} else { // 이미 가입한 회원
-			LoginDTO loginDTO = new LoginDTO();
-			loginDTO.setId(snsUserInfo.getId());
-			httpSession.setAttribute("loginDTO", loginDTO);
-			return "/user/snsUserPwdCheck";
-		}
-
-	}
-
-	@RequestMapping(value = "/insertPwd.do", method = { RequestMethod.GET, RequestMethod.POST })
-	public String insertPwd(@RequestParam("password2") String password2, HttpSession httpSession,
-			RedirectAttributes reAttr, HttpServletRequest request) throws Exception {
-		Map<String, Object> snsUser = (Map<String, Object>) httpSession.getAttribute("snsUser");
-		httpSession.removeAttribute("snsUser");
-		snsUser.put("password", password2);
-		httpSession.setAttribute("snsUser", snsUser);
-		System.out.println(snsUser);
-		request.setAttribute("snsUser", snsUser);
-		return "/user/signUpEnd";
-	}
-
-	@RequestMapping(value = "/user/snsUserPwdCheck.do", method = { RequestMethod.GET, RequestMethod.POST })
-	public String snsUserPwdCheck(@RequestParam("password") String password, HttpSession httpSession,
-			RedirectAttributes reAttr) throws Exception {
-		LoginDTO loginDTO = (LoginDTO) httpSession.getAttribute("loginDTO");
-		loginDTO.setPassword(password);
-		reAttr.addFlashAttribute("loginDTO", loginDTO);
-		return "redirect:/user/logIn.do";
-	}
-
-	@RequestMapping(value = "/logIn.do", method = { RequestMethod.GET, RequestMethod.POST })
-	public ModelAndView logIn(LoginDTO loginDTO, HttpSession httpSession, ModelAndView mav) throws Exception {
-		UserVO userVO = userService.logIn(loginDTO);
-
-		if (userVO == null || !BCrypt.checkpw(loginDTO.getPassword(), userVO.getPassword())) {
-			System.out.println("로그인 실패");
-			mav.setViewName("/user/logInFailed");
+			userService.updateAuthKey(map);
+			ModelAndView mav = new ModelAndView("/user/signUpMail");
+			mav.addObject("map", map);
 			return mav;
 		}
-		mav.setViewName("/home");
-		mav.addObject("userVO", userVO);
-		System.out.println("로그인한 유저  :  " + mav);
+		
+		//가입인증메일 다시 보내
+		@RequestMapping(value = "/resendMail.do", method = RequestMethod.POST)
+		public ModelAndView resendMail(UserVO userVO, HttpServletRequest request, HttpServletResponse response) throws Exception {
+			request.setCharacterEncoding("utf-8");
+			mailService.sendAuthMail(userVO.getEmail(), userVO.getAuthKey());
 
-		// 로그인 유지를 선택할 경우
-		if (loginDTO.isUseCookie()) {
-			int amount = 60 * 60 * 24 * 7; // 7일
-			Date sessionLimit = new Date(System.currentTimeMillis() + (1000 * amount));// 로그인 유지기간 설정
-			userService.keepLogin(userVO.getId(), httpSession.getId(), sessionLimit);
-			System.out.println("세션아이디 저장");
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("id", userVO.getId());
+			map.put("email", userVO.getEmail());
+			map.put("authKey", userVO.getAuthKey());
+			System.out.println(map);
+
+			ModelAndView mav = new ModelAndView("/user/signUpMail");
+			mav.addObject("map", map);
+			return mav;
 		}
-		return mav;
-	}
+		
+		
 
-	@RequestMapping(value = "/logOut.do", method = RequestMethod.GET)
-	public String logOut(HttpServletRequest request, HttpServletResponse response, HttpSession httpSession)
-			throws Exception {
-		UserVO userVO = new UserVO();
-		userVO.setId((String) httpSession.getAttribute(LOGIN));
-		if (userVO != null) {
-			httpSession.removeAttribute(LOGIN);
+		@RequestMapping(value = "/signUpConfirm.do", method = { RequestMethod.GET, RequestMethod.POST })
+		public ModelAndView signUpConfirm(@RequestParam Map<String, String> map, ModelAndView mav) {
+			// email, authKey 가 일치할경우 authStatus 업데이트
+			userService.updateAuthStatus(map);
+			logger.info("authKey update 해드림.");
+			mav.setViewName("redirect:/user/logInView.do");
+			return mav;
+		}
+
+		@RequestMapping(value = "/insertUser2.do", method = { RequestMethod.GET, RequestMethod.POST })
+		public String insertUser2(HttpSession httpSession, LoginDTO loginDTO, RedirectAttributes reAttr) throws Exception {
+			Map<String, Object> snsUser = (Map<String, Object>) httpSession.getAttribute("snsUser");
+			httpSession.removeAttribute("snsUser");
+			System.out.println("##############" + snsUser);
+			loginDTO.setId((String) snsUser.get("id"));
+			loginDTO.setPassword((String) snsUser.get("password"));
+			loginDTO.setName((String) snsUser.get("name"));
+			//loginDTO.setNickName((String) snsUser.get("nickName"));
+			loginDTO.setSex((int) snsUser.get("sex"));
+			String hashedPw = BCrypt.hashpw((String) snsUser.get("password"), BCrypt.gensalt());
+			snsUser.put("password", hashedPw);
+			logger.info("insertUser2");
+			userService.insertUser2(snsUser);
+			reAttr.addFlashAttribute("loginDTO", loginDTO);
+
+			return "redirect:/user/logIn.do";
+		}
+
+		@RequestMapping(value = "/idCheck.do", method = RequestMethod.GET)
+		@ResponseBody
+		public String idCheck(@RequestParam("id") String id) throws Exception {
+			System.out.println(id);
+			int rst = userService.idCheck(id);
+			String result = "0";
+			System.out.println("유저Controller : " + rst);
+			if (rst != 0) {
+				result = "1";
+			}
+			return result;
+		}
+
+		@RequestMapping(value = "/emailCheck.do", method = RequestMethod.GET)
+		@ResponseBody
+		public String emailCheck(@RequestParam("email") String email) throws Exception {
+			System.out.println(email);
+			int rst = userService.emailCheck(email);
+			String result = "0";
+			System.out.println("유저Controller : " + rst);
+			if (rst != 0) {
+				result = "1";
+			}
+			return result;
+		}
+		
+		@RequestMapping(value = "/nickNameCheck.do", method = RequestMethod.GET)
+		@ResponseBody
+		public String nickNameCheck(@RequestParam("nickName") String nickName) throws Exception {
+			System.out.println(nickName);
+			int rst = userService.nickNameCheck(nickName);
+			String result = "0";
+			System.out.println("유저Controller : " + rst);
+			if (rst != 0) {
+				result = "1";
+			}
+			return result;
+		}
+		
+		@Override
+		@RequestMapping(value = "/idEmailCheck.do", method = { RequestMethod.GET, RequestMethod.POST })
+		@ResponseBody
+		public String idEmailCheck(@RequestParam("id") String id, @RequestParam("email") String email) throws Exception {
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("id", id);
+			map.put("email", email);
+			int rst = userService.idEmailCheck(map);
+			String result = "0";
+			System.out.println("유저Controller : " + rst);
+			if (rst != 0) {
+				result = "1";
+			}
+			return result;
+		}
+
+		@RequestMapping(value = "/logInView.do", method = { RequestMethod.GET, RequestMethod.POST })
+		public String logInView(Model model) {
+			System.out.println("로그인 페이지간다");
+			SNSLogin naverLogin = new SNSLogin(naverSns);
+//			SNSLogin googleLogin = new SNSLogin(googleSns);
+			model.addAttribute("naver_url", naverLogin.getNaverAuthURL());
+//			model.addAttribute("google_url", googleLogin.getGoogleAuthURL());
+			return "/user/logInView";
+
+		}
+
+		@RequestMapping(value = "{snsService}/callback", method = { RequestMethod.GET, RequestMethod.POST })
+		public String snsLoginCallBack(@PathVariable String snsService, @RequestParam String code,
+				RedirectAttributes reAttr, HttpSession httpSession) throws Exception {
+			logger.info("snsLoginCallback: service={}", snsService);
+			SnsValue sns = null;
+			if (StringUtils.equals("naver", snsService))
+				sns = naverSns;
+//			else 
+//				sns = googleSns;
+
+			SNSLogin snsLogin = new SNSLogin(sns);
+			Map<String, Object> snsUser = snsLogin.getUserProfile(code);
+			System.out.println("Profile>>" + snsUser);
+			UserVO snsUserInfo = userService.getBySns(snsUser);
+			System.out.println("********" + snsUserInfo);
+			if (snsUserInfo == null) { // 가입하지 않은 회원
+				httpSession.setAttribute("snsUser", snsUser);
+				return "/user/insertPwdView";
+			} else { // 이미 가입한 회원
+				LoginDTO loginDTO = new LoginDTO();
+				loginDTO.setId(snsUserInfo.getId());
+				httpSession.setAttribute("loginDTO", loginDTO);
+				return "/user/snsUserPwdCheck";
+			}
+
+		}
+
+		@RequestMapping(value = "/insertPwd.do", method = { RequestMethod.GET, RequestMethod.POST })
+		public String insertPwd(@RequestParam("password2") String password2, HttpSession httpSession,
+				RedirectAttributes reAttr, HttpServletRequest request) throws Exception {
+			Map<String, Object> snsUser = (Map<String, Object>) httpSession.getAttribute("snsUser");
+			httpSession.removeAttribute("snsUser");
+			snsUser.put("password", password2);
+			httpSession.setAttribute("snsUser", snsUser);
+			System.out.println(snsUser);
+			request.setAttribute("snsUser", snsUser);
+			return "/user/signUpEnd";
+		}
+
+		@RequestMapping(value = "/user/snsUserPwdCheck.do", method = { RequestMethod.GET, RequestMethod.POST })
+		public String snsUserPwdCheck(@RequestParam("password") String password, HttpSession httpSession,
+				RedirectAttributes reAttr) throws Exception {
+			LoginDTO loginDTO = (LoginDTO) httpSession.getAttribute("loginDTO");
+			loginDTO.setPassword(password);
+			reAttr.addFlashAttribute("loginDTO", loginDTO);
+			return "redirect:/user/logIn.do";
+		}
+
+		@RequestMapping(value = "/logIn.do", method = { RequestMethod.GET, RequestMethod.POST })
+		public ModelAndView logIn(LoginDTO loginDTO, HttpSession httpSession, ModelAndView mav) throws Exception {
+			UserVO userVO = userService.logIn(loginDTO);
+
+			if (userVO == null || !BCrypt.checkpw(loginDTO.getPassword(), userVO.getPassword())) {
+				System.out.println("로그인 실패");
+				mav.setViewName("/user/logInFailed");
+				return mav;
+			}
+			mav.setViewName("/home");
+			mav.addObject("userVO", userVO);
+			System.out.println("로그인한 유저  :  " + mav);
+
+			// 로그인 유지를 선택할 경우
+			if (loginDTO.isUseCookie()) {
+				int amount = 60 * 60 * 24 * 7; // 7일
+				Date sessionLimit = new Date(System.currentTimeMillis() + (1000 * amount));// 로그인 유지기간 설정
+				userService.keepLogin(userVO.getId(), httpSession.getId(), sessionLimit);
+				System.out.println("세션아이디 저장");
+			}
+			return mav;
+		}
+
+		@RequestMapping(value = "/logOut.do", method = RequestMethod.GET)
+		public String logOut(HttpServletRequest request, HttpServletResponse response, HttpSession httpSession)
+				throws Exception {
+			UserVO userVO = new UserVO();
+			userVO.setId((String) httpSession.getAttribute(LOGIN));
+			if (userVO != null) {
+				httpSession.removeAttribute(LOGIN);
+				httpSession.invalidate();
+				userService.removeSessionId(httpSession.getId());
+				Cookie loginCookie = WebUtils.getCookie(request, "loginCookie");
+				if (loginCookie != null) {
+					loginCookie.setPath("/");
+					loginCookie.setMaxAge(0);
+					response.addCookie(loginCookie);
+					userService.keepLogin(userVO.getId(), "none", new Date());
+				}
+			}
+			return "/user/logOut";
+		}
+
+		@Override
+		@RequestMapping(value = "/withdrawal.do", method = { RequestMethod.GET, RequestMethod.POST })
+		public String withdrawal(UserVO userVO, HttpSession httpSession) throws Exception {
+			userVO.setId((String) httpSession.getAttribute(LOGIN));
+			System.out.println(userVO);
+			userService.withdrawal(userVO);
+			httpSession.removeAttribute("LOGIN");
 			httpSession.invalidate();
 			userService.removeSessionId(httpSession.getId());
-			Cookie loginCookie = WebUtils.getCookie(request, "loginCookie");
-			if (loginCookie != null) {
-				loginCookie.setPath("/");
-				loginCookie.setMaxAge(0);
-				response.addCookie(loginCookie);
-				userService.keepLogin(userVO.getId(), "none", new Date());
-			}
+			return "/user/withdrawal";
 		}
-		return "/user/logOut";
-	}
+		
+		@RequestMapping(value = "/user/searchId.do", method = { RequestMethod.GET, RequestMethod.POST })
+		public String searchId(@RequestParam("email") String email, HttpServletRequest request) throws Exception {
+			System.out.println("searchId////////    " + email);
+			UserVO userVO = new UserVO();
+			userVO.setEmail(email);
+			String id = userService.searchId(email);
+			request.setCharacterEncoding("utf-8");
+			mailService.sendMail(userVO.getEmail(), "산오름 아이디 찾기 안내 메일",
+					"회원님이 산오름에 요청하신 '아이디 찾기' 문의에 대해 안내 해 드립니다. \n" + "회원님의 아이디는:  " + id);
+			return "/user/sendMailEnd";
+		}
+		
+		@RequestMapping(value = "/sendTempPwd.do", method = { RequestMethod.GET, RequestMethod.POST })
+		public String sendTempPwd(@RequestParam("id") String id, @RequestParam("email") String email,
+				HttpServletRequest request) throws Exception {
+			UserVO userVO = new UserVO();
+			userVO.setEmail(email);
+			// 임의의 authKey 생성 & 이메일 발송
+			String tempPwd = mailService.getKey(8);
+			request.setCharacterEncoding("utf-8");
+			mailService.sendMail(userVO.getEmail(), "산오름 임시 비밀번호 발급", "회원님이 산오름에 요청하신 임시비밀번호를 안내해 드립니다. \n"
+					+ "해당 비밀번호는 보안이 취약하니 로그인 후 즉시 마이페이지> 나의 정보 수정> 비밀번호변경을 권장합니다.\n " + "임시 비밀번호:  " + tempPwd);
 
-	@Override
-	@RequestMapping(value = "/withdrawal.do", method = { RequestMethod.GET, RequestMethod.POST })
-	public String withdrawal(UserVO userVO, HttpSession httpSession) throws Exception {
-		userVO.setId((String) httpSession.getAttribute(LOGIN));
-		System.out.println(userVO);
-		userService.withdrawal(userVO);
-		httpSession.removeAttribute("LOGIN");
-		httpSession.invalidate();
-		userService.removeSessionId(httpSession.getId());
-		return "/user/withdrawal";
-	}
-	
-	@RequestMapping(value = "/user/searchId.do", method = { RequestMethod.GET, RequestMethod.POST })
-	public String searchId(@RequestParam("email") String email, HttpServletRequest request) throws Exception {
-		System.out.println("searchId////////    " + email);
-		UserVO userVO = new UserVO();
-		userVO.setEmail(email);
-		String id = userService.searchId(email);
-		request.setCharacterEncoding("utf-8");
-		mailService.sendMail(userVO.getEmail(), "산오름 아이디 찾기 안내 메일",
-				"회원님이 산오름에 요청하신 '아이디 찾기' 문의에 대해 안내 해 드립니다. \n" + "회원님의 아이디는:  " + id);
-		return "/user/sendMailEnd";
-	}
-	
-	@RequestMapping(value = "/sendTempPwd.do", method = { RequestMethod.GET, RequestMethod.POST })
-	public String sendTempPwd(@RequestParam("id") String id, @RequestParam("email") String email,
-			HttpServletRequest request) throws Exception {
-		UserVO userVO = new UserVO();
-		userVO.setEmail(email);
-		// 임의의 authKey 생성 & 이메일 발송
-		String tempPwd = mailService.getKey(8);
-		request.setCharacterEncoding("utf-8");
-		mailService.sendMail(userVO.getEmail(), "산오름 임시 비밀번호 발급", "회원님이 산오름에 요청하신 임시비밀번호를 안내해 드립니다. \n"
-				+ "해당 비밀번호는 보안이 취약하니 로그인 후 즉시 마이페이지> 나의 정보 수정> 비밀번호변경을 권장합니다.\n " + "임시 비밀번호:  " + tempPwd);
-
-		String hashedPwd = BCrypt.hashpw(tempPwd, BCrypt.gensalt(10));
-		userVO.setPassword(hashedPwd);
-		userVO.setId(id);
-		mypageService.updatePwd(userVO);
-		return "/user/sendMailEnd";
-	}
-
+			String hashedPwd = BCrypt.hashpw(tempPwd, BCrypt.gensalt(10));
+			userVO.setPassword(hashedPwd);
+			userVO.setId(id);
+			mypageService.updatePwd(userVO);
+			return "/user/sendMailEnd";
+		}
 	
 
 

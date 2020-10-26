@@ -2,13 +2,23 @@
 	pageEncoding="UTF-8" isELIgnored="false"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/functions" prefix = "fn" %>
 <%
 	request.setCharacterEncoding("UTF-8");
+	pageContext.setAttribute("loginID", request.getSession().getAttribute("LOGIN"));
 %>
 <!doctype html>
 <html lang="ko">
 <script type="text/javascript"
 	src="/resources/ckeditor/ckeditor/ckeditor.js"></script>
+<style>
+div#posts img {
+	width: auto !important;
+	height: auto !important;
+	max-width: 500px !important;
+	max-height: 500px !important;
+}
+</style>
 <jsp:include page="/commu/common/leftSide.jsp" flush="false" />
 
 <!-- middle div -->
@@ -34,44 +44,102 @@
 					<jsp:include page="/commu/common/postCreateForm.jsp" flush="false" />
 					<hr>
 				</c:if>
-				<div class="card">
-					<div class="card-header">공지사항</div>
-					<div class="card-body">
-						<blockquote class="blockquote mb-0">
-							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-								Integer posuere erat a ante.</p>
-							<footer class="blockquote-footer">
-								Someone famous in <cite title="Source Title">Source Title</cite>
-							</footer>
-						</blockquote>
+				<div class="card" style="border: 1px solid orange;">
+					<div class="card-title">
+						<div class="row">
+						<h5 style="color: orange; padding: 25px 0 0 30px;">[공지사항]</h5>
+							<img class="rounded-circle mt-4" style="margin-left: 20px;"
+								src="/resources/img/${m9.CONTENT2}"
+								width="30" height="30" alt="프로필사진">
+							<h6 style="margin-top: 30px">&nbsp${m9.NICKNAME}</h6>
+							&nbsp&nbsp
+							<h6 style="margin-top: 30px;">
+								<small id="FcreatedAt">${fn:substring(m9.CREATEDAT, 0, 19)}</small>
+							</h6>
+								<div style="width:100px;"></div>
+							<c:choose>
+							<c:when test="${m9.ID eq loginID}">
+							<!-- <button type="button" id="updateBtn" data-toggle="modal" data-target="#postUpdateForm" class="btn btn-link" style="margin-top: 20px; color: gray;">수정</button> -->
+							<form action="/commu/deletePost.do?postNum=${m9.POSTNUM}" method="get" id="removefrm">
+							<button type="button" id="${m9.POSTNUM}" class="btn btn-link" onclick="removeCheck(this)" style="margin-top: 20px; color: gray;">삭제</button>
+							</form>
+							</c:when>
+							<c:otherwise>
+							<div style="width:20px;"></div>
+							<button type="button" id="reportBtn" class="btn btn-link" style="margin-top: 20px; color: gray;">신고</button>
+							</c:otherwise>
+							</c:choose>
+						</div>
+						</div>
+						<div class="card-body" id="posts" style="padding-bottom: 0px !important;">
+							${m9.CONTENT} <br> 
+							<c:if test="${not empty m9.UPDATEDAT}">
+								<small> / 수정 ${m9.UPDATEDAT}</small>
+								<br>
+							</c:if>
+							<hr />
+							</div>
+							<div id="commentShow">
+					 	<button type="button" id="showCommentBtn${m9.POSTNUM}" name="${m9.POSTNUM}" class=" btn btn-link" onclick="showComment(this);" style="color: orange; text-align:left; padding:0 0 0 20px;">댓글보기</button> 
+						 </div>
+						 	<div id="mainCommentBoard${m9.POSTNUM}" class="row" style="display: none; width: 28rem; height: 30rem; overflow:scroll;"></div> 
+					<hr />
+					<div id="mainCommentInput" class="row" style="text-align: center">
+						<img src="/resources/img/${sessionIdImage}" class="rounded-circle mt-1" style="margin-left: 27px; margin-bottom:20px; width: 30px; height: 30px" > 
+							<input id="mainCommentContent${m9.POSTNUM}" class="form-control form-control-md col-lg-9 col-md-9 col-sm-10 col-10 ml-2 mr-2" type="text" placeholder="내용을 입력해주세요">
+							<button id="${m9.POSTNUM}" class="btn btn-warning btn-sm" style="height:37px;">입력</button>
 					</div>
-				</div>
-				<style>
-div#posts img {
-	width: auto !important;
-	height: auto !important;
-	max-width: 500px !important;
-	max-height: 500px !important;
-}
-</style>
+					
+					</div>
+
+	<hr>
 				<c:forEach var="postList" items="${postList}">
 					<div class="card">
-						<div class="row col-sm-4">
-							<img class="rounded-circle mt-3" style="margin-left: 10px"
-								src="http://localhost:8080/resources/img/${postList.CONTENT2}"
+					<div class="card-title">
+						<div class="row">
+							<img class="rounded-circle mt-3" style="margin-left: 35px"
+								src="/resources/img/${postList.CONTENT2}"
 								width="50" height="50" alt="프로필사진">
 							<h6 style="margin-top: 40px">&nbsp${postList.NICKNAME}</h6>
+							&nbsp&nbsp&nbsp&nbsp
+							<h6 style="margin-top: 40px;">
+								<small id="FcreatedAt">${fn:substring(postList.CREATEDAT, 0, 19)}</small>
+							</h6>
+								<div style="width:180px;"></div>
+							<c:choose>
+							<c:when test="${postList.ID eq loginID}">
+							<button type="button" id="${postList.POSTNUM}" data-toggle="modal" onclick="postUpdateForm(this)" class="btn btn-link" style="margin-top: 30px; color: gray;">수정</button>
+							
+							<form action="/commu/deletePost.do?postNum=${postList.POSTNUM}" method="get" id="removefrm">
+							<button type="button" id="${postList.POSTNUM}" class="btn btn-link" onclick="removeCheck(this)" style="margin-top: 30px; color: gray;">삭제</button>
+							</form>
+							</c:when>
+							<c:otherwise>
+							<div style="width:40px;"></div>
+							<button type="button" id="reportBtn" class="btn btn-link" style="margin-top: 30px; color: gray;">신고</button>
+							</c:otherwise>
+							</c:choose>
 						</div>
-						<div class="card-body" id="posts">
-							${postList.CONTENT} <br> <small>작성
-								${postList.CREATEDAT}</small>
+						</div>
+						<div class="card-body" id="posts" style="padding-bottom: 0px !important;">
+							${postList.CONTENT} <br> 
 							<c:if test="${not empty postList.UPDATEDAT}">
 								<small> / 수정 ${postList.UPDATEDAT}</small>
 								<br>
 							</c:if>
-							<hr class="my-4">
-							댓글 부분
-						</div>
+							<hr />
+							</div>
+							<div id="commentShow">
+					 	<button type="button" id="showCommentBtn${postList.POSTNUM}" name="${postList.POSTNUM}" class=" btn btn-link" onclick="showComment(this);" style="color: seaGreen; text-align:left; padding:0 0 0 20px;">댓글보기</button> 
+						 </div>
+						 	<div id="mainCommentBoard${postList.POSTNUM}" class="row" style="display: none; width: 28rem; height: 30rem; overflow:scroll;"></div> 
+					<hr />
+					<div id="mainCommentInput" class="row" style="text-align: center">
+						<img src="/resources/img/${sessionIdImage}" class="rounded-circle mt-1" style="margin-left: 27px; margin-bottom:20px; width: 30px; height: 30px" > 
+							<input id="mainCommentContent${postList.POSTNUM}" class="form-control form-control-md col-lg-9 col-md-9 col-sm-10 col-10 ml-2 mr-2" type="text" placeholder="내용을 입력해주세요">
+							<button id="${postList.POSTNUM}" class="btn btn-success btn-sm" style="height:37px;">입력</button>
+					</div>
+					
 					</div>
 				</c:forEach>
 			</div>
@@ -95,6 +163,40 @@ div#posts img {
 </div>
 <div style="height: 230px;"></div>
 
+						<!--게시글 수정 Modal -->
+<div class="modal fade" id="postUpdateForm" tabindex="-1"
+	aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel"> 피드 수정하기</h5>
+				<button type="button" class="close" data-dismiss="modal"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+					<form action="/commu/updatePost.do" method="post" enctype="multipart/form-data">
+				<div class="row justify-content-md-center">
+					<div class="col_c">
+						<div class="input-group">
+							<textarea class="form-control" name="updateFeedContent" id="updateFeedContent"></textarea>
+							  <script type="text/javascript">
+								
+							</script> 
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="submit" class="btn btn-success">게시글 수정</button>
+			</div>
+			<input type="hidden" name="groupNum" value="">
+			</form>
+		</div>
+	</div>
+</div>
+
 <script type="text/javascript" src="../resources/js/jquery.js"></script>
 <script type="text/javascript" src="../resources/js/bootstrap.min.js"></script>
 <script
@@ -107,9 +209,199 @@ div#posts img {
 	crossorigin="anonymous"></script>
 </body>
 <script>
-
 /*   댓글 */
 const userProfile = '${sessionIdImage}';
+
+
+function postUpdateForm(e){
+ var data = {
+	          "postNum" : e.id
+		};
+
+$.ajax({
+    type: "GET",
+    url: "/commu/selectACommuPost.do",
+    data: data,
+    dataType: 'text',
+    contentType: "application/json; charset=utf-8;",
+    success: function (response){
+    	var str = response;
+    	var editor = CKEDITOR.instances.updateFeedContent;
+    	if (editor) { editor.destroy(true); }
+    	 $("#updateFeedContent").val(str);
+    	 CKEDITOR.replace('updateFeedContent', {
+				filebrowserUploadUrl :'/commu/imageUpload.do',
+				height : 250,
+				width : 750
+			});
+		 $("#postUpdateForm").modal();
+    	console.log("updateFeedContent" + str);
+    },
+    error: function(request,status,error){
+       alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+    }
+})  
+}
+
+
+
+
+function removeCheck(e){ 
+	if(confirm("정말 삭제하시겠습니까?")==true){
+
+		 var data = {
+		          "postNum" : e.id
+	  };
+	  
+	  $.ajax({
+	      type: "GET",
+	      url: "/commu/deletePost.do",
+	      data: data,
+	      dataType: 'json',
+	      contentType: "application/json; charset=utf-8;",
+	      success: function (response){
+	          alert("게시글이 삭제되었습니다.");
+	         history.go(0);
+	      },
+	      error: function(response){
+	          alert("삭제 실패. 새로고침 후 다시 시도해주세요.");
+	      }
+	  })
+		
+	}else{
+		return false;
+	}
+	
+}
+
+
+/* 메인 게시글의 댓글 */
+$(document).on('click','div#mainCommentInput button',function (e){ 
+	console.log("commentInput e"+ e.target.id);
+
+	var data = {
+	          "parentNum" : 0,
+	          "depts" : 1,
+	          "groupNum" : ${m1.GROUPNUM},
+	          "content" : $('#mainCommentContent'+e.target.id).val(),
+	          "userId" : "${loginID}",
+	          "postNum" : e.target.id
+	      }
+
+	      $.ajax({
+	          type: "POST",
+	          url: "/group/insertComment.do",
+	          data: JSON.stringify(data),
+	          dataType: 'json',
+	          contentType: "application/json; charset=utf-8;",
+	          success: function (response){
+
+	              var index = 0;
+	              var count = response.subCommentCount;
+
+	                  var rootNum = response.parentNum;
+
+	                  if (rootNum == 0 ) {
+	                      var id = 'depts' + index
+
+	                      $('#mainCommentBoard'+e.target.id).append(
+	                          '<ul id="' + id + '" class="col-12 pl-5 row">' +
+	                          '<img src="/resources/img/${sessionIdImage}" class="rounded-circle" style="width: 40px;height: 40px">'+
+	                          '<div class="col-10">'+
+	                          '<pre style="display: none">'+response.commentNum+'</pre>'+
+	                          '<h5>'+response.nickname+'</h5>'+
+	                          '<div>'+response.content +'</div>' +
+	                          '<button class="'+id+' p-0 btn btn-default text-muted" onclick="toggleSubComment(this)">[답글 '+ count +'개 더보기]</button>' +
+	                          '<button class="'+id+'subComment p-0 btn btn-default text-muted" onclick="toggleWriteSubComment(this)">[답글 작성]</button>' +
+	                          '<p style="display: none"><input type="text" class="form-control" placeholder="댓글 내용 입력"/>' +
+	                          '<button id="writeMainSubCommentBtn'+e.target.id+'" class="btn btn-success btn-sm" onclick="writeMainSubComment(this)">작성</button>' +
+	                          '<button class="btn btn-light btn-sm" onclick="cancelwriteSubComment(this)">취소</button>' +
+	                          '</p></div></ul>');
+	                      index++;
+							$('#writeMainSubCommentBtn'+e.target.id).data('postNum', e.target.id);
+	                  }
+	          },
+	          error: function(response){
+	              alert("다시 시도해주세요")
+	          }
+	      })
+	
+})
+
+/* 
+/* 나중에 보여줄때 하면돼~~!! */
+function showComment(e){       
+         var postNum =  e.getAttribute('name')
+		$('#mainCommentBoard'+postNum+" ul").remove();
+         
+     	if( $('#mainCommentBoard'+postNum)[0].style.display == "block"){
+            $('#mainCommentBoard'+postNum)[0].style.display = "none";
+        }else if( $('#mainCommentBoard'+postNum)[0].style.display  == "none"){
+        		  $('#mainCommentBoard'+postNum)[0].style.display  = "block";
+         }
+     	
+         var data = {
+                 "postNum" : postNum
+              }; 
+         
+      $.ajax({
+          type: "GET",
+          url: "/group/selectCommentByPostNum.do",
+          data: data,
+          dataType: 'json',
+          contentType: "application/json; charset=utf-8;",
+          success: function (response){
+              var index = 0;
+              for(var i=0; i<response.length; i++) {
+                  var commentNum = response[i].commentNum;
+                  var rootNum = response[i].parentNum;
+                  var count = response[i].subCommentCount;
+                  
+                  if (rootNum == 0) {
+                      var id = 'depts' + index
+                      $('#commentCount'+e.getAttribute('name')).append( '<p>response.length개의</p>');
+                      $('#mainCommentBoard'+e.getAttribute('name')).append(
+                          '<ul id="' + id + '" class="col-12 pl-5 row">' +
+                          '<img src="/resources/img/' + response[i].content2 + '" class="rounded-circle" style="width: 50px;height: 50px">'+
+                          '<div class="col-10">'+
+                          '<pre style="display: none">'+response[i].commentNum+'</pre>'+
+                          '<h5>'+response[i].nickname+'</h5>'+
+                          '<div>'+response[i].content +'</div>' +
+                          '<button class="'+id+' p-0 btn btn-default text-muted" onclick="toggleSubComment(this)">[답글 '+ count +'개 더보기]</button>' +
+                          '<button class="'+id+'subComment p-0 btn btn-default text-muted" onclick="toggleWriteSubComment(this)">[답글 작성]</button>' +
+                          '<p style="display: none"><input type="text" class="form-control" placeholder="댓글 내용 입력"/>' +
+                          '<button id="writeMainSubCommentBtn'+postNum+'" class="btn btn-success btn-sm" onclick="writeSubComment(this)">작성</button>' +
+                          '<button class="btn btn-light btn-sm" onclick="cancelwriteSubComment(this)">취소</button>' +
+                          '</p></div></ul>');
+                      $('#writeMainSubCommentBtn'+postNum).data('postNum', postNum);
+                      index++;
+                      
+                      var index1 = 0;
+                      for (var j = 0; j < response.length; j++) {
+
+                          if (response[j].parentNum == commentNum) {
+                              $('#' + id).append(
+                                  '<li id="' + id + index1 + '" class="col-12 row pt-3 ml-5 pl-2" style="display: none;">'+
+                                  '<img src="/resources/img/'+userProfile+'" class="rounded-circle" style="width: 40px; height: 40px; float: left">'+
+                                  '<div class="col-9 ml-2 pl-5">'+
+                                  '<h5 class="mb-0">'+response[j].nickname+'</h5>'+
+                                  response[j].content +'</div></li>'
+                              );
+
+                              index1++;
+                          }
+                      }
+                  }
+              }
+          },
+          error: function(response){
+              console.log("error");
+              console.log(response)
+          }
+      }) /* selectCommentByPostNum 아작스 */
+     
+     }
+
     
 	function toggleSubComment(e){
      console.log("답글 작성 토글 e"+ e);
@@ -137,7 +429,6 @@ const userProfile = '${sessionIdImage}';
       }
 
       function writeSubComment(e){
-
           $root = e.parentNode.parentNode;
           $parentNum = $root.getElementsByTagName("pre")[0];
 
@@ -146,8 +437,8 @@ const userProfile = '${sessionIdImage}';
               "depts" : 2,
               "groupNum" : "${m1.GROUPNUM}",
               "content" : e.previousSibling.value,
-              "userId" : "<%= request.getSession().getAttribute("LOGIN")%>",
-              "postNum" : $('#oC').data('postNum').replace(/\"/g, "")
+              "userId" : "${loginID}",
+              "postNum" : $("#"+e.id).data('postNum')
           }
 
 
@@ -164,7 +455,7 @@ const userProfile = '${sessionIdImage}';
                       '<li id="temp" class="col-12 row pt-3 ml-5 pl-2">'+
                       '<img src="/resources/img/${sessionIdImage}" class="rounded-circle" style="width: 40px;height: 40px;float: left">'+
                       '<div class="col-9">'+
-                      '<h5 class="mb-0 pl-0">'+response.userId+'</h5>'+
+                      '<h5 class="mb-0 pl-0">'+response.nickname+'</h5>'+
                       response.content +'</div></li>'
                   );
               },
@@ -175,13 +466,76 @@ const userProfile = '${sessionIdImage}';
 
 
       }
+      
+  function writeMainSubComment(e){
 
-      function cancelwriteSubComment(e){
-          e.previousSibling.previousSibling.value=null;
+      $root = e.parentNode.parentNode;
+      $parentNum = $root.getElementsByTagName("pre")[0];
+
+      var data = {
+          "parentNum" : $parentNum.innerHTML,
+          "depts" : 2,
+          "groupNum" : "${m1.GROUPNUM}",
+          "content" : e.previousSibling.value,
+          "userId" : "${loginID}",
+          "postNum" : e.data('postNum')
       }
-      
-      
 
+
+      $.ajax({
+          type: "POST",
+          url: "/group/insertSubComment.do",
+          data: JSON.stringify(data),
+          dataType: 'json',
+          contentType: "application/json; charset=utf-8;",
+          success: function (response){
+              var id = $root.parentNode.id;
+              console.log(id)
+              $('#'+id).append(
+                  '<li id="temp" class="col-12 row pt-3 ml-5 pl-2">'+
+                  '<img src="/resources/img/${sessionIdImage}" class="rounded-circle" style="width: 40px;height: 40px;float: left">'+
+                  '<div class="col-9">'+
+                  '<h5 class="mb-0 pl-0">'+response.nickname+'</h5>'+
+                  response.content +'</div></li>'
+              );
+          },
+          error: function(response){
+              alert("다시 시도해주세요")
+          }
+      })
+  }
+
+  function cancelwriteSubComment(e){
+      e.previousSibling.previousSibling.value=null;
+  }
+      
+  $(document).on('click','#removeBtn',function (){ 
+	  if(confirm("정말 삭제하시겠습니까?")==true){ 
+	   var data = {
+		          "postNum" : $('#commentContent').data('postNum')
+	   };
+	   
+	   $.ajax({
+           type: "GET",
+           url: "/commu/deletePost.do",
+           data: data,
+           dataType: 'json',
+           contentType: "application/json; charset=utf-8;",
+           success: function (response){
+               alert("사진이 삭제되었습니다.");
+               document.getElementsByClassName('close')[0].click();
+             	 history.go(0);
+           },
+           error: function(response){
+               alert("삭제 실패. 새로고침 후 다시 시도해주세요.");
+           }
+       })
+	  }else{
+	  		return false;
+	  }
+   })
+    
+    
 
   $(document).on('click','#commentSubmit',function (){
 
@@ -190,8 +544,8 @@ const userProfile = '${sessionIdImage}';
           "depts" : 1,
           "groupNum" : ${m1.GROUPNUM},
           "content" : $('#commentContent').val(),
-          "userId" : "<%= request.getSession().getAttribute("LOGIN")%>",
-          "postNum" : $('#oC').data('postNum').replace(/\"/g, "")
+          "userId" : "${loginID}",
+          "postNum" : $('#commentContent').data('postNum')
       }
 
       $.ajax({
@@ -207,7 +561,7 @@ const userProfile = '${sessionIdImage}';
 
                   var rootNum = response.parentNum;
 
-                  if (rootNum == 0) {
+                  if (rootNum == 0 ) {
                       var id = 'depts' + index
 
                       $('#commentBoard').append(
@@ -215,7 +569,7 @@ const userProfile = '${sessionIdImage}';
                           '<img src="/resources/img/${sessionIdImage}" class="rounded-circle" style="width: 50px;height: 50px">'+
                           '<div class="col-10">'+
                           '<pre style="display: none">'+response.commentNum+'</pre>'+
-                          '<h5>'+response.userId+'</h5>'+
+                          '<h5>'+response.nickname+'</h5>'+
                           '<div>'+response.content +'</div>' +
                           '<button class="'+id+' p-0 btn btn-default text-muted" onclick="toggleSubComment(this)">[답글 '+ count +'개 더보기]</button>' +
                           '<button class="'+id+'subComment p-0 btn btn-default text-muted" onclick="toggleWriteSubComment(this)">[답글 작성]</button>' +
@@ -234,24 +588,94 @@ const userProfile = '${sessionIdImage}';
 
   })/* $(document).on('click','#commentSubmit',function (){ */
 
-	  
-	  
-/*    function checkOCID(event){
-  var click = event.target.id;
-  var i = click.slice(7,9);
- console.log("click_id: "+ i);
-  picDetail(i)
-  }  
-  */
+  $(document).on('click','div#rightSide a',function (){ 
+	  document.getElementById("list-setting-list").classList.remove('active');  
+  })
   
-     
-    	  
+   $(document).on('click','#list-setting-list',function (){ 
+	   var listGroup = document.getElementById("rightSide");
+       for (let i of listGroup.children){
+           i.classList.remove('active');
+       }
+   })
+	  
+    	
+   $(document).on('click','#withdrawCheckModalBtn',function (){
+        $("#withdrawCheckModal").show();
+    })
+    $(document).on('click','#withdrawBtn',function (){
+    	withdraw();
+    })
+   
+     $(document).on('click','.cancelAskModalBtn',function (){
+        $("#cancelAskModal").show();
+    })
+    $(document).on('click','.cancelAskBtn',function (){
+		withdraw();
+    })
+   
+    
+       function withdraw(){
+        var data = {
+            "groupNum": ${m1.GROUPNUM},
+            "userId" : "${loginID}",
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/group/withdraw.do",
+            data: JSON.stringify(data),
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8;",
+            success : function (response){
+                location.reload();
+            },
+            error : function (response){
+                console.log("error")
+            }
+        })
+        
+  }
+    
+  
+  
+  $(document).on('click','#deleteCommu',function (){
+      $("#deleteAskModal").show();
+  })
+  $(document).on('click','#deleteCommuBtn',function (){
+		deleteCommu();
+  })
+ 
+  
+     function deleteCommu(){
+      var data = {
+          "groupNum": ${m1.GROUPNUM}
+      }
+
+      $.ajax({
+          type: "POST",
+          url: "/group/delete.do",
+          data: JSON.stringify(data),
+          dataType: 'json',
+          contentType: "application/json; charset=utf-8;",
+          success : function (response){
+              location.reload();
+          },
+          error : function (response){
+              console.log("error")
+          }
+      })
+      
+}
+  
+  
+  
 $(document).ready(function (){
 		var selectWaitingList = document.getElementsByClassName('selectWaitingList');
 	if(${0 eq m2.USERTYPE}){
 	var data = {
 	        "groupNum" : "${m1.GROUPNUM}",
-	        "userId" : "<%= request.getSession().getAttribute("LOGIN")%>"
+	        "userId" : "${loginID}"
 	    }
 		 $.ajax({
 	        type: "POST",
@@ -286,7 +710,7 @@ $(document).ready(function (){
     $(document).on('click','.joinGroupBtn',function (){
         var data = {
             "groupNum": "${m1.GROUPNUM}",
-            "userId" : "<%= request.getSession().getAttribute("LOGIN")%>",
+            "userId" : "${loginID}",
             "userComment" : $('#userComment').val()
         }
 
@@ -305,14 +729,15 @@ $(document).ready(function (){
             }
         })
     })
-    $(document).on('click','.withdrawGroupBtn',function (){
+    
+    $(document).on('click','a#withdrawCommu',function (){
         $("#cancelModal").show();
     })
     $(document).on('click','.cancelModalBtn',function (){
 
         var data = {
             "groupNum": ${m1.GROUPNUM},
-            "userId" : "<%= request.getSession().getAttribute("LOGIN")%>",
+            "userId" : "${loginID}",
         }
 
         $.ajax({
@@ -336,7 +761,7 @@ $(document).on('click','.selectWaitingList',function (){
 
     var data = {
         "groupNum" : "${m1.GROUPNUM}",
-        "userId" : "<%= request.getSession().getAttribute("LOGIN")%>"
+        "userId" : "${loginID}"
     }
 
     $.ajax({
@@ -493,7 +918,7 @@ $(document).on('click','.userDisallowed',function (e){
         data.append("ageStart",$('#ageStart').val());
         data.append("ageEnd",$('#ageEnd').val());
         data.append("sex",$('#sex').val());
-        data.append("userId","<%= request.getSession().getAttribute("LOGIN")%>")
+        data.append("userId","${loginID}")
 
         $.ajax({
             type: "POST",
@@ -600,7 +1025,7 @@ $(document).on('click','.userDisallowed',function (e){
        	data["groupNum"] = ${m1.GROUPNUM};
        	data["nowPage"] = currentPage;
        	data["cntPerPage"] = dataPerPage;
-       	data["userId"] = "<%= request.getSession().getAttribute("LOGIN") %>" ;
+       	data["userId"] = "${loginID}" ;
       		data["total"] = ${vM.total}; 
        	$.ajax({
        		contentType:'application/json',
@@ -609,32 +1034,39 @@ $(document).on('click','.userDisallowed',function (e){
        		url:'/commu/commuAlbumPaging.do',
        		type:'POST',
        		success:function(data){
-       			 for(var i=0 in data){  
-       	
-       			var nickName = JSON.stringify(data[i].nickName);
-       			var createdAt = JSON.stringify(data[i].createdAt);
-       			var content = JSON.stringify(data[i].content).replace(/\"/g, "");
-       			var content2 = JSON.stringify(data[i].content2);
-       			var groupNum = JSON.stringify(data[i].groupNum);
-       			var boardType = JSON.stringify(data[i].boardType);
-       			var rn = JSON.stringify(data[i].rn);
-       			var postNum = JSON.stringify(data[i].postNum);
-       			var type = JSON.stringify(data[i].type);
-       			var userNum = JSON.stringify(data[i].userNum);
+       			console.log("data"+data[5].content2);
+       			 for(var i=0 in data){ 
+       				var content = JSON.stringify(data[i].content).replace(/\"/g, "");
    				html = "   <div class='col-lg-3 col-md-4 col-6' >" ;
-   				html += "<a href='#originalContent' id='oC' class='d-block mb-4 h-100' data-toggle='modal' >" ;
-   				html += " <img id='content' class='img-fluid img-thumbnail' src='http://localhost:8080/resources/ckstorage/images/";
+   				html += "<a href='' id='oC' class='d-block mb-4 h-100' data-toggle='modal' >" ;
+   				html += " <img id='content";
+   				html += i;
+   				html +="' class='img-fluid img-thumbnail' src='/resources/img/";
    				html += content ;
    				html += "' alt='사진'></a></div>";
-   				html += postNum;
    				htmlC += html;
-   				document.getElementById('albumList').innerHTML=htmlC;     		
-       				$('#content').data('nickName',nickName);
-       				$('#content').data('content2',content2);
-       				$('#content').data('createdAt',createdAt);
-       				$('#content').data('postNum',postNum);
-       				console.log("html:  " + html);
        			 }   
+   				document.getElementById('albumList').innerHTML=htmlC;     		
+
+   				for(var j=0 in data){ 
+       			var nickName = JSON.stringify(data[j].nickName);
+       			var createdAt = JSON.stringify(data[j].createdAt);
+       			var content2 = JSON.stringify(data[j].content2);
+       			var groupNum = JSON.stringify(data[j].groupNum);
+       			var boardType = JSON.stringify(data[j].boardType);
+       			var rn = JSON.stringify(data[j].rn);
+       			var postNum = JSON.stringify(data[j].postNum);
+       			var type = JSON.stringify(data[j].type);
+       			var userNum = JSON.stringify(data[j].userNum);
+       			
+       			$('#content'+ j ).data('nickName',nickName);
+   				$('#content'+ j ).data('content2',content2);
+   				$('#content'+ j ).data('createdAt',createdAt);
+   				$('#content'+ j ).data('postNum',postNum);
+   				$('#content'+ j ).data('userNum',userNum);
+   				
+   				//console.log("content" + j+":" + $('#content'+ j ).data('content'));
+   				}
        		},
        		error:function(request, status, error){
        			alert(request.message);
@@ -655,105 +1087,147 @@ $(document).on('click','.userDisallowed',function (e){
      }/* function paging(totalData, dataPerPage, pageCount, currentPage){ */
     
         paging(totalData, dataPerPage, pageCount, 1);
+  
+     /* 
+        $('div#commentShow button').each(function(e){
+        	console.log("~~~~~~"+e[0].id);
+        
+        var postNum =  e.getAttribute('name');
+           
+        var data = {
+                     "postNum" : postNum
+                  }; 
+             
+          $.ajax({
+              type: "GET",
+              url: "/group/selectCommentByPostNum.do",
+              data: data,
+              dataType: 'json',
+              contentType: "application/json; charset=utf-8;",
+              success: function (response){
+                  var index = 0;
+                if(response.length ==0){
+              e.target.setAttribute('disabled', true);
+                  }
+              },
+              error: function(response){
+                  console.log("error");
+                  console.log(response)
+              }
+          }) /* selectCommentByPostNum 아작스 */
      
+      }) /*/
+     
+}); /* document ready */
      
    /* album 사진 상세보기 */
-$(document).on( 'click', 'a#oC' , function(e){ 
-    $('a#oC').each(function(){
-        $('a#oC').click(function(){
-             $("#originalContent").modal();
-            })  /*  $('a#oC').click(function(){ */
-     }) /*      $('a#oC').each(function(){ */
+$(document).on( 'click', 'a#oC img' , function(e){ 
+/*     $('a#oC img').each(function(){ */
+ /*    	$(this).click(function(){ */
+              console.log("this.id: "+this.id); 
+         	var nickName = $(this).data('nickName').replace(/\"/g, "");
+         	var content2 = $(this).data('content2')
+         	var createdAts = $(this).data('createdAt').replace(/\"/g, "");
+         	var postNum = $(this).data('postNum').replace(/\"/g, "");
+         	var userNum = $(this).data('userNum').replace(/\"/g, "");
+         	var createdAt = createdAts.slice(0,19);
+         	var src = "/resources/img/"+content2.replace(/\"/g, "");
+       	 console.log("클릭이벤트 먹었니: "+ src +"    ;///   "+postNum);                 
+         	 var modal = document.getElementById('originalContent');
+         	 var modalImg = document.getElementById('OContent');
+         	document.getElementById('nickName').innerHTML=nickName;
+         	document.getElementById('profilePic').src=src;
+         	document.getElementById('createdAt').innerHTML=createdAt;
+         	$('#commentContent').data('postNum', postNum);
+         	  modal.style.display = 'block';
+         	 modalImg.src = this.src;
+         	 
+         	 
+         	var data = {
+         		  	"userId" : "${loginID}"
+                 }; 
+         	 $.ajax({
+                 type: "GET",
+                 url: "/commu/checkWriter.do",
+                 data: data,
+                 dataType: 'json',
+                 contentType: "application/json; charset=utf-8;",
+                 success: function (response){
+         	 if(userNum != response){
+         		$('#AremoveBtn').css('display','none');
+         		$('#AreportBtn').css('display','inline');
+         	 } else {
+         		$('#AremoveBtn').css('display','inline');
+         		$('#AreportBtn').css('display','none');
+         		 }
+         	 }
+  	  })           
+         	 
+         	var data = {
+                    "postNum" : postNum
+                 }; 
+         	$("div#commentBoard ul").remove();
+         $.ajax({
+             type: "GET",
+             url: "/group/selectCommentByPostNum.do",
+             data: data,
+             dataType: 'json',
+             contentType: "application/json; charset=utf-8;",
+             success: function (response){
+                 var index = 0;
+                 for(var i=0; i<response.length; i++) {
+                     var commentNum = response[i].commentNum;
+                     var rootNum = response[i].parentNum;
+                     var count = response[i].subCommentCount;
 
-     var modal = document.getElementById('originalContent');
-     var img = document.querySelectorAll('#content');
-     var modalImg = document.getElementById('OContent');
-     img.forEach(function(showOC){
-     	showOC.addEventListener('click', function(){
-     		  modal.style.display = 'block';
-     	      modalImg.src = this.src;
-     	   var click =this.id;
-  		  console.log("click_id: "+ $(this).data('postNum'));
-        	var nickName = $(this).data('nickName').replace(/\"/g, "");
-        	var content2 = $(this).data('content2').replace(/\"/g, "");
-        	var createdAts = $(this).data('createdAt').replace(/\"/g, "");
-        	var postNum = $('#oC').data('postNum').replace(/\"/g, "");
-        	var createdAt = createdAts.slice(0,19);
-        	var src = ("http://localhost:8080/resources/img/"+content2).replace(/\"/g, "");
-        	console.log("클릭이벤트 먹었니: "+ nickName +"    ;///   "+postNum);                
-        	document.getElementById('nickName').innerHTML=nickName;
-        	document.getElementById('content2').src=src;
-        	document.getElementById('createdAt').innerHTML=createdAt;
-        	
-        	
-          
-         var data = {
-                   "postNum" : $('#oC').data('postNum').replace(/\"/g, "")
-                };
-          var  postNum = $('#oC').data('postNum').replace(/\"/g, "");
-		console.log("postNum"+postNum);
-		
-        $.ajax({
-            type: "GET",
-            url: "/group/selectCommentByPostNum.do",
-            data: data,
-            dataType: 'json',
-            contentType: "application/json; charset=utf-8;",
-            success: function (response){
+                     if (rootNum == 0) {
+                         var id = 'depts' + index
+						
+                         $('#commentBoard').append(
+                             '<ul id="' + id + '" class="col-12 pl-5 row">' +
+                             '<img src="/resources/img/' + response[i].content2 + '" class="rounded-circle" style="width: 50px;height: 50px">'+
+                             '<div class="col-10">'+
+                             '<pre style="display: none">'+response[i].commentNum+'</pre>'+
+                             '<h5>'+response[i].nickname+'</h5>'+
+                             '<div>'+response[i].content +'</div>' +
+                             '<button class="'+id+' p-0 btn btn-default text-muted" onclick="toggleSubComment(this)">[답글 '+ count +'개 더보기]</button>' +
+                             '<button class="'+id+'subComment p-0 btn btn-default text-muted" onclick="toggleWriteSubComment(this)">[답글 작성]</button>' +
+                             '<p style="display: none"><input type="text" class="form-control" placeholder="댓글 내용 입력"/>' +
+                             '<button id="writeSubCommentBtn" class="btn btn-success btn-sm" onclick="writeSubComment(this)">작성</button>' +
+                             '<button class="btn btn-light btn-sm" onclick="cancelwriteSubComment(this)">취소</button>' +
+                             '</p></div></ul>');
 
-                var index = 0;
-                for(var i=0;i<response.length;i++) {
+                         index++;
+                         
+                         var index1 = 0;
+                         for (var j = 0; j < response.length; j++) {
 
-                    var commentNum = response[i].commentNum;
-                    var rootNum = response[i].parentNum;
-                    var count = response[i].subCommentCount;
+                             if (response[j].parentNum == commentNum) {
+                                 $('#' + id).append(
+                                     '<li id="' + id + index1 + '" class="col-12 row pt-3 ml-5 pl-2" style="display: none;">'+
+                                     '<img src="/resources/img/'+userProfile+'" class="rounded-circle" style="width: 40px; height: 40px; float: left">'+
+                                     '<div class="col-9 ml-2 pl-5">'+
+                                     '<h5 class="mb-0">'+response[j].nickname+'</h5>'+
+                                     response[j].content +'</div></li>'
+                                 );
 
-                    if (rootNum == 0) {
-                        var id = 'depts' + index
-
-                        $('#commentBoard').append(
-                            '<ul id="' + id + '" class="col-12 pl-5 row">' +
-                            '<img src="/resources/img/' + response[i].content2 + '" class="rounded-circle" style="width: 50px;height: 50px">'+
-                            '<div class="col-10">'+
-                            '<pre style="display: none">'+response[i].commentNum+'</pre>'+
-                            '<h5>'+response[i].userId+'</h5>'+
-                            '<div>'+response[i].content +'</div>' +
-                            '<button class="'+id+' p-0 btn btn-default text-muted" onclick="toggleSubComment(this)">[답글 '+ count +'개 더보기]</button>' +
-                            '<button class="'+id+'subComment p-0 btn btn-default text-muted" onclick="toggleWriteSubComment(this)">[답글 작성]</button>' +
-                            '<p style="display: none"><input type="text" class="form-control" placeholder="댓글 내용 입력"/>' +
-                            '<button id="writeSubCommentBtn" class="btn btn-success btn-sm" onclick="writeSubComment(this)">작성</button>' +
-                            '<button class="btn btn-light btn-sm" onclick="cancelwriteSubComment(this)">취소</button>' +
-                            '</p></div></ul>');
-
-                        index++;
-
-                        var index1 = 0;
-                        for (var j = 0; j < response.length; j++) {
-
-                            if (response[j].parentNum == commentNum) {
-                                $('#' + id).append(
-                                    '<li id="' + id + index1 + '" class="col-12 row pt-3 ml-5 pl-2" style="display: none;">'+
-                                    '<img src="/resources/img/'+userProfile+'" class="rounded-circle" style="width: 40px; height: 40px; float: left">'+
-                                    '<div class="col-9 ml-2 pl-5">'+
-                                    '<h5 class="mb-0">'+response[j].userId+'</h5>'+
-                                    response[j].content +'</div></li>'
-                                );
-
-                                index1++;
-                            }
-                        }
-                    }
-                }
-            },
-            error: function(response){
-                console.log("error");
-                console.log(response)
-            }
-        }) /* selectCommentByPostNum 아작스 */   
-     })
-    })
+                                 index1++;
+                             }
+                         }
+                     }
+                 }
+             },
+             error: function(response){
+                 console.log("error");
+                 console.log(response)
+             }
+         }) /* selectCommentByPostNum 아작스 */   
+         
+   	  $("#originalContent").modal();
+         
+  /*   }) */
+  /*   }) *//*      $('a#oC').each(function(){ */
    })  /* $(document).on( 'click', 'a#oC' , function(e){  */
-                	
                 	
    
         
@@ -786,15 +1260,16 @@ $(document).on( 'click', 'a#oC' , function(e){
            		error:function(request, status, error){
            			alert(request.message);
            		}
-        
          	})
-        	
         })
         
-      
-
-
-}); /* document ready */
+ /*     
+  $('#list-member-list').click(function(){ 
+	document.getElementById('memberList').submit();
+  }
+     
+        */ 
+        
 
 </script>
 </html>
