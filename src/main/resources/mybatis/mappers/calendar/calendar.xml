@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="calendar">
+    <select id="selectCalendarByUserId" resultType="map" parameterType="string">
+        <![CDATA[
+            SELECT g.groupNum, g.name, TO_CHAR(g.startDay,'yyyy-mm-dd') startday
+            FROM groups g, userWaiting uw
+            WHERE g.groupNum = uw.GROUPNUM
+              AND uw.userId = #{userId}
+              AND uw.userStatus = 0
+        ]]>
+    </select>
+</mapper>

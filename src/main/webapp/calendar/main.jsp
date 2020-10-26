@@ -17,13 +17,72 @@
         <div id='calendar'></div>
     </div>
 </body>
+<script type="text/javascript" src="./resources/js/jquery.js"></script>
 <script src='../resources/full-calendar/core/main.js'></script>
 <script src='../resources/full-calendar/interaction/main.js'></script>
 <script src='../resources/full-calendar/bootstrap/main.js'></script>
 <script src='../resources/full-calendar/daygrid/main.js'></script>
 <script src='../resources/full-calendar/timegrid/main.js'></script>
 <script src='../resources/full-calendar/list/main.js'></script>
-<script src='../resources/js/view/calendar/main.js'></script>
+<script>
+
+document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        plugins: [ 'bootstrap', 'interaction', 'dayGrid', 'timeGrid', 'list' ],
+        header: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,listMonth',
+        },
+        footer: {
+
+        },
+        locale: 'ko',
+        buttonText: {
+            today: '오늘',
+            month: '달력',
+            list: '리스트'
+        },
+        defaultDate: '2020-10-26',
+        navLinks: true, // can click day/week names to navigate views
+        editable: false,
+        themeSystem: 'bootstrap',
+        contentHeight: 500,
+        eventLimit: true, // allow "more" link when too many events
+        events: function (info, successCallback, failureCallback){
+            var data = {
+                'userId' : '<%= request.getSession().getAttribute("LOGIN")%>'
+            }
+
+            $.ajax({
+                type: "GET",
+                url:"/calender/selectCalendarByUserId.do",
+                data: data,
+                dataType:'json',
+                contentType: "application/json; charset=utf-8;",
+                success:function (response){
+
+                    var events = [];
+                    for(var i=0;i<response.length;i++) {
+                        events.push({
+                            id: response[i].GROUPNUM,
+                            title: response[i].NAME,
+                            start: response[i].STARTDAY
+                        })
+                    }
+                    successCallback(events);
+                },
+                error:function (response){
+                    console.log("error")
+                }
+
+            })
+        }
+    });
+    calendar.render();
+});
+</script>
 </html>
 
 
