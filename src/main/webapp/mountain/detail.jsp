@@ -11,7 +11,7 @@
         <div class="col-4">
             <div class="list-group" id="list-tab" role="tablist">
             <c:forEach var="mountain" items="${mountain}" varStatus="status">
-                <a class="list-group-item list-group-item-action" id="list-${mountain.mntiname}-${status.index}-list" data-toggle="list" href="#${mountain.mntiname}-${status.index}" role="tab" aria-controls="home">
+                <a class="list-group-item list-group-item-action" id="list-${mountain.mntiname}-${status.index}-list" data-toggle="list" href="#${mountain.mntiname}-${status.index}" onclick=loadMtImage(${mountain.mntilistno}) role="tab" aria-controls="home">
                     <div><b>${mountain.mntiname}</b></div>
                     <div class="text-muted">${mountain.mntiadd}</div>
                     <div><i class="fas fa-star" style="color:rgb(255, 215, 20)"></i> ${mountain.countLike}</div>
@@ -32,6 +32,10 @@
                             <button class="mtStar btn btn-outline-warning" onclick="followMountain(${mountain.mntilistno})"><i class="far fa-star"></i></button>
                         </c:if>
                     </div>
+                    <li>
+                        <div class="mtImage thumbnail"></div>
+                    </li>
+                    <hr />
                     <li>
                         <h4>주소</h4>
                         <div>${mountain.mntiadd}</div>
@@ -61,34 +65,33 @@
             </div>
         </div>
     </div>
-    <div class="pt-5">
-    </div>
-    <h3 class="my-4">${searchWrd}에 같이 갈 사람 모집중!</h3>
-    <div class="row">
-        <div class="col-md-3 col-sm-6 mb-4">
-            <a href="#">
-                <img class="img-fluid" src="http://placehold.it/500x300" alt="">
-            </a>
-        </div>
-
-        <div class="col-md-3 col-sm-6 mb-4">
-            <a href="#">
-                <img class="img-fluid" src="http://placehold.it/500x300" alt="">
-            </a>
-        </div>
-
-        <div class="col-md-3 col-sm-6 mb-4">
-            <a href="#">
-                <img class="img-fluid" src="http://placehold.it/500x300" alt="">
-            </a>
-        </div>
-
-        <div class="col-md-3 col-sm-6 mb-4">
-            <a href="#">
-                <img class="img-fluid" src="http://placehold.it/500x300" alt="">
-            </a>
-        </div>
-
+    <hr />
+    <h3 class="mt-5">현재 ${searchWrd} 같이가실 분 모집중!</h3>
+    <div class="recommend row">
+        <c:choose>
+            <c:when test="${empty recommendList}">
+                <div class="text-center text-muted" style="width:100%; height: 150px; font-size: 20px;display: flex;justify-content: center;flex-direction: column">
+                    <p>현재 ${searchWrd}의 다른 모임이 없습니다</p>
+                </div>
+            </c:when>
+            <c:when test="${!empty recommendList}">
+                <c:forEach var="recommend" items="${recommendList}">
+                    <div class="pt-3 col-lg-3 col-sm-6" id="groupList">
+                        <div class="card border-0">
+                            <a href="/group/${recommend.GROUPNUM}">
+                                <img class="card-img-top" src="/resources/img/${recommend.STOREDFILENAME}" alt="..."/>
+                            </a>
+                            <div class="card-body row p-3 pl-3">
+                                <div class="col-10 pl-2">
+                                    <h5 class="card-title m-0" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">${recommend.NAME}</h5>
+                                    <p class="text-muted">${recommend.STARTDAY} 출발</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </c:forEach>
+            </c:when>
+        </c:choose>
     </div>
 </div>
 <script type="text/javascript" src="../resources/js/jquery.js"></script>
@@ -143,6 +146,34 @@
             },
             error: function(response){
                 console.log("error");
+            }
+        })
+    }
+
+    function loadMtImage(mntilistno){
+
+        var data = {
+            'mntilistno' : mntilistno,
+        }
+
+        $.ajax({
+            type: "GET",
+            url: "/mountain/image.do",
+            data: data,
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8;",
+            success: function (response){
+                $('.mtImage').empty();
+                for(var i=0;i<response.length;i++){
+                    var html = '';
+
+                    html += '<img src="'+response[i]+'" style="display: inline-block"/>'
+
+                    $('.mtImage').append(html)
+                }
+            },
+            error: function(response){
+                $('.mtImage').empty();
             }
         })
     }

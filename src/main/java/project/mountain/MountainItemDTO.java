@@ -44,6 +44,11 @@ public class MountainItemDTO {
     private String imgname;
     private String imgno;
 
+    // 국내 100대 명산 - 이미지
+    private String content;
+    private String image;
+    private String titl;
+
     private String likeYN;
     private int countLike;
 

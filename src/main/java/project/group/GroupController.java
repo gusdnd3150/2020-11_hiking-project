@@ -44,24 +44,7 @@ public class GroupController{
     }
 
     @GetMapping("/group/main2.do")
-    public String goMain2() throws UnsupportedEncodingException {
-//        ModelAndView mav = new ModelAndView("main2");
-//        MountainResponseVO mountainVO = mountainService.getMountainInfo("");
-//
-//        List<MountainItemDTO> list = new ArrayList<>();
-//
-//        for(MountainItemDTO mountainDTO : mountainVO.getBody().getItems()){
-//
-//            MountainResponseVO imageVO = mountainService.getMountainImage(mountainDTO.getMntilistno());
-//
-//            if (imageVO.getBody().getItems()==null){
-//                mountainDTO.setImgfilename("http://placehold.it/350x200");
-//            }else{
-//                mountainDTO.setImgfilename(mountainImagePath+imageVO.getBody().getItems().get(0).getImgfilename());
-//            }
-//            list.add(mountainDTO);
-//        }
-//        mav.addObject("mtInfo",list);
+    public String goMain2() {
         return "main2";
     }
 

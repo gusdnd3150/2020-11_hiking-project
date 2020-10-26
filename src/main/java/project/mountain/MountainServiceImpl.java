@@ -21,11 +21,14 @@ public class MountainServiceImpl implements MountainService{
     @Value("${mountainURL100}")
     private String mountainURL100;
 
+    @Value("${mountainURL100image}")
+    private String mountainURL100Image;
+
     @Value("${mountainURL}")
     private String mountainURL;
 
-    @Value("${mountainImageURL}")
-    private String mountainImageURL;
+    @Value("${mountainURLimage}")
+    private String mountainURLimage;
 
     private RestTemplate restTemplate = new RestTemplate();
 
@@ -43,7 +46,16 @@ public class MountainServiceImpl implements MountainService{
                 .queryParam("numOfRows",10)
                 .build();
 
-//        System.out.println(builder.toUriString());
+        MountainResponseVO vo = restTemplate.getForObject(builder.toUriString(), MountainResponseVO.class);
+
+        return vo;
+    }
+    public MountainResponseVO get100MountainImage(String mntiListNo) throws UnsupportedEncodingException {
+
+        UriComponents builder = UriComponentsBuilder.fromHttpUrl(mountainURL100Image)
+                .queryParam("serviceKey",URLDecoder.decode(serviceKey, "UTF-8"))
+                .queryParam("searchWrd",mntiListNo)
+                .build();
 
         MountainResponseVO vo = restTemplate.getForObject(builder.toUriString(), MountainResponseVO.class);
 
@@ -57,8 +69,6 @@ public class MountainServiceImpl implements MountainService{
                 .queryParam("searchWrd",searchWrd)
                 .build();
 
-//        System.out.println(builder.toUriString());
-
         MountainResponseVO vo = restTemplate.getForObject(builder.toUriString(), MountainResponseVO.class);
 
         return vo;
@@ -66,12 +76,10 @@ public class MountainServiceImpl implements MountainService{
 
     public MountainResponseVO getMountainImage(String mntiListNo) throws UnsupportedEncodingException {
 
-        UriComponents builder = UriComponentsBuilder.fromHttpUrl(mountainImageURL)
+        UriComponents builder = UriComponentsBuilder.fromHttpUrl(mountainURLimage)
                 .queryParam("serviceKey",URLDecoder.decode(serviceKey, "UTF-8"))
                 .queryParam("mntiListNo",mntiListNo)
                 .build();
-
-//        System.out.println(builder.toUriString());
 
         MountainResponseVO vo = restTemplate.getForObject(builder.toUriString(), MountainResponseVO.class);
 
@@ -84,11 +92,10 @@ public class MountainServiceImpl implements MountainService{
     public int followMountainFunction(Map map){
         return mountainDAO.followMountainFunction(map);
     }
-
-    public String checkMtLike(Map map){
-        return mountainDAO.checkMtLike(map);
-    }
     public int followMountainCount(String mntilistno){
         return mountainDAO.followMountainCount(mntilistno);
+    }
+    public String checkMtLike(Map map){
+        return mountainDAO.checkMtLike(map);
     }
 }

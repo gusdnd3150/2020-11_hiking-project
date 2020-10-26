@@ -434,14 +434,18 @@
     </select>
     <!-- 모집중인 같은 산, 다른 그룹 추천 -->
     <select id="recommendGroup" resultType="map" parameterType="map">
-        <![CDATA[
-            SELECT g.groupNum, g.name, g.staffCurrent, g.staffMax, TO_CHAR(g.startDay,'yyyy.mm.dd') startDay, gm.storedFileName
-            FROM groups g, groupsMedia gm
-            WHERE g.groupNum = gm.groupNum
-            AND g.status = 1
-            AND gm.mediaNum = 0
-            AND g.mtNm = #{MTNM}
-            AND g.groupNum NOT IN (#{GROUPNUM})
-        ]]>
+            <![CDATA[
+                SELECT g.groupNum, g.name, g.staffCurrent, g.staffMax, TO_CHAR(g.startDay,'yyyy.mm.dd') startDay, gm.storedFileName
+                FROM groups g, groupsMedia gm
+                WHERE g.groupNum = gm.groupNum
+                AND g.status = 1
+                AND gm.mediaNum = 0
+                AND g.mtNm = #{MTNM}
+                AND rowNum <= 4
+            ]]>
+            <if test='groupNum != null and groupNum !=""'>
+                AND g.groupNum NOT IN (#{GROUPNUM})
+            </if>
+                ORDER BY DBMS_RANDOM.VALUE()
     </select>
 </mapper>
