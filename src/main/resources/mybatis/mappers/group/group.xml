@@ -48,34 +48,35 @@
     <select id="selectMainGroupList" resultType="map">
         <![CDATA[
             SELECT * FROM (
-                    SELECT rowNum as rnum, data.* FROM (
-                           SELECT g.groupNum,
-                                  g.name,
-                                  g.staffCurrent,
-                                  g.staffmax,
-                                  g.detail,
-                                  DECODE(g.status,0,'마감','모집중') status,
-                                  TO_CHAR(g.startDay,'yyyy"년"MM"월"dd"일"') startDay,
-                                  gm.storedFileName, NVL(ui.CONTENT2,'basic_profile.PNG') content2,
-                                  COUNT(gl.groupNum) likeCount
-                           FROM groups g
-                                    INNER JOIN groupsMedia gm
-                                               ON g.groupNum = gm.groupNum
-                                    INNER JOIN userWaiting uw
-                                               ON g.groupNum = uw.groupNum
-                                    INNER JOIN users u
-                                               ON uw.userId = u.id
-                                    INNER JOIN userInfo ui
-                                               ON u.userNum = ui.userNum
-                                    LEFT OUTER JOIN groupLike gl
-                                                    ON g.groupNum = gl.groupNum
-                           WHERE g.type = 1
-                             AND uw.userType = 0
-                             AND gm.mediaNum = 0
-                             AND g.staffMax != 1
-                           GROUP BY g.groupNum, g.name, g.staffCurrent, g.staffmax, g.detail, g.status, g.startDay, gm.storedFileName, ui.CONTENT2
-                           ORDER BY COUNT(gl.LIKEYN) DESC
-                            ) data )
+                      SELECT rowNum as rnum, data.* FROM (
+                             SELECT g.groupNum,
+                                    g.name,
+                                    g.staffCurrent,
+                                    g.staffmax,
+                                    g.detail,
+                                    DECODE(g.status,0,'마감','모집중') status,
+                                    TO_CHAR(g.startDay,'yyyy"년"MM"월"dd"일"') startDay,
+                                    gm.storedFileName, NVL(ui.CONTENT2,'basic_profile.PNG') content2,
+                                    u.id,
+                                    COUNT(gl.groupNum) likeCount
+                             FROM groups g
+                                      INNER JOIN groupsMedia gm
+                                                 ON g.groupNum = gm.groupNum
+                                      INNER JOIN userWaiting uw
+                                                 ON g.groupNum = uw.groupNum
+                                      INNER JOIN users u
+                                                 ON uw.userId = u.id
+                                      INNER JOIN userInfo ui
+                                                 ON u.userNum = ui.userNum
+                                      LEFT OUTER JOIN groupLike gl
+                                                      ON g.groupNum = gl.groupNum
+                             WHERE g.type = 1
+                               AND uw.userType = 0
+                               AND gm.mediaNum = 0
+                               AND g.staffMax != 1
+                             GROUP BY g.groupNum, g.name, g.staffCurrent, g.staffmax, g.detail, g.status, g.startDay, gm.storedFileName, ui.CONTENT2,u.id
+                             ORDER BY COUNT(gl.LIKEYN) DESC
+                         ) data )
                 WHERE rnum <= 6
         ]]>
     </select>
@@ -440,8 +441,9 @@
                 WHERE g.groupNum = gm.groupNum
                 AND g.status = 1
                 AND gm.mediaNum = 0
-                AND g.mtNm = #{MTNM}
+                AND g.mtNm LIKE '%'||#{MTNM}||'%'
                 AND rowNum <= 4
+                AND g.type = 1
             ]]>
             <if test='groupNum != null and groupNum !=""'>
                 AND g.groupNum NOT IN (#{GROUPNUM})

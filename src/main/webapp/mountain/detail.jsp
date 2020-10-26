@@ -5,7 +5,7 @@
 <link rel="stylesheet" type="text/css" href="/resources/css/views/group/detail.css" />
 <div class="container pt-5">
     <div class="pt-5">
-        <h1 class="pb-5">${searchWrd}의 검색 결과</h1>
+        <h1 class="pb-5">'${searchWrd}'의 검색 결과</h1>
     </div>
     <div class="row">
         <div class="col-4">
@@ -66,12 +66,17 @@
         </div>
     </div>
     <hr />
-    <h3 class="mt-5">현재 ${searchWrd} 같이가실 분 모집중!</h3>
+    <h3 class="mt-5">현재 같이가실 분 모집중!</h3>
     <div class="recommend row">
         <c:choose>
             <c:when test="${empty recommendList}">
                 <div class="text-center text-muted" style="width:100%; height: 150px; font-size: 20px;display: flex;justify-content: center;flex-direction: column">
-                    <p>현재 ${searchWrd}의 다른 모임이 없습니다</p>
+                    <c:if test="${searchWrd eq ''}">
+                        <p>검색어가 없습니다</p>
+                    </c:if>
+                    <c:if test="${searchWrd ne ''}">
+                        <p>현재 ${searchWrd}의 다른 모임이 없습니다</p>
+                    </c:if>
                 </div>
             </c:when>
             <c:when test="${!empty recommendList}">

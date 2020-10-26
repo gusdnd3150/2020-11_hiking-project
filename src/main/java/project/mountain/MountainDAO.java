@@ -13,8 +13,8 @@ public class MountainDAO {
     @Autowired
     private SqlSession sqlSession;
 
-    public List selectMountainByRank(int rowNum){
-        return sqlSession.selectList("mountain.selectMountainByRank",rowNum);
+    public List selectMountainByRank(){
+        return sqlSession.selectList("mountain.selectMountainByRank");
     }
 
     public int followMountainFunction(Map map){

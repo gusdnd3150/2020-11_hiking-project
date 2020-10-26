@@ -273,7 +273,8 @@
 
 
     function showMtInfo(){
-        window.open("/mountain/sub-detail/${group.MTNM}","상세 정보","width=800, height=900, left=300, top=300");
+        var userId = "<%= request.getSession().getAttribute("LOGIN")%>";
+        window.open('/mountain/100/${group.MTNM}.do?userId="'+userId+'"',"상세 정보","width=800, height=900, left=300, top=300");
     }
 
     function switchPhoto(divName, totalImgs){

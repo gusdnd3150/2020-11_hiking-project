@@ -6,16 +6,28 @@
 <mapper namespace="mountain">
     <select id="selectMountainByRank" resultType="map" parameterType="int">
         <![CDATA[
-            SELECT rowNum, g.MTNM
+            SELECT thisWeek.MTNM, NVL(prevWeek.rank - thisWeek.rank,'-999') changeRank
             FROM (
-                     SELECT g.MTNM,
-                            DENSE_RANK() OVER (ORDER BY COUNT(g.MTNM) DESC) MTRANK
-                     FROM groups g
-                     WHERE g.MTNM != '0'
-                     GROUP BY g.MTNM
-                 ) g
-            WHERE rowNum >= ((#{rowNum} - 1) * 9) + 1
-              AND rowNum <= (#{rowNum} * 9)
+            SELECT g.MTNM,DENSE_RANK() OVER (ORDER BY COUNT(g.MTNM) DESC) rank
+            FROM groups g
+            WHERE g.MTNM != '0'
+              AND g.CREATEDAT BETWEEN TO_DATE(sysdate-7)
+              AND   TO_DATE(sysdate)
+            GROUP BY g.MTNM
+           ) thisWeek
+
+            LEFT OUTER JOIN
+            (
+                SELECT g.MTNM, DENSE_RANK() OVER (ORDER BY COUNT(g.MTNM) DESC) rank
+                FROM groups g
+                WHERE g.MTNM != '0'
+                  AND g.CREATEDAT BETWEEN TO_DATE(sysdate-14)
+                  AND   TO_DATE(sysdate-7)
+                GROUP BY g.MTNM
+                ) prevWeek
+
+                ON prevWeek.MTNM = thisWeek.MTNM
+            ORDER BY changeRank DESC
         ]]>
     </select>
 

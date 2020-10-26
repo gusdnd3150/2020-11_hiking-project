@@ -86,8 +86,8 @@ public class MountainServiceImpl implements MountainService{
         return vo;
     }
 
-    public List selectMountainByRank(int rowNum){
-        return mountainDAO.selectMountainByRank(rowNum);
+    public List selectMountainByRank(){
+        return mountainDAO.selectMountainByRank();
     }
     public int followMountainFunction(Map map){
         return mountainDAO.followMountainFunction(map);

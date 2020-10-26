@@ -11,7 +11,7 @@ public interface MountainService {
     MountainResponseVO getMountainInfo(String searchWrd) throws UnsupportedEncodingException;
     MountainResponseVO getMountainImage(String mntiListNo) throws UnsupportedEncodingException;
 
-    List selectMountainByRank(int rowNum);
+    List selectMountainByRank();
     int followMountainFunction(Map map);
     int followMountainCount(String mntilistno);
     String checkMtLike(Map map);
