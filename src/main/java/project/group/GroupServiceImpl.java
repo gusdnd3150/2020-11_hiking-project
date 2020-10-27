@@ -65,7 +65,7 @@ public class GroupServiceImpl implements GroupService{
         return groupDAO.selectWaitingList(map);
     }
 
-    public int selectWaiting(Map map){return groupDAO.selectWaiting(map);}
+    public Map selectWaiting(Map map){return groupDAO.selectWaiting(map);}
 
     @Transactional
     public int userAllowed(Map map){

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import project.chat.ChatService;
 import project.groupmedia.GroupMediaService;
 
 import javax.annotation.Resource;
@@ -21,6 +22,9 @@ public class GroupController{
 
     @Resource(name = "groupMediaService")
     private GroupMediaService groupMediaService;
+
+    @Resource(name = "chatService")
+    private ChatService chatService;
 
     @PostMapping(value = "/group/insert.do")
     public ModelAndView insertGroup(@RequestParam Map map,
@@ -72,8 +76,6 @@ public class GroupController{
 
         String sessionIdImage = groupService.selectSessionIdImage(userId);
 
-        System.out.println("sessionIdImage : " + sessionIdImage);
-
         Map checkMap = new HashMap();
         checkMap.put("userId", userId);
         checkMap.put("groupNum",groupNum);
@@ -83,21 +85,11 @@ public class GroupController{
         }catch (Exception e){
             favoriteResult = 0;
         }
-        int userGradeResult;
-        try{
-            userGradeResult = groupService.selectWaiting(checkMap);
-            System.out.println("userGradeResult : "+userGradeResult);
-        }catch (Exception e){
-            userGradeResult = 2;                                                                        //비그룹 원
-        }
+        Map userGradeResult = groupService.selectWaiting(checkMap);
 
         for(int i=0;i<list.size();i++){
             map.put("image"+i , list.get(i).get("STOREDFILENAME"));
         }
-
-
-        System.out.println(map.toString());
-
 
         List recommendResult = groupService.recommendGroup(map);
 
@@ -140,7 +132,8 @@ public class GroupController{
         int result;
         result = groupService.userAllowed(map);
 
-        System.out.println(result); //1 : 진행, 0 : 마감
+        String roomId = chatService.checkExistRoom(groupNum);
+        map.put("roomId",roomId);
 
         if(result==0){
             groupService.expiredGroup((Integer) map.get("groupNum"));
@@ -168,18 +161,14 @@ public class GroupController{
     @GetMapping("/group/checkGroupExpired.do")
     @ResponseBody
     public int checkGroupExpired(@RequestParam("groupNum")int groupNum){
-        int result = groupService.checkGroupExpired(groupNum);
-        System.out.println("checkGroupExpired : "+result);
-        return result;
+        return groupService.checkGroupExpired(groupNum);
     }
 
     // 그룹 좋아요 등록
     @PostMapping("/group/insertFavorite.do")
     @ResponseBody
     public int insertFavoriteGroup(@RequestBody Map map){
-        int result = groupService.insertFavoriteGroup(map);
-
-        return result;
+        return groupService.insertFavoriteGroup(map);
     }
 
     // 그룹 좋아요 취소

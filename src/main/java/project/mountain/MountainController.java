@@ -119,4 +119,16 @@ public class MountainController {
         return result;
     }
 
+    @PostMapping("/searchMt.do")
+    public MountainResponseVO mountainList1(@RequestBody Map map) throws UnsupportedEncodingException {
+
+        String mtNm = (String) map.get("mtNm");
+        String arNm = (String) map.get("arNm");
+
+        MountainResponseVO vo = mountainService.get100MountainInfo(mtNm, arNm);
+
+        return vo;
+
+    }
+
 }

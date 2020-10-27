@@ -81,7 +81,8 @@ public class GroupDAO{
         return sqlSession.update("group.expiredGroup",groupNum);
     }
 
-    public int selectWaiting(Map map){ return sqlSession.selectOne("group.selectWaiting",map);}
+    public Map selectWaiting(Map map){
+        return sqlSession.selectOne("group.selectWaiting",map);}
 
     public List<Integer> listApplied(int groupNum){
         return sqlSession.selectList("group.listApplied",groupNum);

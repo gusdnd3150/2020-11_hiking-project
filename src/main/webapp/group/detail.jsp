@@ -51,7 +51,7 @@
                 </div>
                 <hr />
                 <ul class="pl-0 col-12" style="list-style: none;height: auto;font-size: 18px">
-                    <li><b>모집 인원</b></li>
+                    <li><b>모집 인원${(group.STAFFCURRENT / group.STAFFMAX)}</b></li>
                     <li>
                         <c:choose>
                             <c:when test="${(group.STAFFCURRENT / group.STAFFMAX) ne 1}">
@@ -92,15 +92,13 @@
                         <c:when test="${favoriteResult eq 1}"><button class="dislike btn btn-outline-danger col-6"><i class="fas fa-heart"></i></button></c:when>
                         <c:when test="${favoriteResult ne 1}"><button class="like btn btn-outline-danger col-6" ><i class="far fa-heart"></i></button></c:when>
                     </c:choose>
-                    <!--favoriteResult ne 1 or-->
                     <button class="btn btn-outline-info col-6" onclick="showMtInfo()">추가 정보</button>
                     <c:choose>
-                        <c:when test="${group.STATUS eq 0 and userGradeResult eq 0}"><button class="resultWaitingBtn btn btn-dark col-12" data-toggle="modal" data-target="#resultModal">모집 종료</button></c:when>
-                        <c:when test="${group.STATUS eq 0 and userGradeResult eq 1}"><button class="resultWaitingBtn btn btn-dark col-12">모집 종료</button></c:when>
-                        <c:when test="${group.STATUS eq 0 and userGradeResult eq 2}"><button class="resultWaitingBtn btn btn-dark col-12">모집 종료</button></c:when>
-                        <c:when test="${userGradeResult eq 0}"><button class="selectWaitingList btn btn-dark col-12" data-toggle="modal" data-target="#listModal">참여 리스트</button></c:when>
-                        <c:when test="${userGradeResult eq 1}"><button class="withdrawGroupBtn btn btn-info col-12" data-toggle="modal" data-target="#cancelModal">참여 취소</button></c:when>
-                        <c:when test="${userGradeResult eq 2}"><button class="joinButton btn btn-outline-info col-12" data-toggle="modal" data-target="#joinModal">참여 신청</button></c:when>
+                        <c:when test="${group.STATUS eq 0 and userGradeResult.USERSTATUS eq 0}"><button class="resultWaitingBtn btn btn-dark col-12" data-toggle="modal" data-target="#resultModal">모집 종료</button></c:when>
+                        <c:when test="${group.STATUS eq 0 and userGradeResult.USERTYPE ne 0}"><button class="resultWaitingBtn btn btn-dark col-12">모집 종료</button></c:when>
+                        <c:when test="${group.STATUS eq 1 and userGradeResult.USERTYPE eq 0}"><button class="selectWaitingList btn btn-dark col-12" data-toggle="modal" data-target="#listModal">신청자 리스트</button></c:when>
+                        <c:when test="${group.STATUS eq 1 and userGradeResult.USERTYPE eq 1}"><button class="withdrawGroupBtn btn btn-info col-12" data-toggle="modal" data-target="#cancelModal">참여 취소</button></c:when>
+                        <c:when test="${group.STATUS eq 1}"><button class="joinButton btn btn-outline-info col-12" data-toggle="modal" data-target="#joinModal">참여 신청</button></c:when>
                     </c:choose>
                 </div>
             </div>
@@ -111,6 +109,7 @@
     <div class="row">
         <div class="col-12">
             ${group.DETAIL}
+<%--                ${userGradeResult}--%>
         </div>
     </div>
 
@@ -206,7 +205,7 @@
                 </div>
                 <!-- body -->
                 <div class="modal-body">
-                    <textarea id="userComment" class="form-control col-xs-12" placeholder="요청 메시지를 입력해주세요"></textarea>
+                    <textarea id="userComment" class="form-control col-xs-12" placeholder="요청 메시지를 입력해주세요(최대50자)"></textarea>
                 </div>
                 <!-- Footer -->
                 <div class="modal-footer">
@@ -274,7 +273,7 @@
 
     function showMtInfo(){
         var userId = "<%= request.getSession().getAttribute("LOGIN")%>";
-        window.open('/mountain/100/${group.MTNM}.do?userId="'+userId+'"',"상세 정보","width=800, height=900, left=300, top=300");
+        window.open('/mountain/100/${group.MTNM}.do?userId="'+userId+'"',"상세 정보","width=900, height=500, left=300, top=300");
     }
 
     function switchPhoto(divName, totalImgs){
@@ -335,7 +334,6 @@
             contentType: "application/json; charset=utf-8;",
             success: function (response){
                 var id = $root.parentNode.id;
-                console.log(id)
                 $('#'+id).append(
                     '<li id="temp" class="col-12 row pt-3 ml-5 pl-2">'+
                     '<img src="/resources/img/${sessionIdImage}" class="rounded-circle" style="width: 40px;height: 40px;float: left">'+
@@ -426,14 +424,14 @@ $(document).ready(function (){
             dataType: 'json',
             contentType: "application/json; charset=utf-8;",
             success : function (response){
-                $('.like').removeClass("like btn btn-outline-danger col-6")
+                $('.like')
+                    .removeClass("like btn btn-outline-danger col-6")
                     .addClass("dislike btn btn-outline-danger col-6")
                     .empty()
                     .append("<i class=\"fas fa-heart\">")
             },
             error : function (response){
                 console.log("error!");
-                console.log(response);
             }
         })
     })
@@ -450,7 +448,8 @@ $(document).ready(function (){
             dataType: 'json',
             contentType: "application/json; charset=utf-8;",
             success : function (response){
-                $('.dislike').removeClass("dislike btn btn-danger col-6")
+                $('.dislike')
+                    .removeClass("dislike btn btn-danger col-6")
                     .addClass("like btn btn-outline-danger col-6")
                     .empty()
                     .append("<i class=\"far fa-heart\">")
@@ -486,17 +485,26 @@ $(document).ready(function (){
 
                 for(var i=0;i<response.length;i++){
 
-                    var id = "waitingUser"+i;
+                    var id = "waitingUserComment"+i;
+                    var html = '';
+                    html += '<li class="row pt-2" style="list-style: none">';
+                    html += '<figure class="text-center col-2 m-2">'
+                    html += '<a href="/profile/'+response[i].USERID+'" style="text-decoration: none;color:black;" onclick="window.open(this.href,\'\',\'width = 500, height = 600\'); return false;">';
+                    html += '<img src="/resources/img/'+response[i].CONTENT2+'" id="userProfile" class="rounded-circle" style="height: 40px;width: 40px"/>';
+                    html += '<figcaption id="waitingUser" style="font-size: 16px">'+response[i].NICKNAME+'</figcaption></a>';
+                    html += '<span id="waitingUserId" style="display: none">'+response[i].USERID+'</span></a>';
+                    html += '</figure>'
+                    html += '<div id="waitingUserComment" class="rounded col-7 m-2" style="background-color:lightgrey;">' + response[i].USERCOMMENT + '</div>'
+                    html += '</li><hr />';
 
-                    $('#waitingList')
-                        .append('<li class="row pt-1" style="list-style: none"><div id="waitingUser" class="col-10 pt-1" style="font-size: 22px">'+response[i].USERID+'</div></li>');
+                    $('#waitingList').append(html);
 
-                    $('#waitingUser').attr('id',id);
+                    $('#waitingUserComment').attr('id',id);
 
                         if(response[i].USERSTATUS==0){
-                            $('#'+id).after('<button class="userDisallowed btn btn-danger col-2">취소</button>');
+                            $('#'+id).after('<button class="userDisallowed btn btn-danger col-2 align-self-center" style="height: 40px;">취소</button>');
                         }else if(response[i].USERSTATUS==1){
-                            $('#'+id).after('<button class="userAllowed btn btn-light col-2">승인</button>');
+                            $('#'+id).after('<button class="userAllowed btn btn-outline-success col-2 align-self-center" style="height: 40px;">승인</button>');
                         }
                     }
                 }
@@ -542,11 +550,14 @@ $(document).ready(function (){
 
     $(document).on('click','.userAllowed',function (e){
 
+
         var data = {
-            userId : (this.parentNode).childNodes[0].innerHTML,
+            userId : (this.parentNode).childNodes[0].childNodes[1].textContent,
             groupNum : ${group.GROUPNUM},
             action : "plus"
         }
+
+        console.log(data)
 
         $.ajax({
             type: "GET",
@@ -555,7 +566,7 @@ $(document).ready(function (){
             dataType: 'json',
             contentType: "application/json; charset=utf-8;",
             success: function (response){
-                e.target.className ="userDisallowed btn btn-danger col-2";
+                e.target.className ="userDisallowed btn btn-danger align-self-center col-2";
                 e.target.innerText = "취소";
             },
             error: function(response){
@@ -567,7 +578,7 @@ $(document).ready(function (){
 
     $(document).on('click','.userDisallowed',function (e){
         var data = {
-            userId : (this.parentNode).childNodes[0].innerHTML,
+            userId : (this.parentNode).childNodes[0].childNodes[1].textContent,
             groupNum : ${group.GROUPNUM},
             action : "minus"
         }
@@ -579,7 +590,7 @@ $(document).ready(function (){
             dataType: 'json',
             contentType: "application/json; charset=utf-8;",
             success: function (response){
-                e.target.className ="userAllowed btn btn-light col-2";
+                e.target.className ="userAllowed btn btn-outline-success align-self-center col-2";
                 e.target.innerText = "승인";
             },
             error: function(response){
@@ -616,19 +627,21 @@ $(document).ready(function (){
                     if (rootNum == 0) {
                         var id = 'depts' + index
 
-                        $('#commentBoard').append(
-                            '<ul id="' + id + '" class="col-12 pl-5 row">' +
-                            '<img src="/resources/img/${sessionIdImage}" class="rounded-circle" style="width: 50px;height: 50px">'+
-                            '<div class="col-10">'+
-                            '<pre style="display: none">'+response.commentNum+'</pre>'+
-                            '<h5>'+response.nickname+'</h5>'+
-                            '<div>'+response.content +'</div>' +
-                            '<button class="'+id+' p-0 btn btn-default text-muted" onclick="toggleSubComment(this)">[답글 '+ count +'개 더보기]</button>' +
-                            '<button class="'+id+'subComment p-0 btn btn-default text-muted" onclick="toggleWriteSubComment(this)">[답글 작성]</button>' +
-                            '<p style="display: none"><input type="text" class="form-control" placeholder="댓글 내용 입력"/>' +
-                            '<button id="writeSubCommentBtn" class="btn btn-info" onclick="writeSubComment(this)">작성</button>' +
-                            '<button class="btn btn-light" onclick="cancelwriteSubComment(this)">취소</button>' +
-                            '</p></div></ul>');
+                        var html = '';
+                        html += '<ul id="' + id + '" class="col-12 pl-5 row">'
+                        html += '<img src="/resources/img/${sessionIdImage}" class="rounded-circle" style="width: 50px;height: 50px">'
+                        html += '<div class="col-10">'
+                        html += '<pre style="display: none">'+response.commentNum+'</pre>'
+                        html += '<h5>'+response.nickname+'</h5>'
+                        html += '<div>'+response.content +'</div>'
+                        html += '<button class="'+id+' p-0 btn btn-default text-muted" onclick="toggleSubComment(this)">[답글 '+ count +'개 더보기]</button>'
+                        html += '<button class="'+id+'subComment p-0 btn btn-default text-muted" onclick="toggleWriteSubComment(this)">[답글 작성]</button>'
+                        html += '<p style="display: none"><input type="text" class="form-control" placeholder="댓글 내용 입력"/>'
+                        html += '<button id="writeSubCommentBtn" class="btn btn-info" onclick="writeSubComment(this)">작성</button>'
+                        html += '<button class="btn btn-light" onclick="cancelwriteSubComment(this)">취소</button>'
+                        html += '</p></div></ul>';
+
+                        $('#commentBoard').append(html);
 
                         index++;
                     }
@@ -663,19 +676,21 @@ $(document).ready(function (){
                     if (rootNum == 0) {
                         var id = 'depts' + index
 
-                        $('#commentBoard').append(
-                            '<ul id="' + id + '" class="col-12 pl-5 row">' +
-                            '<img src="/resources/img/' + response[i].content2 + '" class="rounded-circle" style="width: 50px;height: 50px">'+
-                            '<div class="col-10">'+
-                            '<pre style="display: none">'+response[i].commentNum+'</pre>'+
-                            '<h5>'+response[i].nickname+'</h5>'+
-                            '<div>'+response[i].content +'</div>' +
-                            '<button class="'+id+' p-0 btn btn-default text-muted" onclick="toggleSubComment(this)">[답글 '+ count +'개 더보기]</button>' +
-                            '<button class="'+id+'subComment p-0 btn btn-default text-muted" onclick="toggleWriteSubComment(this)">[답글 작성]</button>' +
-                            '<p style="display: none"><input type="text" class="form-control" placeholder="댓글 내용 입력"/>' +
-                            '<button id="writeSubCommentBtn" class="btn btn-info" onclick="writeSubComment(this)">작성</button>' +
-                            '<button class="btn btn-light" onclick="cancelwriteSubComment(this)">취소</button>' +
-                            '</p></div></ul>');
+                        var html = '';
+                        html += '<ul id="' + id + '" class="col-12 pl-5 row">'
+                        html += '<img src="/resources/img/' + response[i].content2 + '" class="rounded-circle" style="width: 50px;height: 50px">';
+                        html += '<div class="col-10">';
+                        html += '<pre style="display: none">'+response[i].commentNum+'</pre>';
+                        html += '<h5>'+response[i].nickname+'</h5>';
+                        html += '<div>'+response[i].content +'</div>';
+                        html += '<button class="'+id+' p-0 btn btn-default text-muted" onclick="toggleSubComment(this)">[답글 '+ count +'개 더보기]</button>';
+                        html += '<button class="'+id+'subComment p-0 btn btn-default text-muted" onclick="toggleWriteSubComment(this)">[답글 작성]</button>';
+                        html += '<p style="display: none"><input type="text" class="form-control" placeholder="댓글 내용 입력"/>';
+                        html += '<button id="writeSubCommentBtn" class="btn btn-info" onclick="writeSubComment(this)">작성</button>';
+                        html += '<button class="btn btn-light" onclick="cancelwriteSubComment(this)">취소</button>';
+                        html += '</p></div></ul>';
+
+                        $('#commentBoard').append(html);
 
                         index++;
 
@@ -683,13 +698,14 @@ $(document).ready(function (){
                         for (var j = 0; j < response.length; j++) {
 
                             if (response[j].parentNum == commentNum) {
-                                $('#' + id).append(
-                                    '<li id="' + id + index1 + '" class="col-12 row pt-3 ml-5 pl-2" style="display: none;">'+
-                                    '<img src="/resources/img/'+response[j].content2+'" class="rounded-circle" style="width: 40px; height: 40px; float: left">'+
-                                    '<div class="col-9 ml-2 pl-5">'+
-                                    '<h5 class="mb-0">'+response[j].nickname+'</h5>'+
-                                    response[j].content +'</div></li>'
-                                );
+                                var html = '';
+                                html += '<li id="' + id + index1 + '" class="col-12 row pt-3 ml-5 pl-2" style="display: none;">';
+                                html += '<img src="/resources/img/'+response[j].content2+'" class="rounded-circle" style="width: 40px; height: 40px; float: left">';
+                                html += '<div class="col-9 ml-2 pl-5">';
+                                html += '<h5 class="mb-0">'+response[j].nickname+'</h5>'
+                                html += response[j].content +'</div></li>';
+
+                                $('#' + id).append(html);
 
                                 index1++;
                             }
@@ -699,7 +715,6 @@ $(document).ready(function (){
             },
             error: function(response){
                 console.log("error");
-                console.log(response)
             }
         })
     })

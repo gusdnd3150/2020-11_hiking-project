@@ -66,9 +66,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     var events = [];
                     for(var i=0;i<response.length;i++) {
                         events.push({
-                            id: response[i].GROUPNUM,
                             title: response[i].NAME,
-                            start: response[i].STARTDAY
+                            start: response[i].STARTDAY,
+                            url: "/group/"+response[i].GROUPNUM,
+                            color: "#757449"
                         })
                     }
                     successCallback(events);

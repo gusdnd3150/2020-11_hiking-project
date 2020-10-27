@@ -16,13 +16,15 @@
 <header class="top-header top-header-chat">
     <div class="header_top">
         <div class="header_column">
-            <span class="header_time">18:38</span>
+            <span class="header_time">
+                <i id="timeNow"></i>
+            </span>
         </div>
     </div>
 
     <div class="header_bottom chat-header-bottom">
         <div class="header_column">
-            <span class="header_text chat-text">채팅방 제목(그룹 이름)</span>
+            <span class="header_text chat-text">${userInfo[0].NAME}</span>
         </div>
     </div>
 </header>
@@ -73,7 +75,6 @@
 <script type="text/javascript" src="/resources/js/sockjs.js"></script>
 <script type="text/javascript" src="/resources/js/stomp.js"></script>
 <script type="text/javascript">
-
     var stompClient = null;
 
     connect();
@@ -102,49 +103,49 @@
             'userId' :'<%= session.getAttribute("LOGIN")%>',
             'message': $("#message").val(),
             'messagedAt': '<%= LocalDateTime.now() %>',
-            'nickname' : '${nickname}'
+            'nickname' : '${userInfo[0].NICKNAME}',
+            'content2' : '${userInfo[0].CONTENT2}'
         };
-
         stompClient.send("/chat/send/${roomId}", {}, JSON.stringify(data));
         showMyMessage(data);
         document.getElementById("message").value = "";
         $("#chat").scrollTop($("#chat")[0].scrollHeight);
     }
     function showMyMessage(data){
-        $('#chat').append("" +
-            "<div id=\"myMessage\" class=\"chat_message chat_message-me\">" +
-            "<span class=\"chat_message-time\">"+
-            '방금'+"</span>\n" +
-            "<span class=\"chat_message-body\">" + data.message + "</span>" +
-            "</div>")
+        var html = '';
+
+        html += '<div id="myMessage" class="chat_message chat_message-me">';
+        html += '<span class="chat_message-time">';
+        html += '방금'+'</span>\n';
+        html += '<span class="chat_message-body">' + data.message + '</span>';
+        html += '</div>';
+
+        $('#chat').append(html);
     };
 
 
     function showMessage(data) {
+
         console.log(data)
         if(data.userId!='<%= session.getAttribute("LOGIN")%>'){
-            $('#chat').append(
-                "<div id=\"otherMessage\" class=\"chat_message chat_message-from\">" +
-                '<img src="../resources/img/basic_profile.PNG" alt="" class="chat_message-profile-img">'+
-                '<div class="chat_message-profile">' +
-                '<h3 class="chat_message-name">' + data.nickname +'</h3>' +
-                '<span class="chat_message-body">' + data.message + '</span>' +
-                '</div>' +
-                '<span class="chat_message-time">' + '방금' + '</span>' +
-                '</div>')
+
+            var html = '';
+
+            html += '<div id="otherMessage" class="chat_message chat_message-from">';
+            html += '<img src="../resources/img/'+ data.content2 +'" alt="" class="chat_message-profile-img">';
+            html += '<div class="chat_message-profile">';
+            html += '<h3 class="chat_message-name">' + data.nickname +'</h3>';
+            html += '<span class="chat_message-body">' + data.message + '</span>';
+            html += '</div>';
+            html += '<span class="chat_message-time">' + '방금' + '</span>';
+            html += '</div>';
+
+            $('#chat').append(html)
         }
     };
     window.onbeforeunload = function(e){
         disconnect();
     }
-
-    // function alertClosing(selector, delay){
-    //     console.log(selector);
-    //     document.getElementById(selector).style.display = "block";
-    //     window.setTimeout(function(){
-    //         document.getElementById(selector).style.display = "none";
-    //     },delay);
-    // }
 
     $(document).ready(function (){
 
@@ -155,8 +156,31 @@
                 send();
             }
         })
+
+        let today = new Date();
+        let today_result = date_to_str(today);
+        $('#timeNow').text(today_result.toLocaleString())
+
+        setInterval(function (){
+            $('#timeNow').text(today_result.toLocaleString())
+            location.reload();
+        },58000)
     })
 
+    function date_to_str(format) {
+        var year = format.getFullYear();
+        var month = format.getMonth() + 1;
+        if(month<10) month = '0' + month;
+        var date = format.getDate();
+        if(date<10) date = '0' + date;
+        var hour = format.getHours();
+        if(hour<10) hour = '0' + hour;
+        var min = format.getMinutes();
+        if(min<10) min = '0' + min;
+        var sec = format.getSeconds();
+        if(sec<10) sec = '0' + sec;
+        return year + "-" + month + "-" + date + " " + hour + ":" + min;
+    }
 </script>
 </body>
 </html>

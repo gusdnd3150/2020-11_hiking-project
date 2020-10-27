@@ -57,11 +57,38 @@
         ]]>
     </insert>
 
-    <select id="checkValidUser" resultType="map" parameterType="string">
+    <select id="checkValidUser" resultType="map" parameterType="map">
         <![CDATA[
-            SELECT userId
-            FROM chatRoomJoin
-            WHERE roomId = #{roomId}
+            SELECT u.id, u.nickname, ui.content2, g.name
+            FROM chatRoomJoin crj, users u, userInfo ui, userWaiting uw, groups g
+            WHERE crj.userId = u.id
+              AND crj.groupNum = g.groupNum
+              AND u.userNum = ui.userNum
+              AND u.id = uw.userId
+              AND crj.roomId = #{roomId}
+              AND u.id = #{userId}
+            GROUP BY u.id, u.nickname, ui.content2, g.name
         ]]>
     </select>
+
+    <insert id="insertUserToChatRoom" parameterType="map">
+        <![CDATA[
+            INSERT INTO chatRoomJoin
+            VALUES (
+                #{groupNum},
+                #{roomId},
+                #{userId}
+            )
+        ]]>
+
+    </insert>
+
+    <delete id="deleteUserFromChatRoom" parameterType="map">
+        <![CDATA[
+            DELETE FROM chatRoomJoin
+            WHERE groupNum = #{groupNum}
+              AND userId = #{userId}
+        ]]>
+
+    </delete>
 </mapper>

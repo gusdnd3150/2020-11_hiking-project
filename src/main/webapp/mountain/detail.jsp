@@ -66,7 +66,7 @@
         </div>
     </div>
     <hr />
-    <h3 class="mt-5">현재 같이가실 분 모집중!</h3>
+    <h3 class="mt-5">현재 ${searchWrd} 같이가실 분 모집중!</h3>
     <div class="recommend row">
         <c:choose>
             <c:when test="${empty recommendList}">

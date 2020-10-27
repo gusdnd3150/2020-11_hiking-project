@@ -26,7 +26,8 @@
                 #{ageStart},
                 #{ageEnd},
                 #{sex},
-                #{mtNm}
+                #{mtNm},
+                NVL(#{connectGroupNum},0)
                 )
         ]]>
     </insert>
@@ -74,6 +75,7 @@
                                AND uw.userType = 0
                                AND gm.mediaNum = 0
                                AND g.staffMax != 1
+                               AND g.connectGroupNum = 0
                              GROUP BY g.groupNum, g.name, g.staffCurrent, g.staffmax, g.detail, g.status, g.startDay, gm.storedFileName, ui.CONTENT2,u.id
                              ORDER BY COUNT(gl.LIKEYN) DESC
                          ) data )
@@ -160,7 +162,8 @@
             ON (groupNum=#{groupNum} AND userId=#{userId})
             WHEN MATCHED THEN
                 UPDATE SET
-                userStatus = 1
+                userStatus = 1,
+                usercomment = #{userComment}
             WHEN NOT MATCHED THEN
                 INSERT (groupNum,
                         userId,
@@ -184,9 +187,9 @@
         ]]>
     </update>
     <!-- 그룹 가입 여부 체크 -->
-    <select id="selectWaiting" resultType="_int" parameterType="map">
+    <select id="selectWaiting" resultType="map" parameterType="map">
         <![CDATA[
-            SELECT userStatus
+            SELECT userType, userStatus
             FROM userWaiting
             WHERE userId = #{userId}
             AND groupNum = #{groupNum}
@@ -196,11 +199,13 @@
     <!-- 그룹 가입 요청 리스트 불러오기 -->
     <select id="selectWaitingList" resultType="map" parameterType="map">
         <![CDATA[
-            SELECT userId, userStatus
-            FROM userWaiting
-            WHERE groupNum = #{groupNum}
-            AND userStatus IN (0,1)
-            AND userId NOT IN (#{userId})
+            SELECT uw.userId, u.nickname, NVL(uw.userComment,'메세지가 없습니다') userComment, uw.userStatus, ui.content2
+            FROM userWaiting uw, users u, userInfo ui
+            WHERE u.id = uw.userId
+              AND u.userNum = ui.userNum
+              AND uw.groupNum = #{groupNum}
+              AND uw.userStatus IN (0,1)
+              AND uw.userId NOT IN (#{userId})
         ]]>
     </select>
 
@@ -391,6 +396,7 @@
                                AND uw.userType = 0
                                AND gm.mediaNum = 0
                                AND g.staffMax != 1
+                               AND g.connectGroupNum = 0
                              ORDER BY g.createdAt DESC
                          )data)
                     WHERE rnum >= ((#{rowNum}-1)*9)+1
@@ -425,6 +431,7 @@
                              AND uw.userType = 0
                              AND gm.mediaNum = 0
                              AND g.staffMax != 1
+                             AND g.connectGroupNum = 0
                            GROUP BY g.groupNum, g.name, g.staffCurrent, g.staffmax, g.detail, g.status, g.startDay, gm.storedFileName, ui.CONTENT2
                            ORDER BY COUNT(gl.LIKEYN) DESC
                             ) data )
@@ -444,6 +451,7 @@
                 AND g.mtNm LIKE '%'||#{MTNM}||'%'
                 AND rowNum <= 4
                 AND g.type = 1
+                AND g.connectGroupNum = 0
             ]]>
             <if test='groupNum != null and groupNum !=""'>
                 AND g.groupNum NOT IN (#{GROUPNUM})

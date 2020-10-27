@@ -11,7 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import project.common.FileUtils;
 import project.group.GroupDAO;
 
-@Service
+@Service("commuService")
 public class CommuServiceImpl implements CommuService {
 
 	@Autowired

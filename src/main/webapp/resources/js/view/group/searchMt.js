@@ -21,7 +21,6 @@ $(document).ready(function () {
 
                 for (var i=0;i<response.body.items.length;i++){
 
-                    // var mntncd = response.body.items[i].mntncd;
                     var mntnm = response.body.items[i].mntnm;
 
                     $('.mountainList')

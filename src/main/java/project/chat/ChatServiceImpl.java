@@ -50,7 +50,15 @@ public class ChatServiceImpl implements ChatService {
         chatDAO.insertMessage(map);
     }
 
-    public List checkValidUser(String roomId){
-        return chatDAO.checkValidUser(roomId);
+    public List checkValidUser(Map map){
+        return chatDAO.checkValidUser(map);
+    }
+
+    public void insertUserToChatRoom(Map map){
+        chatDAO.insertUserToChatRoom(map);
+    }
+
+    public void deleteUserFromChatRoom(Map map){
+        chatDAO.deleteUserFromChatRoom(map);
     }
 }

@@ -24,7 +24,6 @@ public class ChatController {
 
     @GetMapping("/chat.do")
     public String newChat(@RequestParam("groupNum") int groupNum){
-        System.out.println("groupNum : "+ groupNum);
         String roomId = chatService.newChat(groupNum);
         return "redirect:/chat/" + roomId ;
     }
@@ -40,22 +39,20 @@ public class ChatController {
             mav.addObject("roomId",roomId);
             return mav;
         }
-        for(int j=0;j<list.size();j++){
-            if(list.get(j).get("USERID").equals(sessionId)){
-                mav.addObject("nickname",list.get(j).get("NICKNAME"));
-                break;
-            }
-        }
+
         mav.addObject("resultList", list);
 
-        List<Map> validUserList = chatService.checkValidUser(roomId);
+        Map map = new HashMap();
+        map.put("roomId",roomId);
+        map.put("userId",sessionId);
+        List<Map> userInfo = chatService.checkValidUser(map);
+        String userId = (String) userInfo.get(0).get("ID");
 
-        for(int i=0;i<validUserList.size();i++){
-            String userId = (String) validUserList.get(i).get("USERID");
             if(userId.equals(sessionId)){
+                mav.addObject("userInfo",userInfo);
                 return mav;
             }
-        }
+
         mav.setViewName("redirect:/main.do");
         return mav;
     }

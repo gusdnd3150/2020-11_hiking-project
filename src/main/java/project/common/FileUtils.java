@@ -37,7 +37,6 @@ public class FileUtils {
 			storedFileName = getRandomString() + originalFileExtension;
 
 			file = new File(savePath + storedFileName);
-			System.out.println(file.getAbsolutePath()); // 파일 절대 경로
 
 			m.transferTo(file);
 
@@ -48,7 +47,6 @@ public class FileUtils {
 			listMap.put("fileSize", m.getSize());
 			list.add(listMap);
 		}
-		System.out.println(list.toString());
 		return list;
 	}
 

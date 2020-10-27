@@ -145,7 +145,7 @@
             html += '<img class="card-img-top" src="/resources/img/' + response[i].STOREDFILENAME + '" alt="..." style="width:100%" /></a>'
             html += '<div class="card-body row p-1 pl-4">';
             html += '<a href="/profile/' + response[i].ID + '" onclick="window.open(this.href,\'\',\'width = 500, height = 600\'); return false;">';
-            html += '<img src="/resources/img/' + response[i].CONTENT2 + '" class="rounded-circle" style="width: 40px;height: 40px; border: 1px solid grey"></a>';
+            html += '<img src="/resources/img/' + response[i].CONTENT2 + '" class="rounded-circle" style="width: 40px;height: 40px;"></a>';
             html += '<div class="col-10 p-0 pl-2 m-0">';
             html += '<h5 class="card-title m-0" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">';
             if(response[i].STATUS == '모집중'){

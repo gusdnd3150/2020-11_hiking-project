@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <link rel="stylesheet" type="text/css" href="/resources/css/views/common/fixedBtn.css" />
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-    <c:if test="${userGradeResult eq 0}">
+    <c:if test="${userGradeResult.USERSTATUS eq 0}">
     <span class="col-12" id="RightBottomLayerFixed" onclick="goChat()">
         <i class="fas fa-comments fa-lg"></i>
     </span>

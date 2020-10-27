@@ -37,7 +37,14 @@ public class ChatDao {
         sqlSession.insert("chat.insertMessage",map);
     }
 
-    public List checkValidUser(String roomId){
-        return sqlSession.selectList("chat.checkValidUser",roomId);
+    public List checkValidUser(Map map){
+        return sqlSession.selectList("chat.checkValidUser",map);
+    }
+
+    public void insertUserToChatRoom(Map map){
+        sqlSession.insert("chat.insertUserToChatRoom",map);
+    }
+    public void deleteUserFromChatRoom(Map map){
+        sqlSession.delete("chat.deleteUserFromChatRoom",map);
     }
 }

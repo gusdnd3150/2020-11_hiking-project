@@ -1,9 +1,6 @@
 package project.commu;
 
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -229,6 +226,17 @@ public class CommuController {
 		int total = commuService.countAlbumPosts(m);
 
 		return total;
+	}
+
+	@GetMapping("/commu/searchByUserId.do")
+	@ResponseBody
+	public List selectCreatedCommu(@RequestParam("userId")String userId){
+		List list = new ArrayList();
+		list.add(commuService.selectCreatedCommu(userId));
+		list.add(commuService.selectJoinedCommu(userId));
+
+		System.out.println(list.toString());
+		return list;
 	}
 
 }

@@ -45,25 +45,25 @@
 					<a class="list" href="">
 						<li class="list-group-item d-flex justify-content-between align-items-center">
 							<b>나의 친구 목록</b>
-							<h5 class="mt-2">15</h5>
+							<span class="text-muted mt-2">더보기></span>
 						</li>
 					</a>
 					<a class="list" href="/calendar.do">
 						<li class="list-group-item d-flex justify-content-between align-items-center">
 							<b>나의 등산 일정</b>
-							<h5 class="mt-2">50</h5>
+							<span class="text-muted mt-2">더보기></span>
 						</li>
 					</a>
 					<a class="list" href="">
 						<li class="list-group-item d-flex justify-content-between align-items-center">
 							<b>나의 등산 이력</b>
-							<h5 class="mt-2">50</h5>
+							<span class="text-muted mt-2">더보기></span>
 						</li>
 					</a>
 					<a class="list" href="">
 						<li class="list-group-item d-flex justify-content-between align-items-center">
 							<b>나의 찜 목록</b>
-							<h5 class="mt-2">50</h5>
+							<span class="text-muted mt-2">더보기></span>
 						</li>
 					</a>
 					<li class="list-group-item">

@@ -16,21 +16,19 @@ public class SearchController {
     @Resource(name = "groupService")
     private GroupService groupService;
 
-    @PostMapping("/search")
-    public ModelAndView selectGroupsByKeyword(@RequestParam("keyword") String keyword){
+    @GetMapping("/search.do")
+    @ResponseBody
+    public List selectGroupsByKeyword(@RequestBody Map map){
         ModelAndView mav = new ModelAndView("/group/search");
-        List<Map> group = groupService.selectGroupsByKeyword(keyword);
 
-        int result = 0;
+        System.out.println(map.toString());
 
-        if(!group.isEmpty()){
-            result = group.size();
-        }
+//        List<Map> group = groupService.selectGroupsByKeyword(keyword);
 
-        mav.addObject("result", result); // 건수
-        mav.addObject("group", group);     // 그룹검색결과
 
-        return mav;
+//        mav.addObject("result", result); // 건수
+//        mav.addObject("group", group);     // 그룹검색결과
+        return null;
     }
 
 

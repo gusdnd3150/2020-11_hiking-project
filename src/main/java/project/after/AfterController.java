@@ -49,7 +49,6 @@ public class AfterController {
          임시폴더 -> resources/img 변경 필요
          map.put("content",map.get("content").toString().replace("/upload","/resource/img"));
          */
-        System.out.println(map.toString());
 
         int userNum = userService.selectUserNum(map.get("userId")+"");
 
@@ -57,11 +56,9 @@ public class AfterController {
 
         int result = 0;
         int exist = afterservice.checkAfterExist(map);
-        System.out.println("exist : "+ exist);
         if(exist!=0){
             return result;
         }
-        System.out.println("여기 체크");
         result = afterservice.insertAfter(map);
 
         return result;

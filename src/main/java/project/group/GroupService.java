@@ -23,7 +23,7 @@ public interface GroupService {
 
     int withdrawGroup(Map map);
     List selectWaitingList(Map map);
-    int selectWaiting(Map map);
+    Map selectWaiting(Map map);
     int userAllowed(Map map);
     int userDisallowed(Map map);
 
