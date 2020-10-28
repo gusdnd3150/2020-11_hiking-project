@@ -72,9 +72,9 @@
         </div>
     </div>
     <!-- 쇼핑몰 상품 추천 (랜덤) -->
-    <div class="text-center" style="width:100%; height: 200px; display: flex;justify-content: center;flex-direction: column">
-        <p>결과가 없습니다</p>
-    </div>
+<%--    <div class="text-center" style="width:100%; height: 200px; display: flex;justify-content: center;flex-direction: column">--%>
+<%--        <p>결과가 없습니다</p>--%>
+<%--    </div>--%>
 <script type="text/javascript" src="../resources/js/jquery.js"></script>
 <script type="text/javascript" src="../resources/js/bootstrap.min.js"></script>
 <script>
@@ -84,8 +84,8 @@
 
         $('#resultList').css('display','block');
 
-        // $('#groupCount').empty();
-        // $('#moimCount').empty();
+        $('#groupCount').empty();
+        $('#moimCount').empty();
 
         $('#groupResult').empty();
         $('#moimResult').empty();

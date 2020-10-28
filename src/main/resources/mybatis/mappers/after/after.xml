@@ -32,7 +32,7 @@
     </select>
     <select id="selectAllAfterList" resultType="map">
         <![CDATA[
-            SELECT ga.userNum, ga.mtNm, ga.title, ga.content, TO_CHAR(ga.createdAt,'yyyy-mm-dd') createdAt, ui.content2
+            SELECT ga.afterNum, ga.userNum, ga.mtNm, ga.title, ga.content, TO_CHAR(ga.createdAt,'yyyy-mm-dd') createdAt, ui.content2
             FROM groupAfter ga, users u, userInfo ui
             WHERE ga.userNum = u.userNum
               AND u.userNum = ui.userNum
@@ -44,6 +44,48 @@
             SELECT ga.afterNum, ga.mtNm, ga.title, TO_CHAR(ga.createdAt,'yyyy-mm-dd') createdAt, ui.content2
             FROM groupAfter ga, userInfo ui
             WHERE ga.userNum = ui.userNum
+        ]]>
+    </select>
+    <insert id="insertCommentAfter" useGeneratedKeys="true" keyProperty="commentNum" parameterType="map">
+        <selectKey keyProperty="commentNum" resultType="_int" order="BEFORE">
+            SELECT afterComment_seq.nextval
+            FROM dual
+        </selectKey>
+        <![CDATA[
+            INSERT INTO groupafterComment
+            VALUES  (
+                    #{commentNum},
+                    #{parentNum},
+                    #{depts},
+                     (select NVL(MAX(commentOrder),0)+1
+                     FROM groupAfterComment
+                     WHERE parentNum = #{parentNum}
+                     AND afterNum = #{afterNum}),
+                    #{afterNum},
+                    #{content},
+                    #{userId},
+                    sysdate
+                    )
+        ]]>
+    </insert>
+    <select id="selectCommentOne" resultType="map" parameterType="int">
+        <![CDATA[
+        SELECT gac.commentNum, gac.parentNum, gac.depts, gac.commentOrder, gac.content, u.nickname, TO_CHAR(gac.createdAt,'YYYY-MM-DD') createdAt
+        FROM groupAfterComment gac, users u
+        WHERE gac.userId = u.id
+          AND commentNum = #{commentNum}
+        ]]>
+    </select>
+    <select id="selectCommentByAfterNum" resultType="map" parameterType="int">
+        <![CDATA[
+        SELECT gac.commentNum, gac.parentNum, gac.depts, gac.commentOrder, gac.content, u.nickname, TO_CHAR(gac.createdAt,'YYYY-MM-DD'), ui.content2
+        FROM groupAfterComment gac, users u, userInfo ui
+        WHERE gac.userId = u.id
+          AND   u.userNum = ui.userNum
+          AND   AFTERNUM = #{afterNum}
+        START WITH PARENTNUM = 0
+            CONNECT BY PRIOR COMMENTNUM = PARENTNUM
+            ORDER SIBLINGS BY COMMENTORDER
         ]]>
     </select>
 </mapper>

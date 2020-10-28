@@ -28,4 +28,15 @@ public class AfterDAO {
     public List selectMainAfterList(){
         return sqlSession.selectList("after.selectMainAfterList");
     }
+
+    public int insertCommentAfter(Map map){
+        return sqlSession.insert("after.insertCommentAfter",map);
+    }
+    public Map selectCommentOne(int commentNum){
+        return sqlSession.selectOne("after.selectCommentOne",commentNum);
+    }
+
+    public List selectCommentByAfterNum(int afterNum){
+        return sqlSession.selectList("after.selectCommentByAfterNum",afterNum);
+    }
 }

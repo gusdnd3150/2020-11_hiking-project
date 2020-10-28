@@ -24,4 +24,17 @@ public class AfterServiceImpl implements AfterService {
     public List selectMainAfterList(){
         return afterDAO.selectMainAfterList();
     }
+
+    @Transactional
+    public int insertCommentAfter(Map map){
+        return afterDAO.insertCommentAfter(map);
+    }
+
+    public Map selectCommentOne(int commentNum){
+        return afterDAO.selectCommentOne(commentNum);
+    }
+
+    public List selectCommentByAfterNum(int afterNum){
+        return afterDAO.selectCommentByAfterNum(afterNum);
+    }
 }

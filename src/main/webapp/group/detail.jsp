@@ -334,13 +334,16 @@
             contentType: "application/json; charset=utf-8;",
             success: function (response){
                 var id = $root.parentNode.id;
-                $('#'+id).append(
-                    '<li id="temp" class="col-12 row pt-3 ml-5 pl-2">'+
-                    '<img src="/resources/img/${sessionIdImage}" class="rounded-circle" style="width: 40px;height: 40px;float: left">'+
-                    '<div class="col-9">'+
-                    '<h5 class="mb-0 pl-0">'+response.nickname+'</h5>'+
-                    response.content +'</div></li>'
-                );
+
+                var html = '';
+
+                html += '<li id="temp" class="col-12 row pt-3 ml-5 pl-2">';
+                html += '<img src="/resources/img/${sessionIdImage}" class="rounded-circle" style="width: 40px;height: 40px;float: left">';
+                html += '<div class="col-9">';
+                html += '<h5 class="mb-0 pl-0">'+response.nickname+'</h5>';
+                html += response.content +'</div></li>';
+
+                $('#'+id).append(html);
             },
             error: function(response){
                 alert("다시 시도해주세요")
@@ -533,12 +536,13 @@ $(document).ready(function (){
 
                         var id = "resultUser"+i;
 
-                        $('#resultList').append(
-                            '<a href="/profile/'+response[i].USERID+'"><li class="row pt-1" style="list-style: none">' +
-                            '<div id="resultUser" class="col-10 pt-1" style="font-size: 22px">' +
-                            response[i].USERID +
-                            '</div></li></a>'
-                        );
+                        var html = ''
+
+                        html += '<a href="/profile/'+response[i].USERID+'"><li class="row pt-1" style="list-style: none">';
+                        html += '<div id="resultUser" class="col-10 pt-1" style="font-size: 22px">';
+                        html += response[i].USERID + '</div></li></a>';
+
+                        $('#resultList').append(html);
                     }
             },
             error: function(response){
@@ -556,8 +560,6 @@ $(document).ready(function (){
             groupNum : ${group.GROUPNUM},
             action : "plus"
         }
-
-        console.log(data)
 
         $.ajax({
             type: "GET",

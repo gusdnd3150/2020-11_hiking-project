@@ -8,4 +8,8 @@ public interface AfterService {
     int checkAfterExist(Map map);
     List selectAllAfterList();
     List selectMainAfterList();
+
+    int insertCommentAfter(Map map);
+    Map selectCommentOne(int commentNum);
+    List selectCommentByAfterNum(int afterNum);
 }

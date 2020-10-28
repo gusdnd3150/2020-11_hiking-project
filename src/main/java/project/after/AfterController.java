@@ -24,21 +24,24 @@ import java.util.UUID;
 public class AfterController {
 
     @Resource(name = "afterService")
-    private AfterService afterservice;
+    private AfterService afterService;
 
     @Resource(name = "userService")
     private UserService userService;
 
+    @Resource(name = "groupService")
+    private GroupService groupService;
+
     @GetMapping("/after/main.do")
-    public ModelAndView main(){
+    public ModelAndView main(HttpServletRequest request){
         ModelAndView mav = new ModelAndView("/after/main");
+        String userId = (String) request.getSession().getAttribute("LOGIN");
+        String sessionIdImage = groupService.selectSessionIdImage(userId);
 
-        List list = afterservice.selectAllAfterList();
-
-        System.out.println(list.toString());
+        List<Map> list = afterService.selectAllAfterList();
 
         mav.addObject("after",list);
-
+        mav.addObject("sessionIdImage",sessionIdImage);
         return mav;
     }
 
@@ -55,11 +58,11 @@ public class AfterController {
         map.put("userNum",userNum);
 
         int result = 0;
-        int exist = afterservice.checkAfterExist(map);
+        int exist = afterService.checkAfterExist(map);
         if(exist!=0){
             return result;
         }
-        result = afterservice.insertAfter(map);
+        result = afterService.insertAfter(map);
 
         return result;
     }
@@ -112,4 +115,18 @@ public class AfterController {
         return storedFileName;
     }
 
+    @PostMapping("/after/insertComment.do")
+    @ResponseBody
+    public Map insertCommentAfter(@RequestBody Map map){
+        afterService.insertCommentAfter(map);
+        return afterService.selectCommentOne((Integer) map.get("commentNum"));
+    }
+
+    @GetMapping("/after/selectCommentByAfterNum.do")
+    @ResponseBody
+    public List selectCommentByAfterNum(@RequestParam("afterNum")int afterNum){
+        List list = afterService.selectCommentByAfterNum(afterNum);
+        System.out.println(list.toString());
+        return list;
+    }
 }

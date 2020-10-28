@@ -21,10 +21,12 @@
         </div>
     </div>
     <div class="responsive">
-        <i id="timeNow"></i>
         <div class="row">
+            <i id="timeNow" class="col-md-12"></i>
             <div class="col-sm-12 col-md-6 pt-5 p-3">
-                <h2>주간 산 순위</h2>
+                <div>
+                    <h2>주간 산 순위</h2>
+                </div>
                 <div id="mtRank" class="form-inline"></div>
             </div>
             <div class="col-sm-12 col-md-6 pt-5 p-3">
@@ -72,13 +74,22 @@
 
         let today = new Date();
         let today_result = date_to_str(today);
-        $('#timeNow').text(today_result.toLocaleString())
+        $('#timeNow').text('조회 기준 : ' + lastWeek() +' ~ '+ today_result.toLocaleString())
+
+        console.log()
 
         setInterval(function (){
             $('#timeNow').text(today_result.toLocaleString())
             location.reload();
         },58000)
     })
+
+    function lastWeek(){
+        var d = new Date();
+        var dayOfMonth = d.getDate();
+        d.setDate(dayOfMonth-7);
+        return date_to_str(d);
+    }
 
     function date_to_str(format) {
         var year = format.getFullYear();
@@ -92,7 +103,7 @@
         if(min<10) min = '0' + min;
         var sec = format.getSeconds();
         if(sec<10) sec = '0' + sec;
-        return "( "+year + "-" + month + "-" + date + " " + hour + "시" + min + "분 기준)";
+        return +year + "-" + month + "-" + date + " " + hour + ":" + min;
     }
 
 
