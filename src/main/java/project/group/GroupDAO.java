@@ -14,8 +14,7 @@ public class GroupDAO{
     @Autowired
     private SqlSession sqlSession;
 
-    public void insertGroup(Map map){
-        sqlSession.insert("group.insertGroup", map);
+    public void insertGroup(Map map){ sqlSession.insert("group.insertGroup", map);
     }
     public void insertGroupLeader(Map map){
     	sqlSession.insert("group.insertGroupLeader",map);

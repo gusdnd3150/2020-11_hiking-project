@@ -238,5 +238,4 @@ public class CommuController {
 		System.out.println(list.toString());
 		return list;
 	}
-
 }

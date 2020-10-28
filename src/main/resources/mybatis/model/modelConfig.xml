@@ -12,7 +12,7 @@
 
 		<!-- user -->
 		<typeAlias type="project.user.vo.UserVO"  alias="userVO" />
-		
+
 		<!-- commu -->
 		<typeAlias type="project.commu.CommuVO"  alias="commuVO" />
 

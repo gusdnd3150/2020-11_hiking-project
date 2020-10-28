@@ -217,7 +217,17 @@
            select rownum rn, a.*
 			from
 				( 
-			SELECT g.*, gm.storedFileName
+			SELECT g.groupNum,
+			g.name,
+			g.type,
+			g.staffCurrent,
+			g.detail,
+			g.status,
+			g.area,
+			g.agestart,
+			g.ageEnd,
+			g.sex,
+			gm.storedFileName
             FROM groups g, groupsMedia gm
             WHERE g.groupNum = gm.groupNum
               AND gm.mediaNum = 0

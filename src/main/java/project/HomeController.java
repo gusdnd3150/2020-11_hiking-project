@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import project.after.AfterService;
+import project.commu.CommuService;
 import project.group.GroupService;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
@@ -19,6 +20,9 @@ public class HomeController {
 
 	@Resource(name = "afterService")
 	private AfterService afterService;
+
+	@Resource(name = "commuService")
+	private CommuService commuService;
 	
 	@GetMapping("/main.do")
 	public String home(ModelAndView mav) {
@@ -35,6 +39,12 @@ public class HomeController {
 	@ResponseBody
 	public List mainAfterList(){
 		return afterService.selectMainAfterList();
+	}
+
+	@GetMapping("/main/commuList.do")
+	@ResponseBody
+	public List mainCommuList() {
+		return commuService.selectAllGroupList();
 	}
 
 	@RequestMapping(value = "/admin", method = RequestMethod.GET)

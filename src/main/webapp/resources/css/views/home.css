@@ -63,3 +63,11 @@
 #afterList > a:hover {
     text-decoration: none;
 }
+
+#moimList > a {
+    color: black;
+}
+
+#moimList > a:hover {
+    text-decoration: none;
+}

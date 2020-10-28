@@ -87,10 +87,10 @@
 			<div id="afterList"></div>
 		</div>
 		<div class="col-sm-12 col-md-6">
-			<label for="afterList">
+			<label for="moimList">
 				<h1>인기 산모임</h1>
 			</label>
-			<div id="moinList"></div>
+			<div id="moimList"></div>
 		</div>
 	</div>
 	<hr />
@@ -126,6 +126,7 @@
 	$(document).ready(function (){
 		mainGroupList();
 		mainAfterList();
+		mainMoimList();
 	})
 	var memberCountConTxt= 296842;
 
@@ -158,7 +159,6 @@
 			dataType: 'json',
 			contentType: "application/json; charset=utf-8;",
 			success: function (response){
-				console.log(response)
 				for(var i=0;i<response.length;i++) {
 
 					var editorContent = response[i].DETAIL;
@@ -207,10 +207,7 @@
 			dataType: 'json',
 			contentType: "application/json; charset=utf-8;",
 			success: function (response){
-
-				console.log(response)
-
-				for(var i=0;i<response.length;i++){
+				for(var i=0;i<5;i++){
 
 					var html = '';
 
@@ -224,6 +221,40 @@
 					html += '</span></div></div></a>';
 
 					$('#afterList').append(html);
+				}
+
+
+			},
+			error: function(response){
+				console.log("error");
+			}
+		})
+	}
+
+	function mainMoimList(){
+
+		$.ajax({
+			type: "GET",
+			url: "/main/commuList.do",
+			dataType: 'json',
+			contentType: "application/json; charset=utf-8;",
+			success: function (response){
+
+				console.log(response)
+				for(var i=0;i<5;i++){
+
+					var html = '';
+
+					html += '<a href="/commu/commuPageView.do?groupNum='+response[i].GROUPNUM+'">';
+					html += '<div class="media p-1">';
+					html += '<img src="/resources/img/'+response[i].STOREDFILENAME+'" class="mr-3 rounded" style="width: 50px;height: 50px">';
+					html += '<div class="media-body">';
+					html += '<span>';
+					html += '<h4 class="m-0" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">'+response[i].NAME+'</h4>';
+					html += '<div class="text-muted"> 멤버 '+ response[i].STAFFCURRENT +'/'+ response[i].AREA+ '</div>'
+					html += '</span></div></div></a>';
+
+					$('#moimList').append(html);
 				}
 
 

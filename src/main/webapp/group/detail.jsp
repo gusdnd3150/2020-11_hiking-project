@@ -51,7 +51,7 @@
                 </div>
                 <hr />
                 <ul class="pl-0 col-12" style="list-style: none;height: auto;font-size: 18px">
-                    <li><b>모집 인원${(group.STAFFCURRENT / group.STAFFMAX)}</b></li>
+                    <li><b>모집 인원</b></li>
                     <li>
                         <c:choose>
                             <c:when test="${(group.STAFFCURRENT / group.STAFFMAX) ne 1}">
