@@ -44,7 +44,7 @@
                         html += '<img src="/resources/img/' + response[i].CONTENT2 + '" class="rounded-circle" style="width: 50px;height: 50px">';
                         html += '<div class="col-10">';
                         html += '<pre style="display: none">'+response[i].COMMENTNUM+'</pre>';
-                        html += '<h5>'+response[i].NICKNAME+'</h5>';
+                        html += '<h5 class="m-0">'+response[i].NICKNAME+'</h5>';
                         html += '<div>'+response[i].CONTENT +'</div>';
                         html += '<button class="'+id+'subComment p-0 btn btn-default text-muted" onclick="toggleWriteSubComment(this)">[답글 작성]</button>';
                         html += '<p style="display: none"><input type="text" class="form-control" placeholder="댓글 내용 입력"/>';

@@ -147,10 +147,10 @@
                     </div>
                     <div class="modal-body row">
                         <select class="custom-select col-3 ml-3" id="searchType">
-                            <option value="mtnm" selected>산</option>
-                            <option value="nmtnm">등산로</option>
+                            <option value="mountain" selected>산</option>
+                            <option value="trail">등산로</option>
                         </select>
-                        <input type="text" class="form-control col-6" placeholder="산/등산로 이름 입력" id="mountainName">
+                        <input type="text" class="form-control col-6" placeholder="산/등산로 이름 입력" id="keyword">
                         <button id="searchByMtnm" class="btn btn-info ml-3">검색</button>
                     </div>
                     <ul class="mountainList"></ul>

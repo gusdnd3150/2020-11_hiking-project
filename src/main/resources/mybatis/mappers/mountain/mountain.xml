@@ -78,4 +78,47 @@
             AND MTNUM = #{mntilistno}
         ]]>
     </select>
+    <insert id="insertTrailInfo" parameterType="map">
+        INSERT INTO TRAILINFO
+        VALUES (
+            #{FID},
+            #{PMNTN_LT},
+            #{PMNTN_GODN},
+            #{MNTN_CODE},
+            #{MNTN_ID},
+            #{PMNTN_MAIN},
+            #{PMNTN_UPPL},
+            #{PMNTN_RISK},
+            #{PMNTN_CLS_},
+            #{PMNTN_NM},
+            #{PMNTN_MTRQ},
+            #{PMNTN_SN},
+            #{DATA_STDR_},
+            #{PMNTN_DFFL},
+            #{PMNTN_RECO},
+            #{MNTN_NM},
+            #{PMNTN_CNRL}
+        )
+    </insert>
+
+    <insert id="insertTrailLocation" parameterType="map">
+        INSERT INTO TRAILLOCATION
+        VALUES (
+            #{MNTN_CODE},
+            #{FID},
+            (select NVL(MAX(locationOrder),0)+1
+            FROM TrailLocation
+            WHERE MNTN_CODE = #{MNTN_CODE}
+            AND FID = #{FID}),
+            #{LOCATIONX},
+            #{LOCATIONY}
+        )
+    </insert>
+    <select id="selectTrailLocation" resultType="map" parameterType="map">
+        SELECT *
+        FROM trailLocation
+        WHERE MNTN_CODE = #{MNTN_CODE}
+        AND FID = #{FID}
+        ORDER BY locationorder asc
+    </select>
 </mapper>

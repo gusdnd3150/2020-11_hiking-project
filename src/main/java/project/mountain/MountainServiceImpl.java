@@ -2,6 +2,7 @@ package project.mountain;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -29,6 +30,9 @@ public class MountainServiceImpl implements MountainService{
 
     @Value("${mountainURLimage}")
     private String mountainURLimage;
+
+    @Value("${trailURL}")
+    private String trailURL;
 
     private RestTemplate restTemplate = new RestTemplate();
 
@@ -86,6 +90,18 @@ public class MountainServiceImpl implements MountainService{
         return vo;
     }
 
+    public MountainResponseVO getTrailInfo(String searchWrd) throws UnsupportedEncodingException {
+
+        UriComponents builder = UriComponentsBuilder.fromHttpUrl(trailURL)
+                .queryParam("serviceKey",URLDecoder.decode(serviceKey, "UTF-8"))
+                .queryParam("searchWrd",searchWrd)
+                .build();
+
+        MountainResponseVO vo = restTemplate.getForObject(builder.toUriString(), MountainResponseVO.class);
+
+        return vo;
+    }
+
     public List selectMountainByRank(){
         return mountainDAO.selectMountainByRank();
     }
@@ -97,5 +113,16 @@ public class MountainServiceImpl implements MountainService{
     }
     public String checkMtLike(Map map){
         return mountainDAO.checkMtLike(map);
+    }
+
+    public void insertTrailInfo(Map map){
+        mountainDAO.insertTrailInfo(map);
+    }
+    public void insertTrailLocation(Map map){
+        mountainDAO.insertTrailLocation(map);
+    }
+
+    public List selectTrailLocation(Map map){
+        return mountainDAO.selectTrailLocation(map);
     }
 }

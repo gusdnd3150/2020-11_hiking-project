@@ -48,11 +48,14 @@
                 <when test="period.equals('hour')">
                     AND g.createdAt >= sysdate - 1/24
                 </when>
+                <when test="period.equals('day')">
+                    AND g.createdAt >= sysdate - 1
+                </when>
                 <when test="period.equals('week')">
                     AND g.createdAt >= sysdate - 7
                 </when>
                 <when test="period.equals('month')">
-                    AND g.createdAt >= 31
+                    AND g.createdAt >= sysdate - 31
                 </when>
             </choose>
         </if>

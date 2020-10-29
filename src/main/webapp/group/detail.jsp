@@ -4,6 +4,467 @@
 <jsp:include page="/common/fixedBtn.jsp" />
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 <link rel="stylesheet" type="text/css" href="/resources/css/views/group/detail.css" />
+<script type="text/javascript" src="../resources/js/jquery.js"></script>
+<script type="text/javascript" src="../resources/js/bootstrap.min.js"></script>
+<script>
+
+    const userProfile = '${group.CONTENT2}';
+
+    function openProfile(){
+        window.open("/profile/${group.ID}","하하","width=700, height=500, left=300, top=300")
+    }
+
+
+    function showMtInfo(){
+        var userId = "<%= request.getSession().getAttribute("LOGIN")%>";
+        window.open('/mountain/100/${group.MTNM}.do?userId="'+userId+'"',"상세 정보","width=900, height=500, left=300, top=300");
+    }
+
+    function switchPhoto(divName, totalImgs){
+        for(var i=0; i<=totalImgs; i++){
+            var showDivName = "photo" + i;
+            var showObj = document.getElementById(showDivName);
+            if(showDivName == divName)
+                showObj.style.display = "block";
+            else
+                showObj.style.display = "none";
+        }
+    }
+    function toggleSubComment(e){
+        $commentRoot = e.parentNode.parentNode;
+        $subComments = $commentRoot.getElementsByTagName("li")
+
+        for(var i=0;i<$subComments.length;i++){
+            if($subComments[i].style.display == "block"){
+                $subComments[i].style.display = "none";
+            }else if($subComments[i].style.display == "none"){
+                $subComments[i].style.display = "block";
+            }
+        }
+
+    }
+
+    function toggleWriteSubComment(e){
+        $inputSubComment = e.parentNode.getElementsByTagName("p")[0]
+
+        if($inputSubComment.style.display == "block"){
+            $inputSubComment.style.display = "none";
+        }else if($inputSubComment.style.display == "none"){
+            $inputSubComment.style.display = "block";
+        }
+
+    }
+
+    function writeSubComment(e){
+
+        $root = e.parentNode.parentNode;
+        $parentNum = $root.getElementsByTagName("pre")[0];
+
+        var data = {
+            "parentNum" : $parentNum.innerHTML,
+            "depts" : 2,
+            "groupNum" : "${group.GROUPNUM}",
+            "content" : e.previousSibling.value,
+            "userId" : "<%= request.getSession().getAttribute("LOGIN")%>",
+            "postNum": 0
+        }
+
+
+        $.ajax({
+            type: "POST",
+            url: "/group/insertSubComment.do",
+            data: JSON.stringify(data),
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8;",
+            success: function (response){
+                var id = $root.parentNode.id;
+
+                var html = '';
+
+                html += '<li id="temp" class="col-12 row pt-3 ml-5 pl-2">';
+                html += '<img src="/resources/img/${sessionIdImage}" class="rounded-circle" style="width: 40px;height: 40px;float: left">';
+                html += '<div class="col-9">';
+                html += '<h5 class="mb-0 pl-0">'+response.nickname+'</h5>';
+                html += response.content +'</div></li>';
+
+                $('#'+id).append(html);
+            },
+            error: function(response){
+                alert("다시 시도해주세요")
+            }
+        })
+
+
+    }
+
+    function cancelwriteSubComment(e){
+        e.previousSibling.previousSibling.value=null;
+    }
+
+    function writeAfter(){
+
+        localStorage.setItem("groupNum", ${group.GROUPNUM})
+        localStorage.setItem("mtNm","${group.MTNM}")
+        location.href="../after/form.jsp"
+    }
+
+    $(document).ready(function (){
+
+        $(document).on('click','.joinGroupBtn',function (){
+
+            var data = {
+                "groupNum": "${group.GROUPNUM}",
+                "userId" : "<%= request.getSession().getAttribute("LOGIN")%>",
+                "userComment" : $('#userComment').val()
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "/group/join.do",
+                data: JSON.stringify(data),
+                dataType: 'json',
+                contentType: "application/json; charset=utf-8;",
+                success : function (response){
+                    alert("신청 처리 되었습니다");
+                    location.reload();
+                },
+                error : function (response){
+                    alert("오류 발생! 다시 시도해주세요");
+                }
+            })
+        })
+        $(document).on('click','.withdrawGroupBtn',function (){
+            $("#cancelModal").show();
+        })
+        $(document).on('click','.cancelModalBtn',function (){
+
+            var data = {
+                "groupNum": ${group.GROUPNUM},
+                "userId" : "<%= request.getSession().getAttribute("LOGIN")%>",
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "/group/withdraw.do",
+                data: JSON.stringify(data),
+                dataType: 'json',
+                contentType: "application/json; charset=utf-8;",
+                success : function (response){
+                    location.reload();
+                },
+                error : function (response){
+                    console.log("error")
+                }
+            })
+        })
+
+    });
+    $(document).on('click','.like',function (){
+        var data = {
+            "groupNum" : "${group.GROUPNUM}",
+            "userId" : "<%= request.getSession().getAttribute("LOGIN")%>"
+        }
+        $.ajax({
+            type: "POST",
+            url: "/group/insertFavorite.do",
+            data: JSON.stringify(data),
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8;",
+            success : function (response){
+                $('.like')
+                    .removeClass("like btn btn-outline-danger col-6")
+                    .addClass("dislike btn btn-outline-danger col-6")
+                    .empty()
+                    .append("<i class=\"fas fa-heart\">")
+            },
+            error : function (response){
+                console.log("error!");
+            }
+        })
+    })
+
+    $(document).on('click','.dislike',function (e){
+        var data = {
+            "groupNum" : "${group.GROUPNUM}",
+            "userId" : "<%= request.getSession().getAttribute("LOGIN")%>"
+        }
+        $.ajax({
+            type: "POST",
+            url: "/group/deleteFavorite.do",
+            data: JSON.stringify(data),
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8;",
+            success : function (response){
+                $('.dislike')
+                    .removeClass("dislike btn btn-danger col-6")
+                    .addClass("like btn btn-outline-danger col-6")
+                    .empty()
+                    .append("<i class=\"far fa-heart\">")
+            },
+            error : function (response){
+                alert("로그인이 필요합니다")
+                window.location.replace('/user/logInView.jsp')
+            }
+        })
+    })
+
+    $(document).on('click','.selectWaitingList',function (){
+
+        var data = {
+            "groupNum" : ${group.GROUPNUM},
+            "userId" : "<%= request.getSession().getAttribute("LOGIN")%>"
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/group/selectWaitingList.do",
+            data: JSON.stringify(data),
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8;",
+            success: function (response){
+                $('#waitingList').empty()
+
+                if(response.length == 0){
+                    $('#waitingList').append(
+                        '<div style="text-align: center">신청한 회원이 없습니다</div>'
+                    )
+                }else if(response.length != 0){
+
+                    for(var i=0;i<response.length;i++){
+
+                        var id = "waitingUserComment"+i;
+                        var html = '';
+                        html += '<li class="row pt-2" style="list-style: none">';
+                        html += '<figure class="text-center col-2 m-2">'
+                        html += '<a href="/profile/'+response[i].USERID+'" style="text-decoration: none;color:black;" onclick="window.open(this.href,\'\',\'width = 500, height = 600\'); return false;">';
+                        html += '<img src="/resources/img/'+response[i].CONTENT2+'" id="userProfile" class="rounded-circle" style="height: 40px;width: 40px"/>';
+                        html += '<figcaption id="waitingUser" style="font-size: 16px">'+response[i].NICKNAME+'</figcaption></a>';
+                        html += '<span id="waitingUserId" style="display: none">'+response[i].USERID+'</span></a>';
+                        html += '</figure>'
+                        html += '<div id="waitingUserComment" class="rounded col-7 m-2" style="background-color:lightgrey;">' + response[i].USERCOMMENT + '</div>'
+                        html += '</li><hr />';
+
+                        $('#waitingList').append(html);
+
+                        $('#waitingUserComment').attr('id',id);
+
+                        if(response[i].USERSTATUS==0){
+                            $('#'+id).after('<button class="userDisallowed btn btn-danger col-2 align-self-center" style="height: 40px;">취소</button>');
+                        }else if(response[i].USERSTATUS==1){
+                            $('#'+id).after('<button class="userAllowed btn btn-outline-success col-2 align-self-center" style="height: 40px;">승인</button>');
+                        }
+                    }
+                }
+            },
+            error: function(response){
+                console.log("error");
+                alert("새로고침 후 다시 시도해주세요")
+            }
+        })
+    })
+    $(document).on('click','.resultWaitingBtn',function (e){
+        var data = {
+            "groupNum" : ${group.GROUPNUM},
+            "userId" : "<%= request.getSession().getAttribute("LOGIN")%>"
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/group/selectWaitingList.do",
+            data: JSON.stringify(data),
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8;",
+            success: function (response){
+
+                for(var i=0;i<response.length;i++){
+
+                    var id = "resultUser"+i;
+
+                    var html = ''
+
+                    html += '<a href="/profile/'+response[i].USERID+'"><li class="row pt-1" style="list-style: none">';
+                    html += '<div id="resultUser" class="col-10 pt-1" style="font-size: 22px">';
+                    html += response[i].USERID + '</div></li></a>';
+
+                    $('#resultList').append(html);
+                }
+            },
+            error: function(response){
+                console.log("error");
+                alert("새로고침 후 다시 시도해주세요")
+            }
+        })
+    })
+
+    $(document).on('click','.userAllowed',function (e){
+
+
+        var data = {
+            userId : (this.parentNode).childNodes[0].childNodes[1].textContent,
+            groupNum : ${group.GROUPNUM},
+            action : "plus"
+        }
+
+        $.ajax({
+            type: "GET",
+            url: "/group/userAllowed.do",
+            data: data,
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8;",
+            success: function (response){
+                e.target.className ="userDisallowed btn btn-danger align-self-center col-2";
+                e.target.innerText = "취소";
+            },
+            error: function(response){
+                console.log("error");
+                alert("새로고침 후 다시 시도해주세요")
+            }
+        })
+    })
+
+    $(document).on('click','.userDisallowed',function (e){
+        var data = {
+            userId : (this.parentNode).childNodes[0].childNodes[1].textContent,
+            groupNum : ${group.GROUPNUM},
+            action : "minus"
+        }
+
+        $.ajax({
+            type: "GET",
+            url: "/group/userDisallowed.do",
+            data: data,
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8;",
+            success: function (response){
+                e.target.className ="userAllowed btn btn-outline-success align-self-center col-2";
+                e.target.innerText = "승인";
+            },
+            error: function(response){
+                console.log("error");
+                alert("새로고침 후 다시 시도해주세요")
+            }
+        })
+    })
+
+    $(document).on('click','#commentSubmit',function (){
+
+        var data = {
+            "parentNum" : 0,
+            "depts" : 1,
+            "groupNum" : ${group.GROUPNUM},
+            "content" : $('#commentContent').val(),
+            "userId" : "<%= request.getSession().getAttribute("LOGIN")%>",
+            "postNum": 0
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/group/insertComment.do",
+            data: JSON.stringify(data),
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8;",
+            success: function (response){
+
+                var index = 0;
+                var count = response.subCommentCount;
+
+                var rootNum = response.parentNum;
+
+                if (rootNum == 0) {
+                    var id = 'depts' + index
+
+                    var html = '';
+                    html += '<ul id="' + id + '" class="col-12 pl-5 row">'
+                    html += '<img src="/resources/img/${sessionIdImage}" class="rounded-circle" style="width: 50px;height: 50px">'
+                    html += '<div class="col-10">'
+                    html += '<pre style="display: none">'+response.commentNum+'</pre>'
+                    html += '<h5>'+response.nickname+'</h5>'
+                    html += '<div>'+response.content +'</div>'
+                    html += '<button class="'+id+' p-0 btn btn-default text-muted" onclick="toggleSubComment(this)">[답글 '+ count +'개 더보기]</button>'
+                    html += '<button class="'+id+'subComment p-0 btn btn-default text-muted" onclick="toggleWriteSubComment(this)">[답글 작성]</button>'
+                    html += '<p style="display: none"><input type="text" class="form-control" placeholder="댓글 내용 입력"/>'
+                    html += '<button id="writeSubCommentBtn" class="btn btn-info" onclick="writeSubComment(this)">작성</button>'
+                    html += '<button class="btn btn-light" onclick="cancelwriteSubComment(this)">취소</button>'
+                    html += '</p></div></ul>';
+
+                    $('#commentBoard').append(html);
+
+                    index++;
+                }
+            },
+            error: function(response){
+                alert("다시 시도해주세요")
+            }
+        })
+
+    })
+    $(document).ready(function (){
+
+        var data = {
+            "groupNum" : ${group.GROUPNUM}
+        }
+
+        $.ajax({
+            type: "GET",
+            url: "/group/selectCommentByGroupNum.do",
+            data: data,
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8;",
+            success: function (response){
+
+                var index = 0;
+                for(var i=0;i<response.length;i++) {
+
+                    var commentNum = response[i].commentNum;
+                    var rootNum = response[i].parentNum;
+                    var count = response[i].subCommentCount;
+
+                    if (rootNum == 0) {
+                        var id = 'depts' + index
+
+                        var html = '';
+                        html += '<ul id="' + id + '" class="col-12 pl-5 row">'
+                        html += '<img src="/resources/img/' + response[i].content2 + '" class="rounded-circle" style="width: 50px;height: 50px">';
+                        html += '<div class="col-10">';
+                        html += '<pre style="display: none">'+response[i].commentNum+'</pre>';
+                        html += '<h5>'+response[i].nickname+'</h5>';
+                        html += '<div>'+response[i].content +'</div>';
+                        html += '<button class="'+id+' p-0 btn btn-default text-muted" onclick="toggleSubComment(this)">[답글 '+ count +'개 더보기]</button>';
+                        html += '<button class="'+id+'subComment p-0 btn btn-default text-muted" onclick="toggleWriteSubComment(this)">[답글 작성]</button>';
+                        html += '<p style="display: none"><input type="text" class="form-control" placeholder="댓글 내용 입력"/>';
+                        html += '<button id="writeSubCommentBtn" class="btn btn-info" onclick="writeSubComment(this)">작성</button>';
+                        html += '<button class="btn btn-light" onclick="cancelwriteSubComment(this)">취소</button>';
+                        html += '</p></div></ul>';
+
+                        $('#commentBoard').append(html);
+
+                        index++;
+
+                        var index1 = 0;
+                        for (var j = 0; j < response.length; j++) {
+
+                            if (response[j].parentNum == commentNum) {
+                                var html = '';
+                                html += '<li id="' + id + index1 + '" class="col-12 row pt-3 ml-5 pl-2" style="display: none;">';
+                                html += '<img src="/resources/img/'+response[j].content2+'" class="rounded-circle" style="width: 40px; height: 40px; float: left">';
+                                html += '<div class="col-9 ml-2 pl-5">';
+                                html += '<h5 class="mb-0">'+response[j].nickname+'</h5>'
+                                html += response[j].content +'</div></li>';
+
+                                $('#' + id).append(html);
+
+                                index1++;
+                            }
+                        }
+                    }
+                }
+            },
+            error: function(response){
+                console.log("error");
+            }
+        })
+    })
+</script>
 <div class="container pt-5">
     <!-- Portfolio Item Heading -->
     <h1 class="my-4 pt-3">${group.NAME}
@@ -109,7 +570,6 @@
     <div class="row">
         <div class="col-12">
             ${group.DETAIL}
-<%--                ${userGradeResult}--%>
         </div>
     </div>
 
@@ -133,7 +593,7 @@
         <input id="commentContent" class="form-control form-control-lg col-lg-10 col-md-9 col-10 col-10 ml-2 mr-2" type="text" placeholder="내용을 입력해주세요">
         <button id="commentSubmit" class="btn btn-info col-lg-1 col-md-1 col-sm-11">등록</button>
     </div>
-    <c:if test="${group.STATUS eq 0 and userGradeResult eq 0}">
+    <c:if test="${group.STATUS eq 0 and userGradeResult.USERSTATUS eq 0}">
     <hr />
     <div class="p-3" style="text-align: center">
         <h3>후기를 작성해주세요</h3>
@@ -260,465 +720,4 @@
         </div>
     </div>
 </div>
-<script type="text/javascript" src="../resources/js/jquery.js"></script>
-<script type="text/javascript" src="../resources/js/bootstrap.min.js"></script>
-<script>
-
-    const userProfile = '${group.CONTENT2}';
-
-    function openProfile(){
-        window.open("/profile/${group.ID}","하하","width=700, height=500, left=300, top=300")
-    }
-
-
-    function showMtInfo(){
-        var userId = "<%= request.getSession().getAttribute("LOGIN")%>";
-        window.open('/mountain/100/${group.MTNM}.do?userId="'+userId+'"',"상세 정보","width=900, height=500, left=300, top=300");
-    }
-
-    function switchPhoto(divName, totalImgs){
-        for(var i=0; i<=totalImgs; i++){
-            var showDivName = "photo" + i;
-            var showObj = document.getElementById(showDivName);
-            if(showDivName == divName)
-                showObj.style.display = "block";
-            else
-                showObj.style.display = "none";
-        }
-    }
-    function toggleSubComment(e){
-        $commentRoot = e.parentNode.parentNode;
-        $subComments = $commentRoot.getElementsByTagName("li")
-
-        for(var i=0;i<$subComments.length;i++){
-            if($subComments[i].style.display == "block"){
-                $subComments[i].style.display = "none";
-            }else if($subComments[i].style.display == "none"){
-                $subComments[i].style.display = "block";
-            }
-        }
-
-    }
-
-    function toggleWriteSubComment(e){
-        $inputSubComment = e.parentNode.getElementsByTagName("p")[0]
-
-        if($inputSubComment.style.display == "block"){
-            $inputSubComment.style.display = "none";
-        }else if($inputSubComment.style.display == "none"){
-            $inputSubComment.style.display = "block";
-        }
-
-    }
-
-    function writeSubComment(e){
-
-        $root = e.parentNode.parentNode;
-        $parentNum = $root.getElementsByTagName("pre")[0];
-
-        var data = {
-            "parentNum" : $parentNum.innerHTML,
-            "depts" : 2,
-            "groupNum" : "${group.GROUPNUM}",
-            "content" : e.previousSibling.value,
-            "userId" : "<%= request.getSession().getAttribute("LOGIN")%>",
-            "postNum": 0
-        }
-
-
-        $.ajax({
-            type: "POST",
-            url: "/group/insertSubComment.do",
-            data: JSON.stringify(data),
-            dataType: 'json',
-            contentType: "application/json; charset=utf-8;",
-            success: function (response){
-                var id = $root.parentNode.id;
-
-                var html = '';
-
-                html += '<li id="temp" class="col-12 row pt-3 ml-5 pl-2">';
-                html += '<img src="/resources/img/${sessionIdImage}" class="rounded-circle" style="width: 40px;height: 40px;float: left">';
-                html += '<div class="col-9">';
-                html += '<h5 class="mb-0 pl-0">'+response.nickname+'</h5>';
-                html += response.content +'</div></li>';
-
-                $('#'+id).append(html);
-            },
-            error: function(response){
-                alert("다시 시도해주세요")
-            }
-        })
-
-
-    }
-
-    function cancelwriteSubComment(e){
-        e.previousSibling.previousSibling.value=null;
-    }
-
-    function writeAfter(){
-
-        localStorage.setItem("groupNum", ${group.GROUPNUM})
-        localStorage.setItem("mtNm","${group.MTNM}")
-        location.href="../after/form.jsp"
-    }
-
-$(document).ready(function (){
-
-    $(document).on('click','.joinGroupBtn',function (){
-
-        var data = {
-            "groupNum": "${group.GROUPNUM}",
-            "userId" : "<%= request.getSession().getAttribute("LOGIN")%>",
-            "userComment" : $('#userComment').val()
-        }
-
-        $.ajax({
-            type: "POST",
-            url: "/group/join.do",
-            data: JSON.stringify(data),
-            dataType: 'json',
-            contentType: "application/json; charset=utf-8;",
-            success : function (response){
-                alert("신청 처리 되었습니다");
-                location.reload();
-            },
-            error : function (response){
-                alert("오류 발생! 다시 시도해주세요");
-            }
-        })
-    })
-    $(document).on('click','.withdrawGroupBtn',function (){
-        $("#cancelModal").show();
-    })
-    $(document).on('click','.cancelModalBtn',function (){
-
-        var data = {
-            "groupNum": ${group.GROUPNUM},
-            "userId" : "<%= request.getSession().getAttribute("LOGIN")%>",
-        }
-
-        $.ajax({
-            type: "POST",
-            url: "/group/withdraw.do",
-            data: JSON.stringify(data),
-            dataType: 'json',
-            contentType: "application/json; charset=utf-8;",
-            success : function (response){
-                location.reload();
-            },
-            error : function (response){
-                console.log("error")
-            }
-        })
-    })
-
-    });
-    $(document).on('click','.like',function (){
-        var data = {
-            "groupNum" : "${group.GROUPNUM}",
-            "userId" : "<%= request.getSession().getAttribute("LOGIN")%>"
-        }
-        $.ajax({
-            type: "POST",
-            url: "/group/insertFavorite.do",
-            data: JSON.stringify(data),
-            dataType: 'json',
-            contentType: "application/json; charset=utf-8;",
-            success : function (response){
-                $('.like')
-                    .removeClass("like btn btn-outline-danger col-6")
-                    .addClass("dislike btn btn-outline-danger col-6")
-                    .empty()
-                    .append("<i class=\"fas fa-heart\">")
-            },
-            error : function (response){
-                console.log("error!");
-            }
-        })
-    })
-
-    $(document).on('click','.dislike',function (e){
-        var data = {
-            "groupNum" : "${group.GROUPNUM}",
-            "userId" : "<%= request.getSession().getAttribute("LOGIN")%>"
-        }
-        $.ajax({
-            type: "POST",
-            url: "/group/deleteFavorite.do",
-            data: JSON.stringify(data),
-            dataType: 'json',
-            contentType: "application/json; charset=utf-8;",
-            success : function (response){
-                $('.dislike')
-                    .removeClass("dislike btn btn-danger col-6")
-                    .addClass("like btn btn-outline-danger col-6")
-                    .empty()
-                    .append("<i class=\"far fa-heart\">")
-            },
-            error : function (response){
-                alert("로그인이 필요합니다")
-                window.location.replace('/user/logInView.jsp')
-            }
-        })
-    })
-
-    $(document).on('click','.selectWaitingList',function (){
-
-        var data = {
-            "groupNum" : ${group.GROUPNUM},
-            "userId" : "<%= request.getSession().getAttribute("LOGIN")%>"
-        }
-
-        $.ajax({
-            type: "POST",
-            url: "/group/selectWaitingList.do",
-            data: JSON.stringify(data),
-            dataType: 'json',
-            contentType: "application/json; charset=utf-8;",
-            success: function (response){
-                $('#waitingList').empty()
-
-                if(response.length == 0){
-                    $('#waitingList').append(
-                        '<div style="text-align: center">신청한 회원이 없습니다</div>'
-                    )
-                }else if(response.length != 0){
-
-                for(var i=0;i<response.length;i++){
-
-                    var id = "waitingUserComment"+i;
-                    var html = '';
-                    html += '<li class="row pt-2" style="list-style: none">';
-                    html += '<figure class="text-center col-2 m-2">'
-                    html += '<a href="/profile/'+response[i].USERID+'" style="text-decoration: none;color:black;" onclick="window.open(this.href,\'\',\'width = 500, height = 600\'); return false;">';
-                    html += '<img src="/resources/img/'+response[i].CONTENT2+'" id="userProfile" class="rounded-circle" style="height: 40px;width: 40px"/>';
-                    html += '<figcaption id="waitingUser" style="font-size: 16px">'+response[i].NICKNAME+'</figcaption></a>';
-                    html += '<span id="waitingUserId" style="display: none">'+response[i].USERID+'</span></a>';
-                    html += '</figure>'
-                    html += '<div id="waitingUserComment" class="rounded col-7 m-2" style="background-color:lightgrey;">' + response[i].USERCOMMENT + '</div>'
-                    html += '</li><hr />';
-
-                    $('#waitingList').append(html);
-
-                    $('#waitingUserComment').attr('id',id);
-
-                        if(response[i].USERSTATUS==0){
-                            $('#'+id).after('<button class="userDisallowed btn btn-danger col-2 align-self-center" style="height: 40px;">취소</button>');
-                        }else if(response[i].USERSTATUS==1){
-                            $('#'+id).after('<button class="userAllowed btn btn-outline-success col-2 align-self-center" style="height: 40px;">승인</button>');
-                        }
-                    }
-                }
-            },
-            error: function(response){
-                console.log("error");
-                alert("새로고침 후 다시 시도해주세요")
-            }
-        })
-    })
-    $(document).on('click','.resultWaitingBtn',function (e){
-        var data = {
-            "groupNum" : ${group.GROUPNUM},
-            "userId" : "<%= request.getSession().getAttribute("LOGIN")%>"
-        }
-
-        $.ajax({
-            type: "POST",
-            url: "/group/selectWaitingList.do",
-            data: JSON.stringify(data),
-            dataType: 'json',
-            contentType: "application/json; charset=utf-8;",
-            success: function (response){
-
-                    for(var i=0;i<response.length;i++){
-
-                        var id = "resultUser"+i;
-
-                        var html = ''
-
-                        html += '<a href="/profile/'+response[i].USERID+'"><li class="row pt-1" style="list-style: none">';
-                        html += '<div id="resultUser" class="col-10 pt-1" style="font-size: 22px">';
-                        html += response[i].USERID + '</div></li></a>';
-
-                        $('#resultList').append(html);
-                    }
-            },
-            error: function(response){
-                console.log("error");
-                alert("새로고침 후 다시 시도해주세요")
-            }
-        })
-    })
-
-    $(document).on('click','.userAllowed',function (e){
-
-
-        var data = {
-            userId : (this.parentNode).childNodes[0].childNodes[1].textContent,
-            groupNum : ${group.GROUPNUM},
-            action : "plus"
-        }
-
-        $.ajax({
-            type: "GET",
-            url: "/group/userAllowed.do",
-            data: data,
-            dataType: 'json',
-            contentType: "application/json; charset=utf-8;",
-            success: function (response){
-                e.target.className ="userDisallowed btn btn-danger align-self-center col-2";
-                e.target.innerText = "취소";
-            },
-            error: function(response){
-                console.log("error");
-                alert("새로고침 후 다시 시도해주세요")
-            }
-        })
-    })
-
-    $(document).on('click','.userDisallowed',function (e){
-        var data = {
-            userId : (this.parentNode).childNodes[0].childNodes[1].textContent,
-            groupNum : ${group.GROUPNUM},
-            action : "minus"
-        }
-
-        $.ajax({
-            type: "GET",
-            url: "/group/userDisallowed.do",
-            data: data,
-            dataType: 'json',
-            contentType: "application/json; charset=utf-8;",
-            success: function (response){
-                e.target.className ="userAllowed btn btn-outline-success align-self-center col-2";
-                e.target.innerText = "승인";
-            },
-            error: function(response){
-                console.log("error");
-                alert("새로고침 후 다시 시도해주세요")
-            }
-        })
-    })
-
-    $(document).on('click','#commentSubmit',function (){
-
-        var data = {
-            "parentNum" : 0,
-            "depts" : 1,
-            "groupNum" : ${group.GROUPNUM},
-            "content" : $('#commentContent').val(),
-            "userId" : "<%= request.getSession().getAttribute("LOGIN")%>",
-            "postNum": 0
-        }
-
-        $.ajax({
-            type: "POST",
-            url: "/group/insertComment.do",
-            data: JSON.stringify(data),
-            dataType: 'json',
-            contentType: "application/json; charset=utf-8;",
-            success: function (response){
-
-                var index = 0;
-                var count = response.subCommentCount;
-
-                    var rootNum = response.parentNum;
-
-                    if (rootNum == 0) {
-                        var id = 'depts' + index
-
-                        var html = '';
-                        html += '<ul id="' + id + '" class="col-12 pl-5 row">'
-                        html += '<img src="/resources/img/${sessionIdImage}" class="rounded-circle" style="width: 50px;height: 50px">'
-                        html += '<div class="col-10">'
-                        html += '<pre style="display: none">'+response.commentNum+'</pre>'
-                        html += '<h5>'+response.nickname+'</h5>'
-                        html += '<div>'+response.content +'</div>'
-                        html += '<button class="'+id+' p-0 btn btn-default text-muted" onclick="toggleSubComment(this)">[답글 '+ count +'개 더보기]</button>'
-                        html += '<button class="'+id+'subComment p-0 btn btn-default text-muted" onclick="toggleWriteSubComment(this)">[답글 작성]</button>'
-                        html += '<p style="display: none"><input type="text" class="form-control" placeholder="댓글 내용 입력"/>'
-                        html += '<button id="writeSubCommentBtn" class="btn btn-info" onclick="writeSubComment(this)">작성</button>'
-                        html += '<button class="btn btn-light" onclick="cancelwriteSubComment(this)">취소</button>'
-                        html += '</p></div></ul>';
-
-                        $('#commentBoard').append(html);
-
-                        index++;
-                    }
-            },
-            error: function(response){
-                alert("다시 시도해주세요")
-            }
-        })
-
-    })
-    $(document).ready(function (){
-
-        var data = {
-            "groupNum" : ${group.GROUPNUM}
-        }
-
-        $.ajax({
-            type: "GET",
-            url: "/group/selectCommentByGroupNum.do",
-            data: data,
-            dataType: 'json',
-            contentType: "application/json; charset=utf-8;",
-            success: function (response){
-
-                var index = 0;
-                for(var i=0;i<response.length;i++) {
-
-                    var commentNum = response[i].commentNum;
-                    var rootNum = response[i].parentNum;
-                    var count = response[i].subCommentCount;
-
-                    if (rootNum == 0) {
-                        var id = 'depts' + index
-
-                        var html = '';
-                        html += '<ul id="' + id + '" class="col-12 pl-5 row">'
-                        html += '<img src="/resources/img/' + response[i].content2 + '" class="rounded-circle" style="width: 50px;height: 50px">';
-                        html += '<div class="col-10">';
-                        html += '<pre style="display: none">'+response[i].commentNum+'</pre>';
-                        html += '<h5>'+response[i].nickname+'</h5>';
-                        html += '<div>'+response[i].content +'</div>';
-                        html += '<button class="'+id+' p-0 btn btn-default text-muted" onclick="toggleSubComment(this)">[답글 '+ count +'개 더보기]</button>';
-                        html += '<button class="'+id+'subComment p-0 btn btn-default text-muted" onclick="toggleWriteSubComment(this)">[답글 작성]</button>';
-                        html += '<p style="display: none"><input type="text" class="form-control" placeholder="댓글 내용 입력"/>';
-                        html += '<button id="writeSubCommentBtn" class="btn btn-info" onclick="writeSubComment(this)">작성</button>';
-                        html += '<button class="btn btn-light" onclick="cancelwriteSubComment(this)">취소</button>';
-                        html += '</p></div></ul>';
-
-                        $('#commentBoard').append(html);
-
-                        index++;
-
-                        var index1 = 0;
-                        for (var j = 0; j < response.length; j++) {
-
-                            if (response[j].parentNum == commentNum) {
-                                var html = '';
-                                html += '<li id="' + id + index1 + '" class="col-12 row pt-3 ml-5 pl-2" style="display: none;">';
-                                html += '<img src="/resources/img/'+response[j].content2+'" class="rounded-circle" style="width: 40px; height: 40px; float: left">';
-                                html += '<div class="col-9 ml-2 pl-5">';
-                                html += '<h5 class="mb-0">'+response[j].nickname+'</h5>'
-                                html += response[j].content +'</div></li>';
-
-                                $('#' + id).append(html);
-
-                                index1++;
-                            }
-                        }
-                    }
-                }
-            },
-            error: function(response){
-                console.log("error");
-            }
-        })
-    })
-</script>
 <jsp:include page="/common/footer.jsp" />

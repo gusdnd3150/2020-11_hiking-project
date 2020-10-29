@@ -1,17 +1,18 @@
 package project.mountain;
 
-import org.apache.ibatis.jdbc.Null;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import project.group.GroupService;
 
 import javax.annotation.Resource;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import java.io.*;
+import java.util.*;
 
 @RestController
 public class MountainController {
@@ -104,6 +105,21 @@ public class MountainController {
         return list;
     }
 
+    @GetMapping("/trail/{searchWrd}.do")
+    public ModelAndView getTrailInfo(@PathVariable("searchWrd")String searchWrd) throws UnsupportedEncodingException {
+        ModelAndView mav = new ModelAndView("/mountain/detail2");
+
+        MountainResponseVO vo = mountainService.getTrailInfo(searchWrd);
+
+        List<MountainItemDTO> list = new ArrayList<>();
+        for(int i=0;i<vo.getBody().getItems().size();i++){
+            list.add(vo.getBody().getItems().get(i));
+        }
+
+        mav.addObject("trail",list);
+        return mav;
+    }
+
     // 산 인기 랭킹
     @GetMapping("/mountain/rank.do")
     @ResponseBody
@@ -120,7 +136,7 @@ public class MountainController {
     }
 
     @PostMapping("/searchMt.do")
-    public MountainResponseVO mountainList1(@RequestBody Map map) throws UnsupportedEncodingException {
+    public MountainResponseVO searchMt(@RequestBody Map map) throws UnsupportedEncodingException {
 
         String mtNm = (String) map.get("mtNm");
         String arNm = (String) map.get("arNm");
@@ -129,6 +145,116 @@ public class MountainController {
 
         return vo;
 
+    }
+
+    @PostMapping("/searchTrail.do")
+    public MountainResponseVO searchTrail(@RequestBody Map map) throws UnsupportedEncodingException {
+
+        String searchWrd = (String) map.get("searchWrd");
+
+        MountainResponseVO vo = mountainService.getTrailInfo(searchWrd);
+
+        return vo;
+    }
+    public static String getRandomString() {
+        return UUID.randomUUID().toString().replaceAll("-", "");
+    }
+
+    @Transactional
+    @PostMapping("/mountain/trail/upload.do")
+    public String trailInfoUpload(@RequestParam("file") List<MultipartFile> files, HttpServletRequest request){
+
+        JSONParser jsonParser = new JSONParser();
+
+        String requestPath = request.getSession().getServletContext().getRealPath("/");
+
+        String jsonPath = "/resources/json/";
+        String savePath = requestPath + jsonPath;
+
+        File file = new File(savePath);
+        if (file.exists() == false) {
+            file.mkdirs();
+        }
+
+        Map trailInfo = new HashMap();
+
+
+        try {
+            for(MultipartFile m : files){
+                file = new File(savePath + m.getOriginalFilename());
+                m.transferTo(file);
+                Object obj = jsonParser.parse(new FileReader(file));
+                JSONObject jsonObject = (JSONObject) obj;
+
+                List features = (List) jsonObject.get("features");
+                Map attributes = (Map) features.get(0); //등산로 정보
+                Map innerAttributes = (Map) attributes.get("attributes");
+
+//                System.out.println("attributes : "+attributes.toString());
+//                System.out.println("innerAttributes : " + innerAttributes.toString());
+
+                trailInfo = innerAttributes;
+
+                Map geometry = (Map) attributes.get("geometry");
+                List paths = new ArrayList();
+
+                Map path = new HashMap();
+                if(paths != null){
+                    paths = (List) geometry.get("paths");
+
+                    for(int i=0;i<paths.size();i++){
+                        List pathPoint = (List) paths.get(i);
+                        for(int j=0;j<pathPoint.size();j++){
+//                        System.out.println("pathPoint " +i+" : " + pathPoint.get(j).toString());
+                            List point = (List) pathPoint.get(j);
+
+                            path.put("MNTN_CODE", trailInfo.get("MNTN_CODE"));
+                            path.put("FID", trailInfo.get("FID"));
+                            path.put("MNTN_CODE", trailInfo.get("MNTN_CODE"));
+                            path.put("LOCATIONX", point.get(0));
+                            path.put("LOCATIONY", point.get(1));
+                            mountainService.insertTrailLocation(path);
+                        }
+                    }
+                }
+            }
+
+            System.out.println("trailInfo : "+ trailInfo);
+            mountainService.insertTrailInfo(trailInfo); //trail 정보 입력
+
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return "";
+    }
+
+    public File convert(MultipartFile mfile) throws IOException {
+        File file = new File(mfile.getOriginalFilename());
+        file.createNewFile();
+        FileOutputStream fos = new FileOutputStream(file);
+        fos.write(mfile.getBytes());
+        fos.close();
+        return file;
+    }
+
+
+    @GetMapping("/mountain/trail/{MNTN_CODE}")
+    @ResponseBody
+    public List selectTrailLocation(@PathVariable("MNTN_CODE")int mntn_code,
+                                    @RequestParam("FID")int fid){
+
+        System.out.println(mntn_code);
+        System.out.println(fid);
+        Map map = new HashMap();
+
+        map.put("MNTN_CODE",mntn_code);
+        map.put("FID",fid);
+
+        List list = mountainService.selectTrailLocation(map);
+        System.out.println(list.toString());
+
+        return list;
     }
 
 }

@@ -79,6 +79,14 @@
 <script type="text/javascript" src="../resources/js/bootstrap.min.js"></script>
 <script>
     function search(){
+
+        var keyword = $('#keyword').val();
+
+        if(keyword == '' || keyword == null){
+            alert('검색어를 입력해주세요');
+            return
+        }
+
         var typeCount1 = 0;
         var typeCount2 = 0;
 
@@ -94,7 +102,7 @@
             "type" : $('#type').val(),
             "period" : $('#period').val(),
             "sort" : $('#sort').val(),
-            "keyword" : $('#keyword').val()
+            "keyword" : keyword
         }
 
         $.ajax({

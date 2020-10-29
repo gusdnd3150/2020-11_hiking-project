@@ -27,4 +27,13 @@ public class MountainDAO {
     public int followMountainCount(String mntilistno){
         return sqlSession.selectOne("mountain.followMountainCount",mntilistno);
     }
+    public void insertTrailInfo(Map map){
+        sqlSession.insert("mountain.insertTrailInfo",map);
+    }
+    public void insertTrailLocation(Map map){
+        sqlSession.insert("mountain.insertTrailLocation",map);
+    }
+    public List selectTrailLocation(Map map){
+        return sqlSession.selectList("mountain.selectTrailLocation",map);
+    }
 }

@@ -64,6 +64,7 @@
                     #{afterNum},
                     #{content},
                     #{userId},
+                    0,
                     sysdate
                     )
         ]]>
@@ -78,7 +79,7 @@
     </select>
     <select id="selectCommentByAfterNum" resultType="map" parameterType="int">
         <![CDATA[
-        SELECT gac.commentNum, gac.parentNum, gac.depts, gac.commentOrder, gac.content, u.nickname, TO_CHAR(gac.createdAt,'YYYY-MM-DD'), ui.content2
+        SELECT gac.commentNum, gac.parentNum, gac.depts, gac.commentOrder, gac.content, u.nickname, gac.subCommentCount, TO_CHAR(gac.createdAt,'YYYY-MM-DD') createdAt, ui.content2
         FROM groupAfterComment gac, users u, userInfo ui
         WHERE gac.userId = u.id
           AND   u.userNum = ui.userNum

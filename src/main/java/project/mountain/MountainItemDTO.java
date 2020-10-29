@@ -52,6 +52,17 @@ public class MountainItemDTO {
     private String likeYN;
     private int countLike;
 
+    // 등산로
+    private String baekduId;
+    private String mntnnm;
+    private String mntloca;
+    private String baekdugbnname;
+    private String baekdurealdistance;
+    private String baekdusections; //등산로 시작
+    private String baekdusectione; //등산로 끝
+    private String baekduspect;
+    private String baekduvia;
+
     public String getMntilistno() {
         return mntilistno;
     }

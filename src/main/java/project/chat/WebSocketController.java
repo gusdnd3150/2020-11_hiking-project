@@ -29,9 +29,6 @@ public class WebSocketController {
         Timestamp insertTs = Timestamp.valueOf(inputTime);
         map.put("messagedAt",insertTs);
         chatService.insertMessage(map);
-
-        System.out.println(map.toString());
-
         return map;
     }
 }

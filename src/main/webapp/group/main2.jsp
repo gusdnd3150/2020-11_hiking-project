@@ -16,7 +16,7 @@
     <div class="row">
         <h1 class="col-md-6 col-lg-9 mb-0">등산로 리스트</h1>
         <div class="col-md-6 col-lg-3 pt-2 pb-2 btn-group btn-group-toggle" data-toggle="buttons">
-            <input id="searchKeyword" type="text" class="col-8" placeholder="산/등산로">
+            <input id="searchKeyword" type="text" class="col-8" placeholder="산이름 간편검색">
             <button class="btn btn-info col-4" onclick="searchMtnm()">검색</button>
         </div>
     </div>
@@ -111,6 +111,10 @@
         var keyword = $('#searchKeyword').val()
         var userId = "<%= request.getSession().getAttribute("LOGIN")%>";
 
+        if(keyword == '' || keyword == null){
+            alert('검색어를 입력해주세요');
+            return;
+        }
         location.href = "/mountain/"+keyword+".do?userId="+userId+"";
 
     }
@@ -146,6 +150,45 @@
                     html += '<hr />'
 
                     $('#mtRank').append(html);
+                }
+            },
+            error: function(response){
+                console.log("error");
+            }
+        })
+    }
+
+    //미완
+    function trailRank(){
+        $.ajax({
+            type: "GET",
+            url: "/trail/rank.do",
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8;",
+            success: function (response){
+                for(var i=0;i<response.length;i++){
+                    var html = '';
+                    html += '<div class="col-3 p-2">';
+                    html += '<h4 class="pl-4"><i>'+(i+1)+'</i></h4>';
+                    html += '</div>';
+                    html += '<div class="col-3">';
+                    html += '<h4 style="font-weight: lighter">'+response[i].MTNM + '</h4>';
+                    html += '</div>';
+                    html += '<div class="col-3">';
+                    if(response[i].CHANGERANK == 0){
+                        html += '<i class="fas fa-minus"></i>';
+                    }else if(response[i].CHANGERANK == -999){
+                        html += '<span class="badge badge-success">New</span>'
+                    }else if(response[i].CHANGERANK > 0){
+                        html += '<i class="fas fa-angle-up pl-1" style="color: green">'+response[i].CHANGERANK+'</i>';
+                    }else if(response[i].CHANGERANK < 0){
+                        html += '<i class="fas fa-chevron-down pl-1" style="color: red">'+response[i].CHANGERANK+'</i>';
+                    }
+                    html += '</div>';
+                    html += '<a href="/mountain/'+response[i].MTNM+'.do?userId='+userId+'" class="text-muted col-3">더보기></a>';
+                    html += '<hr />'
+
+                    $('#trailRank').append(html);
                 }
             },
             error: function(response){
