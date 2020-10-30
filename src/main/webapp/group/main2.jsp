@@ -23,15 +23,21 @@
     <div class="responsive">
         <div class="row">
             <i id="timeNow" class="col-md-12"></i>
-            <div class="col-sm-12 col-md-6 pt-5 p-3">
-                <div>
+            <div class="col-12">
+                <div class="col-12">
                     <h2>주간 산 순위</h2>
                 </div>
-                <div id="mtRank" class="form-inline"></div>
+                <div id="mtRankBoard" class="row">
+                    <div id="mtRankHigh" class="col-6 p-0 m-0" style="height: 30%;border-right: 1px solid lightgrey"></div>
+                    <div id="mtRankLow" class="col-6 p-0 m-0" style="height: 30%"></div>
+                </div>
             </div>
-            <div class="col-sm-12 col-md-6 pt-5 p-3">
+            <div class="col-sm-12 col-md-12 pt-5 p-3">
                 <h2>주간 등산로 순위</h2>
-                <div id="pathRank"></div>
+                <div id="trailRank" class="row">
+                    <div id="trailRankHigh" class="col-6 p-0 m-0" style="height: 30%;border-right: 1px solid lightgrey"></div>
+                    <div id="trailRankLow" class="col-6 p-0 m-0" style="height: 30%"></div>
+                </div>
             </div>
 <%--            <div class="col-4 p-3">--%>
 <%--                <h2>나만의 등산로 추천</h2>--%>
@@ -71,12 +77,11 @@
 
     $(document).ready(function (){
         mtRank();
+        trailRank();
 
         let today = new Date();
         let today_result = date_to_str(today);
         $('#timeNow').text('조회 기준 : ' + lastWeek() +' ~ '+ today_result.toLocaleString())
-
-        console.log()
 
         setInterval(function (){
             $('#timeNow').text(today_result.toLocaleString())
@@ -127,15 +132,15 @@
             dataType: 'json',
             contentType: "application/json; charset=utf-8;",
             success: function (response){
-                for(var i=0;i<response.length;i++){
+                for(var i=0;i<5;i++){
                     var html = '';
-                    html += '<div class="col-3 p-2">';
-                    html += '<h4 class="pl-4"><i>'+(i+1)+'</i></h4>';
+                    html += '<li class="form-inline p-2">';
+                    html += '<h4 class="col-2 pl-4"><i>'+(i+1)+'</i></h4>';
                     html += '</div>';
-                    html += '<div class="col-3">';
-                    html += '<h4 style="font-weight: lighter">'+response[i].MTNM + '</h4>';
+                    html += '<div class="col-4 pr-0">';
+                    html += '<h5 style="font-weight: lighter">'+response[i].MTNM + '</h5>';
                     html += '</div>';
-                    html += '<div class="col-3">';
+                    html += '<div class="col-3 p-0">';
                     if(response[i].CHANGERANK == 0){
                         html += '<i class="fas fa-minus"></i>';
                     }else if(response[i].CHANGERANK == -999){
@@ -146,11 +151,34 @@
                         html += '<i class="fas fa-chevron-down pl-1" style="color: red">'+response[i].CHANGERANK+'</i>';
                     }
                     html += '</div>';
-                    html += '<a href="/mountain/'+response[i].MTNM+'.do?userId='+userId+'" class="text-muted col-3">더보기></a>';
+                    html += '<a href="/mountain/'+response[i].MTNM+'.do?userId='+userId+'" class="text-muted col-3 p-0">더보기></a>';
+
+                    $('#mtRankHigh').append(html);
+                }
+                for(var i=5;i<response.length;i++) {
+                    var html = '';
+                    html += '<li class="form-inline p-2">';
+                    html += '<h4 class="col-2 pl-4"><i>'+(i+1)+'</i></h4>';
+                    html += '<div class="col-4 pr-0">';
+                    html += '<h5 style="font-weight: lighter">'+response[i].MTNM + '</h5>';
+                    html += '</div>';
+                    html += '<div class="col-3 p-0">';
+                    if(response[i].CHANGERANK == 0){
+                        html += '<i class="fas fa-minus"></i>';
+                    }else if(response[i].CHANGERANK == -999){
+                        html += '<span class="badge badge-success">New</span>'
+                    }else if(response[i].CHANGERANK > 0){
+                        html += '<i class="fas fa-angle-up pl-1" style="color: green">'+response[i].CHANGERANK+'</i>';
+                    }else if(response[i].CHANGERANK < 0){
+                        html += '<i class="fas fa-chevron-down pl-1" style="color: red">'+response[i].CHANGERANK+'</i>';
+                    }
+                    html += '</div>';
+                    html += '<a href="/mountain/'+response[i].MTNM+'.do?userId='+userId+'" class="text-muted col-3 p-0">더보기></a>';
                     html += '<hr />'
 
-                    $('#mtRank').append(html);
+                    $('#mtRankLow').append(html);
                 }
+
             },
             error: function(response){
                 console.log("error");
@@ -158,37 +186,30 @@
         })
     }
 
-    //미완
+    // 작성중
     function trailRank(){
         $.ajax({
             type: "GET",
-            url: "/trail/rank.do",
+            url: "/mountain/trail/rank.do",
             dataType: 'json',
             contentType: "application/json; charset=utf-8;",
             success: function (response){
+                console.log("success");
+                console.log(response)
+
                 for(var i=0;i<response.length;i++){
                     var html = '';
-                    html += '<div class="col-3 p-2">';
-                    html += '<h4 class="pl-4"><i>'+(i+1)+'</i></h4>';
+
+                    html += '<li class="form-inline p-2">';
+                    html += '<h4 class="col-2 pl-4"><i>'+(i+1)+'</i></h4>';
+                    html += '<div class="col-4 pr-0">';
+                    html += '<h5 style="font-weight: lighter">'+response[i].PMNTN_NM + '</h5>';
                     html += '</div>';
-                    html += '<div class="col-3">';
-                    html += '<h4 style="font-weight: lighter">'+response[i].MTNM + '</h4>';
-                    html += '</div>';
-                    html += '<div class="col-3">';
-                    if(response[i].CHANGERANK == 0){
-                        html += '<i class="fas fa-minus"></i>';
-                    }else if(response[i].CHANGERANK == -999){
-                        html += '<span class="badge badge-success">New</span>'
-                    }else if(response[i].CHANGERANK > 0){
-                        html += '<i class="fas fa-angle-up pl-1" style="color: green">'+response[i].CHANGERANK+'</i>';
-                    }else if(response[i].CHANGERANK < 0){
-                        html += '<i class="fas fa-chevron-down pl-1" style="color: red">'+response[i].CHANGERANK+'</i>';
-                    }
-                    html += '</div>';
-                    html += '<a href="/mountain/'+response[i].MTNM+'.do?userId='+userId+'" class="text-muted col-3">더보기></a>';
+                    html += '<a href="/trail/'+response[i].MNTN_CODE+'.do?FID='+response[i].FID+'&userId='+userId+'" class="text-muted col-3 p-0">더보기></a>';
                     html += '<hr />'
 
-                    $('#trailRank').append(html);
+                    $('#trailRank').append(html)
+
                 }
             },
             error: function(response){

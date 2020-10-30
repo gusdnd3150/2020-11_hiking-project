@@ -30,6 +30,10 @@
             ORDER BY changeRank DESC
         ]]>
     </select>
+    <select id="selectTrailByRank" resultType="map">
+        SELECT *
+        FROM trailInfo
+    </select>
 
     <insert id="followMountainFunction" parameterType="map">
         <if test='likeYN.equals("Y")'>
@@ -114,11 +118,36 @@
             #{LOCATIONY}
         )
     </insert>
+
+    <insert id="insertTrailSpot" parameterType="map">
+        INSERT INTO TRAILSPOT
+        VALUES (
+            #{FID},
+            #{PMNTN_SPOT},
+            #{MNTN_CODE},
+            #{MANAGE_SP1},
+            #{MANAGE_SP2},
+            #{DETAIL_SPO},
+            #{ETC_MATTER},
+            #{MNTN_NM},
+            #{PAST_SPOT_},
+            #{MNTN_ID},
+            #{LOCATIONX},
+            #{LOCATIONY}
+        )
+    </insert>
+
     <select id="selectTrailLocation" resultType="map" parameterType="map">
         SELECT *
         FROM trailLocation
         WHERE MNTN_CODE = #{MNTN_CODE}
         AND FID = #{FID}
         ORDER BY locationorder asc
+    </select>
+    <select id="selectTrailInfo" resultType="map" parameterType="map">
+        SELECT *
+        FROM trailInfo
+        WHERE MNTN_CODE = #{MNTN_CODE}
+        AND FID = #{FID}
     </select>
 </mapper>

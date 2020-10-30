@@ -105,7 +105,9 @@ public class MountainController {
         return list;
     }
 
-    @GetMapping("/trail/{searchWrd}.do")
+
+    //보류
+    @GetMapping("/trail1/{searchWrd}.do")
     public ModelAndView getTrailInfo(@PathVariable("searchWrd")String searchWrd) throws UnsupportedEncodingException {
         ModelAndView mav = new ModelAndView("/mountain/detail2");
 
@@ -125,6 +127,12 @@ public class MountainController {
     @ResponseBody
     public List selectMountainByRank(){
         return mountainService.selectMountainByRank();
+    }
+
+    @GetMapping("/mountain/trail/rank.do")
+    @ResponseBody
+    public List selectTrailByRank(){
+        return mountainService.selectTrailByRank();
     }
 
     // 산 찜 기능
@@ -162,7 +170,7 @@ public class MountainController {
 
     @Transactional
     @PostMapping("/mountain/trail/upload.do")
-    public String trailInfoUpload(@RequestParam("file") List<MultipartFile> files, HttpServletRequest request){
+    public void trailInfoUpload(@RequestParam("file") List<MultipartFile> files, HttpServletRequest request){
 
         JSONParser jsonParser = new JSONParser();
 
@@ -187,46 +195,51 @@ public class MountainController {
                 JSONObject jsonObject = (JSONObject) obj;
 
                 List features = (List) jsonObject.get("features");
-                Map attributes = (Map) features.get(0); //등산로 정보
-                Map innerAttributes = (Map) attributes.get("attributes");
+
+                for(int i=0;i<features.size();i++){
+                    Map attributes = (Map) features.get(i); //등산로 정보
+                    Map innerAttributes = (Map) attributes.get("attributes");
 
 //                System.out.println("attributes : "+attributes.toString());
 //                System.out.println("innerAttributes : " + innerAttributes.toString());
 
-                trailInfo = innerAttributes;
+                    trailInfo = innerAttributes;
 
-                Map geometry = (Map) attributes.get("geometry");
-                List paths = new ArrayList();
+                    Map geometry = (Map) attributes.get("geometry");
 
-                Map path = new HashMap();
-                if(paths != null){
-                    paths = (List) geometry.get("paths");
+                    Map path = new HashMap();
+                    List paths = (List) geometry.get("paths");
 
-                    for(int i=0;i<paths.size();i++){
-                        List pathPoint = (List) paths.get(i);
-                        for(int j=0;j<pathPoint.size();j++){
+                    if(paths==null){
+
+                        trailInfo.put("LOCATIONX", geometry.get("x"));
+                        trailInfo.put("LOCATIONY", geometry.get("y"));
+
+                        mountainService.insertTrailSpot(trailInfo);
+
+                    }else if(paths!=null){
+                        for(int j=0;j<paths.size();j++){
+                            List pathPoint = (List) paths.get(j);
+                            for(int k=0;k<pathPoint.size();k++){
 //                        System.out.println("pathPoint " +i+" : " + pathPoint.get(j).toString());
-                            List point = (List) pathPoint.get(j);
+                                List point = (List) pathPoint.get(k);
 
-                            path.put("MNTN_CODE", trailInfo.get("MNTN_CODE"));
-                            path.put("FID", trailInfo.get("FID"));
-                            path.put("MNTN_CODE", trailInfo.get("MNTN_CODE"));
-                            path.put("LOCATIONX", point.get(0));
-                            path.put("LOCATIONY", point.get(1));
-                            mountainService.insertTrailLocation(path);
+                                path.put("MNTN_CODE", trailInfo.get("MNTN_CODE"));
+                                path.put("FID", trailInfo.get("FID"));
+                                path.put("MNTN_CODE", trailInfo.get("MNTN_CODE"));
+                                path.put("LOCATIONX", point.get(0));
+                                path.put("LOCATIONY", point.get(1));
+                                mountainService.insertTrailLocation(path);
+                            }
                         }
+                        mountainService.insertTrailInfo(trailInfo); //trail 정보 입력
                     }
                 }
             }
 
-            System.out.println("trailInfo : "+ trailInfo);
-            mountainService.insertTrailInfo(trailInfo); //trail 정보 입력
-
         } catch (Exception e){
             e.printStackTrace();
         }
-
-        return "";
     }
 
     public File convert(MultipartFile mfile) throws IOException {
@@ -239,22 +252,32 @@ public class MountainController {
     }
 
 
-    @GetMapping("/mountain/trail/{MNTN_CODE}")
+    @GetMapping("/trail/map.do")
     @ResponseBody
-    public List selectTrailLocation(@PathVariable("MNTN_CODE")int mntn_code,
+    public List selectTrailLocation(@RequestParam("MNTN_CODE")int mntn_code,
                                     @RequestParam("FID")int fid){
-
-        System.out.println(mntn_code);
-        System.out.println(fid);
         Map map = new HashMap();
-
         map.put("MNTN_CODE",mntn_code);
         map.put("FID",fid);
 
-        List list = mountainService.selectTrailLocation(map);
-        System.out.println(list.toString());
-
-        return list;
+        return mountainService.selectTrailLocation(map);
     }
 
-}
+    @GetMapping("/trail/{MNTN_CODE}.do")
+    public ModelAndView selectTrailInfo(@PathVariable("MNTN_CODE")int mntn_code,
+                                        @RequestParam("FID")int fid){
+
+        ModelAndView mav = new ModelAndView("/mountain/trail-detail");
+
+        Map map = new HashMap();
+        map.put("MNTN_CODE",mntn_code);
+        map.put("FID",fid);
+
+        List list = mountainService.selectTrailInfo(map);
+
+        mav.addObject("trail", list);
+
+        return mav;
+    }
+
+    }

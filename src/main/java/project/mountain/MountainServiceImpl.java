@@ -105,6 +105,10 @@ public class MountainServiceImpl implements MountainService{
     public List selectMountainByRank(){
         return mountainDAO.selectMountainByRank();
     }
+    public List selectTrailByRank(){
+        return mountainDAO.selectTrailByRank();
+    }
+
     public int followMountainFunction(Map map){
         return mountainDAO.followMountainFunction(map);
     }
@@ -121,8 +125,14 @@ public class MountainServiceImpl implements MountainService{
     public void insertTrailLocation(Map map){
         mountainDAO.insertTrailLocation(map);
     }
+    public void insertTrailSpot(Map map){
+        mountainDAO.insertTrailSpot(map);
+    }
 
     public List selectTrailLocation(Map map){
         return mountainDAO.selectTrailLocation(map);
+    }
+    public List selectTrailInfo(Map map){
+        return mountainDAO.selectTrailInfo(map);
     }
 }

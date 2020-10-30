@@ -14,12 +14,16 @@ public interface MountainService {
     MountainResponseVO getTrailInfo(String searchWrd) throws UnsupportedEncodingException;
 
     List selectMountainByRank();
+    List selectTrailByRank();
+
     int followMountainFunction(Map map);
     int followMountainCount(String mntilistno);
     String checkMtLike(Map map);
 
     void insertTrailInfo(Map map);
     void insertTrailLocation(Map map);
+    void insertTrailSpot(Map map);
 
     List selectTrailLocation(Map map);
+    List selectTrailInfo(Map map);
 }

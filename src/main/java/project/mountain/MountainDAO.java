@@ -16,6 +16,9 @@ public class MountainDAO {
     public List selectMountainByRank(){
         return sqlSession.selectList("mountain.selectMountainByRank");
     }
+    public List selectTrailByRank(){
+        return sqlSession.selectList("mountain.selectTrailByRank");
+    }
 
     public int followMountainFunction(Map map){
         return sqlSession.insert("mountain.followMountainFunction",map);
@@ -33,7 +36,14 @@ public class MountainDAO {
     public void insertTrailLocation(Map map){
         sqlSession.insert("mountain.insertTrailLocation",map);
     }
+    public void insertTrailSpot(Map map){
+        sqlSession.insert("mountain.insertTrailSpot",map);
+    }
+
     public List selectTrailLocation(Map map){
         return sqlSession.selectList("mountain.selectTrailLocation",map);
+    }
+    public List selectTrailInfo(Map map){
+        return sqlSession.selectList("mountain.selectTrailInfo",map);
     }
 }
