@@ -144,10 +144,20 @@
         AND FID = #{FID}
         ORDER BY locationorder asc
     </select>
+
     <select id="selectTrailInfo" resultType="map" parameterType="map">
-        SELECT *
-        FROM trailInfo
-        WHERE MNTN_CODE = #{MNTN_CODE}
-        AND FID = #{FID}
+        SELECT ti.PMNTN_LT, ti.PMNTN_GODN, ti.MNTN_CODE, ti.PMNTN_MAIN, ti.PMNTN_UPPL, ti.PMNTN_RISK, ti.PMNTN_CLS_, ti.PMNTN_NM, ti.PMNTN_MTRQ, ti.DATA_STDR_, ti.PMNTN_DFFL, ti.MNTN_NM, ti.PMNTN_CNRL, ts.LOCATIONX, ts.LOCATIONY
+        FROM trailInfo ti, trailspot ts
+        WHERE ti.MNTN_CODE = ts.MNTN_CODE
+          AND ts.FID = 0
+          AND ti.MNTN_CODE = #{MNTN_CODE}
+          AND ti.FID = #{FID}
     </select>
+
+    <select id="selectTrailSpot" resultType="map" parameterType="map">
+        SELECT *
+        FROM trailSpot
+        WHERE MNTN_CODE = #{MNTN_CODE}
+    </select>
+
 </mapper>

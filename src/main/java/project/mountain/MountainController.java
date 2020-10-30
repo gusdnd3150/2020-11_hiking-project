@@ -252,7 +252,7 @@ public class MountainController {
     }
 
 
-    @GetMapping("/trail/map.do")
+    @GetMapping("/trail/location.do")
     @ResponseBody
     public List selectTrailLocation(@RequestParam("MNTN_CODE")int mntn_code,
                                     @RequestParam("FID")int fid){
@@ -261,6 +261,18 @@ public class MountainController {
         map.put("FID",fid);
 
         return mountainService.selectTrailLocation(map);
+    }
+
+    @GetMapping("/trail/spot.do")
+    @ResponseBody
+    public List selectTrailSpot(@RequestParam("MNTN_CODE")int mntn_code){
+
+        System.out.println(mntn_code);
+
+        Map map = new HashMap();
+        map.put("MNTN_CODE",mntn_code);
+
+        return mountainService.selectTrailSpot(map);
     }
 
     @GetMapping("/trail/{MNTN_CODE}.do")

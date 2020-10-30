@@ -46,4 +46,7 @@ public class MountainDAO {
     public List selectTrailInfo(Map map){
         return sqlSession.selectList("mountain.selectTrailInfo",map);
     }
+    public List selectTrailSpot(Map map){
+        return sqlSession.selectList("mountain.selectTrailSpot",map);
+    }
 }
