@@ -26,6 +26,7 @@ public interface MountainService {
 
     List selectTrailLocation(Map map);
     List selectTrailInfo(Map map);
+    List selectTrailDetailInfo(Map map);
+    List selectTrailSumInfo(Map map);
     List selectTrailSpot(Map map);
-    List selectCourseByMNTN_CODE(Map map);
 }

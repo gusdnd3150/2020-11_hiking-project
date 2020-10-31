@@ -2,49 +2,46 @@
          pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page session="false" %>
-<jsp:include page="/common/header.jsp" />
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=10adf6d2b4bb761d1e63b20e8cb26e87&libraries=drawing"></script>
-<body class="container pt-5">
-<div class="pt-5">
-    <div class="d-flex justify-content-between">
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>산오름</title>
+    <!-- ico,css -->
+    <link rel="icon" href="../resources/img/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" type="text/css" href="/resources/css/bootstrap.min.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=10adf6d2b4bb761d1e63b20e8cb26e87&libraries=drawing"></script>
+</head>
+<body class="p-3">
+<div>
+    <div>
         <h1>${trail[0].MNTN_NM} 등산로</h1>
-        <button class="mtStar btn btn-outline-warning" style="height: 40px" onclick=""><i class="far fa-star"></i></button>
+        <h2>${trail[0].FID+1} ${trail[0].PMNTN_NM}</h2>
     </div>
-<%--    <button class="mtStar btn btn-outline-warning" style="height: 40px" onclick=""><i class="fas fa-star"></i></button>--%>
     <div class="map_wrap form-inline">
-        <div id="map" class="col-sm-12 col-md-8" style="height:350px;"></div>
-        <div id="sectionList" class="col-sm-12 col-md-4" style="height: 350px;border: 1px solid black;overflow-y: scroll">
-            <li class="p-1" style="list-style: none;">
-                <a href="/trail/${trail[0].MNTN_CODE}.do?userId=${LOGIN}" class="col-12 pr-0 mr-0" style="text-decoration: none;height: 10px">
-                    <span>전체 구간 보기</span>
-                </a>
-            </li>
-            <c:forEach var="trail" items="${trail}">
-                <li class="p-1" style="list-style: none;">
-                    <a href="/trail/detail/${trail.MNTN_CODE}.do?FID=${trail.FID}&userId=${LOGIN}"
-                       class="col-12 justify-content-between" style="text-decoration: none;height: 10px"
-                       onclick="window.open(this.href,'${trail.PMNTN_NM}_blank','width=450, height=777');return false;">
-                        <span>${trail.FID+1}</span>
-                        <span>${trail.PMNTN_NM}</span>
-                    </a>
-                </li>
-            </c:forEach>
+        <div id="map" style="width:100%;height:350px;"></div>
         </div>
     </div>
-    <div class="p-5" style="border: solid 1px black">
-        <h3>등산로 상세 정보</h3>
+    <div class="p-1" style="border: 1px solid black">
+        <h3>구간 정보</h3>
         <div class="row" style="font-size: 20px">
-                <div class="col-6">
-                    <div>등산로 구분 : ${trail[0].MNTN_NM}</div>
-                    <div>종합 난이도 : ${sum[0].AVGDFFL}</div>
-                    <div>총 구간 길이 : ${sum[0].SUMLT} km</div>
-                </div>
-                <div class="col-6">
-                    <div>총 상행시간 : ${sum[0].SUMUP} 분</div>
-                    <div>총 하행시간 : ${sum[0].SUMDN} 분</div>
-                    <div>갱신일자 : ${sum[0].DATA_STDR_}</div>
-                </div>
+            <div class="col-6">
+                <div>난이도 : ${trail[0].PMNTN_DFFL}</div>
+                <div>산이름 : ${trail[0].MNTN_NM}</div>
+                <div>주요지점 : ${trail[0].PMNTN_MAIN}</div>
+                <div>구간 길이 : ${trail[0].PMNTN_LT} km</div>
+                <div>갱신 : ${trail[0].DATA_STDR_}</div>
+            </div>
+            <div class="col-6">
+                <div>상행시간 : ${trail[0].PMNTN_UPPL} 분</div>
+                <div>하행시간 : ${trail[0].PMNTN_GODN} 분</div>
+                <div>폐쇄여부 : ${trail[0].PMNTN_CNRL}</div>
+                <div>위험구간 내용 : ${trail[0].PMNTN_RISK}</div>
+                <div>공식 추천 여부 : ${trail[0].PMNTN_RECO}</div>
+            </div>
+            <hr />
         </div>
     </div>
 </div>
@@ -80,7 +77,7 @@
 
         drawMarker();
         <c:forEach var="trail" items="${trail}">
-           drawPolyline(${trail.MNTN_CODE}, ${trail.FID});
+        drawPolyline(${trail.MNTN_CODE}, ${trail.FID});
         </c:forEach>
     }
 

@@ -23,7 +23,8 @@
     <div class="responsive">
         <div class="row">
             <i id="timeNow" class="col-12"></i>
-            <div class="col-sm-12 col-md-8 p-4">
+            <div class="col-sm-12 col-md-12 col-lg-8">
+                <h2>등산로 종합 순위</h2>
                 <div id="trailRankBoard" class="row m-0">
                     <div id="trailRankHigh" class="col-sm-12 col-md-6 m-0" style="border-right: 1px solid lightgrey">
                         <p>1 ~ 10위</p>
@@ -33,7 +34,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-12 col-md-4">
+            <div class="col-sm-12 col-md-12 col-lg-4">
                 <h2>주간 산 순위</h2>
                 <div id="mtRankBoard" class="row m-0"></div>
             </div>

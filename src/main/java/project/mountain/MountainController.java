@@ -291,6 +291,24 @@ public class MountainController {
         }
 
         List list = mountainService.selectTrailInfo(map);
+        List sum = mountainService.selectTrailSumInfo(map);
+
+        mav.addObject("trail", list);
+        mav.addObject("sum",sum);
+
+        return mav;
+    }
+    @GetMapping("/trail/detail/{MNTN_CODE}.do")
+    public ModelAndView selectTrailDetailInfo(@PathVariable("MNTN_CODE")int mntn_code,
+                                              @RequestParam(value = "FID")String fid){
+
+        ModelAndView mav = new ModelAndView("/mountain/trail-popup");
+
+        Map map = new HashMap();
+        map.put("MNTN_CODE", mntn_code);
+        map.put("FID",fid);
+
+        List list = mountainService.selectTrailDetailInfo(map);
         mav.addObject("trail", list);
 
         return mav;

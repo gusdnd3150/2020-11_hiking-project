@@ -36,12 +36,14 @@ public class AfterController {
     public ModelAndView main(HttpServletRequest request){
         ModelAndView mav = new ModelAndView("/after/main");
         String userId = (String) request.getSession().getAttribute("LOGIN");
-        String sessionIdImage = groupService.selectSessionIdImage(userId);
+        if(userId!=null){
+            String sessionIdImage = groupService.selectSessionIdImage(userId);
+            mav.addObject("sessionIdImage",sessionIdImage);
+        }
 
         List<Map> list = afterService.selectAllAfterList();
 
         mav.addObject("after",list);
-        mav.addObject("sessionIdImage",sessionIdImage);
         return mav;
     }
 

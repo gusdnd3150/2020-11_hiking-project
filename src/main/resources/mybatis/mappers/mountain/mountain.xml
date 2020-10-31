@@ -147,7 +147,7 @@
     </select>
 
     <select id="selectTrailInfo" resultType="map" parameterType="map">
-        SELECT DISTINCT ti.FID, ti.MNTN_CODE, ti.MNTN_NM,
+        SELECT DISTINCT ti.FID, ti.MNTN_CODE, ti.MNTN_NM, ti.PMNTN_NM, NVL(TRIM(ti.PMNTN_NM),CONCAT(ti.FID+1,'구간')),
             (
             SELECT DISTINCT FIRST_VALUE(tl.LOCATIONX) over (PARTITION BY tl.FID ORDER BY tl.LOCATIONORDER ASC)
              FROM TRAILLOCATION tl
@@ -165,20 +165,27 @@
         ORDER BY FID ASC
     </select>
 
-    <select id="selectCourseByMNTN_CODE" resultType="map" parameterType="map">
-        SELECT FID,NVL2(TRIM(PMNTN_NM),TO_CHAR(CONCAT(FID+1,' ')) || TO_CHAR(PMNTN_NM),FID+1||' 구간')
-        FROM TRAILINFO ti2
+    <select id="selectTrailSumInfo" resultType="map" parameterType="map">
+        select PMNTN_NM, TO_CHAR(DATA_STDR_,'yyyy-mm-dd') data_stdr_,
+               DECODE(SUM(DECODE(PMNTN_DFFL,'쉬움',1,'보통',2,'어려움',3))/COUNT(PMNTN_DFFL),1,'쉬움',2,'보통',3,'어려움') avgDffl,
+               SUM(PMNTN_LT) sumLt,
+               SUM(PMNTN_UPPL) sumUp,
+               SUM(PMNTN_GODN) sumDn
+        FROM TRAILINFO
         WHERE MNTN_CODE = #{MNTN_CODE}
+        GROUP BY PMNTN_NM, DATA_STDR_
+
     </select>
 
-<!--    <select id="selectTrailInfo" resultType="map" parameterType="map">-->
-<!--        SELECT ti.PMNTN_LT, ti.PMNTN_GODN, ti.MNTN_CODE, ti.PMNTN_MAIN, ti.PMNTN_UPPL, ti.PMNTN_RISK, ti.PMNTN_CLS_, ti.PMNTN_NM, ti.PMNTN_MTRQ, ti.DATA_STDR_, ti.PMNTN_DFFL, ti.MNTN_NM, ti.PMNTN_CNRL, tl.LOCATIONX, tl.LOCATIONY-->
-<!--        FROM trailInfo ti-->
-<!--        LEFT JOIN trailSpot ts ON ti.MNTN_CODE = ts.MNTN_CODE-->
-<!--        LEFT JOIN trailLocation tl ON ti.MNTN_CODE = tl.MNTN_CODE-->
-<!--        WHERE ti.MNTN_CODE = #{MNTN_CODE}-->
-<!--    </select>-->
-
+    <select id="selectTrailDetailInfo" resultType="map" parameterType="map">
+        SELECT ti.*, tl.LOCATIONX, tl.LOCATIONY
+        FROM TRAILINFO ti, TRAILLOCATION tl
+        WHERE ti.MNTN_CODE = tl.MNTN_CODE
+          AND ti.FID = tl.FID
+          AND tl.LOCATIONORDER = 1
+          AND ti.MNTN_CODE = #{MNTN_CODE}
+          AND ti.FID = #{FID}
+    </select>
 
     <select id="selectTrailSpot" resultType="map" parameterType="map">
         SELECT *

@@ -138,10 +138,13 @@ public class MountainServiceImpl implements MountainService{
     public List selectTrailInfo(Map map){
         return mountainDAO.selectTrailInfo(map);
     }
+    public List selectTrailSumInfo(Map map){
+        return mountainDAO.selectTrailSumInfo(map);
+    }
     public List selectTrailSpot(Map map){
         return mountainDAO.selectTrailSpot(map);
     }
-    public List selectCourseByMNTN_CODE(Map map){
-        return mountainDAO.selectCourseByMNTN_CODE(map);
+    public List selectTrailDetailInfo(Map map){
+        return mountainDAO.selectTrailDetailInfo(map);
     }
 }

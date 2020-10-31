@@ -65,11 +65,6 @@
 <div class="maxdang">
     <span>창을 적당한 크기로 조절 해주세요</span>
 </div>
-<%--<input type="text" id="message" />--%>
-<%--<input type="button" value="전송" onclick="send();" />--%>
-<%--<input type="button" value="종료" onclick="disconnect();" />--%>
-
-<%--<div id="console" />--%>
 
 <script type="text/javascript" src="/resources/js/jquery.js"></script>
 <script type="text/javascript" src="/resources/js/sockjs.js"></script>
