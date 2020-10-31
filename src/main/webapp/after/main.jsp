@@ -139,14 +139,16 @@
             <div id="commentInput" class="row col-12" style="justify-content: center">
                 <c:choose>
                     <c:when test="${sessionIdImage eq null}">
-                        <img src="/resources/img/basic_profile.PNG" class="rounded-circle" style="width: 50px;height: 50px">
+                        <img src="/resources/img/basic_profile.PNG" class="rounded-circle" style="width: 50px;height: 50px" />
+                        <input id="commentContent" class="form-control form-control-lg col-lg-9 col-md-8 col-10 col-10 ml-2 mr-2" type="text" placeholder="로그인 먼저 해주세요" onclick="location.href=('/user/logInView.do')">
+                        <button id="commentSubmit" class="btn btn-info col-lg-1 col-md-2 col-sm-11" onclick="location.href=('/user/logInView.do')">등록</button>
                     </c:when>
                     <c:when test="${sessionIdImage ne null}">
-                        <img src="/resources/img/${sessionIdImage}" class="rounded-circle" style="width: 50px;height: 50px">
+                        <img src="/resources/img/${sessionIdImage}" class="rounded-circle" style="width: 50px;height: 50px" />
+                        <input id="commentContent" class="form-control form-control-lg col-lg-9 col-md-8 col-10 col-10 ml-2 mr-2" type="text" placeholder="내용을 입력해주세요">
+                        <button id="commentSubmit" class="btn btn-info col-lg-1 col-md-2 col-sm-11" onclick="submitComment(${after.AFTERNUM})">등록</button>
                     </c:when>
                 </c:choose>
-                <input id="commentContent" class="form-control form-control-lg col-lg-9 col-md-8 col-10 col-10 ml-2 mr-2" type="text" placeholder="내용을 입력해주세요">
-                <button id="commentSubmit" class="btn btn-info col-lg-1 col-md-2 col-sm-11" onclick="submitComment(${after.AFTERNUM})">등록</button>
             </div>
         </div>
             <script>

@@ -16,4 +16,7 @@ public class SearchDAO {
     public List searchKeyword(Map map){
         return sqlSession.selectList("search.searchKeyword",map);
     }
+    public List suggestion(String keyword){
+        return sqlSession.selectList("search.suggestion",keyword);
+    }
 }

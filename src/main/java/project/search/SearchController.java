@@ -61,5 +61,9 @@ public class SearchController {
         return resultMap;
     }
 
-
+    @GetMapping("/search/suggestion.do")
+    @ResponseBody
+    public List suggestion(@RequestParam("keyword")String keyword){
+        return searchService.suggestion(keyword);
+    }
 }

@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <jsp:include page="/common/header.jsp" />
-<link rel="stylesheet" type="text/css" href="../resources/css/views/home.css">
+<link rel="stylesheet" type="text/css" href="../resources/css/views/search/main.css">
 <body class="container pt-5">
     <div class="pt-5">
         <h1>상세 검색</h1>
@@ -12,6 +12,7 @@
                     상세 검색
                 </a>
             </div>
+            <div id="suggestion" class="col-3"></div>
             <div class="collapse" id="searchCondition">
                 <div class="row card-body">
                     <div class="col-4">
@@ -71,13 +72,50 @@
             </div>
         </div>
     </div>
-    <!-- 쇼핑몰 상품 추천 (랜덤) -->
-<%--    <div class="text-center" style="width:100%; height: 200px; display: flex;justify-content: center;flex-direction: column">--%>
-<%--        <p>결과가 없습니다</p>--%>
-<%--    </div>--%>
 <script type="text/javascript" src="../resources/js/jquery.js"></script>
 <script type="text/javascript" src="../resources/js/bootstrap.min.js"></script>
 <script>
+    $(function () {
+        $('#keyword').keyup(function () {
+
+            if($('#keyword').val()==''){
+                return;
+            }
+
+            var data = {
+                "keyword": $('#keyword').val()
+            }
+
+            $.ajax({
+                type: "GET",
+                url: "/search/suggestion.do",
+                data: data,
+                dataType: 'json',
+                contentType: "application/json; charset=utf-8;",
+                minLength: 1,
+                success:function (response){
+                    $('#suggestion').empty();
+                    console.log("success")
+                    console.log(response)
+                    for(var i=0;i<response.length;i++){
+                        var html = '';
+                        html += '<li class="suggestKeyword pl-1" onclick="setKeyword(this)">'+response[i].NAME+'</li>'
+                        $('#suggestion').append(html)
+                    }
+                },
+                error:function (response){
+                    console.log("error")
+                    console.log(response)
+                }
+            })
+        })
+    })
+    function setKeyword(e){
+        $('#keyword').val(e.innerText);
+        $('#suggestion').empty()
+        search();
+    }
+
     function search(){
 
         var keyword = $('#keyword').val();

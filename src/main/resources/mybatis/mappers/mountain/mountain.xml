@@ -147,7 +147,7 @@
     </select>
 
     <select id="selectTrailInfo" resultType="map" parameterType="map">
-        SELECT DISTINCT ti.FID, ti.MNTN_CODE, ti.MNTN_NM, ti.PMNTN_NM, NVL(TRIM(ti.PMNTN_NM),CONCAT(ti.FID+1,'구간')),
+        SELECT DISTINCT ti.FID, ti.MNTN_CODE, ti.MNTN_NM, NVL(TRIM(ti.PMNTN_NM),'구간') PMNTN_NM,
             (
             SELECT DISTINCT FIRST_VALUE(tl.LOCATIONX) over (PARTITION BY tl.FID ORDER BY tl.LOCATIONORDER ASC)
              FROM TRAILLOCATION tl
@@ -178,7 +178,8 @@
     </select>
 
     <select id="selectTrailDetailInfo" resultType="map" parameterType="map">
-        SELECT ti.*, tl.LOCATIONX, tl.LOCATIONY
+        SELECT ti.FID, ti.PMNTN_LT, ti.PMNTN_GODN, ti.MNTN_CODE, ti.MNTN_ID, ti.PMNTN_MAIN, ti.PMNTN_UPPL, ti.PMNTN_RISK, NVL(TRIM(ti.PMNTN_NM),'구간') PMNTN_NM,
+               ti.PMNTN_CLS_, PMNTN_MTRQ, PMNTN_SN, TO_CHAR(DATA_STDR_,'yyyy-mm-dd'), ti.PMNTN_DFFL, ti.PMNTN_RECO, ti.MNTN_NM, ti.PMNTN_CNRL, tl.LOCATIONX, tl.LOCATIONY
         FROM TRAILINFO ti, TRAILLOCATION tl
         WHERE ti.MNTN_CODE = tl.MNTN_CODE
           AND ti.FID = tl.FID

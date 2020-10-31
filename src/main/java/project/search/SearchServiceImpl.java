@@ -15,4 +15,7 @@ public class SearchServiceImpl implements SearchService{
     public List searchKeyword(Map map){
         return searchDAO.searchKeyword(map);
     }
+    public List suggestion(String keyword){
+        return searchDAO.suggestion(keyword);
+    }
 }

@@ -71,4 +71,17 @@
             </choose>
         </if>
     </select>
+
+    <select id="suggestion" resultType="map" parameterType="string">
+        SELECT *
+        FROM(SELECT name
+        FROM GROUPS
+            UNION
+        SELECT MTNM
+        FROM groups
+            UNION
+        SELECT PMNTN_NM
+        FROM trailInfo) NAME
+        WHERE NAME LIKE '%'||#{keyword}||'%'
+    </select>
 </mapper>
