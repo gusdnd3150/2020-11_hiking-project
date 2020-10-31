@@ -226,7 +226,6 @@ public class MountainController {
 
                                 path.put("MNTN_CODE", trailInfo.get("MNTN_CODE"));
                                 path.put("FID", trailInfo.get("FID"));
-                                path.put("MNTN_CODE", trailInfo.get("MNTN_CODE"));
                                 path.put("LOCATIONX", point.get(0));
                                 path.put("LOCATIONY", point.get(1));
                                 mountainService.insertTrailLocation(path);
@@ -251,14 +250,19 @@ public class MountainController {
         return file;
     }
 
-
     @GetMapping("/trail/location.do")
     @ResponseBody
     public List selectTrailLocation(@RequestParam("MNTN_CODE")int mntn_code,
-                                    @RequestParam("FID")int fid){
+                                    @RequestParam(value = "FID", required = false)String fid){
+
+        System.out.println("location : " + mntn_code);
+
         Map map = new HashMap();
         map.put("MNTN_CODE",mntn_code);
-        map.put("FID",fid);
+        map.put("FID",0);
+        if(fid!=null){
+            map.put("FID",fid);
+        }
 
         return mountainService.selectTrailLocation(map);
     }
@@ -266,8 +270,6 @@ public class MountainController {
     @GetMapping("/trail/spot.do")
     @ResponseBody
     public List selectTrailSpot(@RequestParam("MNTN_CODE")int mntn_code){
-
-        System.out.println(mntn_code);
 
         Map map = new HashMap();
         map.put("MNTN_CODE",mntn_code);
@@ -277,19 +279,20 @@ public class MountainController {
 
     @GetMapping("/trail/{MNTN_CODE}.do")
     public ModelAndView selectTrailInfo(@PathVariable("MNTN_CODE")int mntn_code,
-                                        @RequestParam("FID")int fid){
+                                        @RequestParam(value = "FID",required = false)String fid){
 
         ModelAndView mav = new ModelAndView("/mountain/trail-detail");
 
         Map map = new HashMap();
-        map.put("MNTN_CODE",mntn_code);
-        map.put("FID",fid);
+        map.put("MNTN_CODE", mntn_code);
+        map.put("FID",0);
+        if(fid!=null){
+            map.put("FID",fid);
+        }
 
         List list = mountainService.selectTrailInfo(map);
-
         mav.addObject("trail", list);
 
         return mav;
     }
-
-    }
+}

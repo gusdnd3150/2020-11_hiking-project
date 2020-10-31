@@ -31,8 +31,9 @@
         ]]>
     </select>
     <select id="selectTrailByRank" resultType="map">
-        SELECT *
+        SELECT MNTN_NM, MNTN_CODE
         FROM trailInfo
+        GROUP BY MNTN_NM, MNTN_CODE
     </select>
 
     <insert id="followMountainFunction" parameterType="map">
@@ -141,18 +142,43 @@
         SELECT *
         FROM trailLocation
         WHERE MNTN_CODE = #{MNTN_CODE}
-        AND FID = #{FID}
-        ORDER BY locationorder asc
+          AND FID = #{FID}
+        ORDER BY fid ASC, locationorder ASC
     </select>
 
     <select id="selectTrailInfo" resultType="map" parameterType="map">
-        SELECT ti.PMNTN_LT, ti.PMNTN_GODN, ti.MNTN_CODE, ti.PMNTN_MAIN, ti.PMNTN_UPPL, ti.PMNTN_RISK, ti.PMNTN_CLS_, ti.PMNTN_NM, ti.PMNTN_MTRQ, ti.DATA_STDR_, ti.PMNTN_DFFL, ti.MNTN_NM, ti.PMNTN_CNRL, ts.LOCATIONX, ts.LOCATIONY
-        FROM trailInfo ti, trailspot ts
-        WHERE ti.MNTN_CODE = ts.MNTN_CODE
-          AND ts.FID = 0
-          AND ti.MNTN_CODE = #{MNTN_CODE}
-          AND ti.FID = #{FID}
+        SELECT DISTINCT ti.FID, ti.MNTN_CODE, ti.MNTN_NM,
+            (
+            SELECT DISTINCT FIRST_VALUE(tl.LOCATIONX) over (PARTITION BY tl.FID ORDER BY tl.LOCATIONORDER ASC)
+             FROM TRAILLOCATION tl
+             WHERE tl.MNTN_CODE = #{MNTN_CODE}
+                    AND FID = #{FID}
+            ) LOCATIONX,
+            (
+            SELECT DISTINCT FIRST_VALUE(tl.LOCATIONY) over (PARTITION BY tl.FID ORDER BY tl.LOCATIONORDER ASC)
+             FROM TRAILLOCATION tl
+             WHERE tl.MNTN_CODE = #{MNTN_CODE}
+                AND FID = #{FID}
+            ) LOCATIONY
+        FROM TrailInfo ti
+        WHERE ti.MNTN_CODE = #{MNTN_CODE}
+        ORDER BY FID ASC
     </select>
+
+    <select id="selectCourseByMNTN_CODE" resultType="map" parameterType="map">
+        SELECT FID,NVL2(TRIM(PMNTN_NM),TO_CHAR(CONCAT(FID+1,' ')) || TO_CHAR(PMNTN_NM),FID+1||' 구간')
+        FROM TRAILINFO ti2
+        WHERE MNTN_CODE = #{MNTN_CODE}
+    </select>
+
+<!--    <select id="selectTrailInfo" resultType="map" parameterType="map">-->
+<!--        SELECT ti.PMNTN_LT, ti.PMNTN_GODN, ti.MNTN_CODE, ti.PMNTN_MAIN, ti.PMNTN_UPPL, ti.PMNTN_RISK, ti.PMNTN_CLS_, ti.PMNTN_NM, ti.PMNTN_MTRQ, ti.DATA_STDR_, ti.PMNTN_DFFL, ti.MNTN_NM, ti.PMNTN_CNRL, tl.LOCATIONX, tl.LOCATIONY-->
+<!--        FROM trailInfo ti-->
+<!--        LEFT JOIN trailSpot ts ON ti.MNTN_CODE = ts.MNTN_CODE-->
+<!--        LEFT JOIN trailLocation tl ON ti.MNTN_CODE = tl.MNTN_CODE-->
+<!--        WHERE ti.MNTN_CODE = #{MNTN_CODE}-->
+<!--    </select>-->
+
 
     <select id="selectTrailSpot" resultType="map" parameterType="map">
         SELECT *

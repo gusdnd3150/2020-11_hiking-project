@@ -119,12 +119,15 @@ public class MountainServiceImpl implements MountainService{
         return mountainDAO.checkMtLike(map);
     }
 
+    @Transactional
     public void insertTrailInfo(Map map){
         mountainDAO.insertTrailInfo(map);
     }
+    @Transactional
     public void insertTrailLocation(Map map){
         mountainDAO.insertTrailLocation(map);
     }
+    @Transactional
     public void insertTrailSpot(Map map){
         mountainDAO.insertTrailSpot(map);
     }
@@ -137,5 +140,8 @@ public class MountainServiceImpl implements MountainService{
     }
     public List selectTrailSpot(Map map){
         return mountainDAO.selectTrailSpot(map);
+    }
+    public List selectCourseByMNTN_CODE(Map map){
+        return mountainDAO.selectCourseByMNTN_CODE(map);
     }
 }

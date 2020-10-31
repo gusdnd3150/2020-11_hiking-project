@@ -49,4 +49,7 @@ public class MountainDAO {
     public List selectTrailSpot(Map map){
         return sqlSession.selectList("mountain.selectTrailSpot",map);
     }
+    public List selectCourseByMNTN_CODE(Map map){
+        return sqlSession.selectList("mountain.selectCourseByMNTN_CODE",map);
+    }
 }

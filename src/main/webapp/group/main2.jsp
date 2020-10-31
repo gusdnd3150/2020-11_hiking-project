@@ -178,9 +178,9 @@
                     html += '<li class="form-inline col-12 pl-0 pr-0">';
                     html += '<h4 class="col-2"><i>'+(i+1)+'</i></h4>';
                     html += '<div class="col-7 pr-0">';
-                    html += '<h5 style="font-weight: lighter">'+response[i].PMNTN_NM + '</h5>';
+                    html += '<h5 style="font-weight: lighter">'+response[i].MNTN_NM + ' 등산로</h5>';
                     html += '</div>';
-                    html += '<a href="/trail/'+response[i].MNTN_CODE+'.do?FID='+response[i].FID+'&userId='+userId+'" class="text-muted text-right col-3 p-0">더보기></a>';
+                    html += '<a href="/trail/'+response[i].MNTN_CODE+'.do?userId='+userId+'" class="text-muted text-right col-3 p-0">더보기></a>';
                     html += '<hr />'
 
                     $('#trailRankHigh').append(html)
