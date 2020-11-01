@@ -21,6 +21,18 @@ public class E_p004VO {
 	private String orderStatusString; //주문상태 스트링 변환
 	
 	
+	private String totalpay; //주문금액
+	private String Stringcharge; //배송비
+	private String merchant_uid; //승인번호
+	private String imp_uid; //카드사 승인번호
+	private String preason; //취소 사유
+	
+	private String pcontent; //취소상품사진
+	private String prodCount; //취소상품사진
+	private int optionnum; //옵션 번호
+	
+	
+	
 	public int getOrderNum() {
 		return orderNum;
 	}
@@ -110,6 +122,54 @@ public class E_p004VO {
 	}
 	public void setOrderStatusString(String orderStatusString) {
 		this.orderStatusString = orderStatusString;
+	}
+	public String getTotalpay() {
+		return totalpay;
+	}
+	public void setTotalpay(String totalpay) {
+		this.totalpay = totalpay;
+	}
+	public String getStringcharge() {
+		return Stringcharge;
+	}
+	public void setStringcharge(String stringcharge) {
+		Stringcharge = stringcharge;
+	}
+	public String getMerchant_uid() {
+		return merchant_uid;
+	}
+	public void setMerchant_uid(String merchant_uid) {
+		this.merchant_uid = merchant_uid;
+	}
+	public String getImp_uid() {
+		return imp_uid;
+	}
+	public void setImp_uid(String imp_uid) {
+		this.imp_uid = imp_uid;
+	}
+	public String getPcontent() {
+		return pcontent;
+	}
+	public void setPcontent(String pcontent) {
+		this.pcontent = pcontent;
+	}
+	public String getProdCount() {
+		return prodCount;
+	}
+	public void setProdCount(String prodCount) {
+		this.prodCount = prodCount;
+	}
+	public String getPreason() {
+		return preason;
+	}
+	public void setPreason(String preason) {
+		this.preason = preason;
+	}
+	public int getOptionnum() {
+		return optionnum;
+	}
+	public void setOptionnum(int optionnum) {
+		this.optionnum = optionnum;
 	}
 	
 }

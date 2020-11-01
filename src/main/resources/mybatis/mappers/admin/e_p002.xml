@@ -14,6 +14,7 @@
 		<result property="prodstatusString" column="prodstatusString"/> <!--상품 상패 스르링(1-판매중,2-품절)--> 
 		<result property="createdAtString" column="createdAtString"/> <!--등록일 스트링--> 
 		<result property="quantity" column="quantity"/> <!--상품 재고--> 
+		<result property="userNum" column="userNum"/> <!--상품 재고--> 
 	</resultMap>
 
 	<!-- 상품등록 -->
@@ -221,9 +222,13 @@
 		        ,24,'캡모자',25,'정글모',26,'썬캡',27,'긴양말',28,'반양말',29,'발가락양말',30,'백팩',31,'크로스백',32,'등산화',11,'스틱',12,'장갑'
 		        ,13,'아이젠',14,'보호대')as prodcategorynumString,
 		        p.PRODCATEGORYNUM
-		        FROM products p INNER JOIN prodoption po
-		        ON p.prodnum = po.prodnum )
-	
+		 FROM products p 
+		 	INNER JOIN prodoption po
+		 ON p.prodnum = po.prodnum
+		    WHERE po.prodstatus !=3
+            AND po.prodstatus !=4
+            AND po.prodstatus !=5
+		        )
       	]]>
  
     	<choose>
@@ -305,7 +310,7 @@
 			ON pr.PRODCATEGORYNUM = pc.prodcategorynum
 			ORDER BY pr.prodnum
     		</when>
-    		
+
     	</choose>
 	</select>
 	
@@ -335,8 +340,9 @@
 		 <!-- 상품 상세페이지 메인이미지 리스트 -->
    <select id="viewPhotoMainList" resultMap="e_p002Result02" parameterType="int">
 		 <![CDATA[
-		SELECT content as pcontent,
-		pphotonum
+		SELECT 
+			content as pcontent,
+			pphotonum
 		FROM prodphoto
 		WHERE prodnum=#{prodNum}
 		AND content is NOT NULL
@@ -347,8 +353,8 @@
    <select id="viewPhotoDetail" resultMap="e_p002Result02" parameterType="int">
 		 <![CDATA[
 		SELECT 
-		CONTENTDETAIL as pcontentDetail,
-		pphotonum
+			CONTENTDETAIL as pcontentDetail,
+			pphotonum
 		FROM prodphoto 
 		WHERE prodnum=#{prodNum}
 		AND CONTENTDETAIL is NOT NULL
@@ -490,5 +496,136 @@
         insert into prodphoto (prodNum, pPhotoNum, contentdetail, createdAt)
         values (#{prodNum}, #{pPhotoNum},  #{contentdetail},  CURRENT_TIMESTAMP)
     </insert>
+    
+    <!-- 중고품 요청 조회-->
+   <select id="searchUsedProd" resultMap="e_p002Result02" parameterType="map">
+		 <![CDATA[
+	SELECT
+		    pd.prodnum,
+		    to_char(pd.createdat,'YYYY-MM-DD')as createdAtString,
+		    pd.usernum,
+		    pd.name,
+		    TRIM(to_char(pd.price,'999,999,999,999,999'))as priceString,
+		    DECODE(pd.prodcategorynum,15,'반팔', 16,'긴팔',17,'후드',18,'반바지',19,'긴바지',20,'패딩',21,'야상',22,'바람막이', 23,'비니'
+				        ,24,'캡모자',25,'정글모',26,'썬캡',27,'긴양말',28,'반양말',29,'발가락양말',30,'백팩',31,'크로스백',32,'등산화',11,'스틱',12,'장갑'
+				        ,13,'아이젠',14,'보호대')as prodcategorynumString,
+		    pt.content as pcontent,
+             DECODE(pd.type,3,'거래요청',4,'거래취소', 5,'거래승인')as prodstatusString
+		FROM products pd
+		INNER JOIN prodphoto pt
+		ON pt.prodnum = pd.prodnum
+		WHERE pt.pphotonum = 1
+		AND pd.type !=1
+        AND pd.type !=2
+      	]]>
+      <choose>
+      	<when test='searchOption=="all"'> <!-- 전체 --> 
+    	
+    	</when>
+    	<when test='searchOption=="a"'> <!-- 거래요청--> 
+    	AND pd.type =3
+    	</when>
+    	<when test='searchOption=="b"'> <!-- 거래 취소--> 
+    	AND pd.type =4
+    	</when>
+    	<when test='searchOption=="c"'> <!-- 거래승인--> 
+    	AND pd.type =5
+    	</when>
+    	<when test='searchOption=="p_prodName"'> <!-- 상품명검색--> 
+    	AND pd.name LIKE '%'||#{key_word}||'%'
+    	</when>
+    	<when test='searchOption=="p_prodNum"'> <!-- 상품번호--> 
+    	AND pd.prodnum = #{key_word}
+    	</when>
+    	<when test='searchOption=="u_userNum"'> <!-- 고객번호--> 
+    	AND pd.usernum = #{key_word}
+    	</when>
+    </choose>
+	</select>
+	
+	  <!-- 고객정보, 상품정보 (중고 상세보기)-->
+   <select id="viewUsedList" resultMap="e_p002Result02" parameterType="map">
+		 <![CDATA[
+		select 
+		    u.userNum,
+		    u.name as userName,
+		    u.id,
+		    u.phone,
+		    u.email,
+		    pd.prodNum,
+		    to_char(pd.createdat,'YYYY-MM-DD')as createdAtString,
+		    pd.prodcategorynum,
+		    pd.content,
+		    TRIM(to_char(pd.price,'999,999,999,999,999'))as priceString
+		FROM users u
+		INNER JOIN products pd
+		ON pd.usernum = u.usernum
+		WHERE u.usernum = #{userNum}
+		AND pd.prodnum = #{prodNum}
+      	]]>
+	</select>
+	
+		  <!-- 상품 옵션 정보(중고 상세보기)-->
+   <select id="viewUsedOptionList" resultMap="e_p002Result02" parameterType="int">
+		 <![CDATA[
+		SELECT 
+	    po.optionNum,
+		    po.color,
+		    po.prodsize,
+		    po.quantity
+		FROM prodoption po
+		WHERE po.prodnum = #{prodNum}
+      	]]>
+	</select>
+	
+	
+		<!-- 중고거래 취소 (취소사유 등록 및 타입 변화) -->
+	 <update id="usedComment" parameterType="java.util.Map">
+		 <![CDATA[
+		UPDATE  products
+		    SET 
+		        requirecomment = #{comment},
+		        UPDATEDAT=CURRENT_TIMESTAMP,
+		        type = 4
+		WHERE prodnum = #{prodNum}
+		AND usernum = #{userNum}
+			]]>
+	</update>
+	
+	<!-- 중고거래승인 포인트 지급-->
+	<insert id="insertPoint" parameterType="map">
+        INSERT INTO point (userNum, pointNum, usedday, used, getPoint)
+		VALUES (#{userNum}, SEQ_POINT.nextval,SYSDATE, 0 , #{point})
+    </insert>
+    
+    	<!-- 중고거래 승인 타입변화 -->
+	 <update id="upDateProdType" parameterType="int">
+		 <![CDATA[
+		UPDATE  products
+		    SET 
+		        UPDATEDAT=CURRENT_TIMESTAMP,
+		        type = 5
+		WHERE prodnum = #{prodNum}
+			]]>
+	</update>
+	
+	<!-- 중고요청 카운트 알림-->
+   <select id="countUsed" resultType="string">
+		 <![CDATA[
+		select COUNT(prodnum)as countUsed
+		FROM products
+		WHERE type = 3
+      	]]>
+	</select>
+	
+	<!-- 금일주문건 카운트 알림-->
+   <select id="todayOrder" resultType="string" parameterType="map">
+		 <![CDATA[
+		SELECT count(ordernum)as toDayOrder
+		FROM orders
+		WHERE orderstatus !=3
+		AND orderedat >= TO_DATE( #{st},'YYYY-MM-DD')
+      	]]>
+	</select>
 
 </mapper>

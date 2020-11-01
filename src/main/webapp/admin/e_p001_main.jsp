@@ -6,11 +6,12 @@
       %>
 <!DOCTYPE html>
 <html>
-<%@ include file="../include/head.jsp" %>
+<%@ include file="../include/head.jsp"%>
 
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 
 <!-- 데이터 테이블 -->
+<!-- 데이터 테이블 css -->
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css" />
 
 <script src="https://cdn.datatables.net/t/bs-3.3.6/jqc-1.12.0,dt-1.10.11/datatables.min.js"></script>
@@ -34,18 +35,16 @@
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
 
+<!-- datatable-editor js 파일 -->
+<script type="text/javascript" src="../resources/js/view/admin/datatable-editor.js"></script>
 
-	
-    
 <script type="text/javascript">
-
 $(document).ready(function() {
 	var	table = null;
 	  table= $('#foo-table').DataTable({
-          bAutoWidth : false, //자동너비
-          ordering : true, //칼럼별 정렬
-    		pagingType:"full_numbers",
-    	   autoWidth: true,
+		  "scrollY":        "200px",
+	        "scrollCollapse": true,
+	        "paging":         false,
         dom: 'Blfrtip',
   
 		buttons: [
@@ -63,7 +62,55 @@ $(document).ready(function() {
                 'pdf', 'print'
             ]
     	});
+	   datatableEdit({
+			dataTable : table,
+			columnDefs : [
+				
+				{
+					targets : 5
+				}
+				
+			],
+			onEdited : function(prev, changed, index, cell) {
+			
+	           console.log(prev, changed, index, cell);
+	           console.log(prev );
+	           console.log(changed);
+	           console.log(index);
+	           console.log(index['column']);
+	           
+	           var _value = changed;
+	           var _result = null;
+	           
+	          
+	           var  date =  index['row'];
+	           
+	           var date1 = date+1;
+	           
+	           var tr = $("#foo-table tr:eq("+date1+")");
+	           var _userNum = tr.find('td:eq(0)').text();
+	          
+	           console.log("회원번호"+_userNum);
+	          
+	            $.ajax({
+	               type : 'get',
+	               url : 'updateUserPoint.do',
+	               data : {
+	               	userNum : _userNum,
+	               	point : changed
+	               },
+	               success : function(data) {
+	               	if ("ok"== (data)) {
+	               		console.log("포인트지급 완료");
 
+						} else {
+							console.log("포인트지급 실패");
+						};
+	               	
+	               }
+	            })  
+			}
+		});
     $('#foo-table tbody').on( 'click', 'tr', function () {
 	    if ( $(this).hasClass('selected') ) {
 	        $(this).removeClass('selected');
@@ -98,13 +145,7 @@ function user_status(value,_userNum){
 			}
 		});
 	}
-	
-
 </script>
-<style>
-
-
-</style>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
 
@@ -116,72 +157,168 @@ function user_status(value,_userNum){
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
-    <section class="content-header">
-        <small>회원관리</small>
+  	<section class="content-header">
+     
+        <small>회원 관리</small>
+     
       <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
-        <li class="active">Here</li>
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="#">Forms</a></li>
+        <li class="active">Editors</li>
       </ol>
     </section>
 
     <!-- Main content -->
-    <div class="box">
-    <%@ include file="../include/user_search.jsp" %>
-
+ <section class="content">
+      <div class="row">
+        <div class="col-md-12">
+ <div class="box box-info">
             <div class="box-header">
-              <h3 class="box-title">회원 목록</h3>
+              <h3 class="box-title">회원 조회
+                <small></small>
+              </h3>
+           <!--    tools box -->
+              <div class="pull-right box-tools">
+                <button type="button" class="btn btn-info btn-sm" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
+                  <i class="fa fa-minus"></i></button>
+                <button type="button" class="btn btn-info btn-sm" data-widget="remove" data-toggle="tooltip" title="" data-original-title="Remove">
+                  <i class="fa fa-times"></i></button>
+              </div>
+          <!--     /. tools -->
             </div>
+          <!--   /.box-header -->
+            <div class="box-body pad" style="">
+		   	 <form action="searchUser.do" method="get">
+		          <div class="input-group margin">
+		                <div class="input-group-btn">
+		                	<select name="searchOption" class="btn btn-info dropdown-toggle">
+		            		<option value="userNum">전체검색</option>
+		           			 <option value="name">이름</option>
+		            		<option value="id">아이디</option>
+		           		 <option value="address">주소</option>
+		            		<option value="email">email</option>
+		        			</select>
+		                </div>
+		                <input type="text" name="key_word" class="form-control" placeholder="조회내용을 입력하세요">
+		                    <span class="input-group-btn">
+		                      <button type="submit" class="btn btn-info btn-flat" >조회</button>
+		                    </span>
+		              </div>
+		             </form>
+      <div class="box">
+          <!--   /.box-header -->
+			<div class="box-body">
+					<!-- 	페이지 내용 -->
+				<div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+		            <table id="foo-table"  class="display" style="width:100%" >
+						<thead>
+					<tr>
+		                <th>번호</th>
+		                <th>아이디</th>
+		                <th>이름</th>
+		                <th>성별</th>
+		                <th>전화</th>
+		                <th>포인트</th>
+		                <th>이메일</th>
+		                <th>상태</th>
+		                <th>상세보기</th>
+		            </tr>
+		            </thead>
+		   
+		             <tbody>
+		                <c:forEach var="user" items="${userList}" >   
+		                <tr>
+		                  <td>${user.userNum}</td>
+		                  <td>${user.id}</td>
+		                  <td>${user.name}</td>
+		                  <td>${user.sexType}</td>
+		                  <td>${user.phone}</td>
+		                  <td>${user.totalpoint}</td>
+		                  <td>${user.email}</td>
+		                  <td>
+		                  <select  id="userStatus" class="basic_btn btn btn-default" onchange="user_status(this.value,${user.userNum})">
+								<option value="10" ${user.statusType == '황동중' ? 'selected="selected"' : ''}>활동중</option>
+								<option value="20" ${user.statusType == '휴면' ? 'selected="selected"' : ''}>휴면</option>
+							</select>
+						</td>
+		                  <td><a href="userView.do?userNum=${user.userNum}" onclick="window.open(this.href,'','width=450, height=800'); return false;">
+							<button type="button" class="btn btn-primary btn-xs">상세보기</button></a></td>
+		                </tr>
+		                 </c:forEach>
+		                </tbody>
+		              </table>
+		
+		              </div>
+		              </div>
+		            </div>		
+				</div>
+           <!--  /.box-body -->
+          </div>  
+                   
+           </div>
+          </div>
+          <!-- /.box -->
 
-            <!-- /.box-header -->
-            <div class="box-body">
-              <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
-              <div class="row">
-             <div>
-            <table id="foo-table"  class="display" style="width:100%" >
-
-				<thead>
-			<tr>
-                <th>번호</th>
-                <th>아이디</th>
-                <th>이름</th>
-                <th>성별</th>
-                <th>전화</th>
-                <th>주소</th>
-                <th>이메일</th>
-                <th>상태</th>
-                <th>상세보기</th>
-            </tr>
-            </thead>
-   
-             <tbody>
-                <c:forEach var="user" items="${userList}" >   
-                <tr>
-                  <td>${user.userNum}</td>
-                  <td>${user.id}</td>
-                  <td>${user.name}</td>
-                  <td>${user.sexType}</td>
-                  <td>${user.phone}</td>
-                  <td>${user.address}</td>
-                  <td>${user.email}</td>
-                  <td>
-                  <select  id="userStatus" class="basic_btn btn btn-default" onchange="user_status(this.value,${user.userNum})">
-						<option value="10" ${user.statusType == '황동중' ? 'selected="selected"' : ''}>활동중</option>
-						<option value="20" ${user.statusType == '휴면' ? 'selected="selected"' : ''}>휴면</option>
+<!-- 2페이지 시작 -->
+         <!--  <div class="box box-info">
+            <div class="box-header">
+              <h3 class="box-title">상품 조회
+                <small></small>
+              </h3>
+              tools box
+              <div class="pull-right box-tools">
+                <button type="button" class="btn btn-info btn-sm" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
+                  <i class="fa fa-minus"></i></button>
+                <button type="button" class="btn btn-info btn-sm" data-widget="remove" data-toggle="tooltip" title="" data-original-title="Remove">
+                  <i class="fa fa-times"></i></button>
+              </div>
+              /. tools
+            </div>
+            /.box-header
+            <div class="box-body pad" style="">
+            <form action="selectProd.do" method="get">
+			<div class="input-group margin">
+				<div class="input-group-btn">
+					<select name="searchOption" id="searchOption"class="btn btn-info dropdown-toggle" >
+						<option value="all">전체조회</option>
+						<option value="name">상품명</option>
+						<option value="type1">신제품</option>
+						<option value="type2">중고품</option>
+						<option value="prodstatus1">판매중</option>
+						<option value="prodstatus2">품절</option>
+						<option value="prodcategorynum1">의류</option>
+						<option value="prodcategorynum2">잡화</option>
+						<option value="prodcategorynum3">등산용품</option>
 					</select>
-				</td>
-                  <td><a href="userView.do?userNum=${user.userNum}" onclick="window.open(this.href,'','width=450, height=800'); return false;">
-					<button type="button" class="basic_btn btn-primary">상세보기</button></a></td>
-                </tr>
-                 </c:forEach>
-                </tbody>
-              </table>
-
-              </div>
-              </div>
-            </div>
-          </div>
-          </div>
-
+				</div>
+					<input type="text" name="key_word" id="key_word"class="form-control" placeholder="조회내용을 입력하세요">
+						<span class="input-group-btn">
+                    	 	<button type="submit" id="serch"class="btn btn-info btn-flat" >조회</button>
+                    	</span>
+				</div>
+			</form>
+			
+			
+      <div class="box">
+            /.box-header
+		<div class="box-body">
+				2페이지 내용
+				
+				
+			</div>
+            /.box-body
+          </div>  
+                   
+           </div>
+          </div> --> 
+          <!--2페이지 끝  -->
+          
+          
+        </div>
+        <!-- /.col-->
+      </div>
+      <!-- ./row -->
+    </section>
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->

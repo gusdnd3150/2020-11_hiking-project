@@ -103,8 +103,6 @@
 			</exclusions>
 			<scope>runtime</scope>
 		</dependency>
-
-
 				<dependency>
 	<!-- 썸네일 thumbnailator -->
 			<groupId>net.coobird</groupId>

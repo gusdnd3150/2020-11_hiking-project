@@ -11,12 +11,16 @@ import java.util.UUID;
 
 import javax.annotation.Resource;
 
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import net.nurigo.java_sdk.api.Message;
+import net.nurigo.java_sdk.exceptions.CoolsmsException;
 import project.admin.e_p002.dao.E_p002DAO;
 import project.admin.e_p002.vo.E_p002VO;
 import project.common.FileUtils;
@@ -27,6 +31,14 @@ public class E_p002ServiceImpl implements E_p002Service{
 	
 	@Autowired
 	private E_p002DAO e_p002DAO;
+	
+
+	@Value("${sms.key}")
+	private String api_key;
+
+	@Value("${sms.secret}")
+	private String api_secret;
+
 	
 	@Resource(name = "fileUtils")
     private FileUtils fileUtils;
@@ -102,7 +114,14 @@ public class E_p002ServiceImpl implements E_p002Service{
 	public List selectProd(Map search) throws Exception {
 		List list =  e_p002DAO.selectProd(search);
 		return list;
-	}	
+	}
+	
+	//중고요청 조회
+	@Override
+	public List searchUsedProd(Map<String, String> search) throws Exception {
+		List list =  e_p002DAO.searchUsedProd(search);
+		return list;
+	}
 
 	//상품 옵션 수정 (사이즈, 색상, 재고 수정) 데이터 테이블 안에서 사용
 	@Override
@@ -309,10 +328,87 @@ public class E_p002ServiceImpl implements E_p002Service{
         return e_p002DAO.upDateAddDetailImg(list,prodNum);
 	}
 
+	// 상품정보, 고객정보 (중고상세보기)
+	@Override
+	public List viewUsedList(Map map) throws Exception {
+		List list = e_p002DAO.viewUsedList(map);
+		return list;
+	}
 
+	//상품 옵션 (중고 상세보기)
+	@Override
+	public List viewUsedOptionList(int prodNum) throws Exception {
+		List list = e_p002DAO.viewUsedOptionList(prodNum);
+		return list;
+	}
+
+	//중고거래 취소 (취소사유등록 및 타입변환)
+	@Override
+	public int usedComment(Map map) throws Exception {
+		return e_p002DAO.usedComment(map);
+	}
+
+	//중고거래 승인 (포인트지급 및 문자발송, 상품 상태 변환)
+	@Override
+	@Transactional
+	public int insertPoint(Map map) throws Exception {
+		
+		String str = (String) map.get("point");
+		String str1 = str.replace(",", "");
+		int point = Integer.parseInt(str1);
+		map.put("point", point);
+		
+		//포인트 지급
+		int result =e_p002DAO.insertPoint(map);
+		System.out.println("서비스 result 값" +result);
+		
 	
-	
-	
+		
+		if(result !=0) {
+			
+			//상품 상태변환 (중고거래 승인)
+			int prodNum = Integer.parseInt (map.get("prodNum").toString());	
+			e_p002DAO.upDateProdType(prodNum);
+			
+			//문자발송
+			Message message = new Message(api_key, api_secret);
+			HashMap<String, String> params = new HashMap<String, String>();
+
+			params.put("to", (String) map.get("phone"));
+			params.put("from", "01065130216");
+			params.put("type", "SMS");
+			params.put("text",map.get("userName")+"고객님 중고거래가 승인되어 포인트 "+map.get("point")+"원이 지급되었습니다.");
+			System.out.println(map.get("userName")+"고객님 중고거래가 승인되어 포인트 "+map.get("point")+"원이 지급되었습니다.");
+			params.put("app_version", "test app 1.2");
+
+			try {
+				JSONObject obj = (JSONObject) message.send(params);
+				System.out.println(obj.toString()); // 전송 결과 출력
+				
+			} catch (CoolsmsException e) {
+				System.out.println(e.getMessage());
+				System.out.println(e.getCode());
+				
+			}
+			
+		}
+		return result;
+
+	}
+
+	//중고요청 카운트 알림
+	@Override
+	public String countUsed() throws Exception {
+		return e_p002DAO.countUsed();
+	}
+
+	//금일 주문건 카운트
+	@Override
+	public String todayOrder(Map map) throws Exception {
+		return e_p002DAO.todayOrder(map);
+	}
+
+
 
 
 }

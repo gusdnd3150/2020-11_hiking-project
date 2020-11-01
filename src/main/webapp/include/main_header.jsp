@@ -1,5 +1,36 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    
+ <script type="text/javascript">
+ //상단 헤더부분 알림 아이콘 실행
+/*  var timer = setInterval(function(){
+	 count();
+ }, 5000);  */
+ 
+ //알림 카운트
+ function count(){
+	 console.log("알림 카운트 함수 실행");
+	 //문의글 알림
+	 $.ajax({
+			type : 'post',
+			url : 'countBoard.do',
+			success : function(data) {
+				  $('#inquiry').text(data);
+
+			}
+		});
+	 
+	 //중고요청 알림
+	 $.ajax({
+			type : 'post',
+			url : 'countUsed.do',
+			success : function(data) {
+				  $('#countUsed').text(data);
+			}
+		});
+	 
+ 	}
+</script>
   
 <header class="main-header">
 
@@ -23,61 +54,23 @@
           <!-- Messages: style can be found in dropdown.less-->
           <li class="dropdown messages-menu">
             <!-- Menu toggle button -->
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <a href="/admin/csBoardsearch.do?searchOption=count" title="문의글">
               <i class="fa fa-envelope-o"></i>
-              <span class="label label-success">4</span>
+      <!--0000000000000000000000000000000000000000        문의글   00000000000000000000000000000000000000000000000000000000000  -->
+              <span class="label label-success" id="inquiry"></span>
             </a>
-            <ul class="dropdown-menu">
-              <li class="header">You have 4 messages</li>
-              <li>
-                <!-- inner menu: contains the messages -->
-                <ul class="menu">
-                  <li><!-- start message -->
-                    <a href="#">
-                      <div class="pull-left">
-                        <!-- User Image -->
-                        <img src="/resources/dist/img/goodBoy.jpg" class="img-circle" alt="User Image">
-                      </div>
-                      <!-- Message title and timestamp -->
-                      <h4>
-                        Support Team
-                        <small><i class="fa fa-clock-o"></i> 5 mins</small>
-                      </h4>
-                      <!-- The message -->
-                      <p>Why not buy a new awesome theme?</p>
-                    </a>
-                  </li>
-                  <!-- end message -->
-                </ul>
-                <!-- /.menu -->
-              </li>
-              <li class="footer"><a href="#">See All Messages</a></li>
-            </ul>
-          </li>
+            </li>
+      
           <!-- /.messages-menu -->
 
           <!-- Notifications Menu -->
           <li class="dropdown notifications-menu">
             <!-- Menu toggle button -->
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <a href="/admin/selectUsedProd.do?searchOption=a" title="중고요청">
               <i class="fa fa-bell-o"></i>
-              <span class="label label-warning">10</span>
+              <!--0000000000000000000000000000000000000000   중고요청카운트   00000000000000000000000000000000000000000000000000000000000  -->
+              <span class="label label-warning" id="countUsed"></span>
             </a>
-            <ul class="dropdown-menu">
-              <li class="header">You have 10 notifications</li>
-              <li>
-                <!-- Inner Menu: contains the notifications -->
-                <ul class="menu">
-                  <li><!-- start notification -->
-                    <a href="#">
-                      <i class="fa fa-users text-aqua"></i> 5 new members joined today
-                    </a>
-                  </li>
-                  <!-- end notification -->
-                </ul>
-              </li>
-              <li class="footer"><a href="#">View all</a></li>
-            </ul>
           </li>
           <!-- Tasks Menu -->
           <li class="dropdown tasks-menu">

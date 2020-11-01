@@ -45,6 +45,18 @@ public class E_p001ServiceImpl implements E_p001Service{
 	public List userView(int userNum) throws Exception {
 		List list = e_p001DAO.userView(userNum); 
 		return list;
+	}
+
+	//포인트 추가
+	@Override
+	public int updateUserPoint(Map map) throws Exception {
+		return e_p001DAO.updateUserPoint(map);
+	}
+
+	//금일 신규가입자 카운트
+	@Override
+	public String toDayUser(Map map) throws Exception {
+		return e_p001DAO.toDayUser(map);
 	}	
 
 

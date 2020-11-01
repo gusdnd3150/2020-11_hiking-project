@@ -33,11 +33,11 @@
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header">관리자 메뉴</li>
         <!-- Optionally, you can add icons to the links -->
-        <li> <a href="/admin/e_p001_main.jsp"><i class="fa fa-child"></i> <span>회원 관리</span></a></li>
-        <li> <a href="/admin/e_p002_main.jsp"><i class="fa fa-cart-plus"></i> <span>상품 관리</span></a></li>
-        <li> <a href="/admin/e_p003_main.jsp"><i class="fa fa-list-ul"></i><span>게시글 관리</span></a></li>
-        <li> <a href="/admin/e_p004_main.jsp"><i class="fa fa-link"></i> <span>주문 관리</span></a></li>
-        <li> <a href="/admin/e_p005_main.jsp"><i class="fa fa-won"></i> <span>매출 관리</span></a></li>
+        <li> <a href="/admin/searchUser.do?searchOption=userNum"><i class="fa fa-child"></i> <span>회원 관리</span></a></li>
+        <li> <a href="/admin/selectProd.do?searchOption=all"><i class="fa fa-cart-plus"></i> <span>상품 관리</span></a></li>
+        <li> <a href="/admin/csBoardsearch.do?searchOption=all"><i class="fa fa-list-ul"></i><span>게시글 관리</span></a></li>
+        <li> <a href="/admin/selectOrder.do?searchOption=all"><i class="fa fa-link"></i> <span>주문 관리</span></a></li>
+        <li> <a href="/admin/selectSearch.do?key_word=all"><i class="fa fa-won"></i> <span>매출 관리</span></a></li>
         <li> <a href="/admin/e_p006_main.jsp"><i class="fa fa-pie-chart"></i> <span>통계 현황</span></a></li>
        
       </ul>

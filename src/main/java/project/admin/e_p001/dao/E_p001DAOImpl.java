@@ -40,5 +40,17 @@ public class E_p001DAOImpl implements E_p001DAO{
 		return list;
 	}
 
+	//포인트 지급
+	@Override
+	public int updateUserPoint(Map map) throws Exception {
+		return sqlSession.insert("admin.mapper.e_p001.updateUserPoint", map);
+	}
+
+	//금일신규가입자 카운트
+	@Override
+	public String toDayUser(Map map) throws Exception {
+		return sqlSession.selectOne("admin.mapper.e_p001.toDayUser",map);
+	}
+
 
 }

@@ -19,12 +19,13 @@ public class E_p003VO {
 	   private String createdAtString;    //TIMESTAMP 셍성일자 스트링 변환
 	   private String updatedAtString;    //TIMESTAMP 수정 일자 스트링 변환
 	   private String statusString;    //NUMBER NOT NULL 문의 상태 (1처리중, 2 완료) 스트링 변환
-	   private String csPostTypeString;    //NUMBER NOT NULL 글 부분 (공지사항 100, 문의사항 200, 신고글 300 )
+	   private String csPostTypeString;    //NUMBER NOT NULL 글 부분 (공지사항 100, 문의사항 200, 신고글 300, 이벤트400 )
 	   
 	   //-------------------글상세보기에 불러올 유저정보----------------------------------
 	   private String id;
 	   private String name;
 	   private String email;
+	   private String content2;
 	  
 	   
 	   
@@ -123,6 +124,12 @@ public class E_p003VO {
 	}
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	public String getContent2() {
+		return content2;
+	}
+	public void setContent2(String content2) {
+		this.content2 = content2;
 	}
 	   
 	   

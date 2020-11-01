@@ -32,6 +32,7 @@ public class E_p001VO  {
 	 private String profile; //자기소개
 	 private String content2; //프로필사진
 	 private String nickname; //닉네임
+	 private String totalpoint; //보유포인트
 	 
 	 
 	 
@@ -167,6 +168,12 @@ public class E_p001VO  {
 	}
 	public void setNickname(String nickname) {
 		this.nickname = nickname;
+	}
+	public String getTotalpoint() {
+		return totalpoint;
+	}
+	public void setTotalpoint(String totalpoint) {
+		this.totalpoint = totalpoint;
 	}
 	
 	 

@@ -6,12 +6,12 @@
       %>
 <!DOCTYPE html>
 <html>
-<%@ include file="../include/head.jsp" %>
+<%@ include file="../include/head.jsp"%>
 
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-<script type="text/javascript" src="../resources/js/jquery.js"></script>
 
 <!-- 데이터 테이블 -->
+<!-- 데이터 테이블 css -->
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css" />
 
 <script src="https://cdn.datatables.net/t/bs-3.3.6/jqc-1.12.0,dt-1.10.11/datatables.min.js"></script>
@@ -39,73 +39,51 @@
 <script type="text/javascript" src="../resources/js/view/admin/datatable-editor.js"></script>
 
 <script type="text/javascript">
-/* 주문조회 데이터 테이블 */
 var	table = null;
 $(document).ready(function() {
-	table=$('#foo-table').DataTable({
-		pagingType:"full_numbers",
-    	   autoWidth: false,
-		dom : 'Blfrtip',
-		buttons : [ {
-			extend : 'excel',
-			text : 'excel',
-			filename : '회원정보',
-			title : '산오름 회원정보'
-		}, {
-			extend : 'copy',
-			text : 'copy',
-			title : '회원정보입니다.'
-		}, 'pdf', 'print' ]
-	});
+	table= $('#foo-table').DataTable({
+		  bAutoWidth : false, //자동너비
+        ordering : true, //칼럼별 정렬
+  		pagingType:"full_numbers",
+  	   autoWidth: true,
+      dom: 'Blfrtip',
+
+		buttons: [
+			{
+				extend:'excel',
+				text:'excel',
+				filename:'주문정보',
+				title:'오름마켓 주문목록'
+			},
+			{
+				extend:'copy',
+				text:'copy',
+				title:'주문목록.'
+			},			
+              'pdf', 'print'
+          ]
+  	});
 	
-	  $('#foo-table tbody').on( 'click', 'tr', function () {
-		    if ( $(this).hasClass('selected') ) {
-		        $(this).removeClass('selected');
-		    }
-		    else {
-		        table.$('tr.selected').removeClass('selected');
-		        $(this).addClass('selected');
-		    }
-		}); 
-	
-});
-/* 취소 요청 데이터 테이블 */
-var	table2 = null;
-$(document).ready(function() {
-	table2=$('#foo-table2').DataTable({
-		pagingType:"full_numbers",
-    	   autoWidth: false,
-		dom : 'Blfrtip',
-		buttons : [ {
-			extend : 'excel',
-			text : 'excel',
-			filename : '회원정보',
-			title : '산오름 회원정보'
-		}, {
-			extend : 'copy',
-			text : 'copy',
-			title : '회원정보입니다.'
-		}, 'pdf', 'print' ]
-	});
-	
-	  $('#foo-table tbody2').on( 'click', 'tr', function () {
-		    if ( $(this).hasClass('selected') ) {
-		        $(this).removeClass('selected');
-		    }
-		    else {
-		        table.$('tr.selected').removeClass('selected');
-		        $(this).addClass('selected');
-		    }
-		}); 
+	$('#foo-table tbody').on( 'click', 'tr', function () {
+	    if ( $(this).hasClass('selected') ) {
+	        $(this).removeClass('selected');
+	    }
+	    else {
+	        table.$('tr.selected').removeClass('selected');
+	        $(this).addClass('selected');
+	    }
+	}); 
+
 	
 });
 
+
+		
 	// 데이터테블 함수 끝----------------------------------------------------------------
-	
 function selectDay(str){
 	 console.log("셀렉트 옵션값          "+str);
 	var t = new Date();
-	var _end=t.getFullYear()+'-'+(t.getMonth()+1)+'-'+t.getDate()+1;
+	var _end=t.getFullYear()+'-'+(t.getMonth()+1)+'-'+t.getDate();
 	var _st;
 	var _key_word;
 	
@@ -193,24 +171,7 @@ function selectDay(str){
 	        })
 		
 	}
-	//결제 취소요청 상세보기 팝업
-	$(document).on("click", "#viewCancelList", function() {
-		var num = $(this).val();
-		window.open("viewCancelList.do?merchant_uid="+num, '취소요청상세보기','width=700px,height=800px,scrollbars=yes');
-		
-	});
 </script>
-<style>
-.ck.ck-editor{
-	max-width: 100%;
-	}
-.ck-editor__editable {
-    min-height: 300px;
-}
-
-</style>
-
-
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
 
@@ -237,79 +198,23 @@ function selectDay(str){
  <section class="content">
       <div class="row">
         <div class="col-md-12">
-          <div class="box box-info collapsed-box">
-            <div class="box-header">
-              <h3 class="box-title">취소 요청
-                <small></small>
-              </h3>
-              <!-- tools box -->
-              <div class="pull-right box-tools">
-                <button type="button" class="btn btn-info btn-sm" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
-                  <i class="fa fa-minus"></i></button>
-                <button type="button" class="btn btn-info btn-sm" data-widget="remove" data-toggle="tooltip" title="" data-original-title="Remove">
-                  <i class="fa fa-times"></i></button>
-              </div>
-              <!-- /. tools -->
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body pad" style="">
-   	<div id="example1_wrapper"class="dataTables_wrapper form-inline dt-bootstrap">
-									<table id="foo-table2" class="display" style="width:100%">
-										<thead align=center>
-										<tr>
-											<th>승인번호</th>
-											<th>주문일자</th>
-											<th>고객정보</th>
-											<th>주문정보</th>
-											<th>상세 보기</th>
-										</tr>
-										</thead>
-										 <tbody align=center>
-							                <c:forEach var="cancel" items="${cancelOrde}" >   
-							                <tr>
-							                  <td>${cancel.merchant_uid}</td>
-							                  <td>${cancel.orderDatString}</td>
-							                  <td>
-							                      <strong>이름:${cancel.custName}</strong><br>
-							                      <strong>전화번호:${cancel.custPhone}</strong><br>
-												  <strong>우편번호:${cancel.zoneCode}</strong><br>
-												  <strong>주소:${cancel.address}</strong><br>
-												  <strong>상세주소:${cancel.address2}</strong><br>
-							                  </td>
-							                  <td>
-							                      <strong>상품명:${cancel.prodCount}</strong><br>
-							                      <strong>결제금액:${cancel.totalpay}</strong><br>
-												  <strong><img src="http://localhost:8090/resources/img/${cancel.pcontent}" style="width: 90px; height: 90px; display: block;"></strong><br>
-							                  </td>
-							              <td><button class="btn btn-primary btn-xs" id="viewCancelList" value="${cancel.merchant_uid}">상세보기</button></td>		
-							                </tr>
-							                 </c:forEach>
-							                </tbody>
-									</table>
-								</div>
-            		</div>
-          		</div>
-          <!-- /.box -->
-          
-
-          <div class="box box-info">
+ 		<div class="box box-info">
             <div class="box-header">
               <h3 class="box-title">주문 조회
                 <small></small>
               </h3>
-              <!-- tools box -->
+           <!--    tools box -->
               <div class="pull-right box-tools">
                 <button type="button" class="btn btn-info btn-sm" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
                   <i class="fa fa-minus"></i></button>
                 <button type="button" class="btn btn-info btn-sm" data-widget="remove" data-toggle="tooltip" title="" data-original-title="Remove">
                   <i class="fa fa-times"></i></button>
               </div>
-              <!-- /. tools -->
+          <!--     /. tools -->
             </div>
-            <!-- /.box-header -->
-            
+          <!--   /.box-header -->
             <div class="box-body pad" style="">
-             <form action="selectOrder.do" method="get">
+				<form action="selectOrder.do" method="get">
 					<div class="input-group margin">
 						<div class="input-group-btn">
 							<select name="searchOption" id="searchOption"class="btn btn-info dropdown-toggle" >
@@ -359,11 +264,10 @@ function selectDay(str){
         		   
 			   </div>
 			   <!--지정일자 및 상태별 조회 css 수정해야함  -->
-            <div class="box">
-    
-            <!-- /.box-header -->
-            <div class="box-body">
-	<!-- 	페이지 내용 -->
+      <div class="box">
+          <!--   /.box-header -->
+			<div class="box-body">
+					<!-- 	페이지 내용 -->
 						<div id="example1_wrapper"class="dataTables_wrapper form-inline dt-bootstrap">
 		
 									<table id="foo-table" class="display" style="width:100%">
@@ -411,11 +315,73 @@ function selectDay(str){
 							                </tbody>
 									</table>
 								</div>
-              			</div>
-            <!-- /.box-body -->
-          	  		</div>              
-            	</div>
-          	</div> 
+							</div>
+						</div>
+		              </div>
+		            </div>		
+				</div>
+           <!--  /.box-body -->
+          </div>  
+                   
+           </div>
+          </div>
+          <!-- /.box -->
+
+<!-- 2페이지 시작 -->
+         <!--  <div class="box box-info">
+            <div class="box-header">
+              <h3 class="box-title">상품 조회
+                <small></small>
+              </h3>
+              tools box
+              <div class="pull-right box-tools">
+                <button type="button" class="btn btn-info btn-sm" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
+                  <i class="fa fa-minus"></i></button>
+                <button type="button" class="btn btn-info btn-sm" data-widget="remove" data-toggle="tooltip" title="" data-original-title="Remove">
+                  <i class="fa fa-times"></i></button>
+              </div>
+              /. tools
+            </div>
+            /.box-header
+            <div class="box-body pad" style="">
+            <form action="selectProd.do" method="get">
+			<div class="input-group margin">
+				<div class="input-group-btn">
+					<select name="searchOption" id="searchOption"class="btn btn-info dropdown-toggle" >
+						<option value="all">전체조회</option>
+						<option value="name">상품명</option>
+						<option value="type1">신제품</option>
+						<option value="type2">중고품</option>
+						<option value="prodstatus1">판매중</option>
+						<option value="prodstatus2">품절</option>
+						<option value="prodcategorynum1">의류</option>
+						<option value="prodcategorynum2">잡화</option>
+						<option value="prodcategorynum3">등산용품</option>
+					</select>
+				</div>
+					<input type="text" name="key_word" id="key_word"class="form-control" placeholder="조회내용을 입력하세요">
+						<span class="input-group-btn">
+                    	 	<button type="submit" id="serch"class="btn btn-info btn-flat" >조회</button>
+                    	</span>
+				</div>
+			</form>
+			
+			
+      <div class="box">
+            /.box-header
+		<div class="box-body">
+				2페이지 내용
+				
+				
+			</div>
+            /.box-body
+          </div>  
+                   
+           </div>
+          </div> --> 
+          <!--2페이지 끝  -->
+          
+          
         </div>
         <!-- /.col-->
       </div>

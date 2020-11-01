@@ -13,4 +13,6 @@ public interface E_p005Service {
 
 	List selectSearch(Map<String, String> select_keyword)throws Exception;
 
+	String toDaySales(Map map)throws Exception;
+
 }

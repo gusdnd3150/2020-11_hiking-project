@@ -1,9 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+    pageEncoding="UTF-8"%>
+     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"  %>
+     <%
+     request.setCharacterEncoding("utf-8");
+      %>
 <!DOCTYPE html>
 <html>
-
 <!--jquery  -->
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 
@@ -195,6 +197,39 @@
 							};
 
 							userBarChar.draw(userBarChartDate,userBarChartDateOptions);
+							
+							/* 카테고리별 판매 통계*/
+				 			var category1 = $.ajax({
+								type : 'get',
+								url : "serchCategoryChart.do",
+								dataType : "json",
+								async : false,
+								data : {
+									startDate : _startDate,
+									endDate : _endDate
+								}
+							}).responseText;  
+
+							console.log("카테고리 통계 톰바 차트" + category1);
+
+							var categoryComboChart1 = new google.visualization.DataTable(category1);
+
+							var categoryChar1 = new google.visualization.ComboChart(document.getElementById('categoryChar_div'));
+
+					
+						      var categoryChartOptions1 = {
+						              title : '카테고리별 통계',
+						              width : '100%',
+									  height : '100%',
+						              seriesType: 'bars',
+						          	animation : {
+										duration : 1500,
+										easing : 'linear',
+										startup : true
+									}
+						             
+						            };
+							categoryChar1.draw(categoryComboChart1, categoryChartOptions1);
 
 						}
 					});
@@ -268,11 +303,7 @@
 				 slices: {  3: {offset: 0.2},
                      1: {offset: 0.3}
                   },
-	              animation: { 
-	                  startup: true,
-	                  duration: 1000,
-	                  easing: 'linear' },
-	         
+	             
 			};
 			
 			pieChart.draw(pieChartdata, pieChart_options);
@@ -398,12 +429,45 @@
 				}
 			};
 			userBarChar.draw(userBarChartDate, userBarChartDateOptions);
+			
+			
+			/* 카테고리별 판매 통계*/
+ 			var category = $.ajax({
+				type : 'get',
+				url : "selectCategoryChart.do",
+				dataType : "json",
+				async : false,
+				data : {
+					st : _st,
+					end : _end,
+					key_word : _key_word
+				}
+			}).responseText;  
+
+			console.log("카테고리 통계 톰바 차트" + category);
+
+			var categoryComboChart = new google.visualization.DataTable(category);
+
+			var categoryChar = new google.visualization.ComboChart(document.getElementById('categoryChar_div'));
+
+
+		      var categoryChartOptions = {
+		              title : '카테고리별 통계',
+		              width : '100%',
+					  height : '100%',
+		              seriesType: 'bars',
+		          	animation : {
+						duration : 1500,
+						easing : 'linear',
+						startup : true
+					}
+		             
+		            };
+			categoryChar.draw(categoryComboChart, categoryChartOptions);
 		}
 	}
+
 </script>
-
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
 <style>
 .basic_btn {
 	display: inline-block;
@@ -415,28 +479,49 @@
 	border-radius: 10px;
 }
 </style>
-
 <body class="hold-transition skin-blue sidebar-mini">
-	<div class="wrapper">
+<div class="wrapper">
 
-		<!-- Main Header -->
-		<%@ include file="../include/main_header.jsp"%>
-		<!-- Left side column. contains the logo and sidebar -->
-		<%@ include file="../include/left_column.jsp"%>
+  <!-- Main Header -->
+  <%@ include file="../include/main_header.jsp" %>
+  <!-- Left side column. contains the logo and sidebar -->
+  <%@ include file="../include/left_column.jsp" %>
 
-		<!-- Content Wrapper. Contains page content -->
-		<div class="content-wrapper">
-			<!-- Content Header (Page header) -->
-			<section class="content-header">
-				<small>통계 현황</small>
-				<ol class="breadcrumb">
-					<li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
-					<li class="active">Here</li>
-				</ol>
-			</section>
-			<!-- Main content -->
-			<div>
-				<center>
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+  	<section class="content-header">
+     
+        <small>통계 현황</small>
+     
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="#">Forms</a></li>
+        <li class="active">Editors</li>
+      </ol>
+    </section>
+
+    <!-- Main content -->
+ <section class="content">
+      <div class="row">
+        <div class="col-md-12">
+ <div class="box box-info">
+            <div class="box-header">
+              <h3 class="box-title">통계 조회
+                <small></small>
+              </h3>
+           <!--    tools box -->
+              <div class="pull-right box-tools">
+                <button type="button" class="btn btn-info btn-sm" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
+                  <i class="fa fa-minus"></i></button>
+                <button type="button" class="btn btn-info btn-sm" data-widget="remove" data-toggle="tooltip" title="" data-original-title="Remove">
+                  <i class="fa fa-times"></i></button>
+              </div>
+          <!--     /. tools -->
+            </div>
+          <!--   /.box-header -->
+            <div class="box-body pad" style="">
+			<center>
 					<select name="searchOption" class="basic_btn btn-primary"
 						onchange="selectDay(this.value)">
 						<option>조회 선택</option>
@@ -450,13 +535,11 @@
 					<button class="btn btn-danger btn-xs" id="searchDate">조회</button>
 					&nbsp;&nbsp;
 				</center>
-			</div>
-
-
-			<!-- ---------------------------------- 차트 출력 영역-------------------------------------------------------------- -->
-
-
-			<div class="test_chart" style="width: 100%; height: 100px; margin-top: 20px; display: initial;">
+      <div class="box">
+          <!--   /.box-header -->
+			<div class="box-body">
+					<!-- 	페이지 내용 -->
+				<div class="test_chart" style="width: 100%; height: 100px; margin-top: 20px; display: initial;">
 				<!-- 매출 통계 그래프 -->
 				<div id="columnChart_div">
 					<!-- 차트가 그려지는 영역 -->
@@ -475,8 +558,13 @@
 					<div id="boardChart_div">
 						<!-- 차트가 그려지는 영역 -->
 					</div>
-
+					<!-- 카테고리별 통계 그래프 -->
+					<div id="categoryChar_div">
+						<!-- 차트가 그려지는 영역 -->
+					</div>
+				
 				</div>
+				
 				<!--//왼쪽 그래프 -->
 
 
@@ -496,19 +584,34 @@
 				<!--//오른쪽 그래프 -->
 			</div>
 			<!-- //2번쨰 그래프 -->
+							</div>
+						</div>
+		              </div>
+		            </div>		
+				</div>
+           <!--  /.box-body -->
+          </div>  
+                   
+           </div>
+          </div>
+          <!-- /.box -->          
+          
+        </div>
+        <!-- /.col-->
+      </div>
+      <!-- ./row -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
 
+  <!-- Main Footer -->
+ <%@ include file="../include/main_footer.jsp" %>
+</div>
+<!-- ./wrapper -->
 
-			<!-- /.content -->
-		</div>
-		<!-- /.content-wrapper -->
-
-		<!-- Main Footer -->
-		<%@ include file="../include/main_footer.jsp"%>
-	</div>
-	<!-- ./wrapper -->
-
-	<!-- REQUIRED JS SCRIPTS -->
-	<%@ include file="../include/plugin_js.jsp"%>
+<!-- REQUIRED JS SCRIPTS -->
+<%@ include file="../include/plugin_js.jsp" %>
 
 </body>
 </html>

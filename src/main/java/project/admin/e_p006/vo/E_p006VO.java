@@ -18,7 +18,11 @@ public class E_p006VO {
 	private int woman; // 여자
 	private int allUser; //전체 회원수
 	
-	
+	//카테고리 통계
+	private String ordereDatString; //판매일자
+	private int type1; //의류합계
+	private int type2; //잡화합계
+	private int type3; //등산용품합계
 	
 	public String getCsposttypeString() {
 		return csposttypeString;
@@ -67,6 +71,30 @@ public class E_p006VO {
 	}
 	public void setUserCreatedat(String userCreatedat) {
 		this.userCreatedat = userCreatedat;
+	}
+	public String getOrdereDatString() {
+		return ordereDatString;
+	}
+	public void setOrdereDatString(String ordereDatString) {
+		this.ordereDatString = ordereDatString;
+	}
+	public int getType1() {
+		return type1;
+	}
+	public void setType1(int type1) {
+		this.type1 = type1;
+	}
+	public int getType2() {
+		return type2;
+	}
+	public void setType2(int type2) {
+		this.type2 = type2;
+	}
+	public int getType3() {
+		return type3;
+	}
+	public void setType3(int type3) {
+		this.type3 = type3;
 	}	
 	
 }

@@ -1,5 +1,6 @@
 package project.admin.e_p003.dao;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,15 +17,10 @@ public class E_p003DAOImpl implements E_p003DAO{
 
 	//공지사항 등록
 	@Override
-	public int insertCSpost(E_p003VO e_p003VO) throws Exception {
-		return  sqlSession.insert("admin.mapper.e_p003.insertCSPost", e_p003VO);
+	public int addCSpost(Map map) throws Exception {
+		return sqlSession.insert("admin.mapper.e_p003.addCSpost", map);
 	}
-	//조건검색
-	@Override
-	public List selectCsBoard(Map<String, String> search) throws Exception {
-		List<E_p003VO> csBoardList=sqlSession.selectList("admin.mapper.e_p003.selectUser", search);
-		return csBoardList;
-	}
+
 	//상세보기
 	@Override
 	public List selectviewDetaList(int csPostNum) throws Exception {
@@ -33,10 +29,8 @@ public class E_p003DAOImpl implements E_p003DAO{
 	}
 	//수정
 	@Override
-	public int upDateCsBoard(E_p003VO e_p003VO) throws Exception {
-		int result = 0;
-		result=sqlSession.update("admin.mapper.e_p003.upDateCsBoard",e_p003VO);
-		return result;
+	public int upDateCsBoard(Map map) throws Exception {
+		return sqlSession.update("admin.mapper.e_p003.upDateCsBoard",map);
 	}
 	// 글 삭제
 	@Override
@@ -47,5 +41,19 @@ public class E_p003DAOImpl implements E_p003DAO{
 	public String viewType(int csPostNum) throws Exception {
 		return sqlSession.selectOne("admin.mapper.e_p003.viewType",csPostNum);
 	}
+	
+	//조회
+	@Override
+	public List searchBoard(Map<String, String> search) throws Exception {
+		List list = sqlSession.selectList("admin.mapper.e_p003.selectUser", search);
+		return list;
+	}
+
+	//문의글 카운트 알림
+	@Override
+	public String countBoard() throws Exception {
+		return sqlSession.selectOne("admin.mapper.e_p003.countBoard");
+	}
+	
 
 }

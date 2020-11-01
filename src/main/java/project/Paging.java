@@ -9,14 +9,14 @@ public class Paging {
 	private int nowPage, startPage, endPage, total, cntPerPage, lastPage, start, end;
 	private int cntPage = 7;
 	private int listType;
-	private String search;
+	private int search;
 	private String searchType;
 	private String searchContent;
 
 	public Paging() {
 	}
 
-	public Paging(int listType, int total, int nowPage, int cntPerPage, String search, String searchType,
+	public Paging(int listType, int total, int nowPage, int cntPerPage, int search, String searchType,
 			String searchContent) {
 		setNowPage(nowPage);
 		setCntPerPage(cntPerPage);
@@ -153,11 +153,11 @@ public class Paging {
 		this.cntPage = cntPage;
 	}
 
-	public String getSearch() {
+	public int getSearch() {
 		return search;
 	}
 
-	public void setSearch(String search) {
+	public void setSearch(int search) {
 		this.search = search;
 	}
 

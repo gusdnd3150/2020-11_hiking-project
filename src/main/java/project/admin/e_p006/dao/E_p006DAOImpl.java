@@ -36,6 +36,11 @@ public class E_p006DAOImpl implements E_p006DAO{
 	public List<E_p006VO> serchUserBarChart(Map<String, String> search_keyword) throws Exception {
 		return sqlSession.selectList("admin.mapper.e_p006.serchUserBarChart",search_keyword);
 	}
+	//카테고리별 통계 콤보차트
+	@Override
+	public List<E_p006VO> serchCategoryChart(Map<String, String> search_keyword) throws Exception {
+		return sqlSession.selectList("admin.mapper.e_p006.serchCategoryChart",search_keyword);
+	}
 
 	
 //  --------------------------------------------------------------------------------------------------------           
@@ -62,5 +67,11 @@ public class E_p006DAOImpl implements E_p006DAO{
 	public List<E_p006VO> selectUserBarChart(Map<String, String> select_keyword) throws Exception {
 		return sqlSession.selectList("admin.mapper.e_p006.selectUserBarChart",select_keyword);
 	}
+	// 카테고리별 판매 통계
+	@Override
+	public List<E_p006VO> selectCategoryChart(Map<String, String> select_keyword) throws Exception {
+		return sqlSession.selectList("admin.mapper.e_p006.selectCategoryChart",select_keyword);
+	}
+	
 	
 }

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import project.admin.e_p005.service.E_p005Service;
@@ -57,7 +58,7 @@ public class E_p005ControllerImpl implements E_p005Controller {
 	}
 	
 
-	//셀렉트 매출 조히ㅗ
+	//셀렉트 매출 조회
 	@Override
 	@RequestMapping(value = "/admin/selectSearch.do", method = RequestMethod.GET)
 	public ModelAndView selectSearch(@RequestParam("key_word")String key_word,  @RequestParam(value="st",  required = false)String st,
@@ -79,6 +80,14 @@ public class E_p005ControllerImpl implements E_p005Controller {
 		mav.addObject("avgPrice", avgPrice);
 				
 		return mav;
+	}
+
+	//금일 매출
+	@Override
+	@ResponseBody
+	@RequestMapping(value = "admin/toDaySales.do", method = RequestMethod.POST)
+	public String toDaySales(@RequestParam Map map, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		return e_p005Service.toDaySales(map);
 	}
 	
 	

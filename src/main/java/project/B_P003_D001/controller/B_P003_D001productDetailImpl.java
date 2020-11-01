@@ -1105,7 +1105,7 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 		JSONObject json = new JSONObject();
 	    String result ="";
 	    
-	    String test= (String) info.get("test");  //merchant_uid 아이디를 보낼것
+	    String test= (String) info.get("test");  //imp_uid 아이디를 보낼것
 	    String merchant= (String) info.get("merchant"); 
 	    String token = getToken();     
 	    
@@ -1145,14 +1145,15 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 			JSONParser parser = new JSONParser(); // 전달받은 json형식의 문자열을 파싱하기위함
 			JSONObject obj = (JSONObject) parser.parse(requestString);
 			if((Long)obj.get("code")  == 0){      //key ,value이기때문에 Map에서 값을 뽑아쓰듯 사용
-				//JSONObject getToken = (JSONObject) obj.get("response");
-				//System.out.println("getToken==>>"+getToken.get("access_token"));
+				JSONObject getToken = (JSONObject) obj.get("response");
+				System.out.println("getToken==>>"+getToken.get("access_token"));
+				return "ok";
 			}
 		}catch(Exception e){
 			e.printStackTrace();
 		}
 	    
-	
+		//return "ok";
 		return requestString;
 	}
 	

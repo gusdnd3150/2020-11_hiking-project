@@ -19,4 +19,16 @@ public interface E_p004Service {
 
 	int message(Map map);
 
+	List selectCancelOrder()throws Exception;
+
+	List viewCancelList(String merchant_uid)throws Exception;
+
+	List viewCancelList2(String merchant_uid)throws Exception;
+
+	int upDateCancel(List<Map<String, Object>> optionListMap)throws Exception;
+
+	int upDateOrderStatus(List<Map<String, Object>> ordernumListMap)throws Exception;
+
+	int cancelMessage(Map map);
+
 }

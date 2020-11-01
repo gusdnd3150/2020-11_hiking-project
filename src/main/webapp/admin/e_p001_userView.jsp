@@ -10,8 +10,32 @@
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css" />
 </head>
+<script type="text/javascript">
+
+function end(){
+	close();
+}
+
+
+</script>
+
+
+<style>
+    .example-modal .modal {
+      position: relative;
+      top: auto;
+      bottom: auto;
+      right: auto;
+      left: auto;
+      display: block;
+      z-index: 1;
+    }
+
+    .example-modal .modal {
+      background: transparent !important;
+    }
+  </style>
 <body>
-     
   <div class="box box-primary">
             <div class="box-body box-profile">
             <c:forEach var="userInfo" items="${list}" > 
@@ -29,6 +53,9 @@
                             </li>
                             <li class="list-group-item">
                               <b>성별</b> <a class="pull-right">${userInfo.sexType}</a>
+                            </li>
+                            <li class="list-group-item">
+                              <b>보유포인트</b> <a class="pull-right">${userInfo.totalpoint}</a>
                             </li>
                             <li class="list-group-item">
                               <b>전화번호</b> <a class="pull-right">${userInfo.phone}</a>
@@ -55,13 +82,14 @@
                               <b>가입일자</b> <a class="pull-right">${userInfo.createdAtString}</a>
                             </li>
                           </ul>  
-                    
                           </c:forEach>
-            </div>
+                     
+                          <center>
+                          <button type="button" class="btn btn-primary btn-xs" onclick="end()">확인</button>
+                          </center>
+            	</div>
             <!-- /.box-body -->
-      
           </div>
-                    
-</body>
+	</body>
 </html>
 
