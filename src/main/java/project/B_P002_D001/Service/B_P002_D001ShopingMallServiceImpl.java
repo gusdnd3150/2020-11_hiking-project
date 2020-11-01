@@ -86,8 +86,8 @@ public class B_P002_D001ShopingMallServiceImpl implements B_P002_D001ShopingMall
 	}
 	
 	@Override
-	public List<Map> lastItems() throws DataAccessException {
-		List<Map> list= B_P002_D001ShopingMallDAO.lastItems();
+	public List<Map> lastItems(Map<String, Object> info) throws DataAccessException {
+		List<Map> list= B_P002_D001ShopingMallDAO.lastItems(info);
 		return list;
 	}
 	@Override

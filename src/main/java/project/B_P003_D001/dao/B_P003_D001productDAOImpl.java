@@ -46,8 +46,8 @@ public class B_P003_D001productDAOImpl implements B_P003_D001productDAO {
 	}
 	
 	@Override
-	public List<productAfterVO> afterList(Map<String, Object> map) throws DataAccessException {
-		 List<productAfterVO> list = sqlSession.selectList("project.e_P002_D003.afterList",map);
+	public List<Map> afterList(Map<String, Object> map) throws DataAccessException {
+		 List<Map> list = sqlSession.selectList("project.e_P002_D003.afterList",map);
 			return list;
 	}
 	@Override
@@ -65,8 +65,8 @@ public class B_P003_D001productDAOImpl implements B_P003_D001productDAO {
 		sqlSession.insert("project.e_P002_D003.addComent",map);		
 	}
 	@Override
-	public int average(Map<String, Object> map) throws DataAccessException {
-        int average = sqlSession.selectOne("project.e_P002_D003.prodAverage",map);
+	public float average(Map<String, Object> map) throws DataAccessException {
+		float average = sqlSession.selectOne("project.e_P002_D003.prodAverage",map);
 		return average;
 	}
 	////////////////////구매전////////
@@ -222,6 +222,7 @@ public class B_P003_D001productDAOImpl implements B_P003_D001productDAO {
 	}
 	@Override
 	public int ordernum() throws DataAccessException {
+		System.out.println("dao 테스트 ");
 		return sqlSession.selectOne("project.e_P002_D003.selectOrderNum");
 	}
 	
@@ -295,6 +296,35 @@ public class B_P003_D001productDAOImpl implements B_P003_D001productDAO {
 	@Override
 	public List<Map> payDetailList(Map<String, Object> map) throws DataAccessException {
 		return sqlSession.selectList("project.e_P002_D003.payDetailList",map);
+	}
+	
+	
+	@Override   //매퍼작업 안되어있음
+	public void applycancelPay(Map<String, Object> map) {
+		sqlSession.update("project.e_P002_D003.applycancelPay",map);
+	}
+	@Override
+	public List<Map> selectComment(Map<String, Object> map) throws DataAccessException {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList("project.e_P002_D003.selectComment",map);
+	}
+	
+	//중고신청 리스트
+	@Override
+	public int totaladdUsed(Map<String, Object> usernum) throws DataAccessException {
+		return sqlSession.selectOne("project.e_P002_D003.totaladdUsed",usernum);
+	}
+	@Override
+	public List<Map> selectMyUsedList(Map<String, Object> usernum) throws DataAccessException {
+		return sqlSession.selectList("project.e_P002_D003.selectMyUsedList",usernum);
+	}
+	@Override
+	public void delAfter(Map<String, Object> info) {
+		sqlSession.delete("project.e_P002_D003.delAfter",info);
+	}
+	@Override
+	public void delComment(Map<String, Object> afterNum) {
+		sqlSession.delete("project.e_P002_D003.delComment",afterNum);
 	}
 
 

@@ -70,6 +70,7 @@
             <table class="table">
               <thead>
                 <tr>
+                <th scope="col"><strong></strong></th>
                   <th scope="col"><strong>상품</strong></th>
                   <th scope="col"><strong>가격</strong></th>
                   <th scope="col"><strong>수량</strong></th>
@@ -83,9 +84,10 @@
               <!-- 반복구간 -->
               <c:choose>
                 <c:when test="${not empty payDetailList }">
-                     <c:forEach var="payDetailList" items="${payDetailList }">
+                     <c:forEach var="payDetailList" items="${payDetailList }" varStatus="num">
                      
                   <tr>
+                  <td>${num.index +1 }</td>
                   <td>
                     <div class="media">
                       <div class="d-flex">
@@ -150,6 +152,9 @@
                    </c:if>  
                   <c:if test="${payDetailList.DELIVERYSTATUS ==300 }">
                   <h5>배송완료</h5>
+                   </c:if>
+                    <c:if test="${payDetailList.DELIVERYSTATUS ==400 }">
+                  <h5>배송취소</h5>
                    </c:if>  
                  </td>
                  

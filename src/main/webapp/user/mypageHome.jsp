@@ -113,34 +113,44 @@
 					<li class="list-group-item d-flex justify-content-between align-items-center">
 						<b>위시리스트</b>
 						<c:if test="${wishCount == 0 }">
-							<a href="/B_P003_D001/wishList"><h5 class="mt-2">0 </h5></a>
+							<a href="/wishList.do"><h5 class="mt-2">0 </h5></a>
 						</c:if>
 						<c:if test="${wishCount != 0 }">
-							<a href="/B_P003_D001/wishList"><h5 class="mt-2">${wishCount } </h5></a>
+							<a href="/wishList.do"><h5 class="mt-2">${wishCount } </h5></a>
 						</c:if>
 					</li>
 
 					<li class="list-group-item d-flex justify-content-between align-items-center">
 						<b>장바구니</b>
 						<c:if test="${cartCount == 0 }">
-							<a href="/B_P003_D001/cartList"><h5 class="mt-2">0 </h5></a>
+							<a href="/myShop/cartList.do"><h5 class="mt-2">0 </h5></a>
 						</c:if>
 						<c:if test="${cartCount != 0 }">
-							<a href="/B_P003_D001/cartList"><h5 class="mt-2">${cartCount } </h5></a>
+							<a href="/myShop/cartList.do"><h5 class="mt-2">${cartCount } </h5></a>
 						</c:if>
 					</li>
 
 					<li class="list-group-item d-flex justify-content-between align-items-center">
 						<b>구매내역</b>
 						<c:if test="${buyCount == 0 }">
-							<a href="/B_P003_D001/paymentList"><h5 class="mt-2">0 </h5></a>
+							<a href="/paymentList.do"><h5 class="mt-2">0 </h5></a>
 						</c:if>
 						<c:if test="${buyCount != 0 }">
-							<a href="/B_P003_D001/paymentList"><h5 class="mt-2">${buyCount } </h5></a>
+							<a href="/paymentList.do"><h5 class="mt-2">${buyCount } </h5></a>
+						</c:if>
+					</li>
+					
+					<li class="list-group-item d-flex justify-content-between align-items-center">
+						<b>중고물품 신청내역</b>
+						<c:if test="${usedCount == 0 }">
+							<a href="/myUsedList.do"><h5 class="mt-2">0 </h5></a>
+						</c:if>
+						<c:if test="${usedCount != 0 }">
+							<a href="/myUsedList.do"><h5 class="mt-2">${usedCount } </h5></a>
 						</c:if>
 					</li>
 
-					<li class="list-group-item">
+					<!-- <li class="list-group-item">
 						<nav id="scroll">
 							<ul class="nav nav-tabs" id="myTab" role="tablist">
 								<li class="nav-item" role="presentation">
@@ -164,7 +174,7 @@
 							<div class="tab-pane fade" id="b" role="tabpanel"
 								 aria-labelledby="b-tab">skskskskskskskskskksskskk</div>
 						</div>
-					</li>
+					</li> -->
 				</ul>
 			</div>
 		</div>

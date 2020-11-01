@@ -8,7 +8,7 @@
 }
 
 :lang(ko){
-    font-family: "Noto Sans KR", sans-serif;
+    font-family: "Noto Sans KR", sans-serif; !important
 }
 
 * {

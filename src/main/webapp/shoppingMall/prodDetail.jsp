@@ -10,23 +10,13 @@
 <!DOCTYPE html>
 <html lang="ko">
   <head>
-    <!-- Required meta tags -->
+   <!-- Required meta tags -->
     <meta charset="utf-8" />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
-    <link rel="icon" href="img/favicon.png" type="image/png" />
-    
-        <!-- Bootstrap core CSS -->
-  <link href="/resources/shop/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Custom styles for this template -->
-  <link href="/resources/shop/css/shop-homepage.css" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="/resources/css/views/common/header.css">
-    <!-- Bootstrap core JavaScript -->
-  <script src="/resources/shop/vendor/jquery/jquery.min.js"></script>
-  <script src="/resources/shop/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    
+    <link rel="icon" href="/resources/shop/img/favicon.png" type="image/png" />
     <title>Eiser ecommerce</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="/resources/shop/css/bootstrap.css" />
@@ -41,144 +31,58 @@
     <!-- main css -->
     <link rel="stylesheet" href="/resources/shop/css/style.css" />
     <link rel="stylesheet" href="/resources/shop/css/responsive.css" />
+    
+    
+
+<style>
+
+</style>
+
   </head>
 <script src="http://code.jquery.com/jquery-latest.js"></script>
 <script>         
    $(document).ready(function () {
+	   $("#buyProduct").on("click",function(){           
+	     $.ajax({
+             type:"post",
+             async:true,
+             url:"/getSession.do",
+             dataType:"json",
+             success:function(data,textStatus){
+               if(data.checkStatus == 'notEmpty'){
+            	   buyProd();
+               }else{ 
+            	   alert("로그인 후 이용가능합니다.");
+            	   return;
+               }
+             },
+             error:function(data,textStatus){
+             }
+           });
+	   });
+           
+	   
+	   $("#addCart").on("click",function(){           
+		     $.ajax({
+	             type:"post",
+	             async:true,
+	             url:"/getSession.do",
+	             dataType:"json",
+	             success:function(data,textStatus){
+	               if(data.checkStatus == 'notEmpty'){
+	            	   addcart();
+	               }else{ 
+	            	   alert("로그인 후 이용가능합니다.");
+	            	   return;
+	               }
+	             },
+	             error:function(data,textStatus){
+	             }
+	           });
+		   });
 	   
 
-           
-           
-           
-$("#buyProduct").on("click",function(){     
-    var prodNums = []; 
-    var optionnums =[];
-    var quantities =[];
-    var prices =[];
-    
-    var prodSizes =[];
-    var prodColors=[];
-    var prodNames=[];
-    var prodImages=[];
-    var optionNums=[];
-    
-    var prodPrice =$("input[name=addPrice]").val();
-    
-    var Type ="상품디테일";
-    
-	 $('input[name=optionCheck]:checked').each(function (i, elements) {
-	    var index= $(elements).index("input:checkbox[name=optionCheck]");
-	   var prodNum =$("input[name=prodNum]").eq(index).val();
-	    var optioNnum =$("input[name=optionNum]").eq(index).val();
-	    var quantity =$("input[name=qty]").eq(index).val();
-	    var prodColor =$("input[name=prodColor]").eq(index).val();
-	    var prodSize =$("input[name=prodSize]").eq(index).val();
-	    var prodName =$("input[name=prodName]").eq(index).val();
-	    var prodImage =$("input[name=buyImage]").eq(index).val();
-	    var optionNum =$("input[name=optionNum]").eq(index).val();
-	    
-	    
-	    prodSizes.push(prodSize); 
-	    prodColors.push(prodColor);
-	    prodNames.push(prodName);
-	    prodImages.push(prodImage);
-	    
-	    optionNums.push(Number.parseInt(optionNum));
-	    prodNums.push(Number.parseInt(prodNum));
-	    optionnums.push(Number.parseInt(optioNnum));
-	    quantities.push(Number.parseInt(quantity));
-	    prices.push(prodPrice);
-	});
-	 for(var i=0;i<prodNums.length;i++){
-		 console.log("프로드넘"+prodNums[i]);
-		console.log("옵션"+optionnums[i]);
-		console.log("수량"+quantities[i]);
-		console.log("체크된 수량*제품가격"+prices[i]);
-		 console.log("사이즈"+prodSizes[i]);
-	   console.log("색상"+prodColors[i]);
-			console.log("이름"+prodNames[i]);
-			console.log("이미지"+prodImages[i]);
-			console.log("옵션번호"+optionNums[i]);
-	 }
-	 
-	 for(var i=0;i< quantities.length;i++){
-		 if(quantities[i] <1){
-           alert("수량을 입력해 주세요");
-     }
-	 }
-
-     $.ajax({
-      type:"post",
-      async:true,
-      url:"/B_P003_D001/buyProdFromDetail",
-      data:{prodNums:prodNums,optionnums:optionnums,quantities:quantities,Type:Type,prices:prices,
-    	  prodSizes:prodSizes,prodColors:prodColors,prodNames:prodNames,prodImages:prodImages,optionNums:optionNums},
-      success:function(data,textStatus){
-          	location.href="/B_P003_D001/buyProd?type=1";
-      },
-      error:function(data,textStatus){
-      },
-      complete:function(){
-      }
-    });   
-    
-});
-           
-
-             $("#addCart").on("click",function(){     //장바구니에 추가
-               var prodNums = []; 
-               var optionnums =[];
-               var quantities =[];
-               var prices =[];
-               var prodPrice =$("input[name=addPrice]").val();
-               console.log(prodPrice);
-               var addType ="상품디테일";
-               
-           	 $('input[name=optionCheck]:checked').each(function (i, elements) {
-     		    var index= $(elements).index("input:checkbox[name=optionCheck]");
-     		   var prodNum =$("input[name=prodNum]").eq(index).val();
-     		  var optioNnum =$("input[name=optionNum]").eq(index).val();
-     		    var quantity =$("input[name=qty]").eq(index).val();
-     		   
-     		   //var vcalcul=  Number.parseInt(quantity) * Number.parseInt(prodPrice);
-     		   
-     		    prodNums.push(Number.parseInt(prodNum));
-     		    optionnums.push(Number.parseInt(optioNnum));
-     		    quantities.push(Number.parseInt(quantity));
-     		    prices.push(prodPrice);
-     		});
-           	 for(var i=0;i<prodNums.length;i++){
-           		 console.log("프로드넘"+prodNums[i]);
-           		console.log("옵션"+optionnums[i]);
-           		console.log("수량"+quantities[i]);
-           		console.log("체크된 수량*제품가격"+prices[i]);
-           	 }
-           	 
-           	 for(var i=0;i< quantities.length;i++){
-           		 if(quantities[i] <1){
-                      alert("수량을 입력해 주세요");
-                }
-           	 }
-      		  $.ajax({
- 	            type:"post",
- 	            async:true,
- 	            url:"/B_P003_D001/addCart",
- 	            data:{prodNums:prodNums,optionnums:optionnums,quantities:quantities,addType:addType,prices:prices},
- 	            success:function(data,textStatus){
- 	            },
- 	            error:function(data,textStatus){
- 	            },
- 	            complete:function(){
- 	            	alert('장바구니에 추가되었습니다.');
- 	            	location.href="/B_P002_D001/shopMainCate?listType=100";
- 	            }
- 	          }); 
- 	          
-           });
-           
-   
-          
-          
+	   
           
           $("button[name=upNum]").click(function() {           //수량업 클릭 시 
 				 var index = $("button[name=upNum]").index(this); //인덱스 값 (이벤트를 발생시킨 태그의 index)
@@ -208,6 +112,12 @@ $("#buyProduct").on("click",function(){
 		        	 console.log(index);
 		        	 var quantity =$("input[name=qty]").eq(index); // 값 인덱스번호에 맞는 qty태그를 선택
 		        	 var sst = quantity.val();
+		        	 
+		        	 if(sst==0){
+		        		 alert("수량은 하나이상 선택해 주시길 바랍니다.");
+		        		 return;
+		        	 }
+		        	  
 		        	 if(!isNaN(sst)){
 		        		 sst--;
 		        	 }
@@ -219,12 +129,359 @@ $("#buyProduct").on("click",function(){
 		        	 quantity.val(quantity2);
 		        	 perTotal.val(calcul);
 				});
+	         
+	         
+	   
  
 });
+      
+     
+      
+       
+	   function buyProd(){
+	   	   var prodNums = []; 
+	       var optionnums =[];
+	       var quantities =[];
+	       var prices =[];
+	       
+	       var prodSizes =[];
+	       var prodColors=[];
+	       var prodNames=[];
+	       var prodImages=[];
+	       var optionNums=[];
+	       
+	       var prodPrice =$("input[name=addPrice]").val().replace(",","").trim();
+	       
+	       
+	       
+	       var Type ="상품디테일";
+	       
+	       var checkBox =$('input[name=optionCheck]:checked');// 옵션체크 
+	       if (checkBox.length ==0){
+	       	alert("옵션을 선택해 주세요");
+	       	return;
+	       }
+	       
+	   	 $('input[name=optionCheck]:checked').each(function (i, elements) {
+	   	    var index= $(elements).index("input:checkbox[name=optionCheck]");
+	   	   var prodNum =$("input[name=prodNum]").eq(index).val();
+	   	    var optioNnum =$("input[name=optionNum]").eq(index).val();
+	   	    var quantity =$("input[name=qty]").eq(index).val();
+	   	    var prodColor =$("input[name=prodColor]").eq(index).val();
+	   	    var prodSize =$("input[name=prodSize]").eq(index).val();
+	   	    var prodName =$("input[name=prodName]").eq(index).val();
+	   	    var prodImage =$("input[name=buyImage]").eq(index).val();
+	   	    var optionNum =$("input[name=optionNum]").eq(index).val();
+	   	    
+	   	    
+	   	    prodSizes.push(prodSize); 
+	   	    prodColors.push(prodColor);
+	   	    prodNames.push(prodName);
+	   	    prodImages.push(prodImage);
+	   	    
+	   	    optionNums.push(Number.parseInt(optionNum));
+	   	    prodNums.push(Number.parseInt(prodNum));
+	   	    optionnums.push(Number.parseInt(optioNnum));
+	   	    quantities.push(Number.parseInt(quantity));
+	   	    prices.push(prodPrice);
+	   	});
+	   	 for(var i=0;i<prodNums.length;i++){
+	   		 console.log("프로드넘"+prodNums[i]);
+	   		console.log("옵션"+optionnums[i]);
+	   		console.log("수량"+quantities[i]);
+	   		console.log("체크된 수량*제품가격"+prices[i]);
+	   		 console.log("사이즈"+prodSizes[i]);
+	   	   console.log("색상"+prodColors[i]);
+	   			console.log("이름"+prodNames[i]);
+	   			console.log("이미지"+prodImages[i]);
+	   			console.log("옵션번호"+optionNums[i]);
+	   	 }
+	   	 
+	   	 for(var i=0;i< quantities.length;i++){
+	   		 if(quantities[i] <1){
+	              alert("수량을 입력해 주세요");
+	              return;
+	           }
+	   	 }
+
+	        $.ajax({
+	         type:"post",
+	         async:true,
+	         url:"/myShop/buyProdFromDetail.do",
+	         data:{prodNums:prodNums,optionnums:optionnums,quantities:quantities,Type:Type,prices:prices,
+	       	  prodSizes:prodSizes,prodColors:prodColors,prodNames:prodNames,prodImages:prodImages,optionNums:optionNums},
+	         success:function(data,textStatus){
+	             	location.href="/myShop/buyProd.do?type=1";
+	         },
+	         error:function(data,textStatus){
+	         },
+	         complete:function(){
+	         }
+	       });   
+	       
+	   }   
+	   
+	   
+      function addcart(){
+	       var prodNums = []; 
+           var optionnums =[];
+           var quantities =[];
+           var prices =[];
+           var prodPrice =$("input[name=addPrice]").val().replace(",","").trim();
+           console.log(prodPrice);
+           var addType ="상품디테일";
+           
+           var checkBox =$('input[name=optionCheck]:checked');// 옵션체크 
+	       if (checkBox.length ==0){
+	       	alert("옵션을 선택해 주세요");
+	       	return;
+	       }
+           
+	
+       	 $('input[name=optionCheck]:checked').each(function (i, elements) {
+ 		    var index= $(elements).index("input:checkbox[name=optionCheck]");
+ 		   var prodNum =$("input[name=prodNum]").eq(index).val();
+ 		  var optioNnum =$("input[name=optionNum]").eq(index).val();
+ 		    var quantity =$("input[name=qty]").eq(index).val();
+ 		   
+ 		    prodNums.push(Number.parseInt(prodNum));
+ 		    optionnums.push(Number.parseInt(optioNnum));
+ 		    quantities.push(Number.parseInt(quantity));
+ 		    prices.push(prodPrice);
+ 		});
+       	 for(var i=0;i< quantities.length;i++){
+       		 if(quantities[i] <1){
+                  alert("수량을 입력해 주세요");
+            }
+       	 }
+  		  $.ajax({
+	            type:"post",
+	            async:true,
+	            url:"/myShop/addCart.do",
+	            data:{prodNums:prodNums,optionnums:optionnums,quantities:quantities,addType:addType,prices:prices},
+	            error:function(data,textStatus){
+	            },
+	            complete:function(){
+	            	alert('장바구니에 추가되었습니다.');
+	            	location.reload();
+	            }
+	          }); 
+	          
+       }
 
       
+      
+ 
+   function addComment(index){ //댓글등록
+	   
+	   var prodNum =$("input[name=afterProdNum]").eq(index).val();
+	   var afterType =$("input[name=afterType]").eq(index).val();
+	   var content =$("input[name=afterContent]").eq(index).val();
+	    
+	   console.log("에프터번호"+afterType);
+	   console.log("인덱스"+index);
+	   console.log(content);
+	  
+	     $.ajax({
+             type:"post",
+             async:true,
+             url:"/getSession.do",
+             dataType:"json",
+             success:function(data,textStatus){
+               
+               if(data.checkStatus == 'notEmpty'){
+            	   
+            	   $.ajax({
+       	            type:"post",
+       	            async:true,
+       	            url:"/myShop/addComent.do",
+       	            data:{prodNum:prodNum,afterType:afterType,content:content},
+       	            dataType:"json",
+       	            error:function(data,textStatus){
+       	            },
+       	            complete:function(){
+       	            	location.reload(); 
+       	            }
+       	          }); 
+            	   
+            	   
+               }else{ 
+            	   alert("로그인 후 이용가능합니다.");
+            	   return;
+               }
+             },
+             error:function(data,textStatus){
+             }
+           });
+	     
+	     
+		  /* $.ajax({
+	            type:"post",
+	            async:true,
+	            url:"/myShop/addComent.do",
+	            data:{prodNum:prodNum,afterType:afterType,content:content},
+	            dataType:"json",
+	            success:function(data,textStatus){
+	            	console.log(data);
+	            	if(data =="fail"){
+	            		alert("로그인 후 이용가능합니다.");
+	            	}else{
+	            		location.href = location.href;
+	            	}
+	            },
+	            error:function(data,textStatus){
+	            }
+	          });  */
+      
+   }
    
-
+   function showCommentForm(index){
+	   var tag = $("#commentInput"+index+"");
+	   tag.slideDown();
+   }
+   
+   
+   function PutComment(index){   //댓글 보이기
+	   var afterNum = $("input[name=afterType]").eq(index).val();
+	   var prodNum = $("input[name=afterProdNum]").eq(index).val();
+	   var putter =$("#CommentPutter"+index+"");
+	   var hidebutton =$("#showcommentList"+index+"");   //댓글보기 버튼 숨기기 위함
+	   var sessionId="${sessionId}";
+	   
+	   console.log("인덱스"+index);
+	   console.log(afterNum);
+	   
+		  $.ajax({
+	            type:"get",
+	            async:true,
+	            url:"/selectComment.do",
+	            data:{afterNum:afterNum,prodNum:prodNum},
+	            dataType:"json",
+	            contentType: "application/json; charset=utf-8;",
+	            success:function(data,textStatus){
+	            	
+	            	for(var i=0;i<data.length;i++){
+	            	    var put = "<div>";
+	            	    put +="<br>";
+	            		put += "<ul class='col-12 pl-5 row'>";
+	            		
+	            		if(data[i].IMAGE==null){
+	            		put+=  '<li style="float:left"><img src="/resources/img/basic_profile.PNG" class="rounded-circle" style="width: 50px;height: 50px"></li>';
+	            		}else{
+	            		put += '<li style="float:left"><img src="/resources/img/'+data[i].IMAGE+'" class="rounded-circle" style="width: 50px;height: 50px"></li>';
+	            		}
+	            		
+	            		put +=  '<li style="float:left;padding-left: 22px;padding-top: 4px;"><p>'+data[i].ID+'&nbsp;&nbsp; '+data[i].CREATEDAT+' </p> </li>';
+	            		
+	            		if(data[i].ID ==sessionId){
+	            		put +=  '<li style="float:right;padding-left: 560px;padding-top: 4px;"><button class="genric-btn danger"'; 
+	            		put +=  'style="line-height: 27px;padding: 0px 7px;" onclick="delComment('+data[i].AFTERNUM+','+data[i].PRODNUM+')">댓글삭제</button> </li>';
+	            		}
+	            		
+	            	    put +="</ul>";
+	            	    put +="<p style='padding-left: 50px;padding-top: 2px;' >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong> "+data[i].CONTENT+" </strong> </p>";
+	            	    put +="<br></div>";
+	            	    putter.append(put);
+	            	}
+	            	hidebutton.hide();
+	            },
+	            error:function(data,textStatus){
+	            }
+	          });
+   }
+ 
+   
+   
+    function delAfter(index){
+    	var afterNum = $("input[name=afterType]").eq(index).val();
+    	var prodNum = $("input[name=prodNum]").eq(index).val();
+    	console.log(afterNum);
+    	
+    	var check = window.confirm("후기를 삭제 하시겠습니까?");
+    	
+    	if(check==true){
+    	$.ajax({
+			type : "post",       
+			dataType : "text",    
+			async:true,         
+			url : "/delAfter.do",         
+			data : {afterNum:afterNum}, 
+			success : function(data, textStatus) {
+				location.reload();
+			},
+			error : function(data, textStatus) {
+			}
+		});
+    	}
+    }
+   
+    
+    function delComment(afterNum,prodNum){
+    	
+    	$.ajax({
+			type :"get",       
+			dataType : "text",    
+			async:true,         
+			url : "/delComment.do",         
+			data : {afterNum:afterNum}, 
+			success : function(data, textStatus) {
+				location.reload();
+			},
+			error : function(data, textStatus) {
+			}
+		});
+    }
+    
+    
+    function addAfterTest(){
+    	$.ajax({
+            type:"post",
+            async:true,
+            url:"/getSession.do",
+            dataType:"json",
+            success:function(data,textStatus){
+              console.log(data.checkStatus);
+              
+              if(data.checkStatus == 'notEmpty'){
+              	
+               var afterImage= $("input[id=uploadFile]").val();
+       			
+               console.log(afterImage);
+               if(afterImage.length==0){
+                 alert("후기사진을 등록 바랍니다.");
+                 return;
+               }
+               
+               var form = $('#contactForm')[0];
+               var data = new FormData(form);
+               
+               $.ajax({
+                   type:"post",
+                   async:true,
+                   enctype: 'multipart/form-data',
+                   processData: false,
+                   contentType: false,
+                   url:"/myShop/addAfter.do",
+                   dataType:"json",
+                   data: data,
+                   cache: false,
+                   success:function(data,textStatus){
+                  	 
+                   },
+                   complete:function(){
+                	   location.reload();
+                   }
+                 });
+                
+              }else{ 
+           	   alert("로그인 후 이용가능합니다.");
+           	   return false;
+              }
+            }
+          });
+    	
+    }
+      
 </script>
 
   <body>
@@ -342,11 +599,11 @@ $("#buyProduct").on("click",function(){
               <input type="hidden" name="addPrice" value="${prodDetail[0].PRICE }">
               <ul class="list">
                 <li>
-                    <c:if test="${prodDetail[0].TYPE ==1 }">
+                    <c:if test="${prodDetail[0].TYPE ==2 }">
                     <a class="active" href="#">
                     <span>Category</span> : 중고</a>
                     </c:if>
-                    <c:if test="${prodDetail[0].TYPE ==2 }">
+                    <c:if test="${prodDetail[0].TYPE ==1 }">
                      <a class="active" href="#">
                     <span>Category</span> : 신제품</a>
                     </c:if>
@@ -392,7 +649,7 @@ $("#buyProduct").on("click",function(){
                         type="button"
                         name="upNum"
                       >
-                        <i class="lnr lnr-chevron-up"></i>
+                        <img src="/resources/img/shop_button_up.png" width="20px" height="20px" style="color:black">
                       </button>
                       <button
                         onclick=""
@@ -400,7 +657,7 @@ $("#buyProduct").on("click",function(){
                         type="button"
                         name="downNum"
                       >
-                        <i class="lnr lnr-chevron-down"></i>
+                        <img src="/resources/img/shop_button_down.png" width="20px" height="20px" style="color:black">
                       </button>
                     </div>
                 </td>
@@ -423,15 +680,20 @@ $("#buyProduct").on("click",function(){
              
               <div class="card_area">
                 <p class="main_btn" id="addCart">장바구니</p>  <!--  a tag에 수량+prodNum과 같이 보내고 서버에서 세션으로 진행할지 결정 -->
-                <%-- <a class="main_btn" href="/B_P003_D001/buyProd/${prodDetail.prodNum }">구매하기</a> --%>
+                <%-- <a class="main_btn" href="/myShop/buyProd.do/${prodDetail.prodNum }">구매하기</a> --%>
                 <p class="main_btn" id="buyProduct">구매하기</p> 
                 <input type="hidden" id="prodNum" value="${prodDetail[0].PRODNUM }">
                 <input type="hidden" id="prodName" value="${prodDetail[0].NAME }"> 
                 <input type="hidden" id="prodPrice" value="${prodDetail[0].PRICE }">
                 
-                <a class="icon_btn" href="/B_P003_D001/addCartMain?prodNum=${prodDetail[0].PRODNUM}&prodName=${prodDetail[0].NAME}&prodPrice=${prodDetail[0].PRICE}&addType=wish">
-                  <i class="lnr lnr lnr-heart"></i>
+                <c:if test="${empty prodDetail[0].USERNUM }">
+                <a class="icon_btn" href="/myShop/addCartMain.do?prodNum=${prodDetail[0].PRODNUM}&prodName=${prodDetail[0].NAME}&prodPrice=${prodDetail[0].PRICE}&addType=wish">
+                  <img src="/resources/img/shop_heart.png" width="20px" height="20px" style="color:black">
                 </a>
+                </c:if>
+                <c:if test="${not empty prodDetail[0].USERNUM }">
+                  <img src="/resources/img/shop_heart2.png" width="20px" height="20px" style="color:black">
+                </c:if>
               </div>
             </div>
           </div>
@@ -453,7 +715,7 @@ $("#buyProduct").on("click",function(){
               role="tab"
               aria-controls="home"
               aria-selected="true"
-              >Description</a
+              >상품설명</a
             >
           </li>
           <li class="nav-item">
@@ -465,7 +727,7 @@ $("#buyProduct").on("click",function(){
               role="tab"
               aria-controls="review"
               aria-selected="false"
-              >Reviews</a
+              >상품후기</a
             >
           </li>
         </ul>
@@ -482,165 +744,13 @@ $("#buyProduct").on("click",function(){
                    </c:when>
                   <c:when test="${not empty imagesBottom }">
                     <c:forEach var="imagesBottom" items="${imagesBottom }">
-                   <img src="/resources/img/${imagesBottom.CONTENTDETAIL }"  alt="상" width="800" height="500"><br>
+                   <img src="/resources/img/${imagesBottom.CONTENTDETAIL }"  alt="상" style="max-width: 100%; height:auto"><br>
                    </c:forEach>
             </c:when>
            </c:choose>
           </div>
-          <div
-            class="tab-pane fade"
-            id="profile"
-            role="tabpanel"
-            aria-labelledby="profile-tab"
-          >
-            <div class="table-responsive">
-              <table class="table">
-                <tbody>
-                  <tr>
-                    <td>
-                      <h5>Width</h5>
-                    </td>
-                    <td>
-                      <h5>128mm</h5>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <h5>Height</h5>
-                    </td>
-                    <td>
-                      <h5>508mm</h5>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <h5>Depth</h5>
-                    </td>
-                    <td>
-                      <h5>85mm</h5>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <h5>Weight</h5>
-                    </td>
-                    <td>
-                      <h5>52gm</h5>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <h5>Quality checking</h5>
-                    </td>
-                    <td>
-                      <h5>yes</h5>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <h5>Freshness Duration</h5>
-                    </td>
-                    <td>
-                      <h5>03days</h5>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <h5>When packeting</h5>
-                    </td>
-                    <td>
-                      <h5>Without touch of hand</h5>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <h5>Each Box contains</h5>
-                    </td>
-                    <td>
-                      <h5>60pcs</h5>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-          <div
-            class="tab-pane fade"
-            id="contact"
-            role="tabpanel"
-            aria-labelledby="contact-tab"
-          >
-            <div class="row">
-              <div class="col-lg-6">
-              </div>
-              <div class="col-lg-6">
-                <div class="review_box">
-                  <h4>Post a comment</h4>
-                  <form
-                    class="row contact_form"
-                    action="contact_process.php"
-                    method="post"
-                    id="contactForm"
-                    novalidate="novalidate"
-                  >
-                    <div class="col-md-12">
-                      <div class="form-group">
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="name"
-                          name="name"
-                          placeholder="Your Full name"
-                        />
-                      </div>
-                    </div>
-                    <div class="col-md-12">
-                      <div class="form-group">
-                        <input
-                          type="email"
-                          class="form-control"
-                          id="email"
-                          name="email"
-                          placeholder="Email Address"
-                        />
-                      </div>
-                    </div>
-                    <div class="col-md-12">
-                      <div class="form-group">
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="number"
-                          name="number"
-                          placeholder="Phone Number"
-                        />
-                      </div>
-                    </div>
-                    <div class="col-md-12">
-                      <div class="form-group">
-                        <textarea
-                          class="form-control"
-                          name="message"
-                          id="message"
-                          rows="1"
-                          placeholder="Message"
-                        ></textarea>
-                      </div>
-                    </div>
-                    <div class="col-md-12 text-right">
-                      <button
-                        type="submit"
-                        value="submit"
-                        class="btn submit_btn"
-                      >
-                        Submit Now
-                      </button>
-                    </div>
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
+          
+          
           <div
             class="tab-pane fade show active"
             id="review"
@@ -652,171 +762,68 @@ $("#buyProduct").on("click",function(){
                 <div class="row total_rate">
                   <div class="col-6">
                     <div class="box_total">
-                      <h5>Overall</h5>
+                      <h5>평점</h5>
                       <h4>${average }</h4>
-                      <h6>(03 Reviews)</h6>
                     </div>
                   </div>
-                  <div class="col-6">
-                    <div class="rating_list">
-                      <h3>Based on 3 Reviews</h3>
-                      <ul class="list">
+                  <div class="col-6" style="font:sans-serif">
+                    <div class="rating_list" style="font:sans-serif">
+                      <ul  class="list" style="font:sans-serif">
+                      
                         <li>
+                        
                           <a href="#"
                             >5 Star
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
+                            <img src="/resources/img/shop_star.png" width="20px" height="20px" style="color:black">
+                            <img src="/resources/img/shop_star.png" width="20px" height="20px" style="color:black">
+                            <img src="/resources/img/shop_star.png" width="20px" height="20px" style="color:black">
+                            <img src="/resources/img/shop_star.png" width="20px" height="20px" style="color:black">
+                            <img src="/resources/img/shop_star.png" width="20px" height="20px" style="color:black">
                             </a>
                         </li>
                         <li>
                           <a href="#"
                             >4 Star
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i> </a
+                            <img src="/resources/img/shop_star.png" width="20px" height="20px" style="color:black">
+                            <img src="/resources/img/shop_star.png" width="20px" height="20px" style="color:black">
+                            <img src="/resources/img/shop_star.png" width="20px" height="20px" style="color:black">
+                            <img src="/resources/img/shop_star.png" width="20px" height="20px" style="color:black"> </a
                           >
                         </li>
                         <li>
                           <a href="#"
                             >3 Star
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i> </a
+                            <img src="/resources/img/shop_star.png" width="20px" height="20px" style="color:black">
+                            <img src="/resources/img/shop_star.png" width="20px" height="20px" style="color:black">
+                            <img src="/resources/img/shop_star.png" width="20px" height="20px" style="color:black"> </a
                           >
                         </li>
                         <li>
                           <a href="#"
                             >2 Star
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i> </a
+                            <img src="/resources/img/shop_star.png" width="20px" height="20px" style="color:black">
+                            <img src="/resources/img/shop_star.png" width="20px" height="20px" style="color:black"> </a
                           >
                         </li>
                         <li>
                           <a href="#"
                             >1 Star
-                            <i class="fa fa-star"></i> </a
+                            <img src="/resources/img/shop_star.png" width="20px" height="20px" style="color:black"> </a
                           >
                         </li>
                       </ul>
                     </div>
                   </div>
                 </div>
-                <div class="review_list">
-                          <!-- 경계선 -->
-                       <c:choose>
-                            <c:when test="${empty afterList }">
-                                 <p> 후기가 없습니다 </p>
-                            </c:when>
-                            <c:when test="${not empty afterList }">      
-                               <c:forEach var="afterList" items="${afterList }">
-                                 <c:if test="${afterList.lvl == 1 }">    <!--  후기원글일 경우 -->
-                     
-                     <div class="review_item">
-                    <div class="media">
-                      <div class="d-flex">
-                       <!-- 이미지 -->
-                        <img
-                          src="/resources/img/${afterList.photo }"
-                          alt=""
-                          width="100px" height="100px"
-                        />
-                      </div>
-                      <div class="media-body">
-                        <h4>${afterList.userNum }</h4>    <!-- 유저아이디 -->
-                        
-                        <c:if test="${afterList.evalue ==1 }">
-                        <i class="fa fa-star"></i>        <!-- 평점 -->
-                        </c:if>
-                        <c:if test="${afterList.evalue ==2 }">
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        </c:if>
-                        <c:if test="${afterList.evalue ==3 }">
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        </c:if>
-                       <c:if test="${afterList.evalue == 4 }">
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        </c:if>
-                       <c:if test="${afterList.evalue == 5 }">
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        </c:if>
-                      </div>
-                    </div>
-                    <p>                 <!-- 내용 -->
-                       ${afterList.content }
-                    </p>
-                    <p>${afterList.createDat }</p>
-                                       <form name="addComent"  method="post" action="/B_P003_D001/addComent"  >
-                                            <input type="hidden" name="prodNum" value="${prodDetail[0].PRODNUM }">
-                                            <input type="hidden" name="afterType" value="${afterList.afterNum }">
-                                         <input type="text" name="content">
-                                         <input type="submit" class="btn btn-info" value="댓글등록">
-                                       </form>
-                  </div>
-                  </c:if>
-                  <c:if test="${afterList.lvl == 2 }">
-                     <div class="review_item" style="background-color:#e9e9e9">
-                    <div class="media">
-                      <div class="d-flex">
-                      <hr>   <!-- 이미지 -->
-                      </div>
-                      <div class="media-body">
-                        <h4>id: ${afterList.userNum }</h4>    <!-- 유저아이디 -->
-                      </div>
-                    </div>
-                    <p>                 <!-- 내용 -->
-                       ${afterList.content }
-                    </p>
-                    <p>${afterList.createDat }</p>
-                  </div>
-                                 </c:if>
-                               </c:forEach>
-                            </c:when>
-                         </c:choose>       
-                  
-                 <!-- 경계선 -->
-                </div>
-                    <!-- 페이징 -->
-                <div style="display: block; text-align: center;">
-	<c:if test="${paging.startPage != 1 }">
-			<a href="/B_P003_D001/productDetail?prodNum=${prodDetail[0].PRODNUM }&nowPage=${paging.startPage - 1 }&cntPerPage=${paging.cntPerPage}">&lt;</a>
-		</c:if>
-		<c:forEach begin="${paging.startPage }" end="${paging.endPage }" var="p">
-			<c:choose>
-				<c:when test="${p == paging.nowPage }">
-					<b>${p }</b>
-				</c:when>
-				<c:when test="${p != paging.nowPage }">
-					<a href="/B_P003_D001/productDetail?prodNum=${prodDetail[0].PRODNUM}&nowPage=${p }&cntPerPage=${paging.cntPerPage}">${p }</a>
-				</c:when>
-			</c:choose>
-		</c:forEach>
-		<c:if test="${paging.endPage != paging.lastPage}">
-			<a href="/B_P003_D001/productDetail?prodNum=${prodDetail[0].PRODNUM}&nowPage=${paging.endPage+1 }&cntPerPage=${paging.cntPerPage}">&gt;</a>
-			<p> ${paging.listType}</p>
-		</c:if>
-	</div>
-                
               </div>
               <div class="col-lg-6">
                 <div class="review_box">
                   <h4>상품 후기 등록</h4>
+                  
                    <form
+                    name="addAfter"
                     class="row contact_form"
-                    action="/B_P003_D001/addAfter"
+                    action="/myShop/addAfter.do" 
                     method="post"
                     id="contactForm"
                     novalidate="novalidate"
@@ -832,10 +839,7 @@ $("#buyProduct").on("click",function(){
             <option value="5">5</option>
              </select><br>
                     <!-- 파일첨부 -->
-                        <input
-                          type="file"
-                          name="photo"
-                        />
+                        <input type="file" id="uploadFile" name="photo"/>
                   <!-- 상품후기내용 -->
                     <div class="col-md-12">
                       <div class="form-group">
@@ -848,23 +852,219 @@ $("#buyProduct").on("click",function(){
                           style="width:400px;height:100px"
                         ></textarea>
                       </div>
-                    </div>
-                    <div class="col-md-12 text-right">
-                      <button
-                        type="submit"
-                        value="submit"
-                        class="btn submit_btn"
-                      >
-                        Submit Now
-                      </button>
+                      
                     </div>
                   </form>
+                     <button onclick="addAfterTest()" style="display:inline;" class="nav-link active">후기등록</button>
                 </div>
               </div>
             </div>
+            
+              <hr>
+              <div class="review_list" style="padding:5%">
+              
+                          <!-- 경계선 -->
+                       <c:choose>
+                            <c:when test="${empty afterList }">
+                                 <p> 후기가 없습니다 </p>
+                            </c:when>
+                            <c:when test="${not empty afterList }">      
+                               <c:forEach var="afterList" items="${afterList }" varStatus="num">
+                                 
+                     <div class="review_item" style="background-color:#F6F6F6"  >
+                    <div class="media" >
+                      <div class="d-flex">
+                       <!-- 이미지 -->
+     
+                        
+                        
+                           <img
+                          src="/resources/img/${afterList.PHOTO }"
+                          alt=""
+                           data-toggle="modal" data-target="#myModal${num.index }"
+                          class="img-thumbnail"
+                          width="150px" height="150px"
+                          border="15px"/>
+                    
+
+<!-- Modal -->
+<div id="myModal${num.index }" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+                         <img
+                          src="/resources/img/${afterList.PHOTO }"
+                          border="15px"
+                          style="max-width: 100%; height:auto"
+                        />
+   <div class="media-body">
+                       <c:choose>
+                         <c:when test="${afterList.IMAGE eq null}">
+                        <img src="/resources/img/basic_profile.PNG" class="rounded-circle" style="width: 50px;height: 50px;float:left">
+                         </c:when>
+                          <c:when test="${afterList.IMAGE ne null}">
+                         <img  src="/resources/img/${afterList.IMAGE}" class="rounded-circle" style="width: 50px;height: 50px;float:left">
+                         </c:when>
+                         </c:choose>
+                        <p style="float:left">${afterList.ID } &nbsp;&nbsp; ${afterList.CREATEDAT } </p>    <!-- 유저아이디+생성일 -->
+                        <c:if test="${afterList.EVALUE ==1 }"> <!-- 평점 -->
+                        <img src="/resources/img/shop_star.png" width="20px" height="20px" style="color:black;margin-top: 13px;">        
+                        </c:if>
+                        <c:if test="${afterList.EVALUE ==2 }">
+                        <img src="/resources/img/shop_star.png" width="20px" height="20px" style="color:black;margin-top: 13px;">
+                        <img src="/resources/img/shop_star.png" width="20px" height="20px" style="color:black;margin-top: 13px;">
+                        </c:if>
+                        <c:if test="${afterList.EVALUE ==3 }">
+                        <img src="/resources/img/shop_star.png" width="20px" height="20px" style="color:black;margin-top: 13px;">
+                        <img src="/resources/img/shop_star.png" width="20px" height="20px" style="color:black;margin-top: 13px;">
+                        <img src="/resources/img/shop_star.png" width="20px" height="20px" style="color:black;margin-top: 13px;">
+                        </c:if>
+                       <c:if test="${afterList.EVALUE == 4 }">
+                        <img src="/resources/img/shop_star.png" width="20px" height="20px" style="color:black;margin-top: 13px;">
+                        <img src="/resources/img/shop_star.png" width="20px" height="20px" style="color:black;margin-top: 13px;">
+                        <img src="/resources/img/shop_star.png" width="20px" height="20px" style="color:black;margin-top: 13px;">
+                        <img src="/resources/img/shop_star.png" width="20px" height="20px" style="color:black;margin-top: 13px;">
+                        </c:if>
+                       <c:if test="${afterList.EVALUE == 5 }">
+                        <img src="/resources/img/shop_star.png" width="20px" height="20px" style="color:black;margin-top: 13px;">
+                        <img src="/resources/img/shop_star.png" width="20px" height="20px" style="color:black;margin-top: 13px;">
+                        <img src="/resources/img/shop_star.png" width="20px" height="20px" style="color:black;margin-top: 13px;">
+                        <img src="/resources/img/shop_star.png" width="20px" height="20px" style="color:black;margin-top: 13px;">
+                        <img src="/resources/img/shop_star.png" width="20px" height="20px" style="color:black;margin-top: 13px;">
+                        </c:if>
+                        <p>&nbsp;&nbsp;  <strong style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">${afterList.CONTENT }</strong></p>     <!--  후기내용 -->
+                      </div>
+                        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+                        
+                      </div>
+                      
+                      <div class="media-body">
+                       <c:choose>
+                         <c:when test="${afterList.IMAGE eq null}">
+                        <img src="/resources/img/basic_profile.PNG" class="rounded-circle" style="width: 50px;height: 50px">
+                         </c:when>
+                          <c:when test="${afterList.IMAGE ne null}">
+                         <img src="/resources/img/${afterList.IMAGE}" class="rounded-circle" style="width: 50px;height: 50px">
+                         </c:when>
+                         </c:choose>
+                        <p>${afterList.ID } &nbsp;&nbsp; ${afterList.CREATEDAT } </p>    <!-- 유저아이디+생성일 -->
+                        <c:if test="${afterList.EVALUE ==1 }"> <!-- 평점 -->
+                        <img src="/resources/img/shop_star.png" width="20px" height="20px" style="color:black">        
+                        </c:if>
+                        <c:if test="${afterList.EVALUE ==2 }">
+                        <img src="/resources/img/shop_star.png" width="20px" height="20px" style="color:black">
+                        <img src="/resources/img/shop_star.png" width="20px" height="20px" style="color:black">
+                        </c:if>
+                        <c:if test="${afterList.EVALUE ==3 }">
+                        <img src="/resources/img/shop_star.png" width="20px" height="20px" style="color:black">
+                        <img src="/resources/img/shop_star.png" width="20px" height="20px" style="color:black">
+                        <img src="/resources/img/shop_star.png" width="20px" height="20px" style="color:black">
+                        </c:if>
+                       <c:if test="${afterList.EVALUE == 4 }">
+                        <img src="/resources/img/shop_star.png" width="20px" height="20px" style="color:black">
+                        <img src="/resources/img/shop_star.png" width="20px" height="20px" style="color:black">
+                        <img src="/resources/img/shop_star.png" width="20px" height="20px" style="color:black">
+                        <img src="/resources/img/shop_star.png" width="20px" height="20px" style="color:black">
+                        </c:if>
+                       <c:if test="${afterList.EVALUE == 5 }">
+                        <img src="/resources/img/shop_star.png" width="20px" height="20px" style="color:black">
+                        <img src="/resources/img/shop_star.png" width="20px" height="20px" style="color:black">
+                        <img src="/resources/img/shop_star.png" width="20px" height="20px" style="color:black">
+                        <img src="/resources/img/shop_star.png" width="20px" height="20px" style="color:black">
+                        <img src="/resources/img/shop_star.png" width="20px" height="20px" style="color:black">
+                        </c:if>
+                        <p>&nbsp;&nbsp;  <strong>${afterList.CONTENT }</strong></p>     <!--  후기내용 -->
+                        
+                      </div>
+                 
+                    </div>
+                    <div>
+                      <div>
+                     <ul style="padding-right: 23px;">
+                     
+                         <c:if test="${afterList.CNT !=0 }">
+                         <li id="showcommentList${num.index }" style="float:right"><p align="right"><button style="line-height: 27px;padding: 0px 7px;"
+                     class="genric-btn default-border" onclick="PutComment(${num.index})">댓글${afterList.CNT }개보기</button></p>
+                     </li>
+                         </c:if>
+                     
+                     <c:if test="${afterList.ID == sessionId }">
+                     <li style="float:right">
+                     <p align="right"><button style="line-height: 27px;padding: 0px 7px;" 
+                     class="genric-btn danger" onclick="delAfter(${num.index})">후기삭제</button></p>
+                     </li>
+                     </c:if>
+                     
+                     <li style="float:right">
+                     <p align="right"><button style="line-height: 27px;padding: 0px 7px;" 
+                     class="genric-btn primary radius" onclick="showCommentForm(${num.index})">댓글등록</button></p>
+                     </li>
+                         
+                     </ul>
+                     
+                      </div>
+                    </div>
+                    <br>
+                    <br>
+                    <hr width="90%">
+          <div id="commentInput${num.index }" class="row" style="justify-content:center;display:none"  width="80%">
+        <input name="afterContent" class="form-control"  style="width: 81%;" type="text" 
+        placeholder="내용을 입력해주세요">
+        <button class="genric-btn info radius" style="line-height: 35px;padding: 0 17px;" onclick="addComment(${num.index})">등록</button>
+        <input type="hidden" name="afterProdNum" value="${prodDetail[0].PRODNUM }">
+        <input type="hidden" name="afterType" value="${afterList.AFTERNUM }">
+       </div>
+                   
+                   <div id="CommentPutter${num.index }">
+                   </div>
+                   </div>
+              
+                               </c:forEach>
+                            </c:when>
+                         </c:choose>       
+                  
+                 <!-- 경계선 -->
+                </div>
+                
+                
+                    <!-- 페이징 -->
+                <div style="display: block; text-align: center;">
+                
+	<c:if test="${paging.startPage != 1 }">
+			<a href="/productDetail.do?prodNum=${prodDetail[0].PRODNUM }&nowPage=${paging.startPage - 1 }&cntPerPage=${paging.cntPerPage}">&lt;</a>
+		</c:if>
+		<c:forEach begin="${paging.startPage }" end="${paging.endPage }" var="p">
+			<c:choose>
+				<c:when test="${p == paging.nowPage }">
+					<b>${p }</b>
+				</c:when>
+				<c:when test="${p != paging.nowPage }">
+					<a href="/productDetail.do?prodNum=${prodDetail[0].PRODNUM}&nowPage=${p }&cntPerPage=${paging.cntPerPage}">${p }</a>
+				</c:when>
+			</c:choose>
+		</c:forEach>
+		<c:if test="${paging.endPage != paging.lastPage}">
+			<a href="/productDetail.do?prodNum=${prodDetail[0].PRODNUM}&nowPage=${paging.endPage+1 }&cntPerPage=${paging.cntPerPage}">&gt;</a>
+		</c:if>
+	</div>
+	
+               </div>
+             
           </div>
         </div>
-      </div>
     </section>
     <!--================End Product Description Area =================-->
 <jsp:include page="../common/footer.jsp" flush="false" />
