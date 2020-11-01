@@ -64,7 +64,6 @@ public class UserControllerImpl implements UserController {
 	// 회원가입 완료
 		@RequestMapping(value = "/insertUser.do", method = RequestMethod.POST)
 		public ModelAndView insertUser(UserVO userVO, HttpServletRequest request, HttpServletResponse response) throws Exception {
-			System.out.println(userVO);
 			// 비밀번호 해싱
 			String hashedPw = BCrypt.hashpw(userVO.getPassword(), BCrypt.gensalt(10));
 			userVO.setPassword(hashedPw);
@@ -83,7 +82,6 @@ public class UserControllerImpl implements UserController {
 			map.put("id", userVO.getId());
 			map.put("email", userVO.getEmail());
 			map.put("authKey", userVO.getAuthKey());
-			System.out.println(map);
 
 			userService.updateAuthKey(map);
 			ModelAndView mav = new ModelAndView("/user/signUpMail");
@@ -101,7 +99,6 @@ public class UserControllerImpl implements UserController {
 			map.put("id", userVO.getId());
 			map.put("email", userVO.getEmail());
 			map.put("authKey", userVO.getAuthKey());
-			System.out.println(map);
 
 			ModelAndView mav = new ModelAndView("/user/signUpMail");
 			mav.addObject("map", map);
@@ -123,7 +120,6 @@ public class UserControllerImpl implements UserController {
 		public String insertUser2(HttpSession httpSession, LoginDTO loginDTO, RedirectAttributes reAttr) throws Exception {
 			Map<String, Object> snsUser = (Map<String, Object>) httpSession.getAttribute("snsUser");
 			httpSession.removeAttribute("snsUser");
-			System.out.println("##############" + snsUser);
 			loginDTO.setId((String) snsUser.get("id"));
 			loginDTO.setPassword((String) snsUser.get("password"));
 			loginDTO.setName((String) snsUser.get("name"));
@@ -141,10 +137,8 @@ public class UserControllerImpl implements UserController {
 		@RequestMapping(value = "/idCheck.do", method = RequestMethod.GET)
 		@ResponseBody
 		public String idCheck(@RequestParam("id") String id) throws Exception {
-			System.out.println(id);
 			int rst = userService.idCheck(id);
 			String result = "0";
-			System.out.println("유저Controller : " + rst);
 			if (rst != 0) {
 				result = "1";
 			}
@@ -154,10 +148,8 @@ public class UserControllerImpl implements UserController {
 		@RequestMapping(value = "/emailCheck.do", method = RequestMethod.GET)
 		@ResponseBody
 		public String emailCheck(@RequestParam("email") String email) throws Exception {
-			System.out.println(email);
 			int rst = userService.emailCheck(email);
 			String result = "0";
-			System.out.println("유저Controller : " + rst);
 			if (rst != 0) {
 				result = "1";
 			}
@@ -167,10 +159,8 @@ public class UserControllerImpl implements UserController {
 		@RequestMapping(value = "/nickNameCheck.do", method = RequestMethod.GET)
 		@ResponseBody
 		public String nickNameCheck(@RequestParam("nickName") String nickName) throws Exception {
-			System.out.println(nickName);
 			int rst = userService.nickNameCheck(nickName);
 			String result = "0";
-			System.out.println("유저Controller : " + rst);
 			if (rst != 0) {
 				result = "1";
 			}
@@ -186,7 +176,6 @@ public class UserControllerImpl implements UserController {
 			map.put("email", email);
 			int rst = userService.idEmailCheck(map);
 			String result = "0";
-			System.out.println("유저Controller : " + rst);
 			if (rst != 0) {
 				result = "1";
 			}
@@ -195,7 +184,6 @@ public class UserControllerImpl implements UserController {
 
 		@RequestMapping(value = "/logInView.do", method = { RequestMethod.GET, RequestMethod.POST })
 		public String logInView(Model model) {
-			System.out.println("로그인 페이지간다");
 			SNSLogin naverLogin = new SNSLogin(naverSns);
 //			SNSLogin googleLogin = new SNSLogin(googleSns);
 			model.addAttribute("naver_url", naverLogin.getNaverAuthURL());
@@ -238,7 +226,6 @@ public class UserControllerImpl implements UserController {
 			httpSession.removeAttribute("snsUser");
 			snsUser.put("password", password2);
 			httpSession.setAttribute("snsUser", snsUser);
-			System.out.println(snsUser);
 			request.setAttribute("snsUser", snsUser);
 			return "/user/signUpEnd";
 		}
@@ -257,20 +244,17 @@ public class UserControllerImpl implements UserController {
 			UserVO userVO = userService.logIn(loginDTO);
 
 			if (userVO == null || !BCrypt.checkpw(loginDTO.getPassword(), userVO.getPassword())) {
-				System.out.println("로그인 실패");
 				mav.setViewName("/user/logInFailed");
 				return mav;
 			}
 			mav.setViewName("/home");
 			mav.addObject("userVO", userVO);
-			System.out.println("로그인한 유저  :  " + mav);
 
 			// 로그인 유지를 선택할 경우
 			if (loginDTO.isUseCookie()) {
 				int amount = 60 * 60 * 24 * 7; // 7일
 				Date sessionLimit = new Date(System.currentTimeMillis() + (1000 * amount));// 로그인 유지기간 설정
 				userService.keepLogin(userVO.getId(), httpSession.getId(), sessionLimit);
-				System.out.println("세션아이디 저장");
 			}
 			return mav;
 		}
@@ -299,7 +283,6 @@ public class UserControllerImpl implements UserController {
 		@RequestMapping(value = "/withdrawal.do", method = { RequestMethod.GET, RequestMethod.POST })
 		public String withdrawal(UserVO userVO, HttpSession httpSession) throws Exception {
 			userVO.setId((String) httpSession.getAttribute(LOGIN));
-			System.out.println(userVO);
 			userService.withdrawal(userVO);
 			httpSession.removeAttribute("LOGIN");
 			httpSession.invalidate();
@@ -309,7 +292,6 @@ public class UserControllerImpl implements UserController {
 		
 		@RequestMapping(value = "/user/searchId.do", method = { RequestMethod.GET, RequestMethod.POST })
 		public String searchId(@RequestParam("email") String email, HttpServletRequest request) throws Exception {
-			System.out.println("searchId////////    " + email);
 			UserVO userVO = new UserVO();
 			userVO.setEmail(email);
 			String id = userService.searchId(email);

@@ -42,10 +42,6 @@
 								<div class="input-group mb-2 row">
 								<p>&nbsp&nbsp공지게시글로 작성하기</p>
 								<input style="margin: 5px 20px;" type="checkbox" id="importantPost" name="type" value="1">
-									<!-- <select class="custom-select" id="inputGroupSelect03">
-										<option value="0" selected>일반 게시글</option>
-										<option value="1">공지사항</option>
-									</select> -->
 								</div>
 							</div> 
 				<div class="row justify-content-md-center">
@@ -63,11 +59,6 @@
 					</div>
 				</div>
 			</div>
-					<!-- 	<h1>파일 업로드 하기</h1>
-						 <form name="fileForm" action="requestupload2" method="post" enctype="multipart/form-data">
-        <input multiple="multiple" type="file" name="file" />
-        <input type="text" name="src" />
-    </form> -->
 
 			<div class="modal-footer">
 				<button type="submit" class="btn btn-success">피드 작성</button>

@@ -5,11 +5,57 @@
 
 <mapper namespace="profile">
     <select id="selectUserProfileById" resultType="map" parameterType="string">
-        <![CDATA[
             SELECT u.userNum, u.id, u.nickname, u.createdAt, ui.content2, ui.profile
             FROM users u, userInfo ui
             WHERE u.userNum = ui.userNum
             AND id = #{id}
-        ]]>
     </select>
+    
+      <select id="countFollowBoth" resultType="int" parameterType="map">
+            SELECT count(*)
+            FROM userFollow
+            where userId = #{followId}
+            and followId = #{userId}
+    </select>
+    
+       <select id="countFollowStatus" resultType="int" parameterType="map">
+            SELECT count(*)
+            FROM userFollow
+            WHERE userId = #{userId}
+            AND followId = #{followId}
+    </select>
+    
+    <insert id="insertUserFollow" parameterType="map">
+     		INSERT INTO userFollow(
+            userId,
+            followId
+					)
+            VALUES (
+            #{userId},
+            #{followId}
+            )
+     </insert>
+     
+      <delete id="deleteUserFollow" parameterType="map">
+        DELETE FROM userFollow
+        WHERE userId = #{userId}
+        and followId = #{followId}
+    </delete>
+     
+    <select id="selectFollowingList" resultType="map" parameterType="String">
+	    SELECT uf.userId, u.userNum, u.nickname, to_char(u.createdAt,'YYYY-MM-DD')AS createdAt, ui.content2, ui.profile
+		FROM userFollow uf, users u, userInfo ui
+		WHERE uf.followId = #{userId}
+		and u.id = uf.userId
+		and u.userNum  = ui.userNum
+    </select>
+    
+    <select id="selectFollowerList" resultType="map" parameterType="string">
+        SELECT uf.followId, u.userNum, u.nickname, to_char(u.createdAt,'YYYY-MM-DD')AS createdAt, ui.content2, ui.profile
+		FROM userFollow uf, users u, userInfo ui
+		WHERE uf.userId = #{userId}
+		and u.id = uf.followId
+		and u.userNum  = ui.userNum
+    </select>
+    
 </mapper>

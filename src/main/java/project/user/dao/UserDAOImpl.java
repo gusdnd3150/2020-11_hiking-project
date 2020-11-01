@@ -74,8 +74,6 @@ public class UserDAOImpl implements UserDAO {
 	public void keepLogIn(String id, String sessionId, Date sessionLimit) throws Exception {
 		Map<String, Object> paramMap = new HashMap<>();
 		logger.info("------keepLogInDAO------");
-		System.out.println(sessionId);
-		System.out.println(id);
 		paramMap.put("id", id);
 		paramMap.put("sessionId", sessionId);
 		paramMap.put("sessionLimit", sessionLimit);

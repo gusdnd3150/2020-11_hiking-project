@@ -46,14 +46,13 @@ public class CommuServiceImpl implements CommuService {
 	}
 
 	@Override
-	public List<Map> selectAllGroupList() {
-		return commuDAO.selectAllGroupList();
+	public List<Map> selectAllCommuList(Map map) {
+		return commuDAO.selectAllCommuList(map);
 	}
 
 	@Override
 	public void updateBoardAccess(int groupNum, int boardAccess) {
 		commuDAO.updateBoardAccess(groupNum, boardAccess);
-
 	}
 
 	@Override
@@ -117,6 +116,36 @@ public class CommuServiceImpl implements CommuService {
 	@Override
 	public String selectACommuPost(int postNum) {
 		return commuDAO.selectACommuPost(postNum);
+	}
+
+	@Override
+	public List<Map> selectMemberList(Map groupNum) {
+		return commuDAO.selectMemberList(groupNum);
+	}
+
+	@Override
+	public Map<String, Object> selectLeader(Map groupNum) {
+		return commuDAO.selectLeader(groupNum);
+	}
+
+	@Override
+	public List<Map> selectScheduleList(Map groupNum) {
+		return commuDAO.selectScheduleList(groupNum);
+	}
+
+	@Override
+	public void updatePost(Map m) {
+		commuDAO.updatePost(m);
+	}
+
+	@Override
+	public List<Map> selectSearchPosts(Map<String, Object> map) throws Exception {
+		return commuDAO.selectSearchPosts(map);
+	}
+
+	@Override
+	public List<Map> selectCommuPageInfo2(Map<String, Object> map) throws Exception {
+		return commuDAO.selectCommuPageInfo2(map);
 	}
 
 }

@@ -263,6 +263,7 @@ public class GroupController{
     @PostMapping("/group/insertSubComment.do")
     @ResponseBody
     public GroupCommentVO insertSubCommentGroup(@RequestBody Map map){
+    	System.out.println("mmm:"+ map);
         groupService.insertCommentGroup(map);
         int parentNum = Integer.parseInt(map.get("parentNum").toString());// 다이렉트로 casting 안됨
         groupService.updateSubCommentCount(parentNum);

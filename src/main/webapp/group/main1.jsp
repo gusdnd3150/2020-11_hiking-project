@@ -10,8 +10,8 @@
         <button type="button" class="btn btn-info" id="group" onclick="goMain1()">등산모임</button>
         <button type="button" class="btn btn-outline-secondary" id="path" onclick="goMain2()">등산로</button>
     </div>
-    <button type="button" class="btn btn-dark" id="create" style="float:right;" data-toggle="modal" data-target="#createModal">등산하기</button>
-    <p></p>
+    <button type="button" class="btn" id="create" style="float:right; width:14%; border:3px solid #FF8000; color:#FF8000; " data-toggle="modal" data-target="#createModal">등산하기</button>
+    <p></p> 
     <div class="row">
         <h1 class="col-md-8 col-lg-10 mb-0">등산모임 리스트</h1>
         <div class="col-sm-12 col-md-4 col-lg-2 pt-2 pb-2 btn-group btn-group-toggle" data-toggle="buttons">
@@ -57,6 +57,7 @@
 <script type="text/javascript" src="../resources/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="../resources/js/view/group/main.js"></script>
 <script>
+
     $(document).ready(function (){
         window.addEventListener('scroll',function (){
         });
@@ -126,7 +127,7 @@
                             '<img src="/resources/img/' + response[i].CONTENT2 + '" class="rounded-circle" style="width: 40px;height: 40px; border: 1px solid grey">' +
                             '<div class="col-10 p-0 pl-2 m-0">' +
                             '<h5 class="card-title m-0" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">'+
-                            '<span style="color: limegreen">['+response[i].STATUS+']</span> ' +response[i].NAME +'</h5>' +
+                            '<span style="color: #04B4AE">[모집중]</span> ' +response[i].NAME +'</h5>' +
                             '<p class="card-text text-muted mb-1" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">'+ response[i].DETAIL +'</p>' +
                             '<p class="m-0 text-muted">'+response[i].STARTDAY+' 출발</p>' +
                             '</div></div></div></div>';
@@ -139,7 +140,7 @@
                             '<img src="/resources/img/' + response[i].CONTENT2 + '" class="rounded-circle" style="width: 40px;height: 40px; border: 1px solid grey">' +
                             '<div class="col-10 p-0 pl-2 m-0">' +
                             '<h5 class="card-title m-0" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">'+
-                            '<span style="color:red">['+response[i].STATUS+']</span> ' +response[i].NAME +'</h5>' +
+                            '<span style="color:#848484">[오름완료]</span> ' +response[i].NAME +'</h5>' +
                             '<p class="card-text text-muted mb-1" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">'+ response[i].DETAIL +'</p>' +
                             '<p class="m-0 text-muted">'+response[i].STARTDAY+' 출발</p>' +
                             '</div></div></div></div>';

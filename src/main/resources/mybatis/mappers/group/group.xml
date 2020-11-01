@@ -188,7 +188,8 @@
             ON (groupNum=#{groupNum} AND userId=#{userId})
             WHEN MATCHED THEN
                 UPDATE SET
-                userStatus = 1
+                userStatus = 1,
+                usercomment = #{userComment}
             WHEN NOT MATCHED THEN
                 INSERT (groupNum,
                         userId,
@@ -223,13 +224,15 @@
     </select>
 
     <!-- 그룹 가입 요청 리스트 불러오기 -->
-    <select id="selectWaitingList" resultType="map" parameterType="map">
+   <select id="selectWaitingList" resultType="map" parameterType="map">
         <![CDATA[
-            SELECT userId, userStatus
-            FROM userWaiting
-            WHERE groupNum = #{groupNum}
-            AND userStatus IN (0,1)
-            AND userId NOT IN (#{userId})
+            SELECT uw.userId, u.nickname, NVL(uw.userComment,'메세지가 없습니다') userComment, uw.userStatus, ui.content2
+            FROM userWaiting uw, users u, userInfo ui
+            WHERE u.id = uw.userId
+              AND u.userNum = ui.userNum
+              AND uw.groupNum = #{groupNum}
+              AND uw.userStatus IN (0,1)
+              AND uw.userId NOT IN (#{userId})
         ]]>
     </select>
 
@@ -350,10 +353,11 @@
 
     <select id="selectCommentOne" parameterType="_int" resultType="groupCommentVO">
         <![CDATA[
-            SELECT gc.commentNum, gc.parentNum, gc.depts, gc.commentOrder, gc.content, u.nickname, gc.subCommentCount, gc.createdAt
-            FROM groupComment gc, users u
+            SELECT gc.commentNum, gc.parentNum, gc.depts, gc.commentOrder, gc.content, u.nickname, gc.subCommentCount, gc.createdAt, ui.content2
+            FROM groupComment gc, users u, userinfo ui
             WHERE gc.userId = u.id
-              AND commentNum = #{commentNum}
+            and u.usernum = ui.usernum
+            AND commentNum = #{commentNum}
         ]]>
     </select>
 

@@ -52,7 +52,7 @@ width: 100px;
 						<small>연령 ${m1.AGESTART}~${m1.AGEEND}</small> <br> <br>
 						</c:otherwise>
 						</c:choose>
-						<p class="card-text">${m1.DETAIL}</p>
+						<p class="card-text" style="display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis">${m1.DETAIL}</p>
 						<small>시작일 ${fn:substring(m1.CREATEDAT, 0, 10)}</small> <br>
 						<c:choose>
                     <c:when test="${0 eq m2.USERTYPE}">
@@ -83,11 +83,11 @@ width: 100px;
 			
 			<!-- MODAL -->
 			    <div class="modal fade" id="listModal">
-        <div class="modal-dialog" id="modal1">
+        <div class="modal-dialog modal-lg" id="modal1">
             <div class="modal-content">
                 <!-- header -->
                 <div class="modal-header">
-                    <h4 class="modal-title">요청 리스트</h4>
+                    <h4 class="modal-title">가입 	요청 리스트</h4>
                     <!-- 닫기(x) 버튼 -->
                     <button type="button" class="close" data-dismiss="modal" onclick="window.location.reload();">×</button>
                     <!-- header title -->
@@ -109,9 +109,9 @@ width: 100px;
             <div class="modal-content">
                 <!-- header -->
                 <div class="modal-header">
-                    <h4 class="modal-title">${group.NAME} 참여하기</h4>
-                    <!-- 닫기(x) 버튼 -->
-                    <button type="button" class="close" data-dismiss="modal">×</button>
+                    <h4 class="modal-title">${m1.NAME} 참여하기</h4>
+                  <!--   <!-- 닫기(x) 버튼 -->
+                    <button type="button" class="close" data-dismiss="modal">×</button> -->
                     <!-- header title -->
                 </div>
                 <!-- body -->
@@ -151,11 +151,10 @@ width: 100px;
             </div>
         </div>
     </div>
-			
-			
+	
 			
 	<!-- 탈퇴 확인모달 -->
-	<div class="modal fade" id="withdrawCheckModal">
+	<div class="modal fade" id="withdrawAskModal">
         <div class="modal-dialog" id="modal4">
             <div class="modal-content">
                 <!-- header -->

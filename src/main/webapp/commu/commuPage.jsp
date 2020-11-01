@@ -31,45 +31,44 @@ div#posts img {
 			<div class="tab-pane fade show active" id="commuPage" role="tabpanel"
 				aria-labelledby="list-commuPage-list">
 				<c:if test="${0 eq m2.USERSTATUS}">
+					<form action="/commu/commuSearch.do" method="Get">
 					<div id="search" class="row pl-3 pb-2">
-						<input class="form-control " type="search"
-							style="width: 473px; height: 40px; margin: 3px; border-color: green; !important;"
-							placeholder="Search" aria-label="Search">
-						<button type="submit" class="btn btn-primary"
-							style="background-color: green; border-color: green; margin: 3px; width: 50xp; height: 40px; !important;">
-							<img src="../resources/img/search.png" width="25" height="25"
-								onclick="">
+						<input class="form-control " type="search" style="width: 473px; height: 40px; margin: 3px; border-color: green; !important;" placeholder="Search" name="keyword" aria-label="Search">
+						<button type="submit" class="btn btn-primary" style="background-color: green; border-color: green; margin: 3px; width: 50xp; height: 40px; !important;">
+							<img src="../resources/img/search.png" width="25" height="25" onclick="">
 						</button>
 					</div>
+						<input name="groupNum" type="hidden" value="${m1.GROUPNUM}">
+						<form>
 					<jsp:include page="/commu/common/postCreateForm.jsp" flush="false" />
 					<hr>
-				</c:if>
+					</c:if>
+						<c:if test="${not empty m9.POSTNUM}">
 				<div class="card" style="border: 1px solid orange;">
-					<div class="card-title">
-						<div class="row">
+					<div class="card-title row">
+						 <div class="row" style="width:500px; margin-left:7px;">
 						<h5 style="color: orange; padding: 25px 0 0 30px;">[공지사항]</h5>
-							<img class="rounded-circle mt-4" style="margin-left: 20px;"
-								src="/resources/img/${m9.CONTENT2}"
-								width="30" height="30" alt="프로필사진">
+							<a href='/profile/${m9.ID}' style='color: black;' onclick="window.open(this.href,'','width=450, height=600'); return false;">
+							<img class="rounded-circle mt-4" style="margin-left: 20px;" src="/resources/img/${m9.CONTENT2}" width="30" height="30" alt=""></a>
 							<h6 style="margin-top: 30px">&nbsp${m9.NICKNAME}</h6>
 							&nbsp&nbsp
 							<h6 style="margin-top: 30px;">
 								<small id="FcreatedAt">${fn:substring(m9.CREATEDAT, 0, 19)}</small>
 							</h6>
-								<div style="width:100px;"></div>
+								</div>
 							<c:choose>
 							<c:when test="${m9.ID eq loginID}">
 							<!-- <button type="button" id="updateBtn" data-toggle="modal" data-target="#postUpdateForm" class="btn btn-link" style="margin-top: 20px; color: gray;">수정</button> -->
 							<form action="/commu/deletePost.do?postNum=${m9.POSTNUM}" method="get" id="removefrm">
-							<button type="button" id="${m9.POSTNUM}" class="btn btn-link" onclick="removeCheck(this)" style="margin-top: 20px; color: gray;">삭제</button>
+							<button type="button" id="${m9.POSTNUM}" class="btn btn-link" onclick="removeCheck(this)" style="float: right; margin-top: 20px; color: gray;">삭제</button>
 							</form>
 							</c:when>
 							<c:otherwise>
-							<div style="width:20px;"></div>
-							<button type="button" id="reportBtn" class="btn btn-link" style="margin-top: 20px; color: gray;">신고</button>
+							
+							<button type="button" id="reportBtn" class="btn btn-link" style="float: right; margin-top: 20px; color: gray;">신고</button>
 							</c:otherwise>
 							</c:choose>
-						</div>
+						<!-- </div> -->
 						</div>
 						<div class="card-body" id="posts" style="padding-bottom: 0px !important;">
 							${m9.CONTENT} <br> 
@@ -77,37 +76,40 @@ div#posts img {
 								<small> / 수정 ${m9.UPDATEDAT}</small>
 								<br>
 							</c:if>
-							<hr />
 							</div>
-							<div id="commentShow">
+					<%--  	<div id="commentShow">
+							<hr />
 					 	<button type="button" id="showCommentBtn${m9.POSTNUM}" name="${m9.POSTNUM}" class=" btn btn-link" onclick="showComment(this);" style="color: orange; text-align:left; padding:0 0 0 20px;">댓글보기</button> 
 						 </div>
-						 	<div id="mainCommentBoard${m9.POSTNUM}" class="row" style="display: none; width: 28rem; height: 30rem; overflow:scroll;"></div> 
+						 	<div id="mainCommentBoard${m9.POSTNUM}" class="row" style="display: none; width: 28rem; overflow:scroll;"></div> 
 					<hr />
 					<div id="mainCommentInput" class="row" style="text-align: center">
 						<img src="/resources/img/${sessionIdImage}" class="rounded-circle mt-1" style="margin-left: 27px; margin-bottom:20px; width: 30px; height: 30px" > 
 							<input id="mainCommentContent${m9.POSTNUM}" class="form-control form-control-md col-lg-9 col-md-9 col-sm-10 col-10 ml-2 mr-2" type="text" placeholder="내용을 입력해주세요">
 							<button id="${m9.POSTNUM}" class="btn btn-warning btn-sm" style="height:37px;">입력</button>
-					</div>
+					</div> --%>
+					 
 					
-					</div>
+					</div> 
 
-	<hr>
+				<hr>
+				</c:if>
+				<c:choose>
+				<c:when test="${not empty postList}">
 				<c:forEach var="postList" items="${postList}">
-					<div class="card">
-					<div class="card-title">
-						<div class="row">
-							<img class="rounded-circle mt-3" style="margin-left: 35px"
-								src="/resources/img/${postList.CONTENT2}"
-								width="50" height="50" alt="프로필사진">
+					<div class="card ">
+					<div class="card-title row">
+						 <div class="row" style="width:450px; margin-left:7px;">
+							<a href='/profile/${postList.ID}' style='color: black;' onclick="window.open(this.href,'','width=450, height=600'); return false;">
+							<img class="rounded-circle mt-3" style="margin-left: 25px" src="/resources/img/${postList.CONTENT2}" width="50" height="50" alt="프로필사진"></a>
 							<h6 style="margin-top: 40px">&nbsp${postList.NICKNAME}</h6>
 							&nbsp&nbsp&nbsp&nbsp
 							<h6 style="margin-top: 40px;">
 								<small id="FcreatedAt">${fn:substring(postList.CREATEDAT, 0, 19)}</small>
 							</h6>
-								<div style="width:180px;"></div>
+							</div>
 							<c:choose>
-							<c:when test="${postList.ID eq loginID}">
+							<c:when test="${0 eq m2.USERSTATUS}">
 							<button type="button" id="${postList.POSTNUM}" data-toggle="modal" onclick="postUpdateForm(this)" class="btn btn-link" style="margin-top: 30px; color: gray;">수정</button>
 							
 							<form action="/commu/deletePost.do?postNum=${postList.POSTNUM}" method="get" id="removefrm">
@@ -115,11 +117,10 @@ div#posts img {
 							</form>
 							</c:when>
 							<c:otherwise>
-							<div style="width:40px;"></div>
-							<button type="button" id="reportBtn" class="btn btn-link" style="margin-top: 30px; color: gray;">신고</button>
+							<button type="button" id="reportBtn" class="btn btn-link" style="margin-left:50px; margin-top: 30px; color: gray;">신고</button>
 							</c:otherwise>
 							</c:choose>
-						</div>
+						
 						</div>
 						<div class="card-body" id="posts" style="padding-bottom: 0px !important;">
 							${postList.CONTENT} <br> 
@@ -127,11 +128,14 @@ div#posts img {
 								<small> / 수정 ${postList.UPDATEDAT}</small>
 								<br>
 							</c:if>
-							<hr />
 							</div>
+						 <c:if test="${0 eq m2.USERSTATUS}">
+							<c:if test="${not empty postList.POSTNUMCNT}">
+							<hr />
 							<div id="commentShow">
 					 	<button type="button" id="showCommentBtn${postList.POSTNUM}" name="${postList.POSTNUM}" class=" btn btn-link" onclick="showComment(this);" style="color: seaGreen; text-align:left; padding:0 0 0 20px;">댓글보기</button> 
 						 </div>
+						 </c:if>
 						 	<div id="mainCommentBoard${postList.POSTNUM}" class="row" style="display: none; width: 28rem; height: 30rem; overflow:scroll;"></div> 
 					<hr />
 					<div id="mainCommentInput" class="row" style="text-align: center">
@@ -139,18 +143,27 @@ div#posts img {
 							<input id="mainCommentContent${postList.POSTNUM}" class="form-control form-control-md col-lg-9 col-md-9 col-sm-10 col-10 ml-2 mr-2" type="text" placeholder="내용을 입력해주세요">
 							<button id="${postList.POSTNUM}" class="btn btn-success btn-sm" style="height:37px;">입력</button>
 					</div>
-					
+					</c:if>
 					</div>
+				
 				</c:forEach>
+			    </c:when>
+			    <c:otherwise>
+			    <center>
+			    <a href="/commu/commuPageView.do?groupNum=${m1.GROUPNUM}" style="color: orange;"> 게시글이 존재하지 않습니다. </a>
+			    </center>
+			    </c:otherwise>
+			    </c:choose>
+				
 			</div>
 
 
 
 			<jsp:include page="/commu/setting.jsp" flush="false" />
 			<c:if test="${0 eq m2.USERSTATUS}">
-				<jsp:include page="/commu/calender.jsp" flush="false" />
+				<jsp:include page="/commu/schedule.jsp" flush="false" />
 				<jsp:include page="/commu/album.jsp" flush="false" />
-				<jsp:include page="/commu/files.jsp" flush="false" />
+				<jsp:include page="/commu/intro.jsp" flush="false" />
 				<jsp:include page="/commu/member.jsp" flush="false" />
 		</div>
 		<jsp:include page="/commu/common/rightSide.jsp" flush="false" />
@@ -176,14 +189,17 @@ div#posts img {
 				</button>
 			</div>
 			<div class="modal-body">
-					<form action="/commu/updatePost.do" method="post" enctype="multipart/form-data">
+			  <form action="/commu/updatePost.do" method="post" enctype="multipart/form-data">
+					 <div class="col-sm-5">
+							<div class="input-group mb-2 row">
+						    	 <p>&nbsp&nbsp공지게시글로 작성하기</p>
+							     <input style="margin: 5px 20px;" type="checkbox" id="importantPost" name="type" value="1">
+							</div>
+					 </div> 
 				<div class="row justify-content-md-center">
 					<div class="col_c">
-						<div class="input-group">
+						<div class="input-group" >
 							<textarea class="form-control" name="updateFeedContent" id="updateFeedContent"></textarea>
-							  <script type="text/javascript">
-								
-							</script> 
 						</div>
 					</div>
 				</div>
@@ -191,8 +207,9 @@ div#posts img {
 			<div class="modal-footer">
 				<button type="submit" class="btn btn-success">게시글 수정</button>
 			</div>
-			<input type="hidden" name="groupNum" value="">
-			</form>
+			<input type="hidden" name="groupNum" value="${m1.GROUPNUM}">
+			<input type="hidden" id="postNum"name="postNum" value="">
+			 </form>
 		</div>
 	</div>
 </div>
@@ -209,7 +226,17 @@ div#posts img {
 	crossorigin="anonymous"></script>
 </body>
 <script>
-/*   댓글 */
+
+function create1() {
+	location.href ="/group/form1.jsp";
+}
+
+ function create2() {
+	 location.href ="/group/form2.jsp";
+ }
+ 
+
+/*  앨범 댓글 */
 const userProfile = '${sessionIdImage}';
 
 
@@ -234,8 +261,8 @@ $.ajax({
 				height : 250,
 				width : 750
 			});
+    	 $('#postNum').val(e.id);
 		 $("#postUpdateForm").modal();
-    	console.log("updateFeedContent" + str);
     },
     error: function(request,status,error){
        alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
@@ -319,6 +346,7 @@ $(document).on('click','div#mainCommentInput button',function (e){
 	                          '</p></div></ul>');
 	                      index++;
 							$('#writeMainSubCommentBtn'+e.target.id).data('postNum', e.target.id);
+							location.reload();
 	                  }
 	          },
 	          error: function(response){
@@ -328,8 +356,7 @@ $(document).on('click','div#mainCommentInput button',function (e){
 	
 })
 
-/* 
-/* 나중에 보여줄때 하면돼~~!! */
+/* 메인피드 댓글보기 */
 function showComment(e){       
          var postNum =  e.getAttribute('name')
 		$('#mainCommentBoard'+postNum+" ul").remove();
@@ -370,10 +397,10 @@ function showComment(e){
                           '<button class="'+id+' p-0 btn btn-default text-muted" onclick="toggleSubComment(this)">[답글 '+ count +'개 더보기]</button>' +
                           '<button class="'+id+'subComment p-0 btn btn-default text-muted" onclick="toggleWriteSubComment(this)">[답글 작성]</button>' +
                           '<p style="display: none"><input type="text" class="form-control" placeholder="댓글 내용 입력"/>' +
-                          '<button id="writeMainSubCommentBtn'+postNum+'" class="btn btn-success btn-sm" onclick="writeSubComment(this)">작성</button>' +
+                          '<button id="'+postNum+'" class="btn btn-success btn-sm" onclick="writeSubComment(this)">작성</button>' +
                           '<button class="btn btn-light btn-sm" onclick="cancelwriteSubComment(this)">취소</button>' +
                           '</p></div></ul>');
-                      $('#writeMainSubCommentBtn'+postNum).data('postNum', postNum);
+                       $('#'+postNum).data('postNum', postNum);
                       index++;
                       
                       var index1 = 0;
@@ -382,7 +409,7 @@ function showComment(e){
                           if (response[j].parentNum == commentNum) {
                               $('#' + id).append(
                                   '<li id="' + id + index1 + '" class="col-12 row pt-3 ml-5 pl-2" style="display: none;">'+
-                                  '<img src="/resources/img/'+userProfile+'" class="rounded-circle" style="width: 40px; height: 40px; float: left">'+
+                                  '<img src="/resources/img/'+response[j].content2+'" class="rounded-circle" style="width: 40px; height: 40px; float: left">'+
                                   '<div class="col-9 ml-2 pl-5">'+
                                   '<h5 class="mb-0">'+response[j].nickname+'</h5>'+
                                   response[j].content +'</div></li>'
@@ -404,7 +431,6 @@ function showComment(e){
 
     
 	function toggleSubComment(e){
-     console.log("답글 작성 토글 e"+ e);
           $commentRoot = e.parentNode.parentNode;
           $subComments = $commentRoot.getElementsByTagName("li");
 
@@ -419,7 +445,6 @@ function showComment(e){
 
       function toggleWriteSubComment(e){
           $inputSubComment = e.parentNode.getElementsByTagName("p")[0]
-
           if($inputSubComment.style.display == "block"){
               $inputSubComment.style.display = "none";
           }else if($inputSubComment.style.display == "none"){
@@ -428,44 +453,7 @@ function showComment(e){
 
       }
 
-      function writeSubComment(e){
-          $root = e.parentNode.parentNode;
-          $parentNum = $root.getElementsByTagName("pre")[0];
-
-          var data = {
-              "parentNum" : $parentNum.innerHTML,
-              "depts" : 2,
-              "groupNum" : "${m1.GROUPNUM}",
-              "content" : e.previousSibling.value,
-              "userId" : "${loginID}",
-              "postNum" : $("#"+e.id).data('postNum')
-          }
-
-
-          $.ajax({
-              type: "POST",
-              url: "/group/insertSubComment.do",
-              data: JSON.stringify(data),
-              dataType: 'json',
-              contentType: "application/json; charset=utf-8;",
-              success: function (response){
-                  var id = $root.parentNode.id;
-                  console.log(id)
-                  $('#'+id).append(
-                      '<li id="temp" class="col-12 row pt-3 ml-5 pl-2">'+
-                      '<img src="/resources/img/${sessionIdImage}" class="rounded-circle" style="width: 40px;height: 40px;float: left">'+
-                      '<div class="col-9">'+
-                      '<h5 class="mb-0 pl-0">'+response.nickname+'</h5>'+
-                      response.content +'</div></li>'
-                  );
-              },
-              error: function(response){
-                  alert("다시 시도해주세요")
-              }
-          })
-
-
-      }
+      
       
   function writeMainSubComment(e){
 
@@ -493,18 +481,60 @@ function showComment(e){
               console.log(id)
               $('#'+id).append(
                   '<li id="temp" class="col-12 row pt-3 ml-5 pl-2">'+
-                  '<img src="/resources/img/${sessionIdImage}" class="rounded-circle" style="width: 40px;height: 40px;float: left">'+
+                  '<img src="/resources/img/'+response.content2+'" class="rounded-circle" style="width: 40px;height: 40px;float: left">'+
                   '<div class="col-9">'+
                   '<h5 class="mb-0 pl-0">'+response.nickname+'</h5>'+
                   response.content +'</div></li>'
               );
+                  e.previousSibling.valu="";
           },
           error: function(response){
               alert("다시 시도해주세요")
           }
       })
   }
+  
+ function writeSubComment(e){
+      $root = e.parentNode.parentNode;
+      $parentNum = $root.getElementsByTagName("pre")[0];
 
+      var data = {
+          "parentNum" : $parentNum.innerHTML,
+          "depts" : 2,
+          "groupNum" : "${m1.GROUPNUM}",
+          "content" : e.previousSibling.value,
+          "userId" : "${loginID}",
+          "postNum" : e.id
+      }
+
+      console.log("???: " +e.id);
+
+      $.ajax({
+          type: "POST",
+          url: "/group/insertSubComment.do",
+          data: JSON.stringify(data),
+          dataType: 'json',
+          contentType: "application/json; charset=utf-8;",
+          success: function (response){
+              var id = $root.parentNode.id;
+              console.log(id);
+              $('#'+id).append(
+                  '<li id="temp" class="col-12 row pt-3 ml-5 pl-2">'+
+                  '<img src="/resources/img/response.content2" class="rounded-circle" style="width: 40px;height: 40px;float: left">'+
+                  '<div class="col-9">'+
+                  '<h5 class="mb-0 pl-0">'+response.nickname+'</h5>'+response.content +'</div></li>'
+                  );
+                  e.previousSibling.value="";
+              
+          },
+          error: function(response){
+              alert("다시 시도해주세요")
+          }
+      })
+
+
+  }  
+  
   function cancelwriteSubComment(e){
       e.previousSibling.previousSibling.value=null;
   }
@@ -515,6 +545,31 @@ function showComment(e){
 		          "postNum" : $('#commentContent').data('postNum')
 	   };
 	   
+	   $.ajax({
+           type: "GET",
+           url: "/commu/deletePost.do",
+           data: data,
+           dataType: 'json',
+           contentType: "application/json; charset=utf-8;",
+           success: function (response){
+               alert("사진이 삭제되었습니다.");
+               document.getElementsByClassName('close')[0].click();
+             	 history.go(0);
+           },
+           error: function(response){
+               alert("삭제 실패. 새로고침 후 다시 시도해주세요.");
+           }
+       })
+	  }else{
+	  		return false;
+	  }
+   })
+   
+    $(document).on('click','#AremoveBtn',function (){ 
+	  if(confirm("정말 삭제하시겠습니까?")==true){ 
+	   var data = {
+		          "postNum" : $('#commentContent').data('postNum')
+	   };
 	   $.ajax({
            type: "GET",
            url: "/commu/deletePost.do",
@@ -577,7 +632,7 @@ function showComment(e){
                           '<button id="writeSubCommentBtn" class="btn btn-success btn-sm" onclick="writeSubComment(this)">작성</button>' +
                           '<button class="btn btn-light btn-sm" onclick="cancelwriteSubComment(this)">취소</button>' +
                           '</p></div></ul>');
-
+                      $('#commentContent').val("")
                       index++;
                   }
           },
@@ -690,12 +745,10 @@ $(document).ready(function (){
 				}else{
 	            for(var i=0;i<response.length;i++){
 	                if((response[i].USERSTATUS==1) == "" || response==null){
-	                	console.log("??");
 	                	selectWaitingList[0].innerText = "새로운 가입 요청 없음";
 	                	selectWaitingList[0].disabled = true;
 	                	/*  $('.selectWaitingList').attr(disabled, true);    이거 왜 안되지? */
 	                }else{
-	                	console.log("??????");
 	                	selectWaitingList[0].innerText = "새로운 가입 요청";
 	                	selectWaitingList[0].disabled = false;
                 	     /*  $('.selectWaitingList').attr(disabled, false);  */
@@ -779,13 +832,16 @@ $(document).on('click','.selectWaitingList',function (){
 
                 if(response[i].USERSTATUS==1){
                 $('#waitingList')
-                    .append('<li class="row pt-1" style="list-style: none"><div id="waitingUser" class="col-10 pt-1" style="font-size: 22px">'+response[i].USERID+'</div></li>');
+                    .append(
+                    "<li class='row pt-1' style='list-style: none'><div id='waitingUser' class='col-8 pt-1 row' style='font-size: 22px; margin-left:10px'>"
+                    +"<a href='/profile/"+response[i].USERID+"' style='color: black;'onclick='window.open(this.href,'','width=450, height=600'); return false;'>"+response[i].USERID+"</a>&nbsp&nbsp&nbsp&nbsp<h6 style='margin-top:8px'>"+response[i].USERCOMMENT+"</h6></div></li>");
 
                 $('#waitingUser').attr('id',id);
 						
                 $('#'+id).after('<button class="userAllowed btn btn-light col-2">승인</button>');
+                $('#'+id).after('<button class="userDisallowed btn btn-light col-2">거절</button>'); 
                     }
-                }
+            }
         },
         error: function(response){
             console.log("error");
@@ -795,13 +851,12 @@ $(document).on('click','.selectWaitingList',function (){
 })
 
 $(document).on('click','.userAllowed',function (e){
-	
     var data = {
-        userId : (this.parentNode).childNodes[0].innerHTML,
+        userId :(this.parentNode).childNodes[0].childNodes[0].innerHTML,
         groupNum : ${m1.GROUPNUM},
    		action : "plus"
     };
-
+    
     $.ajax({
         type: "GET",
         url: "/group/userAllowed.do",
@@ -809,8 +864,7 @@ $(document).on('click','.userAllowed',function (e){
         dataType: 'json',
         contentType: "application/json; charset=utf-8;",
         success: function (response){
-            selectWaitingList[0].innerText = "새로운 가입 요청 없음";
-        	selectWaitingList[0].disabled = false;
+        	e.target.disabled=true;
         },
         error: function(response){
             console.log("error");
@@ -820,8 +874,11 @@ $(document).on('click','.userAllowed',function (e){
 })
 
 $(document).on('click','.userDisallowed',function (e){
+	if(confirm("정말 삭제하시겠습니까?")==true){
+
+
     var data = {
-        userId : (this.parentNode).childNodes[0].innerHTML,
+        userId :(this.parentNode).childNodes[0].childNodes[0].innerHTML,
         groupNum : ${m1.GROUPNUM},
         action : "minus"
     }
@@ -833,17 +890,19 @@ $(document).on('click','.userDisallowed',function (e){
         dataType: 'json',
         contentType: "application/json; charset=utf-8;",
         success: function (response){
-            e.target.className ="userAllowed btn btn-light col-2";
-            e.target.innerText = "승인";
+            e.target.disabled=true;
+        /*     e.target.innerText = "승인"; */
+         
         },
         error: function(response){
             console.log("error");
             alert("새로고침 후 다시 시도해주세요")
         }
     })
+   }
 })
 
- $(function() {
+
     $('.button-class1').click(function(){
     	 var data ={
     			 groupNum:${m1.GROUPNUM},
@@ -868,6 +927,7 @@ $(document).on('click','.userDisallowed',function (e){
             }
         })
     });
+    
     $('.button-class2').click(function(){
     	 var data ={
     			 groupNum:${m1.GROUPNUM},
@@ -892,7 +952,7 @@ $(document).on('click','.userDisallowed',function (e){
             }
         })
     });
-}); 
+
 
     if('${m4.BOARDACCESS}' == 0) {
     if( $('#open').hasClass('btn-default') ) $('#open').removeClass('btn-default');
@@ -900,7 +960,6 @@ $(document).on('click','.userDisallowed',function (e){
     if( $('.button-class2').hasClass('btn-primary') ) $('#close').removeClass('btn-primary');
     if( !$('.button-class2').hasClass('btn-default') ) $('#close').addClass('btn-default');
     } else {
-    	console.log("비공개 까메ㅐ진다아")
 	if( $('#close').hasClass('btn-default') ) $('#close').removeClass('btn-default');
     if( !$('#close').hasClass('btn-primary') ) $('#close').addClass('btn-primary');
     if( $('.button-class1').hasClass('btn-primary') ) $('#open').removeClass('btn-primary');
@@ -1037,7 +1096,7 @@ $(document).on('click','.userDisallowed',function (e){
        			console.log("data"+data[5].content2);
        			 for(var i=0 in data){ 
        				var content = JSON.stringify(data[i].content).replace(/\"/g, "");
-   				html = "   <div class='col-lg-3 col-md-4 col-6' >" ;
+   				html = "<div class='col-lg-3 col-md-4 col-6' >" ;
    				html += "<a href='' id='oC' class='d-block mb-4 h-100' data-toggle='modal' >" ;
    				html += " <img id='content";
    				html += i;
@@ -1118,7 +1177,7 @@ $(document).on('click','.userDisallowed',function (e){
      
       }) /*/
      
-}); /* document ready */
+}) /* document ready */
      
    /* album 사진 상세보기 */
 $(document).on( 'click', 'a#oC img' , function(e){ 
@@ -1132,7 +1191,6 @@ $(document).on( 'click', 'a#oC img' , function(e){
          	var userNum = $(this).data('userNum').replace(/\"/g, "");
          	var createdAt = createdAts.slice(0,19);
          	var src = "/resources/img/"+content2.replace(/\"/g, "");
-       	 console.log("클릭이벤트 먹었니: "+ src +"    ;///   "+postNum);                 
          	 var modal = document.getElementById('originalContent');
          	 var modalImg = document.getElementById('OContent');
          	document.getElementById('nickName').innerHTML=nickName;
@@ -1193,10 +1251,10 @@ $(document).on( 'click', 'a#oC img' , function(e){
                              '<button class="'+id+' p-0 btn btn-default text-muted" onclick="toggleSubComment(this)">[답글 '+ count +'개 더보기]</button>' +
                              '<button class="'+id+'subComment p-0 btn btn-default text-muted" onclick="toggleWriteSubComment(this)">[답글 작성]</button>' +
                              '<p style="display: none"><input type="text" class="form-control" placeholder="댓글 내용 입력"/>' +
-                             '<button id="writeSubCommentBtn" class="btn btn-success btn-sm" onclick="writeSubComment(this)">작성</button>' +
+                             '<button id="'+postNum+'" class="btn btn-success btn-sm" onclick="writeSubComment(this)">작성</button>' +
                              '<button class="btn btn-light btn-sm" onclick="cancelwriteSubComment(this)">취소</button>' +
                              '</p></div></ul>');
-
+                         $('#'+postNum).data('postNum', postNum);
                          index++;
                          
                          var index1 = 0;
@@ -1205,7 +1263,7 @@ $(document).on( 'click', 'a#oC img' , function(e){
                              if (response[j].parentNum == commentNum) {
                                  $('#' + id).append(
                                      '<li id="' + id + index1 + '" class="col-12 row pt-3 ml-5 pl-2" style="display: none;">'+
-                                     '<img src="/resources/img/'+userProfile+'" class="rounded-circle" style="width: 40px; height: 40px; float: left">'+
+                                     '<img src="/resources/img/'+response[j].content2+'" class="rounded-circle" style="width: 40px; height: 40px; float: left">'+
                                      '<div class="col-9 ml-2 pl-5">'+
                                      '<h5 class="mb-0">'+response[j].nickname+'</h5>'+
                                      response[j].content +'</div></li>'
@@ -1263,13 +1321,174 @@ $(document).on( 'click', 'a#oC img' , function(e){
          	})
         })
         
- /*     
-  $('#list-member-list').click(function(){ 
-	document.getElementById('memberList').submit();
-  }
      
-        */ 
-        
+  $('#list-member-list').click(function(){
+  
+	var data =  {
+			"groupNum" : ${m1.GROUPNUM} 
+	};
+	
+	 $.ajax({
+         type: "POST",
+         url: "/commu/selectLeader.do",
+         data: JSON.stringify(data),
+         dataType: 'json',
+         contentType: "application/json; charset=utf-8;",
+         success : function (response){
+        	 $('div#leader').append(
+             		'<li class=" list-group-item ">'
+             		+'<div class="row">'
+        			+"<a href='/profile/"+response.USERID+"' style='color: black;'onclick='window.open(this.href,'','width=450, height=600'); return false;'>"
+             		+'<img src="/resources/img/'+response.CONTENT2+'" class="rounded-circle mr-3" width="50" height="50" style="margin-left:30px;" alt="멤버사진">'
+             		+'</a><div class="media-body row mt-3">'
+             		+"<a href='/profile/"+response.USERID+"' style='color: black;'onclick='window.open(this.href,'','width=450, height=600'); return false;'>"
+            		+'<p class="mt-0 mb-1" style="margin:10px;">'+ response.USERID
+            		+'</p></a><h5 class="mt-0 mb-1" style="margin:10px;">'+response.NICKNAME+'</h5>'
+             		+'<svg style="margin:5px; color: red;" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-flag-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">'
+            		+' <path fill-rule="evenodd" d="M14.778.085A.5.5 0 0 1 15 .5V8a.5.5 0 0 1-.314.464L14.5 8l.186.464-.003.001-.006.003-.023.009a12.435 12.435 0 0 1-.397.15c-.264.095-.631.223-1.047.35-.816.252-1.879.523-2.71.523-.847 0-1.548-.28-2.158-.525l-.028-.01C7.68 8.71 7.14 8.5 6.5 8.5c-.7 0-1.638.23-2.437.477A19.626 19.626 0 0 0 3 9.342V15.5a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 1 0v.282c.226-.079.496-.17.79-.26C4.606.272 5.67 0 6.5 0c.84 0 1.524.277 2.121.519l.043.018C9.286.788 9.828 1 10.5 1c.7 0 1.638-.23 2.437-.477a19.587 19.587 0 0 0 1.349-.476l.019-.007.004-.002h.001"/>'
+            	    +'</svg>'
+             		+'</div>'
+             		+'</div>'
+             		+'</li>'
+             		);
+         },
+         error : function (request, status, error){
+        	  alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+         }
+     })
 
+     $.ajax({
+         type: "POST",
+         url: "/commu/selectMemberList.do",
+         data: JSON.stringify(data),
+         dataType: 'json',
+         contentType: "application/json; charset=utf-8;",
+         success : function (response){
+             for(var i=0; i<response.length; i++) {
+             
+                 var userId = response[i].USERID;
+                 var content2 = response[i].CONTENT2;
+                 var nickName = response[i].NICKNAME;
+            	 console.log("asdfasdf:   "+userId);
+                     $('div#members').append(
+                    		'<li class=" list-group-item ">'
+                    		+'<div class="row">'
+                    		+"<a href='/profile/"+userId+"' style='color: black;'onclick='window.open(this.href,'','width=450, height=600'); return false;'>"
+                    		+'<img src="/resources/img/'+content2+'" class="rounded-circle mr-3" width="50" height="50" style="margin-left:30px;" alt="멤버사진">'
+                    		+'</a><div class="media-body row mt-3">'
+                    		+"<a href='/profile/"+userId+"' style='color: black;'onclick='window.open(this.href,'','width=450, height=600'); return false;'>"
+                    		+'<p class="mt-0 mb-1" style="margin:10px;">'+ userId
+                    		+'</p></a><h5 class="mt-0 mb-1" style="margin:10px;">'+nickName+'</h5>'
+                    		+'</div>'
+                     		+'</div>'
+                    		+'</li>'
+                    		);
+                 }
+             },
+         error : function (request, status, error){
+        	  alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+         }
+     })
+     $('#list-member-list').off('click');
+  })
+  
+    $('#list-schedule-list').click(function(){
+    	 var data =  {
+    			"groupNum" : ${m1.GROUPNUM} 
+    	};
+/*     	 sortList(data); */
+         /* infiniteScroll(data); */    
+/*     }); */
+    	 var isEnd = false;
+/* 
+    	    function sortList(data){ */
+    	        if(isEnd == true){
+    	            return ;
+    	        }
+    	    
+    	        $.ajax({
+    	            type: "POST",
+    	            url: "/commu/selectScheduleList.do",
+    	            data: JSON.stringify(data),
+    	            dataType: 'json',
+    	            contentType: "application/json; charset=utf-8;",
+    	            success: function (response){
+    	                if(response.length!=0){
+    	                    appendSortList(response);
+    	                }else if(response.length==0) {
+    	                    isEnd = true;
+    	                    window.removeEventListener('scroll', function (){
+    	                        $('#result')
+    	                            .append('<div>없어요</div>');
+    	                    })
+    	                }
+    	            },
+    	            error: function(response){
+    	                console.log("error");
+    	            }
+    	        })
+    	    /* }; */
+    	    
+    	 function appendSortList(response){
+    	        for(var i=0;i<response.length;i++){
+    	             var status1 = '<div class="pt-4 col-lg-12 col-sm-6" id="groupList">' + 
+    	            	           '<div class="card mb-6" style="max-width: 540px;" > '+
+    	            	           '<a href="/group/'+response[i].GROUPNUM+'">' +
+    	                           '<div class="row no-gutters">'+
+    	                           '<div class="col-md-5">'+
+    	                           '<img class="card-img-" src="/resources/img/' + response[i].STOREDFILENAME + '" alt="..." style="width:100%; height: 200px;" /></a></div>'+
+    	                           '<div class="col-md-7">'+
+    	                           '<div class="card-body"><div class="row">'+
+   	                               '<img src="/resources/img/' + response[i].CONTENT2 + '" class="rounded-circle" style="width:40px; height:40px; border:1px solid grey; margin-left: 20px">' +
+   	                               '<p style="margin-top: 10px; margin-left: 5px">'+response[i].NICKNAME+'</p>'+
+       	                           '</div><div class="col-10 p-0 pl-2 m-0">' +
+       	                           '<h6 class="card-title m-0" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">'+
+       	                           '<span style="color: limegreen">['+response[i].STATUS+']</span> <br>' +response[i].NAME +'</h6>' +
+       	                           '<p class="card-text text-muted mb-1" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">'+ response[i].DETAIL +'</p>' +
+       	                           '<p class="m-0 text-muted">'+response[i].STARTDAY+' 출발</p>' +
+       	                           '</div></div> </div> </div> </div>';
+
+
+       	             var status2 = '<div class="pt-4 col-lg-12 col-sm-6" id="groupList">' + 
+       	            	           '<div class="card mb-6" style="max-width: 540px;" > '+
+       	            	           '<a href="/group/'+response[i].GROUPNUM+'">' +
+       	                           '<div class="row no-gutters">'+
+       	                           '<div class="col-md-5">'+
+       	                           '<img class="card-img-" src="/resources/img/' + response[i].STOREDFILENAME + '" alt="..." style="width:100%; height: 200px;" /></a></div>'+
+       	                           '<div class="col-md-7">'+
+       	                           '<div class="card-body"><div class="row">'+
+	                               '<img src="/resources/img/' + response[i].CONTENT2 + '" class="rounded-circle" style="width:40px; height:40px; border:1px solid grey; margin-left: 20px">' +
+	                               '<p style="margin-top: 10px; margin-left: 5px">'+response[i].NICKNAME+'</p>'+
+    	                           '<div class="col-10 p-0 pl-2 m-0">' +
+    	                           '<h6 class="card-title m-0" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">'+
+    	                           '<span style="color:red">['+response[i].STATUS+']</span> <br>' +response[i].NAME +'</h6>' +
+    	                           '<p class="card-text text-muted mb-1" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">'+ response[i].DETAIL +'</p>' +
+    	                           '<p class="m-0 text-muted">'+response[i].STARTDAY+' 출발</p>' +
+    	                           '</div></div> </div> </div> </div>';
+    	                            
+
+    	            if(response[i].STATUS == '진행중'){
+    	                $('.card-list').append(status1);
+    	            }else if(response[i].STATUS == '마감'){
+    	                $('.card-list').append(status2)
+    	            }
+    	        }
+    	    }
+    	        $('#list-schedule-list').off('click');
+     });
+/*     function infiniteScroll(data){
+            var curHeight = $(window).height() + $(window).scrollTop();
+            var docHeight = $(document).height();
+
+            if (curHeight == docHeight) {
+                closeLoading();
+                loadingImage();
+
+                setTimeout(function (){
+                    data.rowNum += 1;
+                    sortList(data);
+                },1500)
+            }
+    } */
 </script>
 </html>

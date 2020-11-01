@@ -211,6 +211,7 @@
 	    where id=#{id} and status=10
 	    ]]>
 	</select>
+	
 	<update id="removeSessionId" parameterType="String">
 	   <![CDATA[
 		update users
