@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -20,7 +21,7 @@ import project.Paging;
 import project.E_P002_D003.vo.E_P002_D003PhotoVO;
 
 public interface B_P002_D001Controller {
-     public ModelAndView shopmainCate(@RequestParam Map<String, Object> info,HttpServletRequest request, HttpServletResponse response)throws Exception;  
+     public ModelAndView shopmainCate(@RequestParam Map<String, Object> info,HttpSession httpSession,HttpServletRequest request, HttpServletResponse response)throws Exception;  
      //public ModelAndView searchResult(@RequestParam Map<String, Object> info,HttpServletRequest request, HttpServletResponse response)throws Exception;
 
      

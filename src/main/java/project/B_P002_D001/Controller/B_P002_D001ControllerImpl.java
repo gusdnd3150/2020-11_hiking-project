@@ -1,6 +1,7 @@
 package project.B_P002_D001.Controller;
 
 import java.io.ByteArrayInputStream;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -42,30 +43,41 @@ import project.B_P002_D001.Service.B_P002_D001ShopingMallService;
 import project.E_P002_D003.Service.E_P002_D003ProductsService;
 import project.E_P002_D003.vo.E_P002_D003PhotoVO;
 import project.E_P002_D003.vo.E_P002_D003ProductsVO;
+import project.user.service.UserService;
 
 
 @Controller
 public class B_P002_D001ControllerImpl  implements B_P002_D001Controller{
 	private static final Logger logger = LoggerFactory.getLogger(B_P002_D001ControllerImpl.class);
-	//private static final String CURR_IMAGE_REPO_PATH = "C:\\shopping\\file_repo";
+	private static final String LOGIN = "LOGIN";
 	
 	@Autowired
 	private B_P002_D001ShopingMallService b_P002_D001ShopingMallService;
 
 	
-	
+	@Autowired
+	UserService userService;
 	               //상품 카테고리별 페이징
 	@Override
-	@RequestMapping(value = "/B_P002_D001/shopMainCate", method = { RequestMethod.GET, RequestMethod.POST })
-	public ModelAndView shopmainCate(@RequestParam Map<String, Object> info, HttpServletRequest request, HttpServletResponse response) throws Exception {
+	@RequestMapping(value = "/shopMainCate.do", method = { RequestMethod.GET, RequestMethod.POST })
+	public ModelAndView shopmainCate(@RequestParam Map<String, Object> info,HttpSession httpSession, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		ModelAndView mav = new ModelAndView();
 		System.out.println("메인페이지 파라미터정보:"+info.toString());
 		
-		Map<String,Object> search = new HashMap<String,Object>(); //해쉬맵으로 처리할거다 
 		
 		String nowPage = (String) info.get("nowPage");
 		String cntPerPage = (String) info.get("cntPerPage");
 		String listType = (String) info.get("listType");
+		String searchContent= (String) info.get("searchContent");
+		String sorting = (String) info.get("sorting");
+
+		if(httpSession.getAttribute(LOGIN)!=null) { //로그인을 했을 경우
+			String id = (String) httpSession.getAttribute(LOGIN); //아이디
+			int userNum = userService.selectUserNum(id);         //유저넘
+			info.put("userNum", userNum);
+		}else {
+			info.put("userNum", 0);
+		}
 	
 		if (nowPage == null && cntPerPage == null ) {
 			nowPage = "1";
@@ -76,39 +88,35 @@ public class B_P002_D001ControllerImpl  implements B_P002_D001Controller{
 			cntPerPage = "9";
 		}
 		
-		if(listType.equals("200")) { //검색     
-			System.out.println(info.toString());
-			int searchvalue= Integer.parseInt((String) info.get("search"));     //검색 조건 (전체검색,의류,등산 등등)
-			String searchType= (String)info.get("searchType");  //   검색타입 (이름/내용)
-			String searchContent=(String)info.get("searchContent");  // 검색어
-			info.put("search", searchvalue);
-			info.put("searchType", searchType);
-			info.put("searchContent", searchContent);
-			
-			   int total = b_P002_D001ShopingMallService.SearchTotalCount(info);
-				Paging vo2 = new Paging(Integer.parseInt(listType),total, Integer.parseInt(nowPage), 
-						Integer.parseInt(cntPerPage),searchvalue,searchType,searchContent);
-				info.put("listType", vo2.getListType());
-				info.put("start", vo2.getStart());
-				info.put("end", vo2.getEnd());
-				List<Map> list = b_P002_D001ShopingMallService.searchResult(info); //검색 처리 후
-				mav.addObject("paging",vo2);
-				mav.addObject("viewAll", list);
-				
-		}else {  //일반 분류
-		search.put("listType", Integer.parseInt(listType));
-		int total = b_P002_D001ShopingMallService.totalCount2(search);
-		Paging vo2 = new Paging(Integer.parseInt(listType), total, Integer.parseInt(nowPage), Integer.parseInt(cntPerPage));
-		search.put("listType", vo2.getListType());
-		search.put("start", vo2.getStart());
-		search.put("end", vo2.getEnd());
-		List<Map> list =b_P002_D001ShopingMallService.shopListTextCate(search);  // 
+	    
 		
-		mav.addObject("paging",vo2);
-		mav.addObject("viewAll", list);
+		if(listType==null) {
+			listType ="100";
+		}else if (sorting==null) {
+			sorting="defualt";
 		}
 		
-		List<Map> lastItems = b_P002_D001ShopingMallService.lastItems();     //최신 글 5개
+	    System.out.println(info.toString());
+	    info.put("listType", Integer.parseInt(listType));
+	    
+		int total = b_P002_D001ShopingMallService.totalCount2(info);
+		
+		Paging vo2 = new Paging(Integer.parseInt(listType), total, Integer.parseInt(nowPage), Integer.parseInt(cntPerPage),
+				searchContent,sorting);
+		
+		info.put("listType", vo2.getListType());
+		info.put("start", vo2.getStart());
+		info.put("end", vo2.getEnd());
+		info.put("searchContent", vo2.getSearchContent());
+		info.put("sorting", vo2.getSorting());
+		
+		List<Map> list =b_P002_D001ShopingMallService.shopListTextCate(info);  // 
+		
+		System.out.println("페이징"+vo2.toString());
+		mav.addObject("paging",vo2);
+		mav.addObject("viewAll", list);
+		
+		List<Map> lastItems = b_P002_D001ShopingMallService.lastItems(info);     //최신 글 8개
 		mav.addObject("lastItems", lastItems);
 		mav.setViewName("/shoppingMall/shopMain");
 		
@@ -116,62 +124,91 @@ public class B_P002_D001ControllerImpl  implements B_P002_D001Controller{
 	}
 	
 
-	/*
-	@Override      //검색 이전버전  
-	@RequestMapping(value = "/B_P002_D001/searchResult", method = { RequestMethod.GET, RequestMethod.POST })
-	public ModelAndView ㅊ(@RequestParam Map<String, Object> info, HttpServletRequest request, HttpServletResponse response)throws Exception {
-		ModelAndView mav= new ModelAndView();
-		String nowPage = request.getParameter("nowPage");
-		String cntPerPage = request.getParameter("cntPerPage");
-		if (nowPage == null && cntPerPage == null) {
-			nowPage = "1";
-			cntPerPage = "6";
-		} else if (nowPage == null) {
-			nowPage = "1";
-		} else if (cntPerPage == null) { 
-			cntPerPage = "6";
-		}
-		//System.out.println("타입"+info.get("searchtype"));
-		//System.out.println("내용"+info.get("searchContent"));
+	
+	/*             메인화면 백업
+    //상품 카테고리별 페이징
+@Override
+@RequestMapping(value = "/B_P002_D001/shopMainCate", method = { RequestMethod.GET, RequestMethod.POST })
+public ModelAndView shopmainCate(@RequestParam Map<String, Object> info,HttpSession httpSession, HttpServletRequest request, HttpServletResponse response) throws Exception {
+ModelAndView mav = new ModelAndView();
+System.out.println("메인페이지 파라미터정보:"+info.toString());
+
+Map<String,Object> search = new HashMap<String,Object>(); //해쉬맵으로 처리할거다 
+
+String nowPage = (String) info.get("nowPage");
+String cntPerPage = (String) info.get("cntPerPage");
+String listType = (String) info.get("listType");
+
+
+if(httpSession.getAttribute(LOGIN)!=null) { //로그인을 했을 경우
+	String id = (String) httpSession.getAttribute(LOGIN); //아이디
+	int userNum = userService.selectUserNum(id);         //유저넘
+	search.put("userNum", userNum);
+	info.put("userNum", userNum);
+}else {
+	search.put("userNum", 0);
+	info.put("userNum", 0);
+}
+
+if (nowPage == null && cntPerPage == null ) {
+	nowPage = "1";
+	cntPerPage = "9";
+} else if (nowPage == null) {
+	nowPage = "1";
+} else if (cntPerPage == null) { 
+	cntPerPage = "9";
+}
+
+if(listType==null) {
+	listType ="100";
+}
+
+
+if(listType.equals("200")) { //검색     
+	System.out.println(info.toString());
+	//int searchvalue= Integer.parseInt((String) info.get("search"));     //검색 조건 (전체검색,의류,등산 등등)
+	//String searchType= (String)info.get("searchType");  //   검색타입 (이름/내용)
+	String searchContent=(String)info.get("searchContent");  // 검색어
+	//info.put("search", searchvalue);
+	//info.put("searchType", searchType);
+	info.put("searchContent", searchContent);
+	
+	   int total = b_P002_D001ShopingMallService.SearchTotalCount(info);
+		Paging vo2 = new Paging(Integer.parseInt(listType),total, Integer.parseInt(nowPage), 
+				Integer.parseInt(cntPerPage),searchContent);
+		info.put("listType", vo2.getListType());
+		info.put("start", vo2.getStart());
+		info.put("end", vo2.getEnd());
+		List<Map> list = b_P002_D001ShopingMallService.searchResult(info); //검색 처리 후
 		
-		if(info.get("searchtype")==""&&info.get("searchtype")==null) {
-			String searchtype = (String) request.getAttribute("searchtype");
-			String searchContent = (String) request.getAttribute("searchContent");
-			info.put("searchtype", searchtype);
-			info.put("searchContent", searchContent);
-			System.out.println("타입"+info.get("searchtype"));
-			System.out.println("내용"+info.get("searchContent"));
-			int total = b_P002_D001ShopingMallService.SearchTotalCount(info);
-			System.out.println("총 개수"+total);
-			Paging vo = new Paging(total, Integer.parseInt(nowPage), Integer.parseInt(cntPerPage));
-			int start = vo.getStart();
-			int end = vo.getEnd();
-			info.put("start",start );
-			info.put("end", end);
-			List<Map> list = b_P002_D001ShopingMallService.searchResult(info);
-			System.out.println("넘어온 리스트"+list.size());
-			mav.addObject("viewAll", list);
-			mav.addObject("paging",vo);
-		}else {
-			int total = b_P002_D001ShopingMallService.SearchTotalCount(info);
-			System.out.println("총 개수"+total);
-			Paging vo = new Paging(total, Integer.parseInt(nowPage), Integer.parseInt(cntPerPage));
-			int start = vo.getStart();
-			int end = vo.getEnd();
-			info.put("start",start );
-			info.put("end", end);
-			List<Map> list = b_P002_D001ShopingMallService.searchResult(info);
-			System.out.println("넘어온 리스트"+list.size());
-			mav.addObject("viewAll", list);
-			mav.addObject("paging",vo);
-		}
+		mav.addObject("searchContent",searchContent); //검색어
+		mav.addObject("paging",vo2);
+		mav.addObject("viewAll", list);
 		
-		request.setAttribute("searchtype", info.get("searchtype"));
-		request.setAttribute("searchContent", info.get("searchContent"));
-		mav.setViewName("/shoppingMall/searchResult");
-		return mav;
-	}
-      */
+}
+else {  //일반 분류
+	
+search.put("listType", Integer.parseInt(listType));
+int total = b_P002_D001ShopingMallService.totalCount2(search);
+Paging vo2 = new Paging(Integer.parseInt(listType), total, Integer.parseInt(nowPage), Integer.parseInt(cntPerPage));
+search.put("listType", vo2.getListType());
+search.put("start", vo2.getStart());
+search.put("end", vo2.getEnd());
+List<Map> list =b_P002_D001ShopingMallService.shopListTextCate(search);  // 
+
+System.out.println("ddd"+list.toString());
+
+mav.addObject("paging",vo2);
+mav.addObject("viewAll", list);
+}
+
+
+List<Map> lastItems = b_P002_D001ShopingMallService.lastItems();     //최신 글 5개
+mav.addObject("lastItems", lastItems);
+mav.setViewName("/shoppingMall/shopMain");
+
+return mav;
+}*/
 	
 	
 	

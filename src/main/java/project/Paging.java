@@ -7,17 +7,21 @@ public class Paging {
 
 	// 현재페이지, 시작페이지, 끝페이지, 게시글 총 갯수, 페이지당 글 갯수, 마지막페이지, SQL쿼리에 쓸 start, end
 	private int nowPage, startPage, endPage, total, cntPerPage, lastPage, start, end;
-	private int cntPage = 7;
+	private int cntPage = 5;  //한화면에 보여줄 페이징 숫자의 개수 
 	private int listType;
-	private String search;
+	private int search;
 	private String searchType;
 	private String searchContent;
+	private String starD;
+	private String endD;
+	private String sorting;
+
+
 
 	public Paging() {
 	}
 
-	public Paging(int listType, int total, int nowPage, int cntPerPage, String search, String searchType,
-			String searchContent) {
+	public Paging(int listType, int total, int nowPage, int cntPerPage,String searchContent) {
 		setNowPage(nowPage);
 		setCntPerPage(cntPerPage);
 		setTotal(total);
@@ -25,12 +29,35 @@ public class Paging {
 		calcStartEndPage(getNowPage(), cntPage);
 		calcStartEnd(getNowPage(), getCntPerPage());
 		this.listType = listType;
-		this.search = search;
-		this.searchType = searchType;
 		this.searchContent = searchContent;
 
 	}
+	
+	public Paging(int listType, int total, int nowPage, int cntPerPage,String searchContent,String sorting) {
+		setNowPage(nowPage);
+		setCntPerPage(cntPerPage);
+		setTotal(total);
+		calcLastPage(getTotal(), getCntPerPage());
+		calcStartEndPage(getNowPage(), cntPage);
+		calcStartEnd(getNowPage(), getCntPerPage());
+		this.listType = listType;
+		this.searchContent = searchContent;
+		this.sorting = sorting;
 
+	}
+
+	public Paging(String starD,String endD,int listType, int total, int nowPage, int cntPerPage) {
+		setNowPage(nowPage);
+		setCntPerPage(cntPerPage);
+		setTotal(total);
+		calcLastPage(getTotal(), getCntPerPage());
+		calcStartEndPage(getNowPage(), cntPage);
+		calcStartEnd(getNowPage(), getCntPerPage());
+		this.listType = listType;
+		this.endD=endD;
+		this.starD=starD;
+	}
+	
 	public Paging(int listType, int total, int nowPage, int cntPerPage) {
 		setNowPage(nowPage);
 		setCntPerPage(cntPerPage);
@@ -153,11 +180,11 @@ public class Paging {
 		this.cntPage = cntPage;
 	}
 
-	public String getSearch() {
+	public int getSearch() {
 		return search;
 	}
 
-	public void setSearch(String search) {
+	public void setSearch(int search) {
 		this.search = search;
 	}
 
@@ -183,6 +210,31 @@ public class Paging {
 
 	public void setListType(int listType) {
 		this.listType = listType;
+	}
+	
+	public String getStarD() {
+		return starD;
+	}
+
+	public void setStarD(String starD) {
+		this.starD = starD;
+	}
+
+	public String getEndD() {
+		return endD;
+	}
+
+	public void setEndD(String endD) {
+		this.endD = endD;
+	}
+	
+
+	public String getSorting() {
+		return sorting;
+	}
+
+	public void setSorting(String sorting) {
+		this.sorting = sorting;
 	}
 
 	@Override
