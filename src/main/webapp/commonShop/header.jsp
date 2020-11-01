@@ -28,7 +28,7 @@
         </div>
         <nav class="menu-bar">
             <ul>
-                <li><a href="../group/main2.jsp">산 오르기</a></li>
+                <li><a href="../mountain/main.jsp">산 오르기</a></li>
                 
                 <li><a href="#">산 모임</a></li>
                 <li><a href="../shoppingMall/main.jsp">오름 마켓</a></li>

@@ -29,4 +29,7 @@ public interface MountainService {
     List selectTrailDetailInfo(Map map);
     List selectTrailSumInfo(Map map);
     List selectTrailSpot(Map map);
+
+    String checkTrailLike(Map map);
+    int trailLikeFunction(Map map);
 }

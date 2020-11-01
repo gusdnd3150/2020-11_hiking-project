@@ -9,27 +9,46 @@
             SELECT groups_seq.nextval
             FROM dual
         </selectKey>
-        <![CDATA[
+        <if test='staffMax > 1'>
             INSERT INTO groups
             VALUES (
-                #{groupNum},
-                #{name},
-                1,
-                1,
-                #{staffMax},
-                #{detail},
-                1,
-                REPLACE(#{startDay},'T',''),
-                sysdate,
-                sysdate,
-                #{area},
-                #{ageStart},
-                #{ageEnd},
-                #{sex},
-                #{mtNm},
-                NVL(#{connectGroupNum},0)
-                )
-        ]]>
+            #{groupNum},
+            #{name},
+            1,
+            1,
+            #{staffMax},
+            #{detail},
+            1,
+            REPLACE(#{startDay},'T',''),
+            sysdate,
+            sysdate,
+            #{area},
+            #{ageStart},
+            #{ageEnd},
+            #{sex},
+            #{mtNm},
+            NVL(#{connectGroupNum},0)
+            )
+        </if>
+        <if test='staffMax == 1'>
+            INSERT INTO groups
+                (groupNum,name,type,staffCurrent,staffMax,detail,status,startday,createdAt,updatedAt,area,mtnm,sex)
+            VALUES (
+            #{groupNum},
+            #{name},
+            1,
+            1,
+            #{staffMax},
+            #{detail},
+            0,
+            REPLACE(#{startDay},'T',''),
+            sysdate,
+            sysdate,
+            #{area},
+            #{mtNm},
+            '무관'
+            )
+        </if>
     </insert>
 
     <insert id="insertGroupLeader" parameterType="map">

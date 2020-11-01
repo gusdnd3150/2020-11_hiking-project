@@ -6,6 +6,7 @@ function setMtnm(e){
 $(document).ready(function () {
     $('#searchByMtnm').click(function (e){
         e.preventDefault();
+
         $('.mountainList').children().remove()
 
         var type = $('#searchType').val();

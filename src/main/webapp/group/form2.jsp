@@ -181,6 +181,7 @@
 <script src="//cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/js/bootstrap4-toggle.min.js"></script>
 <script src="../resources/ckeditor5/ckeditor.js"></script>
 <script type="text/javascript" src="../resources/js/view/group/searchMt.js"></script>
+<script type="text/javascript" src="../resources/js/view/group/validation.js"></script>
 <script>
     ClassicEditor
         .create( document.querySelector( '#detail' ), {
@@ -310,8 +311,15 @@
                                 html += '<button class="btn btn-outline-secondary col-2" onclick="selectGroup(this)">선택</button>';
                                 html += '</li>'
 
-                                $('.connectGroupList').append(html);
+                            }else if(response[i][j].GROUPNUM == 0){
+                                var html = '';
+
+                                html += '<li>';
+                                html += '가입한 모임이 없습니다'
+                                html += '</li>';
                             }
+
+                            $('.connectGroupList').append(html);
                         }
                     }
                 },

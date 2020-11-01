@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page session="false" %>
 <jsp:include page="/common/header.jsp" />
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=10adf6d2b4bb761d1e63b20e8cb26e87&libraries=drawing"></script>
@@ -9,9 +8,15 @@
 <div class="pt-5">
     <div class="d-flex justify-content-between">
         <h1>${trail[0].MNTN_NM} 등산로</h1>
-        <button class="mtStar btn btn-outline-warning" style="height: 40px" onclick=""><i class="far fa-star"></i></button>
+        <c:choose>
+            <c:when test="${checkLike eq 'Y'}">
+                <button class="trailStar btn btn-outline-warning" style="height: 40px"><i class="fas fa-star"></i></button>
+            </c:when>
+            <c:when test="${empty checkLike || checkLike eq 'N'}">
+                <button class="trailDisStar btn btn-outline-warning" style="height: 40px" ><i class="far fa-star"></i></button>
+            </c:when>
+        </c:choose>
     </div>
-<%--    <button class="mtStar btn btn-outline-warning" style="height: 40px" onclick=""><i class="fas fa-star"></i></button>--%>
     <div class="map_wrap form-inline">
         <div id="map" class="col-sm-12 col-md-8" style="height:350px;"></div>
         <div id="sectionList" class="col-sm-12 col-md-4" style="height: 350px;border: 1px solid black;overflow-y: scroll">
@@ -114,6 +119,41 @@
 
                 var initX = 0;
                 var initY = 0;
+
+                if (navigator.geolocation) {
+                    //위치 정보를 얻기
+                    navigator.geolocation.getCurrentPosition (function(pos) {
+
+                        positions.push(
+                            {
+                                title: 'myposition',
+                                content: '<div>현재 나의 위치</div>',
+                                latlng: new kakao.maps.LatLng(pos.coords.latitude, pos.coords.longitude)
+                            })
+
+                        var imageSrc = "/resources/img/marker.png";
+
+                        for (var i = 0; i < positions.length; i++) {
+
+                            var imageSize = new kakao.maps.Size(35, 35);
+
+                            var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
+
+                            var marker = new kakao.maps.Marker({
+                                map: map,
+                                position: positions[i].latlng,
+                                title: positions[i].title,
+                                image: markerImage,
+                                zIndex: positions[i].zIndex,
+                            });
+                            console.log("pushed")
+                            overlays.push(marker);
+
+                        }
+                    })
+                } else {
+                    alert("이 브라우저에서는 Geolocation이 지원되지 않습니다.")
+                }
 
                 for(var i=0;i<response.length;i++){
                     var centerGRS80 = proj4.Proj(proj4.defs["EPSG:5181"]);
@@ -236,6 +276,67 @@
 
         return path;
     }
+    $(document).on('click','.trailDisStar',function (){
+
+        if(${LOGIN==''}||${LOGIN==null}){
+            alert('로그인 해주세요');return
+        }
+
+        var data = {
+            "MNTN_CODE" : ${trail[0].MNTN_CODE},
+            "USERID" : '${LOGIN}',
+            "likeYN" : 'Y'
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/trail/like.do",
+            data: JSON.stringify(data),
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8;",
+            success: function (response){
+                $('.trailDisStar')
+                    .empty()
+                    .attr('class','trailStar btn btn-outline-warning')
+                    .append('<i class="fas fa-star"></i>')
+                alert("찜 목록에 추가 되었습니다")
+            },
+            error: function (response){
+                console.log("error")
+            }
+        })
+    })
+    $(document).on('click','.trailStar',function (){
+
+        if(${LOGIN==''}||${LOGIN==null}){
+            alert('로그인 해주세요');return
+        }
+
+        var data = {
+            "MNTN_CODE" : ${trail[0].MNTN_CODE},
+            "USERID" : '${LOGIN}',
+            "likeYN" : 'N'
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/trail/like.do",
+            data: JSON.stringify(data),
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8;",
+            success: function (response){
+                $('.trailStar')
+                    .empty()
+                    .append('<i class="far fa-star"></i>')
+                    .attr('class','trailDisStar btn btn-outline-warning');
+                alert("찜 목록에서 삭제 되었습니다")
+
+            },
+            error: function (response){
+                console.log("error")
+            }
+        })
+    })
 </script>
 </body>
 </html>

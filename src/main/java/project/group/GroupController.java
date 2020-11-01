@@ -26,6 +26,11 @@ public class GroupController{
     @Resource(name = "chatService")
     private ChatService chatService;
 
+    @GetMapping("/group/main.do")
+    public String goMain1(){
+        return "main";
+    }
+
     @PostMapping(value = "/group/insert.do")
     public ModelAndView insertGroup(@RequestParam Map map,
                                     @RequestParam(value = "file", required = false) List<MultipartFile> files,
@@ -40,16 +45,6 @@ public class GroupController{
 
         mav.addObject("groupNum",groupNum);
         return mav;
-    }
-
-    @GetMapping("/group/main1.do")
-    public String goMain1(){
-        return "main1";
-    }
-
-    @GetMapping("/group/main2.do")
-    public String goMain2() {
-        return "main2";
     }
 
     @PostMapping("/group/update.do")
@@ -67,7 +62,7 @@ public class GroupController{
         ModelAndView mav = new ModelAndView();
         String userId = (String) request.getSession().getAttribute("LOGIN");
         if(userId==null){
-            mav.setViewName("redirect:/main.do"); //인터셉터 추가후 지우기
+            mav.setViewName("redirect:/user/logInView.do"); //인터셉터 추가후 지우기
             return mav;
         }
         mav.setViewName("detail");

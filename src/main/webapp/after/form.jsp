@@ -156,7 +156,7 @@
                     return;
                 }
                 alert("작성 완료")
-                location.href="../group/main1.jsp"
+                location.href="../group/main.jsp"
             },
             error : function (response){
                 alert("오류 발생! 다시 시도해주세요");

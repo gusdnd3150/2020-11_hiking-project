@@ -4,6 +4,33 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="mountain">
+    <!-- DATE 추가시 일 기준으로 반영됨-->
+<!--    <select id="selectMountainByRank" resultType="map" parameterType="int">-->
+<!--        <![CDATA[-->
+<!--            SELECT thisWeek.MTNM, NVL(prevWeek.rank - thisWeek.rank,'-999') changeRank-->
+<!--            FROM (-->
+<!--            SELECT g.MTNM,DENSE_RANK() OVER (ORDER BY COUNT(g.MTNM) DESC) rank-->
+<!--            FROM groups g-->
+<!--            WHERE g.MTNM != '0'-->
+<!--              AND g.CREATEDAT BETWEEN TO_DATE(sysdate-7)-->
+<!--              AND   TO_DATE(sysdate)-->
+<!--            GROUP BY g.MTNM-->
+<!--           ) thisWeek-->
+
+<!--            LEFT OUTER JOIN-->
+<!--            (-->
+<!--                SELECT g.MTNM, DENSE_RANK() OVER (ORDER BY COUNT(g.MTNM) DESC) rank-->
+<!--                FROM groups g-->
+<!--                WHERE g.MTNM != '0'-->
+<!--                  AND g.CREATEDAT BETWEEN TO_DATE(sysdate-14)-->
+<!--                  AND   TO_DATE(sysdate-7)-->
+<!--                GROUP BY g.MTNM-->
+<!--                ) prevWeek-->
+
+<!--                ON prevWeek.MTNM = thisWeek.MTNM-->
+<!--            ORDER BY changeRank DESC-->
+<!--        ]]>-->
+<!--    </select>-->
     <select id="selectMountainByRank" resultType="map" parameterType="int">
         <![CDATA[
             SELECT thisWeek.MTNM, NVL(prevWeek.rank - thisWeek.rank,'-999') changeRank
@@ -11,8 +38,8 @@
             SELECT g.MTNM,DENSE_RANK() OVER (ORDER BY COUNT(g.MTNM) DESC) rank
             FROM groups g
             WHERE g.MTNM != '0'
-              AND g.CREATEDAT BETWEEN TO_DATE(sysdate-7)
-              AND   TO_DATE(sysdate)
+              AND g.CREATEDAT BETWEEN sysdate-7
+              AND  sysdate
             GROUP BY g.MTNM
            ) thisWeek
 
@@ -21,8 +48,8 @@
                 SELECT g.MTNM, DENSE_RANK() OVER (ORDER BY COUNT(g.MTNM) DESC) rank
                 FROM groups g
                 WHERE g.MTNM != '0'
-                  AND g.CREATEDAT BETWEEN TO_DATE(sysdate-14)
-                  AND   TO_DATE(sysdate-7)
+                  AND g.CREATEDAT BETWEEN sysdate-14
+                  AND  sysdate-7
                 GROUP BY g.MTNM
                 ) prevWeek
 
@@ -31,9 +58,17 @@
         ]]>
     </select>
     <select id="selectTrailByRank" resultType="map">
-        SELECT MNTN_NM, MNTN_CODE
-        FROM trailInfo
-        GROUP BY MNTN_NM, MNTN_CODE
+        SELECT DISTINCT rank.*, ti.MNTN_NM
+        FROM
+        (
+            SELECT tl.MNTN_CODE, DENSE_RANK() OVER (ORDER BY COUNT(tl.LIKEYN) DESC) rank
+            FROM trailLike tl
+            WHERE tl.LIKEYN = 'Y'
+            GROUP BY tl.MNTN_CODE
+            ORDER BY rank ASC
+        ) rank
+        LEFT OUTER JOIN trailInfo ti ON ti.MNTN_CODE = rank.MNTN_CODE
+        ORDER BY rank ASC
     </select>
 
     <insert id="followMountainFunction" parameterType="map">
@@ -194,4 +229,42 @@
         WHERE MNTN_CODE = #{MNTN_CODE}
     </select>
 
+    <select id="checkTrailLike" resultType="string" parameterType="map">
+        SELECT NVL(LIKEYN,'N') LIKEYN
+        FROM TRAILLIKE
+        WHERE MNTN_CODE = #{MNTN_CODE}
+        AND USERID = #{USERID}
+    </select>
+
+    <insert id="trailLikeFunction" parameterType="map">
+        <if test='likeYN.equals("Y")'>
+            <![CDATA[
+            MERGE INTO TRAILLIKE
+            USING DUAL
+            ON (MNTN_CODE = #{MNTN_CODE} AND userId = #{USERID})
+            WHEN MATCHED THEN
+            UPDATE SET
+                    likeYN = #{likeYN},
+                    createdAT = sysdate
+            WHEN NOT MATCHED THEN
+                INSERT (MNTN_CODE, USERID, likeYN, createdAt)
+                VALUES (#{MNTN_CODE},#{USERID},#{likeYN},sysdate)
+        ]]>
+        </if>
+        <if test='likeYN.equals("N")'>
+            UPDATE TRAILLIKE
+            SET MNTN_CODE = #{MNTN_CODE},
+            userId = #{USERID},
+            likeYn = #{likeYN},
+            createdAt = sysdate
+            WHERE MNTN_CODE = #{MNTN_CODE}
+            AND userId = #{USERID}
+        </if>
+        <selectKey keyProperty="MNTN_CODE" resultType="_int" order="AFTER">
+            SELECT MNTN_CODE
+            FROM trailLike
+            WHERE MNTN_CODE = #{MNTN_CODE}
+            AND userId = #{USERID}
+        </selectKey>
+    </insert>
 </mapper>

@@ -107,9 +107,16 @@
     }
 
     function followMountain(mntilistno){
+
+        var userId = '${LOGIN}';
+
+        if(userId==null||userId==''){
+            alert('로그인 서비스입니다');return
+        }
+
         var data = {
             'mntilistno' : mntilistno,
-            'userId' : '<%= session.getAttribute("LOGIN")%>',
+            'userId' : userId,
             'likeYN' : 'Y'
         }
         $.ajax({
@@ -119,7 +126,7 @@
             dataType: 'json',
             contentType: "application/json; charset=utf-8;",
             success: function (response){
-                console.log("success")
+                console.log(response)
                 $('.mtStar')
                     .empty().append('<i class="fas fa-star"></i>')
                 alert("찜 목록에 추가 되었습니다")
@@ -132,9 +139,16 @@
     }
 
     function unFollowMountain(mntilistno){
+
+        var userId = '${LOGIN}';
+
+        if(userId==null||userId==''){
+            alert('로그인 서비스입니다');return
+        }
+
         var data = {
             'mntilistno' : mntilistno,
-            'userId' : '<%= session.getAttribute("LOGIN")%>',
+            'userId' : userId,
             'likeYN' : 'N'
         }
         $.ajax({

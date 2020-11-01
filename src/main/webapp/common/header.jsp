@@ -28,10 +28,10 @@
         <div class="collapse navbar-collapse" id="navbarResponsive" style="font-size: 20px">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="/group/main1.do">산오르기<span class="sr-only"></span></a>
+                    <a class="nav-link" href="/group/main.do">산오르기<span class="sr-only"></span></a>
                     <ul id="sub-menu">
-                        <li style="font-size: 16px"><a class="nav-link" href="/group/main1.do">등산모임<span class="sr-only"></span></a></li>
-                        <li style="font-size: 16px"><a class="nav-link" href="/group/main2.do">등산로<span class="sr-only"></span></a></li>
+                        <li style="font-size: 16px"><a class="nav-link" href="/group/main.do">등산모임<span class="sr-only"></span></a></li>
+                        <li style="font-size: 16px"><a class="nav-link" href="/mountain/main.do">등산로<span class="sr-only"></span></a></li>
                         <li style="font-size: 16px"><a class="nav-link" href="/after/main.do">후기<span class="sr-only"></span></a></li>
                     </ul>
                 </li>

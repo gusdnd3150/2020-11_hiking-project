@@ -11,7 +11,7 @@
 	<div class="left-cover col-6 align-self-center">
 		<div class="inner-cover" style="margin-left: 20%">
 			<h1>등산 좋아하세요?</h1>
-			산모임 검색하기
+			등산모임 검색하기
 <%--			<button class="btn btn-outline-info" onclick="moveToMain();">더보기</button>--%>
 			<div class="form-inline">
 				<input type="text" class="form-control col-6">
@@ -207,7 +207,7 @@
 			dataType: 'json',
 			contentType: "application/json; charset=utf-8;",
 			success: function (response){
-				for(var i=0;i<5;i++){
+				for(var i=0;i<response.length;i++){
 
 					var html = '';
 
@@ -240,8 +240,7 @@
 			contentType: "application/json; charset=utf-8;",
 			success: function (response){
 
-				console.log(response)
-				for(var i=0;i<5;i++){
+				for(var i=0;i<response.length;i++){
 
 					var html = '';
 

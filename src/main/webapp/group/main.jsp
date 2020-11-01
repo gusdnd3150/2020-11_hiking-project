@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page session="false" %>
 <jsp:include page="/common/header.jsp" />
 <link rel="stylesheet" type="text/css" href="/resources/css/views/group/main.css" />
 <body class="pt-5 mt-5">
@@ -41,14 +40,24 @@
                 <button type="button" class="close" data-dismiss="modal">x</button>
             </div>
             <div class="modal-body row" style="text-align: center">
-                <div class="col-6">
-                    <img src="../resources/img/select1.png" style="width: 250px; height: 250px; display: block;">
-                    <button class="btn btn-primary" onclick="create1()">혼자 가기</button>
-                </div>
-                <div class="col-6" style="text-align: center">
-                    <img src="../resources/img/select2.png" style="width: 250px; height: 250px; display: block">
-                    <button class="btn btn-primary" onclick="create2()">다른사람과 가기</button>
-                </div>
+                <c:choose>
+                    <c:when test="${LOGIN ne null}">
+                        <div class="col-6">
+                            <img src="../resources/img/select1.png" style="width: 250px; height: 250px; display: block;">
+                            <button class="btn btn-primary" onclick="create1()">혼자 가기</button>
+                        </div>
+                        <div class="col-6" style="text-align: center">
+                            <img src="../resources/img/select2.png" style="width: 250px; height: 250px; display: block">
+                            <button class="btn btn-primary" onclick="create2()">다른사람과 가기</button>
+                        </div>
+                    </c:when>
+                    <c:when test="${LOGIN eq null}">
+                        <div class="p-5">
+                            <h2>로그인 해주세요</h2>
+                            <a class="btn btn-info m-5" href="/user/logInView.do" onclick="this.href">로그인 페이지로</a>
+                        </div>
+                    </c:when>
+                </c:choose>
             </div>
         </div>
     </div>
@@ -133,7 +142,6 @@
 
     function appendSortList(response){
 
-        console.log(response)
         for(var i=0;i<response.length;i++){
 
             var editorContent = response[i].DETAIL;

@@ -147,4 +147,11 @@ public class MountainServiceImpl implements MountainService{
     public List selectTrailDetailInfo(Map map){
         return mountainDAO.selectTrailDetailInfo(map);
     }
+
+    public String checkTrailLike(Map map){
+        return mountainDAO.checkTrailLike(map);
+    }
+    public int trailLikeFunction(Map map){
+        return mountainDAO.trailLikeFunction(map);
+    }
 }

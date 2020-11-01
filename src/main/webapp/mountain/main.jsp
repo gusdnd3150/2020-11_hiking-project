@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page session="false" %>
 <jsp:include page="/common/header.jsp" />
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="/resources/css/views/group/main.css" />
@@ -51,14 +50,24 @@
                 <button type="button" class="close" data-dismiss="modal">x</button>
             </div>
             <div class="modal-body row" style="text-align: center">
-                <div class="col-6">
-                    <img src="../resources/img/select1.png" style="width: 250px; height: 250px; display: block;">
-                    <button class="btn btn-primary" onclick="create1()">혼자 가기</button>
-                </div>
-                <div class="col-6" style="text-align: center">
-                    <img src="../resources/img/select2.png" style="width: 250px; height: 250px; display: block">
-                    <button class="btn btn-primary" onclick="create2()">다른사람과 가기</button>
-                </div>
+                <c:choose>
+                    <c:when test="${LOGIN ne null}">
+                        <div class="col-6">
+                            <img src="../resources/img/select1.png" style="width: 250px; height: 250px; display: block;">
+                            <button class="btn btn-primary" onclick="create1()">혼자 가기</button>
+                        </div>
+                        <div class="col-6" style="text-align: center">
+                            <img src="../resources/img/select2.png" style="width: 250px; height: 250px; display: block">
+                            <button class="btn btn-primary" onclick="create2()">다른사람과 가기</button>
+                        </div>
+                    </c:when>
+                    <c:when test="${LOGIN eq null}">
+                        <div class="p-5">
+                            <h2>로그인 해주세요</h2>
+                            <a class="btn btn-info m-5" href="/user/logInView.do" onclick="this.href">로그인 페이지로</a>
+                        </div>
+                    </c:when>
+                </c:choose>
             </div>
         </div>
     </div>
@@ -70,6 +79,7 @@
 
     var userId = "<%= request.getSession().getAttribute("LOGIN")%>"
 
+    console.log(userId)
     $(document).ready(function (){
         mtRank();
         trailRank();
@@ -194,7 +204,7 @@
                     html += '<li class="form-inline col-12 pl-0 pr-0">';
                     html += '<h4 class="col-2"><i>'+(i+1)+'</i></h4>';
                     html += '<div class="col-7 pr-0">';
-                    html += '<h5 style="font-weight: lighter">'+response[i].PMNTN_NM + '</h5>';
+                    html += '<h5 style="font-weight: lighter">'+response[i].MNTN_NM + '</h5>';
                     html += '</div>';
                     html += '<a href="/trail/'+response[i].MNTN_CODE+'.do?FID='+response[i].FID+'&userId='+userId+'" class="text-muted text-right col-3 p-0">더보기></a>';
                     html += '<hr />'

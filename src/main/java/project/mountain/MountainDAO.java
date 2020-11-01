@@ -55,4 +55,10 @@ public class MountainDAO {
     public List selectTrailDetailInfo(Map map){
         return sqlSession.selectList("mountain.selectTrailDetailInfo",map);
     }
+    public String checkTrailLike(Map map){
+        return sqlSession.selectOne("mountain.checkTrailLike",map);
+    }
+    public int trailLikeFunction(Map map){
+        return sqlSession.insert("mountain.trailLikeFunction",map);
+    }
 }

@@ -3,6 +3,7 @@ package project.mountain;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.util.*;
 
-@RestController
+@Controller
 public class MountainController {
 
     @Value("${mountainImagePath}")
@@ -29,9 +30,14 @@ public class MountainController {
     @Resource(name = "groupService")
     private GroupService groupService;
 
+    @GetMapping("/mountain/main.do")
+    public String goMain2() {
+        return "main";
+    }
 
     // 100대 명산 api
     @GetMapping("/mountain/100/{mtNm}.do")
+    @ResponseBody
     public ModelAndView get100MountainInfo(@PathVariable("mtNm")String mtNm) throws UnsupportedEncodingException {
         ModelAndView mav = new ModelAndView("/mountain/sub-detail");
         MountainResponseVO vo = mountainService.get100MountainInfo(mtNm,"");
@@ -43,6 +49,7 @@ public class MountainController {
         return mav;
     }
     @GetMapping("/mountain/100/image.do")
+    @ResponseBody
     public List get100MountainImage(@RequestParam("mntiListNo")String mntiListNo) throws UnsupportedEncodingException {
         MountainResponseVO vo = mountainService.get100MountainImage(mntiListNo);
         List list = new ArrayList();
@@ -95,6 +102,7 @@ public class MountainController {
     }
 
     @GetMapping("/mountain/image.do")
+    @ResponseBody
     public List selectMtImage(@RequestParam("mntilistno")String mntilistno) throws UnsupportedEncodingException {
         MountainResponseVO vo = mountainService.getMountainImage(mntilistno);
         List list = new ArrayList();
@@ -108,6 +116,7 @@ public class MountainController {
 
     //보류
     @GetMapping("/trail1/{searchWrd}.do")
+    @ResponseBody
     public ModelAndView getTrailInfo(@PathVariable("searchWrd")String searchWrd) throws UnsupportedEncodingException {
         ModelAndView mav = new ModelAndView("/mountain/detail2");
 
@@ -139,11 +148,18 @@ public class MountainController {
     @PostMapping("/mountain/followFN.do")
     @ResponseBody
     public int followMountainFunction(@RequestBody Map map){
+
+        String userId = (String) map.get("userId");
+        System.out.println("userId : "+userId);
+        if(userId==null){
+            return 0;
+        }
         int result = mountainService.followMountainFunction(map);
         return result;
     }
 
     @PostMapping("/searchMt.do")
+    @ResponseBody
     public MountainResponseVO searchMt(@RequestBody Map map) throws UnsupportedEncodingException {
 
         String mtNm = (String) map.get("mtNm");
@@ -156,6 +172,7 @@ public class MountainController {
     }
 
     @PostMapping("/searchTrail.do")
+    @ResponseBody
     public MountainResponseVO searchTrail(@RequestBody Map map) throws UnsupportedEncodingException {
 
         String searchWrd = (String) map.get("searchWrd");
@@ -279,7 +296,8 @@ public class MountainController {
 
     @GetMapping("/trail/{MNTN_CODE}.do")
     public ModelAndView selectTrailInfo(@PathVariable("MNTN_CODE")int mntn_code,
-                                        @RequestParam(value = "FID",required = false)String fid){
+                                        @RequestParam(value = "FID",required = false)String fid,
+                                        @RequestParam(value = "userId",required = false)String userId){
 
         ModelAndView mav = new ModelAndView("/mountain/trail-detail");
 
@@ -289,10 +307,15 @@ public class MountainController {
         if(fid!=null){
             map.put("FID",fid);
         }
+        if(userId!=null){
+            map.put("USERID",userId);
+        }
 
+        String checkLike = mountainService.checkTrailLike(map);
         List list = mountainService.selectTrailInfo(map);
         List sum = mountainService.selectTrailSumInfo(map);
 
+        mav.addObject("checkLike",checkLike);
         mav.addObject("trail", list);
         mav.addObject("sum",sum);
 
@@ -300,7 +323,7 @@ public class MountainController {
     }
     @GetMapping("/trail/detail/{MNTN_CODE}.do")
     public ModelAndView selectTrailDetailInfo(@PathVariable("MNTN_CODE")int mntn_code,
-                                              @RequestParam(value = "FID")String fid){
+                                              @RequestParam("FID")String fid){
 
         ModelAndView mav = new ModelAndView("/mountain/trail-popup");
 
@@ -312,5 +335,10 @@ public class MountainController {
         mav.addObject("trail", list);
 
         return mav;
+    }
+    @PostMapping("/trail/like.do")
+    @ResponseBody
+    public int trailLikeFunction(@RequestBody Map map){
+        return mountainService.trailLikeFunction(map);
     }
 }

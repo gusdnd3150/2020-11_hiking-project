@@ -1,13 +1,13 @@
 function create1(){
-    location.href='form1.jsp';
+        location.href='/group/form1.jsp';
 }
 function create2(){
-    location.href='form2.jsp';
+        location.href='/group/form2.jsp';
 }
 function goMain1(){
-    location.href='/group/main1.do';
+    location.href='/group/main.do';
 }
 function goMain2(){
-    location.href='/group/main2.do';
+    location.href='/mountain/main.do';
 
 }
