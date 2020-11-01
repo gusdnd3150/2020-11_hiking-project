@@ -1,6 +1,5 @@
 package project.B_P003_D001.service;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import java.util.List;
@@ -48,8 +47,8 @@ public class B_P003_D001productServiceImpl implements B_P003_D001productService{
 	}
 
 	@Override
-	public List<Map> afterList(Map<String, Object> map) throws DataAccessException {
-		List<Map> list = b_P003_D001productDAO.afterList(map);
+	public List<productAfterVO> afterList(Map<String, Object> map) throws DataAccessException {
+		List<productAfterVO> list = b_P003_D001productDAO.afterList(map);
 		return list;
 	}
 
@@ -71,8 +70,8 @@ public class B_P003_D001productServiceImpl implements B_P003_D001productService{
 	}
 
 	@Override
-	public float average(Map<String, Object> map) throws DataAccessException {
-		float average = b_P003_D001productDAO.average(map);
+	public int average(Map<String, Object> map) throws DataAccessException {
+        int average = b_P003_D001productDAO.average(map);
 		return average;
 	}
 
@@ -115,6 +114,16 @@ public class B_P003_D001productServiceImpl implements B_P003_D001productService{
 		
 	}
 
+	//트랜잭션 테스트
+	@Override
+	@Transactional
+	public void insertPaymentTest(Map<String, Object> map) throws DataAccessException {
+		    //b_P003_D001productDAO.updateQuantity(map);
+			//b_P003_D001productDAO.updateOrders(map);
+			//b_P003_D001productDAO.delivery(map);
+			//b_P003_D001productDAO.updatePoint(map);
+			//b_P003_D001productDAO.insertPayment(map);
+	}
 	
 	//장바구니 상품 추가
 	
@@ -328,169 +337,7 @@ public class B_P003_D001productServiceImpl implements B_P003_D001productService{
 		return b_P003_D001productDAO.payDetailList(map);
 	}
 
-
-	@Override
-	public void applycancelPay(Map<String, Object> map) {
-		b_P003_D001productDAO.applycancelPay(map);
-		
-	}
 	
-	@Override
-	public List<Map> selectComment(Map<String, Object> map) throws DataAccessException {
-		return b_P003_D001productDAO.selectComment(map);
-	}
-
-	@Override
-	public int totaladdUsed(Map<String, Object> usernum) throws DataAccessException {
-		return b_P003_D001productDAO.totaladdUsed(usernum);
-	}
-
-	@Override
-	public List<Map> selectMyUsedList(Map<String, Object> usernum) throws DataAccessException {
-		return b_P003_D001productDAO.selectMyUsedList(usernum);
-	}
 	
-
-	@Override
-	public void delAfter(Map<String, Object> info) {
-		b_P003_D001productDAO.delAfter(info);
-		
-	}
-
-	@Override
-	public void delComment(Map<String, Object> afterNum) {
-		b_P003_D001productDAO.delComment(afterNum);
-	}
-
-		@Override           //결제
-		@Transactional
-		public String insertPaymentTest(Map<String, Object> info,int userNum,List<Integer> prodNums,List<Integer> quantityToDB
-				,List<Integer> orderNums,List<Integer> perTotals,List<Integer> prodPrices,List<Integer> optionNums) throws DataAccessException {
-			String result ="";
-
-			Map<String,Object> param2 = new HashMap<String,Object>();
-	        List<Map> list = new ArrayList<Map>();
-	        System.out.println("info에 담긴 정보들:"+info.toString());
-	        
-	        String type = (String) info.get("type");  //즉시구매 1   장바구니결제 3
-	        String point=(String) info.get("point");
-	        int deliveryType =0;
-	        
-	        try {
-			    param2.put("userNum", userNum);
-		        param2.put("price",Integer.parseInt((String) info.get("paid_amount")));
-		        param2.put("prodName",info.get("prodName"));
-		        param2.put("chooseAddress",info.get("chooseAddress")); 
-		        param2.put("address1",info.get("address1"));
-		        param2.put("address2",info.get("address2"));
-		        param2.put("paid_amount",Integer.parseInt((String) info.get("paid_amount")));
-		        param2.put("zoneCode",Integer.parseInt((String) info.get("zoneCode")));
-		        param2.put("point",Integer.parseInt((String) info.get("point")));
-		        param2.put("phoneNum",info.get("phoneNum"));
-		        param2.put("custName",info.get("custName"));
-			
-		     //   delivery
-			  if(info.get("chooseAddress").equals("변경배송지")) {
-				  
-				    List<Map> delisize = getDelibasicSize(param2);
-				    if(delisize.size()==0) { //delivery 테이블에 row가 없으면 기본배송지로 추가
-				    	deliveryType=1;
-				    }else {
-				    	deliveryType = getDelibasic(param2)+1;
-				    }
-			        param2.put("deliBasic", deliveryType);
-			        delivery(param2);
-			        
-		        }else {  //기본배송지
-		        	deliveryType = 1;
-		        }
-			
-			
-			if(type.equals("1")) {
-				System.out.println("즉시구매");
-				
-				int totalPrice =Integer.parseInt((String) info.get("totalPrice")); //결제 총금액
-		    	 
-				
-				System.out.println("즉시구매 사이즈:"+orderNums.size());
-				for(int i=0; i<orderNums.size() ;i++) {
-					Map<String,Object> param = new HashMap<String,Object>();
-					int orderNum= ordernum(); //시퀀스번호
-					System.out.println("오더넘 시퀀스:"+orderNum);
-					param.put("userNum",userNum);
-					param.put("prodNum", prodNums.get(i));
-					param.put("quantity", quantityToDB.get(i));  
-					param.put("optionNum", optionNums.get(i));
-					param.put("payTotal", perTotals.get(i));
-					param.put("price", prodPrices.get(i));
-					param.put("deliveryType",deliveryType  );
-					param.put("prodName",info.get("prodName"));
-					param.put("custName",info.get("custName"));
-					param.put("payType",info.get("payType"));
-					param.put("imp_uid",info.get("imp_uid"));
-					param.put("merchant_uid",info.get("merchant_uid"));
-					param.put("apply_num", info.get("apply_num"));
-					
-					param.put("orderNum",orderNum);
-					param.put("getPoint", (totalPrice*0.05));  //총금액 5% - 사용포인트
-					param.put("used", Integer.parseInt(point));  //사용한 포인트
-					
-					list.add(param);
-				}
-				
-				System.out.println("즉시구매 파라미터값:"+list.toString());
-				  //orders 에  delieryType 추가해주어야함
-			    updateOrder(list);   //  (즉시구매)   insert orders
-				updatePoint(list);   // point 테이블에 추가
-				
-			}else if(type.equals("3")) {
-				System.out.println("장바구니 결제");
-				
-				int totalPrice =Integer.parseInt((String) info.get("totalPrice")); //결제 총금액
-				for(int i=0;i<orderNums.size();i++) {
-					Map<String,Object> param = new HashMap<String,Object>();
-					param.put("userNum",userNum);
-					param.put("prodNum", prodNums.get(i));
-					param.put("quantity", quantityToDB.get(i));  //
-					param.put("orderNum", orderNums.get(i));   //
-					param.put("optionNum", optionNums.get(i));
-					param.put("payTotal", perTotals.get(i));
-					param.put("price", prodPrices.get(i));
-					param.put("deliveryType", deliveryType );
-					param.put("prodName",info.get("prodName"));
-					param.put("custName",info.get("custName"));
-					param.put("payType",info.get("payType"));  //
-					param.put("imp_uid",info.get("imp_uid"));
-					param.put("merchant_uid",info.get("merchant_uid"));
-					param.put("apply_num", info.get("apply_num"));
-					
-					param.put("getPoint", (totalPrice*0.05));  //총금액 5% - 사용포인트
-					param.put("used", Integer.parseInt(point));  //사용한 포인트
-					list.add(param);
-				}
-	        	updateOrders(list);    // (장바구니) update  orders
-			    updatePoint(list);
-	        	
-			}
-	        System.out.println("리스트 정보:"+list.toString());
-	             //update  prodoption 수량 차감 
-			    updateQuantity(list);
-			    //insert payment   
-			    insertPaymentMultiple(list); 
-			    
-	        result ="seccess";
-	        	 
-			} catch (Exception e) {
-	           e.printStackTrace();
-	           result="fail";
-			}
-			return result;
-				
-		}
-
-		
-
-	
-
 
 }

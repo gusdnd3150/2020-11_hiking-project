@@ -161,52 +161,27 @@
        <select id="afterTotal" resultType="int" parameterType="java.util.Map">
 	      SELECT COUNT(*) FROM productafter
 	      where prodNum = #{prodNum}
-	      and aftertype is null
        </select>
        
        	<!-- 총 게시글 갯수 출력 카테고리 분류형 -->
        <select id="countBoard2" resultType="int" parameterType="java.util.Map">
 	       <![CDATA[
-	                       select count(*)
-						FROM products p,prodPhoto io
-                        where p.prodnum=io.prodnum
-                        and io.pphotonum=1
-                        and p.type not in (3,4)
+	       SELECT COUNT(*) FROM products
 	         ]]>
-	         
-	         <choose>
-	         <when test="listType==100">
-	         </when>
-	         <!-- 200이면 검색이기때문에 검색어를 넣어줌 -->
-              <when test="listType==200">
-              and (p.name like trim('%'||#{searchContent}||'%') or p.content like trim('%'||#{searchContent}||'%'))
-              </when>
-              <otherwise>
-            and p.PRODCATEGORYNUM = #{listType}
-              </otherwise>
-	         </choose>
+	       <where>
+           <if test=" listType!='' and listType!=null and listType!=100">
+            PRODCATEGORYNUM = #{listType}
+           </if>
+           </where>
        </select>
        
   	<!-- 상품상세 -->
        <select id="selectProductDetail" resultType="map" parameterType="java.util.Map">
-	    <if test="userNum==0">
-	    	       select op.color,op.prodsize,op.quantity,p.prodnum,
-                   p.content,p.name,to_char(p.price,'999,999,999,999')as price,p.type,op.optionnum
-           from products p, prodoption op 
+	       select op.color,op.prodsize,op.quantity,p.prodnum,
+                   p.content,p.name,p.price,p.type,op.optionnum
+           from products p, prodoption op
            where p.prodnum=op.prodnum
            and p.PRODNUM = #{prodNum}
-	    </if>
-	    
-	    <if test="userNum!=0">
-	     SELECT *
-             FROM(select op.color,op.prodsize,op.quantity,p.prodnum,
-              p.content,p.name,to_char(p.price,'999,999,999,999')as price,p.type,op.optionnum
-           from products p, prodoption op 
-           where p.prodnum=op.prodnum
-           and p.PRODNUM = #{prodNum})A left OUTER JOIN (select DISTINCT prodnum,usernum
-                                          from prodlike
-                                         where usernum=#{userNum}) B on A.prodnum=B.prodnum 
-	    </if> 
        </select>
        
        
@@ -241,8 +216,7 @@
 	  update orders
 	     set quantity = #{quantity},
           ORDERTYPE= 2,
-          optionnum = #{optionNum},
-          orderedat = sysdate
+          optionnum = #{optionNum}
 	     where ordernum= #{ordernum}
       ]]>      
    </update> 
@@ -322,9 +296,9 @@
        </select>
        
        
-              <!-- 상품 평균점수  decode(FLOOR(AVG(evalue)),null,0,FLOOR(AVG(evalue)))  -->
-       <select id="prodAverage" resultType="float" parameterType="java.util.Map">
-             select decode(ROUND(avg(evalue),1),null,0,ROUND(avg(evalue),1))  
+              <!-- 상품 평균점수 -->
+       <select id="prodAverage" resultType="int" parameterType="java.util.Map">
+             select  decode(FLOOR(AVG(evalue)),null,0,FLOOR(AVG(evalue))) 
              from productAfter
              where prodNum = #{prodNum}
        </select> 
@@ -401,20 +375,8 @@
                   connect by prior PRODCATEGORYNUM=PARENTCATEGORYNUM
               )a ,products b 
 	          where a.PRODCATEGORYNUM=b.PRODCATEGORYNUM
-	          and b.type not in (3,4)
 	         ]]>
-	         <choose>
-	            <when test="searchContent !=null and searchContent !=''">
-	            
-	              and b.name like trim('%'||#{searchContent}||'%') or b.content like trim('%'||#{searchContent}||'%')
-	            </when>
-	            <otherwise>
-	            </otherwise>
-	         </choose>
-	   
-	   
-	         
-    		 <!-- <choose>
+    		 <choose>
     		  <when test="search==10 and searchContent != null and searchType=='name'  ">
                 and b.name like '%'||#{searchContent}||'%'
               </when>
@@ -446,7 +408,7 @@
                and a.PARENTCATEGORYNUM =3
                 and b.content like '%'||#{searchContent}||'%'
               </when>
-            </choose> -->
+            </choose>
        </select>
 
 
@@ -468,68 +430,40 @@
 	            ]]>
        </select>
        
-       <!--     상품 후기 조회                        상품 상세페이지
-          <select id="afterList" resultType="map" parameterType="java.util.Map">
+           <!-- 상품 후기 조회                        상품 상세페이지-->
+          <select id="afterList" resultType="productAfterVO" parameterType="java.util.Map">
             <![CDATA[
-                  select *
-                from (select rownum as recum,
-                                 lvl,                          
-                      A.USERNUM,
-                      u.id,
-                      uin.content as image,
-                      A.AFTERNUM,
-                        A.prodNum,
-                        A.content,
-                      A.aftertype,      
-                      A.createDat,
-                        A.evalue,
-                        A.photo,
-                        A.photoName
-                  from   (    SELECT LEVEL AS lvl,
-                         USERNUM,AFTERNUM, prodNum,content,aftertype,createDat,evalue,photo,photoName
+                SELECT lvl,USERNUM,AFTERNUM,prodNum,content,aftertype,createDat,evalue,photo,photoName                
+                  FROM(                             
+                     SELECT ROWNUM AS recnum,
+                     lvl,                          
+                      USERNUM,
+                      AFTERNUM,
+                        prodNum,
+                        content,
+                      aftertype,      
+                      createDat,
+                        evalue,
+                        photo,
+                        photoName
+                         FROM(                              
+                             SELECT LEVEL AS lvl,
+                         USERNUM,
+                        AFTERNUM, 
+                         prodNum,
+                           content,
+                          aftertype,      
+                          createDat,
+                            evalue,
+                              photo,
+                              photoName
                                FROM productafter
                                  where prodNum= #{prodNum}
                                  START WITH aftertype is null
                                  CONNECT BY PRIOR AFTERNUM=aftertype
-                                 ORDER SIBLINGS BY AFTERNUM desc) A , users u, userinfo uin
-                   where A.usernum=u.usernum
-                   and u.usernum =uin.usernum)
-           where recum between #{start} and #{end}
-                        
-	            ]]>
-       </select> -->
-       
-       
-       
-         <!-- 상품 후기 조회                        상품 상세페이지-->
-          <select id="afterList" resultType="map" parameterType="java.util.Map">
-            <![CDATA[
-             select *
-                from (select rownum as recum,
-                      A.USERNUM,
-                      A.cnt,
-                      u.id,
-                      uin.content2 as image,
-                      A.AFTERNUM,
-                        A.prodNum,
-                        A.content,
-                      A.aftertype,      
-                      TO_CHAR(A.createDat,'YYYY-MM-DD HH:MM'),
-                        A.evalue,
-                        A.photo,
-                        A.photoName
-                  from   (    
-                         select  af.USERNUM,af.AFTERNUM, af.prodNum,af.content,af.aftertype,af.createDat,af.evalue,af.photo,af.photoName,(select count(*)
-                         from productafter      
-                         where aftertype= af.afternum) as cnt
-                         from productafter af 
-                         where af.aftertype is null
-                         and af.prodnum= #{prodNum}
-                         order by af.afternum desc) A , users u, userinfo uin
-                   where A.usernum=u.usernum
-                   and u.usernum =uin.usernum)
-              where recum between #{start} and #{end}
-
+                                 ORDER SIBLINGS BY AFTERNUM desc
+                               ))
+                        WHERE recnum BETWEEN #{start} AND #{end}
 	            ]]>
        </select>
        
@@ -541,117 +475,26 @@
 		       FROM (
 			       SELECT ROWNUM RN, A.* 
 				     FROM (
-					SELECT p.PRODNUM, p.PRODCATEGORYNUM,p.NAME,p.PRICE as sortPrice,p.CONTENT
-					 ,p.TYPE,p.CREATEDAT,p.UPDATEDAT,io.content as image , to_char(p.price,'999,999,999,999') as price
+					SELECT p.PRODNUM, p.PRODCATEGORYNUM,p.NAME,p.PRICE,p.CONTENT ,p.TYPE,p.CREATEDAT,p.UPDATEDAT,io.content as image
 						FROM products p,prodPhoto io
                         where p.prodnum=io.prodnum
                         and io.pphotonum=1
-                        and p.type not in (3,4)
+						ORDER BY p.prodNum desc
+						) A
+				     )
            ]]>
-   
-           <choose>
-            <when test="userNum ==0 and listType ==100 and listType !=200">
-            	     ORDER BY p.prodNum desc
-						) A
-				     )
-           where RN BETWEEN #{start} AND #{end}
-            </when>
-           
-           <when test="userNum !=0  and listType ==100 and listType !=200 ">
-           	     ORDER BY p.prodNum desc
-						) A
-				     )
-            B left OUTER JOIN (select DISTINCT prodnum , usernum
-                                          from prodlike
-                                        where usernum= #{userNum}) li on B.prodnum=li.prodnum 
-       where B.rn BETWEEN #{start} AND #{end}
-           </when>   
-   
-   
-           <when test="userNum ==0 and listType ==200 and sorting=='defualt'">
-               and (p.name like trim('%'||#{searchContent}||'%') or p.content like  trim('%'||#{searchContent}||'%'))
-               ORDER BY p.prodNum desc
-						) A
-				     )
-          where RN BETWEEN #{start} AND #{end}
-           
-           </when>
-         
-           <when test="userNum !=0 and listType ==200 and sorting=='defualt'  " >
-           	      and (p.name like trim('%'||#{searchContent}||'%') or p.content like  trim('%'||#{searchContent}||'%'))
-               ORDER BY p.prodNum desc
-						) A
-				     )
-           B left OUTER JOIN (select DISTINCT prodnum , usernum
-                                          from prodlike
-                                        where usernum= #{userNum}) li on B.prodnum=li.prodnum 
-       where B.rn BETWEEN #{start} AND #{end}
-       
-           </when>
-            
-            
-            
-          <when test="userNum ==0 and listType ==200 and sorting=='heightPrice'">
-          	      and (p.name like trim('%'||#{searchContent}||'%') or p.content like  trim('%'||#{searchContent}||'%'))
-               ORDER BY sortPrice desc
-						) A
-				     )
-          where RN BETWEEN #{start} AND #{end}
-          
-           </when>
-            
-           <when test="userNum !=0 and listType ==200 and sorting=='heightPrice'" >
-          	      and (p.name like trim('%'||#{searchContent}||'%') or p.content like  trim('%'||#{searchContent}||'%'))
-                  ORDER BY sortPrice desc
-						) A
-				     )
-           B left OUTER JOIN (select DISTINCT prodnum , usernum
-                                          from prodlike
-                                        where usernum= #{userNum}) li on B.prodnum=li.prodnum 
-       where B.rn BETWEEN #{start} AND #{end}
-         order by B.sortPrice desc
-           </when>
-            
-            
-            
-            <when test="userNum ==0 and listType ==200 and sorting=='lowPrice'">
-          	      and (p.name like trim('%'||#{searchContent}||'%') or p.content like  trim('%'||#{searchContent}||'%'))
-               ORDER BY sortPrice asc
-						) A
-				     )
-          where RN BETWEEN #{start} AND #{end}
-          
-          
-           </when>
-            
-           <when test="userNum !=0 and listType ==200 and sorting=='lowPrice'" >
-       	      and (p.name like trim('%'||#{searchContent}||'%') or p.content like  trim('%'||#{searchContent}||'%'))
-               ORDER BY sortPrice asc
-						) A
-				     )
-           B left OUTER JOIN (select DISTINCT prodnum , usernum
-                                          from prodlike
-                                        where usernum= #{userNum}) li on B.prodnum=li.prodnum 
-       where B.rn BETWEEN #{start} AND #{end}
-       order by B.sortPrice asc
-           </when>
-            
-          <!--    <otherwise>
-              ORDER BY p.prodNum desc
-						) A
-				     )
-             where RN BETWEEN #{start} AND #{end}
-               and prodcategorynum =#{listType}
-             </otherwise> -->
-           
-           </choose>
+           <where>
+           RN BETWEEN #{start} AND #{end}
+           <if test="listType!=100">
+          AND PRODCATEGORYNUM = #{listType}
+           </if>
+           </where>
        </select>
        
        
          <!-- 최신글 5개 -->
-       <select id="lastItems" resultType="map" parameterType="java.util.Map">
-          <![CDATA[
-          SELECT *
+       <select id="lastItems" resultType="map">
+         SELECT *
 		       FROM (
 			       SELECT ROWNUM RN, A.* 
 				     FROM (
@@ -659,25 +502,10 @@
 						FROM products p,prodPhoto io
                         where p.prodnum=io.prodnum
                         and io.pphotonum=1
-                        and p.type not in(3,4)
 						ORDER BY p.createdat desc
 						) A
 				     )
-			]]>
-			
-			<choose>
-			  <when test="userNum==0">
-               where RN BETWEEN 1 AND 8
-			  </when>
-			  
-			  <when test="userNum !=0">
-			  B left OUTER JOIN (select DISTINCT prodnum , usernum
-                                          from prodlike
-                                        where usernum=  #{userNum} ) li on B.prodnum=li.prodnum
-                where b.rn between 1 and 8
-			  </when>
-			
-			</choose>
+           where RN BETWEEN 1 AND 8
        </select>
        
                <!-- 즉시구매 페이지 상품 정보 -->
@@ -701,33 +529,13 @@
 		       FROM (
 			       SELECT ROWNUM RN, A.* 
 				     FROM (
-					   SELECT p.PRODNUM, p.PRODCATEGORYNUM,trim(p.NAME) as name,p.PRICE,trim(p.CONTENT) as content,a.PARENTCATEGORYNUM
+					   SELECT p.PRODNUM, p.PRODCATEGORYNUM,p.NAME,p.PRICE,p.CONTENT,a.PARENTCATEGORYNUM
                         ,p.TYPE,p.CREATEDAT,p.UPDATEDAT,io.content as image  
 						FROM (select *
                                from prodcategory
-                               start with PARENTCATEGORYNUM is null
-                               connect by prior PRODCATEGORYNUM=PARENTCATEGORYNUM
-                               )a, products p,prodPhoto io
-                        where p.prodnum=io.prodnum
-                        and a.PRODCATEGORYNUM =p.PRODCATEGORYNUM
-                        and io.pphotonum=1
-                        and p.type not in(3,4)
-						ORDER BY p.CREATEDAT desc
-						) A
-				     )
 
            ]]>
-           <choose>
-               <when test="searchContent!=null and searchContent!=''">
-               where rn between #{start} and #{end}
-               and content like  trim('%'||#{searchContent}||'%') or name like trim('%'||#{searchContent}||'%')
-               </when>
-               <otherwise>
-                where rn between #{start} and #{end}
-               </otherwise>
-           
-           </choose>
-          <!-- <choose>
+          <choose>
             <when test="search ==10 and searchType=='content' and searchContent != null">
                     start with PARENTCATEGORYNUM is null
                                connect by prior PRODCATEGORYNUM=PARENTCATEGORYNUM
@@ -735,8 +543,7 @@
                         where p.prodnum=io.prodnum
                         and a.PRODCATEGORYNUM =p.PRODCATEGORYNUM
                         and io.pphotonum=1
-                        and p.type not in(3,4)
-						ORDER BY p.CREATEDAT desc
+						ORDER BY p.CREATEDAT asc
 						) A
 				     )
            where rn between #{start} and #{end}
@@ -750,8 +557,7 @@
                         where p.prodnum=io.prodnum
                         and a.PRODCATEGORYNUM =p.PRODCATEGORYNUM
                         and io.pphotonum=1
-                        and p.type not in(3,4)
-						ORDER BY p.CREATEDAT desc
+						ORDER BY p.CREATEDAT asc
 						) A
 				     )
            where rn between #{start} and #{end}
@@ -765,8 +571,7 @@
                         where p.prodnum=io.prodnum
                         and a.PRODCATEGORYNUM =p.PRODCATEGORYNUM
                         and io.pphotonum=1
-                        and p.type not in(3,4)
-						ORDER BY p.CREATEDAT desc
+						ORDER BY p.CREATEDAT asc
 						) A
 				     )
            where rn between #{start} and #{end}
@@ -780,8 +585,7 @@
                         where p.prodnum=io.prodnum
                         and a.PRODCATEGORYNUM =p.PRODCATEGORYNUM
                         and io.pphotonum=1
-                        and p.type not in(3,4)
-						ORDER BY p.CREATEDAT desc
+						ORDER BY p.CREATEDAT asc
 						) A
 				     )
            where rn between #{start} and #{end}
@@ -795,8 +599,7 @@
                         where p.prodnum=io.prodnum
                         and a.PRODCATEGORYNUM =p.PRODCATEGORYNUM
                         and io.pphotonum=1
-                        and p.type not in(3,4)
-						ORDER BY p.CREATEDAT desc
+						ORDER BY p.CREATEDAT asc
 						) A
 				     )
            where rn between #{start} and #{end}
@@ -811,8 +614,7 @@
                         where p.prodnum=io.prodnum
                         and a.PRODCATEGORYNUM =p.PRODCATEGORYNUM
                         and io.pphotonum=1
-                        and p.type not in(3,4)
-						ORDER BY p.CREATEDAT desc
+						ORDER BY p.CREATEDAT asc
 						) A
 				     )
            where rn between #{start} and #{end}
@@ -826,8 +628,7 @@
                         where p.prodnum=io.prodnum
                         and a.PRODCATEGORYNUM =p.PRODCATEGORYNUM
                         and io.pphotonum=1
-                        and p.type not in(3,4)
-						ORDER BY p.CREATEDAT desc
+						ORDER BY p.CREATEDAT asc
 						) A
 				     )
            where rn between #{start} and #{end}
@@ -841,14 +642,13 @@
                         where p.prodnum=io.prodnum
                         and a.PRODCATEGORYNUM =p.PRODCATEGORYNUM
                         and io.pphotonum=1
-                        and p.type not in(3,4)
-						ORDER BY p.CREATEDAT desc
+						ORDER BY p.CREATEDAT asc
 						) A
 				     )
            where rn between #{start} and #{end}
             and name like  '%'||#{searchContent}||'%'
             </when>
-          </choose>   -->       
+          </choose>         
        </select>
        
        
@@ -923,236 +723,12 @@
                                 and o.usernum= #{userNum}
                                 and  o.ordertype= #{orderType}
                                 and po.pphotonum=1
-                                ORDER BY o.ordereDat desc 
+                                order by ordernum desc     
 						) A
 				)
 	  WHERE RN BETWEEN #{start} AND #{end}
         ]]>
         </select>
-        
-        
-        
-        
-         
-        <select id="totaladdUsed" resultType="int" parameterType="java.util.Map">
-        <![CDATA[
-	  SELECT count(*)
-		FROM (
-			SELECT ROWNUM RN, A.* 
-				FROM (
-                    select p.PRODNUM, p.NAME, p.PRICE, p.CONTENT, p.TYPE, to_char(p.CREATEDAT,'yyyy-mm-dd') as createdat, 
-                    p.UPDATEDAT, p.USERNUM, p.PRODCATEGORYNUM ,p.REQUIRECOMMENT,
-                  po.CONTENT as image
-                  from products p, prodphoto po
-                  where  p.prodnum=po.prodnum
-                   and p.usernum= #{userNum}
-				      ]]>
-				        <if test="listType==100">
-				        and p.type not in (1,2)
-                   and po.pphotonum=1
-                 ORDER BY p.prodnum desc 
-						) A
-				)
-				        </if>
-				        <if test="listType==1">
-				and p.type not in (1,2)
-                   and po.pphotonum=1
-                 ORDER BY p.prodnum desc 
-						) A
-				)
-				         where createdat between sysdate-7 and sysdate
-				        </if>
-				        <if test="listType==15">
-				 and p.type not in (1,2)
-                   and po.pphotonum=1
-                 ORDER BY p.prodnum desc 
-						) A
-				)
-				         where createdat between sysdate-15 and sysdate
-				        </if>
-				        <if test="listType==30">
-				    and p.type not in (1,2)
-                   and po.pphotonum=1
-                 ORDER BY p.prodnum desc 
-						) A
-				)
-				        where  createdat between sysdate-30 and sysdate
-				        </if>
-				        <if test="listType==200">
-				      and p.type not in (1,2)
-                   and po.pphotonum=1
-                 ORDER BY p.prodnum desc 
-						) A
-				)
-				         where createdat BETWEEN to_date(#{startD},'yyyy-mm-dd hh') and to_date(#{endD},'yyyy-mm-dd')+1
-				        </if>
-				        
-				        <if test="listType==5 and endD != null">
-				     and p.type =#{listType}
-                   and po.pphotonum=1
-                 ORDER BY p.prodnum desc 
-						) A
-				)
-				         where createdat BETWEEN to_date(#{startD},'yyyy-mm-dd hh') and to_date(#{endD},'yyyy-mm-dd')+1
-				        </if>
-				        
-				        			        <if test="listType==4 and endD != null">
-				        		        		        and p.type =#{listType}
-                   and po.pphotonum=1
-                 ORDER BY p.prodnum desc 
-						) A
-				)
-				         where createdat BETWEEN to_date(#{startD},'yyyy-mm-dd hh') and to_date(#{endD},'yyyy-mm-dd')+1
-				        </if>
-				        
-				      <if test="listType==4 and endD == null">
-				        		        		        and p.type =#{listType}
-                   and po.pphotonum=1
-                 ORDER BY p.prodnum desc 
-						) A
-				)
-				        </if>
-				<if test="listType==5 and endD == null">
-				        		        		        and p.type =#{listType}
-                   and po.pphotonum=1
-                 ORDER BY p.prodnum desc 
-						) A
-				)
-				        </if>
-				        
-				  <if test="listType==3 and endD != null">
-				     and p.type =#{listType}
-                   and po.pphotonum=1
-                 ORDER BY p.prodnum desc 
-						) A
-				)
-				         where createdat BETWEEN to_date(#{startD},'yyyy-mm-dd hh') and to_date(#{endD},'yyyy-mm-dd')+1
-				        </if>  
-				  <if test="listType==3 and endD == null">
-				     and p.type =#{listType}
-                   and po.pphotonum=1
-                 ORDER BY p.prodnum desc 
-						) A
-				)
-				        </if>    
-       </select>
-        
-            <!-- 중고품 신청 내역 페이징 -->   
-         <select id="selectMyUsedList" resultType="map" parameterType="java.util.Map">
-        <![CDATA[
-      SELECT *
-		FROM (
-			SELECT ROWNUM RN, A.* 
-				FROM (
-                    select p.PRODNUM, p.NAME, p.PRICE, p.CONTENT, p.TYPE, to_char(p.CREATEDAT,'yyyy-mm-dd') as createdat,
-                     p.UPDATEDAT, p.USERNUM, p.PRODCATEGORYNUM ,p.REQUIRECOMMENT,
-                     po.CONTENT as image , u.id
-                    from products p, prodphoto po ,users u
-                  where  p.prodnum=po.prodnum
-                  and u.usernum=p.usernum
-                   and p.usernum= #{userNum}
-        ]]>
-           <if test="listType==1">
-           and p.type not in (1,2)
-                   and po.pphotonum=1
-                 ORDER BY p.prodnum desc 
-						) A
-				)
-	  WHERE RN BETWEEN #{start} AND #{end}
-           and createdat between sysdate-7 and sysdate
-           </if>
-           <if test="listType==15">
-           and p.type not in (1,2)
-                   and po.pphotonum=1
-                 ORDER BY p.prodnum desc 
-						) A
-				)
-	  WHERE RN BETWEEN #{start} AND #{end}
-           and createdat between sysdate-15 and sysdate
-           </if>
-           <if test="listType==30">
-           and p.type not in (1,2)
-                   and po.pphotonum=1
-                 ORDER BY p.prodnum desc 
-						) A
-				)
-	  WHERE RN BETWEEN #{start} AND #{end}
-           and createdat between sysdate-30 and sysdate
-           </if>
-           <if test="listType==200">
-           and p.type not in (1,2)
-                   and po.pphotonum=1
-                 ORDER BY p.prodnum desc 
-						) A
-				)
-	  WHERE RN BETWEEN #{start} AND #{end}
-           and createdat BETWEEN to_date(#{startD},'yyyy-mm-dd hh') and to_date(#{endD},'yyyy-mm-dd')+1
-           </if>
-           <if test="listType==100">
-           and p.type not in (1,2)
-                   and po.pphotonum=1
-                 ORDER BY p.prodnum desc 
-						) A
-				)
-	  WHERE RN BETWEEN #{start} AND #{end}
-           </if>
-           
-          <if test="listType==4 and endD !=null">
-           and p.type =#{listType}
-                   and po.pphotonum=1
-                 ORDER BY p.prodnum desc 
-						) A
-				)
-	  WHERE RN BETWEEN #{start} AND #{end}
-	   and createdat BETWEEN to_date(#{startD},'yyyy-mm-dd hh') and to_date(#{endD},'yyyy-mm-dd')+1
-           </if>
-          <if test="listType==5 and endD !=null">
-           and p.type =#{listType}
-                   and po.pphotonum=1
-                 ORDER BY p.prodnum desc 
-						) A
-				)
-	  WHERE RN BETWEEN #{start} AND #{end}
-	   and createdat BETWEEN to_date(#{startD},'yyyy-mm-dd hh') and to_date(#{endD},'yyyy-mm-dd')+1
-           </if>
-           
-          <if test="listType==5 and endD ==null">
-           and p.type =#{listType}
-                   and po.pphotonum=1
-                 ORDER BY p.prodnum desc 
-						) A
-				)
-	  WHERE RN BETWEEN #{start} AND #{end}
-           </if>
-           <if test="listType==4 and endD ==null">
-           and p.type =#{listType}
-                   and po.pphotonum=1
-                 ORDER BY p.prodnum desc 
-						) A
-				)
-	  WHERE RN BETWEEN #{start} AND #{end}
-           </if>
-           
-         <if test="listType==3 and endD !=null">
-           and p.type =#{listType}
-                   and po.pphotonum=1
-                 ORDER BY p.prodnum desc 
-						) A
-				)
-	  WHERE RN BETWEEN #{start} AND #{end}
-	  and createdat BETWEEN to_date(#{startD},'yyyy-mm-dd hh') and to_date(#{endD},'yyyy-mm-dd')+1
-           </if>
-          <if test="listType==3 and endD ==null">
-           and p.type =#{listType}
-                   and po.pphotonum=1
-                 ORDER BY p.prodnum desc 
-						) A
-				)
-	  WHERE RN BETWEEN #{start} AND #{end}
-           </if>
-        </select>
-        
-        
         
         
              <!-- 구매내역 페이징 -->   
@@ -1165,7 +741,7 @@
                            select pay.createdat, min(pay.buyername) as buyername,count(pay.ordernum) as count,
                 min(pay.imp_uid) as imp_uid, min(pay.merchant_uid) as merchant_uid,min(pay.ordernum),
                 min(pay.type) as type ,min(pay.apply_num) as apply_num ,min(p.name) as name,
-                sum(o.payTotal) as totalPrice ,min(used) as used,min(o.deliverytype) as delivery,min(o.orderStatus) as orderStatus
+                sum(o.payTotal) as totalPrice ,min(used) as used,min(o.deliverytype) as delivery
                 
                 from payment pay, orders o,products p,point poin
                 where pay.ordernum =o.ordernum
@@ -1179,36 +755,7 @@
 				)
 	  WHERE RN BETWEEN #{start} AND #{end}
         ]]>
-        
-          <if test= "listType == 100 ">
-          and createdat BETWEEN sysdate-3 and sysdate
-         </if>
-         
-        <if test= "listType != null and listType == 0">
-         and createdat BETWEEN sysdate-1 and sysdate
-         </if>
-         
-         <if test= "listType != null and listType == 1">
-         and createdat BETWEEN sysdate-7 and sysdate
-         </if>
-         
-         <if test= "listType != null and listType == 15">
-         and createdat BETWEEN sysdate-15 and sysdate
-         </if>
-         
-          <if test= "listType != null and listType == 30">
-         and createdat BETWEEN sysdate-30 and sysdate
-         </if>
-         
-          <if test= "listType != null and listType == 200">
-         and createdat BETWEEN to_date(#{startD},'yyyy-mm-dd hh') and to_date(#{endD},'yyyy-mm-dd')+1
-         </if>
-         
         </select>
-        
-        
-        
-        
         
               <select id="payDetailList" resultType="map" parameterType="java.util.Map">
         <![CDATA[
@@ -1247,47 +794,9 @@
                 and poin.ordernum=pay.ordernum
                 and o.usernum=#{userNum}
                 and o.ordertype=4
-                
+                 group by pay.createdat
+				)
         ]]>
-         <if test="listType!= null and listType==100">
-                 and pay.createdat between sysdate-3 and sysdate
-                 group by pay.createdat
-				)
-         </if>
-             <if test="listType!= null and listType==0">
-                 and pay.createdat between sysdate-1 and sysdate
-                 group by pay.createdat
-				)
-           </if>
-              <if test="listType!= null and listType==1">
-                 and pay.createdat between sysdate-7 and sysdate
-                 group by pay.createdat
-				)  
-           </if>
-           
-             <if test="listType!= null and listType==15">
-                 and pay.createdat between sysdate-15 and sysdate
-                 group by pay.createdat
-				)
-           </if>
-           
-             <if test="listType!= null and listType==30">
-                 and pay.createdat between sysdate-30 and sysdate
-                 group by pay.createdat
-				)
-           </if>
-        
-            <if test="listType!= null and listType==200">
-                 and pay.createdat between #{startD} and #{endD}
-                 group by pay.createdat
-				)
-           </if>
-           
-            <if test="listType == null ">
-                 group by pay.createdat
-				)
-         </if>
-        
         </select>
         
         
@@ -1325,7 +834,7 @@
                         and o.userNum = #{userNum}
                         and o.ordertype=3
                         and io.pphotonum=1
-						ORDER BY o.ordereDat asc       
+						ORDER BY o.ordernum desc       
 						) A
 				)
 	  WHERE RN BETWEEN #{start} AND #{end}
@@ -1350,7 +859,7 @@
                                   and p.prodnum=po.prodnum
                                   and po.pphotonum=1
                                   and pl.usernum = #{userNum}
-                                 ORDER BY pl.pickdate desc   
+                                 ORDER BY pl.likenum desc   
                                                        ) A left outer join (  select prodnum, round(avg(evalue),1) as value,count(*) as totalcount
                                                                               from productafter
                                                                               where aftertype is null
@@ -1391,16 +900,6 @@
        </update>
         
         
-        
-          <!-- 결제취소 요청 -->
-	   <update id="applycancelPay"  parameterType="java.util.Map">
-      update payment
-     set type='cancel',
-      reason=#{reason}
-      where imp_uid=#{imp_uid}
-
-       </update>
-        
 	    <!--위시리스트->장바구니 후 위시리스트 내용 삭제-->
 	   <delete id="deleteWish"  parameterType="java.util.List">
         <foreach  item="item" collection="list"  index="index" 
@@ -1408,16 +907,6 @@
            DELETE from prodlike
            WHERE likenum= #{item.likeNum}
       </foreach>
-       </delete>
-        
-        <delete id="delAfter"  parameterType="java.util.Map">
-           DELETE from productafter
-           WHERE afternum= #{afterNum}
-       </delete>
-        
-        <delete id="delComment"  parameterType="java.util.Map">
-           DELETE from productafter
-           WHERE afternum= #{afterNum}
        </delete>
         
            <!--위시리스트 삭제-->
@@ -1789,13 +1278,12 @@
         <select id="optionNum" resultType="int" >
         <![CDATA[
          select prodOption_seq.nextval from dual
-         
         ]]>
         </select>
         
         
             <!-- optionnum dd -->  
-        <select id="selectOrderNum" resultType="int" flushCache="true" useCache="false">
+        <select id="selectOrderNum" resultType="int" >
         <![CDATA[
          select orders_seq.nextval from dual
         ]]>
@@ -2028,31 +1516,6 @@
       SELECT *
 		FROM orders
 		where ordernum =#{orderNum}
-        ]]>
-        </select>
-        
-        
-                
-		<!-- select usernum,afternum,prodnum,content,aftertype,TO_CHAR(createdat,'yyyy-mm-dd hh')as createdat
-         from productafter
-         where prodnum= #{prodNum}
-        start with AFTERTYPE =#{afterNum}
-        connect by prior afternum = AFTERTYPE
-        ORDER SIBLINGS BY afternum asc -->
-        
-             <!-- 댓글 가져오기 -->   
-         <select id="selectComment" resultType="map" parameterType="java.util.Map">
-        <![CDATA[
-          select af.usernum,af.afternum,af.prodnum,af.content,af.aftertype,TO_CHAR(af.createdat,'yyyy-mm-dd hh:mm')as createdat,
-           u.content2 as image, us.id
-         from productafter af ,userinfo u,users us
-         where af.usernum=u.usernum
-         and us.usernum=u.usernum
-         and af.prodnum= #{prodNum}
-        start with af.AFTERTYPE = #{afterNum}
-        connect by prior af.afternum = af.AFTERTYPE
-        ORDER SIBLINGS BY af.afternum desc
-        
         ]]>
         </select>
         

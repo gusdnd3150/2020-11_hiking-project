@@ -1,12 +1,9 @@
 <!DOCTYPE html>
-<%-- <%@ page language="java" contentType="text/html; charset=UTF-8"
+<%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"
     isELIgnored="false" 
-    import ="java.util.*,project.*"%> --%>
-    
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<html lang="ko">
+    import ="java.util.*,project.*"%>
+<html lang="en">
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 
@@ -14,45 +11,10 @@
 
 
 </style>
-<!-- <script src="https://kit.fontawesome.com/e8913b960a.js" crossorigin="anonymous"></script> -->
-
+<script src="https://kit.fontawesome.com/e8913b960a.js" crossorigin="anonymous"></script>
 <script src="http://code.jquery.com/jquery-latest.js"></script>
 <script>
 $(document).ready(function () {
-	
-
-	$("#sortProduct").change(function(){
-		var sorting= $(this).val();
-		var searContent ='${paging.searchContent}' ;
-		console.log(sorting);
-		console.log(searContent);
-		
-			location.href="/shopMainCate.do?listType=200&sorting="+sorting+"&searchContent="+searContent+"";
-/* 		if(sorting!='defualt'){
-			
-		} */
-		
-	});
-	
-	
-	
-	$("input[id=price]").keyup(function(){     //가격입력 정규식
-		var req = new RegExp(/[^0-9]/g);
-		var price =$(this);
-		var text =$("#showText");
-		if(req.test(price.val())==true){
-			price.css("color","red");
-			text.css("color","red");
-			text.show();
-		}else{
-			price.css("color","black");
-			text.hide();
-		}
-	});
-	
-	
-	
-	
      $("li[id=tap1]").on("click",function(){  //의류 클릭 시
     	 var dap1Top =$("li[id=dap1Top]");    //-상의 
 	     var dap1Bottom = $("#dap1Bottom");  //-하의
@@ -331,18 +293,16 @@ $(document).ready(function () {
 	       }
   });  
 	
-	
-	
     $('#getSession').click(function(){
         $.ajax({
              type:"post",
              async:true,
-             url:"/getSession.do",
+             url:"/B_P003_D001/getSession",
              dataType:"json",
              success:function(data,textStatus){
                console.log(data.checkStatus);
                if(data.checkStatus == 'notEmpty'){
-               location.href="/myShop/cartList.do";  
+               location.href="/B_P003_D001/cartList";  
                }else{ 
             	   alert("로그인 후 이용가능합니다.");
                }
@@ -352,160 +312,22 @@ $(document).ready(function () {
            });
     }); 
     
+    
+    $("#addcart1").click(function(){
+    	
+    	console.log("dddd");
+    	
+    });
 
 	
 });
 
 
 
-
-/* 모달 영역 */
-
-var cnt=1;
-function fn_addFile(){
-	  $("#d_file").append("<br>"+"<input type='file' name='content'  />");
-	cnt++;
-}
-
-
-var cnt2=1;
- function addFileDetail(){
-	  $("#d_file2").append("<br>"+"<input type='file' name='contentDetail' />");
-		cnt2++;
- }
- 
- var cnt3=1;
- function addOption(){
-	  $("#addOption").append("<br>"+"<label for='title'>색상:</label>");
-	  //$("#addOption").append("<input type='text' name='color[]' value=''>");
-	  $("#addOption").append("<select name='color[]' >"
-      +"<option value=' '>color</option>"
-      +"<option value='white'>white</option>"
-      +"<option value='black'>black</option>"
-      +"<option value='red'>red</option>"
-      +"<option value='blue'>blue</option>"
-      +"<option value='ogrange'>ogrange</option>"
-      +"<option value='yellow'>yellow</option>"
-      +"<option value='green'>green</option>"
-      +"<option value='violet'>violet</option>"
-      +"<option value='pink'>pink</option>"
-      +"<option value='navy'>navy</option>"
-      +"<option value='gray'>gray</option>"
-      +"<option value='etc'>etc</option>"
-      +"</select>");
-	  
-	  $("#addOption").append("<label for='title'>사이즈:</label>");
-	  $("#addOption").append("<input type='text' name='prodSize[]' style='width: 75px;' value=''>");
-	  $("#addOption").append("<label for='title'>수량:</label>");
-	  $("#addOption").append("<input type='text' id='quantityCheck'  class='quantityCheck2' name='quantity[]'  style='width: 75px;' value=''>");
-	  $("#addOption").append("<input type='hidden' name='prodstatus[]' value='3'>");
-		cnt3++;
- }
-
- 
- 
- 
- 
- function checkUsedForm(){
-	 /* <form name="usedForm" method="post" action="/addUsedPro" enctype="multipart/form-data"> */
-
- $.ajax({
-          type:"post",
-          async:true,
-          url:"/getSession.do",
-          dataType:"json",
-          success:function(data,textStatus){
-            console.log(data.checkStatus);
-            
-            if(data.checkStatus == 'notEmpty'){
-            	
-            var frmPro = document.usedForm;
-             var req = new RegExp(/[^0-9]/g);
-             
-             var mainImage= $("input[name=content]");
-             var detailImage= $("input[name=contentDetail]");
-             var name= $("input[name=name]");
-             var name= $("input[name=content]");
-
-
-     			
-             if(mainImage.length==0 || detailImage.length==0){
-               alert("대표사진 및 상품사진을 확인하여 주시기 바랍니다.");
-               return;
-             }else if(req.test(price)==true) {
-            	 alert("상품가격은 숫자만 입력 가능합니다.");
-             }
-             
-             
-             // Get form
-             var form = $('#addForm')[0];
-     	    // Create an FormData object 
-             var data = new FormData(form);
-             
-             $.ajax({
-                 type:"post",
-                 async:true,
-                 enctype: 'multipart/form-data',
-                 processData: false,
-                 contentType: false,
-                 url:"/myShop/addUsedPro.do",
-                 dataType:"json",
-                 data: data,
-                 cache: false,
-                 success:function(data,textStatus){
-                	 location.reload();
-                 },
-                 complete:function(){
-                	 location.reload();
-                 }
-               });
-            }else{ 
-         	   alert("로그인 후 이용가능합니다.");
-         	   return false;
-            }
-          }
-        });
-}
-
-
- function setPreview(event){
-     for(var image of event.target.files) {
-         var reader = new FileReader();
-
-         reader.onload = function (event) {
-             var img = document.createElement("img");
-             img.setAttribute("src", event.target.result);
-             img.setAttribute("class","col-4")
-             document.querySelector("div.preview").appendChild(img);
-         };
-         reader.readAsDataURL(image);
-     }
- }
- 
- 
- function setPreview2(event){
-     for(var image of event.target.files) {
-         var reader = new FileReader();
-
-         reader.onload = function (event) {
-             var img = document.createElement("img");
-             img.setAttribute("src", event.target.result);
-             img.setAttribute("class","col-4")
-             document.querySelector("div.preview2").appendChild(img);
-         };
-         reader.readAsDataURL(image);
-     }
- }
- 
- function resetForm(){
-	 document.usedForm.reset();
- }
- 
 </script>
 
 
   <head>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
     <!-- Required meta tags -->
     <meta charset="utf-8" />
     <meta
@@ -513,23 +335,26 @@ var cnt2=1;
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
     <link rel="icon" href="/resources/shop/img/favicon.png" type="image/png" />
+    <title>Eiser ecommerce</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="/resources/shop/css/bootstrap.css" />
     <link rel="stylesheet" href="/resources/shop/vendors/linericon/style.css" />
-    <!-- <link rel="stylesheet" href="/resources/shop/css/font-awesome.min.css" /> -->
+    <link rel="stylesheet" href="/resources/shop/css/font-awesome.min.css" />
     <link rel="stylesheet" href="/resources/shop/css/themify-icons.css" />
     <link rel="stylesheet" href="/resources/shop/vendors/owl-carousel/owl.carousel.min.css" />
     <link rel="stylesheet" href="/resources/shop/vendors/lightbox/simpleLightbox.css" />
     <link rel="stylesheet" href="/resources/shop/vendors/nice-select/css/nice-select.css" />
     <link rel="stylesheet" href="/resources/shop/vendors/animate-css/animate.css" />
     <link rel="stylesheet" href="/resources/shop/vendors/jquery-ui/jquery-ui.css" />
+    <!-- main css -->
     <link rel="stylesheet" href="/resources/shop/css/style.css" />
     <link rel="stylesheet" href="/resources/shop/css/responsive.css" />
   </head>
 
   <body>
+  <jsp:include page="/common/header.jsp" />
     <!-- 해더 자리 -->
-<jsp:include page="/common/header.jsp" />
+
   <br><br><br>
   
     <!--================탑 5 메인 =================-->
@@ -567,40 +392,30 @@ var cnt2=1;
         </div>
             </div>
     <!--================Category Product Area =================-->
-    <section class="cat_product_area section_gap" style="padding-top: 23px;">
+    <section class="cat_product_area section_gap">
       <div class="container">
         <div class="row flex-row-reverse">
           <div class="col-lg-9">
             <div class="product_top_bar">
               <div class="left_dorp">
               
-              <table>
-              <tr>
-              <form action="/shopMainCate.do" method="get" name="searchForm" align="right">
-  
-                 <td><input type="text" class="form-control" name= "searchContent" style="border-radius:10px;border-color:green" >
-                 </td> 
-                 <input type="hidden" name= "listType" value="200" >
-                 <td><input type="image" src="/resources/img/search.png"  width="25px" height="25px"></td>
-              </form>
-
+              <form action="/B_P002_D001/shopMainCate" method="get" name="searchForm">
               
-              </tr>
-            
-              </table>
-              </div>
-              <div class="sortingPrice" style="margin-left: 400px;">
-                   <c:if test="${paging.listType==200 }">
-                   <ul>
-                <li style="float:right">
-                 <select id="sortProduct" name="sort">
-                 <option value="defualt">정렬</option>
-                 <option value="heightPrice">가격 오름차순</option>
-                 <option value="lowPrice">가격 내림차순</option>
-                 </select>
-                 </li>
-                 </ul>
-              </c:if>  
+                <select class="sorting" name="search">
+                  <option value="10">전체검색</option>
+                  <option value="1">의류</option>
+                  <option value="2">잡화</option>
+                  <option value="3">등산용품</option>
+                </select>
+                <select class="sorting" name="searchType">
+                  <option value="name">제목</option>
+                  <option value="content">내용</option>
+                </select>
+                 <input type="text" name= "searchContent" placeholder="검색어를 입력해 주세요" >
+                 
+                 <input type="hidden" name= "listType" value="200" >
+                 <input class="btn btn-info" type="submit" value="검색"> 
+              </form>
               
               </div>
             </div>
@@ -625,37 +440,20 @@ var cnt2=1;
                 <div class="col-lg-4 col-md-6">
                   <div class="single-product">
                     <div class="product-img">
-                      <a href="/productDetail.do?prodNum=${data.PRODNUM}"><img
+                      <a href="/B_P003_D001/productDetail?prodNum=${data.PRODNUM}"><img
                         class="card-img"
                         src="/resources/img/${data.IMAGE }"
                         alt=""
                       /></a>
                       <div class="p_icon">
-                      <c:if test="${data.TYPE ==2 || data.TYPE==5 }">
                         <a href="#">
-                          <i>old</i>
-                        </a> 
-                      </c:if>
-                      <c:if test="${data.TYPE ==1 }">
-                        <a href="#">
-                          <i >new</i>
-                        </a> 
-                      </c:if>
-                      
-                      <c:if test="${not empty data.USERNUM }">
-                      <a href="">
-                          <img src="/resources/img/shop_heart2.png" width="20px" height="20px" >
-                          </a>
-                      </c:if>
-                      
-                        <c:if test="${empty data.USERNUM}">
-                        <a href="/myShop/addCartMain.do?prodNum=${data.PRODNUM}&prodName=${data.NAME}&prodPrice=${data.PRICE}&addType=wish">
-                          <img src="/resources/img/shop_heart.png" width="20px" height="20px" style="color:black">
+                          <i class="ti-eye"></i>
                         </a>
-                      </c:if>
-                      
-                          <a id="addcart1" href="/myShop/addCartMain.do?prodNum=${data.PRODNUM}&prodName=${data.NAME}&prodPrice=${data.PRICE}&addType=cart" > 
-                           <img src="/resources/img/cart_icon.png" width="20px" height="20px" style="color:black">
+                        <a href="/B_P003_D001/addCartMain?prodNum=${data.PRODNUM}&prodName=${data.NAME}&prodPrice=${data.PRICE}&addType=wish">
+                          <i class="ti-heart"></i>
+                        </a>
+                          <a id="addcart1" href="/B_P003_D001/addCartMain?prodNum=${data.PRODNUM}&prodName=${data.NAME}&prodPrice=${data.PRICE}&addType=cart" > 
+                           <i class="ti-shopping-cart"></i>
                           </a>
                       </div>
                       
@@ -665,25 +463,14 @@ var cnt2=1;
                         <h4>${data.NAME }</h4>
                       </a>
                       <div class="mt-3">
-                        <span class="mr-4"> ${data.PRICE } 원</span>
-                        <%-- <del>${data.PRICE }</del> --%>
-                        <c:if test="${data.TYPE ==1 }">
-                        <p>신상</p>
-                        </c:if>
-                        <c:if test="${data.TYPE ==2 }">
-                        <p>중고</p>
-                        </c:if>
-                        <c:if test="${data.TYPE ==5 }">
-                        <p>중고</p>
-                        </c:if>
+                        <span class="mr-4"> ${data.PRICE } .원</span>
+                        <del>${data.PRICE }</del>
                       </div>
                     </div>
                   </div>
                 </div>
-                <input type="hidden" name="addProdNum" value="${data.PRODNUM}">
-                <input type="hidden" name="addName" value="${data.NAME}">
-                <input type="hidden" name="addPrice" value="${data.PRICE}">
-              </c:forEach>
+                
+</c:forEach>
       </c:when>
           </c:choose>
           
@@ -698,9 +485,10 @@ var cnt2=1;
            <!-- 페이징 -->
            
            
-            <div style="display: block; text-align: center;" class="pagination">
+           <c:if test="${paging.listType != 200  }">   <!--  검색결과가 아닌 일반 페이징 -->
+            <div style="display: block; text-align: center;">
 	<c:if test="${paging.startPage != 1 }">
-			<a href="/shopMainCate.do?sorting=${paging.sorting }&searchContent=${paging.searchContent }&listType=${paging.listType}&nowPage=${paging.startPage - 1 }&cntPerPage=${paging.cntPerPage}">&lt;</a>
+			<a href="/B_P002_D001/shopMainCate?listType=${paging.listType}&nowPage=${paging.startPage - 1 }&cntPerPage=${paging.cntPerPage}">&lt;</a>
 		</c:if>
 		<c:forEach begin="${paging.startPage }" end="${paging.endPage }" var="p">
 			<c:choose>
@@ -708,17 +496,39 @@ var cnt2=1;
 					<b>${p }</b>
 				</c:when>
 				<c:when test="${p != paging.nowPage }">
-					<a href="/shopMainCate.do?sorting=${paging.sorting }&searchContent=${paging.searchContent }&listType=${paging.listType}&nowPage=${p }&cntPerPage=${paging.cntPerPage}">${p }</a>
+					<a href="/B_P002_D001/shopMainCate?listType=${paging.listType}&nowPage=${p }&cntPerPage=${paging.cntPerPage}">${p }</a>
 				</c:when>
 			</c:choose>
 		</c:forEach>
 		<c:if test="${paging.endPage != paging.lastPage}">
-			<a href="/shopMainCate.do?sorting=${paging.sorting }&searchContent=${paging.searchContent }&listType=${paging.listType}&nowPage=${paging.endPage+1 }&cntPerPage=${paging.cntPerPage}">&gt;</a>
+			<a href="/B_P002_D001/shopMainCate?listType=${paging.listType}&nowPage=${paging.endPage+1 }&cntPerPage=${paging.cntPerPage}">&gt;</a>
 			<p> ${paging.listType}</p>
 		</c:if>
 	</div>
+	       </c:if>
 	       
-
+	         <c:if test="${paging.listType == 200  }">  <!--  검색 결과 페이징 -->
+	         
+            <div style="display: block; text-align: center;">
+	<c:if test="${paging.startPage != 1 }">
+			<a href="/B_P002_D001/shopMainCate?listType=${paging.listType}&nowPage=${paging.startPage - 1 }&searchContent=${paging.searchContent }&searchType=${paging.searchType }&search=${paging.search }&cntPerPage=${paging.cntPerPage}">&lt;</a>
+		</c:if>
+		<c:forEach begin="${paging.startPage }" end="${paging.endPage }" var="p">
+			<c:choose>
+				<c:when test="${p == paging.nowPage }">
+					<b>${p }</b>
+				</c:when>
+				<c:when test="${p != paging.nowPage }">
+					<a href="/B_P002_D001/shopMainCate?listType=${paging.listType}&nowPage=${p }&searchContent=${paging.searchContent }&searchType=${paging.searchType }&search=${paging.search }&cntPerPage=${paging.cntPerPage}">${p }</a>
+				</c:when>
+			</c:choose>
+		</c:forEach>
+		<c:if test="${paging.endPage != paging.lastPage}">
+			<a href="/B_P002_D001/shopMainCate?listType=${paging.listType}&nowPage=${paging.endPage+1 }&searchContent=${paging.searchContent }&searchType=${paging.searchType }&search=${paging.search }&cntPerPage=${paging.cntPerPage}">&gt;</a>
+			<p> ${paging.listType}</p>
+		</c:if>
+	</div>
+	       </c:if>
 	<!-- 페이징 끝-->
 	          </div>
              </div>
@@ -727,11 +537,10 @@ var cnt2=1;
             <div class="left_sidebar_area">
               <aside class="left_widgets p_filter_widgets">
                   <div class="l_w_title">
-                  <h3><a id="getSession"> <img src="/resources/img/cart_icon.png" width="20px" height="20px" style="color:black">
-                  </a> 장바구니 </h3>
+                  <h3>장바구니<a class="fas fa-shopping-cart" id="getSession"></a></h3>
                 </div>
                 <div class="l_w_title">
-                  <h3><img src="/resources/img/shop_category.png" width="25px" height="25px"> 카테고리  </h3>
+                  <h3>카테고리</h3>
                 </div>
                 <div class="widgets_inner">
                 
@@ -739,46 +548,46 @@ var cnt2=1;
                   <!-- 의류 -->
                     <li id="tap1"><bold>의류</bold></li>
                     <li id="dap1Top" style="display:none;">-상의</li>
-                    <li id="dap2Top_1" style="display:none;"><a href="/shopMainCate.do?listType=15">반팔</a></li>
-                    <li id="dap2Top_2" style="display:none;"><a href="/shopMainCate.do?listType=16">긴팔</a></li>
-                    <li id="dap2Top_3" style="display:none;"><a href="/shopMainCate.do?listType=17">후드</a></li>
+                    <li id="dap2Top_1" style="display:none;"><a href="/B_P002_D001/shopMainCate?listType=15">반팔</a></li>
+                    <li id="dap2Top_2" style="display:none;"><a href="/B_P002_D001/shopMainCate?listType=16">긴팔</a></li>
+                    <li id="dap2Top_3" style="display:none;"><a href="/B_P002_D001/shopMainCate?listType=17">후드</a></li>
                     
                     <li id="dap1Bottom" style="display:none;">-하의</li>
-                    <li id="dap2Bottom_1" style="display:none;"><a href="/shopMainCate.do?listType=18">반바지</a></li>
-                    <li id="dap2Bottom_2" style="display:none;"><a href="/shopMainCate.do?listType=19">긴바지</a></li>
+                    <li id="dap2Bottom_1" style="display:none;"><a href="/B_P002_D001/shopMainCate?listType=18">반바지</a></li>
+                    <li id="dap2Bottom_2" style="display:none;"><a href="/B_P002_D001/shopMainCate?listType=19">긴바지</a></li>
                     
                     <li id="dap1Outter" style="display:none;">-아우터</li>
-                    <li id="dap2Outter_1" style="display:none;"><a href="/shopMainCate.do?listType=20">패딩</a></li>
-                    <li id="dap2Outter_2" style="display:none;"><a href="/shopMainCate.do?listType=21">야상</a></li>
-                    <li id="dap2Outter_3" style="display:none;"><a href="/shopMainCate.do?listType=22">바람막이</a></li>
+                    <li id="dap2Outter_1" style="display:none;"><a href="/B_P002_D001/shopMainCate?listType=20">패딩</a></li>
+                    <li id="dap2Outter_2" style="display:none;"><a href="/B_P002_D001/shopMainCate?listType=21">야상</a></li>
+                    <li id="dap2Outter_3" style="display:none;"><a href="/B_P002_D001/shopMainCate?listType=22">바람막이</a></li>
                     <!-- 의류 -->
                     <!-- 잡화 -->
                     <li id="tap2">잡화</li>
                     <li id="dap1Cap" style="display:none;">-모자</li>
-                    <li id="dapC2_1" style="display:none;"><a href="/shopMainCate.do?listType=23">비니</a></li>
-                    <li id="dapC2_2" style="display:none;"><a href="/shopMainCate.do?listType=24">캡모자</a></li>
-                    <li id="dapC2_3" style="display:none;"><a href="/shopMainCate.do?listType=25">정글모</a></li>
-                    <li id="dapC2_4" style="display:none;"><a href="/shopMainCate.do?listType=26">선캡</a></li>
+                    <li id="dapC2_1" style="display:none;"><a href="/B_P002_D001/shopMainCate?listType=23">비니</a></li>
+                    <li id="dapC2_2" style="display:none;"><a href="/B_P002_D001/shopMainCate?listType=24">캡모자</a></li>
+                    <li id="dapC2_3" style="display:none;"><a href="/B_P002_D001/shopMainCate?listType=25">정글모</a></li>
+                    <li id="dapC2_4" style="display:none;"><a href="/B_P002_D001/shopMainCate?listType=26">선캡</a></li>
                     
                     <li id="dap1Socse" style="display:none;">-양말</li>
-                    <li id="dap2S_1" style="display:none;"><a href="/shopMainCate.do?listType=27">긴양말</a></li>
-                    <li id="dap2S_2" style="display:none;"><a href="/shopMainCate.do?listType=28">반양말</a></li>
-                    <li id="dap2S_3" style="display:none;"><a href="/shopMainCate.do?listType=29">발가락</a></li>
+                    <li id="dap2S_1" style="display:none;"><a href="/B_P002_D001/shopMainCate?listType=27">긴양말</a></li>
+                    <li id="dap2S_2" style="display:none;"><a href="/B_P002_D001/shopMainCate?listType=28">반양말</a></li>
+                    <li id="dap2S_3" style="display:none;"><a href="/B_P002_D001/shopMainCate?listType=29">발가락</a></li>
                     
                     <li id="dap1Bag" style="display:none;">-가방</li>
-                    <li id="dap2B_1" style="display:none;"><a href="/shopMainCate.do?listType=30">백팩</a></li>
-                    <li id="dap2B_2" style="display:none;"><a href="/shopMainCate.do?listType=31">크로스백</a></li>
+                    <li id="dap2B_1" style="display:none;"><a href="/B_P002_D001/shopMainCate?listType=30">백팩</a></li>
+                    <li id="dap2B_2" style="display:none;"><a href="/B_P002_D001/shopMainCate?listType=31">크로스백</a></li>
                     
                     <li id="dap1Shose" style="display:none;">-신발</li>
-                    <li id="dap2Sh" style="display:none;"><a href="/shopMainCate.do?listType=32">등산화</a></li>
+                    <li id="dap2Sh" style="display:none;"><a href="/B_P002_D001/shopMainCate?listType=32">등산화</a></li>
                     <!-- 잡화 -->
                     
                     <!-- 등산용품 -->
                     <li id="tap3">등산용품</li>
-                    <li id="dap1stuff_0" style="display:none;"><a href="/shopMainCate.do?listType=11">스틱</a></li>
-                    <li id="dap1stuff_1" style="display:none;"><a href="/shopMainCate.do?listType=12">장갑</a></li>
-                    <li id="dap1stuff_2" style="display:none;"><a href="/shopMainCate.do?listType=13">아이젠</a></li>
-                    <li id="dap1stuff_3" style="display:none;"><a href="/shopMainCate.do?listType=14">보호대</a></li>
+                    <li id="dap1stuff_0" style="display:none;"><a href="/B_P002_D001/shopMainCate?listType=11">스틱</a></li>
+                    <li id="dap1stuff_1" style="display:none;"><a href="/B_P002_D001/shopMainCate?listType=12">장갑</a></li>
+                    <li id="dap1stuff_2" style="display:none;"><a href="/B_P002_D001/shopMainCate?listType=13">아이젠</a></li>
+                    <li id="dap1stuff_3" style="display:none;"><a href="/B_P002_D001/shopMainCate?listType=14">보호대</a></li>
                     <!-- 등산용품 -->
                     
                   </ul>
@@ -787,14 +596,13 @@ var cnt2=1;
 
             <aside class="left_widgets p_filter_widgets">
                 <div class="l_w_title">
-                  <!-- <h3><a href="/addUsedForm">중고등록</a></h3> -->
-                  <h3><a data-toggle="modal" data-target="#myModal">중고등록</a></h3>
+                  <h3><a href="/E_P003_D001/addUsedForm">중고등록</a></h3>
                 </div>
                 <div class="widgets_inner">
                 </div>
               </aside> 
 
-               
+            
             </div>
           </div>
         </div>
@@ -810,7 +618,7 @@ var cnt2=1;
         <div class="col-lg-12">
           <div class="main_title">
             <h2><span>New Products</span></h2>
-            <!-- <p>오름마!!</p> -->
+            <p>새것이 최고다!!</p>
           </div>
         </div>
       </div>
@@ -826,37 +634,16 @@ var cnt2=1;
         <div class="col-lg-3 col-md-6">
           <div class="single-product">
             <div class="product-img">
-            <a href="/productDetail.do?prodNum=${items.PRODNUM}"><img class="img-fluid w-100" src="/resources/img/${items.IMAGE }" alt=""/></a>
+            <a href="/B_P003_D001/productDetail?prodNum=${items.PRODNUM}"><img class="img-fluid w-100" src="/resources/img/${items.IMAGE }" alt=""/></a>
               <div class="p_icon">
-       <c:if test="${items.TYPE ==2 || items.TYPE==5 }">
-                        <a href="#">
-                          <i>old</i>
-                        </a> 
-                      </c:if>
-                      <c:if test="${items.TYPE ==1 }">
-                        <a href="#">
-                          <i >new</i>
-                        </a> 
-                      </c:if>
-              
-                
-                       <c:if test="${not empty items.USERNUM }">
-                      <a href="">
-                          <img src="/resources/img/shop_heart2.png" width="20px" height="20px" >
-                          </a>
-                      </c:if>
-                      
-                        <c:if test="${empty items.USERNUM}">
-                        <a href="/myShop/addCartMain.do?prodNum=${data.PRODNUM}&prodName=${data.NAME}&prodPrice=${data.PRICE}&addType=wish">
-                          <!-- <i class="ti-heart"></i> -->
-                          <img src="/resources/img/shop_heart.png" width="20px" height="20px" style="color:black">
-                        </a>
-                      </c:if>
-                
-                
-                
-                <a  href="/myShop/addCartMain.do?prodNum=${items.PRODNUM}&prodName=${items.NAME}&prodPrice=${items.PRICE}&addType=cart" >
-                  <img src='/resources/img/cart_icon.png' width='20px' height='20px' style='color:black'>
+                <a href="#">
+                  <i class="ti-eye"></i>
+                </a>
+                <a href="/B_P003_D001/addCartMain?prodNum=${data.PRODNUM}&prodName=${data.NAME}&prodPrice=${data.PRICE}&addType=wish">
+                  <i class="ti-heart"></i>
+                </a>
+                <a  href="/B_P003_D001/addCartMain?prodNum=${items.PRODNUM}&prodName=${items.NAME}&prodPrice=${items.PRICE}&addType=cart" >
+                  <i class="ti-shopping-cart"></i>
                 </a>
               </div>
             </div>
@@ -878,130 +665,6 @@ var cnt2=1;
       </div>
     </div>
   </section>
-  
-  
-  
-  
-  
-  <!-- 모달창 -->
-  
-  <div id="myModal" class="modal fade" role="dialog">
-  <div class="modal-dialog">
-
-    <!-- Modal content-->
-    <div class="modal-content" style="width: 128%;">
-      <div class="modal-header">
-       <h2>중고 물품 등록신청</h2>
-        <button type="reset" class="close" data-dismiss="modal" onclick="resetForm()">&times;</button>
-      </div>
-      <div class="modal-body">
-               
-               
-<div class="container">
-    
-    <!-- method="post" action="/addUsedPro"  -->
-    <form name="usedForm" id="addForm" action="/myShop/addUsedPro.do" method="post" enctype="multipart/form-data">
-        <div class="mb-3">
-            <label for="title">상품이름</label>
-            <input type="text" class="form-control" name="name" id="name" required="required">
-        </div>
-       <div class="mb-3">
-            <label for="title">상품가격</label>
-            <input type="text" class="form-control" name="price" id="price" required="required">
-            <p id="showText" style="display:none">숫자만 입력 가능합니다.</p>
-        </div>
-        <div class="mb-3">
-            <label for="title">상품내용</label>
-            <input type="text" class="form-control" name="content" id="content" required="required">
-        </div>
-        
-         <div class="mb-3">
-            <label for="title">상품구분</label><br>
-            <select style="float:left"  id="parentCategoryNum" name="parentCategoryNum">
-             <option value="15">반팔</option>    
-             <option value="16">긴팔</option>
-             <option value="17">후드</option>
-             <option value="18">반바지</option>
-             <option value="19">긴바지</option>
-             <option value="20">패딩</option>
-             <option value="21">야상</option>
-             <option value="22">바람막이</option>
-             <option value="23">비니</option>
-             <option value="24">캡모자</option>
-             <option value="25">정글모</option>
-             <option value="26">선캡</option>
-             <option value="27">긴양말</option>
-             <option value="28">반양말</option>
-             <option value="29">발가락양말</option>
-             <option value="30">백팩</option>
-             <option value="31">크로스백</option>
-             <option value="32">등산화</option>
-             <option value="11">스틱</option>
-             <option value="12">장갑</option>
-             <option value="13">아이젠</option>
-             <option value="14">보호대</option>
-            </select>
-        </div>
-        <div>
-        <input type="hidden" name="type" value="1">
-            </div>
-              <hr>
-            <br>
-            <br>
-         <input  type="button"  value="옵션추가" onClick="addOption()"/>  
-         <br>
-          <div id="addOption">
-          
-          <label for="title">색상:</label>
-          <select id="color" name="color[]" >
-           <option value='etc'>color선택</option>
-      <option value='white'>white</option>
-      <option value='black'>black</option>
-      <option value='red'>red</option>
-      <option value='blue'>blue</option>
-      <option value='ogrange'>ogrange</option>
-      <option value='yellow'>yellow</option>
-      <option value='green'>green</option>
-      <option value='violet'>violet</option>
-      <option value='pink'>pink</option>
-      <option value='navy'>navy</option>
-      <option value='gray'>gray</option>
-      <option value='etc'>etc</option>
-            </select>
-          
-          <label for="title">사이즈:</label>
-          <input type="text" name="prodSize[]" value="" style="width: 75px;">
-          <label for="title">수량:</label>
-          <input type="text" id="quantityCheck" class="quantityCheck2" name="quantity[]" value="" style="width: 75px;">
-          <input type="hidden" name="prodstatus[]" value="3">
-         <br>
-          </div>   
-          <hr>
-          <label>대표사진 </label><br>
-        <input type="file" accept="image/*" id="uploadFile" name="content" onchange="setPreview(event);" multiple>
-           <div class="preview" id="d_file">
-          </div>
-          <hr>
-          <label>기타 </label><br>
-          <input type="file" accept="image/*" id="uploadFile" name="contentDetail" onchange="setPreview2(event);" multiple>
-             <div class="preview2" id="d_file">
-          </div>
-      </form>
-      
-         <div class="modal-footer" align="center">
-        <button onclick="checkUsedForm()" class="btn btn-default" >중고등록 신청</button>
-      </div>
-</div>
-               
-      </div>
-    </div>
-
-  </div>
-</div>
-  
-  
-  
-  
   <!--================ End Inspired Product Area =================-->
     <!--================ start footer Area  =================-->
     <jsp:include page="../common/footer.jsp" flush="false" />

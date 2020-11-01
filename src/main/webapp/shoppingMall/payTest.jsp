@@ -129,7 +129,7 @@ $(document).ready(function () {
             	if(check==true){ //예 누르면
             		//아작스
             		
-            		window.open("/addDeliveryForm.do",
+            		window.open("/E_P003_D001/addDeliveryForm",
                             "childForm", "width=700, height=450, resizable = no, scrollbars = no");
             	}else{//아니면
             		defualtAddress.prop("checked",false);
@@ -180,37 +180,19 @@ $(document).ready(function () {
 });
 
 
-
-
 function usePoin(){                         //포인트 사용할 경우
-     var usepoint = $('input[name=usepoint]'); //사용자 입력값
-     var point = $('input[name=point]'); //결제시 넘어갈 사용 포인트
-     var comparePoint = $('input[name=comparePoint]'); //사용값과 디비값을 비교하기위함
-     var minusPoint = $('input[name=minusPoint]'); //최종적으로 사용할 포인트정보
+     var usepoint = $('input[name=usepoint]');
+     var point = $('input[name=point]'); //db 보유포인트
      var put =  $('#minus');
-     
-     
-     var reg = new RegExp(/[^0-9]/g);
-     
-     
-     if(Number.parseInt(usepoint.val()) > Number.parseInt(comparePoint.val())){
+    
+     if(usepoint.val() > point.val()){
     	 alert("보유포인트보다 많습니다");
-    	 return;
-     }else if(usepoint.val()==''||usepoint.val()==null){
-    	 alert("사용할 포인트 입력해 주세요");
-    	 return;
-     }else if(reg.test(usepoint.val())==true){
-    	 console.log(reg.test(usepoint));
-    	 alert("숫자만 입력 가능합니다.");
-    	 return;
      }else{
       var result ="-"+usepoint.val();
       put.text(result);
       put.removeAttr("style");
       put.css("color","red");
-      
       point.val(usepoint.val());
-      minusPoint.val(usepoint.val());
      }
     
 }
@@ -255,14 +237,13 @@ function usePoin(){                         //포인트 사용할 경우
 } 
  
  
- 
- 
- function cancelPay(imp_uid,merchant,reason) {
+ function cancelPay(imp,merchant) {
+	  var test ="imp_122779319082";
 	  $.ajax({
 		 type:"post",
 	     async:true,
-	     url:"/cancelPay.do",
-	     data:{imp_uid:imp_uid,merchant:merchant,reason:reason},
+	     url:"/E_P003_D001/cancelPay",
+	     data:{test:imp,merchant:merchant},
 	     success:function(data,textStatus){
 	     	alert('결제취소 결과:'+data);
 	     	console.log(data);
@@ -273,19 +254,10 @@ function usePoin(){                         //포인트 사용할 경우
 
    }
  
- 
-
-	
- 
- 
- 
  IMP.init('imp33067254');
  function check() {
 	  var check = window.confirm("결제를 진행 하시겠습니까?");
 	  if (check == true){
-		  
-		  var req = new RegExp(/(^02.{0}|^01.{1}|[0-9]{3})([0-9]+)([0-9]{4})/g);
-		  var req2 = new RegExp( /[^0-9]/g);
 		  
 		  var chooseAddress = $('input[name=address]').val(); // 기본 혹은 변경지
           var zoneCode = $('input[name=post1]').val();  
@@ -294,50 +266,20 @@ function usePoin(){                         //포인트 사용할 경우
           var phoneNum = $('input[name=tel]').val();
           var custName = $('input[name=fax]').val();
 		  var payType = $('input[name=payType]').val(); // 결제타입 카드/통장
-		  //var point= $('input[name=usepoint]').val();    //포인트         minusPoint
-		  var point= $('input[name=minusPoint]').val(); 
+		  var point= $('input[name=usepoint]').val();    //포인트 
 		  var type =$('input[name=type]').val();      // 1즉시구매 3 장바구니결제
 		  //var prodNum = $('input[name=prodNum]').val();  //물품 정보
 		  //var quantity = $('input[name=qty]').val();
 		  var totalPrice= $('input[name=payTotal]').val();//상품개수의 총 합
 		  console.log(totalPrice);
-		  
 		  var prodName = $('input[name=prodName]').val();
+		  
 		  var prodNums=[];
 		  var quantityToDB=[];
 		  var orderNums=[];
 		  var perTotals=[];
 		  var prodPrices =[];
 		  var optionNums=[];
-		  var payNames =[];
-		/*    테스트중
-		  if(req.test(phoneNum)==false&&req2.test(phoneNum)==true){
-			  alert("전화번호를 확인해 주세요");
-			  return;
-		  } */
-		  
-          var address1CheckBox = $('input[name=defualtAddress]:checked'); //주소박스 체크
-    	  var address2CheckBox = $('input[name=newAddress]:checked');
-		  var cardCheckBox = $('input[name=card]:checked');
-		  var transCheckBox = $('input[name=account]:checked'); //결제수단 박스 체크
-          
-          
-          if(address1CheckBox.length ==0&&address2CheckBox.length==0){
-            		 alert("배송지를 선택해 주세요");
-            		 return;
-          }else if(cardCheckBox.length ==0&&transCheckBox.length==0){
-        	  alert("결제수단을 선택해 주세요");
-     		 return;
-          }else if(phoneNum==null||phoneNum==''){
-        	  alert("전화번호를 입력해 주세요");
-        	  return;
-          }else if(point==null||point==''){
-			  point = '0';
-          }else if(custName==null||custName==''){
-        	  alert("구매자 이름은 필수입니다.");
-          }
-		  
-		  
           $("input[name=prodNum]").each(function(idx){
               var value = $(this).val();
               var eqValue = $("input[name=prodNum]:eq(" + idx + ")").val() ;
@@ -346,27 +288,26 @@ function usePoin(){                         //포인트 사용할 경우
               var perTotal = $("input[name=total]:eq(" + idx + ")").val() ;
               var prodPrice = $("input[name=prodPrice]:eq(" + idx + ")").val() ;
               var optionNum = $("input[name=optionNums]:eq(" + idx + ")").val() ;
-              var payName = $("input[name=prodName]:eq(" + idx + ")").val() ;
               
-              
-              payNames.push(payName);
               prodNums.push(Number.parseInt(eqValue));
               quantityToDB.push(Number.parseInt(quan));
               orderNums.push(Number.parseInt(orderNum));
               optionNums.push(Number.parseInt(optionNum));
               perTotals.push(Number.parseInt(perTotal));
               prodPrices.push(prodPrice);
+              console.log("수량:"+quan);
+              console.log("오더넘:"+orderNum);
+              console.log("프로드넘:"+eqValue);
              });
 
-		  
-		  
-		  var AllProdNames= payNames.toString(); //장바구니에있는 모든 상품이름을 가져옴 
-		  
+		  if(point==null ||point==''){
+			  point = '0';
+		  }
 		  IMP.request_pay({
 		      pg : 'inicis', // version 1.1.0부터 지원.
 		      pay_method : payType,           //trans는 무통장
 		      merchant_uid : 'merchant_' + new Date().getTime(),
-		      name : AllProdNames,
+		      //name : custName,
 		      amount : totalPrice-point, //판매 가격
 		      /* buyer_email : 'iamport@siot.do', */
 		      buyer_name : custName,
@@ -381,7 +322,7 @@ function usePoin(){                         //포인트 사용할 경우
 	              $.ajax({
 	                type:"post",
 	                async:true,
-	                url:"/payInfo.do",
+	                url:"/B_P003_D001/payInfo",
 	                data:{zoneCode:zoneCode,
 	                	address1:address1,address2:address2,
 	                	phoneNum:phoneNum,custName:custName,
@@ -393,11 +334,11 @@ function usePoin(){                         //포인트 사용할 경우
 	                success:function(data,textStatus){
 	                    alert(data);
 	                    if(data =='fail'){
-	                    	cancelPay(rsp.imp_uid,rsp.merchant_uid,'결제실패');
+	                    	cancelPay(rsp.imp_uid,rsp.merchant_uid);
 	                    	alert('결제 취소실행.');
 	                    }else{
 	                    	alert('결제가 완료 되었습니다.');
-		                	location.href="/shopMainCate.do?listType=100";
+		                	location.href="/B_P002_D001/shopMainCate?listType=100";
 	                    }
 	                },
 	                error:function(data,textStatus){
@@ -407,6 +348,12 @@ function usePoin(){                         //포인트 사용할 경우
 	                complete:function(){
 	                }
 	              });
+	                  /* var msg = '결제가 완료되었습니다.';
+	   		          msg += '고유ID : ' + rsp.imp_uid;
+	   		          msg += '상점 거래ID : ' + rsp.merchant_uid;
+	   		          msg += '결제 금액 : ' + rsp.paid_amount;
+	   		          msg += '카드 승인번호 : ' + rsp.apply_num;
+	   		          location.href="/B_P002_D001/shopMainCate?listType=10"; */
 		         
 		      } else {
 		          var msg = '결제에 실패하였습니다.';
@@ -416,7 +363,7 @@ function usePoin(){                         //포인트 사용할 경우
 		      alert(msg);
 		  });
 	  }else{
-		  location.href="/shopMainCate.do?listType=100";
+		  location.href="/B_P002_D001/shopMainCate?listType=100";
 	  }
 }
  
@@ -459,7 +406,7 @@ align:bottom;
         <div class="col-sm-12 pt-3">
             <div class="card">
                 <div class="card-header card-header-primary">
-                    <h4 class="card-title"><img src="/resources/img/shop_house.png" width="25px" height="25px"> 배송지 정보 </h4>
+                    <h4 class="card-title"><i class="fas fa-square"></i> 배송지 정보 </h4>
                     <p class="card-catagory"></p>
                 </div>
                 <div class="card-body">
@@ -477,26 +424,25 @@ align:bottom;
                             <tr>
                                 <td>전화번호</td>
                                 <td>
-                                    <input type="text" name="tel" class="form-control" value="" required="required">
+                                    <input type="text" name="tel" class="form-control" value="">
                                 </td>
                                 <td>구매자</td>
                                 <td>
-                                    <input type="text" name="fax" class="form-control" value="" required="required">
+                                    <input type="text" name="fax" class="form-control" value="">
                                 </td>
                             </tr>
                             <tr>
                                 <td>우편번호</td>
                                 <td>
-                                    <input type="text" name="post1" id="post1" size="5" class="form-control" readonly value="" style="display:inline-block;width:100px;" required="required"> 
-                                    <!-- <i class="fas fa-search" onclick="sample6_execDaumPostcode()" style="cursor:pointer;font-size:24px;"></i> -->
-                                    <button onclick="sample6_execDaumPostcode()"><img src="/resources/img/search.png" width="20px" height="20px"></button>
+                                    <input type="text" name="post1" id="post1" size="5" class="form-control" readonly value="" style="display:inline-block;width:100px;"> 
+                                    <i class="fas fa-search" onclick="sample6_execDaumPostcode()" style="cursor:pointer;font-size:24px;"></i>
                                 </td>
                             </tr>
                             <tr>
                                 <td>주소</td>
                                 <td colspan="3">
-                                    <input type="text" name="address1" id="address1" class="form-control mb-3" value="" required="required">
-                                    <input type="text" name="address2" id="address2" class="form-control" value="" required="required">
+                                    <input type="text" name="address1" id="address1" class="form-control mb-3" value="">
+                                    <input type="text" name="address2" id="address2" class="form-control" value="">
                                 </td>
                             </tr>
                             </tbody>
@@ -508,7 +454,7 @@ align:bottom;
             <div class="pt-3"></div>
  
                  <div class="card">
-                <div class="card-header"><img src="/resources/img/shop_clothes.png" width="25px" height="25px"> 결제상품</div>
+                <div class="card-header"><i class="fas fa-square"></i> 결제상품</div>
                 <div class="card-body">
                 <!-- 경계선 -->
                 
@@ -601,7 +547,7 @@ align:bottom;
  
  
             <div class="card">
-                <div class="card-header"><img src="/resources/img/shop_card.png" width="25px" height="25px"> 결제 진행</div>
+                <div class="card-header"><i class="fas fa-square"></i> 결제 진행</div>
                 <div class="card-body">
                     <table class="table">
                         <tbody>
@@ -616,9 +562,7 @@ align:bottom;
                             <tr style="line-height:32px;">
                                 <td>포인트</td>
                                 <td>
-                                    <p>보유 포인트: ${point }  <img src="/resources/img/shop_coin.png" width="25px" height="25px"></p><br>
-                                    
-                                    <input type="hidden" name="comparePoint" value="${point }">
+                                    <p>보유 포인트: ${point } p</p><br>
                                     <input type="hidden" name="point" value="${point }">
                                     <p><input type="text" name="usepoint" value="">포인트P 
                                     <button type="button" id="poinButton" onclick="usePoin()" class="btn btn-success">포인트사용</button> </p>
@@ -628,7 +572,6 @@ align:bottom;
                                 <td>총 결제 금액</td>
                                 <td >
                                     <p> <bold id="payTotal"></bold>원  <blod id="minus" style="display: none;"></blod> </p>
-                                    <input type ="hidden" name="minusPoint" value="">
                                     <input type ="hidden" name="payTotal" value="">
                                     
                                 </td>

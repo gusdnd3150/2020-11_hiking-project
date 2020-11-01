@@ -26,7 +26,7 @@ public interface B_P002_D001ShopingMallDAO {
 	public List<Map> searchAllResult(Map<String, Object> info) throws DataAccessException;  //검색기능
 	public int SearchAllTotalCount(Map<String, Object> info); //전체검색토탈
 	
-	public List<Map> lastItems(Map<String, Object> info) throws DataAccessException;  //최신 상품 5개
+	public List<Map> lastItems() throws DataAccessException;  //최신 상품 5개
 	
 	//////////////위에는 작업 완료/////////////
 	

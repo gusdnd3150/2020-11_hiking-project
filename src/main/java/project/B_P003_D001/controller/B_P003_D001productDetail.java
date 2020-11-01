@@ -17,9 +17,9 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import project.*;
 public interface B_P003_D001productDetail {
-	public ModelAndView prodDetail(@RequestParam Map<String, Object> info,HttpSession httpSession,HttpServletRequest request,HttpServletResponse response)throws Exception;
-	public String addAfter(@RequestParam Map<String,Object> info,HttpSession httpSession, MultipartHttpServletRequest file,HttpServletRequest request,HttpServletResponse response)throws Exception;
-	public String addComent(@RequestParam Map<String,Object> info,HttpSession httpSession,HttpServletRequest request,HttpServletResponse response)throws Exception;
+	public ModelAndView prodDetail(@RequestParam Map<String, Object> info,HttpServletRequest request,HttpServletResponse response);
+	public ResponseEntity addAfter(@RequestParam Map<String,Object> info,HttpSession httpSession, MultipartHttpServletRequest file,HttpServletRequest request,HttpServletResponse response)throws Exception;
+	public ResponseEntity addComent(@RequestParam Map<String,Object> info,HttpSession httpSession,HttpServletRequest request,HttpServletResponse response)throws Exception;
 	public ResponseEntity<byte[]> getAfterImage(@PathVariable("num") int num, HttpServletRequest req, HttpServletResponse res)throws Exception;
 	public ModelAndView buyProduct(@RequestParam Map<String,Object> info,
 			HttpSession httpSession, HttpServletRequest req, HttpServletResponse res)throws Exception;
@@ -45,7 +45,6 @@ public interface B_P003_D001productDetail {
 	public ResponseEntity addCartMain(@RequestParam Map<String,Object> info,HttpSession httpSession)throws Exception;
 	
 	public String checkCart(@RequestParam Map<String,Object> info, HttpServletRequest req, HttpServletResponse res) throws Exception;
-	
 	public String insertPayinfo(@RequestParam Map<String, Object> info,HttpSession httpSession,
 			@RequestParam(value = "prodNums[]") List<Integer> prodNums,
 			@RequestParam(value = "quantityToDB[]") List<Integer> quantityToDB,  
@@ -74,7 +73,7 @@ public interface B_P003_D001productDetail {
 			HttpServletRequest req, HttpServletResponse res,HttpSession httpSession)
 			throws Exception ;
 	
-	public String addUsedProduct(MultipartHttpServletRequest upfile,
+	public ModelAndView addUsedProduct(MultipartHttpServletRequest upfile,
 			HttpSession httpSession,
 			@RequestParam Map<String,Object> info,
 			@RequestParam(value = "quantity[]")List<Integer> quantity,
@@ -86,7 +85,6 @@ public interface B_P003_D001productDetail {
 	
 	public ModelAndView addDeliveryForm(@RequestParam Map<String,Object> info,HttpServletResponse response,HttpServletRequest request,HttpSession httpSession);
 	public String addDelivery(@RequestParam Map<String,Object> info,HttpServletResponse response,HttpServletRequest request,HttpSession httpSession);
-	public String cancelPay(@RequestParam Map<String,Object> info,HttpServletResponse response,HttpServletRequest request,HttpSession httpSession);
 
 	public String addCartFromWish(
 			@RequestParam(value = "orderNums[]")List<Integer> orderNums,
@@ -97,15 +95,10 @@ public interface B_P003_D001productDetail {
 			@RequestParam(value = "prodNums[]")List<Integer> prodNums,
 			HttpServletRequest req, HttpServletResponse res,HttpSession httpSession)
 			throws Exception ;
-	public List<Map> chooseOption(@RequestParam Map<String,Object> info,HttpSession httpSession,HttpServletResponse response,HttpServletRequest request)throws Exception;
+	public List<Map> chooseOption(@RequestParam Map<String,Object> info,HttpServletResponse response,HttpServletRequest request)throws Exception;
 	public String modOption(@RequestParam Map<String,Object> info,HttpServletResponse response,HttpServletRequest request)throws Exception;
 	public String updateMemo(@RequestParam Map<String,Object> info,HttpServletResponse response,HttpServletRequest request,HttpSession httpSession)throws Exception;
     public String deleteWish(@RequestParam Map<String,Object> info,HttpServletResponse response,HttpServletRequest request,HttpSession httpSession);
     public ModelAndView payListDetail(@RequestParam Map<String,Object> info,HttpServletResponse response,HttpServletRequest request,HttpSession httpSession);
     
-    public String applycancelPayment(@RequestParam Map<String,Object> info,HttpServletResponse response,HttpServletRequest request,HttpSession httpSession);
-    public List<Map> selectComment(@RequestParam Map<String,Object> info,HttpServletResponse response,HttpServletRequest request);
-    public ModelAndView myUsedList(@RequestParam Map<String,Object> info,HttpServletResponse response,HttpServletRequest request,HttpSession httpSession);
-    public String delAfter (@RequestParam Map<String,Object> info,HttpServletResponse response);
-    public String delComment (@RequestParam Map<String,Object> info,HttpServletResponse response);
 }

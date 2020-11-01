@@ -34,48 +34,13 @@ th, td {
         	var delivery = $("input[name=delivery]").eq(index).val();
         	console.log(createDat);
         	
-        	window.open("/payListDetail.do?createDat="+createDat+"&delivery="+delivery+"",
+        	window.open("/E_P003_D001/payListDetail?createDat="+createDat+"&delivery="+delivery+"",
                     "childForm", "width=1300, height=450, resizable = no, scrollbars = no");
         	
         }
         
-      function cancelProd(index){
-        	var createDat = $("input[name=createDat]").eq(index).val();
-        	
-        	var orderstatus = $("input[name=orderStatus]").eq(index).val();
-        	var imp_uid = $("input[name=imp_uid]").eq(index).val();
-        	var merchant_uid = $("input[name=merchant_uid]").eq(index).val();
-        	
-        	var confirm = window.confirm("취소 요청을 하시겠습니까?");
-        	
-        	if(confirm==true){
-        	  var reason=window.prompt("취소사유를 적어주세요");
-        		
-        	  if(reason==''){
-        		  alert("취소 사유를 적어주세요");
-        		  return;
-        	  }
-        	  
-        	  $.ajax({
-        			 type:"post",
-        		     async:true,
-        		     url:"/applycancelPayment.do",
-        		     data:{reason:reason,imp_uid:imp_uid,merchant_uid:merchant_uid},
-        		     success:function(data,textStatus){
-        		     	console.log(data);
-        		     	if(data=='success'){
-        		     		alert("취소접수가 완료되었습니다. 취소처리에는 다소 시간이 소요될 수 있는 점 양해 부탁드리며 빠른 시일내에 처리될 수 있도록 노력하겠습니다. 감사합니다.");
-        		     		location.reload(true);
-        		     	}
-        		     },
-        		     error:function(data,textStatus){
-        		     }
-        		 });
-        	  
-        	}
-        	
-        	
-        }
+        
+
 	         
 	
         
@@ -140,28 +105,11 @@ th, td {
     <!--================Cart Area =================-->
     <section class="cart_area">
       <div class="container">
-        <div class="left_dorp">
-              
-              <table>
-                <!-- <th><button><a href="/paymentList.do?listType=0">당일</a></button></th> -->
-                <th><button class="btn btn-info"><a href="/paymentList.do?listType=1" style="color:white">1주일</a></button></th>
-                <th><button class="btn btn-info"><a href="/paymentList.do?listType=15" style="color:white">15일</a></button></th>
-                <th><button class="btn btn-info"><a href="/paymentList.do?listType=30" style="color:white">1개월</a></button></th>
-                <th><form action="/paymentList.do" method="get" name="searchForm">
-                  <input type="date" name="startD" required="required"> 
-                  <input type="date" name="endD" required="required"> 
-                 <input type="hidden" name= "listType" value="200" >
-                 <input class="btn btn-info" type="submit" value="조회"> 
-              </form></th>
-              </table>
-              </div>
-      
         <div class="cart_inner">
           <div class="table-responsive">
             <table class="table">
               <thead>
                 <tr>
-                <th></th>
                   <th scope="col"><strong>결제일</strong></th>
                   <th scope="col"><strong>구매자</strong></th>
                   <th scope="col"><strong>결제수단</strong></th>
@@ -174,51 +122,11 @@ th, td {
               <!-- 반복구간 -->
               <c:choose>
                 <c:when test="${empty payList }">
-                <h>최근 결제 내역이 없습니다.</h>
+                <h>등록된 상품이 없습니다</h>
                 </c:when>
                 <c:when test="${not empty payList }">
-                
                      <c:forEach var="payList" items="${payList }" varStatus="Num">
-                <c:if test="${payList.TYPE != 'cancel' && payList.TYPE != 'canceled' }">
                 <tr>
-                  <td>
-                      <p>${payList.RN }</p>  <!-- 결제일 -->      
-                  </td>
-                  <td>
-                      <p>${payList.CREATEDAT }</p>  <!-- 결제일 -->      
-                  </td>
-                  <td>
-                  <p>${payList.BUYERNAME }</p>      <!-- 구매자 -->
-                  </td>
-                  <td>
-                   <p>${payList.TYPE }</p>      <!-- 결제수단 -->
-                  </td>
-                  <td>
-                    <p>${payList.NAME } (외 : ${payList.COUNT } 건 )</p>  <!-- 상품이름 + 건수-->
-                  </td>
-                  <td>
-                   <p>${payList.TOTALPRICE -payList.USED  }</p>      <!-- 결제금액 -->
-                  </td>
-                  <td>
-                   <p>${payList.USED }</p>      <!-- 포인트사용 -->
-                  </td>
-                   <td>
-                    <button class="btn btn-info btn-sm" onclick="prodDetail(${Num.index})" value="" >상세보기</button><br><br>
-                    <button class="btn btn-info btn-sm" onclick="cancelProd(${Num.index})" value="" >취소요청</button>
-                  </td>
-                </tr>
-                <input type= "hidden" name="createDat" value="${payList.CREATEDAT }">
-                <input type= "hidden" name="delivery" value="${payList.DELIVERY }">
-                <input type= "hidden" name="imp_uid" value="${payList.IMP_UID }">
-                <input type= "hidden" name="merchant_uid" value="${payList.MERCHANT_UID }">
-                <input type= "hidden" name="orderStatus" value="${payList.ORDERSTATUS }">
-                </c:if>
-                
-                <c:if test="${payList.TYPE eq 'cancel' }">
-                <tr>
-                      <td>
-                      <p>${payList.RN }</p>  <!-- 결제일 -->      
-                  </td>
                   <td>
                       <p>${payList.CREATEDAT }</p>  <!-- 결제일 -->      
                   </td>
@@ -238,56 +146,11 @@ th, td {
                    <p>${payList.USED }</p>      <!-- 포인트사용 -->
                   </td>
                    <td>
-                    <button class="btn btn-info btn-sm" onclick="prodDetail(${Num.index})" value="" >상세보기</button><br><br>
-                    <%-- <button class="btn btn-info btn-sm" onclick="cancelProd(${Num.index})" value="" style="display:none">취소요청</button> --%>
-                    <p>취소처리중</p>
+                    <button class="btn btn-info btn-sm" onclick="prodDetail(${Num.index})" value="" >상세보기</button>
                   </td>
                 </tr>
                 <input type= "hidden" name="createDat" value="${payList.CREATEDAT }">
                 <input type= "hidden" name="delivery" value="${payList.DELIVERY }">
-                <input type= "hidden" name="imp_uid" value="${payList.IMP_UID }">
-                <input type= "hidden" name="merchant_uid" value="${payList.MERCHANT_UID }">
-                <input type= "hidden" name="orderStatus" value="${payList.ORDERSTATUS }">
-                </c:if>
-                
-                
-                    <c:if test="${payList.TYPE eq 'canceled' }">
-                <tr>
-                      <td>
-                      <p>${payList.RN }</p>  <!-- 결제일 -->      
-                  </td>
-                  <td>
-                      <p>${payList.CREATEDAT }</p>  <!-- 결제일 -->      
-                  </td>
-                  <td>
-                  <p>${payList.BUYERNAME }</p>      <!-- 구매자 -->
-                  </td>
-                  <td>
-                   <p>${payList.TYPE }</p>      <!-- 결제수단 -->
-                  </td>
-                  <td>
-                    <p>${payList.NAME } (외 : ${payList.COUNT } 건 )</p>  <!-- 상품이름 + 건수-->
-                  </td>
-                  <td>
-                   <p>${payList.TOTALPRICE }</p>      <!-- 결제금액 -->
-                  </td>
-                  <td>
-                   <p>${payList.USED }</p>      <!-- 포인트사용 -->
-                  </td>
-                   <td>
-                    <button class="btn btn-info btn-sm" onclick="prodDetail(${Num.index})" value="" >상세보기</button><br><br>
-                    <p>취소완료</p>
-                    </p>
-                  </td>
-                </tr>
-                <input type= "hidden" name="createDat" value="${payList.CREATEDAT }">
-                <input type= "hidden" name="delivery" value="${payList.DELIVERY }">
-                <input type= "hidden" name="imp_uid" value="${payList.IMP_UID }">
-                <input type= "hidden" name="merchant_uid" value="${payList.MERCHANT_UID }">
-                <input type= "hidden" name="orderStatus" value="${payList.ORDERSTATUS }">
-                </c:if>
-                
-                
                      </c:forEach>
                 </c:when>              
               </c:choose>
@@ -299,7 +162,7 @@ th, td {
                  
           <div style="display: block; text-align: center;">
 	     <c:if test="${paging.startPage != 1 }">
-			<a href="/paymentList.do?startD=${paging.starD }&endD=${paging.endD }&listType=${paging.listType }&nowPage=${paging.startPage - 1 }&cntPerPage=${paging.cntPerPage}">&lt;</a>
+			<a href="/B_P003_D001/paymentList?nowPage=${paging.startPage - 1 }&cntPerPage=${paging.cntPerPage}">&lt;</a>
 		</c:if>
 		<c:forEach begin="${paging.startPage }" end="${paging.endPage }" var="p">
 			<c:choose>
@@ -307,20 +170,17 @@ th, td {
 					<b>${p }</b>
 				</c:when>
 				<c:when test="${p != paging.nowPage }">
-					<a href="/paymentList.do?startD=${paging.starD }&endD=${paging.endD }&listType=${paging.listType }&nowPage=${p }&cntPerPage=${paging.cntPerPage}">${p }</a>
+					<a href="/B_P003_D001/paymentList?nowPage=${p }&cntPerPage=${paging.cntPerPage}">${p }</a>
 				</c:when>
 			</c:choose>
 		</c:forEach>
-		
 		<c:if test="${paging.endPage != paging.lastPage}">
-			<a href="/paymentList.do?startD=${paging.starD }&endD=${paging.endD }&listType=${paging.listType }&nowPage=${paging.endPage+1 }&cntPerPage=${paging.cntPerPage}">&gt;</a>
+			<a href="/B_P003_D001/paymentList?nowPage=${paging.endPage+1 }&cntPerPage=${paging.cntPerPage}">&gt;</a>
+			<p> ${paging.listType}</p>
 		</c:if>
-	    </div>      
-	    
-	    
-	      
+	    </div>        
                       <div style="text-align: center" ><br><br>
-                     <a href="/shopMainCate.do?listType=100"> <p align="center" class="main_btn" >쇼핑계속하기</p></a>
+                     <a href="/B_P002_D001/shopMainCate?listType=100"> <p align="center" class="main_btn" >쇼핑계속하기</p></a>
                       </div>
           </div>
         </div>

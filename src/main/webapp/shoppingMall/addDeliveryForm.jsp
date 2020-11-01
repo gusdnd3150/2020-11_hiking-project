@@ -88,7 +88,7 @@ oncomplete: function(data) {
 	  $.ajax({
 			 type:"post",
 		     async:true,
-		     url:"/addDelivery.do",
+		     url:"/E_P003_D001/addDelivery",
 		     data:{userNum:userNum,address1:address1,address2:address2,
 		    	 phonNum:phonNum,userName:userName,post:post
 		     },

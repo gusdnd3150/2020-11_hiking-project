@@ -43,7 +43,7 @@
                     <a class="nav-link" href="/commu/commuMainView.do">산모임</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/shopMainCate.do?listType=100">오름마켓</a>
+                    <a class="nav-link" href="/B_P002_D001/shopMainCate?listType=100">오름마켓</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="../board/board.jsp">고객센터</a>

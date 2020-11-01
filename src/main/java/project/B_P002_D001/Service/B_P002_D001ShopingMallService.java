@@ -23,7 +23,7 @@ public interface B_P002_D001ShopingMallService {
 	public int SearchAllTotalCount(Map<String, Object> info) ;
     ////////////////위에는 작업 완료/////////////
 	
-	public List<Map> lastItems(Map<String, Object> info) throws DataAccessException;
+	public List<Map> lastItems() throws DataAccessException;
 	
 	public int totalCount2(Map<String, Object> info);    //총 카운트 (분류별)
 	

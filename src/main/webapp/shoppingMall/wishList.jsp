@@ -58,12 +58,12 @@
 	    			type : "post",       
 	    			dataType : "text",      
 	    			async:true,          
-	    			url : "/addCartFromWish.do",      
+	    			url : "/E_P003_D001/addCartFromWish",      
 	    			data : {quantities:quantities,prodNames:prodNames,prices:prices,prodNums:prodNums,
 	    				optionNums:optionNums,likenums:likenums},  
 	    			success : function(data, textStatus) {
 	    				alert("추가되었습니다.");
-	    				location.reload();
+	    				location.href="/B_P003_D001/wishList";
 	    			},
 	    			error : function(data, textStatus) {
 	    				alert('에러발생');
@@ -134,11 +134,11 @@
     			type : "post",       
     			dataType : "text",    
     			async:true,         
-    			url : "/updateMemo.do",         
+    			url : "/E_P003_D001/updateMemo",         
     			data : {likeNum:likeNum,prodComment:prodComment},  //서버로 매개변수와 값을 설정
     			success : function(data, textStatus) {
     				alert("수정되었습니다.");
-    				location.reload();
+    				location.href="/B_P003_D001/wishList";
     			},
     			error : function(data, textStatus) {
     				alert('에러발생');
@@ -156,10 +156,10 @@
     			type : "post",       
     			dataType : "text",    
     			async:true,         
-    			url : "/deleteWish.do",         
+    			url : "/E_P003_D001/deleteWish",         
     			data : {likeNum:likeNum},  //서버로 매개변수와 값을 설정
     			success : function(data, textStatus) {
-    				location.reload();
+    				location.href="/B_P003_D001/wishList";
     			},
     			error : function(data, textStatus) {
     				alert('에러발생');
@@ -180,10 +180,10 @@
     			type : "post",       
     			dataType : "text",    
     			async:true,         
-    			url : "/updateMemo.do",         
+    			url : "/E_P003_D001/updateMemo",         
     			data : {prodComment:prodComment,likeNum:likeNum},  //서버로 매개변수와 값을 설정
     			success : function(data, textStatus) {
-    				location.reload();
+    				location.href="/B_P003_D001/wishList";
     			},
     			error : function(data, textStatus) {
     				alert('에러발생');
@@ -205,11 +205,11 @@
     			type : "post",       
     			dataType : "text",    
     			async:true,         
-    			url : "/updateMemo",         
+    			url : "/E_P003_D001/updateMemo",         
     			data : {prodComment:prodComment,likeNum:likeNum},  //서버로 매개변수와 값을 설정
     			success : function(data, textStatus) {
     				alert("수정되었습니다.");
-    				location.href="/wishList";
+    				location.href="/B_P003_D001/wishList";
     			},
     			error : function(data, textStatus) {
     				alert('에러발생');
@@ -343,74 +343,34 @@
                      
                   </td>
                   <td>
-                   <div class="rating_list">    
-                   
-                     <c:if test="${cartList.VALUE ==5 }">
+                   <div class="rating_list">
+                     <c:if test="${cartList.VALUE >= 5 && cartList.VALUE < 6 }">
                       <p>${cartList.VALUE }  (상품평 : ${cartList.TOTALCOUNT } )</p>
-                      <img src='/resources/img/shop_star.png' width='20px' height='20px' style='color:black'> 
-                     <img src='/resources/img/shop_star.png' width='20px' height='20px' style='color:black'>
-                     <img src='/resources/img/shop_star.png' width='20px' height='20px' style='color:black'>
-                     <img src='/resources/img/shop_star.png' width='20px' height='20px' style='color:black'>
-                     <img src='/resources/img/shop_star.png' width='20px' height='20px' style='color:black'>
+                     <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i>
                      </c:if>
-                     
-                     <c:if test="${cartList.VALUE >=4.5 && cartList.VALUE <=4.9 }">
+                     <c:if test="${cartList.VALUE >=4  && cartList.VALUE <= 4.9  }">
                       <p>${cartList.VALUE }  (상품평 : ${cartList.TOTALCOUNT } )</p>
-                      <img src='/resources/img/shop_star.png' width='20px' height='20px' style='color:black'> 
-                     <img src='/resources/img/shop_star.png' width='20px' height='20px' style='color:black'>
-                     <img src='/resources/img/shop_star.png' width='20px' height='20px' style='color:black'>
-                     <img src='/resources/img/shop_star.png' width='20px' height='20px' style='color:black'>
-                     <img src='/resources/img/shop_star_half.png' width='20px' height='20px' style='color:black'>
-                     
+                     <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i>
                      </c:if>
-                     <c:if test="${cartList.VALUE >=4 && cartList.VALUE <=4.4 }">
+                     <c:if test="${cartList.VALUE >=3  && cartList.VALUE <= 3.9  }">
                       <p>${cartList.VALUE }  (상품평 : ${cartList.TOTALCOUNT } )</p>
-                     <img src='/resources/img/shop_star.png' width='20px' height='20px' style='color:black'>
-                     <img src='/resources/img/shop_star.png' width='20px' height='20px' style='color:black'>
-                     <img src='/resources/img/shop_star.png' width='20px' height='20px' style='color:black'>
-                     <img src='/resources/img/shop_star.png' width='20px' height='20px' style='color:black'>
+                     <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i>
                      </c:if>
-                     <c:if test="${cartList.VALUE >=3.5 && cartList.VALUE <=3.9 }">
+                     <c:if test="${cartList.VALUE >=2  && cartList.VALUE <= 2.9  }">
                       <p>${cartList.VALUE }  (상품평 : ${cartList.TOTALCOUNT } )</p>
-                     <img src='/resources/img/shop_star.png' width='20px' height='20px' style='color:black'>
-                     <img src='/resources/img/shop_star.png' width='20px' height='20px' style='color:black'>
-                     <img src='/resources/img/shop_star.png' width='20px' height='20px' style='color:black'>
-                     <img src='/resources/img/shop_star_half.png' width='20px' height='20px' style='color:black'>
+                     <i class="fa fa-star"></i><i class="fa fa-star"></i>
                      </c:if>
-                     <c:if test="${cartList.VALUE >=3 && cartList.VALUE <=3.4 }">
+                    <c:if test="${cartList.VALUE >=1  && cartList.VALUE <= 1.9  }">
                       <p>${cartList.VALUE }  (상품평 : ${cartList.TOTALCOUNT } )</p>
-                     <img src='/resources/img/shop_star.png' width='20px' height='20px' style='color:black'>
-                     <img src='/resources/img/shop_star.png' width='20px' height='20px' style='color:black'>
-                     <img src='/resources/img/shop_star.png' width='20px' height='20px' style='color:black'>
+                     <i class="fa fa-star"></i>
                      </c:if>
-                    <c:if test="${cartList.VALUE >=2.5 && cartList.VALUE <=2.9 }">
-                      <p>${cartList.VALUE }  (상품평 : ${cartList.TOTALCOUNT } )</p>
-                     <img src='/resources/img/shop_star.png' width='20px' height='20px' style='color:black'>
-                     <img src='/resources/img/shop_star.png' width='20px' height='20px' style='color:black'>
-                     <img src='/resources/img/shop_star_half.png' width='20px' height='20px' style='color:black'>
-                     </c:if>
-                     <c:if test="${cartList.VALUE >=2 && cartList.VALUE <=2.4 }">
-                      <p>${cartList.VALUE }  (상품평 : ${cartList.TOTALCOUNT } )</p>
-                     <img src='/resources/img/shop_star.png' width='20px' height='20px' style='color:black'>
-                     <img src='/resources/img/shop_star.png' width='20px' height='20px' style='color:black'>
-                     </c:if>
-                     <c:if test="${cartList.VALUE >=1.5 && cartList.VALUE <=1.9 }">
-                      <p>${cartList.VALUE }  (상품평 : ${cartList.TOTALCOUNT } )</p>
-                     <img src='/resources/img/shop_star.png' width='20px' height='20px' style='color:black'>
-                     <img src='/resources/img/shop_star_half.png' width='20px' height='20px' style='color:black'>
-                     </c:if>
-                       <c:if test="${cartList.VALUE >=1 && cartList.VALUE <=1.4 }">
-                      <p>${cartList.VALUE }  (상품평 : ${cartList.TOTALCOUNT } )</p>
-                     <img src='/resources/img/shop_star.png' width='20px' height='20px' style='color:black'>
-                     </c:if>
-                       
                   </div>
                   </td>
                   <td>
                    <p> ${cartList.PICKDATE } </p>
                   </td>
                    <td>  
-                    <a href="/productDetail.do?prodNum=${cartList.PRODNUM}"><button class="btn btn-info btn-sm" >상품보기</button></a><br><br>
+                    <a href="/B_P003_D001/productDetail?prodNum=${cartList.PRODNUM}"><button class="btn btn-info btn-sm" >상품보기</button></a><br><br>
                     <button class="genric-btn danger" style="line-height: 33px;padding: 0px 22px" onclick="deleteWish(${cartList.LIKENUM})" >삭제</button>
                   </td>
                 </tr>
@@ -421,10 +381,10 @@
                                   
                 
                 <tr>      <!-- 페이징 자리 -->
-                  <td colspan="8">
+                  <td colspan="6">
           <div style="display: block; text-align: center;">
 	     <c:if test="${paging.startPage != 1 }">
-			<a href="/wishList.do?nowPage=${paging.startPage - 1 }&cntPerPage=${paging.cntPerPage}">&lt;</a>
+			<a href="/B_P003_D001/wishList?nowPage=${paging.startPage - 1 }&cntPerPage=${paging.cntPerPage}">&lt;</a>
 		</c:if>
 		<c:forEach begin="${paging.startPage }" end="${paging.endPage }" var="p">
 			<c:choose>
@@ -432,29 +392,44 @@
 					<b>${p }</b>
 				</c:when>
 				<c:when test="${p != paging.nowPage }">
-					<a href="/wishList.do?nowPage=${p }&cntPerPage=${paging.cntPerPage}">${p }</a>
+					<a href="/B_P003_D001/wishList?nowPage=${p }&cntPerPage=${paging.cntPerPage}">${p }</a>
 				</c:when>
 			</c:choose>
 		</c:forEach>
 		<c:if test="${paging.endPage != paging.lastPage}">
-			<a href="/wishList.do?nowPage=${paging.endPage+1 }&cntPerPage=${paging.cntPerPage}">&gt;</a>
+			<a href="/B_P003_D001/wishList?nowPage=${paging.endPage+1 }&cntPerPage=${paging.cntPerPage}">&gt;</a>
 			<p> ${paging.listType}</p>
 		</c:if>
 	    </div>        
                   </td>
-            
+                  <td></td>
+                  <td></td>
                 </tr>
                 
-  
+                <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                  <td >
+                  </td>
+                  <td></td>
+                </tr>
 
-        
-              </tbody>
-            </table>
-            
-                    <div class="checkout_btn_inner" align="center">
-                      <a href="/shopMainCate.do?listType=100"> <p align="center" class="main_btn" >쇼핑계속하기</p></a>
+                <tr class="out_button_area">
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td colspan="2" align="center">
+                    <div class="checkout_btn_inner">
+                      <p class="gray_btn" id="keepShopping">뒤로가기</p>
                       <p class="main_btn" id="addCart">장바구니에 추가</p>
                     </div>
+                  </td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>

@@ -77,8 +77,8 @@ public class B_P002_D001ShopingMallDAOImpl implements B_P002_D001ShopingMallDAO{
 		return totalCount;
 	}
 	@Override
-	public List<Map> lastItems(Map<String, Object> info) throws DataAccessException {    //최신글 5
-		List<Map> result = sqlSession.selectList("project.e_P002_D003.lastItems",info);
+	public List<Map> lastItems() throws DataAccessException {    //최신글 5
+		List<Map> result = sqlSession.selectList("project.e_P002_D003.lastItems");
 		return result;
 	}
 	

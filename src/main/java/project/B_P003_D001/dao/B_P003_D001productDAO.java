@@ -22,13 +22,12 @@ public interface B_P003_D001productDAO {
 	public List<Map> detailImagesBottom(Map<String, Object> map) throws DataAccessException ;
 	public void addAfter(Map<String,Object> map)throws DataAccessException;
 	public void addComent(Map<String,Object> map)throws DataAccessException;
-	public float average(Map<String,Object> map)throws DataAccessException; //평균값 구하는 메서드
+	public int average(Map<String,Object> map)throws DataAccessException; //평균값 구하는 메서드
 
 	public List<Map> selectProductInfo(Map<String,Object> map) throws DataAccessException;  //즉시구매 페이지 상품 정보
-	public List<Map> selectComment(Map<String,Object> map) throws DataAccessException;  //즉시구매 페이지 상품 정보
 	
 	public int afterTotal(Map<String,Object> map);
-	public List<Map> afterList(Map<String,Object> map)throws DataAccessException;
+	public List<productAfterVO> afterList(Map<String,Object> map)throws DataAccessException;
 	public productAfterVO getImage(productAfterVO vo) throws DataAccessException;  //
 	
 	///구매전
@@ -68,7 +67,6 @@ public interface B_P003_D001productDAO {
 	public Integer checkCart(Map<String, Object> map) throws DataAccessException ;
 	public List<Map> CartList(Map<String,Object> map)throws DataAccessException;
 	public List<Map> paymentList(Map<String,Object> map)throws DataAccessException;
-	public void applycancelPay(Map<String,Object> map);
 	public List<Map> payDetailList(Map<String,Object> map)throws DataAccessException;
 	public int totalPaymentCount(Map<String,Object> map)throws DataAccessException;
 	public int CartTotal(Map<String,Object> map)throws DataAccessException;
@@ -99,9 +97,4 @@ public interface B_P003_D001productDAO {
 	public void deleteWish(List<Map> addOption)throws DataAccessException ;
 	public void deleteWishOne(Map<String,Object> likenum)throws DataAccessException ;
 	
-	public void delAfter(Map<String,Object> likenum);
-	public void delComment(Map<String,Object> afterNum);
-	
-	public int totaladdUsed(Map<String,Object> usernum)throws DataAccessException ;
-	public List<Map> selectMyUsedList(Map<String,Object> usernum)throws DataAccessException ;
 }
