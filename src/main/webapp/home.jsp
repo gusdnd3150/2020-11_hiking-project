@@ -14,12 +14,12 @@
 			등산모임 검색하기
 <%--			<button class="btn btn-outline-info" onclick="moveToMain();">더보기</button>--%>
 			<div class="form-inline">
-				<input type="text" class="form-control col-6">
+				<input id="keyword" type="text" class="form-control col-6">
 				<a href="#" class="pl-2">
 					<img src="../resources/img/search.png" width="25" height="25" onclick="">
 				</a>
 			</div>
-			<div onclick="moveToMain()">
+			<div onclick="moveToMain()" style="position: absolute;margin-bottom: 10%">
 				<h1><i class="fas fa-angle-down"></i></h1>
 			</div>
 		</div>
@@ -128,6 +128,7 @@
 		mainAfterList();
 		mainMoimList();
 	})
+
 	var memberCountConTxt= 296842;
 
 	$({ val : 0 }).animate({ val : memberCountConTxt }, {

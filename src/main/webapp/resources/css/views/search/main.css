@@ -11,3 +11,11 @@
     cursor: pointer;
     background-color: cadetblue;
 }
+
+#keywordRank{
+    height: 30px;
+    overflow-y: hidden;
+}
+#keywordRank:hover{
+    cursor: pointer;
+}

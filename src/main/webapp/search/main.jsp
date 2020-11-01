@@ -13,6 +13,9 @@
                 </a>
             </div>
             <div id="suggestion" class="col-3"></div>
+
+            <ul id="keywordRank" class="p-1"></ul>
+
             <div class="collapse" id="searchCondition">
                 <div class="row card-body">
                     <div class="col-4">
@@ -75,6 +78,28 @@
 <script type="text/javascript" src="../resources/js/jquery.js"></script>
 <script type="text/javascript" src="../resources/js/bootstrap.min.js"></script>
 <script>
+    $(document).ready(function (){
+        keywordRank();
+        ticker();
+        tickerover();
+    })
+    function ticker(){
+        timer = setTimeout(function (){
+            $('#keywordRank li:first').animate({marginTop: '-20px'}, 400, function (){
+                $(this).detach().appendTo('ul#keywordRank').removeAttr('style');
+            });
+            ticker();
+        },3000);
+    }
+
+    function tickerover(){
+        $('#keywordRank').mouseover(function (){
+            clearTimeout(timer);
+        });
+        $('#keywordRank').mouseout(function (){
+            ticker();
+        })
+    }
     $(function () {
         $('#keyword').keyup(function () {
 
@@ -95,8 +120,6 @@
                 minLength: 1,
                 success:function (response){
                     $('#suggestion').empty();
-                    console.log("success")
-                    console.log(response)
                     for(var i=0;i<response.length;i++){
                         var html = '';
                         html += '<li class="suggestKeyword pl-1" onclick="setKeyword(this)">'+response[i].NAME+'</li>'
@@ -105,11 +128,40 @@
                 },
                 error:function (response){
                     console.log("error")
-                    console.log(response)
                 }
             })
         })
     })
+
+    function keywordRank(){
+        $.ajax({
+            type: "GET",
+            url: "/search/rank.do",
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8;",
+            success: function (response){
+                console.log("success")
+                console.log(response)
+
+                for(var i=0;i<response.length;i++){
+                    var html = '';
+
+                    html += '<li>';
+                    html += '<span style="color: lightseagreen">'+ (i+1) + '</span>'+ ' ';
+                    html += '<a onclick="quickSearch(\''+response[i].KEYWORD+'\')">'+response[i].KEYWORD + '</a>';
+                    html += '</li>';
+                    $('#keywordRank').append(html)
+                }
+            },
+            error: function (response){
+                console.log("error")
+            }
+        })
+    }
+    function quickSearch(data){
+        $('#keyword').val(data);
+        search();
+    }
     function setKeyword(e){
         $('#keyword').val(e.innerText);
         $('#suggestion').empty()
@@ -150,8 +202,6 @@
             dataType: 'json',
             contentType: "application/json; charset=utf-8;",
             success: function (response){
-                console.log("success")
-                console.log(response)
                 if(response.groupList.length != 0){
                     appendGroupList(response.groupList)
                 }else{

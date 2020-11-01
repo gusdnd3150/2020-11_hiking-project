@@ -84,4 +84,19 @@
         FROM trailInfo) NAME
         WHERE NAME LIKE '%'||#{keyword}||'%'
     </select>
+
+    <insert id="saveKeyword" parameterType="map">
+        INSERT INTO KEYWORD
+        VALUES (
+            KEYWORD_SEQ.nextval,
+            #{keyword},
+            sysdate
+        )
+    </insert>
+
+    <select id="selectKeywordRank" resultType="map">
+        SELECT KEYWORD, DENSE_RANK() over (ORDER BY COUNT(KEYWORD) DESC) rank
+        FROM KEYWORD
+        GROUP BY KEYWORD
+    </select>
 </mapper>

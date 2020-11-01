@@ -18,4 +18,10 @@ public class SearchServiceImpl implements SearchService{
     public List suggestion(String keyword){
         return searchDAO.suggestion(keyword);
     }
+    public void saveKeyword(Map map){
+        searchDAO.saveKeyword(map);
+    }
+    public List selectKeywordRank(){
+        return searchDAO.selectKeywordRank();
+    }
 }

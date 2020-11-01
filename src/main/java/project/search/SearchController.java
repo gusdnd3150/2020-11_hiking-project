@@ -38,6 +38,8 @@ public class SearchController {
         searchMap.put("sort",sort);
         searchMap.put("keyword",keyword);
 
+        searchService.saveKeyword(searchMap);
+
 
         System.out.println(searchMap.toString());
 
@@ -65,5 +67,11 @@ public class SearchController {
     @ResponseBody
     public List suggestion(@RequestParam("keyword")String keyword){
         return searchService.suggestion(keyword);
+    }
+
+    @GetMapping("/search/rank.do")
+    @ResponseBody
+    public List selectKeywordRank(){
+        return searchService.selectKeywordRank();
     }
 }

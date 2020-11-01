@@ -74,7 +74,8 @@
     var mapContainer = document.getElementById('map'),
         mapOptions = {
             center: new kakao.maps.LatLng(p.y, p.x),
-            level: 5
+            level: 5,
+            draggable: true
         };
 
     var map = new kakao.maps.Map(mapContainer, mapOptions),
