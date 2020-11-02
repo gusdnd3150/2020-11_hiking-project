@@ -21,11 +21,11 @@
 		        
 		        $.ajax({
 		        	type:"post",
-		        	url:"/B_P003_D001/deleteCart",
+		        	url:"/deleteCart",
 		        	dataType:"text",
 		        	data:{deleteNum:deleteNum},
 		        	success:function(data){
-		        		location.href="/B_P003_D001/cartList";
+		        		location.reload();
 		        	},
 		        	error:function(data){
 		        		alert("삭제실패");
@@ -42,7 +42,7 @@
 	 		       
 	 	          	var prodNum = $(this).val(); //프로드넘  putOption
 	 	          	var index = $("button[name=chooseOption]").index(this); //인덱스
-	 	          	var ordernum =$("input[name=orderNum]").eq(index).val(); //오더넘
+	 	          	var ordernum =$("input[name=opOrderNum]").eq(index).val(); //오더넘
 	 	          	var putter =$("div #putOption").eq(index); //푸터 태그 선택
 	 		        console.log(prodNum);
 	 		       console.log("인덱스값"+index);
@@ -51,7 +51,7 @@
 	 		      
 	 		        $.ajax({
 	 		        	type:"get",
-	 		        	url:"/E_P003_D001/chooseOption",
+	 		        	url:"/chooseOption.do",
 	 		        	dataType:"JSON", 
 	 		        	data:{prodNum:prodNum},
 	 		        	contentType: "application/json; charset=utf-8;",
@@ -82,8 +82,8 @@
 	                    	put += "<td>";
 	                    	put += "<div class='product_count' style='margin-top: 10px;margin-bottom: 6px'  >";
 	                    	put += "<input type='text' name='qty2' id='sst2' maxlength='12' value='1' title='Quantity:' class='input-text qty' style='height: 36px'/>";
-	                    	put += "<button onclick='' class='increase items-count' type='button' name='upNum2'> <i class='lnr lnr-chevron-up'></i> </button>";
-	                    	put += "<button onclick='' class='reduced items-count' type='button' name='downNum2'> <i class='lnr lnr-chevron-down'></i> </button>";
+	                    	put += "<button onclick='' class='increase items-count' type='button' name='upNum2'> <img src='/resources/img/shop_button_up.png' width='20px' height='20px' style='color:black'> </button>";
+	                    	put += "<button onclick='' class='reduced items-count' type='button' name='downNum2'> <img src='/resources/img/shop_button_down.png' width='20px' height='20px' style='color:black'>  </button>";
 	                    	put += "</div>";
 	                    	put += "</td>";
 	                    	put += "<td>";
@@ -130,7 +130,12 @@
 	            		        	 console.log(index);
 	            		        	 var quantity =$("input[name=qty2]").eq(index); // 값 인덱스번호에 맞는 qty태그를 선택
 	            		        	 var sst = quantity.val();
-	            		        	 if(!isNaN(sst)){
+	            		        	 
+	            		        	 if(sst ==1){
+	            		        		 alert("수량은 하나이상 선택해 주세요");
+	            		        		 sst=1;
+	            		        	 }
+	            		        	 else if(!isNaN(sst)){
 	            		        		 sst--;
 	            		        	 }
 	            		        	 quantity.val(sst);
@@ -162,7 +167,7 @@
 		       	        	//내일 아침에 아작스로 처리하면 끝
 		       	        	          $.ajax({
 		       	        		            type: "get",
-		       	        		            url: "/E_P003_D001/modOption",
+		       	        		            url: "/modOption",
 		       	        		            data: {ordernum:ordernum,optionNum:optionNum,quantity:quantity,perPrice:perPrice},
 		       	        		            dataType: "json",
 		       	        		            success: function( responseData, status , xhr ){
@@ -172,7 +177,7 @@
 		       	        		            },
 		       	        		            complete:function(){
 		       	        		            	alert("옵션이 등록되었습니다.");
-		       	        		            	location.href="/B_P003_D001/cartList";
+		       	        		            	location.reload();
 		       	        		            }
 		       	        		        });
 		       	        	
@@ -203,6 +208,12 @@
 	        	 var colors=[];
 	        	 var sizes=[];
 	        	 var optionNums=[];
+	        	 
+	        	 var checkBox = $('input[name=buyinfo]:checked');
+	        	 if(checkBox.length ==0){
+	        		 alert("상품을 선택해 주세요");
+	        		 return;
+	        	 }
 	        	 
 	        	 $('input[name=buyinfo]:checked').each(function (i, elements) {
 	        		    var index= $(elements).index("input:checkbox[name=buyinfo]");
@@ -236,20 +247,20 @@
 	        		    
 	        		});
 	     		$.ajax({
-	    			type : "post",       //응답 데이터를 텍스트로 지정
-	    			dataType : "text",    //응답 데이터를 텍스트로 지정   
-	    			async:true,           //false인경우 동기식으로 처리
-	    			url : "/B_P003_D001/butProductsFromCart",               // 서버에서 세션으로 상품을 담는다
+	    			type : "post",       
+	    			dataType : "text",    
+	    			async:true,         
+	    			url : "/butProductsFromCart",             
 	    			data : {totalPrice:totalPrice,orderNums:orderNums,quantities:quantities,optionNums:optionNums,
-	    				images:images,prodNames:prodNames,prices:prices,prodNums:prodNums,colors:colors,sizes:sizes},  //서버로 매개변수와 값을 설정
-	    			success : function(data, textStatus) {  //전송과 응담이 성공했을 경우의 작업을 설정
-	    				$('#message').append(data);  //서버 응답 메시지를 <div> 엘리먼트에 표시
+	    				images:images,prodNames:prodNames,prices:prices,prodNums:prodNums,colors:colors,sizes:sizes},  
+	    			success : function(data, textStatus) {  
+	    				$('#message').append(data);  
 	    			},
-	    			error : function(data, textStatus) { //오류발생 시 내용
+	    			error : function(data, textStatus) { 
 	    				alert('에러발생');
 	    			},
-	    			complete : function(data, textStatus) {  //완료 시 수행
-	    				location.href="/B_P003_D001/buyProd?type=3";
+	    			complete : function(data, textStatus) {  
+	    				location.href="/myShop/buyProd.do?type=3";
 	    			}
 	    		}); 
 	        	 
@@ -280,7 +291,11 @@
 		        	 console.log(index);
 		        	 var quantity =$("input[name=qty]").eq(index); // 값 인덱스번호에 맞는 qty태그를 선택
 		        	 var sst = quantity.val();
-		        	 if(!isNaN(sst)){
+		        	 
+		        	 if(sst ==1){
+		        		 sst=1;
+		        		 alert("수량은 하나이상 선택해 주세요");
+		        	 }else if(!isNaN(sst)){
 		        		 sst--;
 		        	 }
 		        	 quantity.val(sst);
@@ -397,8 +412,8 @@
                 <tr>
                       <td id="locationOrderNum">
                       <h>옵션 선택</h>
-                <input type="hidden" name="prodNum" value="${cartList.PRODNUM }">
-                <input type="hidden" name="orderNum" value="${cartList.ORDERNUM }">
+                <input type="hidden" name="opProdNum" value="${cartList.PRODNUM }">
+                <input type="hidden" name="opOrderNum" value="${cartList.ORDERNUM }">
                 </td>
                   <td>
                     <div class="media">
@@ -408,17 +423,17 @@
                           <%-- src="http://localhost:8080/resources/img/${cartList.IMAGE }" --%>
                           alt="" width="90px" height="90px"
                         />
-                        <input type="hidden" name="images" value="${cartList.IMAGE }">
+                        <input type="hidden" name="opimages" value="${cartList.IMAGE }">
                       </div>
                       <div class="media-body">
                         <p>${cartList.NAME }</p>
-                        <input type ="hidden" name="prodNames" value="${cartList.NAME }">
+                        <input type ="hidden" name="opProdNames" value="${cartList.NAME }">
                       </div>
                     </div>
                   </td>
                   <td>
                     <h5>${cartList.PRICE } &nbsp; 원</h5>
-                    <input type="hidden" name="perPrice" value="${cartList.PRICE }">
+                    <input type="hidden" name="opPerPrice" value="${cartList.PRICE }">
                   </td>
                   <td colspan="3">
                   <div id="putOption">   <!-- 아작스로 처리 -->
@@ -440,7 +455,7 @@
                   <td colspan="6">
           <div style="display: block; text-align: center;">
 	     <c:if test="${paging2.startPage != 1 }">
-			<a href="/B_P003_D001/cartList?nowPage2=${paging2.startPage - 1 }&cntPerPage2=${paging2.cntPerPage}">&lt;</a>
+			<a href="/myShop/cartList.do?nowPage2=${paging2.startPage - 1 }&cntPerPage2=${paging2.cntPerPage}">&lt;</a>
 		</c:if>
 		<c:forEach begin="${paging2.startPage }" end="${paging2.endPage }" var="p">
 			<c:choose>
@@ -448,12 +463,12 @@
 					<b>${p }</b>
 				</c:when>
 				<c:when test="${p != paging2.nowPage }">
-					<a href="/B_P003_D001/cartList?nowPage2=${p }&cntPerPage2=${paging2.cntPerPage}">${p }</a>
+					<a href="/myShop/cartList.do?nowPage2=${p }&cntPerPage2=${paging2.cntPerPage}">${p }</a>
 				</c:when>
 			</c:choose>
 		</c:forEach>
 		<c:if test="${paging2.endPage != paging2.lastPage}">
-			<a href="/B_P003_D001/cartList?nowPage2=${paging2.endPage+1 }&cntPerPage2=${paging2.cntPerPage}">&gt;</a>
+			<a href="/myShop/cartList.do?nowPage2=${paging2.endPage+1 }&cntPerPage2=${paging2.cntPerPage}">&gt;</a>
 			<p> ${paging2.listType}</p>
 		</c:if>
 	    </div>        
@@ -464,7 +479,7 @@
 	    <!-- ///////////// -->
 	    
     <!--================Cart Area =================-->
-    <section class="cart_area">
+    <section class="cart_area" style="padding-top: 38px;" >
       <div class="container">
         <div class="cart_inner">
           <div class="table-responsive">
@@ -530,7 +545,7 @@
                         type="button"
                         name="upNum"
                       >
-                        <i class="lnr lnr-chevron-up"></i>
+                        <img src="/resources/img/shop_button_up.png" width="20px" height="20px" style="color:black">
                       </button>
                       <button
                         onclick=""
@@ -538,13 +553,13 @@
                         type="button"
                         name="downNum"
                       >
-                        <i class="lnr lnr-chevron-down"></i>
+                        <img src="/resources/img/shop_button_down.png" width="20px" height="20px" style="color:black">
                       </button>
                     </div>
                   </td>
                   <td>
                     <%-- <h5 id="totalPut">${cartList.price * cartList.quantity }</h5> --%>
-                    <input type="text" name="perTotal" value="${cartList.PRICE * cartList.QUANTITY }" readonly style="border: none">
+                    <input type="text" name="perTotal" value="${cartList.PRICE * cartList.QUANTITY }" readonly style="border: none" width="30px">
                   </td>
                   <td>
                   <div>
@@ -571,7 +586,7 @@
                   <td colspan="6">
           <div style="display: block; text-align: center;">
 	     <c:if test="${paging.startPage != 1 }">
-			<a href="/B_P003_D001/cartList?nowPage=${paging.startPage - 1 }&cntPerPage=${paging.cntPerPage}">&lt;</a>
+			<a href="/myShop/cartList.do?nowPage=${paging.startPage - 1 }&cntPerPage=${paging.cntPerPage}">&lt;</a>
 		</c:if>
 		<c:forEach begin="${paging.startPage }" end="${paging.endPage }" var="p">
 			<c:choose>
@@ -579,12 +594,12 @@
 					<b>${p }</b>
 				</c:when>
 				<c:when test="${p != paging.nowPage }">
-					<a href="/B_P003_D001/cartList?nowPage=${p }&cntPerPage=${paging.cntPerPage}">${p }</a>
+					<a href="/myShop/cartList.do?nowPage=${p }&cntPerPage=${paging.cntPerPage}">${p }</a>
 				</c:when>
 			</c:choose>
 		</c:forEach>
 		<c:if test="${paging.endPage != paging.lastPage}">
-			<a href="/B_P003_D001/cartList?nowPage=${paging.endPage+1 }&cntPerPage=${paging.cntPerPage}">&gt;</a>
+			<a href="/myShop/cartList.do?nowPage=${paging.endPage+1 }&cntPerPage=${paging.cntPerPage}">&gt;</a>
 			<p> ${paging.listType}</p>
 		</c:if>
 	    </div>        
@@ -592,6 +607,7 @@
 	
 	              
                   </td>
+                  <td></td>
                 </tr>
                 
                 <tr>
@@ -606,23 +622,16 @@
                     <intput type="hidden" name="lastPrice" value="">
                   </td>
                   <td></td>
+                  <td></td>
                 </tr>
 
-                <tr class="out_button_area">
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td colspan="2" align="center">
-                    <div class="checkout_btn_inner">
-                      <p class="gray_btn" id="keepShopping">쇼핑계속하기</p>
-                      <p class="main_btn" id="buyProduts">구매하기</p>
-                    </div>
-                  </td>
-                  <td></td>
-                  <td></td>
-                </tr>
+          
               </tbody>
             </table>
+                      <div class="checkout_btn_inner" align="center">
+                      <a href="/shopMainCate.do?listType=100"> <p align="center" class="main_btn" >쇼핑계속하기</p></a>
+                      <p class="main_btn" id="buyProduts">구매하기</p>
+                    </div>
           </div>
         </div>
       </div>

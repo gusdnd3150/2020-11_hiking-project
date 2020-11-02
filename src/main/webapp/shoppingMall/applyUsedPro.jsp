@@ -72,10 +72,12 @@ var cnt2=1;
 <br>
 <br>
 <br>
+
+
 <div class="container">
     <h1 align="center">중고물품 등록</h1>
     
-    <form name="frm" method="post" action="/E_P002_D003/addUsedPro" enctype="multipart/form-data">
+    <form name="frm" method="post" action="/addUsedPro" enctype="multipart/form-data">
         <div class="mb-3">
             <label for="title">상품이름</label>
             <input type="text" class="form-control" name="name" id="name">
@@ -90,13 +92,13 @@ var cnt2=1;
         </div>
          <label>상품구분(중고/신품):</label>
             <select id="type" name="type">
-             <option value="1">중고</option>    
-             <option value="2">신품</option>
+             <option value="1">신품</option>    
+             <option value="2">중고</option>
              <option value="3">물품 검수</option>
             </select><br>
             
-         <label>상품분류</label>              
-            <select id="parentCategoryNum" name="parentCategoryNum">
+         <label style="float:left">상품분류</label>              
+            <select style="float:left" id="parentCategoryNum" name="parentCategoryNum">
              <option value="15">반팔</option>    
              <option value="16">긴팔</option>
              <option value="17">후드</option>
@@ -122,7 +124,7 @@ var cnt2=1;
             </select><br>   
             
             <!-- prodOption table 추가내용 -->
-         <input type="button"  value="옵션추가" onClick="addOption()"/><br>   
+         <input style="float:left" type="button"  value="옵션추가" onClick="addOption()"/><br>   
           <div id="addOption">
           <label for="title">색상:</label>
           <!-- <input type="text" name="color[]" value=""> -->
@@ -146,11 +148,11 @@ var cnt2=1;
           <input type="text" name="prodSize[]" value="">
           <label for="title">수량:</label>
           <input type="text" name="quantity[]" value="">
-          <input type="hidden" name="prodstatus[]" value="1">
+          <input type="hidden" name="prodstatus[]" value="3">
          <br>
           </div>   
           <hr>
-        <input type="button"  class=".btn-primary" value="섬네일 사진추가" onClick="fn_addFile()"/><br>
+        <input  type="button"  class=".btn-primary" value="섬네일 사진추가" onClick="fn_addFile()"/><br>
            <div id="d_file">
          <br>
           </div>
