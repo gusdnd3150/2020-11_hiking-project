@@ -37,24 +37,13 @@
 				</button>
 			</div>
 			<div class="modal-body">
-				<div class="input-group col-sm-6" style="padding-bottom: 10px;">
-					<div class="input-group-prepend ">
-						<label class="input-group-text">제목</label>
-					</div>
 					<form action="/commu/insertPost.do" method="post" enctype="multipart/form-data">
-					<input type="text" class="form-control" name="feedTitle" id="feedTitle">
-				</div>
-				<!-- <div class="col-sm-3">
-								<div class="input-group mb-3">
-									<select class="custom-select" id="inputGroupSelect03">
-										<option selected>분류</option>
-										<option value="1">One</option>
-										<option value="2">Two</option>
-										<option value="3">Three</option>
-									</select>
+				 <div class="col-sm-5">
+								<div class="input-group mb-2 row">
+								<p>&nbsp&nbsp공지게시글로 작성하기</p>
+								<input style="margin: 5px 20px;" type="checkbox" id="importantPost" name="type" value="1">
 								</div>
-							</div> -->
-
+							</div> 
 				<div class="row justify-content-md-center">
 					<div class="col_c">
 						<div class="input-group">
@@ -70,11 +59,6 @@
 					</div>
 				</div>
 			</div>
-					<!-- 	<h1>파일 업로드 하기</h1>
-						 <form name="fileForm" action="requestupload2" method="post" enctype="multipart/form-data">
-        <input multiple="multiple" type="file" name="file" />
-        <input type="text" name="src" />
-    </form> -->
 
 			<div class="modal-footer">
 				<button type="submit" class="btn btn-success">피드 작성</button>

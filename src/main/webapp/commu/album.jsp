@@ -8,34 +8,8 @@
 <!doctype html>
 
 <style>
-ul, ol {
-	list-style-type: none;
-}
-
-.album-cover {
-	width: 92%;
-	height: 230px;
-	background-image:
-		url('http://localhost:8080/resources/img/test/list1.jpg');
-	background-repeat: no-repeat;
-	background-size: cover;
-	background-position: center;
-}
-
-.album-info {
-	padding: 5px;
-}
-
-.album-title {
-	font-family: 'Noto Sans KR', sans-serif;
-}
-
-.album-item {
-	border-color: 2px solid green;
-}
-
 #ASpace {
-	width: 330px;
+	width: 320px;
 }
 
 #OContent {
@@ -50,7 +24,7 @@ ul, ol {
 <div class="tab-pane fade" id="album" role="tabpanel"
 	aria-labelledby="list-album-list">
 	<div class="row pt-3">
-		<h3>&nbsp&nbsp&nbsp전체 사진</h3>
+		<h3>&nbsp&nbsp&nbsp오름 사진</h3>
 		<div id="ASpace"></div>
 		<button type="file" style="float: right;" class="btn btn-outline-success" data-toggle="modal" data-target="#uploadAlbum">사진 올리기</button>
 	</div>
@@ -66,29 +40,31 @@ ul, ol {
 			<!-- <div class="col-sm-7" style="width: 40rem; height: 60rem;" > -->
 			<img class="col-sm-7" id="OContent" src="">
 			<!--  </div> -->
-			<div class="card scroll"
-				style="width: 30rem; height: 45rem; margin-left: 0px; margin-right: 50px;">
+			<div class="card scroll" style="width: 30rem; height: 55rem; margin-left: 0px; margin-right: 8%;">
 				<button type="button" class="close" data-dismiss="modal"
 					aria-label="Close" style="text-align: right; margin-right: 10px;">
 					<span aria-hidden="true">&times;</span>
 				</button>
 				<div class="card-body">
-					<div class="card-title">
-						<div class=" row text-left">
-							<img class="rounded-circle mt-1" id="content2" style="margin-left: 10px" src="" width="50" height="50" alt="프로필사진"> &nbsp
+					<div class="card-title row">
+						<div class=" row text-left" style="width:400px; margin-left:10px;">
+							<img class="rounded-circle mt-1" id="profilePic" style="margin-left: 10px" src='' width="50" height="50" alt="프로필사진"> &nbsp
 							<h6 style="margin-top: 25px" id="nickName"></h6>
 							&nbsp&nbsp&nbsp&nbsp
 							<h6 style="margin-top: 25px;">
 								<small id="createdAt"></small>
 							</h6>
 						</div>
+						<!-- 	<div style="width:150px;"></div> -->
+							<button type="button" id="AremoveBtn" class="btn btn-link" style="margin-top: 17px;">삭제</button>
+							<button type="button" id="AreportBtn" class="btn btn-link" style="margin-top: 17px;">신고</button>
 					</div>
 					<hr />
 
 					<div class="mt-3">
 						<h6 class="mt-2 pb-1">댓글</h6>
-						<div id="commentBoard" class="row"></div>
-						<div style="width: 28rem; height: 30rem; overflow:scroll;">
+						<div style="width: 28rem; height: 35rem; overflow:scroll;">
+							<div id="commentBoard" class="row"></div>
 						</div>
 					</div>
 					<hr />
@@ -111,45 +87,7 @@ ul, ol {
 			<div id="paging"></div>
 		</div>
 	</div>
-	<!-- <br>
-<br>
-<h3>&nbsp&nbsp&nbsp사진첩</h3>
-<br>
-<ul>
-  <li>
-    <div class="album-item">
-      <div class="album-cover"></div>
-      <div class="album-info">
-        <p class="album-title">앨범1</p>
-      </div>
-    </div>
-  </li>
-  <li>
-    <div class="album-item">
-      <div class="album-cover"></div>
-      <div class="album-info">
-        <p class="album-title">앨범2</p>
-      </div>
-    </div>
-  </li>
-  <li>
-    <div class="album-item">
-      <div class="album-cover"></div>
-      <div class="album-info">
-        <p class="album-title">앨범3</p>
-      </div>
-    </div>
-  </li>
-  <li>
-    <div class="album-item">
-      <div class="album-cover"></div>
-      <div class="album-info">
-        <p class="album-title">앨범4</p>
-      </div>
-    </div>
-  </li>
-</ul>
- -->
+
 
 
 </div>

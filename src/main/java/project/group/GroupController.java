@@ -86,6 +86,10 @@ public class GroupController{
             map.put("image"+i , list.get(i).get("STOREDFILENAME"));
         }
 
+
+        System.out.println(map.toString());
+
+
         List recommendResult = groupService.recommendGroup(map);
 
         mav.addObject("group",map);

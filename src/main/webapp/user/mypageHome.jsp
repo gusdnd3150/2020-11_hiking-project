@@ -2,6 +2,10 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <jsp:include page="/common/header.jsp" flush="false" />
+<%
+	request.setCharacterEncoding("UTF-8");
+	pageContext.setAttribute("loginID", request.getSession().getAttribute("LOGIN"));
+%>
 <style>
 	.list {
 		text-decoration: none; !important;
@@ -45,7 +49,9 @@
 					<a class="list" href="">
 						<li class="list-group-item d-flex justify-content-between align-items-center">
 							<b>나의 친구 목록</b>
-							<span class="text-muted mt-2">더보기></span>
+							<a href='/profile/myFriendsList.do/${loginID}' style='color: black;' onclick="window.open(this.href,'','width=370, height=540'); return false;">
+								<span class="text-muted mt-2">더보기></span>
+							</a>
 						</li>
 					</a>
 					<a class="list" href="/calendar.do">
@@ -80,20 +86,24 @@
 							</li>
 						</ul>
 						<div class="tab-content" id="myInfoContent" style="overflow:scroll;width: auto;height: 200px" >
-							<div class="tab-pane fade show active" id="joined" data-spy="scroll" role="tabpanel" aria-labelledby="joined-tab">
+							<div class=" tab-pane fade show active" id="joined" data-spy="scroll" role="tabpanel" aria-labelledby="joined-tab">
+								<ul>
 								<c:forEach var="JList" items="${JList}">
-									<img class="rounded-circle mt-2" src="http://localhost:8080/resources/img/${JList.STOREDFILENAME}" width="50" height="50">
+										<li><img class="rounded-circle mt-2" src="/resources/img/${JList.STOREDFILENAME}" width="50" height="50">
 									<a href="/commu/commuPageView.do?groupNum=${JList.GROUPNUM}">
-										${JList.NAME}
+										${JList.NAME}</li>
 									</a>
 								</c:forEach>
+								</ul>
 							</div>
-							<div class="tab-pane fade" id="created" role="tabpanel" data-spy="scroll" aria-labelledby="created-tab">
+							<div class=" tab-pane fade" id="created" role="tabpanel" data-spy="scroll" aria-labelledby="created-tab">
+								<ul>
 								<c:forEach var="CList" items="${CList}">
-									<img class="rounded-circle mt-2" src="http://localhost:8080/resources/img/${CList.STOREDFILENAME}" width="50" height="50">
+									<li><img class="rounded-circle mt-2" src="/resources/img/${CList.STOREDFILENAME}" width="50" height="50">
 									<a href="/commu/commuPageView.do?groupNum=${CList.GROUPNUM}">
-										${CList.NAME}</a>
+										${CList.NAME}</a></li>
 								</c:forEach>
+								</ul>
 							</div>
 						</div>
 					</li>
@@ -145,7 +155,7 @@
 							<a href="/paymentList.do"><h5 class="mt-2">${buyCount } </h5></a>
 						</c:if>
 					</li>
-					
+
 					<li class="list-group-item d-flex justify-content-between align-items-center">
 						<b>중고물품 신청내역</b>
 						<c:if test="${usedCount == 0 }">
@@ -266,7 +276,6 @@
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
 <script>
 	$(document).ready(function() {
-
 		$("#checkIt").click(function() {
 			var pwd = $("#password3").val();
 			console.log("이벤트!!" + pwd);

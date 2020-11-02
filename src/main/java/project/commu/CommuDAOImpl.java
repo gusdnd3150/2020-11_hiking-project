@@ -74,13 +74,13 @@ public class CommuDAOImpl implements CommuDAO {
 		list.add(sqlSession.selectOne("commuMapper.selectUserWaiting", map));
 		list.add(sqlSession.selectOne("commuMapper.selectGroupsMedia", map));
 		list.addAll(sqlSession.selectList("commuMapper.selectGroupsBoard", map));
-		//list.addAll(sqlSession.selectList("commuMapper.selectGroupsBoardPost", map));
+		list.add(sqlSession.selectOne("commuMapper.selectImportantPost", map));
 		return list;
 	}
 
 	@Override
-	public List<Map> selectAllGroupList() {
-		return sqlSession.selectList("commuMapper.selectAllGroupList");
+	public List<Map> selectAllCommuList(Map map) {
+		return sqlSession.selectList("commuMapper.selectAllCommuList", map);
 	}
 
 	@Override
@@ -98,7 +98,6 @@ public class CommuDAOImpl implements CommuDAO {
 
 	@Override
 	public void insertAlbum(Map m) {
-		System.out.println("m:  "+ m);
 		sqlSession.insert("commuMapper.insertAlbum",m);
 	}
 
@@ -125,6 +124,62 @@ public class CommuDAOImpl implements CommuDAO {
 	@Override
 	public List<CommuVO> selectPgAlbumPosts(Map<String, Object> vM) {
 		return sqlSession.selectList("commuMapper.selectPgAlbumPosts", vM);
+	}
+
+	@Override
+	public int deletePost(int postNum) {
+		sqlSession.delete("commuMapper.deletePost", postNum);
+		return 1;
+	}
+
+	@Override
+	public void updatePostType(Map m) {
+		sqlSession.update("commuMapper.updatePostType", m);
+	}
+
+	@Override
+	public String selectACommuPost(int postNum) {
+		return sqlSession.selectOne("commuMapper.selectACommuPost", postNum);
+	}
+
+	@Override
+	public List<Map> selectMemberList(Map groupNum) {
+		return sqlSession.selectList("commuMapper.selectMemberList", groupNum);
+	}
+
+	@Override
+	public Map<String, Object> selectLeader(Map groupNum) {
+		return sqlSession.selectOne("commuMapper.selectLeader", groupNum);
+	}
+
+	@Override
+	public List<Map> selectScheduleList(Map groupNum) {
+		return sqlSession.selectList("commuMapper.selectScheduleList", groupNum);
+	}
+
+	@Override
+	public void updatePost(Map m) {
+		sqlSession.update("commuMapper.updatePost", m);
+	}
+
+	@Override
+	public List<Map> selectSearchPosts(Map<String, Object> map) throws Exception {
+		List<Map> list = sqlSession.selectList("commuMapper.selectSearchPosts", map);
+		List<Map> list2 = new ArrayList<Map>();
+		if(!list.isEmpty()) {
+			list2 = sqlSession.selectList("commuMapper.selectPostbyPostNum", list);
+		}
+		 return list2;
+	}
+
+	@Override
+	public List<Map> selectCommuPageInfo2(Map<String, Object> map)throws Exception {
+		List<Map> list =new ArrayList<Map>();
+		list.add(sqlSession.selectOne("commuMapper.selectGroups", map));
+		list.add(sqlSession.selectOne("commuMapper.selectUserWaiting", map));
+		list.add(sqlSession.selectOne("commuMapper.selectGroupsMedia", map));
+		list.addAll(sqlSession.selectList("commuMapper.selectGroupsBoard", map));
+		return list;
 	}
 
 }

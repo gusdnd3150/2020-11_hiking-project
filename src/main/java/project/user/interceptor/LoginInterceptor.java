@@ -26,6 +26,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 		UserVO userVO = (project.user.vo.UserVO) modelMap.get("userVO");
 		if (userVO != null) {
 			String id = userVO.getId();
+			int userNum = userVO.getUserNum();
 			httpSession.setAttribute(LOGIN, id);
 
 			if (request.getParameter("useCookie") != null) {

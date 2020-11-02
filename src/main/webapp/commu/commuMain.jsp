@@ -39,22 +39,19 @@
 			</div>
 		</div>
 		<div class="btn-group" role="group" aria-label="...">
-			<!-- <button type="button" class="btn btn-info" id="group" onclick="goMain1()">산모임</button>
-        <button type="button" class="btn btn-outline-secondary" id="path" onclick="goMain2()">등산로</button> -->
 		</div>
-		<!-- <a href="/commu/createForm.jsp"><button type="button"
-				class="btn btn-info" id="create" style="float: right;">산모임
-				만들기</button></a> -->
+		
 		<p></p>
 		<hr >
 		<div class="row">
 			<h1 class="col-md-8 col-lg-10 mb-0">이런 산모임 어때요?</h1>
 			<div class="col-md-4 col-lg-2 pt-2 pb-2 btn-group btn-group-toggle"
 				data-toggle="buttons">
-				<label class="btn btn-outline-secondary active"> <input
-					type="radio" name="options" id="option1" checked> 최신순
-				</label> <label class="btn btn-outline-secondary"> <input
-					type="radio" name="options" id="option2"> 인기순
+				<label class="btn btn-outline-secondary active"> 
+				   <input type="radio" name="options" id="sort_lately" checked> 최신순
+				</label> 
+				<label class="btn btn-outline-secondary"> 
+				   <input type="radio" name="options" id="sort_like"> 인기순
 				</label>
 			</div>
 		</div>
@@ -74,69 +71,16 @@
 						<h3 style="margin:1% 0% 0% 0%;">&nbsp&nbsp&nbsp&nbsp산모임 만들기</h3>
 						</div>
 					</button></a>
-					<c:forEach var="commu" items="${commu}">
-						<c:if test="${commu.RN%2==0}">
-							<a href="/commu/commuPageView.do?groupNum=${commu.GROUPNUM}"
-								style=" color: black;">
-								<div class="media" style=" padding: 10px 10px;">
-									<img
-										src="/resources/img/${commu.STOREDFILENAME}"
-										style="width: 120px; height: 100px;" class="mr-3" alt="...">
-									<div class="media-body" style="width:100px;">
-										<h6 class="mt-0 mb-1">
-											<strong>${commu.NAME}</strong>
-										</h6>
-										<small class="card-text text-mute" style="display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis">${commu.DETAIL}</small>
-										<small style="color: gray;">멤버 ${commu.STAFFCURRENT} /
-											지역 ${commu.AREA} </small>
-									</div>
-								</div>
-							</a>
-						</c:if>
-					</c:forEach>
+					<div id="commuList_even"></div>
 				</div>
-				<div class="col-sm-6">
-					<c:forEach var="commu" items="${commu}">
-						<c:if test="${commu.RN%2==1}">
-							<a href="/commu/commuPageView.do?groupNum=${commu.GROUPNUM}"
-								style="color: black;">
-								<div class="media" style="padding: 10px 10px;">
-									<img
-										src="/resources/img/${commu.STOREDFILENAME}"
-										style="width: 120px; height: 100px;" class="mr-3" alt="...">
-									<div class="media-body" style="width:100px;">
-										<h6 class="mt-0 mb-1">
-											<strong>${commu.NAME}</strong>
-										</h6>
-										<small class="card-text text-mute"
-											style="display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis">${commu.DETAIL}</small>
-										<small style="color: gray;">멤버 ${commu.STAFFCURRENT} /
-											지역 ${commu.AREA} </small>
-									</div>
-								</div>
-							</a>
-						</c:if>
-					</c:forEach>
-				</div>
+				<div class="col-sm-6" id="commuList_odd"></div>
 			</div>
 			<!-- row -->
 		</div>
+		<div id="result"></div>
 		<!-- responsive -->
 	</div>
 	<!-- container -->
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 	<div class="container">
 		<jsp:include page="../common/footer.jsp" flush="false" />
@@ -152,4 +96,119 @@
 		integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
 		crossorigin="anonymous"></script>
 </body>
+<script>
+ $(document).ready(function (){
+        window.addEventListener('scroll',function (){
+        });
+        
+        $('#sort_lately').click();
+    })
+
+    $('#sort_lately').on('click',function (){
+        $('#commuList_even').empty();
+        $('#commuList_odd').empty();
+
+        var data = {
+            'keyword' : 'lately',
+            'rowNum' : 0
+        }
+
+        sortList(data);
+        infiniteScroll(data);
+    });
+
+    $('#sort_like').on('click',function (){
+    	  $('#commuList_even').empty();
+          $('#commuList_odd').empty();
+
+        var data = {
+            'keyword' : 'like',
+            'rowNum' : 0
+        }
+
+        sortList(data);
+        infiniteScroll(data);
+    });
+    var isEnd = false;
+
+    function sortList(data){
+        if(isEnd == true){
+            return ;
+        }
+        $.ajax({
+            type: "POST",
+            url: "/commu/selectAllCommuList.do",
+            data: JSON.stringify(data),
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8;",
+            success: function (response){
+                if(response.length!=0){
+                    appendSortList(response);
+                }else if(response.length==0) {
+                    isEnd = true;
+                    window.removeEventListener('scroll', function (){
+                    
+                        $('#result')
+                            .append('<div>없어요</div>');
+                    })
+                }
+            },
+            error: function(request, status, error){
+            	alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+            }
+        })
+    };
+    function appendSortList(response){
+        for(var i=0;i<response.length;i++){
+
+            var status =  '<a href="/commu/commuPageView.do?groupNum='+response[i].GROUPNUM+'" style=" color: black;">' +
+			              '<div class="media" style=" padding: 10px 10px;">'+
+						  '<img src="/resources/img/'+response[i].STOREDFILENAME+'" style="width: 120px; height: 100px;" class="mr-3" alt="...">'+
+				          '<div class="media-body" style="width:100px;">'+
+				          '<h6 class="mt-0 mb-1">'+
+						  '<strong>'+response[i].NAME+'</strong>'+
+					      '</h6>'+
+					      '<small class="card-text text-mute" style="display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis">'+response[i].DETAIL+'</small>'+
+					      '<small style="color: gray;">멤버 '+response[i].STAFFCURRENT+' / 지역 '+response[i].AREA+' </small>'+
+				          '</div> </div> </a>';
+
+
+            if( i%2==0 ){
+                $('#commuList_odd').append(status);
+            }else if(i%2==1){
+                $('#commuList_even').append(status);
+            }
+        }
+    }
+    function infiniteScroll(data){
+            var curHeight = $(window).height() + $(window).scrollTop();
+            var docHeight = $(document).height();
+
+            if (curHeight == docHeight) {
+                closeLoading();
+                loadingImage();
+
+                setTimeout(function (){
+                    data.rowNum += 1;
+                    sortList(data);
+                },1500)
+            }
+    }
+
+    function loadingImage() {
+        var loadingImg ='';
+
+        loadingImg +="<div id='loadingImg' class='pt-5' style='width: 100%'>";
+        loadingImg +="<img src='/resources/img/loading.gif' style='position: relative; margin: 0px auto;display: block'/>";
+        loadingImg +="</div>";
+
+        $('#result').append(loadingImg);
+
+    }
+
+    function closeLoading() {
+        $('#loadingImg').remove();
+    }
+
+</script>
 </html>

@@ -100,6 +100,7 @@ public class GroupDAO{
     }
 
     public int insertCommentGroup(Map map){
+    System.out.println("mmmmmm   " + map );
         return sqlSession.insert("group.insertCommentGroup",map);
     }
     
@@ -116,7 +117,7 @@ public class GroupDAO{
     }
     
     public List selectCommentByPostNum(int postNum){
-       return sqlSession.selectList("group.selectCommentByGroupNum",postNum);
+       return sqlSession.selectList("group.selectCommentByPostNum",postNum);
    }
     
     public String selectSessionIdImage(String userId){

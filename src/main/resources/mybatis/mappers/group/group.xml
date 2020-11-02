@@ -197,6 +197,7 @@
                         1)
         ]]>
     </update>
+    
     <!-- 그룹 탈퇴 -->
     <update id="withdrawGroup" parameterType="map">
         <![CDATA[
@@ -217,7 +218,7 @@
     </select>
 
     <!-- 그룹 가입 요청 리스트 불러오기 -->
-    <select id="selectWaitingList" resultType="map" parameterType="map">
+   <select id="selectWaitingList" resultType="map" parameterType="map">
         <![CDATA[
             SELECT uw.userId, u.nickname, NVL(uw.userComment,'메세지가 없습니다') userComment, uw.userStatus, ui.content2
             FROM userWaiting uw, users u, userInfo ui
@@ -346,10 +347,11 @@
 
     <select id="selectCommentOne" parameterType="_int" resultType="groupCommentVO">
         <![CDATA[
-            SELECT gc.commentNum, gc.parentNum, gc.depts, gc.commentOrder, gc.content, u.nickname, gc.subCommentCount, gc.createdAt
-            FROM groupComment gc, users u
+            SELECT gc.commentNum, gc.parentNum, gc.depts, gc.commentOrder, gc.content, u.nickname, gc.subCommentCount, gc.createdAt, ui.content2
+            FROM groupComment gc, users u, userinfo ui
             WHERE gc.userId = u.id
-              AND commentNum = #{commentNum}
+            and u.usernum = ui.usernum
+            AND commentNum = #{commentNum}
         ]]>
     </select>
 
@@ -365,10 +367,11 @@
             ORDER SIBLINGS BY COMMENTORDER
         ]]>
     </select>
+    
     <!-- 산모임 페이지 댓글 -->
     <select id="selectCommentByPostNum" parameterType="_int" resultType="groupCommentVO">
         <![CDATA[
-            SELECT gc.commentNum, gc.parentNum, gc.depts, gc.commentOrder, gc.content, gc.userId, gc.subCommentCount, gc.createdAt, ui.content2
+            SELECT gc.commentNum, gc.parentNum, gc.depts, gc.commentOrder, gc.content, u.nickname, gc.subCommentCount, gc.createdAt, ui.content2
             FROM groupComment gc, users u, userInfo ui
             WHERE gc.userId = u.id
             AND   u.userNum = ui.userNum

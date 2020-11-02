@@ -21,8 +21,8 @@
 		<result property="sex" column="sex" />
 		<result property="mtNm" column="mtNm" />
 	</resultMap>
-	
-		<resultMap id="postResult1" type="commuVO">
+
+	<resultMap id="postResult1" type="commuVO">
 		<result property="groupNum" column="groupNum" />
 		<result property="nickName" column="nickName" />
 		<result property="createdAt" column="createdAt" />
@@ -114,7 +114,7 @@
 	<select id="selectCreatedGroupNum" resultMap="groupResult2"
 		parameterType="String">
 	 <![CDATA[
-   select u.groupNum
+   select u.groupNum, g.name, g.detail
         from userWaiting u, groups g
         where u.groupNum = g.groupNum
         and userId=#{id} and userType=0 
@@ -125,7 +125,7 @@
 	<select id="selectJoinedGroupNum" resultMap="groupResult2"
 		parameterType="String">
 	 <![CDATA[
-	  select u.groupNum
+	  select u.groupNum, g.name, g.detail
         from userWaiting u, groups g
         where u.groupNum = g.groupNum
         and userId=#{id} and userType=1 and userStatus=0
@@ -140,9 +140,8 @@
 		b
 		where a.groupNum=b.groupNum
 		and b.groupNum in
-		<foreach collection="list" item="list" open="(" separator=","
-			close=")">
-			#{list.groupNum}
+		<foreach collection="list" item="item" open="(" separator="," close=")">
+			#{item.groupNum}
 		</foreach>
 	</select>
 
@@ -181,61 +180,107 @@
           ]]>
 	</select>
 
-	<select id="selectCommuPosts" resultType="map"
-		parameterType="java.util.List">
-			 <![CDATA[
-		select g.*, i.content2, u.nickname
-        from groupsBoardPost g, userInfo i, users u
-         where g.userNum = #{userNum}
-        and i.userNum = #{userNum}
-        and u.userNum = #{userNum}
-        and g.groupNum=#{groupNum}
-        and g.BOARDTYPE=1
-        ORDER BY g.POSTNUM DESC
-          ]]>
+	<select id="selectCommuPosts" resultType="map" parameterType="map">
+		select first.*, sec.postNumCnt
+    	from
+        	(
+       		 select a.*, i.content2, u.id, u.nickName
+        	 from
+            	(
+            	 select GROUPNUM, POSTNUM, CONTENT, USERNUM, CREATEDAT, UPDATEDAT
+            	 from groupsBoardPost g
+            	 where g.groupNum=#{groupNum}
+            	 and g.BOARDTYPE=1
+            	) a,
+             	 userinfo i,
+             	 users u
+       		 where a.usernum = i.usernum
+        	 and i.usernum = u.usernum
+        	 order by a.postnum desc
+        	    ) first
+        full outer join
+       		(
+        	 select a.postnum, b.postNumCnt
+        	 from
+            	(
+            	select POSTNUM
+            	from groupsBoardPost g
+            	where g.groupNum=#{groupNum}
+            	and g.BOARDTYPE=1
+                ) a,
+                (
+             	select count(postnum) postNumCnt, postnum
+            	from groupcomment
+            	where postnum != 0
+            	and groupNum = #{groupNum}
+            	group by postnum
+                ) b
+        	where a.postnum=b.postnum
+           ) sec
+        on first.postnum = sec.postnum
+        order by first.postnum desc
 	</select>
-	
-	<select id="selectAlbumPosts" resultType="map"
-		parameterType="java.util.List">
+
+	<select id="selectACommuPost" resultType="String" parameterType="int">
 			 <![CDATA[
-		select A.*
-		from(
-		select g.*, i.content2, u.nickname
-        from groupsBoardPost g, userInfo i, users u
-        where g.userNum = #{userNum}
-        and i.userNum = #{userNum}
-        and u.userNum = #{userNum}
-        and g.groupNum = #{groupNum}
-        and g.BOARDTYPE=3
-        ORDER BY g.POSTNUM DESC) A
-        where ROWNUM < 5
+		   select content
+		    from groupsBoardPost
+		    where postNum=#{postNum}
+		    and BOARDTYPE=1
           ]]>
 	</select>
 
-	<select id="selectAllGroupList" resultType="map">
+	<select id="selectImportantPost" resultType="map" parameterType="map">
+			 <![CDATA[
+		select a.*, i.content2, u.id, u.nickName
+		from
+		(
+		    select GROUPNUM, POSTNUM, CONTENT, USERNUM, CREATEDAT, UPDATEDAT
+		    from groupsBoardPost g
+		    where g.groupNum=#{groupNum}
+		    and g.BOARDTYPE=1
+		    and g.TYPE=1
+		 ) a ,
+		    userinfo i,
+		    users u
+		where a.usernum = i.usernum
+		and i.usernum = u.usernum
+          ]]>
+	</select>
+
+	<select id="selectAllCommuList" resultType="map" parameterType="map">
+       <if test='keyword.equals("lately")'>
         <![CDATA[
            select rownum rn, a.*
 			from
 				( 
-			SELECT g.groupNum,
-			g.name,
-			g.type,
-			g.staffCurrent,
-			g.detail,
-			g.status,
-			g.area,
-			g.agestart,
-			g.ageEnd,
-			g.sex,
-			gm.storedFileName
+			SELECT g.GROUPNUM, g.NAME, g.TYPE, g.STAFFCURRENT, g.DETAIL, g.AREA, g.SEX, gm.storedFileName
             FROM groups g, groupsMedia gm
             WHERE g.groupNum = gm.groupNum
               AND gm.mediaNum = 0
               AND type = 2
             ORDER BY g.groupNum DESC
 				) a
-			where rownum <= 9
+			WHERE rownum >= (#{rowNum}*10)+1
+			AND rownum  <= 9 + (#{rowNum}*10)
         ]]>
+        </if>
+        <if test='keyword.equals("like")'>
+           <![CDATA[
+           select rownum rn, a.*
+			from
+				(
+			SELECT g.GROUPNUM, g.NAME, g.TYPE, g.STAFFCURRENT, g.DETAIL, g.AREA, g.SEX, gm.storedFileName
+            FROM groups g, groupsMedia gm
+            WHERE g.groupNum = gm.groupNum
+              AND gm.mediaNum = 0
+              AND type = 2
+            ORDER BY g.groupNum DESC
+				) a
+			WHERE rownum >= (#{rowNum}*10)+1
+			AND rownum  <= 9 + (#{rowNum}*10)
+        ]]>
+        </if>
 	</select>
 
 	<update id="updateBoardAccess" parameterType="map">
@@ -251,6 +296,26 @@
     update groups
 	  	set detail=#{detail}, area=#{area}, ageStart=#{ageStart}, ageEnd=#{ageEnd}, sex=#{sex} 
 	    where groupNum = #{groupNum}
+        ]]>
+	</update>
+
+    <update id="updatePostType" parameterType="map">
+    <![CDATA[
+    update groupsBoardPost
+	  	set type=0
+	    where groupNum = #{groupNum}
+	    and type=1
+        ]]>
+	</update>
+
+ 	<update id="updatePost" parameterType="map">
+    <![CDATA[
+    update groupsBoardPost
+	  	set type = #{type},
+	  	    content = #{updateFeedContent}
+	    where groupNum = #{groupNum}
+	    and postNum = #{postNum}
+	    and userNum = #{userNum}
         ]]>
 	</update>
 
@@ -292,16 +357,15 @@
              #{groupNum},
              1,
              POSTNUM_seq.nextval,
-             0,
+              NVL(#{type}, 0),
              #{feedContent},
              sysdate,
              #{userNum}
             )
               ]]>
 	</insert>
-	
-		<select id="countAlbumPosts" resultType="int"
-		parameterType="map">
+
+	<select id="countAlbumPosts" resultType="int" parameterType="map">
 			 <![CDATA[
 		select count(*)
         from groupsBoardPost
@@ -310,25 +374,186 @@
         and BOARDTYPE=3
           ]]>
 	</select>
-    <!-- 페이징 처리 -->
-	 <select id="selectPgAlbumPosts" resultMap="postResult1" parameterType="map">
+
+	<!-- 페이징 처리 -->
+	<select id="selectPgAlbumPosts" resultMap="postResult1" parameterType="map">
             <![CDATA[
               SELECT *
 		FROM (
              SELECT ROWNUM RN, A.*
 		       FROM (
-        select g.*, i.content2, u.nickname
-        from groupsBoardPost g, userInfo i, users u
-         where g.userNum = #{userNum}
-        and i.userNum = #{userNum}
-        and u.userNum = #{userNum}
-        and g.groupNum=#{groupNum}
-        and g.BOARDTYPE=3
-        ORDER BY g.POSTNUM DESC
-        ) A
-      )
+			        select a.*, i.content2, u.nickName
+					from
+					(
+					    select GROUPNUM, POSTNUM, CONTENT, USERNUM, CREATEDAT, UPDATEDAT
+					    from groupsBoardPost g
+					    where g.groupNum=#{groupNum}
+					    and g.BOARDTYPE=3
+					) a ,
+					    userinfo i,
+					    users u
+					where a.usernum = i.usernum
+					and i.usernum = u.usernum
+					ORDER BY a.POSTNUM DESC
+                    ) A
+            )
         where RN BETWEEN #{start} AND #{end}
 	            ]]>
-       </select>
-       
+	</select>
+
+	<delete id="deletePost" parameterType="int">
+		DELETE FROM groupsBoardPost
+		WHERE postNum = #{postNum}
+	</delete>
+
+	<select id="selectMemberList" resultType="Map" parameterType="int">
+            <![CDATA[
+           select uw.userid, i.content2, u.nickName, u.usernum
+		   from (
+				   select userId
+			       from userWaiting
+			       where groupNum = #{groupNum}
+			       and userstatus = 0
+			       and usertype = 1
+			    ) uw,
+			    userinfo i,
+			    users u
+			where uw.userid = u.id
+			and u.usernum = i.usernum
+              ]]>
+	</select>
+
+	<select id="selectLeader" resultType="Map" parameterType="int">
+            <![CDATA[
+            select uw.userid, i.content2, u.nickName, u.usernum
+			from (
+				   select userId
+			       from userWaiting
+			       where groupNum = #{groupNum}
+			       and userstatus = 0
+			       and usertype = 0
+			    ) uw,
+			    userinfo i,
+			    users u
+			where uw.userid = u.id
+			and u.usernum = i.usernum
+              ]]>
+	</select>
+	<select id="selectScheduleList" resultType="Map" parameterType="int">
+            <![CDATA[
+			select a.GROUPNUM, b.STOREDFILENAME, f.CONTENT2, a.NAME, a.DETAIL, d.NICKNAME,
+   					   DECODE(a.STATUS, 0, '마감', '진행중') STATUS,
+     					   TO_CHAR(a.STARTDAY, 'yyyy"년"MM"월"dd"일"') STARTDAY,
+     					   NVL(f.CONTENT2, 'basic_profile.PNG') CONTENT2
+			from (select *
+     					 from groups a
+    					  where a.CONNECTGROUPNUM = #{groupNum}
+     					  and a.type = 1
+     				      ) a, groupsmedia b, userwaiting c, users d, userinfo f
+			where a.groupNum = b.groupNum
+			and c.groupnum = a.groupNum
+			and c.usertype = 0
+			and c.userid = d.id
+			and d.usernum = f.usernum
+			and b.MEDIANUM = 0
+			order by a.groupnum desc
+            ]]>
+	</select>
+
+	<select id="selectSearchPosts" resultType="map" parameterType="map">
+			select distinct(postnum) POSTNUM
+			from (
+			        select aa.postnum, aa.CONTENT|| aa.CREATEDAT|| aa.UPDATEDAT|| aa.id|| aa.nickname|| bb.COMMENTNUM|| bb.ccontent|| bb.cid|| bb.SUBCOMMENTCOUNT|| bb.ccreatedAT|| bb.cnickname as allcol
+			        from (
+			               select g.POSTNUM, g.CONTENT, g.CREATEDAT, g.UPDATEDAT, u.id, u.nickname
+			               from groupsBoardPost g, users u, userinfo ui
+			               where g.boardType = 1
+			               and g.groupnum = #{groupNum}
+			               and g.usernum = u.usernum
+			               and u.usernum = ui.usernum
+			             ) aa,
+
+			            (
+			               select a.POSTNUM as cpostNum, b.COMMENTNUM, b.content as ccontent, b.SUBCOMMENTCOUNT, b.CREATEDAT as cCreatedAT, b.id as cid, b.nickname as cnickname
+			               from
+			                    (
+			                        select POSTNUM
+			                        from groupsBoardPost
+			                        where groupNum = #{groupNum}
+			                        and BOARDTYPE = 1
+			                     ) a,
+			                    (
+			                        select g.COMMENTNUM, g.PARENTNUM, g.depts, g.commentorder, g.GROUPNUM, g.CONTENT, g.USERID, g.SUBCOMMENTCOUNT, g.CREATEDAT, g.POSTNUM, u.id, u.nickname
+			                        from groupcomment g, users u, userinfo ui
+			                        where g.postnum != 0
+			                        and g.groupNum = #{groupNum}
+			                        and g.userid = u.id
+			                        and u.usernum = ui.usernum
+			                    ) b
+			                where a.postnum = b.postnum
+			             ) bb
+			          where bb.cpostnum (+)= aa.postnum
+			     ) abc
+			where allcol like '%'||#{keyword}||'%'
+			order by postnum desc
+	</select>
+
+	 <select id="selectPostbyPostNum" resultType="map" parameterType="list">
+				select first.*, sec.postNumCnt
+		    	from
+		        	(
+		       		 select a.*, i.content2, u.id, u.nickName
+		        	 from
+		            	(
+		            	 select GROUPNUM, POSTNUM, CONTENT, USERNUM, CREATEDAT, UPDATEDAT
+		            	 from groupsBoardPost
+		            	where postnum IN
+		            	<foreach collection="list" item="item" open="(" separator="," close=")">
+		            	 #{item.POSTNUM}
+		            	 </foreach>
+		            	) a,
+		             	 userinfo i,
+		             	 users u
+		       		  where a.usernum = i.usernum
+		        	  and i.usernum = u.usernum
+		        	  order by a.postnum desc
+		        	    ) first
+		        full outer join
+		       		(
+		             	select count(postnum) postNumCnt, postnum
+		            	from groupcomment
+		            	where postnum IN
+		            	<foreach collection="list" item="item" open="(" separator="," close=")">
+		            	 #{item.POSTNUM}
+		            	 </foreach>
+		            	group by postNum
+		           ) sec
+		        on first.postNum = sec.postNum
+	            order by first.postnum desc
+	</select>
+	<select id="selectAllGroupList" resultType="map">
+		<![CDATA[
+           select rownum rn, a.*
+			from
+				(
+			SELECT g.groupNum,
+			g.name,
+			g.type,
+			g.staffCurrent,
+			g.detail,
+			g.status,
+			g.area,
+			g.agestart,
+			g.ageEnd,
+			g.sex,
+			gm.storedFileName
+            FROM groups g, groupsMedia gm
+            WHERE g.groupNum = gm.groupNum
+              AND gm.mediaNum = 0
+              AND type = 2
+            ORDER BY g.groupNum DESC
+				) a
+			where rownum <= 9
+        ]]>
+	</select>
 </mapper>

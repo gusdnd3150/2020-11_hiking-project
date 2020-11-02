@@ -91,7 +91,6 @@ public class MypageControllerImpl implements MypageController {
 		mav.addObject("CList", CList);
 		mav.addObject("JList", JList);
 		mav.setViewName("/user/mypageHome");
-		System.out.println("갖다준당 : " + userVO);
 		return mav;
 	}
 
@@ -155,7 +154,6 @@ public class MypageControllerImpl implements MypageController {
 		if (!fileP.isEmpty()) {
 			String path = request.getSession().getServletContext().getRealPath("/");
 			int mediaResult = mypageService.updateUserCont(userNum, fileP, path);
-			System.out.println("mediaResult: " + mediaResult);
 		}
 		return "redirect:/mypage/mypageHomeView.do";
 	}
@@ -166,9 +164,7 @@ public class MypageControllerImpl implements MypageController {
 		UserVO userVO = new UserVO();
 		String rst = "1";
 		logger.info("pwdCheck   :" + pwd);
-		System.out.println((String) httpSession.getAttribute(LOGIN));
 		userVO.setId((String) httpSession.getAttribute(LOGIN));
-		System.out.println(userVO.getId());
 		userVO = mypageService.pwdCheck(userVO);
 		if (userVO == null || !BCrypt.checkpw(pwd, userVO.getPassword())) {
 			return rst;

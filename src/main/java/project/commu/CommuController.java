@@ -1,6 +1,10 @@
 package project.commu;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -48,7 +52,7 @@ public class CommuController {
 
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	private GroupService groupService;
 
@@ -58,11 +62,9 @@ public class CommuController {
 	public Map<String, Object> insertGroup(@RequestParam Map map,
 			@RequestParam(value = "file", required = false) List<MultipartFile> files, HttpServletRequest request)
 			throws Exception {
-		System.out.println("컨트롤러에 들어온 맵:    " + map);
 		Map<String, Object> m = commuService.insertGroup(map);
 
 		String path = request.getSession().getServletContext().getRealPath("/");
-		System.out.println("사진 경로" + path);
 		int groupNum = (int) map.get("groupNum");
 		groupMediaService.insertGroupMedia(groupNum, files, path);
 
@@ -79,7 +81,6 @@ public class CommuController {
 
 		if (!files.isEmpty()) {
 			String path = request.getSession().getServletContext().getRealPath("/");
-			System.out.println("사진 경로" + path);
 			int groupNum = Integer.parseInt((String) map.get("groupNum"));
 			groupMediaService.updateGroupMedia(groupNum, files, path);
 		}
@@ -88,9 +89,16 @@ public class CommuController {
 	@GetMapping("/commuMainView.do")
 	public ModelAndView commuMainView() {
 		ModelAndView mav = new ModelAndView("commuMain");
-		List<Map> list = commuService.selectAllGroupList();
-		mav.addObject("commu", list);
+//		List<Map> list = commuService.selectAllCommuList();
+//		mav.addObject("commu", list);
 		return mav;
+	}
+
+	@PostMapping("/selectAllCommuList.do")
+	@ResponseBody
+	public List<Map> selectAllCommuList(@RequestBody Map map) {
+		List<Map> list = commuService.selectAllCommuList(map);
+		return list;
 	}
 
 	@RequestMapping(value = "/commuPageView.do")
@@ -110,7 +118,7 @@ public class CommuController {
 			int i = 1;
 			for (Map m : list) {
 				String s = "m" + i;
-				// System.out.println(s + ">>>>>" + m);
+				//System.out.println(s + ">>>>>" + m);
 				mav.addObject(s, m);
 				i++;
 			}
@@ -121,7 +129,7 @@ public class CommuController {
 			Map<String, Object> vM = map;
 			vM.put("total", total);
 			mav.addObject("vM", vM);
-			
+
 			String sessionIdImage = groupService.selectSessionIdImage(id);
 			mav.addObject("sessionIdImage", sessionIdImage);
 		}
@@ -147,8 +155,6 @@ public class CommuController {
 		m.put("start", vo.getStart());
 		m.put("end", vo.getEnd());
 		List<CommuVO> pList = commuService.selectPgAlbumPosts(m);
-		for (CommuVO cc : pList) {
-		}
 
 		return pList;
 	}
@@ -166,7 +172,7 @@ public class CommuController {
 	}
 
 	@Transactional
-	@RequestMapping(value = "/commu/insertPost.do", method = RequestMethod.POST)
+	@RequestMapping(value = "/insertPost.do")
 	@ResponseBody
 	public ModelAndView insertPost(MultipartHttpServletRequest multipartRequest, HttpServletResponse response,
 			HttpServletRequest request, HttpSession httpSession) throws Exception {
@@ -180,14 +186,20 @@ public class CommuController {
 		Enumeration enu = multipartRequest.getParameterNames();
 
 		int groupNum = Integer.parseInt(multipartRequest.getParameter("groupNum"));
-		System.out.println("groupNum:   " + groupNum);
+		int type = 0;
+		if (multipartRequest.getParameter("type") != null) {
+			type = Integer.parseInt(multipartRequest.getParameter("type"));
+			Map mmm = new HashMap();
+			mmm.put("groupNum", groupNum);
+			mmm.put("type", type);
+			commuService.updatePostType(mmm);
+		}
+
 		while (enu.hasMoreElements()) {
 			String name = (String) enu.nextElement();
-
 			String value = multipartRequest.getParameter(name);
-
 			Matcher matcher = nonValidPattern.matcher(value);
-			String path = request.getSession().getServletContext().getRealPath("/");
+			//String path = request.getSession().getServletContext().getRealPath("/");
 			while (matcher.find()) {
 				String src = matcher.group(1);
 				int i = matcher.group(1).lastIndexOf("/");
@@ -199,6 +211,7 @@ public class CommuController {
 			}
 			m.put("userNum", userNum);
 			m.put(name, value);
+			m.put("type", type);
 		}
 		commuService.insertPost(m);
 		ModelAndView mav = new ModelAndView("redirect:commuPageView.do?groupNum=" + groupNum);
@@ -206,7 +219,38 @@ public class CommuController {
 	}
 
 	@Transactional
-	@PostMapping(value = "/commu/insertAlbum.do", produces = "application/json")
+	@PostMapping(value = "/updatePost.do")
+	public ModelAndView updatePost(MultipartHttpServletRequest multipartRequest, HttpServletResponse response,
+			HttpServletRequest request, HttpSession httpSession) throws Exception {
+		multipartRequest.setCharacterEncoding("utf-8");
+		Map m = new HashMap();
+		Enumeration enu = multipartRequest.getParameterNames();
+
+		String id = (String) httpSession.getAttribute(LOGIN);
+		int userNum = userService.selectUserNum(id);
+		int groupNum = Integer.parseInt(multipartRequest.getParameter("groupNum"));
+		int type = 0;
+		if (multipartRequest.getParameter("type") != null) {
+			type = Integer.parseInt(multipartRequest.getParameter("type"));
+			Map mmm = new HashMap();
+			mmm.put("groupNum", groupNum);
+			mmm.put("type", type);
+			commuService.updatePostType(mmm);
+		}
+		while (enu.hasMoreElements()) {
+			String name = (String) enu.nextElement();
+			String value = multipartRequest.getParameter(name);
+			m.put("userNum", userNum);
+			m.put(name, value);
+			m.put("type", type);
+		}
+		commuService.updatePost(m);
+		ModelAndView mav = new ModelAndView("redirect:commuPageView.do?groupNum=" + groupNum);
+		return mav;
+	}
+
+	@Transactional
+	@PostMapping(value = "/insertAlbum.do", produces = "application/json")
 	@ResponseBody
 	public int insertAlbum(MultipartHttpServletRequest multipartRequest, HttpSession httpSession,
 			HttpServletRequest request) throws Exception {
@@ -238,4 +282,88 @@ public class CommuController {
 		System.out.println(list.toString());
 		return list;
 	}
+	@GetMapping("/checkWriter.do")
+	@ResponseBody
+	public int checkWriter(@RequestParam String userId) {
+		return userService.selectUserNum(userId);
+	}
+
+	@Transactional
+	@GetMapping("/deletePost.do")
+	@ResponseBody
+	public int deletePost(@RequestParam int postNum) {
+		int i = commuService.deletePost(postNum);
+		return i;
+	}
+
+	@GetMapping(value = "/selectACommuPost.do", produces = "application/text; charset=UTF-8")
+	@ResponseBody
+	public String selectACommuPost(@RequestParam int postNum, HttpServletResponse response) throws Exception {
+		response.setCharacterEncoding("UTF-8");
+		String str = commuService.selectACommuPost(postNum);
+		return str;
+	}
+
+	@PostMapping(value = "/selectMemberList.do", produces = "application/json; charset=UTF-8")
+	@ResponseBody
+	public List<Map> selectMemberList(@RequestBody Map groupNum, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		List<Map> rst = new ArrayList<Map>();
+		rst = commuService.selectMemberList(groupNum);
+		return rst;
+	}
+
+	@PostMapping(value = "/selectLeader.do", produces = "application/json; charset=UTF-8")
+	@ResponseBody
+	public Map<String, Object> selectLeader(@RequestBody Map groupNum, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		Map<String, Object> rst = new HashMap<String, Object>();
+		rst = commuService.selectLeader(groupNum);
+		return rst;
+	}
+
+	@PostMapping(value = "/selectScheduleList.do", produces = "application/json; charset=UTF-8")
+	@ResponseBody
+	public List<Map> selectScheduleList(@RequestBody Map groupNum, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		List<Map> rst = new ArrayList<Map>();
+		rst = commuService.selectScheduleList(groupNum);
+		return rst;
+	}
+
+	@RequestMapping(value = "/commuSearch.do")
+	public ModelAndView commuSearch(@RequestParam("groupNum") int groupNum, @RequestParam("keyword") String keyword,
+			HttpSession httpSession) throws Exception {
+		ModelAndView mav = new ModelAndView("commuPage");
+		if (groupNum == 0) {
+			mav.setViewName("redirect:/commu/commuMain.do");
+		} else {
+			Map<String, Object> map = new HashMap<String, Object>();
+			String id = (String) httpSession.getAttribute(LOGIN);
+			int userNum = userService.selectUserNum(id);
+			map.put("id", id);
+			map.put("groupNum", groupNum);
+			map.put("userNum", userNum);
+			List<Map> list = commuService.selectCommuPageInfo2(map);
+			int i = 1;
+			for (Map m : list) {
+				String s = "m" + i;
+				mav.addObject(s, m);
+				i++;
+			}
+			map.put("keyword", keyword);
+			List<Map> postList = commuService.selectSearchPosts(map);
+			mav.addObject("postList", postList);
+
+			int total = commuService.countAlbumPosts(map);
+			Map<String, Object> vM = map;
+			vM.put("total", total);
+			mav.addObject("vM", vM);
+
+			String sessionIdImage = groupService.selectSessionIdImage(id);
+			mav.addObject("sessionIdImage", sessionIdImage);
+		}
+		return mav;
+	}
+
 }
