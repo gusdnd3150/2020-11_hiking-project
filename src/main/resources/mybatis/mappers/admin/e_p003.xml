@@ -26,22 +26,23 @@
 		<result property="id" column="id"/>
 		<result property="name" column="name"/>
 		<result property="email" column="email"/>
+		<result property="content2" column="content2"/>
 	</resultMap>
 
 	<!-- 공지사항  등록 -->
- 	<insert id="insertCSPost" parameterType="e_p003VO">
+ 	<insert id="addCSpost" parameterType="java.util.Map">
 		<![CDATA[
 		insert into CSPost (csPostNum,csBoardNum,userNum,title,content,createdAt,status, csPostType)
-		VALUES (CSPost_seq.nextval, CSBOARD_seq.nextval, 1, #{title}, #{content}, CURRENT_TIMESTAMP, 2, 100)
+		VALUES (CSPost_seq.nextval, CSBOARD_seq.nextval, 1, #{title}, #{content}, CURRENT_TIMESTAMP, 2, #{csPostType})
 		]]>
 	</insert>  
 	
 	<!--조건 검색  -->
 	<select id="selectUser" resultMap="e_p003Result03" parameterType="java.util.Map">
 		 <![CDATA[
-        select csPostNum,userNum,title,content,
+        select csPostNum,userNum,title,
         		DECODE(status, 1, '대기', 2, '완료')as statusString, 
-        		DECODE(csPostType, 100, '공지', 200, '문의', 300, '신고')as csPostTypeString, 
+        		DECODE(csPostType, 100, '공지', 200, '문의', 300, '신고' , 400 , '이벤트')as csPostTypeString, 
         		to_char(createdAt,'YYYY-MM-DD HH24:MI:SS')as createdAtString 
 		from   CSPost
       	]]>
@@ -58,11 +59,15 @@
     		<when test="searchOption=='csPostType300'"> <!-- 신고 전체 조회  -->
     		where   csPostType = 300 
     		</when>
+    		<when test="searchOption=='csPostType400'"> <!-- 이벤트 전체 조회  -->
+    		where   csPostType = 400 
+    		</when>
     		<when test="searchOption=='userNum'"> <!-- 작성자 id 조회  -->
     		where userNum in(SELECT userNum from users where id like '%'||#{key_word}||'%')
     		</when>
-    		<when test="searchOption=='status'"> <!-- 처리 상태 조회  1- 처리대기, 2-완료 -->
-    		where status= #{key_word1}
+    		<when test="searchOption=='count'"> <!-- 미처리 문의글 보기 -->
+    		WHERE csposttype = 200
+			AND status = 1
     		</when>
     	</choose>
 	</select>
@@ -71,36 +76,47 @@
 	<!-- 상세보기list -->
 		<select id="selectViewDetaListt" resultMap="e_p003Result03" parameterType="java.util.Map">
 		 <![CDATA[
-        select c.csPostNum,c.csBoardNum,c.userNum,c.title,c.content, 
-        		DECODE(c.csPostType, 100, '공지', 200, '문의', 300, '신고')as csPostTypeString, 
+        select c.csPostNum,c.userNum,c.title,c.content,c.status,ui.content2,
+        		DECODE(c.csPostType, 100, '공지사항', 200, '문의사항', 300, '신고글' , 400, '이벤트글')as csPostTypeString, 
         		to_char(c.createdAt,'YYYY-MM-DD HH24:MI:SS')as createdAtString, 
         		to_char(c.updatedAt,'YYYY-MM-DD HH24:MI:SS')as updatedAtString,
                 u.id,u.name,u.email
 		from   CSPost c inner JOIN USERS u
         on c.usernum=u.usernum
-         where csPostNum = #{csPostNum}
+        INNER JOIN userinfo ui
+        ON ui.usernum=u.usernum
+        where csPostNum = #{csPostNum}
       	]]>
+      
 	</select>
 	
 	<!-- 상세보기 글 구분 가져오기 -->
 		<select id="viewType" parameterType="int" resultType="string" >
 		 <![CDATA[
-       SELECT DECODE(csPostType, 100, '공지사항', 200, '문의사항', 300, '신고글')as csPostTypeString
+       SELECT DECODE(csPostType, 100, '관리자게시글', 200, '문의사항', 300, '신고글', 400, '관리자게시글')as csPostTypeString
 		FROM cspost
 		WHERE cspostnum = #{csPostNum}
       	]]>
 	</select>
 	
 	<!-- 글 수정 -->
-	 <update id="upDateCsBoard" parameterType="e_p003VO">
+	 <update id="upDateCsBoard" parameterType="java.util.Map">
 	  <![CDATA[
 		UPDATE CSPost
 			SET title = #{title},
-    			content= #{content},
-    			status= #{status},
-    			updatedAt= CURRENT_TIMESTAMP
-		WHERE csPostNum=#{csPostNum}
-		 ]]>
+    			updatedAt= CURRENT_TIMESTAMP,
+    			 ]]>
+		 	<choose>
+    		<when test="result=='admin'"> <!-- 공지, 이벤트  -->
+    		content= #{content1},
+    		csPostType =#{csPostType} 
+    		</when>
+    		<when test="result=='user'"> <!-- 문의, 신고 -->
+    		content= #{content},
+    		status= #{status} 
+    		</when>
+    		</choose>
+    		WHERE csPostNum=#{csPostNum}
 	</update>
 	
 	<delete id="deleteUserCsboard"  parameterType="int">
@@ -111,6 +127,13 @@
 	]]>      
   </delete>
   
-	
-	
+  <!--문의글 카운트 알림 -->
+  <select id="countBoard" resultType="string">
+  <![CDATA[
+	select to_char(count(*))as csCount
+	FROM cspost
+	WHERE csposttype = 200
+	AND status = 1
+	]]> 
+	</select>
 </mapper>

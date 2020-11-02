@@ -94,9 +94,11 @@ public class E_p002ControllerImpl implements E_p002Controller{
 		search.put("searchOption",searchOption);
 		
 		List list = e_p002Service.selectProd(search);
+		//List list2 =e_p002Service.searchUsedProd(search);
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("e_p002_main");
 		mav.addObject("list",list);
+		//mav.addObject("used",list2);
 		
 		return mav;
 	}
@@ -128,6 +130,7 @@ public class E_p002ControllerImpl implements E_p002Controller{
 	@ResponseBody
 	@RequestMapping(value = "/admin/updateOption.do", method = RequestMethod.GET)
 	public String updateOption(@RequestParam Map map, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		System.out.println("map>>>>>>>>>>>"+map.toString());
 
 		int result = e_p002Service.updateOption(map);
 		
@@ -244,6 +247,97 @@ public class E_p002ControllerImpl implements E_p002Controller{
 			return "ok";
 		}
 		return "x";
+	}
+
+	//중고 요청 상세보기
+	@Override
+	@RequestMapping(value = "/admin/viewUsedList.do", method = RequestMethod.GET)
+	public ModelAndView viewUsedList(@RequestParam Map map, HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		int prodNum = Integer.parseInt (map.get("prodNum").toString());
+		//상품, 고객정보
+		List list = e_p002Service.viewUsedList(map);
+		//상품 옵션
+		List list2 = e_p002Service.viewUsedOptionList(prodNum);
+		//상품 메인
+		List list3 = e_p002Service.viewPhotoMainList(prodNum);
+		//상품 디테일
+		List list4 = e_p002Service.viewPhotoDetail(prodNum);
+		
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("e_p002_viewUsedList");
+		mav.addObject("list", list);
+		mav.addObject("list2", list2);
+		mav.addObject("list3", list3);
+		mav.addObject("list4", list4);
+		
+		
+		return mav;
+	}
+
+	//중고거래 취소 (취소사유 등록 및 타입변환)
+	@Override
+	@ResponseBody
+	@RequestMapping(value = "/admin/usedComment.do", method = RequestMethod.POST)
+	public String usedComment(@RequestParam Map map, HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		int result = e_p002Service.usedComment(map);
+		if(result != 0) {
+			return "ok";
+		}
+		return "x";
+		
+	}
+
+	//중고품 조건 검색 조회
+	@Override
+	@RequestMapping(value = "/admin/selectUsedProd.do", method = RequestMethod.GET)
+	public ModelAndView selectUsedProd(@RequestParam(value="searchOption") String searchOption, @RequestParam(value="key_word", defaultValue = " ") String key_word,
+			HttpServletRequest request, HttpServletResponse response) throws Exception {
+		
+		Map<String, String> search = new HashMap<String, String>();
+		search.put("key_word",key_word);
+		search.put("searchOption",searchOption);
+		
+		
+		List list =e_p002Service.searchUsedProd(search);
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("e_p002_main");
+		mav.addObject("used",list);
+		
+		return mav;
+	}
+
+	//중고거래승인 포인트지급 및 문자발송
+	@Override
+	@ResponseBody
+	@RequestMapping(value = "/admin/insertPoint.do", method = RequestMethod.POST)
+	public String insertPoint(@RequestParam Map map, HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		
+		int result = e_p002Service.insertPoint(map);
+		
+		if(result != 0) {
+			System.out.println("포인트 지급 완료");
+			return "ok";
+		}
+		return "x";
+	}
+
+	//중고요청 카운트 알림
+	@Override
+	@ResponseBody
+	@RequestMapping(value = "/admin/countUsed.do", method = RequestMethod.POST)
+	public String countUsed(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		return e_p002Service.countUsed();
+	}
+
+	//금일주문건 카운트
+	@Override
+	@ResponseBody
+	@RequestMapping(value = "/admin/toDayOrder.do", method = RequestMethod.POST)
+	public String todayOrder(@RequestParam Map map,HttpServletRequest request, HttpServletResponse response) throws Exception {
+		return e_p002Service.todayOrder(map);
 	}
 
 

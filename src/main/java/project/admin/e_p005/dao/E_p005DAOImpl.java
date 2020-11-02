@@ -42,4 +42,10 @@ public class E_p005DAOImpl implements E_p005DAO{
 		List selectSearch = sqlSession.selectList("admin.mapper.e_p005.selectSearch",select_keyword);
 		return selectSearch;
 	}
+
+	//금일 매출
+	@Override
+	public String toDaySales(Map map) throws Exception {
+		return sqlSession.selectOne("admin.mapper.e_p005.toDaySales",map);
+	}
 }

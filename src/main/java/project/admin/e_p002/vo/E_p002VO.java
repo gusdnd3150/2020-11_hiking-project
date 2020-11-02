@@ -12,7 +12,7 @@ public class E_p002VO {
 	private String priceString; // 상품가격 스트링 변환
 	private String prodsize; // 상품 사이즈
 	private String color; // 상품 색상
-	private String typeString; // 상품 타입 스트링 변환 (신상품 / 중고품)
+	private String typeString; // 상품 타입 스트링 변환 (1.신상품 / 2.중고품 / 3.중고거래요청 / 4.중고거래실패 / 5.중고거래 승인)
 	private String prodcategorynumString; // 상품 카테고리 스트링 변환 (반팔, 신발, 가방, 긴팔, 긴바지 등등)
 	private String prodstatusString;// 상품 상태(판매중 / 품절) 스트링변환
 	private String createdAtString; // 상품등록일자 스트링 변환
@@ -25,6 +25,12 @@ public class E_p002VO {
 	private String pcontent; //상품 메인이미지 as
 	private String pcontentDetail; //상품 디테일이미지 as
 	private int pphotonum; //사진번호
+	
+	private int userNum; //고객번호
+	private String userName;
+	private String id;
+	private String phone;
+	private String email;
 	
 	
 	public int getProdNum() {
@@ -140,6 +146,36 @@ public class E_p002VO {
 	}
 	public void setPphotonum(int pphotonum) {
 		this.pphotonum = pphotonum;
+	}
+	public int getUserNum() {
+		return userNum;
+	}
+	public void setUserNum(int userNum) {
+		this.userNum = userNum;
+	}
+	public String getUserName() {
+		return userName;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
+	public String getPhone() {
+		return phone;
+	}
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
 	}
 	
 	

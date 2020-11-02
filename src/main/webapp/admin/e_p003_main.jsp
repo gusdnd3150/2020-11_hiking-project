@@ -1,17 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%
-	request.setCharacterEncoding("utf-8");
-%>
+    pageEncoding="UTF-8"%>
+     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"  %>
+     <%
+     request.setCharacterEncoding("utf-8");
+      %>
 <!DOCTYPE html>
 <html>
-<%@ include file="../include/head.jsp"%>
+<%@ include file="../include/head.jsp" %>
 
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script type="text/javascript" src="../resources/js/jquery.js"></script>
 
 <!-- 데이터 테이블 -->
-<!-- 데이터 테이블 css -->
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css" />
 
 <script src="https://cdn.datatables.net/t/bs-3.3.6/jqc-1.12.0,dt-1.10.11/datatables.min.js"></script>
@@ -36,43 +36,64 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
 
 <script type="text/javascript">
-	$(document).ready(function() {
-		var	table = null;
-		 table= $('#foo-table').DataTable({
-			  bAutoWidth : false, //자동너비
-	          ordering : true, //칼럼별 정렬
-	    		pagingType:"full_numbers",
-	    	   autoWidth: true,
-	        dom: 'Blfrtip',
-	  
-			buttons: [
-				{
-					extend:'excel',
-					text:'excel',
-					filename:'게시글정보',
-					title:'cs게시글 목록'
-				},
-				{
-					extend:'copy',
-					text:'copy',
-					title:'게시글목록.'
-				},			
-	                'pdf', 'print'
-	            ]
-	    	});
-		 
-		    $('#foo-table tbody').on( 'click', 'tr', function () {
-			    if ( $(this).hasClass('selected') ) {
-			        $(this).removeClass('selected');
-			    }
-			    else {
-			        table.$('tr.selected').removeClass('selected');
-			        $(this).addClass('selected');
-			    }
-			}); 
-});
-	// 데이터테블 함수 끝----------------------------------------------------------------
 
+var	table = null;
+$(document).ready(function() {
+	table=$('#foo-table').DataTable({
+		pagingType:"full_numbers",
+    	   autoWidth: false,
+		dom : 'Blfrtip',
+		buttons : [ {
+			extend : 'excel',
+			text : 'excel',
+			filename : '회원정보',
+			title : '산오름 회원정보'
+		}, {
+			extend : 'copy',
+			text : 'copy',
+			title : '회원정보입니다.'
+		}, 'pdf', 'print' ]
+	});
+	
+	  $('#foo-table tbody').on( 'click', 'tr', function () {
+		    if ( $(this).hasClass('selected') ) {
+		        $(this).removeClass('selected');
+		    }
+		    else {
+		        table.$('tr.selected').removeClass('selected');
+		        $(this).addClass('selected');
+		    }
+		}); 
+	
+});
+
+
+	// 데이터테블 함수 끝----------------------------------------------------------------
+	
+	//조건검색시 인풋창 입력 막는 조건
+  function myFunction(str) {
+	    if(str=='status'){
+	        $(".form-control").prop("disabled",true);
+	         $("#radioInput").append("<input type='radio'  name='key_word1' value='1'> 처리대기 &nbsp;&nbsp");
+	         $("#radioInput").append("<input type='radio'  name='key_word1' value='2'>완료  &nbsp;&nbsp");
+	    }else if(str=='all'){
+	    	 $(".form-control").prop("disabled",true);
+	    }else if (str=='csPostType100'){
+	    	 $(".form-control").prop("disabled",true);
+	    }else if (str=='csPostType200'){
+	    	$(".form-control").prop("disabled",true);
+	    }else if(str=='csPostType300'){
+	    	$(".form-control").prop("disabled",true);
+	    }else if(str=='csPostType400'){
+	    	$(".form-control").prop("disabled",true);
+	    }
+	    
+	    else{
+	    	  $(".form-control").prop("disabled",false);
+	    	  $("#radioInput").hide();
+	    	
+	    }
+	};
 	$(document).on("click", "#remove", function() {// 글삭제 알림창
 		var _csPostNum = $(this).val();
 
@@ -94,122 +115,341 @@
 		})
 	});
 
-	$(function upDateMsg() { // 글 수정 후 알림창
-		var upDate = "<c:out value="${upDateCsBoardMsg}" />";
-		if (upDate == 1) {
-			alert("완료");
-			//window.location.href = 'http://localhost:8090/admin/e_p003_main.jsp';
-		}
-	});
 
 	$(function addCsBoardMsg() { // 공지사항 등록완료
 		var result = "<c:out value="${result}" />";
 		if (result == 1) {
-			alert(" 공지사항  등록완료");
+			alert(" 등록완료");
 			//window.location.href = 'http://localhost:8090/admin/e_p003_main.jsp';
 		} else {
 
 		}
 	});
 
-	$(function mailSending() { // 이메일발송 완료
-		var mailResult = "<c:out value="${mailResult}" />";
-		if (mailResult == 1) {
-			alert(" 이메일 발송이 완료 되었습니다.");
-			//window.location.href = 'http://localhost:8090/admin/e_p003_main.jsp';
-		} else {
-
+	$(function upDateMsg() { // 글 수정 후 알림창
+		var upDate = "<c:out value="${upDatemsg}" />";
+		if (upDate ==="ok") {
+			opener.location.reload();
+			close(viewDetaList);
 		}
 	});
+	var viewDetaList;
+	function viewCsboard (csPostNum){
+		viewDetaList=window.open("viewDetaList.do?csPostNum="+csPostNum, '상품상세정보','width=700px,height=800px,scrollbars=yes');
+	};
+	
 </script>
+<style>
+.ck.ck-editor{
+	max-width: 100%;
+	}
+.ck-editor__editable {
+    min-height: 300px;
+}
+
+</style>
+
 
 <body class="hold-transition skin-blue sidebar-mini">
-	<div class="wrapper">
+<div class="wrapper">
 
-		<!-- Main Header -->
-		<%@ include file="../include/main_header.jsp"%>
-		<!-- Left side column. contains the logo and sidebar -->
-		<%@ include file="../include/left_column.jsp"%>
+  <!-- Main Header -->
+  <%@ include file="../include/main_header.jsp" %>
+  <!-- Left side column. contains the logo and sidebar -->
+  <%@ include file="../include/left_column.jsp" %>
 
-		<!-- Content Wrapper. Contains page content -->
-		<div class="content-wrapper">
-			<!-- Content Header (Page header) -->
-			<section class="content-header">
-				<small>게시글 관리</small>
-				<ol class="breadcrumb">
-					<li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
-					<li class="active">Here</li>
-				</ol>
-			</section>
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+  	<section class="content-header">
+     
+        <small>게시글 관리</small>
+     
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="#">Forms</a></li>
+        <li class="active">Editors</li>
+      </ol>
+    </section>
 
-			<!-- Main content -->
-			<div class="box">
-				<!-- 게시글관리 검색창 -->
-				<%@ include file="../include/admin_csBoard_search.jsp"%>
+    <!-- Main content -->
+ <section class="content">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="box box-info collapsed-box">
+            <div class="box-header">
+              <h3 class="box-title">게시글 등록
+                <small></small>
+              </h3>
+              <!-- tools box -->
+              <div class="pull-right box-tools">
+                <button type="button" class="btn btn-info btn-sm" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
+                  <i class="fa fa-minus"></i></button>
+                <button type="button" class="btn btn-info btn-sm" data-widget="remove" data-toggle="tooltip" title="" data-original-title="Remove">
+                  <i class="fa fa-times"></i></button>
+              </div>
+              <!-- /. tools -->
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body pad" style="">
+                      <form name="form" id="form" role="form" method="post" action="addCSboard.do">
+                  <div style="margin-bottom:10px;">
+                  <input  class="form-control" type="text" class="form-control" name="title" id="title" placeholder="제목을 입력해 주세요">
+               </div>
+               <div style="margin-bottom:10px;">
+                  <textarea class="form-control"  name="content" id="content" ></textarea>
+               </div>
+        			<center> 
+        				<div>
+                     <input type="radio" class="minimal" name="csPostType" value="100">공지사항 &nbsp;&nbsp;
+                     <input type="radio"  class="minimal" name="csPostType" value="400">이벤트&nbsp;&nbsp;
+                       </div>
+                	</center>      
+                	 <center>
+                       <input class="btn btn-info" type="submit"  value="등록"/>
+                     </center>                      
+               </form>
+            </div>
+          </div>
+          <!-- /.box -->
 
-				<div class="box-header">
-					<h3 class="box-title">게시글 목록</h3>
-				</div>
-				<!-- /.box-header -->
-				<div class="box-body">
-					<div id="example1_wrapper"
-						class="dataTables_wrapper form-inline dt-bootstrap">
-						<div class="row">
-
-							<div class="col-sm-6">
-								<div id="example1_filter" class="dataTables_filter">
-									<div>
-										<a href="e_p003_addCsBoardForm.jsp"><button class="btn btn-primary btn-xs">게시글 등록</button></a>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="row">
-							<div>
-								<table id="foo-table" class="display" style="width:100%">
-									<thead>
-										<tr>
-											<th>글 번호</th>
-											<th>고객 번호</th>
-											<th>제목</th>
-											<th>내용</th>
-											<th>등록일</th>
-											<th>상태</th>
-											<th>구분</th>
-											<th>상세보기</th>
-											<th>삭제</th>
-										</tr>
-									</thead>
-									<tbody>
-										<c:forEach var="cs" items="${csBoardList}">
+          <div class="box box-info">
+            <div class="box-header">
+              <h3 class="box-title">게시글 조회
+                <small></small>
+              </h3>
+              <!-- tools box -->
+              <div class="pull-right box-tools">
+                <button type="button" class="btn btn-info btn-sm" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
+                  <i class="fa fa-minus"></i></button>
+                <button type="button" class="btn btn-info btn-sm" data-widget="remove" data-toggle="tooltip" title="" data-original-title="Remove">
+                  <i class="fa fa-times"></i></button>
+              </div>
+              <!-- /. tools -->
+            </div>
+            <!-- /.box-header -->
+            
+            <div class="box-body pad" style="">
+             <form action="csBoardsearch.do" method="get" >
+		          <div class="input-group margin">
+		                <div class="input-group-btn">
+		                	<select name="searchOption" id="searchOption" class="btn btn-info dropdown-toggle" onchange="myFunction(this.value)">
+		            		<option value="all">전체조회</option>
+		            		<option value="csPostType100">공지 전체 조회</option>
+		            		<option value="csPostType400">이벤트 전체 조회</option>
+		           			<option value="csPostType200">문의 전체 조회</option>
+		            		<option value="csPostType300">신고 전체 조회</option>
+		            		<option value="userNum">작성자 ID 조회</option>
+		            		<option value="status">처리 상태 조회</option>
+		        			</select>  
+		                </div> 
+		                <input type="text" name="key_word" class="form-control" placeholder="조회내용을 입력하세요">
+		                    <span class="input-group-btn">
+		                      <button type="submit"  id="searchBoard" class="btn btn-info btn-flat" >조회</button>            
+		                    </span>
+		              </div>
+		               <div id="radioInput"> </div> 
+             </form>
+            <div class="box">
+    
+            <!-- /.box-header -->
+            <div class="box-body">
+             <div id="example2_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+               <!-- 데이터 테이블 -->
+              <table id="foo-table" class="display" style="width:100%">
+                           <thead>
+                      
+                              <tr>
+                                 <th>글 번호</th>
+                                 <th>고객 번호</th>
+                                 <th>제목</th>
+                                 <th>등록일</th>
+                                 <th>상태</th>
+                                 <th>구분</th>
+                                 <th>상세보기</th>
+                                 <th>삭제</th>
+                              </tr>
+                           </thead>
+                           <tbody>
+                             	<c:forEach var="cs" items="${csBoardList}">
 											<tr>
 												<td>${cs.csPostNum}</td>
 												<td>${cs.userNum}</td>
 												<td>${cs.title}</td>
-												<td>${cs.content}</td>
 												<td>${cs.createdAtString}</td>
 												<td>${cs.statusString}</td>
 												<td>${cs.csPostTypeString}</td>
-												<td><a href="viewDetaList.do?csPostNum=${cs.csPostNum}"><button class="btn btn-primary btn-xs">상세보기</button></a></td>
+												<td><button class="btn btn-primary btn-xs" onclick="viewCsboard(${cs.csPostNum})">상세보기</button></td>
 												<td><button class="btn btn-danger btn-xs" id="remove" value="${cs.csPostNum}">삭제</button></td>
 											</tr>
 										</c:forEach>
-									</tbody>
+                           </tbody>
+                        </table>
+             
+             		</div>
+          
+              	</div>
+            <!-- /.box-body -->
+          	  </div>              
+            </div>
+          </div>
+          
+          
+        </div>
+        <!-- /.col-->
+      </div>
+      <!-- ./row -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
 
-								</table>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<!-- /.content -->
-		</div>
-		<!-- /.content-wrapper -->
-		<!-- Main Footer -->
-		<%@ include file="../include/main_footer.jsp"%>
-	</div>
-	<!-- ./wrapper -->
-	<!-- REQUIRED JS SCRIPTS -->
-	<%@ include file="../include/plugin_js.jsp"%>
+  <!-- Main Footer -->
+ <%@ include file="../include/main_footer.jsp" %>
+</div>
+<!-- ./wrapper -->
+
+<!-- REQUIRED JS SCRIPTS -->
+<%@ include file="../include/plugin_js.jsp" %>
+
+<script src="../resources/ckeditor5/ckeditor.js"></script>
+<script>
+		ClassicEditor
+	    .create( document.querySelector( '#content' ), {
+	        extraPlugins: [MyCustomUploadAdapterPlugin],
+	        heading: {
+	            options: [
+	                { model: 'paragraph', title: '본문', class: 'ck-heading_paragraph' },
+	                { model: 'heading1', view: 'h1', title: '제목 1', class: 'ck-heading_heading1' },
+	                { model: 'heading2', view: 'h2', title: '제목 2', class: 'ck-heading_heading2' },
+	                { model: 'heading3', view: 'h3', title: '제목 3', class: 'ck-heading_heading3' }
+	            ]
+	        },
+	        language: 'ko',
+	        image: {
+	            ImageCaption: {
+	
+	            },
+	            resizeUnit: 'px',
+	            toolbar: [
+	                'imageTextAlternative',
+	                'imageStyle:alignLeft',
+	                'imageStyle:full',
+	                'imageStyle:side'
+	            ],
+	            styles: [ 'full','alignLeft','alignRight','side' ]
+	        },
+	        table: {
+	            contentToolbar: [
+	                'tableColumn',
+	                'tableRow',
+	                'mergeTableCells'
+	            ]
+	        },
+	        ckfinder: {
+	            options: {
+	                uploadUrl: '/after/uploadImage.do'
+	            }
+	        },
+	        alignment: {
+	            options: [ 'left', 'center', 'right']
+	        }
+	    } )
+	    .then( editor => {
+	        window.editor = editor;
+	
+	    } )
+	    .catch( err => {
+	        console.error( err.stack );
+	    } );
+	
+	function MyCustomUploadAdapterPlugin(editor) {
+	    editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
+	        return new UploadAdapter(loader)
+	    }
+	}
+	
+	class UploadAdapter {
+	    constructor(loader) {
+	        this.loader = loader;
+	    }
+	
+	    upload() {
+	        return this.loader.file.then( file => new Promise(((resolve, reject) => {
+	            this._initRequest();
+	            this._initListeners( resolve, reject, file );
+	            this._sendRequest( file );
+	        })))
+	    }
+	
+	    _initRequest() {
+	        const xhr = this.xhr = new XMLHttpRequest();
+	        xhr.open('POST', '/after/uploadImage.do', true);
+	        xhr.responseType = 'json';
+	    }
+	
+	    _initListeners(resolve, reject, file) {
+	        const xhr = this.xhr;
+	        const loader = this.loader;
+	        const genericErrorText = '파일을 업로드 할 수 없습니다.'
+	
+	        xhr.addEventListener('error', () => {reject(genericErrorText)})
+	        xhr.addEventListener('abort', () => reject())
+	        xhr.addEventListener('load', () => {
+	            const response = xhr.response
+	
+	            if(!response || response.error) {
+	                return reject( response && response.error ? response.error.message : genericErrorText );
+	            }
+	
+	            resolve({
+	                default: response.url //업로드된 파일 주소
+	            })
+	        })
+	    }
+	
+	    _sendRequest(file) {
+	        const data = new FormData()
+	        data.append('upload',file)
+	        this.xhr.send(data)
+	    }
+	}
+	$('#reset').on("click",function (){
+	    $('#title').val("");
+	    window.editor.setData("");
+	})
+/* 	
+	$('#submit').on("click",function (){
+	
+	    var data = {
+	        "title" : $('#title').val(),
+	        "title" : $('#title').val(),
+	        "content" : window.editor.getData(),
+
+	     
+	    }
+	
+	    $.ajax({
+	        type: "POST",
+	        url: "/after/insertAfter.do",
+	        data: JSON.stringify(data),
+	        dataType: 'json',
+	        contentType: "application/json; charset=utf-8;",
+	        success : function (response){
+	            console.log(response);
+	
+	            if(response==0){
+	                alert("회원당 후기는 1개만 작성가능합니다")
+	                return;
+	            }
+	            alert("작성 완료")
+	            location.href="../group/main1.jsp"
+	        },
+	        error : function (response){
+	            alert("오류 발생! 다시 시도해주세요");
+	        }
+	    })
+	}) */
+</script>
 </body>
 </html>

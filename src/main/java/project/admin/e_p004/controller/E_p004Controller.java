@@ -1,5 +1,6 @@
 package project.admin.e_p004.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +18,9 @@ public interface E_p004Controller {
 	public ModelAndView searchOrderDay(String startDate,String endDate, HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public ModelAndView selectOrderStatus(int orderStatus, HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public ModelAndView selectDeliveryStatus(int deliverystatus, HttpServletRequest request, HttpServletResponse response) throws Exception;
+	public ModelAndView viewCancelList(String orderNum, HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public String message(Map map, HttpServletRequest request, HttpServletResponse response) throws Exception;
+	public String cancelMessage(Map map, HttpServletRequest request, HttpServletResponse response) throws Exception;
+	public String upDateCancel(List ordernum ,List quantity, List optionnum ,HttpServletRequest request, HttpServletResponse response) throws Exception;
 
 }

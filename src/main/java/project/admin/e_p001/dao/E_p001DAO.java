@@ -17,6 +17,10 @@ public interface E_p001DAO {
 
 	public List userView(int userNum)throws Exception;
 
+	public int updateUserPoint(Map map)throws Exception;
+
+	public String toDayUser(Map map)throws Exception;
+
 
 	
 }

@@ -22,6 +22,12 @@ public interface E_p001Service {
 	//상세보기
 	public List userView(int userNum)throws Exception;
 
+	//포인트 추가
+	public int updateUserPoint(Map map)throws Exception;
+
+	//금일신규가입자
+	public String toDayUser(Map map)throws Exception;
+
 
 
 }

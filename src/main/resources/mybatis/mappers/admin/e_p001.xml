@@ -25,6 +25,7 @@
 		<result property="profile" column="profile" /> <!--프로필 내용  -->
 		<result property="address2" column="address2" /> <!--상세주소  -->
 		<result property="zoneCode" column="zoneCode" /> <!--우편번호  -->
+		<result property="totalpoint" column="totalpoint" /> <!--  보유포인트-->
 		
 		<result property="createdAtString" column="createdAtString" /> <!--날짜 스트링 -->
 		<result property="updatedAtString" column="updatedAtString" /> <!--날짜 스트링 -->
@@ -41,18 +42,26 @@
 	<!-- 회원 조건별 검색 -->
 	<select id="selectUser" resultMap="e_p001Result01" parameterType="java.util.Map">
 		 <![CDATA[
-        select userNum, id,  password, name, 
-        		DECODE(sex,10,'남자', 20, '여자')as sexType, 
-       			phone, address, email, 
-        		DECODE(status, 10, '활동중', 20, '휴면')as statusType
-		from   USERS
+        select u.userNum, u.id,  u.password, u.name, 
+        		DECODE(u.sex,10,'남자', 20, '여자')as sexType, 
+       			u.phone,  u.email, 
+        		DECODE(u.status, 10, '활동중', 20, '휴면')as statusType,
+        		DECODE(to_char(sum(pi.getpoint-pi.used),'999,999,999,999,999'),null,'0',to_char(sum(pi.getpoint-pi.used),'999,999,999,999,999'))as totalpoint
+		from   USERS u
+		LEFT join point pi
+		on pi.usernum = u.usernum 
       	]]>
     	<choose>
     		<when test="searchOption=='userNum'">
-    		<!-- where  userNum =userNum -->
+    		group by u.userNum, u.id, u.password, u.name, DECODE(u.sex,10,'남자', 20, '여자'), 
+        	u.phone, u.email, DECODE(u.status, 10, '활동중', 20, '휴면')
+        	ORDER BY u.userNum
     		</when>
     		<when test="searchOption!='userNum'">
     		where  ${searchOption} like '%'||#{key_word}||'%'
+    		group by u.userNum, u.id, u.password, u.name, DECODE(u.sex,10,'남자', 20, '여자'), 
+        	u.phone, u.email, DECODE(u.status, 10, '활동중', 20, '휴면')
+        	ORDER BY u.userNum
     		</when>
     	</choose>
 	</select>
@@ -85,12 +94,37 @@
 		    DECODE(u.status, 10, '활동중', 20, '휴면')as statusType,
 		    ui.profile,
 		    ui.content2,
-		    DECODE(u.type, 100, '관리자', 200, '회원', 300, '비회원')as usersType 
-		FROM users u INNER JOIN userinfo ui
+		    DECODE(u.type, 100, '관리자', 200, '회원', 300, '비회원')as usersType,
+            to_char(sum(getpoint-used),'999,999,999,999,999')as totalpoint
+		FROM users u 
+			INNER JOIN userinfo ui
 		ON u.usernum = ui.usernum
-		WHERE u.usernum = #{userNum}
+        	INNER JOIN point pi
+        ON pi.userNum = u.usernum
+			WHERE u.usernum = #{userNum} 
+        group by u.userNum, u.id, u.name, u.nickname, DECODE(u.sex,10,'남자', 20, '여자'), 
+        u.phone, u.zoneCode, u.address, u.address2, u.email, 
+        to_char(u.createdAt,'YYYY-MM-DD'), DECODE(u.status, 10, '활동중', 20, '휴면'), 
+        ui.profile, ui.content2, DECODE(u.type, 100, '관리자', 200, '회원', 300, '비회원')   
       	]]>
     	
+	</select>
+	
+	<!-- 포인트 지급-->	
+	<insert id="updateUserPoint" parameterType="java.util.Map">
+		<![CDATA[
+		INSERT INTO point (userNum, pointNum, usedday, used, getPoint)
+		VALUES (#{userNum} , SEQ_POINT.nextval,SYSDATE,0 , #{point} )
+		 ]]>
+	</insert>
+	
+	<!-- 금일신규가입자카운트 알림-->
+   <select id="toDayUser" resultType="string" parameterType="map">
+		 <![CDATA[
+		SELECT count(userNum)as toDayUser
+		FROM users
+		WHERE CREATEDAT >= TO_DATE( #{st},'YYYY-MM-DD')
+      	]]>
 	</select>
 	
 </mapper>

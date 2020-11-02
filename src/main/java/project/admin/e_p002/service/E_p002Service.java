@@ -48,5 +48,19 @@ public interface E_p002Service {
 
 	int upDateAddDetailImg(List<MultipartFile> files, String path, int prodNum)throws IOException;
 
+	List searchUsedProd(Map<String, String> search)throws Exception;
+
+	List viewUsedList(Map map)throws Exception;
+
+	List viewUsedOptionList(int prodNum)throws Exception;
+
+	int usedComment(Map map)throws Exception;
+
+	int insertPoint(Map map)throws Exception;
+
+	String countUsed()throws Exception;
+
+	String todayOrder(Map map)throws Exception;
+
 
 }

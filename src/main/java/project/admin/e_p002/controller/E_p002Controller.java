@@ -16,7 +16,9 @@ public interface E_p002Controller {
 	
 	public ModelAndView insertProd( Map map,List<MultipartFile> files,List<MultipartFile> files2,List<Integer> quantity,List<String> color,List<String> prodSize, HttpServletRequest request) throws Exception ;
 	public ModelAndView selectProd(String searchOption,String key_word , HttpServletRequest request, HttpServletResponse response)throws Exception;
+	public ModelAndView selectUsedProd(String searchOption,String key_word , HttpServletRequest request, HttpServletResponse response)throws Exception;
 	public ModelAndView viewProdList( int prodNum, int optionNum, HttpServletRequest request, HttpServletResponse response) throws Exception;
+	public ModelAndView viewUsedList( Map map, HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public String updateOption (Map map, HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public String updateDateProdOption (Map map, HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public String updateDateProd (Map map, HttpServletRequest request, HttpServletResponse response) throws Exception;
@@ -25,6 +27,10 @@ public interface E_p002Controller {
 	public String deleteImg(Map map, HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public String upDateAddMainImg(List<MultipartFile> files, int prodNum, HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public String upDateAddDetailImg(List<MultipartFile> files, int prodNum, HttpServletRequest request, HttpServletResponse response) throws Exception;
+	public String usedComment(Map map, HttpServletRequest request, HttpServletResponse response) throws Exception;
+	public String insertPoint(Map map, HttpServletRequest request, HttpServletResponse response) throws Exception;
+	public String countUsed( HttpServletRequest request, HttpServletResponse response) throws Exception;
+	public String todayOrder(Map map, HttpServletRequest request, HttpServletResponse response) throws Exception;
 	
 }
 

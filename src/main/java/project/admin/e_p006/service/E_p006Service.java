@@ -11,12 +11,15 @@ public interface E_p006Service {
 	public JSONObject searchDateColumnChart(Map<String, String> search_keyword)throws Exception;
 	public JSONObject serchUserLineChart(Map<String, String> search_keyword)throws Exception;
 	public JSONObject serchUserBarChart(Map<String, String> search_keyword)throws Exception;
+	public JSONObject serchCategoryChart(Map<String, String> search_keyword)throws Exception;
 
 	//셀렉트 조회
 	public JSONObject selectPieChart(Map<String, String> select_keyword)throws Exception;
 	public JSONObject selectColumnChart(Map<String, String> select_keyword)throws Exception;
 	public JSONObject selectUserLineChart(Map<String, String> select_keyword)throws Exception;
 	public JSONObject selectUserBarChart(Map<String, String> select_keyword)throws Exception;
+	public JSONObject selectCategoryChart(Map<String, String> select_keyword)throws Exception;
+	
 
 	
 	

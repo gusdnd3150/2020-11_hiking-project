@@ -17,6 +17,7 @@ public interface E_p006Controller {
 	public JSONObject searchDateColumnChart( String startDate, String endDate, HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public JSONObject serchUserLineChart( String startDate, String endDate, HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public JSONObject serchUserBarChart( String startDate, String endDate, HttpServletRequest request, HttpServletResponse response) throws Exception;
+	public JSONObject serchCategoryChart( String startDate, String endDate, HttpServletRequest request, HttpServletResponse response) throws Exception;
 	
 	
 	
@@ -25,6 +26,7 @@ public interface E_p006Controller {
 	public JSONObject selectColumnChart( String key_word, String st, String end, HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public JSONObject selectUserLineChart( String key_word, String st, String end, HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public JSONObject selectUserBarChart( String key_word, String st, String end, HttpServletRequest request, HttpServletResponse response) throws Exception;
+	public JSONObject selectCategoryChart( String key_word, String st, String end, HttpServletRequest request, HttpServletResponse response) throws Exception;
 
 	
 	

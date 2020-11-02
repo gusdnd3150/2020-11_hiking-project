@@ -40,4 +40,10 @@ public class E_p005ServiceImpl implements E_p005Service {
 		return selectSearch;
 	}
 
+	//금일 매출
+	@Override
+	public String toDaySales(Map map) throws Exception {
+		return e_p005DAO.toDaySales(map);
+	}
+
 }

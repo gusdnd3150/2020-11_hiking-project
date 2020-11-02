@@ -9,7 +9,7 @@
 		<result property="orderDatString" column="orderDatString"/> <!--주문시간 String-->
 		<result property="orderStatus" column="orderStatus"/> <!--주문상태 (1.결제전   2.결제완료  3.결제취소)-->
 		<result property="orderStatusString" column="orderStatusString"/> <!--주문상태 (1.결제전   2.결제완료  3.결제취소) 스트링 변환-->
-		<result property="deliverystatus" column="deliverystatus"/> <!--배송상태(100.입금대기  200.입금완료   300.배송준비  400.배송완료)-->
+		<result property="deliverystatus" column="deliverystatus"/> <!--배송상태(100.배송대기  200.배송준비   300.배송완료  400.배송취소)-->
 		<result property="prodName" column="prodName"/> <!--상품명-->
 		<result property="prodSize" column="prodSize"/> <!--상품 사이즈-->
 		<result property="color" column="color"/> <!--상품 컬러-->
@@ -20,6 +20,12 @@
 		<result property="zoneCode" column="zoneCode"/> <!--우편번호-->
 		<result property="address" column="address"/> <!--주소-->
 		<result property="address2" column="address2"/> <!--상세주소-->
+		<result property="totalpay" column="totalpay"/> <!--주문금액-->
+		<result property="Stringcharge" column="Stringcharge"/> <!--배송비 스트링-->
+		<result property="merchant_uid" column="merchant_uid"/> <!--승인번호-->
+		<result property="imp_uid" column="imp_uid"/> <!--카드사승인번호-->
+		<result property="reason" column="reason"/> <!--취소 사유-->
+		<result property="optionnum" column="optionnum"/> <!--옵션 번호-->
 		
 	</resultMap>
 
@@ -205,7 +211,6 @@
 			AND d.delibasic = o.deliverytype
 			AND o.orderStatus = #{orderStatus}
       	]]>
-    	
 	</select>
 	
 	
@@ -243,7 +248,112 @@
       	]]>
     	
 	</select>
+
+	
+	<!-- 취소 요청건 조회 -->
+	<select id="selectCancelOrder" resultMap="e_p004Result04">
+		 <![CDATA[
+			SELECT pm.MERCHANT_UID,
+                    to_char(o.ordereDat,'YYYY-MM-DD HH:MM.SS')AS orderDatString,
+			 		dl.custname,
+			 		dl.custphone,
+			 		dl.zonecode,
+			 		dl.address,
+			 		dl.address2,
+			 		to_char( sum(o.paytotal),'999,999,999,999,999')as totalpay,
+			 		min(pp.content)as pcontent,
+			 		min(o.prodname)||'(외'||COUNT(o.prodname)||'개)'as prodCount
+			FROM payment pm 
+				INNER JOIN orders o
+			ON pm.ordernum =o.ordernum
+				INNER JOIN delivery dl
+			ON dl.usernum = o.usernum
+				INNER JOIN (SELECT content, prodnum FROM prodphoto WHERE pphotonum = 1)pp
+			ON pp.prodnum = o.prodnum
+				WHERE pm.type = 'cancel'
+			AND dl.delibasic = o.deliverytype
+				GROUP BY pm.merchant_uid,pm.buyername,dl.custname, dl.custphone,dl.zonecode, dl.address, dl.address2,to_char(o.ordereDat,'YYYY-MM-DD HH:MM.SS')
+      	]]>
+	</select> 
 	     
+	  <!--취소 상세보기1 (고객정보)-->   
+	     <select id="viewCancelList" resultMap="e_p004Result04" parameterType="String">
+		 <![CDATA[
+        select  
+          		pm.MERCHANT_UID,
+                pm.IMP_UID,
+                dl.custname,
+			    dl.custphone,
+			    dl.zonecode,
+			    dl.address,
+			    dl.address2,
+                to_char(o.ordereDat,'YYYY-MM-DD HH:MM.SS')AS orderDatString,
+                SUM(o.paytotal)as totalpay,
+                min(pm.reason)as preason
+        FROM payment pm
+            INNER JOIN orders o
+          ON o.ordernum = pm.ordernum
+            INNER JOIN delivery dl
+          ON dl.usernum = o.usernum
+        WHERE dl.delibasic = o.deliverytype
+       		AND pm.MERCHANT_UID= #{merchant_uid}
+        GROUP BY pm.MERCHANT_UID,pm.IMP_UID, dl.custname, dl.custphone, dl.zonecode, dl.address, dl.address2, to_char(o.ordereDat,'YYYY-MM-DD HH:MM.SS')
+      	]]>
+	</select>
+	
+		  <!--취소 상세보기2 (상품 정보)-->   
+	<select id="viewCancelList2" resultMap="e_p004Result04" parameterType="String">
+		 <![CDATA[
+     select 
+     		o.ordernum,
+		    o.prodname,
+		    o.quantity,
+		    po.color,
+		    po.prodsize,
+		    pp.content,
+		    po.optionnum
+	FROM orders o
+	  	INNER JOIN payment pm
+			ON pm.ordernum= o.ordernum
+		INNER JOIN prodoption po
+			ON po.optionnum = o.optionnum
+		INNER JOIN prodphoto pp
+			ON pp.prodnum = po.prodnum
+	WHERE pm.merchant_uid = #{merchant_uid}
+		AND pp.pphotonum =1
+      	]]>
+	</select>
+	
+	<!-- 결제취소시 취소상품 재고수량 업데이트 -->
+	 <update id="upDateCancel" parameterType="java.util.Map">
+	 <![CDATA[
+		UPDATE prodoption
+			SET 
+			    MODDATE = CURRENT_TIMESTAMP,
+				quantity = quantity+#{quantity}
+			WHERE OPTIONNUM = #{optionnum}			
+        	]]>	
+	</update>
+	
+	<!-- 결제취소시 오더테이블 상태 결제 취소로 전환-->
+	 <update id="upDateOrderStatus" parameterType="java.util.Map">
+	 <![CDATA[
+		UPDATE orders
+		    SET 
+		        orderstatus = 3
+		    WHERE ordernum = #{orderNum}			
+        	]]>	
+	</update>
+	<!-- 결제취소시 페이테이블 상태 취소로 전환-->
+	 <update id="upDatePayType" parameterType="java.util.Map">
+	 <![CDATA[
+		UPDATE payment
+		    SET 
+		        updatedat = CURRENT_TIMESTAMP,
+		        type = 'canceled'
+		    WHERE ordernum = #{orderNum}			
+        	]]>	
+	</update>
 	
 	
 </mapper>

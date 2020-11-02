@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.gson.Gson;
+
 import project.admin.e_p003.service.E_p003Service;
 import project.admin.e_p003.vo.E_p003VO;
 
@@ -33,14 +35,13 @@ public class E_p003ControllerImpl implements E_p003Controller{
 	private E_p003VO e_p003VO;
 	
 	
-	//공지사항 등록
+	//게시글 등록
 	@Override
 	@RequestMapping(value = "/admin/addCSboard.do", method = RequestMethod.POST)
-	public ModelAndView addCSpost(@ModelAttribute("e_p003VO")E_p003VO e_p003VO, HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
-		request.setCharacterEncoding("utf-8");
-		int result = 0;
-		result=e_p003Service.addCSpost(e_p003VO);
+	public ModelAndView addCSpost(@RequestParam Map map, HttpServletRequest request, HttpServletResponse response)throws Exception {
+		
+		int result = e_p003Service.addCSpost(map);
+
 		ModelAndView mav = new ModelAndView("e_p003_main");
 		mav.addObject("result", result);
 		return mav;
@@ -48,15 +49,11 @@ public class E_p003ControllerImpl implements E_p003Controller{
 	
 	//조건 검색
 	@Override
-	@RequestMapping(value = "/admin/csBoardsearch.do", method = RequestMethod.POST)
-	public ModelAndView searchCsBoard(@RequestParam(defaultValue="") String searchOption, 
-			@RequestParam(defaultValue="csPostNum") String key_word,
-			@RequestParam(required=false) String key_word1, 
-			HttpServletRequest request, HttpServletResponse response) throws Exception { 
-		
+	@RequestMapping(value = "/admin/csBoardsearch.do", method = RequestMethod.GET, produces = "application/text; charset=UTF-8" )
+	public ModelAndView searchCsBoard(@RequestParam(defaultValue="") String searchOption, @RequestParam(defaultValue="csPostNum") String key_word,  HttpServletRequest request, HttpServletResponse response) throws Exception {
+	
 		Map<String, String> search = new HashMap<String, String>();
 		search.put("key_word", key_word);
-		search.put("key_word1", key_word1);
 		search.put("searchOption", searchOption);
 		List csBoardList = e_p003Service.searchCsBoard(search);
 		ModelAndView mav = new ModelAndView();
@@ -83,19 +80,17 @@ public class E_p003ControllerImpl implements E_p003Controller{
 	//글 수정
 	@Override
 	@RequestMapping(value = "/admin/upDateCsboard.do", method = RequestMethod.POST)
-	public ModelAndView upDateCsBoard(@ModelAttribute("e_p003VO") E_p003VO e_p003VO, HttpServletRequest request, HttpServletResponse response)throws Exception {
+	public ModelAndView upDateCsBoard(@RequestParam Map map, HttpServletRequest request, HttpServletResponse response)throws Exception {
 		request.setCharacterEncoding("utf-8");
-		
-		int result = 0;
-		result=e_p003Service.upDateCsBoard(e_p003VO);
 		ModelAndView mav = new ModelAndView();
-		if(result == 1) {
-			mav.addObject("upDateCsBoardMsg", result);
-		}else {
-			mav.addObject("upDateCsBoardMsg", result);
-		}
+		int result=e_p003Service.upDateCsBoard(map);
 		mav.setViewName("e_p003_main");
-		return mav;
+		if(result !=0) {
+			mav.addObject("upDatemsg", "ok");
+			}else {
+				mav.addObject("upDatemsg", "x");
+			}
+		return mav;	
 	}
 	
 	//글삭제
@@ -114,16 +109,6 @@ public class E_p003ControllerImpl implements E_p003Controller{
 		
 	}
 	
-	//이메일 버틑 클릭후  회원 이메일 값 전달 및 폼 이동 메소드
-	@Override
-	@RequestMapping(value="/admin/sendEmail.do", method=RequestMethod.GET)
-	public ModelAndView mailForm(@RequestParam("userEmail")String userEmail, HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
-		ModelAndView mav = new ModelAndView();
-		mav.addObject("userEmail", userEmail);
-		mav.setViewName("e_p003_emailForm");
-		return mav;
-	}
 
 	//메일발송
 	@Override
@@ -143,6 +128,15 @@ public class E_p003ControllerImpl implements E_p003Controller{
 			return msg;
 		}
 		
+	}
+
+	//문의글 카운트 알림
+	@Override
+	@ResponseBody
+	@RequestMapping(value="/admin/countBoard.do", method=RequestMethod.POST)
+	public String countBoard(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		System.out.println("문의글 카운트");
+		return e_p003Service.countBoard();
 	}
 	
 }

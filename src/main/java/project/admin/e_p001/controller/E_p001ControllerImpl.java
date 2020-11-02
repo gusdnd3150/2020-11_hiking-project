@@ -51,7 +51,7 @@ public class E_p001ControllerImpl implements E_p001Controller {
 	}
 
 	@Override // 회원 조건검색
-	@RequestMapping(value = "admin/searchUser.do", method = RequestMethod.POST)
+	@RequestMapping(value = "admin/searchUser.do", method = RequestMethod.GET)
 	public ModelAndView searchUser(@RequestParam(defaultValue = "") String searchOption,
 			@RequestParam(defaultValue = "userNum") String key_word, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
@@ -84,15 +84,32 @@ public class E_p001ControllerImpl implements E_p001Controller {
 	@RequestMapping(value = "admin/userView.do", method = RequestMethod.GET)
 	public ModelAndView userView(@RequestParam(value="userNum") int userNum, HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
-		System.out.println("상세보기 회원 번호           "+userNum);
-		
 		List list = e_p001Service.userView(userNum);
 		
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("e_p001_userView");
-		//mav.setViewName("e_p001_main");
 		mav.addObject("list", list);
 		return mav;
+	}
+
+	//회원 포인트 추가 (데이터테이블 안에서 사용)
+	@Override
+	@ResponseBody
+	@RequestMapping(value = "admin/updateUserPoint.do", method = RequestMethod.GET)
+	public String updateUserPoint(@RequestParam Map map, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		int result = e_p001Service.updateUserPoint(map);
+		if (result != 0) {
+			return "ok";
+		}
+		return "x";
+	}
+
+	//금일 신규 가입자 카운트
+	@Override
+	@ResponseBody
+	@RequestMapping(value = "admin/toDayUser.do", method = RequestMethod.POST)
+	public String toDayUser(@RequestParam Map map, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		return e_p001Service.toDayUser(map);
 	}
 
 

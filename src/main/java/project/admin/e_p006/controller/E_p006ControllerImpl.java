@@ -79,6 +79,18 @@ public class E_p006ControllerImpl implements E_p006Controller{
 			return e_p006Service.serchUserBarChart(search_keyword);
 		}
 		
+		//지정일자 조회 카테고리별 통계 
+		@Override
+		@ResponseBody
+		@RequestMapping(value = "/admin/serchCategoryChart.do", method = RequestMethod.GET)
+		public JSONObject serchCategoryChart(@RequestParam("startDate") String startDate, @RequestParam("endDate") String endDate, HttpServletRequest request,
+				HttpServletResponse response) throws Exception {
+			Map<String, String> search_keyword = new HashMap<String, String>();
+			search_keyword.put("startDate", startDate);
+			search_keyword.put("endDate", endDate);
+			return e_p006Service.serchCategoryChart(search_keyword);
+		}
+		
 //0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 		
 	//셀렉트 cs글 통계 조회
@@ -132,5 +144,20 @@ public class E_p006ControllerImpl implements E_p006Controller{
 		select_keyword.put("key_word", key_word);
 		return e_p006Service.selectUserBarChart(select_keyword);
 	}
+
+	@Override
+	@ResponseBody
+	@RequestMapping(value = "/admin/selectCategoryChart.do", method = RequestMethod.GET)
+	public JSONObject selectCategoryChart(@RequestParam(value="key_word" ,defaultValue = "all")String key_word, @RequestParam(value="st",  required = false)String st, 
+			@RequestParam(value="end", required = false)String end, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		Map<String, String> select_keyword = new HashMap<String, String>();
+		select_keyword.put("st", st);
+		select_keyword.put("end", end);
+		select_keyword.put("key_word", key_word);
+		return e_p006Service.selectCategoryChart(select_keyword);
+	}
+
+
 
 }

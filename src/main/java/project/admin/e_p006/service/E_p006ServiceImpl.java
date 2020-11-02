@@ -463,4 +463,145 @@ public class E_p006ServiceImpl implements E_p006Service {
 
 		return data;
 	}
+
+	//셀렉트 조회 카테고리별 판매 통계
+	@Override
+	public JSONObject selectCategoryChart(Map<String, String> select_keyword) throws Exception {
+		List<E_p006VO> items = e_p006DAO.selectCategoryChart(select_keyword);
+		
+		JSONObject data = new JSONObject(); 
+
+		JSONObject col1 = new JSONObject();
+		JSONObject col2 = new JSONObject();
+		JSONObject col3 = new JSONObject();
+		JSONObject col4 = new JSONObject();
+		
+	
+		JSONArray title = new JSONArray();
+
+		
+		col1.put("label", "날짜"); 
+		col1.put("type", "string");
+		
+		col2.put("label", "의류"); 
+		col2.put("type", "number");
+		
+		col3.put("label", "잡화"); 
+		col3.put("type", "number");
+		
+		col4.put("label", "등산");
+		col4.put("type", "number");
+		
+
+		title.add(col1);
+		title.add(col2);
+		title.add(col3);
+		title.add(col4);
+		
+
+		data.put("cols", title);
+
+		JSONArray body = new JSONArray(); 
+
+		for (E_p006VO vo : items) {
+
+			JSONObject type = new JSONObject(); 
+			type.put("v",vo.getOrdereDatString());
+
+			JSONObject count = new JSONObject(); //의류
+			JSONObject count1 = new JSONObject(); //잡화
+			JSONObject count2 = new JSONObject(); //등산용품
+			
+		
+			
+			count.put("v", vo.getType1());
+			count1.put("v",vo.getType2());
+			count2.put("v",vo.getType3());
+
+			JSONArray row = new JSONArray(); 
+			row.add(type);
+			row.add(count); 
+			row.add(count1); 
+			row.add(count2); 
+
+			JSONObject cell = new JSONObject();
+			cell.put("c", row);
+			body.add(cell); 
+
+		}
+		data.put("rows", body);
+
+		return data;
+		
+	}
+
+	//지정일자 조회 카테고리별 통계
+	@Override
+	public JSONObject serchCategoryChart(Map<String, String> search_keyword) throws Exception {
+		List<E_p006VO> items = e_p006DAO.serchCategoryChart(search_keyword);
+		
+		JSONObject data = new JSONObject(); 
+
+		JSONObject col1 = new JSONObject();
+		JSONObject col2 = new JSONObject();
+		JSONObject col3 = new JSONObject();
+		JSONObject col4 = new JSONObject();
+		
+	
+		JSONArray title = new JSONArray();
+
+		
+		col1.put("label", "날짜"); 
+		col1.put("type", "string");
+		
+		col2.put("label", "의류"); 
+		col2.put("type", "number");
+		
+		col3.put("label", "잡화"); 
+		col3.put("type", "number");
+		
+		col4.put("label", "등산");
+		col4.put("type", "number");
+		
+
+		title.add(col1);
+		title.add(col2);
+		title.add(col3);
+		title.add(col4);
+		
+
+		data.put("cols", title);
+
+		JSONArray body = new JSONArray(); 
+
+		for (E_p006VO vo : items) {
+
+			JSONObject type = new JSONObject(); 
+			type.put("v",vo.getOrdereDatString());
+
+			JSONObject count = new JSONObject(); //의류
+			JSONObject count1 = new JSONObject(); //잡화
+			JSONObject count2 = new JSONObject(); //등산용품
+			
+		
+			
+			count.put("v", vo.getType1());
+			count1.put("v",vo.getType2());
+			count2.put("v",vo.getType3());
+
+			JSONArray row = new JSONArray(); 
+			row.add(type);
+			row.add(count); 
+			row.add(count1); 
+			row.add(count2); 
+
+			JSONObject cell = new JSONObject();
+			cell.put("c", row);
+			body.add(cell); 
+
+		}
+		data.put("rows", body);
+
+		return data;
+	}
 }

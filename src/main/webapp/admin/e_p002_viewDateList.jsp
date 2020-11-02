@@ -626,7 +626,13 @@ function removeImgDetailImageFile(_pphotonum){
 	   	 });   
   })	 
 
-
+function end(){
+		var upDate = "<c:out value="${upDatemsg}" />";
+		if (upDate ==="ok") {
+			 opener.location.reload();
+			close();
+		}
+};
 </script>
 <body>
 
@@ -807,11 +813,14 @@ function removeImgDetailImageFile(_pphotonum){
                                 <input type='file' id="detail_img_add" name='file2' multiple  />
                             </td>
                              <td>
-                                <button type="button" id="addDetailImg" class="basic_btn1 btn-primary btn-xs">추가</button>
+                                 <button type="button" id="addDetailImg" class="basic_btn1 btn-primary btn-xs">추가</button>
                             </td>
-						</tr>
+						</tr>	         
 						</form>
-					
+						<tr>
+							<th></th>
+							<td> </center> <button type="button" id="end"class="basic_btn1 btn-primary btn-xs" onclick="end()">확인</button><center></td>
+						</tr>
 					</table>
 
 				</div>
