@@ -22,6 +22,13 @@
                    )
         ]]>
     </insert>
+    <select id="selectAfterDetail" resultType="map" parameterType="int">
+        SELECT ga.afterNum, ga.userNum, ga.mtNm, ga.title, ga.content, TO_CHAR(ga.createdAt,'yyyy-mm-dd') createdAt, ui.content2
+            FROM groupAfter ga, users u, userInfo ui
+            WHERE ga.userNum = u.userNum
+              AND u.userNum = ui.userNum
+              AND afterNum = #{afterNum}
+    </select>
     <select id="checkAfterExist" resultType="_int" parameterType="map">
         <![CDATA[
             SELECT userNum
@@ -69,9 +76,16 @@
                     )
         ]]>
     </insert>
+    <update id="updateSubCommentCount" parameterType="_int">
+        <![CDATA[
+            UPDATE groupAfterComment
+            SET subCommentCount = subCommentCount+1
+            WHERE commentNum = #{parentNum}
+        ]]>
+    </update>
     <select id="selectCommentOne" resultType="map" parameterType="int">
         <![CDATA[
-        SELECT gac.commentNum, gac.parentNum, gac.depts, gac.commentOrder, gac.content, u.nickname, TO_CHAR(gac.createdAt,'YYYY-MM-DD') createdAt
+        SELECT gac.afterNum, gac.commentNum, gac.parentNum, gac.depts, gac.commentOrder, gac.content, gac.subCommentCount,u.nickname, TO_CHAR(gac.createdAt,'YYYY-MM-DD') createdAt
         FROM groupAfterComment gac, users u
         WHERE gac.userId = u.id
           AND commentNum = #{commentNum}
@@ -79,7 +93,7 @@
     </select>
     <select id="selectCommentByAfterNum" resultType="map" parameterType="int">
         <![CDATA[
-        SELECT gac.commentNum, gac.parentNum, gac.depts, gac.commentOrder, gac.content, u.nickname, gac.subCommentCount, TO_CHAR(gac.createdAt,'YYYY-MM-DD') createdAt, ui.content2
+        SELECT gac.afterNum, gac.commentNum, gac.parentNum, gac.depts, gac.commentOrder, gac.content, u.nickname, gac.subCommentCount, TO_CHAR(gac.createdAt,'YYYY-MM-DD') createdAt, ui.content2
         FROM groupAfterComment gac, users u, userInfo ui
         WHERE gac.userId = u.id
           AND   u.userNum = ui.userNum

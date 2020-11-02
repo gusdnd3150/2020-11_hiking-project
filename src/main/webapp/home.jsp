@@ -208,7 +208,7 @@
 
 					var html = '';
 
-					html += '<a href="'+response[i].AFTERNUM+'">';
+					html += '<a href="/after/'+response[i].AFTERNUM+'.do">';
 					html += '<div class="media p-1">';
 					html += '<img src="/resources/img/'+response[i].CONTENT2+'" class="mr-3 rounded" style="width: 50px;height: 50px">';
 					html += '<div class="media-body">';
@@ -276,19 +276,15 @@
 			success: function (response){
 				console.log("success");
 
-				var html1 = '';
-
 				for(var i=0;i<5;i++){
-					var html2 = '';
-					html2 += '<li class="list-group-item"><a href="#" class="notice-item" style="color: black">'
-					html2 += response[i].title
-					html2 += '</a></li>';
 
-					$('#noticeList').append(html2);
+					var html = '';
+					html += '<li class="list-group-item"><a href="#" class="notice-item" style="color: black">'
+					html += response[i].title
+					html += '</a></li>';
+
+					$('#noticeList').append(html);
 				}
-
-				html1 += '<li class="list-group-item p-0 text-center text-muted"><a href="#" class="notice-item" style="color: black">더보기</a></li>';
-				$('#noticeList').append(html1);
 			},
 			error: function(response){
 				console.log("error");

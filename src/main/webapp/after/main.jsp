@@ -1,12 +1,24 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page session="false" %>
 <jsp:include page="/common/header.jsp" />
 <link rel="stylesheet" type="text/css" href="../resources/css/views/after/main.css" />
 <script type="text/javascript" src="../resources/js/jquery.js"></script>
 <script type="text/javascript" src="../resources/js/bootstrap.min.js"></script>
 <script>
+    function toggleSubComment(e){
+        $commentRoot = e.parentNode.parentNode;
+        $subComments = $commentRoot.getElementsByTagName("li");
+
+        for(var i=0;i<$subComments.length;i++){
+            if($subComments[i].style.display == "block"){
+                $subComments[i].style.display = "none";
+            }else if($subComments[i].style.display == "none"){
+                $subComments[i].style.display = "block";
+            }
+        }
+
+    }
     function toggleWriteSubComment(e){
         $inputSubComment = e.parentNode.getElementsByTagName("p")[0]
 
@@ -33,12 +45,17 @@
                 console.log(response)
 
                 var index = 0;
+
                 for(var i=0;i<response.length;i++) {
 
+                    var rootNum = response[i].PARENTNUM;
                     var commentNum = response[i].COMMENTNUM;
+                    var afterNum = response[i].AFTERNUM
+                    var selector = 'commentBoard'+afterNum;
 
-                        var id = 'depts' + index
+                    var id = 'depts' + index;
 
+                    if(rootNum == 0){
                         var html = '';
                         html += '<ul id="' + id + '" class="col-12 pl-5 row">'
                         html += '<img src="/resources/img/' + response[i].CONTENT2 + '" class="rounded-circle" style="width: 50px;height: 50px">';
@@ -46,16 +63,35 @@
                         html += '<pre style="display: none">'+response[i].COMMENTNUM+'</pre>';
                         html += '<h5 class="m-0">'+response[i].NICKNAME+'</h5>';
                         html += '<div>'+response[i].CONTENT +'</div>';
+                        html += '<button class="'+id+' p-0 btn btn-default text-muted" onclick="toggleSubComment(this)">[답글 '+ response[i].SUBCOMMENTCOUNT +'개 더보기]</button>'
                         html += '<button class="'+id+'subComment p-0 btn btn-default text-muted" onclick="toggleWriteSubComment(this)">[답글 작성]</button>';
                         html += '<p style="display: none"><input type="text" class="form-control" placeholder="댓글 내용 입력"/>';
-                        html += '<button id="writeSubCommentBtn" class="btn btn-info" onclick="writeSubComment(this)">작성</button>';
+                        html += '<button id="writeSubCommentBtn" class="btn btn-info" onclick="writeSubComment(this,'+response[i].AFTERNUM+')">작성</button>';
                         html += '<button class="btn btn-light" onclick="cancelwriteSubComment(this)">취소</button>';
                         html += '</p></div></ul>';
 
-                        $('#commentBoard').append(html);
+
+                        $('#'+selector).append(html);
 
                         index++;
 
+                        var index1 = 0;
+                        for (var j = 0; j < response.length; j++) {
+
+                            if (response[j].PARENTNUM == commentNum) {
+                                var html = '';
+                                html += '<li id="' + id + index1 + '" class="col-12 row pt-3 ml-5 pl-2" style="display: none;">';
+                                html += '<img src="/resources/img/'+response[j].CONTENT2+'" class="rounded-circle" style="width: 40px; height: 40px; float: left">';
+                                html += '<div class="col-9 ml-2 pl-5">';
+                                html += '<h5 class="mb-0">'+response[j].NICKNAME+'</h5>'
+                                html += response[j].CONTENT +'</div></li>';
+
+                                $('#' + id).append(html);
+
+                                index1++;
+                            }
+                        }
+                    }
                 }
             },
             error: function(response){
@@ -65,11 +101,12 @@
     }
 
     function submitComment(afterNum){
+        var content = 'commentContent-'+afterNum;
         var data = {
             "parentNum" : 0,
             "depts" : 1,
             "afterNum" : afterNum,
-            "content" : $('#commentContent').val(),
+            "content" : $('#'+content).val(),
             "userId" : "<%= request.getSession().getAttribute("LOGIN")%>",
             "postNum": 0
         }
@@ -81,8 +118,9 @@
             dataType: 'json',
             contentType: "application/json; charset=utf-8;",
             success: function (response){
+                console.log(response)
                 var index = 0;
-
+                var selector = 'commentBoard'+response.AFTERNUM;
                 var rootNum = response.PARENTNUM;
 
                 if (rootNum == 0) {
@@ -96,13 +134,14 @@
                     html += '<h5>'+response.NICKNAME+'</h5>'
                     html += '<div>'+response.CONTENT +'</div>'
                     html += '<button class="'+id+' p-0 btn btn-default text-muted"></button>'
+                    html += '<button class="'+id+' p-0 btn btn-default text-muted" onclick="toggleSubComment(this)">[답글 '+ response.SUBCOMMENTCOUNT +'개 더보기]</button>'
                     html += '<button class="'+id+'subComment p-0 btn btn-default text-muted" onclick="toggleWriteSubComment(this)">[답글 작성]</button>'
                     html += '<p style="display: none"><input type="text" class="form-control" placeholder="댓글 내용 입력"/>'
-                    html += '<button id="writeSubCommentBtn" class="btn btn-info" onclick="writeSubComment(this)">작성</button>'
+                    html += '<button id="writeSubCommentBtn" class="btn btn-info" onclick="writeSubComment(this,'+response.AFTERNUM+')">작성</button>'
                     html += '<button class="btn btn-light" onclick="cancelwriteSubComment(this)">취소</button>'
                     html += '</p></div></ul>';
 
-                    $('#commentBoard').append(html);
+                    $('#'+selector).append(html);
 
                     index++;
                 }
@@ -111,6 +150,49 @@
                 alert("다시 시도해주세요")
             }
         })
+    }
+
+    //
+    function writeSubComment(e,afterNum){
+
+        $root = e.parentNode.parentNode;
+        $parentNum = $root.getElementsByTagName("pre")[0];
+
+        var data = {
+            "parentNum" : $parentNum.innerHTML,
+            "depts" : 2,
+            "afterNum" : afterNum,
+            "content" : e.previousSibling.value,
+            "userId" : "<%= request.getSession().getAttribute("LOGIN")%>"
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/after/insertSubComment.do",
+            data: JSON.stringify(data),
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8;",
+            success: function (response){
+                console.log(response)
+                var id = $root.parentNode.id;
+
+                console.log(id)
+                var html = '';
+
+                html += '<li id="temp" class="col-12 row pt-3 ml-5 pl-2">';
+                html += '<img src="/resources/img/${sessionIdImage}" class="rounded-circle" style="width: 40px;height: 40px;float: left">';
+                html += '<div class="col-9">';
+                html += '<h5 class="mb-0 pl-0">'+response.NICKNAME+'</h5>';
+                html += response.CONTENT +'</div></li>';
+
+                $('#'+id).append(html);
+            },
+            error: function(response){
+                alert("다시 시도해주세요")
+            }
+        })
+
+
     }
 
 </script>
@@ -131,7 +213,7 @@
             <hr />
             <div class="m-3">
                 <h3 class="mt-2 pb-1">댓글</h3>
-                <div id="commentBoard" class="row">
+                <div id="commentBoard${after.AFTERNUM}" class="row">
                 </div>
             </div>
             <!-- 댓글 입력 -->
@@ -139,12 +221,12 @@
                 <c:choose>
                     <c:when test="${sessionIdImage eq null}">
                         <img src="/resources/img/basic_profile.PNG" class="rounded-circle" style="width: 50px;height: 50px" />
-                        <input id="commentContent" class="form-control form-control-lg col-lg-9 col-md-8 col-10 col-10 ml-2 mr-2" type="text" placeholder="로그인 먼저 해주세요" onclick="location.href=('/user/logInView.do')">
+                        <input id="commentContent-${after.AFTERNUM}" class="form-control form-control-lg col-lg-9 col-md-8 col-10 col-10 ml-2 mr-2" type="text" placeholder="로그인 먼저 해주세요" onclick="location.href=('/user/logInView.do')">
                         <button id="commentSubmit" class="btn btn-info col-lg-1 col-md-2 col-sm-11" onclick="location.href=('/user/logInView.do')">등록</button>
                     </c:when>
                     <c:when test="${sessionIdImage ne null}">
                         <img src="/resources/img/${sessionIdImage}" class="rounded-circle" style="width: 50px;height: 50px" />
-                        <input id="commentContent" class="form-control form-control-lg col-lg-9 col-md-8 col-10 col-10 ml-2 mr-2" type="text" placeholder="내용을 입력해주세요">
+                        <input id="commentContent-${after.AFTERNUM}" class="form-control form-control-lg col-lg-9 col-md-8 col-10 col-10 ml-2 mr-2" type="text" placeholder="내용을 입력해주세요">
                         <button id="commentSubmit" class="btn btn-info col-lg-1 col-md-2 col-sm-11" onclick="submitComment(${after.AFTERNUM})">등록</button>
                     </c:when>
                 </c:choose>

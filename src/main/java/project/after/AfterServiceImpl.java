@@ -17,6 +17,9 @@ public class AfterServiceImpl implements AfterService {
     public int insertAfter(Map map) {
         return afterDAO.insertAfter(map);
     }
+    public List selectAfterDetail(int afterNum){
+        return afterDAO.selectAfterDetail(afterNum);
+    }
     public int checkAfterExist(Map map){return afterDAO.checkAfterExist(map);}
     public List selectAllAfterList(){
         return afterDAO.selectAllAfterList();
@@ -25,9 +28,11 @@ public class AfterServiceImpl implements AfterService {
         return afterDAO.selectMainAfterList();
     }
 
-    @Transactional
     public int insertCommentAfter(Map map){
         return afterDAO.insertCommentAfter(map);
+    }
+    public int updateSubCommentCount(Map map){
+        return afterDAO.updateSubCommentCount(map);
     }
 
     public Map selectCommentOne(int commentNum){

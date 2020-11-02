@@ -10,6 +10,8 @@ public interface AfterService {
     List selectMainAfterList();
 
     int insertCommentAfter(Map map);
+    int updateSubCommentCount(Map map);
     Map selectCommentOne(int commentNum);
     List selectCommentByAfterNum(int afterNum);
+    List selectAfterDetail(int afterNum);
 }

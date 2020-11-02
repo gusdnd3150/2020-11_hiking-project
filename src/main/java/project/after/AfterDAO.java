@@ -22,6 +22,9 @@ public class AfterDAO {
         }
         return 1;
     }
+    public List selectAfterDetail(int afterNum){
+        return sqlSession.selectList("after.selectAfterDetail",afterNum);
+    }
     public List selectAllAfterList(){
         return sqlSession.selectList("after.selectAllAfterList");
     }
@@ -31,6 +34,9 @@ public class AfterDAO {
 
     public int insertCommentAfter(Map map){
         return sqlSession.insert("after.insertCommentAfter",map);
+    }
+    public int updateSubCommentCount(Map map){
+        return sqlSession.update("after.updateSubCommentCount",map);
     }
     public Map selectCommentOne(int commentNum){
         return sqlSession.selectOne("after.selectCommentOne",commentNum);

@@ -69,6 +69,21 @@ public class AfterController {
         return result;
     }
 
+    @GetMapping("/after/{afterNum}.do")
+    public ModelAndView afterDetail(@PathVariable("afterNum")int afterNum,
+                                    HttpServletRequest request){
+        ModelAndView mav = new ModelAndView("/after/main");
+        List list = afterService.selectAfterDetail(afterNum);
+
+        String userId = (String) request.getSession().getAttribute("LOGIN");
+        if(userId!=null){
+            String sessionIdImage = groupService.selectSessionIdImage(userId);
+            mav.addObject("sessionIdImage",sessionIdImage);
+        }
+        mav.addObject("after",list);
+        return mav;
+    }
+
     @PostMapping("/after/uploadImage.do")
     @ResponseBody
     public String insertImage(@RequestParam("upload")MultipartFile file, HttpServletRequest request) {
@@ -124,11 +139,19 @@ public class AfterController {
         return afterService.selectCommentOne((Integer) map.get("commentNum"));
     }
 
+    @PostMapping("/after/insertSubComment.do")
+    @ResponseBody
+    public Map insertSubComment(@RequestBody Map map){
+        afterService.insertCommentAfter(map);
+        System.out.println("**********");
+        System.out.println(map.toString());
+        afterService.updateSubCommentCount(map);
+        return afterService.selectCommentOne((Integer) map.get("commentNum"));
+    }
+
     @GetMapping("/after/selectCommentByAfterNum.do")
     @ResponseBody
     public List selectCommentByAfterNum(@RequestParam("afterNum")int afterNum){
-        List list = afterService.selectCommentByAfterNum(afterNum);
-        System.out.println(list.toString());
-        return list;
+        return afterService.selectCommentByAfterNum(afterNum);
     }
 }
