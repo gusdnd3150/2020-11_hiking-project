@@ -275,7 +275,6 @@
 			contentType: "application/json; charset=utf-8;",
 			success: function (response){
 				console.log("success");
-				console.log(response);
 
 				var html1 = '';
 

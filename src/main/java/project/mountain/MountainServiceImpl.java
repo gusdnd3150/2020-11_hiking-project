@@ -158,4 +158,8 @@ public class MountainServiceImpl implements MountainService{
     public List selectAllTrailList(Map map){
         return mountainDAO.selectAllTrailList(map);
     }
+    public int countAllTrail(){
+        return mountainDAO.countAllTrail();
+    }
+
 }

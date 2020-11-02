@@ -184,7 +184,6 @@
             dataType: 'json',
             contentType: "application/json; charset=utf-8;",
             success: function (response){
-                console.log(response)
 
                 for(var i=0;i<10;i++){
                     var html = '';
@@ -209,7 +208,7 @@
                     html += '<div class="col-7 pr-0">';
                     html += '<h5 style="font-weight: lighter">'+response[i].MNTN_NM + '</h5>';
                     html += '</div>';
-                    html += '<a href="/trail/'+response[i].MNTN_CODE+'.do?FID='+response[i].FID+'&userId='+userId+'" class="text-muted text-right col-3 p-0">더보기></a>';
+                    html += '<a href="/trail/'+response[i].MNTN_CODE+'.do?userId='+userId+'" class="text-muted text-right col-3 p-0">더보기></a>';
                     html += '<hr />'
 
                     $('#trailRankLow').append(html)

@@ -26,6 +26,7 @@
     <div class="responsive pt-5">
         <table id="trailList"class="table table-hover">
         </table>
+        <div id="pagination"></div>
     </div>
 </div>
 <div class="modal fade" id="createModal" role="dialog">
@@ -64,21 +65,46 @@
 <script type="text/javascript" src="../resources/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="../resources/js/view/group/main.js"></script>
 <script>
-    selectTrailListSortASC();
+
+    //정렬 나누기
+    let type;
+    sort(1,'asc');
 
     $('#sort_asc').on('click',function (){
-        $('#trailList').empty()
-        selectTrailListSortASC();
+        sort(1,'asc');
     })
 
     $('#sort_DFFL').on('click',function (){
-        $('#trailList').empty()
-        selectTrailListSortDFFL();
+        sort(1,'dffl');
     })
 
-    function selectTrailListSortASC(){
+    function sort(rowNum,type){
+        if(type=='asc'){
+            type = 'asc';
+            sortASC(rowNum);
+        }else if(type=='dffl'){
+            type = 'dffl';
+            sortDFFL(rowNum);
+        }
+    }
+
+    function sortASC(rowNum){
+        $('#trailList').empty()
+        $('#pagination').empty()
+        selectTrailListSortASC(rowNum);
+        pagingInit(rowNum);
+    }
+
+    function sortDFFL(rowNum){
+        $('#trailList').empty()
+        $('#pagination').empty()
+        selectTrailListSortDFFL(rowNum);
+        pagingInit(rowNum);
+    }
+
+    function selectTrailListSortASC(rowNum){
         var data = {
-            "rowNum": 1,
+            "rowNum": rowNum,
             "sort":"asc",
         }
         $.ajax({
@@ -96,9 +122,9 @@
         })
     }
 
-    function selectTrailListSortDFFL(){
+    function selectTrailListSortDFFL(rowNum){
         var data = {
-            "rowNum": 1,
+            "rowNum": rowNum,
             "sort":"dffl",
         }
         $.ajax({
@@ -132,7 +158,7 @@
         for(var i=0;i<response.length;i++){
 
             html += '<tr style="font-size: 20px">';
-            html += '<th width="80">'+response[i].ROWNUM+'</th>';
+            html += '<th width="80">'+response[i].RNUM+'</th>';
             html += '<th width="500"><a href="/trail/'+response[i].MNTN_CODE+'.do?userId='+userId+'" class="text-muted p-0">'+response[i].MNTN_NM+' 등산로 </a></th>';
             if(response[i].PMNTN_DFFL=='쉬움'){
                 html += '<th width="100" style="color: green">'+response[i].PMNTN_DFFL+'</th>';
@@ -146,7 +172,81 @@
 
         }
 
-        $('#trailList').append(html)
+        $('#trailList').append(html);
     }
+
+    // 모듈화 시킬 것
+    function pagingInit(curPage){
+        $.ajax({
+            type: "GET",
+            url: "/trail/allCount.do",
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8;",
+            success: function (response){
+                paging(response, curPage);
+            },
+            error: function(response){
+                console.log("error");
+            }
+        })
+    }
+
+    var rangeSize = 10; // 10개씩 뿌릴거임
+    var curRange;
+    var startPage;
+    var endPage;
+    var pageCnt;
+    var rangeCnt;
+    var prevPage;
+    var nextPage;
+
+    function paging(listCnt, curPage){
+        pageCnt = Math.ceil((listCnt*1)/10);
+        rangeCnt = Math.ceil((pageCnt*1)/rangeSize);
+        setRange(curPage);
+    }
+
+    function setRange(curPage){
+        curRange = Math.floor((curPage-1)/rangeSize)+1;
+        startPage = ((curRange-1)*rangeSize)+1;
+        endPage = startPage + rangeSize - 1;
+
+        if(endPage > pageCnt){
+            endPage = pageCnt;
+        }
+
+        prevPage = curPage - 1;
+        nextPage = curPage + 1;
+
+        var html = '';
+
+        html += '<nav aria-label="Page navigation example">';
+        html += '<ul class="pagination justify-content-center text-info">';
+
+        if(curPage == 1){
+            html += '<li class="page-item disabled"><a class="page-link" href="#">이전</a></li>';
+        }else {
+            html += '<li class="page-item"><a class="page-link" href="#" onclick="sortASC(prevPage)">이전</a></li>';
+        }
+
+        for(var i=startPage;i<=endPage;i++){
+            if(i==curPage){
+                html += '<li class="page-item active"><a class="page-link" href="#" onclick="sortASC('+i+')">'+Math.ceil(i)+'</a></li>';
+            }else {
+                html += '<li class="page-item"><a class="page-link" href="#" onclick="sortASC('+i+')">'+Math.ceil(i)+'</a></li>';
+            }
+        }
+
+        if(curPage == pageCnt){
+            html += '<li class="page-item disabled"><a class="page-link" href="#">다음</a></li>';
+        }else if(curPage < pageCnt){
+            html += '<li class="page-item"><a class="page-link" href="#" onclick="sortASC(nextPage)">다음</a></li>';
+        }
+
+        $('#pagination').append(html);
+
+        console.log('--------------')
+    }
+
 </script>
 </body>

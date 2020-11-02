@@ -35,3 +35,15 @@ button {
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px
 }
+
+#pagination a{
+    color: black;
+}
+
+#pagination .disabled a{
+    color: lightgrey;
+}
+#pagination .active a{
+    background: lightseagreen;
+    color: black;
+}

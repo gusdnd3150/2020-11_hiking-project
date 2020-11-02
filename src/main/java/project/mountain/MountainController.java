@@ -353,4 +353,10 @@ public class MountainController {
         System.out.println(map.toString());
         return mountainService.selectAllTrailList(map);
     }
+
+    @GetMapping("/trail/allCount.do")
+    @ResponseBody
+    public int countAllTrail(){
+        return mountainService.countAllTrail();
+    }
 }
