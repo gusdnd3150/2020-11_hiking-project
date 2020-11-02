@@ -89,7 +89,7 @@
                 $(this).detach().appendTo('ul#keywordRank').removeAttr('style');
             });
             ticker();
-        },3000);
+        },2000);
     }
 
     function tickerover(){

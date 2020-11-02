@@ -46,67 +46,65 @@
 					<li class="list-group-item text-center">
 						<h4>나의 산오름</h4>
 					</li>
-					<a class="list" href="">
+					<a class="list" href='/profile/myFriendsList.do/${loginID}' style='color: black;' onclick="window.open(this.href,'','width=370, height=540'); return false;">
 						<li class="list-group-item d-flex justify-content-between align-items-center">
 							<b>나의 친구 목록</b>
-							<a href='/profile/myFriendsList.do/${loginID}' style='color: black;' onclick="window.open(this.href,'','width=370, height=540'); return false;">
-								<span class="text-muted mt-2">더보기></span>
-							</a>
+							<span class="text-muted m-2">더보기></span>
 						</li>
 					</a>
 					<a class="list" href="/calendar.do">
 						<li class="list-group-item d-flex justify-content-between align-items-center">
 							<b>나의 등산 일정</b>
-							<span class="text-muted mt-2">더보기></span>
+							<span class="text-muted m-2">더보기></span>
 						</li>
 					</a>
 					<a class="list" href="">
 						<li class="list-group-item d-flex justify-content-between align-items-center">
-							<b>나의 등산 이력</b>
-							<span class="text-muted mt-2">더보기></span>
+							<b>나의 모임 관리</b>
+							<span class="text-muted m-2">더보기></span>
 						</li>
 					</a>
 					<a class="list" href="">
 						<li class="list-group-item d-flex justify-content-between align-items-center">
 							<b>나의 찜 목록</b>
-							<span class="text-muted mt-2">더보기></span>
+							<span class="text-muted m-2">더보기></span>
 						</li>
 					</a>
-					<li class="list-group-item">
-						<ul class="nav nav-tabs" id="myInfoTab" role="tablist">
-							<li class="nav-item" role="presentation">
-								<a class="nav-link active" id="joined-tab" data-toggle="tab" href="#joined" role="tab" aria-controls="joined" aria-selected="true">
-									<b>내가 가입한 산모임</b>
-								</a>
-							</li>
-							<li class="nav-item" role="presentation">
-								<a class="nav-link" id="created-tab" data-toggle="tab" href="#created" role="tab" aria-controls="created" aria-selected="false">
-									<b>내가 만든 산모임</b>
-								</a>
-							</li>
-						</ul>
-						<div class="tab-content" id="myInfoContent" style="overflow:scroll;width: auto;height: 200px" >
-							<div class=" tab-pane fade show active" id="joined" data-spy="scroll" role="tabpanel" aria-labelledby="joined-tab">
-								<ul>
-								<c:forEach var="JList" items="${JList}">
-										<li><img class="rounded-circle mt-2" src="/resources/img/${JList.STOREDFILENAME}" width="50" height="50">
-									<a href="/commu/commuPageView.do?groupNum=${JList.GROUPNUM}">
-										${JList.NAME}</li>
-									</a>
-								</c:forEach>
-								</ul>
-							</div>
-							<div class=" tab-pane fade" id="created" role="tabpanel" data-spy="scroll" aria-labelledby="created-tab">
-								<ul>
-								<c:forEach var="CList" items="${CList}">
-									<li><img class="rounded-circle mt-2" src="/resources/img/${CList.STOREDFILENAME}" width="50" height="50">
-									<a href="/commu/commuPageView.do?groupNum=${CList.GROUPNUM}">
-										${CList.NAME}</a></li>
-								</c:forEach>
-								</ul>
-							</div>
-						</div>
-					</li>
+<%--					<li class="list-group-item">--%>
+<%--						<ul class="nav nav-tabs" id="myInfoTab" role="tablist">--%>
+<%--							<li class="nav-item" role="presentation">--%>
+<%--								<a class="nav-link active" id="joined-tab" data-toggle="tab" href="#joined" role="tab" aria-controls="joined" aria-selected="true">--%>
+<%--									<b>내가 가입한 산모임</b>--%>
+<%--								</a>--%>
+<%--							</li>--%>
+<%--							<li class="nav-item" role="presentation">--%>
+<%--								<a class="nav-link" id="created-tab" data-toggle="tab" href="#created" role="tab" aria-controls="created" aria-selected="false">--%>
+<%--									<b>내가 만든 산모임</b>--%>
+<%--								</a>--%>
+<%--							</li>--%>
+<%--						</ul>--%>
+<%--						<div class="tab-content" id="myInfoContent" style="overflow:scroll;width: auto;height: 200px" >--%>
+<%--							<div class=" tab-pane fade show active" id="joined" data-spy="scroll" role="tabpanel" aria-labelledby="joined-tab">--%>
+<%--								<ul>--%>
+<%--								<c:forEach var="JList" items="${JList}">--%>
+<%--										<li><img class="rounded-circle mt-2" src="/resources/img/${JList.STOREDFILENAME}" width="50" height="50">--%>
+<%--									<a href="/commu/commuPageView.do?groupNum=${JList.GROUPNUM}">--%>
+<%--										${JList.NAME}</li>--%>
+<%--									</a>--%>
+<%--								</c:forEach>--%>
+<%--								</ul>--%>
+<%--							</div>--%>
+<%--							<div class=" tab-pane fade" id="created" role="tabpanel" data-spy="scroll" aria-labelledby="created-tab">--%>
+<%--								<ul>--%>
+<%--								<c:forEach var="CList" items="${CList}">--%>
+<%--									<li><img class="rounded-circle mt-2" src="/resources/img/${CList.STOREDFILENAME}" width="50" height="50">--%>
+<%--									<a href="/commu/commuPageView.do?groupNum=${CList.GROUPNUM}">--%>
+<%--										${CList.NAME}</a></li>--%>
+<%--								</c:forEach>--%>
+<%--								</ul>--%>
+<%--							</div>--%>
+<%--						</div>--%>
+<%--					</li>--%>
 				</ul>
 			</div>
 			<!-- 나의 오름마켓 탭 -->
@@ -116,15 +114,15 @@
 					<li class="list-group-item text-center">
 						<h4 id="shoppingMall">나의 오름마켓</h4>
 					</li>
-					<li class="list-group-item d-flex justify-content-between align-items-center">
-						<b>보유포인트 P</b>
-						<c:if test="${empty point }">
-							<h5 class="mt-2">0 </h5>
-						</c:if>
-						<c:if test="${not empty point }">
-							<h5 class="mt-2">${point.point } P</h5>
-						</c:if>
-					</li>
+						<li class="list-group-item d-flex justify-content-between align-items-center">
+							<b>보유포인트 P</b>
+							<c:if test="${empty point }">
+								<b class="mt-2 mb-2 ml-2">0 </b>
+							</c:if>
+							<c:if test="${not empty point }">
+								<b class="mt-2 mb-2 ml-2">${point.point } P</b>
+							</c:if>
+						</li>
 
 					<li class="list-group-item d-flex justify-content-between align-items-center">
 						<b>위시리스트</b>

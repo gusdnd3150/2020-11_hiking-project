@@ -341,4 +341,16 @@ public class MountainController {
     public int trailLikeFunction(@RequestBody Map map){
         return mountainService.trailLikeFunction(map);
     }
+
+    @GetMapping("/trail/list.do")
+    public String trailList(){
+        return "/mountain/trail-list";
+    }
+
+    @PostMapping("/trail/list.do")
+    @ResponseBody
+    public List selectAllTrailList(@RequestBody Map map){
+        System.out.println(map.toString());
+        return mountainService.selectAllTrailList(map);
+    }
 }

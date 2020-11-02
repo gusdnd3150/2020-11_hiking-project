@@ -267,4 +267,24 @@
             AND userId = #{USERID}
         </selectKey>
     </insert>
+
+    <select id="selectAllTrailList" resultType="map" parameterType="map">
+        SELECT rowNum, list.*
+        FROM(
+        select DISTINCT MNTN_CODE, MNTN_NM, PMNTN_DFFL
+        from TRAILINFO
+        <if test="sort != null">
+            <if test="sort.equals('asc')">
+                ORDER BY MNTN_NM ASC
+            </if>
+            <if test="sort.equals('dffl')">
+                ORDER BY PMNTN_DFFL DESC
+            </if>
+        </if>
+         ) list
+        <![CDATA[
+        WHERE rowNum >= ((#{rowNum}-1)*10)+1 --> rowNum 입력
+        AND rowNum <= #{rowNum}*10
+        ]]>
+    </select>
 </mapper>

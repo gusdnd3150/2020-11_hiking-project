@@ -42,7 +42,7 @@
         <div class="row" style="font-size: 20px">
                 <div class="col-6">
                     <div>등산로 구분 : ${trail[0].MNTN_NM}</div>
-                    <div>종합 난이도 : ${sum[0].AVGDFFL}</div>
+                    <div>평균 난이도 : ${sum[0].AVGDFFL}</div>
                     <div>총 구간 길이 : ${sum[0].SUMLT} km</div>
                 </div>
                 <div class="col-6">

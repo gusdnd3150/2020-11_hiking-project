@@ -97,12 +97,7 @@
 	<div class="row">
 		<div class="col-sm-12 col-md-6">
 			<p><h2>공지사항</h2></p>
-			<ul class="list-group">
-				<li class="list-group-item"><a href="#" class="notice-item" style="color: black">[공지사항타입] 공지내용</a><span class="badge badge-danger">New</span></li>
-				<li class="list-group-item"><a href="#" class="notice-item" style="color: black">공지사항2</a></li>
-				<li class="list-group-item"><a href="#" class="notice-item" style="color: black">공지사항3</a></li>
-				<li class="list-group-item"><a href="#" class="notice-item" style="color: black">공지사항4</a></li>
-				<li class="list-group-item p-0 text-center text-muted"><a href="#" class="notice-item" style="color: black">더보기</a></li>
+			<ul id="noticeList" class="list-group">
 			</ul>
 		</div>
 		<div class="col-sm-12 col-md-6">
@@ -127,6 +122,7 @@
 		mainGroupList();
 		mainAfterList();
 		mainMoimList();
+		mainNotice();
 	})
 
 	var memberCountConTxt= 296842;
@@ -234,14 +230,20 @@
 
 	function mainMoimList(){
 
+		var data = {
+			keyword : "like",
+			rowNum : 0
+		}
+
 		$.ajax({
 			type: "GET",
 			url: "/main/commuList.do",
+			data: data,
 			dataType: 'json',
 			contentType: "application/json; charset=utf-8;",
 			success: function (response){
 
-				for(var i=0;i<response.length;i++){
+				for(var i=0;i<5;i++){
 
 					var html = '';
 
@@ -258,6 +260,36 @@
 				}
 
 
+			},
+			error: function(response){
+				console.log("error");
+			}
+		})
+	}
+
+	function mainNotice(){
+		$.ajax({
+			type: "GET",
+			url: "/main/noticeList.do",
+			dataType: 'json',
+			contentType: "application/json; charset=utf-8;",
+			success: function (response){
+				console.log("success");
+				console.log(response);
+
+				var html1 = '';
+
+				for(var i=0;i<5;i++){
+					var html2 = '';
+					html2 += '<li class="list-group-item"><a href="#" class="notice-item" style="color: black">'
+					html2 += response[i].title
+					html2 += '</a></li>';
+
+					$('#noticeList').append(html2);
+				}
+
+				html1 += '<li class="list-group-item p-0 text-center text-muted"><a href="#" class="notice-item" style="color: black">더보기</a></li>';
+				$('#noticeList').append(html1);
 			},
 			error: function(response){
 				console.log("error");

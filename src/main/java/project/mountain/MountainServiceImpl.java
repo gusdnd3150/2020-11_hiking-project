@@ -154,4 +154,8 @@ public class MountainServiceImpl implements MountainService{
     public int trailLikeFunction(Map map){
         return mountainDAO.trailLikeFunction(map);
     }
+
+    public List selectAllTrailList(Map map){
+        return mountainDAO.selectAllTrailList(map);
+    }
 }

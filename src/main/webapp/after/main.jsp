@@ -81,7 +81,6 @@
             dataType: 'json',
             contentType: "application/json; charset=utf-8;",
             success: function (response){
-                console.log(response)
                 var index = 0;
 
                 var rootNum = response.PARENTNUM;
@@ -136,7 +135,7 @@
                 </div>
             </div>
             <!-- 댓글 입력 -->
-            <div id="commentInput" class="row col-12" style="justify-content: center">
+            <div id="commentInput" class="row col-12 pb-4" style="justify-content: center">
                 <c:choose>
                     <c:when test="${sessionIdImage eq null}">
                         <img src="/resources/img/basic_profile.PNG" class="rounded-circle" style="width: 50px;height: 50px" />

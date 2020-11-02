@@ -97,6 +97,7 @@ public class CommuController {
 	@PostMapping("/selectAllCommuList.do")
 	@ResponseBody
 	public List<Map> selectAllCommuList(@RequestBody Map map) {
+		System.out.println(map.toString());
 		List<Map> list = commuService.selectAllCommuList(map);
 		return list;
 	}

@@ -61,4 +61,8 @@ public class MountainDAO {
     public int trailLikeFunction(Map map){
         return sqlSession.insert("mountain.trailLikeFunction",map);
     }
+
+    public List selectAllTrailList(Map map){
+        return sqlSession.selectList("mountain.selectAllTrailList",map);
+    }
 }

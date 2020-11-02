@@ -23,7 +23,10 @@
         <div class="row">
             <i id="timeNow" class="col-12"></i>
             <div class="col-sm-12 col-md-12 col-lg-8">
-                <h2>등산로 종합 순위</h2>
+                <span class="d-flex justify-content-between align-items-center">
+                    <h2>등산로 종합 순위</h2>
+                    <a href="/trail/list.do" class="text-muted">등산로 전체보기</a>
+                </span>
                 <div id="trailRankBoard" class="row m-0">
                     <div id="trailRankHigh" class="col-sm-12 col-md-6 m-0" style="border-right: 1px solid lightgrey">
                         <p>1 ~ 10위</p>
