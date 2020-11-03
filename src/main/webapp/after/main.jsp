@@ -240,7 +240,7 @@
                 }
             },
             error: function(response){
-                alert("다시 시도해주세요")
+                alert("로그인 해주세요")
             }
         })
     }
@@ -250,11 +250,11 @@
         $parentNum = $root.getElementsByTagName("pre")[0];
 
         var data = {
-            "parentNum" : $parentNum.innerHTML,
-            "depts" : 2,
-            "afterNum" : afterNum,
-            "content" : e.previousSibling.value,
-            "userId" : "<%= request.getSession().getAttribute("LOGIN")%>"
+            "parentNum": $parentNum.innerHTML,
+            "depts": 2,
+            "afterNum": afterNum,
+            "content": e.previousSibling.value,
+            "userId": '${LOGIN}'
         }
 
         $.ajax({
@@ -277,7 +277,7 @@
                 $('#'+id).append(html);
             },
             error: function(response){
-                alert("다시 시도해주세요")
+                alert("로그인 해주세요")
             }
         })
 

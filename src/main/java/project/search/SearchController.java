@@ -74,4 +74,14 @@ public class SearchController {
     public List selectKeywordRank(){
         return searchService.selectKeywordRank();
     }
+
+    @GetMapping("/search/mainKeywordSearch.do")
+    @ResponseBody
+    public List mainKeywordSearch(@RequestParam("keyword")String keyword,
+                                  @RequestParam("rowNum")int rowNum){
+        Map map = new HashMap();
+        map.put("keyword",keyword);
+        map.put("rowNum",rowNum);
+        return searchService.mainKeywordSearch(map);
+    }
 }

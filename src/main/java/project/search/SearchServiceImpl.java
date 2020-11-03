@@ -24,4 +24,7 @@ public class SearchServiceImpl implements SearchService{
     public List selectKeywordRank(){
         return searchDAO.selectKeywordRank();
     }
+    public List mainKeywordSearch(Map map){
+        return searchDAO.mainKeywordSearch(map);
+    }
 }

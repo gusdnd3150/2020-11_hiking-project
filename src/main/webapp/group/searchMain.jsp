@@ -3,6 +3,12 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <jsp:include page="/common/header.jsp" />
 <link rel="stylesheet" type="text/css" href="/resources/css/views/group/main.css" />
+<style>
+    .highlight{
+        background-color: #FF7E00;
+        color: white;
+    }
+</style>
 <body class="pt-5 mt-5">
 <div class="container">
     <div class="btn-group" role="group" aria-label="...">
@@ -26,9 +32,9 @@
         <div class="card-list row"></div>
     </div>
     <div id="result"></div>
-<%--    <div class="text-center" style="height: 150px">--%>
-<%--        <p class="text-muted">더 이상 모임이 없습니다</p>--%>
-<%--    </div>--%>
+    <%--    <div class="text-center" style="height: 150px">--%>
+    <%--        <p class="text-muted">더 이상 모임이 없습니다</p>--%>
+    <%--    </div>--%>
 </div>
 <div class="modal fade" id="createModal" role="dialog">
     <div class="modal-dialog" style="max-width: 100%; width: auto; display: table">
@@ -71,7 +77,7 @@
     var keyword = '';
 
     $(document).ready(function (){
-        $('#sort_like').click();
+        searchKeyword(1)
     })
     $(document).scroll(function (){
         var curHeight = $(window).height() + $(window).scrollTop();
@@ -144,6 +150,12 @@
 
         for(var i=0;i<response.length;i++){
 
+            var groupName = response[i].NAME;
+            var find = '${keyword}';
+            var regex = new RegExp(find,"g");
+            var newName = groupName.replace(regex, "<span class='highlight'>"+find+"</span>");
+
+
             var editorContent = response[i].DETAIL;
             var covertContent = editorContent.replace(/(<([^>]+)>)/ig,"");
 
@@ -163,7 +175,7 @@
             }else if(response[i].STATUS == '마감'){
                 html += '<span style="color:red">';
             }
-            html += '['+response[i].STATUS+']</span>' +response[i].NAME +'</h5>';
+            html += '['+response[i].STATUS+']</span>' + newName +'</h5>';
             html += '<p class="card-text text-muted text- mb-1" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">'+ covertContent +'</p>';
             html += '<p class="m-0 text-muted">'+response[i].STARTDAY+' 출발';
             if(response[i].LIKECOUNT!=null){
@@ -173,7 +185,7 @@
             }
             html += '</div></div></div></div>';
 
-                $('.card-list').append(html);
+            $('.card-list').append(html);
         }
     }
 
@@ -196,12 +208,39 @@
         var endHtml = '';
 
         endHtml +=  '<div class="text-center" style="width:100%; height: 200px; display: flex;justify-content: center;flex-direction: column">' +
-                    '<p>더이상 결과가 없습니다</p>' +
-                    '</div>';
+            '<p>더이상 결과가 없습니다</p>' +
+            '</div>';
 
         $('#result').append(endHtml)
     }
 
+    function searchKeyword(rowNum){
+        var data = {
+            "keyword":'${keyword}',
+            'rowNum' : rowNum
+        }
+
+        $.ajax({
+            type: "Get",
+            url: "/search/mainKeywordSearch.do",
+            data: data,
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8;",
+            success: function (response){
+
+
+                appendSortList(response);
+                if(response.length==0){
+                    loading = false;
+                    closeLoading();
+                    loadingEndImage();
+                }
+            },
+            error: function(response){
+                console.log("error");
+            }
+        })
+    }
 </script>
 </body>
 <jsp:include page="/common/footer.jsp" />

@@ -9,4 +9,5 @@ public interface SearchService {
     List suggestion(String keyword);
     void saveKeyword(Map map);
     List selectKeywordRank();
+    List mainKeywordSearch(Map map);
 }

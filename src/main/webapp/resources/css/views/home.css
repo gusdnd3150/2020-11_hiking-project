@@ -71,3 +71,11 @@
 #moimList > a:hover {
     text-decoration: none;
 }
+
+#keywordRank{
+    height: 30px;
+    overflow-y: hidden;
+}
+#keywordRank:hover{
+    cursor: pointer;
+}

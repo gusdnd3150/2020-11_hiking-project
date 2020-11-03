@@ -7,6 +7,7 @@ import project.admin.e_p003.service.E_p003ServiceImpl;
 import project.after.AfterService;
 import project.commu.CommuService;
 import project.group.GroupService;
+import project.search.SearchService;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import javax.annotation.Resource;
@@ -29,6 +30,9 @@ public class HomeController {
 
 	@Resource
 	private E_p003ServiceImpl noticeService;
+
+	@Resource(name = "searchService")
+	private SearchService searchService;
 
 	@GetMapping("/main.do")
 	public String home() {
@@ -66,6 +70,13 @@ public class HomeController {
 		return noticeService.searchCsBoard(map);
 	}
 
+	//메인 등산모임 search
+	@GetMapping("/main/search.do")
+	public ModelAndView mainSearch(@RequestParam("keyword")String keyword){
+		ModelAndView mav = new ModelAndView("/group/searchMain");
+		mav.addObject("keyword",keyword);
+		return mav;
+	}
 	@RequestMapping(value = "/admin", method = RequestMethod.GET)
 	public String adminHome() {
 		return "admin_home";

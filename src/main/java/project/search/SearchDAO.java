@@ -25,4 +25,7 @@ public class SearchDAO {
     public List selectKeywordRank(){
         return sqlSession.selectList("search.selectKeywordRank");
     }
+    public List mainKeywordSearch(Map map){
+        return sqlSession.selectList("search.mainKeywordSearch",map);
+    }
 }

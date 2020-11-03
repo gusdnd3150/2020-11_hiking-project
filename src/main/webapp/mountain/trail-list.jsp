@@ -66,32 +66,22 @@
 <script type="text/javascript" src="../resources/js/view/group/main.js"></script>
 <script>
 
-    //정렬 나누기
-    let type;
-    sort(1,'asc');
+    var type = '';
+    sortASC(1);
 
     $('#sort_asc').on('click',function (){
-        sort(1,'asc');
+        sortASC(1);
     })
 
     $('#sort_DFFL').on('click',function (){
-        sort(1,'dffl');
+        sortDFFL(1);
     })
-
-    function sort(rowNum,type){
-        if(type=='asc'){
-            type = 'asc';
-            sortASC(rowNum);
-        }else if(type=='dffl'){
-            type = 'dffl';
-            sortDFFL(rowNum);
-        }
-    }
 
     function sortASC(rowNum){
         $('#trailList').empty()
         $('#pagination').empty()
         selectTrailListSortASC(rowNum);
+        type = 'asc';
         pagingInit(rowNum);
     }
 
@@ -99,6 +89,7 @@
         $('#trailList').empty()
         $('#pagination').empty()
         selectTrailListSortDFFL(rowNum);
+        type = 'dffl';
         pagingInit(rowNum);
     }
 
@@ -226,26 +217,40 @@
         if(curPage == 1){
             html += '<li class="page-item disabled"><a class="page-link" href="#">이전</a></li>';
         }else {
-            html += '<li class="page-item"><a class="page-link" href="#" onclick="sortASC(prevPage)">이전</a></li>';
+            if(type=='asc') {
+                html += '<li class="page-item"><a class="page-link" href="#" onclick="sortASC(prevPage)">이전</a></li>';
+            }else if(type=='dffl'){
+                html += '<li class="page-item"><a class="page-link" href="#" onclick="sortDFFL(prevPage)">이전</a></li>';
+            }
         }
 
         for(var i=startPage;i<=endPage;i++){
-            if(i==curPage){
-                html += '<li class="page-item active"><a class="page-link" href="#" onclick="sortASC('+i+')">'+Math.ceil(i)+'</a></li>';
-            }else {
-                html += '<li class="page-item"><a class="page-link" href="#" onclick="sortASC('+i+')">'+Math.ceil(i)+'</a></li>';
+            if(type=='asc'){
+                if(i==curPage){
+                    html += '<li class="page-item active"><a class="page-link" href="#" onclick="sortASC('+i+')">'+Math.ceil(i)+'</a></li>';
+                }else {
+                    html += '<li class="page-item"><a class="page-link" href="#" onclick="sortASC('+i+')">'+Math.ceil(i)+'</a></li>';
+                }
+            }else if(type=='dffl'){
+                if(i==curPage){
+                    html += '<li class="page-item active"><a class="page-link" href="#" onclick="sortDFFL('+i+')">'+Math.ceil(i)+'</a></li>';
+                }else {
+                    html += '<li class="page-item"><a class="page-link" href="#" onclick="sortDFFL('+i+')">'+Math.ceil(i)+'</a></li>';
+                }
             }
         }
 
         if(curPage == pageCnt){
             html += '<li class="page-item disabled"><a class="page-link" href="#">다음</a></li>';
         }else if(curPage < pageCnt){
-            html += '<li class="page-item"><a class="page-link" href="#" onclick="sortASC(nextPage)">다음</a></li>';
+            if(type=='asc'){
+                html += '<li class="page-item"><a class="page-link" href="#" onclick="sortASC(nextPage)">다음</a></li>';
+            }else if(type=='dffl'){
+                html += '<li class="page-item"><a class="page-link" href="#" onclick="sortDFFL(nextPage)">다음</a></li>';
+            }
         }
 
         $('#pagination').append(html);
-
-        console.log('--------------')
     }
 
 </script>

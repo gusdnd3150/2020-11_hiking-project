@@ -140,9 +140,6 @@
             dataType: 'json',
             contentType: "application/json; charset=utf-8;",
             success: function (response){
-                console.log("success")
-                console.log(response)
-
                 for(var i=0;i<response.length;i++){
                     var html = '';
 

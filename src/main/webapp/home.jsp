@@ -15,10 +15,11 @@
 <%--			<button class="btn btn-outline-info" onclick="moveToMain();">더보기</button>--%>
 			<div class="form-inline">
 				<input id="keyword" type="text" class="form-control col-6">
-				<a href="#" class="pl-2">
+				<a href="#" class="pl-2" onclick="mainSearch()">
 					<img src="../resources/img/search.png" width="25" height="25" onclick="">
 				</a>
 			</div>
+			<ul id="keywordRank" class="p-1"></ul>
 			<div onclick="moveToMain()" style="position: absolute;margin-bottom: 10%">
 				<h1><i class="fas fa-angle-down"></i></h1>
 			</div>
@@ -123,6 +124,9 @@
 		mainAfterList();
 		mainMoimList();
 		mainNotice();
+		keywordRank();
+		ticker();
+		tickerover();
 	})
 
 	var memberCountConTxt= 296842;
@@ -146,6 +150,54 @@
 	function moveToMain(){
 		var location = document.querySelector('header').offsetTop;
 		window.scrollTo({top:location, behavior:"smooth"})
+	}
+
+	function mainSearch(){
+		location.href = "/main/search.do?keyword="+$('#keyword').val()+"";
+	}
+	function ticker(){
+		timer = setTimeout(function (){
+			$('#keywordRank li:first').animate({marginTop: '-20px'}, 400, function (){
+				$(this).detach().appendTo('ul#keywordRank').removeAttr('style');
+			});
+			ticker();
+		},2000);
+	}
+
+	function tickerover(){
+		$('#keywordRank').mouseover(function (){
+			clearTimeout(timer);
+		});
+		$('#keywordRank').mouseout(function (){
+			ticker();
+		})
+	}
+
+	function keywordRank() {
+		$.ajax({
+			type: "GET",
+			url: "/search/rank.do",
+			dataType: 'json',
+			contentType: "application/json; charset=utf-8;",
+			success: function (response) {
+
+				for (var i = 0; i < response.length; i++) {
+					var html = '';
+
+					html += '<li>';
+					html += '<span style="color: lightseagreen">' + (i + 1) + '</span>' + ' ';
+					html += '<a onclick="setKeyword(\'' + response[i].KEYWORD + '\')">' + response[i].KEYWORD + '</a>';
+					html += '</li>';
+					$('#keywordRank').append(html)
+				}
+			},
+			error: function (response) {
+				console.log("error")
+			}
+		})
+	}
+	function setKeyword(keyword){
+		$('#keyword').val(keyword)
 	}
 
 	function mainGroupList(){
@@ -274,7 +326,6 @@
 			dataType: 'json',
 			contentType: "application/json; charset=utf-8;",
 			success: function (response){
-				console.log("success");
 
 				for(var i=0;i<5;i++){
 

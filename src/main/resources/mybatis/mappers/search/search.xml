@@ -99,4 +99,39 @@
         FROM KEYWORD
         GROUP BY KEYWORD
     </select>
+
+    <select id="mainKeywordSearch" resultType="map" parameterType="map">
+        <![CDATA[
+            SELECT *  FROM (
+            SELECT rowNum as rnum , data.* FROM (
+            SELECT g.groupNum, g.name,
+            g.staffCurrent,
+            g.staffmax,
+            g.detail,
+            DECODE(g.status, 0, '마감', '모집중')         status,
+            TO_CHAR(g.startDay, 'yyyy"년"MM"월"dd"일"') startDay,
+            gm.storedFileName,
+            NVL(ui.CONTENT2, 'basic_profile.PNG')    content2,
+            u.id
+            FROM groups g
+            INNER JOIN groupsMedia gm
+            ON g.groupNum = gm.groupNum
+            INNER JOIN userWaiting uw
+            ON g.groupNum = uw.groupNum
+            INNER JOIN users u
+            ON uw.userId = u.id
+            INNER JOIN userInfo ui
+            ON u.userNum = ui.userNum
+            WHERE g.type = 1
+            AND uw.userType = 0
+            AND gm.mediaNum = 0
+            AND g.staffMax != 1
+            AND g.connectGroupNum = 0
+            ORDER BY g.createdAt DESC
+            )data)
+            WHERE rnum >= ((#{rowNum}-1)*9)+1
+            AND rnum <= (#{rowNum}*9)
+            AND name LIKE '%'||#{keyword}||'%'
+        ]]>
+    </select>
 </mapper>
