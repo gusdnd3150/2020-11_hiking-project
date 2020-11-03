@@ -13,7 +13,7 @@
                               FROM (
                                        SELECT cp.CSPOSTNUM, cp.title, TO_CHAR(cp.CREATEDAT, 'yyyy-mm-dd') createdAt
                                        FROM CSPOST cp
-                                       WHERE csPostType = 100
+                                       WHERE csPostType = #{csPostType}
                                        ORDER BY CREATEDAT ASC
                                    ) post
                               ORDER BY rnum DESC

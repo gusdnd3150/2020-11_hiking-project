@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import project.admin.e_p003.service.E_p003ServiceImpl;
 import project.after.AfterService;
+import project.board.BoardService;
 import project.commu.CommuService;
 import project.group.GroupService;
 import project.search.SearchService;
@@ -28,11 +29,8 @@ public class HomeController {
 	@Resource(name = "commuService")
 	private CommuService commuService;
 
-	@Resource
-	private E_p003ServiceImpl noticeService;
-
-	@Resource(name = "searchService")
-	private SearchService searchService;
+	@Resource(name = "boardService")
+	private BoardService boardService;
 
 	@GetMapping("/main.do")
 	public String home() {
@@ -65,9 +63,9 @@ public class HomeController {
 	@ResponseBody
 	public List mainNoticeList() throws Exception {
 		Map map = new HashMap();
-		String searchOption = "csPostType100";
-		map.put(searchOption,"searchOption");
-		return noticeService.searchCsBoard(map);
+		map.put("csPostType",200);
+		map.put("rowNum",1);
+		return boardService.selectBoard(map);
 	}
 
 	//메인 등산모임 search

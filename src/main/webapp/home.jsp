@@ -103,7 +103,7 @@
 		</div>
 		<div class="col-sm-12 col-md-6">
 			<p><h2>이벤트</h2></p>
-			<img src="./resources/img/test/event1.jpg" style="max-width: 100%">
+			<a href="/board/261.do"><img src="./resources/img/test/event1.jpg" style="max-width: 100%"></a>
 		</div>
 	</div>
 	<hr />
@@ -326,12 +326,11 @@
 			dataType: 'json',
 			contentType: "application/json; charset=utf-8;",
 			success: function (response){
-
 				for(var i=0;i<5;i++){
 
 					var html = '';
-					html += '<li class="list-group-item"><a href="#" class="notice-item" style="color: black">'
-					html += response[i].title
+					html += '<li class="list-group-item"><a href="/board/'+response[i].CSPOSTNUM+'.do" class="notice-item" style="color: black">'
+					html += response[i].TITLE
 					html += '</a></li>';
 
 					$('#noticeList').append(html);

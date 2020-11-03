@@ -9,3 +9,7 @@
     background: lightseagreen;
     color: white;
 }
+
+#boardList .content-row:nth-child(2n+1){
+    background: rgb(247, 247, 247);
+}

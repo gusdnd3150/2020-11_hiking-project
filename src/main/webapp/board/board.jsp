@@ -6,10 +6,10 @@
 <div class="pt-5">
     <h1>고객센터 게시판</h1>
 </div>
-<div class="p-3">
+<div class="row p-3">
     <button id="csBoardBtn"class="btn btn-info">고객센터</button>
-    <button id="noticeBoardBtn" class="btn btn-outline-secondary">공지사항</button>
-    <button id="eventBoardBtn" class="btn btn-outline-secondary">이벤트</button>
+    <button id="noticeBoardBtn" class="ml-1 btn btn-outline-secondary">공지사항</button>
+    <button id="eventBoardBtn" class="ml-1 btn btn-outline-secondary">이벤트</button>
 </div>
 <div class="responsive">
     <table id="boardList"class="table table-hover">
@@ -27,28 +27,70 @@
         selectCSBoard(1);
     })
 
+    $(document).on('click','#csBoardBtn',function (){
+        selectCSBoard(1);
+        $('#csBoardBtn').attr('class','btn btn-info');
+        $('#noticeBoardBtn').attr('class','ml-1 btn btn-outline-secondary');
+        $('#eventBoardBtn').attr('class','ml-1 btn btn-outline-secondary');
+        type = 'cs';
+
+    })
+    $(document).on('click','#noticeBoardBtn',function (){
+        selectNoticeBoard(1);
+        $('#csBoardBtn').attr('class','btn btn-outline-secondary');
+        $('#noticeBoardBtn').attr('class','ml-1 btn btn-info');
+        $('#eventBoardBtn').attr('class','ml-1 btn btn-outline-secondary');
+        type = 'notice';
+    })
+    $(document).on('click','#eventBoardBtn',function (){
+        selectEventBoard(1);
+        $('#csBoardBtn').attr('class','btn btn-outline-secondary');
+        $('#noticeBoardBtn').attr('class','ml-1 btn btn-outline-secondary');
+        $('#eventBoardBtn').attr('class','ml-1 btn btn-info');
+        type = 'event';
+    })
+
     function selectCSBoard(rowNum){
         $('#boardList').empty()
         $('#pagination').empty()
         selectCSBoardAjax(rowNum);
+        pagingInit(rowNum,200);
+    }
+
+    function selectNoticeBoard(rowNum){
+        $('#boardList').empty()
+        $('#pagination').empty()
+        selectNoticeBoardAjax(rowNum);
         pagingInit(rowNum,100);
     }
 
-    // function selectNoticeBoard(rowNum){
-    //     $('#boardList').empty()
-    //     $('#pagination').empty()
-    //     selectNoticeBoardAjax(rowNum);
-    //     pagingInit(rowNum);
-    // }
-    //
-    // function selectEventBoard(rowNum){
-    //     $('#boardList').empty()
-    //     $('#pagination').empty()
-    //     selectEventBoardAjax(rowNum);
-    //     pagingInit(rowNum)
-    // }
+    function selectEventBoard(rowNum){
+        $('#boardList').empty()
+        $('#pagination').empty()
+        selectEventBoardAjax(rowNum);
+        pagingInit(rowNum,400)
+    }
 
     function selectCSBoardAjax(rowNum){
+        var data = {
+            "rowNum": rowNum,
+            "csPostType":200,
+        }
+        $.ajax({
+            type: "GET",
+            url: "/board/select.do",
+            data: data,
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8;",
+            success: function (response){
+                appendList(response);
+            },
+            error: function(response){
+                console.log("error");
+            }
+        })
+    }
+    function selectNoticeBoardAjax(rowNum){
         var data = {
             "rowNum": rowNum,
             "csPostType":100,
@@ -67,46 +109,26 @@
             }
         })
     }
-    <%--function selectNoticeBoardAjax(rowNum){--%>
-    <%--    var data = {--%>
-    <%--        "rowNum": rowNum,--%>
-    <%--        "csPostType":200,--%>
-    <%--    }--%>
-    <%--    $.ajax({--%>
-    <%--        type: "GET",--%>
-    <%--        url: "/board/select.do",--%>
-    <%--        data: data,--%>
-    <%--        dataType: 'json',--%>
-    <%--        contentType: "application/json; charset=utf-8;",--%>
-    <%--        success: function (response){--%>
-    <%--            // appendList(response);--%>
-    <%--            console.log(response)--%>
-    <%--        },--%>
-    <%--        error: function(response){--%>
-    <%--            console.log("error");--%>
-    <%--        }--%>
-    <%--    })--%>
-    <%--}--%>
-    <%--function selectEventBoardAjax(rowNum){--%>
-    <%--    var data = {--%>
-    <%--        "rowNum": rowNum,--%>
-    <%--        "csPostType":300,--%>
-    <%--    }--%>
-    <%--    $.ajax({--%>
-    <%--        type: "GET",--%>
-    <%--        url: "/board/select.do",--%>
-    <%--        data: data,--%>
-    <%--        dataType: 'json',--%>
-    <%--        contentType: "application/json; charset=utf-8;",--%>
-    <%--        success: function (response){--%>
-    <%--            // appendList(response);--%>
-    <%--            console.log(response)--%>
-    <%--        },--%>
-    <%--        error: function(response){--%>
-    <%--            console.log("error");--%>
-    <%--        }--%>
-    <%--    })--%>
-    <%--}--%>
+    function selectEventBoardAjax(rowNum){
+        var data = {
+            "rowNum": rowNum,
+            "csPostType":400,
+        }
+        $.ajax({
+            type: "GET",
+            url: "/board/select.do",
+            data: data,
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8;",
+            success: function (response){
+                appendList(response);
+                // console.log(response)
+            },
+            error: function(response){
+                console.log("error");
+            }
+        })
+    }
     function appendList(response){
         var userId = '<%= session.getAttribute("LOGIN")%>';
 
@@ -121,7 +143,7 @@
 
         for(var i=0;i<response.length;i++){
 
-            html += '<tr style="font-size: 20px">';
+            html += '<tr class="content-row" style="font-size: 20px">';
             html += '<th width="100">'+response[i].RNUM+'</th>';
             html += '<th width="400" style="font-weight: normal"><a href="/board/'+response[i].CSPOSTNUM+'.do?userId='+userId+'" class="text-muted p-0">'+response[i].TITLE+'</a></th>';
             html += '<th width="200" style="font-weight: lighter">'+response[i].CREATEDAT+'</th>';
@@ -188,21 +210,47 @@
         if(curPage == 1){
             html += '<li class="page-item disabled"><a class="page-link" href="#">이전</a></li>';
         }else {
-            html += '<li class="page-item"><a class="page-link" href="#" onclick="selectCSBoard(prevPage)">이전</a></li>';
+            if(type=='cs'){
+                html += '<li class="page-item"><a class="page-link" href="#" onclick="selectCSBoard(prevPage)">이전</a></li>';
+            }else if(type='notice'){
+                html += '<li class="page-item"><a class="page-link" href="#" onclick="selectNoticeBoard(prevPage)">이전</a></li>';
+            }else if(type='event'){
+                html += '<li class="page-item"><a class="page-link" href="#" onclick="selectEventBoard(prevPage)">이전</a></li>';
+            }
         }
 
         for(var i=startPage;i<=endPage;i++){
-            if(i==curPage){
-                html += '<li class="page-item active"><a class="page-link" href="#" onclick="selectCSBoard('+i+')">'+Math.ceil(i)+'</a></li>';
-            }else {
-                html += '<li class="page-item"><a class="page-link" href="#" onclick="selectCSBoard('+i+')">'+Math.ceil(i)+'</a></li>';
+            if(type=='cs'){
+                if(i==curPage){
+                    html += '<li class="page-item active"><a class="page-link" href="#" onclick="selectCSBoard('+i+')">'+Math.ceil(i)+'</a></li>';
+                }else {
+                    html += '<li class="page-item"><a class="page-link" href="#" onclick="selectCSBoard('+i+')">'+Math.ceil(i)+'</a></li>';
+                }
+            }else if(type='notice'){
+                if(i==curPage){
+                    html += '<li class="page-item active"><a class="page-link" href="#" onclick="selectNoticeBoard('+i+')">'+Math.ceil(i)+'</a></li>';
+                }else {
+                    html += '<li class="page-item"><a class="page-link" href="#" onclick="selectNoticeBoard('+i+')">'+Math.ceil(i)+'</a></li>';
+                }
+            }else if(type='event'){
+                if(i==curPage){
+                    html += '<li class="page-item active"><a class="page-link" href="#" onclick="selectEventBoard('+i+')">'+Math.ceil(i)+'</a></li>';
+                }else {
+                    html += '<li class="page-item"><a class="page-link" href="#" onclick="selectEventBoard('+i+')">'+Math.ceil(i)+'</a></li>';
+                }
             }
         }
 
         if(curPage == pageCnt){
             html += '<li class="page-item disabled"><a class="page-link" href="#">다음</a></li>';
         }else if(curPage < pageCnt){
-            html += '<li class="page-item"><a class="page-link" href="#" onclick="selectCSBoard(nextPage)">다음</a></li>';
+            if(type=='cs'){
+                html += '<li class="page-item"><a class="page-link" href="#" onclick="selectCSBoard(nextPage)">다음</a></li>';
+            }else if(type='notice'){
+                html += '<li class="page-item"><a class="page-link" href="#" onclick="selectNoticeBoard(nextPage)">다음</a></li>';
+            }else if(type='event'){
+                html += '<li class="page-item"><a class="page-link" href="#" onclick="selectEventBoard(nextPage)">다음</a></li>';
+            }
         }
 
         $('#pagination').append(html);

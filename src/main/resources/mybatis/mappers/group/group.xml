@@ -479,7 +479,7 @@
                 AND g.type = 1
                 AND g.connectGroupNum = 0
             ]]>
-            <if test='groupNum != null and groupNum !=""'>
+            <if test='GROUPNUM != null and GROUPNUM !=""'>
                 AND g.groupNum NOT IN (#{GROUPNUM})
             </if>
                 ORDER BY DBMS_RANDOM.VALUE()
