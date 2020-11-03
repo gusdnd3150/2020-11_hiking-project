@@ -33,7 +33,7 @@ public class Paging {
 
 	}
 
-	public Paging(int listType, int total, int nowPage, int cntPerPage,String searchContent,String sorting) {
+	public Paging(int listType, int total, int nowPage, int cntPerPage,String searchContent, String sorting) {
 		setNowPage(nowPage);
 		setCntPerPage(cntPerPage);
 		setTotal(total);

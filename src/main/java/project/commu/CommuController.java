@@ -173,33 +173,27 @@ public class CommuController {
 
 	@Transactional
 	@RequestMapping(value = "/insertPost.do")
-	@ResponseBody
-	public ModelAndView insertPost(MultipartHttpServletRequest multipartRequest, HttpServletResponse response,
-			HttpServletRequest request, HttpSession httpSession) throws Exception {
-		multipartRequest.setCharacterEncoding("utf-8");
+	public ModelAndView insertPost(@RequestParam Map<String, Object> info, HttpServletResponse response, HttpServletRequest request, HttpSession httpSession) throws Exception {
+		System.out.println("커뮤 피드 작성하기: insertPost" +info);
 		String id = (String) httpSession.getAttribute(LOGIN);
 		int userNum = userService.selectUserNum(id);
 
 		Pattern nonValidPattern = Pattern.compile("<img[^>]*src=[\"']?([^>\"']+)[\"']?[^>]*>");
 		Map m = new HashMap();
 		Map mm = new HashMap();
-		Enumeration enu = multipartRequest.getParameterNames();
+		//Enumeration enu = info.getParameterNames();
 
-		int groupNum = Integer.parseInt(multipartRequest.getParameter("groupNum"));
+		int groupNum = Integer.parseInt((String) info.get("groupNum"));
 		int type = 0;
-		if (multipartRequest.getParameter("type") != null) {
-			type = Integer.parseInt(multipartRequest.getParameter("type"));
+		if (info.get("type") != null) {
+			type = Integer.parseInt((String) info.get("type"));
 			Map mmm = new HashMap();
 			mmm.put("groupNum", groupNum);
 			mmm.put("type", type);
 			commuService.updatePostType(mmm);
 		}
 
-		while (enu.hasMoreElements()) {
-			String name = (String) enu.nextElement();
-			String value = multipartRequest.getParameter(name);
-			Matcher matcher = nonValidPattern.matcher(value);
-			//String path = request.getSession().getServletContext().getRealPath("/");
+			Matcher matcher = nonValidPattern.matcher((String)info.get("feedContent"));
 			while (matcher.find()) {
 				String src = matcher.group(1);
 				int i = matcher.group(1).lastIndexOf("/");
@@ -209,42 +203,38 @@ public class CommuController {
 				mm.put("userNum", userNum);
 				commuService.insertAlbum(mm);
 			}
+			
+			m = info;
 			m.put("userNum", userNum);
-			m.put(name, value);
 			m.put("type", type);
+			commuService.insertPost(m);
+			ModelAndView mav = new ModelAndView("redirect:commuPageView.do?groupNum=" + groupNum);
+			return mav;
 		}
-		commuService.insertPost(m);
-		ModelAndView mav = new ModelAndView("redirect:commuPageView.do?groupNum=" + groupNum);
-		return mav;
-	}
 
 	@Transactional
 	@PostMapping(value = "/updatePost.do")
-	public ModelAndView updatePost(MultipartHttpServletRequest multipartRequest, HttpServletResponse response,
+	public ModelAndView updatePost(@RequestParam Map<String, Object> info, HttpServletResponse response,
 			HttpServletRequest request, HttpSession httpSession) throws Exception {
-		multipartRequest.setCharacterEncoding("utf-8");
-		Map m = new HashMap();
-		Enumeration enu = multipartRequest.getParameterNames();
-
+		System.out.println("커뮤 피드 작성하기: updatePost" +info);
 		String id = (String) httpSession.getAttribute(LOGIN);
 		int userNum = userService.selectUserNum(id);
-		int groupNum = Integer.parseInt(multipartRequest.getParameter("groupNum"));
+		Map m = new HashMap();
+
+		int groupNum = Integer.parseInt((String) info.get("groupNum"));
 		int type = 0;
-		if (multipartRequest.getParameter("type") != null) {
-			type = Integer.parseInt(multipartRequest.getParameter("type"));
+		if (info.get("type") != null) {
+			type = Integer.parseInt((String) info.get("type"));
 			Map mmm = new HashMap();
 			mmm.put("groupNum", groupNum);
 			mmm.put("type", type);
 			commuService.updatePostType(mmm);
 		}
-		while (enu.hasMoreElements()) {
-			String name = (String) enu.nextElement();
-			String value = multipartRequest.getParameter(name);
-			m.put("userNum", userNum);
-			m.put(name, value);
-			m.put("type", type);
-		}
+		m = info;
+		m.put("userNum", userNum);
+		m.put("type", type);
 		commuService.updatePost(m);
+		System.out.println("커뮤 피드 작성하기????: updatePost" +m);
 		ModelAndView mav = new ModelAndView("redirect:commuPageView.do?groupNum=" + groupNum);
 		return mav;
 	}
@@ -308,6 +298,7 @@ public class CommuController {
 	@ResponseBody
 	public List<Map> selectMemberList(@RequestBody Map groupNum, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
+	 System.out.println("?? 왜 안와 여기??");
 		List<Map> rst = new ArrayList<Map>();
 		rst = commuService.selectMemberList(groupNum);
 		return rst;

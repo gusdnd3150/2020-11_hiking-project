@@ -14,14 +14,7 @@
 		<button type="file" style="float: right;" class="btn btn-outline-success" data-toggle="modal" data-target="#createModal">등산일정 계획하기</button>
 	</div>
 
-
 <div class="card-list" ></div>
-
-
-
-
-
-
 
 
 
@@ -47,19 +40,6 @@
         </div>
     </div>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

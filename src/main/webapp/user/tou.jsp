@@ -17,17 +17,28 @@
 <script type="text/javascript" src="/resources/js/jquery.js"></script>
 <script type="text/javascript" src="/resources/js/bootstrap.min.js"></script>
 </head>
+<style>
+.containerr {
+	text-align: left;
+	margin-left: 230px;
+	margin-top: 10px;
+}
+.navbar {
+height: 60px;
+}
+</style>
 <body>
-	<div class="container">
-		<a class="navbar-brand" href="/"> <img
-			src="../resources/img/main-icon.svg" width="30" height="30"
-			class="d-inline-block align-top" alt="" loading="lazy"> 산오름
-		</a>
-
+		 <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top p-0">
+<div class="containerr ">
+		  <a class="navbar-brand" href="/">
+            <img src="../resources/img/main-icon.svg" width="50" height="50" class="d-inline-block align-top" alt="" loading="lazy" style="float: left">
+            <p class="m-0" style="font: 30pt 'fromdamiM'; float: left">산오름</p>
+        </a>
 	</div>
+	</nav>
 	<div class="row text-center">
 
-		<div class="col-md-3"></div>
+		<div class="col-md-3" ></div>
 		<div class="col-md-6">
 			<br> <br> <br> <br>
 

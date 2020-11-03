@@ -59,6 +59,7 @@ public class GroupDAO{
 
         return result;
     }
+    
     public int userDisallowed(Map map){
         int result = 0;
         result = sqlSession.update("group.userDisallowed",map);

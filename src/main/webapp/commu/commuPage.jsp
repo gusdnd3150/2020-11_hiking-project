@@ -9,8 +9,8 @@
 %>
 <!doctype html>
 <html lang="ko">
-<script type="text/javascript"
-	src="/resources/ckeditor/ckeditor/ckeditor.js"></script>
+<!-- <script type="text/javascript"
+	src="/resources/ckeditor/ckeditor/ckeditor.js"></script> -->
 <style>
 div#posts img {
 	width: auto !important;
@@ -18,8 +18,15 @@ div#posts img {
 	max-width: 500px !important;
 	max-height: 500px !important;
 }
+.ck-editor__editable {
+    min-height: 300px;
+}
+.ck.ck-editor{
+	max-width: 100%;
+	}
 </style>
-<jsp:include page="/commu/common/leftSide.jsp" flush="false" />
+
+			<jsp:include page="/commu/common/leftSide.jsp" flush="false" />
 
 <!-- middle div -->
 <c:choose>
@@ -39,8 +46,55 @@ div#posts img {
 						</button>
 					</div>
 						<input name="groupNum" type="hidden" value="${m1.GROUPNUM}">
-						<form>
-					<jsp:include page="/commu/common/postCreateForm.jsp" flush="false" />
+						</form>
+						
+						
+						
+					<button type="button" class="btn btn-outline-success" id="insertPostBtn" data-toggle="modal" data-target="#postCreateForm" style="padding: 10px 10px; margin: 10px 10px 10px 0px; width: 100%; height: 100px;">
+	<div class="row">
+		<svg width="3em" height="3em" viewBox="0 0 16 16"
+			class="bi bi-pencil-square mr-3" fill="currentColor"
+			xmlns="http://www.w3.org/2000/svg" style="margin: 0% 0% 0% 28%;">
+  <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+  <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+</svg>
+		<h3 style="margin: 1% 0% 0% 0%;">&nbsp&nbsp&nbsp&nbsp산모임 피드 쓰기</h3>
+	</div>
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="postCreateForm" tabindex="-1"
+	aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">산모임 피드 쓰기</h5>
+				<button type="button" class="close" data-dismiss="modal"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+				<form action="/commu/insertPost.do" method="post" >
+			<div class="modal-body">
+				 <div class="col-sm-5">
+								<div class="input-group mb-2 row">
+								<p style="margin-left:20%">&nbsp&nbsp공지게시글로 작성하기</p>
+								<input style="margin: 5px 20px;" type="checkbox" id="importantPost" name="type" value="1">
+								</div>
+							</div> 
+				<div class="row justify-content-md-center" id="feedContentDiv">
+							<textarea class="form-control" name="feedContent" id="feedContent"></textarea>
+				</div>
+			</div>
+
+			<div class="modal-footer">
+				<input type="submit" class="btn btn-success" value="피드 작성">
+			</div>
+			<input type="hidden" name="groupNum" value="${m1.GROUPNUM}">
+			</form>
+		</div>
+	</div>
+</div>
 					<hr>
 					</c:if>
 						<c:if test="${not empty m9.POSTNUM}">
@@ -120,7 +174,6 @@ div#posts img {
 							<button type="button" id="reportBtn" class="btn btn-link" style="margin-left:50px; margin-top: 30px; color: gray;">신고</button>
 							</c:otherwise>
 							</c:choose>
-						
 						</div>
 						<div class="card-body" id="posts" style="padding-bottom: 0px !important;">
 							${postList.CONTENT} <br> 
@@ -160,12 +213,12 @@ div#posts img {
 
 
 			<jsp:include page="/commu/setting.jsp" flush="false" />
-			<c:if test="${0 eq m2.USERSTATUS}">
 				<jsp:include page="/commu/schedule.jsp" flush="false" />
 				<jsp:include page="/commu/album.jsp" flush="false" />
 				<jsp:include page="/commu/intro.jsp" flush="false" />
 				<jsp:include page="/commu/member.jsp" flush="false" />
-		</div>
+			</div>
+			<c:if test="${0 eq m2.USERSTATUS}">
 		<jsp:include page="/commu/common/rightSide.jsp" flush="false" />
 		</c:if>
 	</c:otherwise>
@@ -176,7 +229,7 @@ div#posts img {
 </div>
 <div style="height: 230px;"></div>
 
-						<!--게시글 수정 Modal -->
+<!--게시글 수정 Modal -->
 <div class="modal fade" id="postUpdateForm" tabindex="-1"
 	aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg">
@@ -188,8 +241,8 @@ div#posts img {
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
+			  <form action="/commu/updatePost.do" method="post">
 			<div class="modal-body">
-			  <form action="/commu/updatePost.do" method="post" enctype="multipart/form-data">
 					 <div class="col-sm-5">
 							<div class="input-group mb-2 row">
 						    	 <p>&nbsp&nbsp공지게시글로 작성하기</p>
@@ -198,7 +251,7 @@ div#posts img {
 					 </div> 
 				<div class="row justify-content-md-center">
 					<div class="col_c">
-						<div class="input-group" >
+						<div class="input-group"   id="updateFeedContentDiv">
 							<textarea class="form-control" name="updateFeedContent" id="updateFeedContent"></textarea>
 						</div>
 					</div>
@@ -206,16 +259,16 @@ div#posts img {
 			</div>
 			<div class="modal-footer">
 				<button type="submit" class="btn btn-success">게시글 수정</button>
+			<input type="hidden" name="groupNum" value="${m1.GROUPNUM}" style="display: none;">
+			<input type="hidden" id="postNum"name="postNum" value="" style="display: none;">
 			</div>
-			<input type="hidden" name="groupNum" value="${m1.GROUPNUM}">
-			<input type="hidden" id="postNum"name="postNum" value="">
 			 </form>
 		</div>
 	</div>
 </div>
-
-<script type="text/javascript" src="../resources/js/jquery.js"></script>
-<script type="text/javascript" src="../resources/js/bootstrap.min.js"></script>
+<script src="../resources/ckeditor5/ckeditor.js"></script>
+<script type="text/javascript" src="/resources/js/jquery.js"></script>
+<script type="text/javascript" src="/resources/js/bootstrap.min.js"></script>
 <script
 	src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
 	integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
@@ -236,7 +289,7 @@ function create1() {
  }
  
 
-/*  앨범 댓글 */
+
 const userProfile = '${sessionIdImage}';
 
 
@@ -253,14 +306,11 @@ $.ajax({
     contentType: "application/json; charset=utf-8;",
     success: function (response){
     	var str = response;
-    	var editor = CKEDITOR.instances.updateFeedContent;
-    	if (editor) { editor.destroy(true); }
+    	 $('#updateFeedContentDiv').empty();
+    	 $('#updateFeedContentDiv').append(
+		 '<textarea class="form-control" name="updateFeedContent" id="updateFeedContent"></textarea>');
+    	ckEditor('updateFeedContent');
     	 $("#updateFeedContent").val(str);
-    	 CKEDITOR.replace('updateFeedContent', {
-				filebrowserUploadUrl :'/commu/imageUpload.do',
-				height : 250,
-				width : 750
-			});
     	 $('#postNum').val(e.id);
 		 $("#postUpdateForm").modal();
     },
@@ -276,9 +326,9 @@ $.ajax({
 function removeCheck(e){ 
 	if(confirm("정말 삭제하시겠습니까?")==true){
 
-		 var data = {
-		          "postNum" : e.id
-	  };
+		var data = {
+		    "postNum" : e.id
+	  		};
 	  
 	  $.ajax({
 	      type: "GET",
@@ -302,7 +352,7 @@ function removeCheck(e){
 }
 
 
-/* 메인 게시글의 댓글 */
+/* 메인 댓글 */
 $(document).on('click','div#mainCommentInput button',function (e){ 
 	console.log("commentInput e"+ e.target.id);
 
@@ -333,7 +383,7 @@ $(document).on('click','div#mainCommentInput button',function (e){
 
 	                      $('#mainCommentBoard'+e.target.id).append(
 	                          '<ul id="' + id + '" class="col-12 pl-5 row">' +
-	                          '<img src="/resources/img/${sessionIdImage}" class="rounded-circle" style="width: 40px;height: 40px">'+
+	                          '<img src="/resources/img/'+response.content2+'" class="rounded-circle" style="width: 40px;height: 40px">'+
 	                          '<div class="col-10">'+
 	                          '<pre style="display: none">'+response.commentNum+'</pre>'+
 	                          '<h5>'+response.nickname+'</h5>'+
@@ -366,11 +416,14 @@ function showComment(e){
         }else if( $('#mainCommentBoard'+postNum)[0].style.display  == "none"){
         		  $('#mainCommentBoard'+postNum)[0].style.display  = "block";
          }
+     	selectMainCommentByPostNum(postNum, e)
+     }
+     
+function selectMainCommentByPostNum(postNum, e){
      	
-         var data = {
+     var data = {
                  "postNum" : postNum
               }; 
-         
       $.ajax({
           type: "GET",
           url: "/group/selectCommentByPostNum.do",
@@ -391,8 +444,8 @@ function showComment(e){
                           '<ul id="' + id + '" class="col-12 pl-5 row">' +
                           '<img src="/resources/img/' + response[i].content2 + '" class="rounded-circle" style="width: 50px;height: 50px">'+
                           '<div class="col-10">'+
-                          '<pre style="display: none">'+response[i].commentNum+'</pre>'+
-                          '<h5>'+response[i].nickname+'</h5>'+
+                          '<pre style="display: none">'+ response[i].commentNum +'</pre>'+
+                          '<h5>'+response[i].nickname+'</h5>' +
                           '<div>'+response[i].content +'</div>' +
                           '<button class="'+id+' p-0 btn btn-default text-muted" onclick="toggleSubComment(this)">[답글 '+ count +'개 더보기]</button>' +
                           '<button class="'+id+'subComment p-0 btn btn-default text-muted" onclick="toggleWriteSubComment(this)">[답글 작성]</button>' +
@@ -426,11 +479,12 @@ function showComment(e){
               console.log(response)
           }
       }) /* selectCommentByPostNum 아작스 */
-     
-     }
+      e.click();
+   }
 
     
 	function toggleSubComment(e){
+		console.log(e);
           $commentRoot = e.parentNode.parentNode;
           $subComments = $commentRoot.getElementsByTagName("li");
 
@@ -457,16 +511,17 @@ function showComment(e){
       
   function writeMainSubComment(e){
 
-      $root = e.parentNode.parentNode;
+      $root = e.parentNode;
       $parentNum = $root.getElementsByTagName("pre")[0];
-
-      var data = {
+      postNum = e.data('postNum');
+   
+    	  var data = {
           "parentNum" : $parentNum.innerHTML,
           "depts" : 2,
           "groupNum" : "${m1.GROUPNUM}",
           "content" : e.previousSibling.value,
           "userId" : "${loginID}",
-          "postNum" : e.data('postNum')
+          "postNum" : postNum
       }
 
 
@@ -486,7 +541,8 @@ function showComment(e){
                   '<h5 class="mb-0 pl-0">'+response.nickname+'</h5>'+
                   response.content +'</div></li>'
               );
-                  e.previousSibling.valu="";
+              selectMainCommentByPostNum(postNum);
+                  e.previousSibling.value="";
           },
           error: function(response){
               alert("다시 시도해주세요")
@@ -497,17 +553,18 @@ function showComment(e){
  function writeSubComment(e){
       $root = e.parentNode.parentNode;
       $parentNum = $root.getElementsByTagName("pre")[0];
-
+      postNum = e.id;
+      
       var data = {
           "parentNum" : $parentNum.innerHTML,
           "depts" : 2,
           "groupNum" : "${m1.GROUPNUM}",
           "content" : e.previousSibling.value,
           "userId" : "${loginID}",
-          "postNum" : e.id
+          "postNum" : postNum
       }
 
-      console.log("???: " +e.id);
+
 
       $.ajax({
           type: "POST",
@@ -520,12 +577,13 @@ function showComment(e){
               console.log(id);
               $('#'+id).append(
                   '<li id="temp" class="col-12 row pt-3 ml-5 pl-2">'+
-                  '<img src="/resources/img/response.content2" class="rounded-circle" style="width: 40px;height: 40px;float: left">'+
+                  '<img src="/resources/img/'+response.content2+'" class="rounded-circle" style="width: 40px;height: 40px;float: left">'+
                   '<div class="col-9">'+
                   '<h5 class="mb-0 pl-0">'+response.nickname+'</h5>'+response.content +'</div></li>'
                   );
-                  e.previousSibling.value="";
-              
+              selectAlbumCommentByPostNum(postNum);
+             
+              e.previousSibling.value="";
           },
           error: function(response){
               alert("다시 시도해주세요")
@@ -610,7 +668,6 @@ function showComment(e){
           dataType: 'json',
           contentType: "application/json; charset=utf-8;",
           success: function (response){
-
               var index = 0;
               var count = response.subCommentCount;
 
@@ -618,7 +675,7 @@ function showComment(e){
 
                   if (rootNum == 0 ) {
                       var id = 'depts' + index
-
+			console.log("!!!!!!   "+response.postNum);
                       $('#commentBoard').append(
                           '<ul id="' + id + '" class="col-12 pl-5 row">' +
                           '<img src="/resources/img/${sessionIdImage}" class="rounded-circle" style="width: 50px;height: 50px">'+
@@ -629,7 +686,7 @@ function showComment(e){
                           '<button class="'+id+' p-0 btn btn-default text-muted" onclick="toggleSubComment(this)">[답글 '+ count +'개 더보기]</button>' +
                           '<button class="'+id+'subComment p-0 btn btn-default text-muted" onclick="toggleWriteSubComment(this)">[답글 작성]</button>' +
                           '<p style="display: none"><input type="text" class="form-control" placeholder="댓글 내용 입력"/>' +
-                          '<button id="writeSubCommentBtn" class="btn btn-success btn-sm" onclick="writeSubComment(this)">작성</button>' +
+                          '<button id="'+$('#commentContent').data('postNum')+'" class="btn btn-success btn-sm" onclick="writeSubComment(this)">작성</button>' +
                           '<button class="btn btn-light btn-sm" onclick="cancelwriteSubComment(this)">취소</button>' +
                           '</p></div></ul>');
                       $('#commentContent').val("")
@@ -702,14 +759,63 @@ function showComment(e){
   })
  
   
-     function deleteCommu(){
+function deleteCommu(){	
+ 	var data = {
+     			"groupNum": ${m1.GROUPNUM}
+ 				}
+
+ 	$.ajax({
+     	type: "POST",
+     	url: "/group/delete.do",
+     	data: JSON.stringify(data),
+     	dataType: 'json',
+     	contentType: "application/json; charset=utf-8;",
+     	success : function (response){
+         location.reload();
+     	},
+    	 error : function (response){
+         console.log("error")
+     	}
+ 	})
+     
+}
+  
+  $(document).on('click','.joinGroupBtn',function (){
       var data = {
-          "groupNum": ${m1.GROUPNUM}
+          "groupNum": "${m1.GROUPNUM}",
+          "userId" : "${loginID}",
+          "userComment" : $('#userComment').val()
       }
 
       $.ajax({
           type: "POST",
-          url: "/group/delete.do",
+          url: "/group/join.do",
+          data: JSON.stringify(data),
+          dataType: 'json',
+          contentType: "application/json; charset=utf-8;",
+          success : function (response){
+              alert("신청 처리 되었습니다");
+              location.reload();
+          },
+          error : function (response){
+              alert("오류 발생! 다시 시도해주세요");
+          }
+      })
+  })
+  
+  $(document).on('click','a#withdrawCommu',function (){
+      $("#cancelModal").show();
+  })
+  $(document).on('click','.cancelModalBtn',function (){
+
+      var data = {
+          "groupNum": ${m1.GROUPNUM},
+          "userId" : "${loginID}",
+      }
+
+      $.ajax({
+          type: "POST",
+          url: "/group/withdraw.do",
           data: JSON.stringify(data),
           dataType: 'json',
           contentType: "application/json; charset=utf-8;",
@@ -720,10 +826,387 @@ function showComment(e){
               console.log("error")
           }
       })
+  })
+
+ 
+  
+$(document).on('click','.selectWaitingList',function (){
+
+  var data = {
+      "groupNum" : "${m1.GROUPNUM}",
+      "userId" : "${loginID}"
+  }
+
+  $.ajax({
+      type: "POST",
+      url: "/group/selectWaitingList.do",
+      data: JSON.stringify(data),
+      dataType: 'json',
+      contentType: "application/json; charset=utf-8;",
+      success: function (response){
+          $('#waitingList').empty()
+
+          for(var i=0;i<response.length;i++){
+
+              var id = "waitingUser"+i;
+
+              if(response[i].USERSTATUS==1){
+              $('#waitingList')
+                  .append(
+                  "<li class='row pt-1' style='list-style: none'><div id='waitingUser' class='col-8 pt-1 row' style='font-size: 22px; margin-left:10px'>"
+                  +"<a href='/profile/"+response[i].USERID+"' style='color: black;'onclick='window.open(this.href,'','width=450, height=600'); return false;'>"+response[i].USERID+"</a>&nbsp&nbsp&nbsp&nbsp<h6 style='margin-top:8px'>"+response[i].USERCOMMENT+"</h6></div></li>");
+
+              $('#waitingUser').attr('id',id);
+						
+              $('#'+id).after('<button class="userAllowed btn btn-light col-2">승인</button>');
+              $('#'+id).after('<button class="userDisallowed btn btn-light col-2">거절</button>'); 
+                  }
+          }
+      },
+      error: function(response){
+          console.log("error");
+          alert("새로고침 후 다시 시도해주세요")
+      }
+  })
+})
+
+$(document).on('click','.userAllowed',function (e){
+  var data = {
+      userId :(this.parentNode).childNodes[0].childNodes[0].innerHTML,
+      groupNum : ${m1.GROUPNUM},
+ 		action : "plus"
+  };
+  
+  $.ajax({
+      type: "GET",
+      url: "/group/userAllowed.do",
+      data: data,
+      dataType: 'json',
+      contentType: "application/json; charset=utf-8;",
+      success: function (response){
+      	e.target.disabled=true;
+      	alert("승인이 완료되었습니다.");
+      e.target.parentNode.remove();
+      },
+      error: function(response){
+          console.log("error");
+          alert("새로고침 후 다시 시도해주세요")
+      }
+  })
+})
+
+$(document).on('click','.userDisallowed',function (e){
+	if(confirm("정말 거절 하시겠습니까?")==true){
+
+
+  var data = {
+      userId :(this.parentNode).childNodes[0].childNodes[0].innerHTML,
+      groupNum : ${m1.GROUPNUM},
+      action : "minus"
+  }
+
+  $.ajax({
+      type: "GET",
+      url: "/group/userDisallowed.do",
+      data: data,
+      dataType: 'json',
+      contentType: "application/json; charset=utf-8;",
+      success: function (response){
+          e.target.disabled=true;
+          alert("거절이 완료되었습니다.");
+          e.target.parentNode.remove();
+       
+      },
+      error: function(response){
+          console.log("error");
+          alert("새로고침 후 다시 시도해주세요")
+      }
+  })
+ }
+})
+
+
+  $('.button-class1').click(function(){
+  	 var data ={
+  			 groupNum:${m1.GROUPNUM},
+  			 boardAccess:0
+  	 };
+      if( $(this).hasClass('btn-default') ) $(this).removeClass('btn-default');
+      if( !$(this).hasClass('btn-primary') ) $(this).addClass('btn-primary');
+      if( $('.button-class2').hasClass('btn-primary') ) $('#close').removeClass('btn-primary');
+      if( !$('.button-class2').hasClass('btn-default') ) $('#close').addClass('btn-default');
+      $.ajax({
+          type: "GET",
+          url: "/commu/updateBoardAccess.do",
+          data: data,
+          dataType: 'text',
+          contentType: "application/json; charset=utf-8;",
+          success: function (request){
+          	console.log("boardAccess: + 0 컨트롤러 다녀옴")
+          },
+              error:function(request,status,error){
+                 console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+              alert("새로고침 후 다시 시도해주세요")
+          }
+      })
+  });
+  
+  $('.button-class2').click(function(){
+  	 var data ={
+  			 groupNum:${m1.GROUPNUM},
+  			 boardAccess:1
+  	 };
+      if( $(this).hasClass('btn-default') ) $(this).removeClass('btn-default');
+      if( !$(this).hasClass('btn-primary') ) $(this).addClass('btn-primary');
+      if( $('.button-class1').hasClass('btn-primary') ) $('#open').removeClass('btn-primary');
+      if( !$('.button-class1').hasClass('btn-default') ) $('#open').addClass('btn-default');
+      $.ajax({
+          type: "GET",
+          url: "/commu/updateBoardAccess.do",
+          data: data,
+          dataType: 'text',
+          contentType: "application/json; charset=utf-8;",
+          success: function (response){
+          	console.log("boardAccess: + 1 컨트롤러 다녀옴");
+          },
+          error:function(request,status,error){
+              console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+              alert("새로고침 후 다시 시도해주세요")
+          }
+      })
+  });
+
+
+  if('${m4.BOARDACCESS}' == 0) {
+  if( $('#open').hasClass('btn-default') ) $('#open').removeClass('btn-default');
+  if( !$('#open').hasClass('btn-primary') ) $('#open').addClass('btn-primary');
+  if( $('.button-class2').hasClass('btn-primary') ) $('#close').removeClass('btn-primary');
+  if( !$('.button-class2').hasClass('btn-default') ) $('#close').addClass('btn-default');
+  } else {
+	if( $('#close').hasClass('btn-default') ) $('#close').removeClass('btn-default');
+  if( !$('#close').hasClass('btn-primary') ) $('#close').addClass('btn-primary');
+  if( $('.button-class1').hasClass('btn-primary') ) $('#open').removeClass('btn-primary');
+  if( !$('.button-class1').hasClass('btn-default') ) $('#open').addClass('btn-default');
+  }
+  
+  $('#update').click(function (e){
+      e.preventDefault();
+
+      var form = $('#filesForm')[0];
+      var data = new FormData(form);
+      data.append("groupNum",${m1.GROUPNUM});
+      data.append("detail",$('#detail').val());
+      data.append("area",$('#area').val());
+      data.append("ageStart",$('#ageStart').val());
+      data.append("ageEnd",$('#ageEnd').val());
+      data.append("sex",$('#sex').val());
+      data.append("userId","${loginID}")
+
+      $.ajax({
+          type: "POST",
+          enctype: 'multipart/form-data',
+          url: '/commu/update.do',
+          data: data,
+          processData: false,
+          contentType: false,
+          cache: false,
+          success(response){
+              console.log(response);
+              alert("등록완료!")
+             self.location ="/commu/commuPageView.do?groupNum=${m1.GROUPNUM}";
+          },
+          error(response){
+              alert("등록 오류, 새로고침 후 다시 시도 해주세요")
+          }
+      });
+  });   
+ 
+  $("#sex option").each(function(){
+  	if($(this).val()== "${m1.SEX}"){
+  		$(this).attr("selected", "selected");
+  	} 
+  });
+
+  $("#area option").each(function(){
+  	if($(this).val()== "${m1.AREA}"){
+  		$(this).attr("selected", "selected");
+  	} 
+  });
+
+  $("#ageStart option").each(function(){
+  	if($(this).val()== "${m1.AGESTART}"){
+  		$(this).attr("selected", "selected");
+  	} 
+  });
+
+  $("#ageEnd option").each(function(){
+  	if($(this).val()== "${m1.AGEEND}"){
+  		$(this).attr("selected", "selected");
+  	} 
+  });   
+  
+  var totalData = ${vM.total};    // 총 데이터 수
+  var dataPerPage = 12;   // 한 페이지에 나타낼 데이터 수
+  var pageCount = 10;        // 한 화면에 나타낼 페이지 수   
+/* 페이징 처리 */
+  $('#list-album-list').click(function (e){
+  if((totalData/dataPerPage) < pageCount){
+	  pageCount = Math.ceil(totalData/dataPerPage)
+	  }
+   /*  위 세대는 예시 내가 해당 파람터에 값을 넣을 생각을 해야함. 위에 없애자고 해보자 */
+  
+  paging(totalData, dataPerPage, pageCount, 1);
+  });
+
+  function paging(totalData, dataPerPage, pageCount, currentPage){
+/*         console.log("totalData : " + totalData);
+      console.log("dataPerPage : " + dataPerPage);
+      console.log("currentPage : " + currentPage); */
       
-}
+      var totalPage = Math.ceil(totalData/dataPerPage);    // 총 페이지 수
+      var section = Math.ceil(currentPage/pageCount);    // 페이지 그룹
+      
+ /*      console.log("section : " + section); */
+      
+      var last = section * pageCount;    // 화면에 보여질 마지막 페이지 번호
+      if(last > totalPage)
+          last = totalPage;
+      var first = last - (pageCount-1);    // 화면에 보여질 첫번째 페이지 번호
+      var next = last+1;
+      var prev = first-1;
+      
+     /*  console.log("last : " + last);
+      console.log("first : " + first);
+      console.log("next : " + next);
+      console.log("prev : " + prev); */
+
+      var $pingingView = $("#paging");
+      
+      var html = "";
+      
+      if(prev > 0) { 
+    	  html += "<a href=# id='prev'><</a> "
+    	  };
+          
+          
+      if(first<1){first==1}
+      for(var i=first; i <= last; i++){
+          html += "<a href=# id=" + i + ">" + i + "</a> ";
+      }
+      
+      if(last < totalPage){
+          html += "<a href=# id='next'>></a>"
+          };
+      
+      $("#paging").html(html);    // 페이지 목록 생성
+      $("#paging a").css("color", "black");
+      $("#paging a#" + currentPage).css({"text-decoration":"none", 
+                                         "color":"green", 
+                                         "font-weight":"bold"});    // 현재 페이지 표시
+                                        
+                                                      
+         
+         /* 페이징 아작스 */
+         var html;
+         var htmlC ="";
+         var data={}
+     	data["groupNum"] = ${m1.GROUPNUM};
+     	data["nowPage"] = currentPage;
+     	data["cntPerPage"] = dataPerPage;
+     	data["userId"] = "${loginID}" ;
+    		data["total"] = ${vM.total}; 
+     	$.ajax({
+     		contentType:'application/json',
+     		dataType:'json',
+     		data:JSON.stringify(data),
+     		url:'/commu/commuAlbumPaging.do',
+     		type:'POST',
+     		success:function(data){
+     				 $('#albumList').empty();
+     			 for(var i=0 in data){ 
+     				var content = JSON.stringify(data[i].content).replace(/\"/g, "");
+     				  $('#albumList').append(
+ 						"<div class='col-lg-3 col-md-4 col-6' >" +
+ 						"<a href='' id='oC' class='d-block mb-4 h-100' data-toggle='modal' >" +
+ 						" <img id='content"+ i +
+ 						"' class='img-fluid img-thumbnail' src='/resources/img/"+ content +
+ 					    "' alt='사진'></a></div>");
+     			 }
+
+ 				for(var j=0 in data){ 
+     			var nickName = JSON.stringify(data[j].nickName);
+     			var createdAt = JSON.stringify(data[j].createdAt);
+     			var content2 = JSON.stringify(data[j].content2);
+     			var groupNum = JSON.stringify(data[j].groupNum);
+     			var boardType = JSON.stringify(data[j].boardType);
+     			var rn = JSON.stringify(data[j].rn);
+     			var postNum = JSON.stringify(data[j].postNum);
+     			var type = JSON.stringify(data[j].type);
+     			var userNum = JSON.stringify(data[j].userNum);
+     			
+     			$('#content'+ j ).data('nickName',nickName);
+ 				$('#content'+ j ).data('content2',content2);
+ 				$('#content'+ j ).data('createdAt',createdAt);
+ 				$('#content'+ j ).data('postNum',postNum);
+ 				$('#content'+ j ).data('userNum',userNum);
+ 				
+ 				//console.log("content" + j+":" + $('#content'+ j ).data('content'));
+ 				}
+     		},
+     		error:function(request, status, error){
+     			alert(request.message);
+     		}
+     	})
+   } /* function paging */
   
-  
+   $(document).on('click','#paging a',function (e){
+     var $item = $(this);
+     var $id = $item.attr("id");     
+     var selectedPage = $item.text();
+     selectedPage *= 1;
+     
+     if($id == "next")    selectedPage = next;  
+     if($id == "prev")    selectedPage = prev;
+
+     paging(totalData, dataPerPage, pageCount, selectedPage);
+ });
+   
+
+/* 엘범 사진 업로드 */  
+      $('#uploadPics').click(function(){
+      	var formData = new FormData();
+      	var inputFile=$('input[name="pics"]');
+      	var files=inputFile[0].files;
+      	formData.append('key1', 'value1');
+      	formData.append('key2', 'value2');
+      	formData.append('groupNum', ${m1.GROUPNUM});
+      	
+      	for(var i=0; i<files.length; i++){
+      		formData.append('pics', files[i]);
+      	}
+      	
+       	$.ajax({
+         		contentType: false,
+         		processData: false,
+         		data: formData,
+         		url:'/commu/insertAlbum.do',
+         		type:'POST',
+         		success:function(result){
+         		console.log("result: "+ result);	
+         		var totalData = result;
+         		document.getElementById('closeUploadModal').click();
+         		 paging(totalData, dataPerPage, pageCount, 1); 
+         		document.getElementById('pics').value = null;
+         		alert("사진이 정상적으로 업로드되었습니다.");
+         		location.reload(); 
+         		},
+         		error:function(request, status, error){
+         			alert(request.message);
+         		}
+       	})
+      })
+      
+
   
 $(document).ready(function (){
 		var selectWaitingList = document.getElementsByClassName('selectWaitingList');
@@ -758,426 +1241,9 @@ $(document).ready(function (){
         }
      })
   }; 
-	
-	
-    $(document).on('click','.joinGroupBtn',function (){
-        var data = {
-            "groupNum": "${m1.GROUPNUM}",
-            "userId" : "${loginID}",
-            "userComment" : $('#userComment').val()
-        }
-
-        $.ajax({
-            type: "POST",
-            url: "/group/join.do",
-            data: JSON.stringify(data),
-            dataType: 'json',
-            contentType: "application/json; charset=utf-8;",
-            success : function (response){
-                alert("신청 처리 되었습니다");
-                location.reload();
-            },
-            error : function (response){
-                alert("오류 발생! 다시 시도해주세요");
-            }
-        })
-    })
-    
-    $(document).on('click','a#withdrawCommu',function (){
-        $("#cancelModal").show();
-    })
-    $(document).on('click','.cancelModalBtn',function (){
-
-        var data = {
-            "groupNum": ${m1.GROUPNUM},
-            "userId" : "${loginID}",
-        }
-
-        $.ajax({
-            type: "POST",
-            url: "/group/withdraw.do",
-            data: JSON.stringify(data),
-            dataType: 'json',
-            contentType: "application/json; charset=utf-8;",
-            success : function (response){
-                location.reload();
-            },
-            error : function (response){
-                console.log("error")
-            }
-        })
-    })
-
-   
-    
-$(document).on('click','.selectWaitingList',function (){
-
-    var data = {
-        "groupNum" : "${m1.GROUPNUM}",
-        "userId" : "${loginID}"
-    }
-
-    $.ajax({
-        type: "POST",
-        url: "/group/selectWaitingList.do",
-        data: JSON.stringify(data),
-        dataType: 'json',
-        contentType: "application/json; charset=utf-8;",
-        success: function (response){
-            $('#waitingList').empty()
-
-            for(var i=0;i<response.length;i++){
-
-                var id = "waitingUser"+i;
-
-                if(response[i].USERSTATUS==1){
-                $('#waitingList')
-                    .append(
-                    "<li class='row pt-1' style='list-style: none'><div id='waitingUser' class='col-8 pt-1 row' style='font-size: 22px; margin-left:10px'>"
-                    +"<a href='/profile/"+response[i].USERID+"' style='color: black;'onclick='window.open(this.href,'','width=450, height=600'); return false;'>"+response[i].USERID+"</a>&nbsp&nbsp&nbsp&nbsp<h6 style='margin-top:8px'>"+response[i].USERCOMMENT+"</h6></div></li>");
-
-                $('#waitingUser').attr('id',id);
-						
-                $('#'+id).after('<button class="userAllowed btn btn-light col-2">승인</button>');
-                $('#'+id).after('<button class="userDisallowed btn btn-light col-2">거절</button>'); 
-                    }
-            }
-        },
-        error: function(response){
-            console.log("error");
-            alert("새로고침 후 다시 시도해주세요")
-        }
-    })
-})
-
-$(document).on('click','.userAllowed',function (e){
-    var data = {
-        userId :(this.parentNode).childNodes[0].childNodes[0].innerHTML,
-        groupNum : ${m1.GROUPNUM},
-   		action : "plus"
-    };
-    
-    $.ajax({
-        type: "GET",
-        url: "/group/userAllowed.do",
-        data: data,
-        dataType: 'json',
-        contentType: "application/json; charset=utf-8;",
-        success: function (response){
-        	e.target.disabled=true;
-        },
-        error: function(response){
-            console.log("error");
-            alert("새로고침 후 다시 시도해주세요")
-        }
-    })
-})
-
-$(document).on('click','.userDisallowed',function (e){
-	if(confirm("정말 삭제하시겠습니까?")==true){
-
-
-    var data = {
-        userId :(this.parentNode).childNodes[0].childNodes[0].innerHTML,
-        groupNum : ${m1.GROUPNUM},
-        action : "minus"
-    }
-
-    $.ajax({
-        type: "GET",
-        url: "/group/userDisallowed.do",
-        data: data,
-        dataType: 'json',
-        contentType: "application/json; charset=utf-8;",
-        success: function (response){
-            e.target.disabled=true;
-        /*     e.target.innerText = "승인"; */
-         
-        },
-        error: function(response){
-            console.log("error");
-            alert("새로고침 후 다시 시도해주세요")
-        }
-    })
-   }
-})
-
-
-    $('.button-class1').click(function(){
-    	 var data ={
-    			 groupNum:${m1.GROUPNUM},
-    			 boardAccess:0
-    	 };
-        if( $(this).hasClass('btn-default') ) $(this).removeClass('btn-default');
-        if( !$(this).hasClass('btn-primary') ) $(this).addClass('btn-primary');
-        if( $('.button-class2').hasClass('btn-primary') ) $('#close').removeClass('btn-primary');
-        if( !$('.button-class2').hasClass('btn-default') ) $('#close').addClass('btn-default');
-        $.ajax({
-            type: "GET",
-            url: "/commu/updateBoardAccess.do",
-            data: data,
-            dataType: 'text',
-            contentType: "application/json; charset=utf-8;",
-            success: function (request){
-            	console.log("boardAccess: + 0 컨트롤러 다녀옴")
-            },
-                error:function(request,status,error){
-                   console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-                alert("새로고침 후 다시 시도해주세요")
-            }
-        })
-    });
-    
-    $('.button-class2').click(function(){
-    	 var data ={
-    			 groupNum:${m1.GROUPNUM},
-    			 boardAccess:1
-    	 };
-        if( $(this).hasClass('btn-default') ) $(this).removeClass('btn-default');
-        if( !$(this).hasClass('btn-primary') ) $(this).addClass('btn-primary');
-        if( $('.button-class1').hasClass('btn-primary') ) $('#open').removeClass('btn-primary');
-        if( !$('.button-class1').hasClass('btn-default') ) $('#open').addClass('btn-default');
-        $.ajax({
-            type: "GET",
-            url: "/commu/updateBoardAccess.do",
-            data: data,
-            dataType: 'text',
-            contentType: "application/json; charset=utf-8;",
-            success: function (response){
-            	console.log("boardAccess: + 1 컨트롤러 다녀옴");
-            },
-            error:function(request,status,error){
-                console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-                alert("새로고침 후 다시 시도해주세요")
-            }
-        })
-    });
-
-
-    if('${m4.BOARDACCESS}' == 0) {
-    if( $('#open').hasClass('btn-default') ) $('#open').removeClass('btn-default');
-    if( !$('#open').hasClass('btn-primary') ) $('#open').addClass('btn-primary');
-    if( $('.button-class2').hasClass('btn-primary') ) $('#close').removeClass('btn-primary');
-    if( !$('.button-class2').hasClass('btn-default') ) $('#close').addClass('btn-default');
-    } else {
-	if( $('#close').hasClass('btn-default') ) $('#close').removeClass('btn-default');
-    if( !$('#close').hasClass('btn-primary') ) $('#close').addClass('btn-primary');
-    if( $('.button-class1').hasClass('btn-primary') ) $('#open').removeClass('btn-primary');
-    if( !$('.button-class1').hasClass('btn-default') ) $('#open').addClass('btn-default');
-    }
-    
-    $('#update').click(function (e){
-        e.preventDefault();
-
-        var form = $('#filesForm')[0];
-        var data = new FormData(form);
-        data.append("groupNum",${m1.GROUPNUM});
-        data.append("detail",$('#detail').val());
-        data.append("area",$('#area').val());
-        data.append("ageStart",$('#ageStart').val());
-        data.append("ageEnd",$('#ageEnd').val());
-        data.append("sex",$('#sex').val());
-        data.append("userId","${loginID}")
-
-        $.ajax({
-            type: "POST",
-            enctype: 'multipart/form-data',
-            url: '/commu/update.do',
-            data: data,
-            processData: false,
-            contentType: false,
-            cache: false,
-            success(response){
-                console.log(response);
-                alert("등록완료!")
-               self.location ="/commu/commuPageView.do?groupNum=${m1.GROUPNUM}";
-            },
-            error(response){
-                alert("등록 오류, 새로고침 후 다시 시도 해주세요")
-            }
-        });
-    });   
-   
-    $("#sex option").each(function(){
-    	if($(this).val()== "${m1.SEX}"){
-    		$(this).attr("selected", "selected");
-    	} 
-    });
-
-    $("#area option").each(function(){
-    	if($(this).val()== "${m1.AREA}"){
-    		$(this).attr("selected", "selected");
-    	} 
-    });
-
-    $("#ageStart option").each(function(){
-    	if($(this).val()== "${m1.AGESTART}"){
-    		$(this).attr("selected", "selected");
-    	} 
-    });
-
-    $("#ageEnd option").each(function(){
-    	if($(this).val()== "${m1.AGEEND}"){
-    		$(this).attr("selected", "selected");
-    	} 
-    });   
-    
- 
-  
-  /* 페이징 처리 */
-    var totalData = ${vM.total};    // 총 데이터 수
-    var dataPerPage = 16;   // 한 페이지에 나타낼 데이터 수
-    var pageCount = 10;        // 한 화면에 나타낼 페이지 수   
-    if((totalData/dataPerPage) < pageCount){pageCount = Math.ceil(totalData/dataPerPage)}
-     /*  위 세대는 예시 내가 해당 파람터에 값을 넣을 생각을 해야함. 위에 없애자고 해보자 */
-    
-    function paging(totalData, dataPerPage, pageCount, currentPage){
-/*         console.log("totalData : " + totalData);
-        console.log("dataPerPage : " + dataPerPage);
-        console.log("currentPage : " + currentPage); */
-        
-        var totalPage = Math.ceil(totalData/dataPerPage);    // 총 페이지 수
-        var section = Math.ceil(currentPage/pageCount);    // 페이지 그룹
-        
-   /*      console.log("section : " + section); */
-        
-        var last = section * pageCount;    // 화면에 보여질 마지막 페이지 번호
-        if(last > totalPage)
-            last = totalPage;
-        var first = last - (pageCount-1);    // 화면에 보여질 첫번째 페이지 번호
-        var next = last+1;
-        var prev = first-1;
-        
-       /*  console.log("last : " + last);
-        console.log("first : " + first);
-        console.log("next : " + next);
-        console.log("prev : " + prev); */
- 
-        var $pingingView = $("#paging");
-        
-        var html = "";
-        
-        if(prev > 0)
-            html += "<a href=# id='prev'><</a> ";
-            
-            
-        if(first<1){first==1}
-        for(var i=first; i <= last; i++){
-            html += "<a href=# id=" + i + ">" + i + "</a> ";
-        }
-        
-        if(last < totalPage)
-            html += "<a href=# id='next'>></a>";
-        
-        $("#paging").html(html);    // 페이지 목록 생성
-        $("#paging a").css("color", "black");
-        $("#paging a#" + currentPage).css({"text-decoration":"none", 
-                                           "color":"green", 
-                                           "font-weight":"bold"});    // 현재 페이지 표시
-                                          
-                                                        
-           
-           /* 페이징 아작스 */
-           var html;
-           var htmlC ="";
-           var data={}
-       	data["groupNum"] = ${m1.GROUPNUM};
-       	data["nowPage"] = currentPage;
-       	data["cntPerPage"] = dataPerPage;
-       	data["userId"] = "${loginID}" ;
-      		data["total"] = ${vM.total}; 
-       	$.ajax({
-       		contentType:'application/json',
-       		dataType:'json',
-       		data:JSON.stringify(data),
-       		url:'/commu/commuAlbumPaging.do',
-       		type:'POST',
-       		success:function(data){
-       			console.log("data"+data[5].content2);
-       			 for(var i=0 in data){ 
-       				var content = JSON.stringify(data[i].content).replace(/\"/g, "");
-   				html = "<div class='col-lg-3 col-md-4 col-6' >" ;
-   				html += "<a href='' id='oC' class='d-block mb-4 h-100' data-toggle='modal' >" ;
-   				html += " <img id='content";
-   				html += i;
-   				html +="' class='img-fluid img-thumbnail' src='/resources/img/";
-   				html += content ;
-   				html += "' alt='사진'></a></div>";
-   				htmlC += html;
-       			 }   
-   				document.getElementById('albumList').innerHTML=htmlC;     		
-
-   				for(var j=0 in data){ 
-       			var nickName = JSON.stringify(data[j].nickName);
-       			var createdAt = JSON.stringify(data[j].createdAt);
-       			var content2 = JSON.stringify(data[j].content2);
-       			var groupNum = JSON.stringify(data[j].groupNum);
-       			var boardType = JSON.stringify(data[j].boardType);
-       			var rn = JSON.stringify(data[j].rn);
-       			var postNum = JSON.stringify(data[j].postNum);
-       			var type = JSON.stringify(data[j].type);
-       			var userNum = JSON.stringify(data[j].userNum);
-       			
-       			$('#content'+ j ).data('nickName',nickName);
-   				$('#content'+ j ).data('content2',content2);
-   				$('#content'+ j ).data('createdAt',createdAt);
-   				$('#content'+ j ).data('postNum',postNum);
-   				$('#content'+ j ).data('userNum',userNum);
-   				
-   				//console.log("content" + j+":" + $('#content'+ j ).data('content'));
-   				}
-       		},
-       		error:function(request, status, error){
-       			alert(request.message);
-       		}
-       	})
-       	
-        $("#paging a").click(function(){
-            var $item = $(this);
-            var $id = $item.attr("id");     
-            var selectedPage = $item.text();
-            selectedPage *= 1;
-            
-            if($id == "next")    selectedPage = next;  
-            if($id == "prev")    selectedPage = prev;
-
-            paging(totalData, dataPerPage, pageCount, selectedPage);
-        });
-     }/* function paging(totalData, dataPerPage, pageCount, currentPage){ */
-    
-        paging(totalData, dataPerPage, pageCount, 1);
-  
-     /* 
-        $('div#commentShow button').each(function(e){
-        	console.log("~~~~~~"+e[0].id);
-        
-        var postNum =  e.getAttribute('name');
-           
-        var data = {
-                     "postNum" : postNum
-                  }; 
-             
-          $.ajax({
-              type: "GET",
-              url: "/group/selectCommentByPostNum.do",
-              data: data,
-              dataType: 'json',
-              contentType: "application/json; charset=utf-8;",
-              success: function (response){
-                  var index = 0;
-                if(response.length ==0){
-              e.target.setAttribute('disabled', true);
-                  }
-              },
-              error: function(response){
-                  console.log("error");
-                  console.log(response)
-              }
-          }) /* selectCommentByPostNum 아작스 */
-     
-      }) /*/
-     
 }) /* document ready */
+     
+
      
    /* album 사진 상세보기 */
 $(document).on( 'click', 'a#oC img' , function(e){ 
@@ -1220,108 +1286,80 @@ $(document).on( 'click', 'a#oC img' , function(e){
          		 }
          	 }
   	  })           
-         	 
-         	var data = {
-                    "postNum" : postNum
-                 }; 
-         	$("div#commentBoard ul").remove();
-         $.ajax({
-             type: "GET",
-             url: "/group/selectCommentByPostNum.do",
-             data: data,
-             dataType: 'json',
-             contentType: "application/json; charset=utf-8;",
-             success: function (response){
-                 var index = 0;
-                 for(var i=0; i<response.length; i++) {
-                     var commentNum = response[i].commentNum;
-                     var rootNum = response[i].parentNum;
-                     var count = response[i].subCommentCount;
-
-                     if (rootNum == 0) {
-                         var id = 'depts' + index
-						
-                         $('#commentBoard').append(
-                             '<ul id="' + id + '" class="col-12 pl-5 row">' +
-                             '<img src="/resources/img/' + response[i].content2 + '" class="rounded-circle" style="width: 50px;height: 50px">'+
-                             '<div class="col-10">'+
-                             '<pre style="display: none">'+response[i].commentNum+'</pre>'+
-                             '<h5>'+response[i].nickname+'</h5>'+
-                             '<div>'+response[i].content +'</div>' +
-                             '<button class="'+id+' p-0 btn btn-default text-muted" onclick="toggleSubComment(this)">[답글 '+ count +'개 더보기]</button>' +
-                             '<button class="'+id+'subComment p-0 btn btn-default text-muted" onclick="toggleWriteSubComment(this)">[답글 작성]</button>' +
-                             '<p style="display: none"><input type="text" class="form-control" placeholder="댓글 내용 입력"/>' +
-                             '<button id="'+postNum+'" class="btn btn-success btn-sm" onclick="writeSubComment(this)">작성</button>' +
-                             '<button class="btn btn-light btn-sm" onclick="cancelwriteSubComment(this)">취소</button>' +
-                             '</p></div></ul>');
-                         $('#'+postNum).data('postNum', postNum);
-                         index++;
-                         
-                         var index1 = 0;
-                         for (var j = 0; j < response.length; j++) {
-
-                             if (response[j].parentNum == commentNum) {
-                                 $('#' + id).append(
-                                     '<li id="' + id + index1 + '" class="col-12 row pt-3 ml-5 pl-2" style="display: none;">'+
-                                     '<img src="/resources/img/'+response[j].content2+'" class="rounded-circle" style="width: 40px; height: 40px; float: left">'+
-                                     '<div class="col-9 ml-2 pl-5">'+
-                                     '<h5 class="mb-0">'+response[j].nickname+'</h5>'+
-                                     response[j].content +'</div></li>'
-                                 );
-
-                                 index1++;
-                             }
-                         }
-                     }
-                 }
-             },
-             error: function(response){
-                 console.log("error");
-                 console.log(response)
-             }
-         }) /* selectCommentByPostNum 아작스 */   
-         
+         	
+  	  
+  	  selectAlbumCommentByPostNum(postNum);
    	  $("#originalContent").modal();
          
   /*   }) */
   /*   }) *//*      $('a#oC').each(function(){ */
-   })  /* $(document).on( 'click', 'a#oC' , function(e){  */
-                	
+   })  /* 'click', 'a#oC' */
    
-        
-        $('#uploadPics').click(function(){
-        	var formData = new FormData();
-        	var inputFile=$('input[name="pics"]');
-        	var files=inputFile[0].files;
-        	formData.append('key1', 'value1');
-        	formData.append('key2', 'value2');
-        	formData.append('groupNum', ${m1.GROUPNUM});
-        	
-        	for(var i=0; i<files.length; i++){
-        		formData.append('pics', files[i]);
-        	}
-        	
-         	$.ajax({
-           		contentType: false,
-           		processData: false,
-           		data: formData,
-           		url:'/commu/insertAlbum.do',
-           		type:'POST',
-           		success:function(result){
-           		console.log("result: "+ result);	
-           		var totalData = result;
-           		document.getElementById('closeUploadModal').click();
-           		 paging(totalData, dataPerPage, pageCount, 1); 
-           		document.getElementById('pics').value = null;
-           		alert("사진이 정상적으로 업로드되었습니다.");
-           		},
-           		error:function(request, status, error){
-           			alert(request.message);
-           		}
-         	})
-        })
-        
-     
+   function selectAlbumCommentByPostNum(postNum){
+	console.log("postNum:   " + postNum);
+
+ 	var data = {
+            "postNum" : postNum
+         }; 
+ 	$("div#commentBoard ul").remove();
+ $.ajax({
+     type: "GET",
+     url: "/group/selectCommentByPostNum.do",
+     data: data,
+     dataType: 'json',
+     contentType: "application/json; charset=utf-8;",
+     success: function (response){
+         var index = 0;
+         for(var i=0; i<response.length; i++) {
+             var commentNum = response[i].commentNum;
+             var rootNum = response[i].parentNum;
+             var count = response[i].subCommentCount;
+
+             if (rootNum == 0) {
+                 var id = 'depts' + index
+				
+                 $('#commentBoard').append(
+                     '<ul id="' + id + '" class="col-12 pl-5 row">' +
+                     '<img src="/resources/img/' + response[i].content2 + '" class="rounded-circle" style="width: 50px;height: 50px">'+
+                     '<div class="col-10">'+
+                     '<pre style="display: none">'+response[i].commentNum+'</pre>'+
+                     '<h5>'+response[i].nickname+'</h5>'+
+                     '<div>'+response[i].content +'</div>' +
+                     '<button class="'+id+' p-0 btn btn-default text-muted" onclick="toggleSubComment(this)">[답글 '+ count +'개 더보기]</button>' +
+                     '<button class="'+id+'subComment p-0 btn btn-default text-muted" onclick="toggleWriteSubComment(this)">[답글 작성]</button>' +
+                     '<p style="display: none"><input type="text" class="form-control" placeholder="댓글 내용 입력"/>' +
+                     '<button id="'+postNum+'" class="btn btn-success btn-sm" onclick="writeSubComment(this)">작성</button>' +
+                     '<button class="btn btn-light btn-sm" onclick="cancelwriteSubComment(this)">취소</button>' +
+                     '</p></div></ul>');
+                 $('#'+postNum).data('postNum', postNum);
+                 index++;
+                 
+                 var index1 = 0;
+                 for (var j = 0; j < response.length; j++) {
+
+                     if (response[j].parentNum == commentNum) {
+                         $('#' + id).append(
+                             '<li id="' + id + index1 + '" class="col-12 row pt-3 ml-5 pl-2" style="display: none;">'+
+                             '<img src="/resources/img/'+response[j].content2+'" class="rounded-circle" style="width: 40px; height: 40px; float: left">'+
+                             '<div class="col-9 ml-2 pl-5">'+
+                             '<h5 class="mb-0">'+response[j].nickname+'</h5>'+
+                             response[j].content +'</div></li>'
+                         );
+
+                         index1++;
+                     }
+                 }
+             }
+         }
+     },
+     error: function(response){
+         console.log("error");
+         console.log(response)
+     }
+	 }) /* selectCommentByPostNum 아작스 */   
+}
+                	
+  
   $('#list-member-list').click(function(){
   
 	var data =  {
@@ -1364,6 +1402,8 @@ $(document).on( 'click', 'a#oC img' , function(e){
          dataType: 'json',
          contentType: "application/json; charset=utf-8;",
          success : function (response){
+        	 console.log("asdfasdf:   ????");
+         
              for(var i=0; i<response.length; i++) {
              
                  var userId = response[i].USERID;
@@ -1396,12 +1436,9 @@ $(document).on( 'click', 'a#oC img' , function(e){
     	 var data =  {
     			"groupNum" : ${m1.GROUPNUM} 
     	};
-/*     	 sortList(data); */
-         /* infiniteScroll(data); */    
-/*     }); */
+
     	 var isEnd = false;
-/* 
-    	    function sortList(data){ */
+
     	        if(isEnd == true){
     	            return ;
     	        }
@@ -1490,5 +1527,119 @@ $(document).on( 'click', 'a#oC img' , function(e){
                 },1500)
             }
     } */
+    
+    $('#insertPostBtn').click(function(){ 
+     $('#feedContentDiv').empty();
+     $('#feedContentDiv').append(
+    		 '<textarea class="form-control" name="feedContent" id="feedContent"></textarea>');
+    	ckEditor('feedContent');
+    });
+    
+function ckEditor(e){
+	var eid = e.id;
+	console.log(e);
+	  
+		ClassicEditor
+	    .create( document.querySelector( '#'+e ), {
+	        extraPlugins: [MyCustomUploadAdapterPlugin],
+	        heading: {
+	            options: [
+	                { model: 'paragraph', title: '본문', class: 'ck-heading_paragraph' },
+	                { model: 'heading1', view: 'h1', title: '제목 1', class: 'ck-heading_heading1' },
+	                { model: 'heading2', view: 'h2', title: '제목 2', class: 'ck-heading_heading2' },
+	                { model: 'heading3', view: 'h3', title: '제목 3', class: 'ck-heading_heading3' }
+	            ]
+	        },
+	        language: 'ko',
+	        image: {
+	            ImageCaption: {
+	
+	            },
+	            resizeUnit: 'px',
+	            toolbar: [
+	                'imageTextAlternative',
+	                'imageStyle:alignLeft',
+	                'imageStyle:full',
+	                'imageStyle:side'
+	            ],
+	            styles: [ 'full','alignLeft','alignRight','side' ]
+	        },
+	        table: {
+	            contentToolbar: [
+	                'tableColumn',
+	                'tableRow',
+	                'mergeTableCells'
+	            ]
+	        },
+	        ckfinder: {
+	            options: {
+	                uploadUrl: '/after/uploadImage.do'
+	            }
+	        },
+	        alignment: {
+	            options: [ 'left', 'center', 'right']
+	        }
+	    } )
+	    .then( editor => {
+	        window.editor = editor;
+	    } )
+	    .catch( err => {
+	        console.error( err.stack );
+	    } );
+	
+	function MyCustomUploadAdapterPlugin(editor) {
+	    editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
+	        return new UploadAdapter(loader)
+	    }
+	}
+	
+	
+	class UploadAdapter {
+	    constructor(loader) {
+	        this.loader = loader;
+	    }
+	
+	    upload() {
+	        return this.loader.file.then( file => new Promise(((resolve, reject) => {
+	            this._initRequest();
+	            this._initListeners( resolve, reject, file );
+	            this._sendRequest( file );
+	        })))
+	    }
+	
+	    _initRequest() {
+	        const xhr = this.xhr = new XMLHttpRequest();
+	        xhr.open('POST', '/after/uploadImage.do', true);
+	        xhr.responseType = 'json';
+	    }
+	
+	    _initListeners(resolve, reject, file) {
+	        const xhr = this.xhr;
+	        const loader = this.loader;
+	        const genericErrorText = '파일을 업로드 할 수 없습니다.'
+	
+	        xhr.addEventListener('error', () => {reject(genericErrorText)})
+	        xhr.addEventListener('abort', () => reject())
+	        xhr.addEventListener('load', () => {
+	            const response = xhr.response
+	
+	            if(!response || response.error) {
+	                return reject( response && response.error ? response.error.message : genericErrorText );
+	            }
+	
+	            resolve({
+	                default: response.url //업로드된 파일 주소
+	            })
+	        })
+	    }
+	
+	    _sendRequest(file) {
+	        const data = new FormData()
+	        data.append('upload',file)
+	        this.xhr.send(data)
+	    }
+	}
+}
+	
 </script>
 </html>

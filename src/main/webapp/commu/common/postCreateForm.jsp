@@ -1,16 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-
-
-<!-- Button trigger modal -->
-<!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#postCreateForm">
-  Launch demo modal
-</button>
- -->
-<button type="button" class="btn btn-outline-success"
-	data-toggle="modal" data-target="#postCreateForm"
-	style="padding: 10px 10px; margin: 10px 10px 10px 0px; width: 100%; height: 100px;">
+<style>
+.ck-editor__editable {
+    min-height: 300px;
+}
+.ck.ck-editor{
+	max-width: 100%;
+	}
+</style>
+<button type="button" class="btn btn-outline-success" id="insertPostBtn" data-toggle="modal" data-target="#postCreateForm" style="padding: 10px 10px; margin: 10px 10px 10px 0px; width: 100%; height: 100px;">
 	<div class="row">
 		<svg width="3em" height="3em" viewBox="0 0 16 16"
 			class="bi bi-pencil-square mr-3" fill="currentColor"
@@ -36,36 +35,24 @@
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
+				<form action="/commu/insertPost.do" method="post" >
 			<div class="modal-body">
-					<form action="/commu/insertPost.do" method="post" enctype="multipart/form-data">
 				 <div class="col-sm-5">
-								<div class="input-group mb-2 row">
-								<p>&nbsp&nbsp공지게시글로 작성하기</p>
-								<input style="margin: 5px 20px;" type="checkbox" id="importantPost" name="type" value="1">
-								</div>
-							</div> 
-				<div class="row justify-content-md-center">
-					<div class="col_c">
-						<div class="input-group">
-							<textarea class="form-control" name="feedContent" id="feedContent"></textarea>
-							 <script type="text/javascript">
-								CKEDITOR.replace('feedContent', {
-									filebrowserUploadUrl :'/commu/imageUpload.do',
-									height : 250,
-									width : 750
-								});
-							</script> 
-						</div>
+					<div class="input-group mb-2 row">
+					<p style="margin-left:20%">&nbsp&nbsp공지게시글로 작성하기</p>
+					<input style="margin: 5px 20px;" type="checkbox" id="importantPost" name="type" value="1">
 					</div>
+				</div> 
+				<div class="row justify-content-md-center" id="feedContentDiv">
+					<textarea class="form-control" name="feedContent" id="feedContent"></textarea>
 				</div>
 			</div>
 
 			<div class="modal-footer">
-				<button type="submit" class="btn btn-success">피드 작성</button>
+				<input type="submit" class="btn btn-success" value="피드 작성">
 			</div>
 			<input type="hidden" name="groupNum" value="${m1.GROUPNUM}">
 			</form>
 		</div>
 	</div>
 </div>
-
