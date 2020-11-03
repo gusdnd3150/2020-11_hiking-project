@@ -14,4 +14,7 @@ public interface AfterService {
     Map selectCommentOne(int commentNum);
     List selectCommentByAfterNum(int afterNum);
     List selectAfterDetail(int afterNum);
+
+    int selectLikeCount(int afterNum);
+    void insertAfterLike(Map map);
 }

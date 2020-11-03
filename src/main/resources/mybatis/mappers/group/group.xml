@@ -201,6 +201,7 @@
     <!-- 그룹 탈퇴 -->
     <update id="withdrawGroup" parameterType="map">
         <![CDATA[
+
             UPDATE userWaiting
             SET userStatus = 2
             WHERE groupNum = #{groupNum}

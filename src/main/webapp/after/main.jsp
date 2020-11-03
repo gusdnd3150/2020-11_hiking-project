@@ -2,10 +2,54 @@
          pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <jsp:include page="/common/header.jsp" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="../resources/css/views/after/main.css" />
 <script type="text/javascript" src="../resources/js/jquery.js"></script>
 <script type="text/javascript" src="../resources/js/bootstrap.min.js"></script>
 <script>
+    $(document).on('click','.like',function (){
+        var data = {
+            "afterNum": this.getAttribute("id"),
+            "userId" : "${LOGIN}",
+            "likeYN" :  "Y"
+        }
+        $.ajax({
+            type: "POST",
+            url: "/after/insertAfterLike.do",
+            data: JSON.stringify(data),
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8;",
+            success: function (response) {
+                console.log("success")
+                console.log(response)
+            },
+            error: function (response){
+                console.log("error")
+            }
+        })
+    })
+
+    function selectLikeCount(afterNum){
+        var data = {
+            "afterNum":afterNum
+        }
+        $.ajax({
+            type: "GET",
+            url: "/after/selectLikeCount.do",
+            data: data,
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8;",
+            success: function (response) {
+                console.log("success")
+                console.log(response)
+            },
+            error: function (response){
+                console.log("error")
+            }
+        })
+    }
+
+    //comment
     function toggleSubComment(e){
         $commentRoot = e.parentNode.parentNode;
         $subComments = $commentRoot.getElementsByTagName("li");
@@ -29,7 +73,6 @@
         }
 
     }
-
     function selectCommentByAfterNum(afterNum){
         var data = {
             "afterNum" : afterNum
@@ -42,7 +85,6 @@
             dataType: 'json',
             contentType: "application/json; charset=utf-8;",
             success: function (response){
-                console.log(response)
 
                 var index = 0;
 
@@ -99,7 +141,6 @@
             }
         })
     }
-
     function submitComment(afterNum){
         var content = 'commentContent-'+afterNum;
         var data = {
@@ -151,8 +192,6 @@
             }
         })
     }
-
-    //
     function writeSubComment(e,afterNum){
 
         $root = e.parentNode.parentNode;
@@ -173,7 +212,6 @@
             dataType: 'json',
             contentType: "application/json; charset=utf-8;",
             success: function (response){
-                console.log(response)
                 var id = $root.parentNode.id;
 
                 console.log(id)
@@ -200,16 +238,20 @@
     <div class="col-12 pt-5">
         <c:forEach var="after" items="${after}">
         <div class="afterBox" style="width: 100%">
-            <div class="after-title row m-3">
-                <a href="/profile/${after.USERNUM}">
-                    <img class="rounded-circle" src="/resources/img/${after.CONTENT2}" style="width: 45px;height: 45px">
-                </a>
-                <h3 class="pl-2 mt-1 mb-0">[${after.MTNM}] ${after.TITLE}</h3>
-
+            <div class="after-title row d-flex justify-content-between m-3">
+                <div class="titlebox form-inline">
+                    <a href="/profile/${after.USERNUM}">
+                        <img class="rounded-circle" src="/resources/img/${after.CONTENT2}" style="width: 45px;height: 45px">
+                    </a>
+                    <h3 class="pl-2 mt-1 mb-0">[${after.MTNM}] ${after.TITLE}</h3>
+                </div>
+                <div id="likebox" class="align-self-center">
+                    <i id="${after.AFTERNUM}" class="like far fa-thumbs-up" style="font-size: 30px"></i>
+                </div>
             </div>
             <hr />
             <div class="after-content p-4 m-4">${after.CONTENT}</div>
-            <p class="pr-3 text-muted text-right">${after.CREATEDAT}</p>
+                <p class="pr-3 text-muted text-right">${after.CREATEDAT}</p>
             <hr />
             <div class="m-3">
                 <h3 class="mt-2 pb-1">댓글</h3>
@@ -234,6 +276,7 @@
         </div>
             <script>
                 selectCommentByAfterNum(${after.AFTERNUM})
+                selectLikeCount(${after.AFTERNUM})
             </script>
         </c:forEach>
     </div>

@@ -103,4 +103,43 @@
             ORDER SIBLINGS BY COMMENTORDER
         ]]>
     </select>
+
+    <insert id="insertAfterLike" parameterType="map">
+        <if test='likeYN.equals("Y")'>
+            <![CDATA[
+            MERGE INTO groupAfterLike
+            USING DUAL
+            ON (afterNum = #{afterNum} AND userId = #{userId})
+            WHEN MATCHED THEN
+            UPDATE SET
+                    likeYN = #{likeYN},
+                    createdAT = sysdate
+            WHEN NOT MATCHED THEN
+                INSERT (afterNum, userId, likeYN, createdAT)
+                VALUES (#{afterNum},#{userId},#{likeYN},sysdate)
+        ]]>
+        </if>
+        <if test='likeYN.equals("N")'>
+            UPDATE groupAfterLike
+            SET afterNum = #{afterNum},
+            userId = #{userId},
+            likeYn = #{likeYN},
+            createdAt = sysdate
+            WHERE mtNum = #{afterNum}
+            AND userId = #{userId}
+        </if>
+        <selectKey keyProperty="afterNum" resultType="_int" order="AFTER">
+            SELECT afterNum
+            FROM groupAfterLike
+            WHERE afterNum = #{afterNum}
+            AND userId = #{userId}
+        </selectKey>
+    </insert>
+
+    <select id="selectLikeCount" resultType="int" parameterType="int">
+        SELECT COUNT(*)
+        FROM groupAfterLike
+        WHERE afterNum = #{afterNum}
+        GROUP BY afterNum
+    </select>
 </mapper>

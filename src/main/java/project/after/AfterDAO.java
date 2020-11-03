@@ -41,8 +41,13 @@ public class AfterDAO {
     public Map selectCommentOne(int commentNum){
         return sqlSession.selectOne("after.selectCommentOne",commentNum);
     }
-
     public List selectCommentByAfterNum(int afterNum){
         return sqlSession.selectList("after.selectCommentByAfterNum",afterNum);
+    }
+    public int selectLikeCount(int afterNum){
+        return sqlSession.selectOne("after.selectLikeCount",afterNum);
+    }
+    public void insertAfterLike(Map map){
+        sqlSession.insert("after.insertAfterLike",map);
     }
 }

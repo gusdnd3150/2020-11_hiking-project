@@ -44,7 +44,17 @@ public class GroupDAO{
         return sqlSession.update("group.joinGroup",map);
     }
     public int withdrawGroup(Map map){
-        return sqlSession.update("group.withdrawGroup",map);
+
+        String action = (String) map.get("action");
+        int result = 0 ;
+
+        result = sqlSession.update("group.withdrawGroup",map);
+
+        if(action!=null){
+            result = sqlSession.update("group.updateGroupCount",map);
+        }
+
+        return result;
     }
     public List selectWaitingList(Map map){
         return sqlSession.selectList("group.selectWaitingList",map);
@@ -54,7 +64,6 @@ public class GroupDAO{
     public int userAllowed(Map map){
         int result = 0;
         result = sqlSession.update("group.userAllowed",map);
-        System.out.println("userAllowed : " + map.toString());
         result = sqlSession.update("group.updateGroupCount",map);
 
         return result;
@@ -62,7 +71,6 @@ public class GroupDAO{
     public int userDisallowed(Map map){
         int result = 0;
         result = sqlSession.update("group.userDisallowed",map);
-        System.out.println("userDisallowed : " + map.toString());
         result = sqlSession.update("group.updateGroupCount",map);
 
         return result;

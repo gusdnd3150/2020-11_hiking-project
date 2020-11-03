@@ -38,8 +38,14 @@ public class AfterServiceImpl implements AfterService {
     public Map selectCommentOne(int commentNum){
         return afterDAO.selectCommentOne(commentNum);
     }
-
     public List selectCommentByAfterNum(int afterNum){
         return afterDAO.selectCommentByAfterNum(afterNum);
+    }
+
+    public int selectLikeCount(int afterNum){
+        return afterDAO.selectLikeCount(afterNum);
+    }
+    public void insertAfterLike(Map map){
+        afterDAO.insertAfterLike(map);
     }
 }

@@ -136,11 +136,12 @@
         $(document).on('click','.withdrawGroupBtn',function (){
             $("#cancelModal").show();
         })
-        $(document).on('click','.cancelModalBtn',function (){
+        $(document).on('click','.cancelModalBtn1',function (){
 
             var data = {
                 "groupNum": ${group.GROUPNUM},
                 "userId" : "<%= request.getSession().getAttribute("LOGIN")%>",
+                "action" : "minus"
             }
 
             $.ajax({
@@ -158,6 +159,27 @@
             })
         })
 
+    });
+    $(document).on('click','.cancelModalBtn2',function (){
+
+        var data = {
+            "groupNum": ${group.GROUPNUM},
+            "userId" : "<%= request.getSession().getAttribute("LOGIN")%>"
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/group/withdraw.do",
+            data: JSON.stringify(data),
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8;",
+            success : function (response){
+                location.reload();
+            },
+            error : function (response){
+                console.log("error")
+            }
+        })
     });
     $(document).on('click','.like',function (){
         var data = {
@@ -558,8 +580,11 @@
                         <c:when test="${group.STATUS eq 0 and userGradeResult.USERSTATUS eq 0}"><button class="resultWaitingBtn btn btn-dark col-12" data-toggle="modal" data-target="#resultModal">모집 종료</button></c:when>
                         <c:when test="${group.STATUS eq 0 and userGradeResult.USERTYPE ne 0}"><button class="resultWaitingBtn btn btn-dark col-12">모집 종료</button></c:when>
                         <c:when test="${group.STATUS eq 1 and userGradeResult.USERTYPE eq 0}"><button class="selectWaitingList btn btn-dark col-12" data-toggle="modal" data-target="#listModal">신청자 리스트</button></c:when>
-                        <c:when test="${group.STATUS eq 1 and userGradeResult.USERTYPE eq 1}"><button class="withdrawGroupBtn btn btn-info col-12" data-toggle="modal" data-target="#cancelModal">참여 취소</button></c:when>
+                        <c:when test="${group.STATUS eq 1 and userGradeResult.USERSTATUS eq 2}"><button class="joinButton btn btn-outline-info col-12" data-toggle="modal" data-target="#joinModal">참여 신청</button></c:when>
+                        <c:when test="${group.STATUS eq 1 and userGradeResult.USERSTATUS eq 0}"><button class="withdrawGroupBtn1 btn btn-info col-12" data-toggle="modal" data-target="#cancelModal1">참여 취소</button></c:when>
+                        <c:when test="${group.STATUS eq 1 and userGradeResult.USERTYPE eq 1}"><button class="withdrawGroupBtn2 btn btn-info col-12" data-toggle="modal" data-target="#cancelModal2">참여 취소</button></c:when>
                         <c:when test="${group.STATUS eq 1}"><button class="joinButton btn btn-outline-info col-12" data-toggle="modal" data-target="#joinModal">참여 신청</button></c:when>
+
                     </c:choose>
                 </div>
             </div>
@@ -675,7 +700,7 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="cancelModal">
+    <div class="modal fade" id="cancelModal1">
         <div class="modal-dialog" id="modal3">
             <div class="modal-content">
                 <!-- header -->
@@ -692,13 +717,35 @@
                 <!-- Footer -->
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
-                    <button type="button" class="cancelModalBtn btn btn-info">확인</button>
+                    <button type="button" class="cancelModalBtn1 btn btn-info">확인</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="cancelModal2">
+        <div class="modal-dialog" id="modal3-1">
+            <div class="modal-content">
+                <!-- header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">${group.NAME} 참여 신청 취소하기</h4>
+                    <!-- 닫기(x) 버튼 -->
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                    <!-- header title -->
+                </div>
+                <!-- body -->
+                <div class="modal-body">
+                    정말로 취소하시겠습니까?
+                </div>
+                <!-- Footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
+                    <button type="button" class="cancelModalBtn2 btn btn-info">확인</button>
                 </div>
             </div>
         </div>
     </div>
     <div class="modal fade" id="resultModal">
-        <div class="modal-dialog" id="modal3">
+        <div class="modal-dialog" id="modal4">
             <div class="modal-content">
                 <!-- header -->
                 <div class="modal-header">

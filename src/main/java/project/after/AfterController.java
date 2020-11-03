@@ -143,8 +143,6 @@ public class AfterController {
     @ResponseBody
     public Map insertSubComment(@RequestBody Map map){
         afterService.insertCommentAfter(map);
-        System.out.println("**********");
-        System.out.println(map.toString());
         afterService.updateSubCommentCount(map);
         return afterService.selectCommentOne((Integer) map.get("commentNum"));
     }
@@ -153,5 +151,23 @@ public class AfterController {
     @ResponseBody
     public List selectCommentByAfterNum(@RequestParam("afterNum")int afterNum){
         return afterService.selectCommentByAfterNum(afterNum);
+    }
+
+    @GetMapping("/after/selectLikeCount.do")
+    @ResponseBody
+    public int selectLikeCount(@RequestParam("afterNum")int afterNum){
+        int count = afterService.selectLikeCount(afterNum);
+        if(count==0){
+            System.out.println("count is "+count);
+        }
+        System.out.println("count is "+count);
+        return count;
+    }
+
+    @PostMapping("/after/insertAfterLike.do")
+    @ResponseBody
+    public int insertLike(@RequestBody Map map){
+        afterService.insertAfterLike(map);
+        return afterService.selectLikeCount((Integer)map.get("afterNum"));
     }
 }
