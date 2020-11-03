@@ -88,7 +88,6 @@
             dataType: 'json',
             contentType: "application/json; charset=utf-8;",
             success: function (response) {
-                console.log(response)
                 if(response==1){
                     $('#like-'+afterNum).append('<i id="'+afterNum+'" class="dislike fas fa-thumbs-up" style="color:skyblue"></i>')
                 }else if(response==0){
@@ -147,7 +146,7 @@
                     var afterNum = response[i].AFTERNUM
                     var selector = 'commentBoard'+afterNum;
 
-                    var id = 'depts' + index;
+                    var id = afterNum+'-depts-' + index;
 
                     if(rootNum == 0){
                         var html = '';
@@ -173,6 +172,7 @@
                         for (var j = 0; j < response.length; j++) {
 
                             if (response[j].PARENTNUM == commentNum) {
+                                console.log(1)
                                 var html = '';
                                 html += '<li id="' + id + index1 + '" class="col-12 row pt-3 ml-5 pl-2" style="display: none;">';
                                 html += '<img src="/resources/img/'+response[j].CONTENT2+'" class="rounded-circle" style="width: 40px; height: 40px; float: left">';
@@ -211,7 +211,6 @@
             dataType: 'json',
             contentType: "application/json; charset=utf-8;",
             success: function (response){
-                console.log(response)
                 var index = 0;
                 var selector = 'commentBoard'+response.AFTERNUM;
                 var rootNum = response.PARENTNUM;

@@ -12,7 +12,7 @@ public class BoardServiceImpl implements BoardService{
     @Resource(name = "boardDAO")
     private BoardDAO boardDAO;
 
-    public List selectNotice(Map map){
-        return boardDAO.selectNotice(map);
+    public List selectBoard(Map map){
+        return boardDAO.selectBoard(map);
     }
 }

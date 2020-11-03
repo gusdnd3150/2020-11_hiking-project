@@ -42,7 +42,7 @@
                 <input id="area-detail"type="text" class="form-control" placeholder="상세 집합 장소를 입력해주세요(선택)">
             </div>
         </div>
-        <div class="col-6">
+        <div class="col-12">
             <input type="text" class="form-control pr-3" id="startDay" placeholder="모임 시작 날짜">
         </div>
         <div class="m-3">

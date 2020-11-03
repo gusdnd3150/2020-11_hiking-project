@@ -13,7 +13,7 @@ public class BoardDAO {
     @Autowired
     private SqlSession sqlSession;
 
-    public List selectNotice(Map map){
+    public List selectBoard(Map map){
         return sqlSession.selectList("board.selectNotice",map);
     }
 }

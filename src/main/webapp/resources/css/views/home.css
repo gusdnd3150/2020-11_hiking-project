@@ -42,16 +42,16 @@
     filter: alpha(opacity=40); /* For IE8 and earlier */
 }
 
-@media screen and (max-width: 992px){
+@media screen and (max-width: 996px){
     .cover-container {
         width: 0; !important;
         display: none; !important;
     }
 
 }
-@media screen and (min-width: 993px) {
+@media screen and (min-width: 997px) {
     .cover-container {
-
+        display: flex
     }
     
 }
@@ -73,9 +73,17 @@
 }
 
 #keywordRank{
+    position: absolute;
     height: 30px;
     overflow-y: hidden;
 }
 #keywordRank:hover{
+    position: absolute;
+    width: 180px;
+    height: 200px;
+    border: 1px solid lightgrey;
     cursor: pointer;
+
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
 }

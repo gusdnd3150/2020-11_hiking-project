@@ -15,12 +15,12 @@ public class BoardController {
     @Resource(name = "boardService")
     private BoardService boardService;
 
-    @GetMapping("/board/notice.do")
+    @GetMapping("/board/select.do")
     public List selectNotice(@RequestParam("rowNum")int rowNum,
-                             @RequestParam("type")String type){
+                             @RequestParam("type")String csPostType){
         Map map = new HashMap();
         map.put("rowNum",rowNum);
-        map.put("type",type);
-        return boardService.selectNotice(map);
+        map.put("csPostType",csPostType);
+        return boardService.selectBoard(map);
     }
 }

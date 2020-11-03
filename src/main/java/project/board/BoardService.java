@@ -5,5 +5,5 @@ import java.util.Map;
 
 public interface BoardService {
 
-    List selectNotice(Map map);
+    List selectBoard(Map map);
 }

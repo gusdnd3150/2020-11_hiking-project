@@ -5,7 +5,7 @@
 <jsp:include page="/common/header.jsp" />
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="./resources/css/views/home.css">
-<body class="container pt-5" style="width: 100%">
+<body class="container pt-3" style="width: 100%">
 <!-- cover -->
 <div class="cover-container row">
 	<div class="left-cover col-6 align-self-center">
@@ -20,14 +20,14 @@
 				</a>
 			</div>
 			<ul id="keywordRank" class="p-1"></ul>
-			<div onclick="moveToMain()" style="position: absolute;margin-bottom: 10%">
-				<h1><i class="fas fa-angle-down"></i></h1>
-			</div>
 		</div>
 	</div>
 	<div class="right-cover text-right col-sm-12 col-md-6 pt-5" style="object-fit: cover">
 		<img id="cover_image" src="./resources/img/cover.png" style="height: 100%;overflow-y: hidden" >
 	</div>
+	<h2 class="container pb-5 align-self-end text-center" onclick="moveToMain()" style="position: absolute;">
+		<i class="fas fa-angle-down"></i>
+	</h2>
 </div>
 <hr />
 <%--<div class="container">--%>
