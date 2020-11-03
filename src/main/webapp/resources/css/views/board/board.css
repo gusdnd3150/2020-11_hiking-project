@@ -1,0 +1,11 @@
+#pagination a{
+    color: black;
+}
+
+#pagination .disabled a{
+    color: lightgrey;
+}
+#pagination .active a{
+    background: lightseagreen;
+    color: white;
+}

@@ -222,3 +222,5 @@
     }
 </script>
 </body>
+<pre class="pt-5"></pre>
+<jsp:include page="/common/footer.jsp" />

@@ -15,4 +15,10 @@ public class BoardServiceImpl implements BoardService{
     public List selectBoard(Map map){
         return boardDAO.selectBoard(map);
     }
+    public int selectBoardAllCount(String csPostType){
+        return boardDAO.selectBoardAllCount(csPostType);
+    };
+    public List selectBoardDetail(int csPostNum){
+        return boardDAO.selectBoardDetail(csPostNum);
+    }
 }

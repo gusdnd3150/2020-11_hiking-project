@@ -5,13 +5,36 @@
 <mapper namespace="board">
     <select id="selectBoard" resultType="map" parameterType="map">
         <![CDATA[
-            SELECT rownum, post.*
+            SELECT *
             FROM (
-                     SELECT cp.CSPOSTNUM, cp.title, TO_CHAR(cp.CREATEDAT, 'yyyy-mm-dd')
-                     FROM CSPOST cp
-                     WHERE csPostType = #{csPostType}
-                     ORDER BY CREATEDAT DESC
-                 ) post;
+                     SELECT rownum num, post1.*
+                     FROM (
+                              SELECT rownum rnum, post.*
+                              FROM (
+                                       SELECT cp.CSPOSTNUM, cp.title, TO_CHAR(cp.CREATEDAT, 'yyyy-mm-dd') createdAt
+                                       FROM CSPOST cp
+                                       WHERE csPostType = 100
+                                       ORDER BY CREATEDAT ASC
+                                   ) post
+                              ORDER BY rnum DESC
+                          ) post1
+                 )
+            WHERE num >= ((#{rowNum}-1)*10)+1
+              AND num <= #{rowNum}*10
         ]]>
+    </select>
+    <select id="selectBoardAllCount" resultType="int" parameterType="string">
+        SELECT COUNT(*)
+        FROM CSPOST
+        WHERE csPostType = #{csPostType}
+    </select>
+    <select id="selectBoardDetail" resultType="map" parameterType="map">
+        SELECT cspostnum, csboardnum, usernum, title, content,
+               TO_CHAR(createdat,'yyyy-mm-dd hh:mi:ss') createdAt,
+               TO_CHAR(updatedat,'yyyy-mm-dd hh:mi:ss') updatedat,
+               DECODE(status,1,'미처리',2,'완료') status,
+               DECODE(csposttype,100,'공지사항',200,'문의사항',300,'신고글',400,'이벤트') type
+        FROM csPost
+        WHERE csPostNum = #{csPostNum}
     </select>
 </mapper>

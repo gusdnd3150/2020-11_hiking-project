@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <jsp:include page="/common/header.jsp" />
+<link rel="stylesheet" type="text/css" href="../resources/css/views/board/board.css">
 <body class="container pt-5">
 <div class="pt-5">
     <h1>고객센터 게시판</h1>
@@ -21,33 +22,41 @@
 <script>
 
     var type = '';
-    sortASC(1);
 
-    function CS(){
-        $('#trailList').empty()
+    $(document).ready(function (){
+        selectCSBoard(1);
+    })
+
+    function selectCSBoard(rowNum){
+        $('#boardList').empty()
         $('#pagination').empty()
-        selectTrailListSortASC(rowNum);
-        type = 'asc';
-        pagingInit(rowNum);
+        selectCSBoardAjax(rowNum);
+        pagingInit(rowNum,100);
     }
 
-    function sortCS(rowNum){
-        $('#trailList').empty()
-        $('#pagination').empty()
-        selectTrailListSort(rowNum);
-        type = 'dffl';
-        pagingInit(rowNum);
-    }
+    // function selectNoticeBoard(rowNum){
+    //     $('#boardList').empty()
+    //     $('#pagination').empty()
+    //     selectNoticeBoardAjax(rowNum);
+    //     pagingInit(rowNum);
+    // }
+    //
+    // function selectEventBoard(rowNum){
+    //     $('#boardList').empty()
+    //     $('#pagination').empty()
+    //     selectEventBoardAjax(rowNum);
+    //     pagingInit(rowNum)
+    // }
 
-    function selectTrailListSortASC(rowNum){
+    function selectCSBoardAjax(rowNum){
         var data = {
             "rowNum": rowNum,
-            "sort":"asc",
+            "csPostType":100,
         }
         $.ajax({
-            type: "POST",
-            url: "/trail/list.do",
-            data: JSON.stringify(data),
+            type: "GET",
+            url: "/board/select.do",
+            data: data,
             dataType: 'json',
             contentType: "application/json; charset=utf-8;",
             success: function (response){
@@ -58,27 +67,46 @@
             }
         })
     }
-
-    function selectTrailListSortDFFL(rowNum){
-        var data = {
-            "rowNum": rowNum,
-            "sort":"dffl",
-        }
-        $.ajax({
-            type: "POST",
-            url: "/trail/list.do",
-            data: JSON.stringify(data),
-            dataType: 'json',
-            contentType: "application/json; charset=utf-8;",
-            success: function (response){
-                appendList(response);
-            },
-            error: function(response){
-                console.log("error");
-            }
-        })
-    }
-
+    <%--function selectNoticeBoardAjax(rowNum){--%>
+    <%--    var data = {--%>
+    <%--        "rowNum": rowNum,--%>
+    <%--        "csPostType":200,--%>
+    <%--    }--%>
+    <%--    $.ajax({--%>
+    <%--        type: "GET",--%>
+    <%--        url: "/board/select.do",--%>
+    <%--        data: data,--%>
+    <%--        dataType: 'json',--%>
+    <%--        contentType: "application/json; charset=utf-8;",--%>
+    <%--        success: function (response){--%>
+    <%--            // appendList(response);--%>
+    <%--            console.log(response)--%>
+    <%--        },--%>
+    <%--        error: function(response){--%>
+    <%--            console.log("error");--%>
+    <%--        }--%>
+    <%--    })--%>
+    <%--}--%>
+    <%--function selectEventBoardAjax(rowNum){--%>
+    <%--    var data = {--%>
+    <%--        "rowNum": rowNum,--%>
+    <%--        "csPostType":300,--%>
+    <%--    }--%>
+    <%--    $.ajax({--%>
+    <%--        type: "GET",--%>
+    <%--        url: "/board/select.do",--%>
+    <%--        data: data,--%>
+    <%--        dataType: 'json',--%>
+    <%--        contentType: "application/json; charset=utf-8;",--%>
+    <%--        success: function (response){--%>
+    <%--            // appendList(response);--%>
+    <%--            console.log(response)--%>
+    <%--        },--%>
+    <%--        error: function(response){--%>
+    <%--            console.log("error");--%>
+    <%--        }--%>
+    <%--    })--%>
+    <%--}--%>
     function appendList(response){
         var userId = '<%= session.getAttribute("LOGIN")%>';
 
@@ -86,37 +114,34 @@
         html += '<thead>';
         html += '<tr>';
         html += '<th>번호</th>';
-        html += '<th>산이름</th>';
-        html += '<th>난이도</th>';
-        html += '<th>바로가기</th>';
+        html += '<th>제목</th>';
+        html += '<th>작성 시간</th>';
         html += '</tr>';
         html += '</thead>';
 
         for(var i=0;i<response.length;i++){
 
             html += '<tr style="font-size: 20px">';
-            html += '<th width="80">'+response[i].RNUM+'</th>';
-            html += '<th width="500"><a href="/trail/'+response[i].MNTN_CODE+'.do?userId='+userId+'" class="text-muted p-0">'+response[i].MNTN_NM+' 등산로 </a></th>';
-            if(response[i].PMNTN_DFFL=='쉬움'){
-                html += '<th width="100" style="color: green">'+response[i].PMNTN_DFFL+'</th>';
-            }else if(response[i].PMNTN_DFFL=='중간'){
-                html += '<th width="100" style="color: rgb(247, 222, 2)">'+response[i].PMNTN_DFFL+'</th>';
-            }else if(response[i].PMNTN_DFFL=='어려움') {
-                html += '<th width="100" style="color: red">'+response[i].PMNTN_DFFL+'</th>';
-            }
-            html += '<th width="100"><a href="/trail/'+response[i].MNTN_CODE+'.do?userId='+userId+'" class="text-muted p-0">더보기></a></th>';
+            html += '<th width="100">'+response[i].RNUM+'</th>';
+            html += '<th width="400" style="font-weight: normal"><a href="/board/'+response[i].CSPOSTNUM+'.do?userId='+userId+'" class="text-muted p-0">'+response[i].TITLE+'</a></th>';
+            html += '<th width="200" style="font-weight: lighter">'+response[i].CREATEDAT+'</th>';
             html += '</tr>';
 
         }
 
-        $('#trailList').append(html);
+        $('#boardList').append(html);
     }
 
-    // 모듈화 시킬 것
-    function pagingInit(curPage){
+    <%--// 모듈화 시킬 것--%>
+    function pagingInit(curPage,csPostType){
+        var data = {
+            "csPostType":csPostType
+        }
+
         $.ajax({
             type: "GET",
-            url: "/trail/allCount.do",
+            url: "/board/allCount.do",
+            data: data,
             dataType: 'json',
             contentType: "application/json; charset=utf-8;",
             success: function (response){
@@ -163,37 +188,21 @@
         if(curPage == 1){
             html += '<li class="page-item disabled"><a class="page-link" href="#">이전</a></li>';
         }else {
-            if(type=='asc') {
-                html += '<li class="page-item"><a class="page-link" href="#" onclick="sortASC(prevPage)">이전</a></li>';
-            }else if(type=='dffl'){
-                html += '<li class="page-item"><a class="page-link" href="#" onclick="sortDFFL(prevPage)">이전</a></li>';
-            }
+            html += '<li class="page-item"><a class="page-link" href="#" onclick="selectCSBoard(prevPage)">이전</a></li>';
         }
 
         for(var i=startPage;i<=endPage;i++){
-            if(type=='asc'){
-                if(i==curPage){
-                    html += '<li class="page-item active"><a class="page-link" href="#" onclick="sortASC('+i+')">'+Math.ceil(i)+'</a></li>';
-                }else {
-                    html += '<li class="page-item"><a class="page-link" href="#" onclick="sortASC('+i+')">'+Math.ceil(i)+'</a></li>';
-                }
-            }else if(type=='dffl'){
-                if(i==curPage){
-                    html += '<li class="page-item active"><a class="page-link" href="#" onclick="sortDFFL('+i+')">'+Math.ceil(i)+'</a></li>';
-                }else {
-                    html += '<li class="page-item"><a class="page-link" href="#" onclick="sortDFFL('+i+')">'+Math.ceil(i)+'</a></li>';
-                }
+            if(i==curPage){
+                html += '<li class="page-item active"><a class="page-link" href="#" onclick="selectCSBoard('+i+')">'+Math.ceil(i)+'</a></li>';
+            }else {
+                html += '<li class="page-item"><a class="page-link" href="#" onclick="selectCSBoard('+i+')">'+Math.ceil(i)+'</a></li>';
             }
         }
 
         if(curPage == pageCnt){
             html += '<li class="page-item disabled"><a class="page-link" href="#">다음</a></li>';
         }else if(curPage < pageCnt){
-            if(type=='asc'){
-                html += '<li class="page-item"><a class="page-link" href="#" onclick="sortASC(nextPage)">다음</a></li>';
-            }else if(type=='dffl'){
-                html += '<li class="page-item"><a class="page-link" href="#" onclick="sortDFFL(nextPage)">다음</a></li>';
-            }
+            html += '<li class="page-item"><a class="page-link" href="#" onclick="selectCSBoard(nextPage)">다음</a></li>';
         }
 
         $('#pagination').append(html);
@@ -201,4 +210,4 @@
 
 </script>
 </body>
-</html>
+<jsp:include page="/common/footer.jsp" />

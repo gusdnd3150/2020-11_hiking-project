@@ -287,7 +287,7 @@
                     ) list
             )
         <![CDATA[
-        WHERE rnum >= ((#{rowNum}-1)*10)+1 --> rowNum 입력
+        WHERE rnum >= ((#{rowNum}-1)*10)+1
         AND rnum <= #{rowNum}*10
         ]]>
     </select>

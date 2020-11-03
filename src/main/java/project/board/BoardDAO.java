@@ -14,6 +14,12 @@ public class BoardDAO {
     private SqlSession sqlSession;
 
     public List selectBoard(Map map){
-        return sqlSession.selectList("board.selectNotice",map);
+        return sqlSession.selectList("board.selectBoard",map);
+    }
+    public int selectBoardAllCount(String csPostType){
+        return sqlSession.selectOne("board.selectBoardAllCount",csPostType);
+    }
+    public List selectBoardDetail(int csPostNum){
+        return sqlSession.selectList("board.selectBoardDetail",csPostNum);
     }
 }
