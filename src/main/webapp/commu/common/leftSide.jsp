@@ -8,7 +8,7 @@
   request.setCharacterEncoding("UTF-8");
 %> 
 <jsp:include page="/common/header.jsp" flush="false" />
-    <style>
+<style>
 		.card {
 	margin: 10px auto;
 }
@@ -27,13 +27,12 @@
 } 
 
  #rightSide {
-width: 100px;
+	width: 100px;
 	position: fixed;
 } 
-
-	</style>
-				<div class="container mt-4">
-		<div class="row pt-5">
+</style>
+			<div class="container mt-4">
+	<div class="row pt-5">
 			<div class="col-md-3"  >
 			<div id="leftSide">
 				<div class="card col-sm-12" style="border: 2px solid green; width: 15rem; padding:0;">
@@ -61,7 +60,7 @@ width: 100px;
 					  <a style=" color: gray;" id="list-setting-list" data-toggle="list" href="#setting" role="tab" aria-controls="setting" > 관리하기> </a><br>
 				
 					</c:when>
-                      <c:when test="${1 eq m2.USERTYPE}">
+                      <c:when test="${1 eq m2.USERTYPE && 0 eq m2.USERSTATUS }">
                       <br>
                       <button type="button" id="withdrawCheckModalBtn" class="btn btn-link"  data-toggle="modal" data-target="#withdrawAskModal" style="color: gray;">탈퇴하기></button><br>
 						</c:when>
@@ -111,7 +110,7 @@ width: 100px;
                 <div class="modal-header">
                     <h4 class="modal-title">${m1.NAME} 참여하기</h4>
                   <!--   <!-- 닫기(x) 버튼 -->
-                    <button type="button" class="close" data-dismiss="modal">×</button> -->
+                    <button type="button" class="close" data-dismiss="modal">×</button>
                     <!-- header title -->
                 </div>
                 <!-- body -->

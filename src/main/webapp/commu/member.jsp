@@ -7,7 +7,7 @@
 		<h3>&nbsp&nbsp&nbsp오름 멤버</h3>
 		<div id="ASpace"></div>
 	</div>
-<ul class="list-group mt-4" id="memberList"  >
+<ul class="list-group mt-4" id="memberList" >
 <div id="leader"></div>
 <div id="members"></div>
 </ul>

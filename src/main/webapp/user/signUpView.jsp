@@ -71,17 +71,21 @@
 <style>
 .containerr {
 	text-align: left;
+	margin-left: 225px;
+	margin-bottom: 20px;
+}
+.navbar {
+height: 60px;
 }
 </style>
 </head>
 <body>
-	 <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+	 <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top p-0">
 <div class="containerr ">
-		<a class="navbar-brand" href="/"> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-											&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-		<img src="../resources/img/main-icon.svg" width="30" height="30"
-			class="d-inline-block align-top" alt="" loading="lazy"> 산오름
-		</a>
+		  <a class="navbar-brand" href="/">
+            <img src="../resources/img/main-icon.svg" width="50" height="50" class="d-inline-block align-top" alt="" loading="lazy" style="float: left">
+            <p class="m-0" style="font: 30pt 'fromdamiM'; float: left">산오름</p>
+        </a>
 	</div> 
 	</nav>
 	<div class="row text-center">
