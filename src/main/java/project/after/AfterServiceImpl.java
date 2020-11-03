@@ -45,7 +45,15 @@ public class AfterServiceImpl implements AfterService {
     public int selectLikeCount(int afterNum){
         return afterDAO.selectLikeCount(afterNum);
     }
+    @Transactional
     public void insertAfterLike(Map map){
         afterDAO.insertAfterLike(map);
+    }
+    @Transactional
+    public void updateAfterLike(Map map){
+        afterDAO.updateAfterLike(map);
+    }
+    public int checkAfterLike(Map map){
+        return afterDAO.checkAfterLike(map);
     }
 }

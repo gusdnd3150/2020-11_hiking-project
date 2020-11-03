@@ -17,4 +17,6 @@ public interface AfterService {
 
     int selectLikeCount(int afterNum);
     void insertAfterLike(Map map);
+    void updateAfterLike(Map map);
+    int checkAfterLike(Map map);
 }

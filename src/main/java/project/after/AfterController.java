@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -156,18 +157,28 @@ public class AfterController {
     @GetMapping("/after/selectLikeCount.do")
     @ResponseBody
     public int selectLikeCount(@RequestParam("afterNum")int afterNum){
-        int count = afterService.selectLikeCount(afterNum);
-        if(count==0){
-            System.out.println("count is "+count);
-        }
-        System.out.println("count is "+count);
-        return count;
+        return afterService.selectLikeCount(afterNum);
+    }
+    @GetMapping("/after/checkAfterLike.do")
+    @ResponseBody
+    public int checkAfterLike(@RequestParam("afterNum")int afterNum,
+                                 @RequestParam("userId")String userId){
+        Map map = new HashMap();
+        map.put("afterNum",afterNum);
+        map.put("userId",userId);
+        return afterService.checkAfterLike(map);
     }
 
     @PostMapping("/after/insertAfterLike.do")
     @ResponseBody
     public int insertLike(@RequestBody Map map){
         afterService.insertAfterLike(map);
+        return afterService.selectLikeCount((Integer)map.get("afterNum"));
+    }
+    @PostMapping("/after/updateAfterLike.do")
+    @ResponseBody
+    public int updateAfterLike(@RequestBody Map map){
+        afterService.updateAfterLike(map);
         return afterService.selectLikeCount((Integer)map.get("afterNum"));
     }
 }

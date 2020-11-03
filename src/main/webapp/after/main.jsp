@@ -7,9 +7,11 @@
 <script type="text/javascript" src="../resources/js/jquery.js"></script>
 <script type="text/javascript" src="../resources/js/bootstrap.min.js"></script>
 <script>
+
     $(document).on('click','.like',function (){
+        var afterNum = this.getAttribute("id")
         var data = {
-            "afterNum": this.getAttribute("id"),
+            "afterNum": afterNum,
             "userId" : "${LOGIN}",
             "likeYN" :  "Y"
         }
@@ -20,8 +22,33 @@
             dataType: 'json',
             contentType: "application/json; charset=utf-8;",
             success: function (response) {
-                console.log("success")
-                console.log(response)
+                var id = 'likebox-'+afterNum;
+                $('#'+afterNum).attr('class','dislike fas fa-thumbs-up');
+                $('#'+id).text(response)
+            },
+            error: function (response){
+                console.log("error")
+            }
+        })
+    });
+
+    $(document).on('click','.dislike',function (){
+        var afterNum = this.getAttribute("id")
+        var data = {
+            "afterNum": afterNum,
+            "userId" : "${LOGIN}",
+            "likeYN" :  "N"
+        }
+        $.ajax({
+            type: "POST",
+            url: "/after/updateAfterLike.do",
+            data: JSON.stringify(data),
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8;",
+            success: function (response) {
+                var id = 'likebox-'+afterNum;
+                $('#'+afterNum).attr('class','like far fa-thumbs-up');
+                $('#'+id).text(response)
             },
             error: function (response){
                 console.log("error")
@@ -31,7 +58,7 @@
 
     function selectLikeCount(afterNum){
         var data = {
-            "afterNum":afterNum
+            "afterNum": afterNum
         }
         $.ajax({
             type: "GET",
@@ -40,8 +67,33 @@
             dataType: 'json',
             contentType: "application/json; charset=utf-8;",
             success: function (response) {
-                console.log("success")
+                var id = 'likebox-'+afterNum;
+                $('#'+id).append(response)
+            },
+            error: function (response){
+                console.log("error")
+            }
+        })
+    }
+
+    function checkAfterLike(afterNum){
+        var data = {
+            "afterNum" : afterNum,
+            "userId" : "<%= request.getSession().getAttribute("LOGIN")%>"
+        }
+        $.ajax({
+            type: "GET",
+            url: "/after/checkAfterLike.do",
+            data: data,
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8;",
+            success: function (response) {
                 console.log(response)
+                if(response==1){
+                    $('#like-'+afterNum).append('<i id="'+afterNum+'" class="dislike fas fa-thumbs-up" style="color:skyblue"></i>')
+                }else if(response==0){
+                    $('#like-'+afterNum).append('<i id="'+afterNum+'" class="like far fa-thumbs-up" style="color:skyblue"></i>')
+                }
             },
             error: function (response){
                 console.log("error")
@@ -214,7 +266,6 @@
             success: function (response){
                 var id = $root.parentNode.id;
 
-                console.log(id)
                 var html = '';
 
                 html += '<li id="temp" class="col-12 row pt-3 ml-5 pl-2">';
@@ -245,8 +296,8 @@
                     </a>
                     <h3 class="pl-2 mt-1 mb-0">[${after.MTNM}] ${after.TITLE}</h3>
                 </div>
-                <div id="likebox" class="align-self-center">
-                    <i id="${after.AFTERNUM}" class="like far fa-thumbs-up" style="font-size: 30px"></i>
+                <div id="like-${after.AFTERNUM}" class="align-self-center" style="font-size: 22px">
+                    <span id="likebox-${after.AFTERNUM}" style="margin: 5px 5px 5px 5px;"></span>
                 </div>
             </div>
             <hr />
@@ -277,6 +328,7 @@
             <script>
                 selectCommentByAfterNum(${after.AFTERNUM})
                 selectLikeCount(${after.AFTERNUM})
+                checkAfterLike(${after.AFTERNUM})
             </script>
         </c:forEach>
     </div>

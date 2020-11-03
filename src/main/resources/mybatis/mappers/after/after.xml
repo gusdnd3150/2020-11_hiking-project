@@ -104,7 +104,7 @@
         ]]>
     </select>
 
-    <insert id="insertAfterLike" parameterType="map">
+    <insert id="likeFunction" parameterType="map">
         <if test='likeYN.equals("Y")'>
             <![CDATA[
             MERGE INTO groupAfterLike
@@ -125,7 +125,7 @@
             userId = #{userId},
             likeYn = #{likeYN},
             createdAt = sysdate
-            WHERE mtNum = #{afterNum}
+            WHERE afterNum = #{afterNum}
             AND userId = #{userId}
         </if>
         <selectKey keyProperty="afterNum" resultType="_int" order="AFTER">
@@ -140,6 +140,14 @@
         SELECT COUNT(*)
         FROM groupAfterLike
         WHERE afterNum = #{afterNum}
+        AND LIKEYN = 'Y'
         GROUP BY afterNum
+    </select>
+
+    <select id="checkAfterLike" resultType="Integer" parameterType="map">
+        select DECODE(LIKEYN,'Y',1,'N',0)
+        FROM groupAfterLike
+        WHERE afterNum = #{afterNum}
+        AND userId = #{userId}
     </select>
 </mapper>

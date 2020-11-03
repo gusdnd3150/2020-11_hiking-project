@@ -45,9 +45,23 @@ public class AfterDAO {
         return sqlSession.selectList("after.selectCommentByAfterNum",afterNum);
     }
     public int selectLikeCount(int afterNum){
-        return sqlSession.selectOne("after.selectLikeCount",afterNum);
+        Integer result = sqlSession.selectOne("after.selectLikeCount",afterNum);
+        if(result==null){
+            return 0;
+        }
+        return result;
     }
     public void insertAfterLike(Map map){
-        sqlSession.insert("after.insertAfterLike",map);
+        sqlSession.insert("after.likeFunction",map);
+    }
+    public void updateAfterLike(Map map){
+        sqlSession.delete("after.likeFunction",map);
+    }
+    public int checkAfterLike(Map map){
+        Integer result = sqlSession.selectOne("after.checkAfterLike",map);
+        if(result==null||result==0){
+            return 0;
+        }
+        return 1;
     }
 }
