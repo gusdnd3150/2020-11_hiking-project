@@ -250,8 +250,7 @@
 
                 var html = '';
                 html += '<a href="/trail/'+ trailInfo.MNTN_CODE +'.do?userId=' + userId + '" class="col-6" style="text-decoration:none; color: black;">';
-                html += '<h3>'+trailInfo.PMNTN_NM+'</h3>'
-                html += '<div>'+trailInfo.MNTN_NM+'</div>'
+                html += '<h3>'+trailInfo.MNTN_NM+' - '+trailInfo.PMNTN_NM+'</h3>'
                 html += '<div style="color:gray">'+trailInfo.PMNTN_DFFL+'</div>'
                 html += '</a>'
 
@@ -272,17 +271,14 @@
                 html += '<a href="/group/' + groupInfo.GROUPNUM + '" style="text-decoration: none;color: black">';
                 html += '<div class="media">';
                 html += '<img src="/resources/img/'+groupInfo.STOREDFILENAME+'" style="width: 120px; height: 100px;" class="rounded" alt="...">'
-                html += '<div class="media-body" class="col-md-6">';
-                html += '<h3 class="m-1">';
+                html += '<div class="media-body" class="col-6">';
+                html += '<div class="col-12" style="height: 100px">';
+                html += '<h3 style="width:200px; display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis">';
                 html += groupInfo.NAME;
                 html += '</h3>';
-                html += '<div class="text-mute" style="width:100%; display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis">'+convertDetail+'</div>';
-                html += '[' + groupInfo.STATUS + ']</span>';
-                html += '<a href="/profile/' + groupInfo.ID + '" onclick=\"window.open(this.href,\'\',\'width=500, height=600\'); return false;">';
-                html += '<img src="/resources/img/' + groupInfo.CONTENT2 + '" class="rounded" style="width: 40px;height: 40px;">';
-                html += '<span style="color: black">'+groupInfo.NICKNAME+'</span>'
-                html += '</a>';
-                html += '</div></div></a>';
+                html += '<div class="text-muted" style="width:250px; display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis">'+convertDetail+'</div>';
+                html += '<span class="align-self-end">[' + groupInfo.STATUS + ']</span>';
+                html += '</div></div></div></a>';
 
                 if (groupInfo.STATUS == '모집중') {
                     html += '<span style="color: limegreen">';
