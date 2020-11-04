@@ -56,4 +56,8 @@ public class AfterServiceImpl implements AfterService {
     public int checkAfterLike(Map map){
         return afterDAO.checkAfterLike(map);
     }
+    @Override
+	public int countSubComment(Map map) {
+		return afterDAO.countSubComment(map);
+	}
 }

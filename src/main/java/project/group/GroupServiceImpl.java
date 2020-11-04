@@ -138,4 +138,9 @@ public class GroupServiceImpl implements GroupService{
     }
 
     public List recommendGroup(Map map){return groupDAO.recommendGroup(map);}
+
+	@Override
+	public int countSubComment(Map map) {
+		return groupDAO.countSubComment(map);
+	}
 }

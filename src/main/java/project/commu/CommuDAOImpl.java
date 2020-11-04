@@ -182,4 +182,12 @@ public class CommuDAOImpl implements CommuDAO {
 		return list;
 	}
 
+	@Override
+	public int commuMandate(Map map) {
+		System.out.println("commuMandate:    " +map);
+		sqlSession.update("commuMapper.updateLeaderType", map);
+		sqlSession.update("commuMapper.commuMandate", map);
+		  return 1;
+	}
+
 }

@@ -109,6 +109,7 @@ public class GroupController{
     @PostMapping("/group/withdraw.do")
     @ResponseBody
     public int withdrawGroup(@RequestBody Map map){
+    	System.out.println("withdrawGroup :  " +map);
         return groupService.withdrawGroup(map);
     }
 
@@ -207,6 +208,7 @@ public class GroupController{
     @ResponseBody
     public List selectCommentByPostNum(@RequestParam("postNum") int postNum){
         List<Map> list = groupService.selectCommentByPostNum(postNum);
+        System.out.println("왔다");
         return list;
     }
 
@@ -214,5 +216,11 @@ public class GroupController{
     @ResponseBody
     public List sortGroupByKeyword(@RequestBody Map map){
         return groupService.sortGroupByKeyword(map);
+    }
+    
+    @PostMapping("/group/countSubComment.do")
+    @ResponseBody
+    public int countSubComment(@RequestBody Map map){
+        return groupService.countSubComment(map);
     }
 }

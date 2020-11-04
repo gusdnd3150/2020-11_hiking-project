@@ -31,39 +31,34 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public int idCheck(String id) throws Exception{
 		int rst = userDAO.idCheck(id);
-		System.out.println("Service : "+ rst);
 		return rst;
 	}
 	
 	@Override
 	public int emailCheck(String email) throws Exception {
 		int rst = userDAO.emailCheck(email);
-		System.out.println("Service : "+ rst);
 		return rst;
 	}
 	
 	@Override
 	public int nickNameCheck(String nickName) throws Exception {
 		int rst = userDAO.nickNameCheck(nickName);
-		System.out.println("Service : "+ rst);
 		return rst;
 	}
 
 	@Override
 	public int idEmailCheck(Map<String, Object> map) throws Exception {
 		int rst = userDAO.idEmailCheck(map);
-		System.out.println("Service : "+ rst);
 		return rst;
 	}
 	
 	public UserVO logIn(LoginDTO loginDTO) throws Exception {
-		System.out.println("서비스왔다감");
 		return userDAO.logIn(loginDTO);
 	}
 
 	@Override
 	public void keepLogin(String id, String sessionId, Date sessionLimit) throws Exception {
-		logger.info("------keepLogInService------");
+		//logger.info("------keepLogInService------");
 		userDAO.keepLogIn(id, sessionId, sessionLimit);
 		
 	}
@@ -98,7 +93,6 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void updateAuthStatus(Map<String, String> map) {
 		userDAO.updateAuthStatus(map);
-		System.out.println("아우스 키 업뎃!!!!!!!");
 	}
 
 	@Override

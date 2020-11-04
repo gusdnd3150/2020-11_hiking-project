@@ -41,8 +41,7 @@
 			<img class="col-sm-7" id="OContent" src="">
 			<!--  </div> -->
 			<div class="card scroll" style="width: 30rem; height: 55rem; margin-left: 0px; margin-right: 8%;">
-				<button type="button" class="close" data-dismiss="modal"
-					aria-label="Close" style="text-align: right; margin-right: 10px;">
+				<button type="button" class="close" id="ocClose" onclick="oCModalClose()" data-dismiss="modal" aria-label="Close" style="text-align: right; margin-right: 10px;">
 					<span aria-hidden="true">&times;</span>
 				</button>
 				<div class="card-body">
@@ -64,14 +63,14 @@
 					<div class="mt-3">
 						<h6 class="mt-2 pb-1">댓글</h6>
 						<div style="width: 28rem; height: 35rem; overflow:scroll;">
-							<div id="commentBoard" class="row"></div>
+							<div id="commentBoard" name="commentBoard" class="row"></div>
 						</div>
 					</div>
 					<hr />
 					<div id="commentInput" class="row" style="text-align: center">
 						<img src="/resources/img/${sessionIdImage}" class="rounded-circle mt-1" style="margin-left: 10px; width: 30px; height: 30px"> 
-							<input id="commentContent" class="form-control form-control-md col-lg-9 col-md-9 col-sm-10 col-10 ml-2 mr-2" type="text" placeholder="내용을 입력해주세요">
-							<button id="commentSubmit" class="btn btn-success btn-sm">입력</button>
+							<input id="commentContent"name="commentContent" class="form-control form-control-md col-lg-9 col-md-9 col-sm-10 col-10 ml-2 mr-2" type="text" placeholder="내용을 입력해주세요">
+							<button id="commentSubmit" class="btn btn-success btn-sm" >입력</button>
 					</div>
 
 				</div>

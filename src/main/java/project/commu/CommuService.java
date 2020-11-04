@@ -55,4 +55,6 @@ public interface CommuService {
 
 	List<Map> selectCommuPageInfo2(Map<String, Object> map)throws Exception;
 
+	int commuMandate(Map map);
+
 }

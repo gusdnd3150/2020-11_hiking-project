@@ -31,16 +31,16 @@
 	position: fixed;
 } 
 </style>
-			<div class="container mt-4">
+			<div class="container mt-4" >
 	<div class="row pt-5">
 			<div class="col-md-3"  >
 			<div id="leftSide">
-				<div class="card col-sm-12" style="border: 2px solid green; width: 15rem; padding:0;">
+				<div class="card col-sm-12" style="border: 2px solid green; max-height:40rem; width: 15rem; padding:0;">
 					<img src="/resources/img/${m3.STOREDFILENAME}" style="width:100%; height:200px;"
 						class="card-img-top" alt="산모임 기본 이미지">
 					<div class="card-body">
 						<h5 class="card-title">${m1.NAME}</h5>
-						<small>멤버 ${m1.STAFFCURRENT}</small> <br>
+						<%-- <small>멤버 ${m1.STAFFCURRENT}</small> <br>
 						<small>지역 ${m1.AREA}</small> <br> 
 						<small>성별 ${m1.SEX}</small> <br>
 						<c:choose>
@@ -50,8 +50,10 @@
 						   <c:otherwise>
 						<small>연령 ${m1.AGESTART}~${m1.AGEEND}</small> <br> <br>
 						</c:otherwise>
-						</c:choose>
-						<p class="card-text" style="display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis">${m1.DETAIL}</p>
+						</c:choose> --%>
+						<div class="mb-4" style="max-height: 19rem; overflow:scroll; margin: 20px 0px;">
+						<p class="card-text" style="display: block; overflow:scroll; text-overflow: ellipsis">${m1.DETAIL}</p>
+						</div>
 						<small>시작일 ${fn:substring(m1.CREATEDAT, 0, 10)}</small> <br>
 						<c:choose>
                     <c:when test="${0 eq m2.USERTYPE}">
@@ -68,7 +70,7 @@
 					</div>
 				<div style="height:5px"></div>
 				</div>
-			<center>
+			    <center>
 				<c:choose>
                         <c:when test="${0 eq m2.USERTYPE}"><button class="selectWaitingList btn btn-success col-11" disabled="" data-toggle="modal" data-target="#listModal">새로운 가입 요청</button></c:when>
                         <c:when test="${1 eq m2.USERSTATUS}"><button class="cancelAskModalBtn btn btn-dark col-11" data-toggle="modal" data-target="#cancelAskModal">요청 취소하기</button></c:when>

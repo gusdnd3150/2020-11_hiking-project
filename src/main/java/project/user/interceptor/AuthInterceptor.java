@@ -20,7 +20,7 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 
 		if (httpSession.getAttribute(LOGIN) == null) {
 			logger.info("current user is not logged");
-			response.sendRedirect("/user/logInView.do");
+			response.sendRedirect("/user/authReject.jsp");
 			return false;
 		}
 		return true;

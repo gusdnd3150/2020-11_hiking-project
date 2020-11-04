@@ -64,4 +64,7 @@ public class AfterDAO {
         }
         return 1;
     }
+	public int countSubComment(Map map) {
+		 return sqlSession.selectOne("after.countSubComment",map);
+	}
 }

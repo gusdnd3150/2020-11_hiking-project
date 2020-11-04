@@ -20,6 +20,7 @@ public class GroupCommentVO {
     private int subCommentCount;
     private Timestamp createdAt;
 
+    private int postNum;
     private String content2;
     private String nickname;
 }

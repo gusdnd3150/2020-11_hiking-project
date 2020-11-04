@@ -275,7 +275,7 @@
             WHERE g.groupNum = gm.groupNum
               AND gm.mediaNum = 0
               AND type = 2
-            ORDER BY g.groupNum DESC
+            ORDER BY g.STAFFCURRENT DESC
 				) a
 			WHERE rownum >= (#{rowNum}*10)+1
 			AND rownum  <= 9 + (#{rowNum}*10)
@@ -369,8 +369,7 @@
 			 <![CDATA[
 		select count(*)
         from groupsBoardPost
-        where userNum = #{userNum}
-        and groupNum = #{groupNum}
+        where groupNum = #{groupNum}
         and BOARDTYPE=3
           ]]>
 	</select>
@@ -556,4 +555,21 @@
 			where rownum <= 9
         ]]>
 	</select>
+	
+	<update id="updateLeaderType" parameterType="map">
+    <![CDATA[
+    update userWaiting
+	  	set userType = 1
+	    where groupNum = #{groupNum}
+        ]]>
+	</update>
+	
+	<update id="commuMandate" parameterType="map">
+    <![CDATA[
+    update userWaiting
+	  	set userType = 0
+	    where groupNum = #{groupNum}
+	       and userId = #{userId}
+        ]]>
+	</update>
 </mapper>

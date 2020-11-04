@@ -51,4 +51,6 @@ public interface CommuDAO {
 
 	public List<Map> selectCommuPageInfo2(Map<String, Object> map) throws Exception;
 
+	public int commuMandate(Map map);
+
 }
