@@ -30,6 +30,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import project.Paging;
+import project.after.AfterService;
 import project.group.GroupService;
 import project.groupmedia.GroupMediaService;
 import project.user.service.UserService;
@@ -55,6 +56,9 @@ public class CommuController {
 
 	@Autowired
 	private GroupService groupService;
+
+	@Autowired
+	private AfterService afterService;
 
 	@Transactional
 	@PostMapping(value = "/insert.do", produces = "application/json")

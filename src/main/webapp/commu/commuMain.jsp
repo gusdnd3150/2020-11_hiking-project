@@ -10,37 +10,14 @@
 		<div class="row">
 			<h1 class="col-md-8 col-lg-10 mb-0">인기글</h1>
 			<div class="col-md-4 col-lg-2 pt-2 pb-2 mt-5">
-				<a href=""><button type="button"  style="margin:0 0 0 60px; color:green;" class="btn btn-link">더 보기 ></button></a>
+				<a href="/after/main.do"><button type="button"  style="margin:0 0 0 60px; color:green;" class="btn btn-link">더 보기 ></button></a>
 			</div>
-			<div class="row row-cols-1 row-cols-md-2">
-				<div class="col mb-4">
-					<div class="card"  style="border: 1px solid green;">
-						<img src="/resources/img/home.png" class="card-img-top" alt="...">
-						<div class="card-body">
-							<h5 class="card-title">Card title</h5>
-							<p class="card-text">This is a longer card with supporting
-								text below as a natural lead-in to additional content. This
-								content is a little bit longer.</p>
-						</div>
-					</div>
-				</div>
-				<div class="col mb-4">
-					<div class="card" style="border: 1px solid green;">
-						<img src="/resources/img/home.png" class="card-img-top" alt="...">
-						<div class="card-body">
-							<h5 class="card-title">Card title</h5>
-							<p class="card-text">This is a longer card with supporting
-								text below as a natural lead-in to additional content. This
-								content is a little bit longer.</p>
-						</div>
-					</div>
-
-				</div>
+			<div id="afterBoard" class="row col-12 row-cols-1 row-cols-md-2">
 			</div>
 		</div>
 		<div class="btn-group" role="group" aria-label="...">
 		</div>
-		
+
 		<p></p>
 		<hr >
 		<div class="row">
@@ -98,6 +75,7 @@
 </body>
 <script>
  $(document).ready(function (){
+
         window.addEventListener('scroll',function (){
         });
         
@@ -105,6 +83,7 @@
     })
 
     $('#sort_lately').on('click',function (){
+    	loadAfterBoard();
         $('#commuList_even').empty();
         $('#commuList_odd').empty();
 
@@ -118,8 +97,9 @@
     });
 
     $('#sort_like').on('click',function (){
-    	  $('#commuList_even').empty();
-          $('#commuList_odd').empty();
+		loadAfterBoard();
+		$('#commuList_even').empty();
+		$('#commuList_odd').empty();
 
         var data = {
             'keyword' : 'like',
@@ -209,6 +189,43 @@
     function closeLoading() {
         $('#loadingImg').remove();
     }
+//afterBoard
+ 	function loadAfterBoard(){
+		$.ajax({
+			type: "GET",
+			url: "/main/afterList.do",
+			dataType: 'json',
+			contentType: "application/json; charset=utf-8;",
+			success: function (response){
+				console.log("success")
+				console.log(response)
 
+				for(var i=0;i<2;i++){
+
+					var detail = response[i].CONTENT;
+					var convertDetail = detail.replace(/(<([^>]+)>)/ig,"");
+
+					var html = ''
+					html += '<div class="col-6">';
+					html += '<div class="card" style="border: 1px solid green;">';
+					html += '<div class="p-3">'
+					html += '<div class="profile-box form-inline">'
+					html += '<img src="/resources/img/'+response[i].CONTENT2+'" class="rounded-circle" style="width: 50px;height: 50px">'
+					html += '<div>';
+					html += '<div class="m-0 pl-2" style="height: 30px;display:block;overflow:auto;white-space:nowrap;text-overflow: ellipsis">'+response[i].NICKNAME+' 님이 작성하신 글</div>'
+					html += '<h3 class="pl-2">'+response[i].TITLE+'</h3>'
+					html += '</div></div>'
+					html += '<div class="card-body">';
+					html += '<p class="text-muted">'+convertDetail+'</p>';
+					html += '</div></div></div>';
+
+					$('#afterBoard').append(html)
+				}
+			},
+			error: function(request, status, error){
+				console.log("error")
+			}
+		})
+	}
 </script>
 </html>
