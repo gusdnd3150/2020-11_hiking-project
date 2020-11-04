@@ -138,4 +138,8 @@ public class GroupDAO{
     public List recommendGroup(Map map){
         return sqlSession.selectList("group.recommendGroup",map);
     }
+
+	public int countSubComment(Map map) {
+		 return sqlSession.selectOne("group.countSubComment",map);
+	}
 }

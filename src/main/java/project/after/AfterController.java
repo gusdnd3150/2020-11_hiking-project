@@ -181,4 +181,10 @@ public class AfterController {
         afterService.updateAfterLike(map);
         return afterService.selectLikeCount((Integer)map.get("afterNum"));
     }
+    
+    @PostMapping("/after/countSubComment.do")
+    @ResponseBody
+    public int countSubComment(@RequestBody Map map){
+        return afterService.countSubComment(map);
+    }
 }

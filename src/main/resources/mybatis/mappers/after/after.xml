@@ -150,4 +150,12 @@
         WHERE afterNum = #{afterNum}
         AND userId = #{userId}
     </select>
+    
+    <select id="countSubComment" resultType="int" parameterType="map">
+        <![CDATA[
+            SELECT SUBCOMMENTCOUNT
+            FROM GROUPAFTERCOMMENT
+            WHERE COMMENTNUM = #{commentNum}
+        ]]>
+    </select>
 </mapper>

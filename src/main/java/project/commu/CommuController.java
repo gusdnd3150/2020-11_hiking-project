@@ -33,11 +33,11 @@ import project.Paging;
 import project.group.GroupService;
 import project.groupmedia.GroupMediaService;
 import project.user.service.UserService;
-
 @Controller
 @RequestMapping("/commu/*")
 public class CommuController {
 
+	
 	public static final Logger logger = LoggerFactory.getLogger(CommuController.class);
 	private static final String LOGIN = "LOGIN";
 
@@ -75,14 +75,14 @@ public class CommuController {
 	@PostMapping(value = "/update.do")
 	@ResponseBody
 	public void updateGroup(@RequestParam Map map,
-			@RequestParam(value = "file", required = false) List<MultipartFile> files, HttpServletRequest request)
+			@RequestParam(value = "file", required = false) List<MultipartFile> file, HttpServletRequest request)
 			throws Exception {
 		commuService.updateGroup(map);
-
-		if (!files.isEmpty()) {
+			System.out.println("files.isEmpty()???:     "+ file.size());
+		if (file.size() ==0) {
 			String path = request.getSession().getServletContext().getRealPath("/");
 			int groupNum = Integer.parseInt((String) map.get("groupNum"));
-			groupMediaService.updateGroupMedia(groupNum, files, path);
+			groupMediaService.updateGroupMedia(groupNum, file, path);
 		}
 	}
 
@@ -357,5 +357,11 @@ public class CommuController {
 		}
 		return mav;
 	}
+	
+    @PostMapping("/commu/commuMandate.do")
+    @ResponseBody
+    public int commuMandate(@RequestBody Map map){
+        return commuService.commuMandate(map);
+    }
 
 }

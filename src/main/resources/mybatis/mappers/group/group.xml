@@ -349,7 +349,7 @@
 
     <select id="selectCommentOne" parameterType="_int" resultType="groupCommentVO">
         <![CDATA[
-            SELECT gc.commentNum, gc.parentNum, gc.depts, gc.commentOrder, gc.content, u.nickname, gc.subCommentCount, gc.createdAt, ui.content2
+            SELECT gc.postNum, gc.commentNum, gc.parentNum, gc.depts, gc.commentOrder, gc.content, u.nickname, gc.subCommentCount, gc.createdAt, ui.content2
             FROM groupComment gc, users u, userinfo ui
             WHERE gc.userId = u.id
             and u.usernum = ui.usernum
@@ -373,7 +373,7 @@
     <!-- 산모임 페이지 댓글 -->
     <select id="selectCommentByPostNum" parameterType="_int" resultType="groupCommentVO">
         <![CDATA[
-            SELECT gc.commentNum, gc.parentNum, gc.depts, gc.commentOrder, gc.content, u.nickname, gc.subCommentCount, gc.createdAt, ui.content2
+            SELECT gc.postNum, gc.commentNum, gc.parentNum, gc.depts, gc.commentOrder, gc.content, gc.subCommentCount, gc.createdAt, ui.content2, u.nickname 
             FROM groupComment gc, users u, userInfo ui
             WHERE gc.userId = u.id
             AND   u.userNum = ui.userNum
@@ -483,5 +483,13 @@
                 AND g.groupNum NOT IN (#{GROUPNUM})
             </if>
                 ORDER BY DBMS_RANDOM.VALUE()
+    </select>
+    
+    <select id="countSubComment" resultType="int" parameterType="map">
+            <![CDATA[
+                SELECT SUBCOMMENTCOUNT
+                FROM groupComment
+                WHERE COMMENTNUM = #{commentNum}
+            ]]>
     </select>
 </mapper>

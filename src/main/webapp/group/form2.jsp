@@ -282,6 +282,7 @@
                 off: 'Disabled'
             });
         })
+        
         $('#connect').click(function (e){
 
             var data = {

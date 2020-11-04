@@ -68,7 +68,6 @@
 	<mvc:interceptors>
 		<mvc:interceptor>
 			<mvc:mapping path="/user/logIn.do" />
-			<mvc:mapping path="/user/mypageHome.jsp" />
 			<beans:ref bean="loginInterceptor" />
 		</mvc:interceptor>
 	</mvc:interceptors>
@@ -76,14 +75,18 @@
 <!--	<elasticsearch:rest-client id="esClient" hosts="http://ip:9200,http://ip:9200,http://ip:9200" />-->
 
 	<!-- AuthIntercept -->
-<!-- 	<beans:bean id="authInterceptor"
+	<beans:bean id="authInterceptor"
 		class="project.user.interceptor.AuthInterceptor" />
 	<mvc:interceptors>
 		<mvc:interceptor>
-		
+		<mvc:mapping path="/commu/commuPageView.do" />
+		<mvc:mapping path="/mypage/*" />
+		<mvc:mapping path="/admin/*" />
+		<mvc:mapping path="/group/*" />
+		<mvc:mapping path="/myShop/*" />
 			<beans:ref bean="authInterceptor" />
 		</mvc:interceptor>
-	</mvc:interceptors> -->
+	</mvc:interceptors> 
 
 	<!-- RemembermeInterceptor 자동로그인 -->
 	<beans:bean id="remembermeInterceptor"

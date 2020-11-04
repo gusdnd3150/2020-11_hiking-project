@@ -148,4 +148,9 @@ public class CommuServiceImpl implements CommuService {
 		return commuDAO.selectCommuPageInfo2(map);
 	}
 
+	@Override
+	public int commuMandate(Map map) {
+		return commuDAO.commuMandate(map);
+	}
+
 }

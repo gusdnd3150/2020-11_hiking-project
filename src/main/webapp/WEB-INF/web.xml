@@ -79,9 +79,11 @@
 		<url-pattern>/ckfinder/core/connector/java/connector.java</url-pattern>
 	</servlet-mapping>
 
-
-
-
+ <!-- 세션 시간 설정 -->
+ <!--   <session-config>
+        <session-timeout>1</session-timeout> 분 단위
+    </session-config>
+ -->
 
 	<servlet>
 		<servlet-name>CKFinder</servlet-name>

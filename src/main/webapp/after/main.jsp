@@ -157,7 +157,7 @@
                         html += '<pre style="display: none">'+response[i].COMMENTNUM+'</pre>';
                         html += '<h5 class="m-0">'+response[i].NICKNAME+'</h5>';
                         html += '<div>'+response[i].CONTENT +'</div>';
-                        html += '<button class="'+id+' p-0 btn btn-default text-muted" onclick="toggleSubComment(this)">[답글 '+ response[i].SUBCOMMENTCOUNT +'개 더보기]</button>'
+                        html += '<button id ='+response[i].COMMENTNUM+' class="'+id+' p-0 btn btn-default text-muted" onclick="toggleSubComment(this)">[답글 '+ response[i].SUBCOMMENTCOUNT +'개 더보기]</button>'
                         html += '<button class="'+id+'subComment p-0 btn btn-default text-muted" onclick="toggleWriteSubComment(this)">[답글 작성]</button>';
                         html += '<p style="display: none"><input type="text" class="form-control" placeholder="댓글 내용 입력"/>';
                         html += '<button id="writeSubCommentBtn" class="btn btn-info" onclick="writeSubComment(this,'+response[i].AFTERNUM+')">작성</button>';
@@ -226,8 +226,7 @@
                     html += '<pre style="display: none">'+response.COMMENTNUM+'</pre>'
                     html += '<h5>'+response.NICKNAME+'</h5>'
                     html += '<div>'+response.CONTENT +'</div>'
-                    html += '<button class="'+id+' p-0 btn btn-default text-muted"></button>'
-                    html += '<button class="'+id+' p-0 btn btn-default text-muted" onclick="toggleSubComment(this)">[답글 '+ response.SUBCOMMENTCOUNT +'개 더보기]</button>'
+                    html += '<button id ='+response.COMMENTNUM+' class="'+id+' p-0 btn btn-default text-muted" onclick="toggleSubComment(this)">[답글 '+ response.SUBCOMMENTCOUNT +'개 더보기]</button>'
                     html += '<button class="'+id+'subComment p-0 btn btn-default text-muted" onclick="toggleWriteSubComment(this)">[답글 작성]</button>'
                     html += '<p style="display: none"><input type="text" class="form-control" placeholder="댓글 내용 입력"/>'
                     html += '<button id="writeSubCommentBtn" class="btn btn-info" onclick="writeSubComment(this,'+response.AFTERNUM+')">작성</button>'
@@ -235,7 +234,7 @@
                     html += '</p></div></ul>';
 
                     $('#'+selector).append(html);
-
+                    $('#'+content).val("");
                     index++;
                 }
             },
@@ -275,14 +274,34 @@
                 html += response.CONTENT +'</div></li>';
 
                 $('#'+id).append(html);
+                countSubComment($parentNum.innerHTML);
+                e.previousSibling.value ="";
             },
             error: function(response){
                 alert("다시 시도해주세요")
             }
         })
-
-
     }
+    
+	function countSubComment(parentNum){
+	 var data = {
+		        "commentNum" : parentNum
+		    }
+	
+	    $.ajax({
+	        type: "POST",
+	        url: "/after/countSubComment.do",
+	        data: JSON.stringify(data),
+	        dataType: 'json',
+	        contentType: "application/json; charset=utf-8;",
+	        success: function (response){
+			$('#'+parentNum).text('[답글 '+ response +'개 더보기]');
+	        },
+	        error: function(response){
+	            alert("다시 시도해주세요")
+	        }
+	    })
+	}
 
 </script>
 <body class="container pt-5">

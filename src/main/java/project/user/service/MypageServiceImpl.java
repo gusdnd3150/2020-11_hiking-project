@@ -45,7 +45,6 @@ public class MypageServiceImpl implements MypageService {
 
 	@Override
 	public void updateUserProf(Map<String, Object> profMap) {
-		System.out.println("1");
 		mypageDAO.updateUserProf(profMap);
 	}
 
