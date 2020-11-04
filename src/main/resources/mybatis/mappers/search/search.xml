@@ -4,7 +4,12 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="search">
-    <select id="searchKeyword" resultType="map" parameterType="map">
+    <select id="searchKeywordTrail" resultType="map" parameterType="map">
+        SELECT DISTINCT MNTN_NM , MNTN_CODE, PMNTN_NM, PMNTN_DFFL
+        FROM TRAILINFO
+        WHERE PMNTN_NM = #{keyword}
+    </select>
+    <select id="searchKeywordGroup" resultType="map" parameterType="map">
         SELECT
         g.groupNum, g.name,
         g.staffCurrent,
@@ -30,19 +35,58 @@
         WHERE uw.userType = 0
           AND gm.mediaNum = 0
           AND g.staffMax != 1
-        <if test="type.equals('none')">
-            AND g.type IN (1,2)
-        </if>
-        <if test="!type.equals('none')">
+          AND g.type =1
+        <if test="!period.equals('none')">
             <choose>
-                <when test="type.equals('group')">
-                    AND g.type=1
+                <when test="period.equals('hour')">
+                    AND g.createdAt >= sysdate - 1/24
                 </when>
-                <when test="type.equals('moim')">
-                    AND g.type=2
+                <when test="period.equals('day')">
+                    AND g.createdAt >= sysdate - 1
+                </when>
+                <when test="period.equals('week')">
+                    AND g.createdAt >= sysdate - 7
+                </when>
+                <when test="period.equals('month')">
+                    AND g.createdAt >= sysdate - 31
                 </when>
             </choose>
         </if>
+        AND g.name LIKE '%'||#{keyword}||'%'
+        <if test="!sort.equals('none')">
+            <choose>
+                <when test="sort.equals('new')">
+                    ORDER BY g.createdAt DESC
+                </when>
+                <when test="sort.equals('old')">
+                    ORDER BY g.createdAt ASC
+                </when>
+            </choose>
+        </if>
+    </select>
+    <select id="searchKeywordMoim" resultType="map" parameterType="map">
+        SELECT
+        g.groupNum, g.name,
+        g.staffCurrent,
+        g.detail,
+        gm.storedFileName,
+        NVL(ui.CONTENT2, 'basic_profile.PNG')    content2,
+        u.nickname,
+        u.id,
+        g.area
+        FROM groups g
+        INNER JOIN groupsMedia gm
+        ON g.groupNum = gm.groupNum
+        INNER JOIN userWaiting uw
+        ON g.groupNum = uw.groupNum
+        INNER JOIN users u
+        ON uw.userId = u.id
+        INNER JOIN userInfo ui
+        ON u.userNum = ui.userNum
+        WHERE uw.userType = 0
+        AND gm.mediaNum = 0
+        AND g.staffMax != 1
+        AND g.type =2
         <if test="!period.equals('none')">
             <choose>
                 <when test="period.equals('hour')">
@@ -95,9 +139,16 @@
     </insert>
 
     <select id="selectKeywordRank" resultType="map">
-        SELECT KEYWORD, DENSE_RANK() over (ORDER BY COUNT(KEYWORD) DESC) rank
-        FROM KEYWORD
-        GROUP BY KEYWORD
+        <![CDATA[
+            SELECT ROWNUM, data.*
+            FROM (
+            SELECT KEYWORD, DENSE_RANK() over (ORDER BY COUNT(KEYWORD) DESC) rank
+            FROM KEYWORD
+            GROUP BY KEYWORD
+            ) data
+            WHERE ROWNUM >= 1
+            AND ROWNUM <=10
+        ]]>
     </select>
 
     <select id="mainKeywordSearch" resultType="map" parameterType="map">

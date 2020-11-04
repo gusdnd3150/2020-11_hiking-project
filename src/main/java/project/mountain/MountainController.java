@@ -115,10 +115,9 @@ public class MountainController {
 
 
     //보류
-    @GetMapping("/trail1/{searchWrd}.do")
+    @GetMapping("/trail/search/{searchWrd}.do")
     @ResponseBody
-    public ModelAndView getTrailInfo(@PathVariable("searchWrd")String searchWrd) throws UnsupportedEncodingException {
-        ModelAndView mav = new ModelAndView("/mountain/detail2");
+    public List getTrailInfo(@PathVariable("searchWrd")String searchWrd) throws UnsupportedEncodingException {
 
         MountainResponseVO vo = mountainService.getTrailInfo(searchWrd);
 
@@ -127,8 +126,7 @@ public class MountainController {
             list.add(vo.getBody().getItems().get(i));
         }
 
-        mav.addObject("trail",list);
-        return mav;
+        return list;
     }
 
     // 산 인기 랭킹
@@ -359,4 +357,7 @@ public class MountainController {
     public int countAllTrail(){
         return mountainService.countAllTrail();
     }
+
 }
+
+

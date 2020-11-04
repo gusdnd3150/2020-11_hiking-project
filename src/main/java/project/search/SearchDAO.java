@@ -13,8 +13,14 @@ public class SearchDAO {
     @Autowired
     private SqlSession sqlSession;
 
-    public List searchKeyword(Map map){
-        return sqlSession.selectList("search.searchKeyword",map);
+    public List searchKeywordTrail(Map map){
+        return sqlSession.selectList("search.searchKeywordTrail",map);
+    }
+    public List searchKeywordGroup(Map map){
+        return sqlSession.selectList("search.searchKeywordGroup",map);
+    }
+    public List searchKeywordMoim(Map map){
+        return sqlSession.selectList("search.searchKeywordMoim",map);
     }
     public List suggestion(String keyword){
         return sqlSession.selectList("search.suggestion",keyword);

@@ -12,8 +12,14 @@ public class SearchServiceImpl implements SearchService{
     @Resource(name = "searchDAO")
     private SearchDAO searchDAO;
 
-    public List searchKeyword(Map map){
-        return searchDAO.searchKeyword(map);
+    public List searchKeywordTrail(Map map){
+        return searchDAO.searchKeywordTrail(map);
+    }
+    public List searchKeywordGroup(Map map){
+        return searchDAO.searchKeywordGroup(map);
+    }
+    public List searchKeywordMoim(Map map){
+        return searchDAO.searchKeywordMoim(map);
     }
     public List suggestion(String keyword){
         return searchDAO.suggestion(keyword);

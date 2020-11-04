@@ -63,7 +63,7 @@ public class HomeController {
 	@ResponseBody
 	public List mainNoticeList() throws Exception {
 		Map map = new HashMap();
-		map.put("csPostType",200);
+		map.put("csPostType",100);
 		map.put("rowNum",1);
 		return boardService.selectBoard(map);
 	}

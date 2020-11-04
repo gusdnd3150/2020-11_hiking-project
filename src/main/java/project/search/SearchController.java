@@ -6,9 +6,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import project.group.GroupService;
 import project.groupmedia.GroupMediaService;
+import project.mountain.MountainItemDTO;
+import project.mountain.MountainResponseVO;
 import project.mountain.MountainService;
 
 import javax.annotation.Resource;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,7 +31,7 @@ public class SearchController {
     public Map searchKeyword(@RequestParam("type")String type,
                                @RequestParam("period")String period,
                                @RequestParam("sort")String sort,
-                               @RequestParam("keyword")String keyword){
+                               @RequestParam("keyword")String keyword) throws UnsupportedEncodingException {
 
         Map resultMap = new HashMap();
 
@@ -38,28 +41,51 @@ public class SearchController {
         searchMap.put("sort",sort);
         searchMap.put("keyword",keyword);
 
+        // 검색어 저장
         searchService.saveKeyword(searchMap);
 
+        // 결과 리스트 선언
+        List<MountainItemDTO> mountainList = new ArrayList<>();
+        List trailList = new ArrayList();
+        List moimList = new ArrayList();
 
-        System.out.println(searchMap.toString());
+        // 산 검색
+        try{
+            if(type.equals("none")||type.equals("mt")){
+                MountainResponseVO vo = mountainService.get100MountainInfo(keyword, "");
+                List<MountainItemDTO> mountainInfo = vo.getBody().getItems();
+                if(mountainInfo!=null){
+                    for(int i=0;i<mountainInfo.size();i++){
+                        mountainList.add(mountainInfo.get(i));
+                    }
+                }
+            }
 
-        switch (type){
-            case "mt":break;
-            case "path":break;
-            case "group":break;
-            case "moim":break;
-            case "none":break;
+            // 등산로 검색
+            if(type.equals("none")||type.equals("trail")){
+                trailList = searchService.searchKeywordTrail(searchMap);
+            }
+
+            // 그룹 검색
+            List groupList = new ArrayList();
+            if(type.equals("none") || type.equals("group")){
+                groupList = searchService.searchKeywordGroup(searchMap);
+            }
+
+            // 모임 검색
+            if(type.equals("none") || type.equals("moim")){
+                moimList = searchService.searchKeywordMoim(searchMap);
+            }
+
+            resultMap.put("mountainList",mountainList);
+            resultMap.put("trailList",trailList);
+            resultMap.put("groupList",groupList);
+            resultMap.put("moimList",moimList);
+
+        }catch (Exception e){
+            e.printStackTrace();
         }
-        List groupList = new ArrayList();
-        if(type.equals("none") || type.equals("group") || type.equals("moim")){
-            groupList = searchService.searchKeyword(searchMap);
-        }
 
-        resultMap.put("groupList",groupList);
-
-
-//        mav.addObject("result", result); // 건수
-//        mav.addObject("group", group);     // 그룹검색결과
         return resultMap;
     }
 

@@ -3,19 +3,17 @@
 <link rel="stylesheet" type="text/css" href="../resources/css/views/search/main.css">
 <body class="container pt-5">
     <div class="pt-5">
-        <h1>상세 검색</h1>
+        <h1>통합 검색</h1>
         <div class="pt-3">
             <div class="form-inline">
                 <input id="keyword" type="text" class="form-control col-3" placeholder="검색어를 입력해주세요">
                 <button class="btn btn-info" onclick="search()">검색</button>
                 <a class="btn btn-light" data-toggle="collapse" href="#searchCondition" role="button" aria-expanded="false" aria-controls="collapseExample">
-                    상세 검색
+                    조건 검색
                 </a>
             </div>
             <div id="suggestion" class="col-3"></div>
-
             <ul id="keywordRank" class="p-1"></ul>
-
             <div class="collapse" id="searchCondition">
                 <div class="row card-body">
                     <div class="col-4">
@@ -49,30 +47,42 @@
                 </div>
             </div>
         </div>
-
         <hr />
-
         <div id="resultList" style="display: none"><!-- result List 버튼 누르기 전까지 style none -->
-            <div id="mtList">
-                <h2>산 리스트</h2>
-                <div id="mtResult"></div>
+            <h2 id="result"></h2>
+            <hr />
+            <div id="mtBoard" class="mt-3">
+                <label for="mtList">
+                    <h2>산</h2>
+                    <i id="mtCount"></i>
+                </label>
+                <div id="mtList" class="row"></div>
             </div>
-            <div id="pathList">
-                <h2>등산로 리스트</h2>
-                <div id="pathResult"></div>
+            <hr />
+            <div id="trailBoard" class="mt-3">
+                <label for="trailList">
+                    <h2>등산로</h2>
+                    <i id="trailCount"></i>
+                </label>
+                <div id="trailList" class="row"></div>
             </div>
-            <div class="pt-3">
-                <label for="groupResult">
+            <hr />
+            <div id="groupBoard" class="mt-3">
+                <label for="groupList">
                     <h2>등산 모임</h2>
                     <i id="groupCount"></i>
                 </label>
-                <div id="groupResult" class="row"></div>
+                <div id="groupList" class="row"></div>
             </div>
-            <div id="moimList">
-                <h2>산모임 리스트</h2>
-                <i id="moimCount"></i>
-                <div id="moimResult"></div>
+            <hr />
+            <div id="moimBoard" class="mt-3">
+                <label for="moimList">
+                    <h2>산모임</h2>
+                    <i id="moimCount"></i>
+                </label>
+                <div id="moimList" class="row"></div>
             </div>
+            <hr />
         </div>
     </div>
 <script type="text/javascript" src="../resources/js/jquery.js"></script>
@@ -161,7 +171,6 @@
     }
     function setKeyword(e){
         $('#keyword').val(e.innerText);
-        $('#suggestion').empty()
         search();
     }
 
@@ -172,18 +181,24 @@
         if(keyword == '' || keyword == null){
             alert('검색어를 입력해주세요');
             return
+        }else if(keyword == '산'){
+            alert('검색할 수 없는 검색어 입니다')
         }
-
-        var typeCount1 = 0;
-        var typeCount2 = 0;
 
         $('#resultList').css('display','block');
 
+        $('#suggestion').empty()
+
+        $('#result').empty();
+        $('#mtCount').empty();
+        $('#trailCount').empty();
         $('#groupCount').empty();
         $('#moimCount').empty();
 
-        $('#groupResult').empty();
-        $('#moimResult').empty();
+        $('#mtList').empty();
+        $('#trailList').empty();
+        $('#groupList').empty();
+        $('#moimList').empty();
 
         var data = {
             "type" : $('#type').val(),
@@ -191,7 +206,6 @@
             "sort" : $('#sort').val(),
             "keyword" : keyword
         }
-
         $.ajax({
             type: "GET",
             url: "/search.do",
@@ -199,11 +213,8 @@
             dataType: 'json',
             contentType: "application/json; charset=utf-8;",
             success: function (response){
-                if(response.groupList.length != 0){
-                    appendGroupList(response.groupList)
-                }else{
-                    $('#groupCount').text('총 '+typeCount1+' 건의 검색결과')
-                    $('#moimCount').text('총 '+typeCount2+' 건의 검색결과')
+                if(response.length != 0){
+                    appendGroupList(response)
                 }
             },
             error: function(response){
@@ -212,67 +223,107 @@
         })
     }
 
-    function appendGroupList(data){
+    function appendGroupList(data) {
         console.log(data)
-        var typeCount1 = 0;
-        var typeCount2 = 0;
+        var userId = '${LOGIN}';
 
-        for(var i=0;i<data.length;i++){
 
-            var editorContent = data[i].DETAIL;
-            var covertContent = editorContent.replace(/(<([^>]+)>)/ig,"");
-
-            if(data[i].TYPE == 1){
-
-                typeCount1++;
+        if (data.mountainList.length != 0) {
+            for(var i = 0; i < data.mountainList.length; i++){
+                var mountainInfo = data.mountainList[i];
 
                 var html = '';
 
-                html += '<div class="col-md-6">'
-                html += '<a href="/group/' + data[i].GROUPNUM + '">';
-                html += '<div class="media" style=" padding: 10px 10px;">';
-                html += '<img src="/resources/img/'+data[i].STOREDFILENAME+'" style="width: 120px; height: 100px;" class="rounded mr-3" alt="...">'
-                html += '<div class="media-body" class="col-md-6">';
-                html += '<a href="/profile/' + data[i].ID + '" onclick=\"window.open(this.href,\'\',\'width=500, height=600\'); return false;">';
-                html += '<img src="/resources/img/' + data[i].CONTENT2 + '" class="rounded" style="width: 40px;height: 40px;">';
-                html += '<span style="color: black">'+data[i].NICKNAME+'</span>'
+                html += '<a href="/mountain/'+ mountainInfo.mntnm +'.do?userId=' + userId + '" class="col-6" style="color: black;">';
+                html += '<h3>'+mountainInfo.mntnm+'</h3>';
+                html += '<div>'+mountainInfo.subnm+'</div>';
+                html += '<div style="color: gray;">'+ mountainInfo.areanm +'</div>';
                 html += '</a>';
-                html += '<h6 class="mt-0 mb-1">';
-                html += '<strong>'+data[i].NAME+'</strong>';
-                html += '</h6>';
-                html += '<small class="card-text text-mute" style="display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis">'+covertContent+'</small>';
-                html += '[' + data[i].STATUS + ']</span>';
+                html += '<hr />';
+                $('#mtList').append(html)
+            }
+        }
+
+        if(data.trailList.length != 0){
+            for(var i = 0; i < data.trailList.length; i++){
+                var trailInfo = data.trailList[i];
+
+                var html = '';
+                html += '<a href="/trail/'+ trailInfo.MNTN_CODE +'.do?userId=' + userId + '" class="col-6" style="text-decoration:none; color: black;">';
+                html += '<h3>'+trailInfo.PMNTN_NM+'</h3>'
+                html += '<div>'+trailInfo.MNTN_NM+'</div>'
+                html += '<div style="color:gray">'+trailInfo.PMNTN_DFFL+'</div>'
+                html += '</a>'
+
+                $('#trailList').append(html)
+            }
+        }
+
+        if(data.groupList.length != 0){
+            for(var i = 0; i < data.groupList.length; i++){
+                var groupInfo = data.groupList[i];
+
+                var detail = groupInfo.DETAIL;
+                var convertDetail = detail.replace(/(<([^>]+)>)/ig,"");
+
+                var html = '';
+
+                html += '<div class="col-sm-12 col-md-6 col-lg-6 mt-2">'
+                html += '<a href="/group/' + groupInfo.GROUPNUM + '" style="text-decoration: none;color: black">';
+                html += '<div class="media">';
+                html += '<img src="/resources/img/'+groupInfo.STOREDFILENAME+'" style="width: 120px; height: 100px;" class="rounded" alt="...">'
+                html += '<div class="media-body" class="col-md-6">';
+                html += '<h3 class="m-1">';
+                html += groupInfo.NAME;
+                html += '</h3>';
+                html += '<div class="text-mute" style="width:100%; display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis">'+convertDetail+'</div>';
+                html += '[' + groupInfo.STATUS + ']</span>';
+                html += '<a href="/profile/' + groupInfo.ID + '" onclick=\"window.open(this.href,\'\',\'width=500, height=600\'); return false;">';
+                html += '<img src="/resources/img/' + groupInfo.CONTENT2 + '" class="rounded" style="width: 40px;height: 40px;">';
+                html += '<span style="color: black">'+groupInfo.NICKNAME+'</span>'
+                html += '</a>';
                 html += '</div></div></a>';
 
-                if (data[i].STATUS == '모집중') {
+                if (groupInfo.STATUS == '모집중') {
                     html += '<span style="color: limegreen">';
-                } else if (data[i].STATUS == '마감') {
+                } else if (groupInfo.STATUS == '마감') {
                     html += '<span style="color: red">';
                 }
 
-                $('#groupCount').text('총 '+typeCount1+' 건의 검색결과')
-                $('#groupResult').append(html);
+                $('#groupList').append(html);
 
-            }else if(data[i].TYPE == 2){
-                typeCount2++;
-
-                var html2 = '';
-
-                html2 += '<a href="/commu/commuPageView.do?groupNum=' + data[i].GROUPNUM + '" style=" color: black;">';
-                html2 += '<div class="media" style=" padding: 10px 10px;">';
-                html2 += '<img src="/resources/img/'+data[i].STOREDFILENAME+'" style="width: 120px; height: 100px;" class="rounded mr-3" alt="...">'
-                html2 += '<div class="media-body" style="width:100px;">';
-                html2 += '<h6 class="mt-0 mb-1">';
-                html2 += '<strong>'+data[i].NAME+'</strong>';
-                html2 += '</h6>';
-                html2 += '<small class="card-text text-mute" style="display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis">'+covertContent+'</small>';
-                html2 += '<small style="color: gray;">멤버'+ data[i].STAFFCURRENT +'/ 지역 '+ data[i].AREA+ '</small>';
-                html2 += '</div></div></a>';
-
-                $('#moimCount').text('총 '+typeCount2+' 건의 검색결과')
-                $('#moimResult').append(html2)
             }
         }
+
+        if(data.moimList.length != 0){
+
+            for(var i=0; i<data.moimList.length;i++){
+
+                var moimInfo = data.moimList[i];
+
+                var html = '';
+
+                html += '<a href="/commu/commuPageView.do?groupNum=' + moimInfo.GROUPNUM + '" style=" color: black;">';
+                html += '<div class="media" style=" padding: 10px 10px;">';
+                html += '<img src="/resources/img/'+moimInfo.STOREDFILENAME+'" style="width: 120px; height: 100px;" class="rounded mr-3" alt="...">'
+                html += '<div class="media-body" style="width:100px;">';
+                html += '<h6 class="mt-0 mb-1">';
+                html += '<strong>'+moimInfo.NAME+'</strong>';
+                html += '</h6>';
+                html += '<small class="card-text text-mute" style="display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis">'+moimInfo.DETAIL+'</small>';
+                html += '<small style="color: gray;">멤버'+ moimInfo.STAFFCURRENT +'/ 지역 '+ moimInfo.AREA+ '</small>';
+                html += '</div></div></a>';
+
+                $('#moimList').append(html)
+            }
+        }
+        $('#mtCount').text('총 '+ data.mountainList.length +' 건의 검색결과');
+        $('#trailCount').text('총 '+ data.trailList.length +' 건의 검색결과');
+        $('#groupCount').text('총 '+ data.groupList.length +' 건의 검색결과');
+        $('#moimCount').text('총 '+ data.moimList.length +' 건의 검색결과');
+
+        var allCount = data.mountainList.length + data.trailList.length + data.groupList.length + data.moimList.length;
+        $('#result').append('전체 <i>'+ allCount + '</i> 건의 검색결과')
     }
 </script>
 </body>
