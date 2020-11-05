@@ -46,7 +46,7 @@
 					<li class="list-group-item text-center">
 						<h4>나의 산오름</h4>
 					</li>
-					<a class="list" href='/profile/myFriendsList.do/${loginID}' style='color: black;' onclick="window.open(this.href,'','width=370, height=540'); return false;">
+					<a class="list" href='/profile/myFriendsList.do/${loginID}' style='color: black;' onclick="window.open(this.href,'','width=390, height=540'); return false;">
 						<li class="list-group-item d-flex justify-content-between align-items-center">
 							<b>나의 친구 목록</b>
 							<span class="text-muted m-2">더보기></span>

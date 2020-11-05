@@ -251,34 +251,34 @@
 	<select id="selectAllCommuList" resultType="map" parameterType="map">
        <if test='keyword.equals("lately")'>
         <![CDATA[
-           select rownum rn, a.*
+           select a.*
 			from
 				( 
-			SELECT g.GROUPNUM, g.NAME, g.TYPE, g.STAFFCURRENT, g.DETAIL, g.AREA, g.SEX, gm.storedFileName
+			SELECT rownum RN, g.GROUPNUM, g.NAME, g.TYPE, g.STAFFCURRENT, g.DETAIL, g.AREA, g.SEX, gm.storedFileName
             FROM groups g, groupsMedia gm
             WHERE g.groupNum = gm.groupNum
               AND gm.mediaNum = 0
               AND type = 2
             ORDER BY g.groupNum DESC
 				) a
-			WHERE rownum >= (#{rowNum}*10)+1
-			AND rownum  <= 9 + (#{rowNum}*10)
+			WHERE RN >= (#{rowNum}*10)
+			AND RN  <= 9 + (#{rowNum}*10)
         ]]>
         </if>
         <if test='keyword.equals("like")'>
            <![CDATA[
-           select rownum rn, a.*
+           select a.*
 			from
 				(
-			SELECT g.GROUPNUM, g.NAME, g.TYPE, g.STAFFCURRENT, g.DETAIL, g.AREA, g.SEX, gm.storedFileName
+			SELECT rownum RN, g.GROUPNUM, g.NAME, g.TYPE, g.STAFFCURRENT, g.DETAIL, g.AREA, g.SEX, gm.storedFileName
             FROM groups g, groupsMedia gm
             WHERE g.groupNum = gm.groupNum
               AND gm.mediaNum = 0
               AND type = 2
             ORDER BY g.STAFFCURRENT DESC
 				) a
-			WHERE rownum >= (#{rowNum}*10)+1
-			AND rownum  <= 9 + (#{rowNum}*10)
+			WHERE RN >= (#{rowNum}*10)
+			AND RN  <= 9 + (#{rowNum}*10)
         ]]>
         </if>
 	</select>
