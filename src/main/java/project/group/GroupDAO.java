@@ -142,4 +142,7 @@ public class GroupDAO{
 	public int countSubComment(Map map) {
 		 return sqlSession.selectOne("group.countSubComment",map);
 	}
+	public int updateGroupInfo(Map map){
+        return sqlSession.update("group.updateGroupInfo",map);
+    }
 }

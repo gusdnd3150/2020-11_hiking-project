@@ -143,4 +143,9 @@ public class GroupServiceImpl implements GroupService{
 	public int countSubComment(Map map) {
 		return groupDAO.countSubComment(map);
 	}
+
+	@Transactional
+	public int updateGroupInfo(Map map){
+        return groupDAO.updateGroupInfo(map);
+    }
 }

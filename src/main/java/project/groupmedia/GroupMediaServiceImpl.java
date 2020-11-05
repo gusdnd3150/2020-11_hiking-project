@@ -22,7 +22,7 @@ public class GroupMediaServiceImpl implements GroupMediaService {
     @Resource(name = "fileUtils")
     private FileUtils fileUtils;
 
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional
     public void insertGroupMedia(int groupNum, List<MultipartFile> files, String path) throws IOException {
         List list = fileUtils.saveFile(groupNum, files, path);
         groupMediaDAO.insertGroupMedia(list);
@@ -36,8 +36,8 @@ public class GroupMediaServiceImpl implements GroupMediaService {
         return groupMediaDAO.selectGroupMediaDetail(groupNum);
     }
 
-  //그룹 사진 수정
-    @Transactional(propagation = Propagation.REQUIRED)
+    //그룹 사진 수정
+    @Transactional
 	public void updateGroupMedia(int groupNum, List<MultipartFile> files, String path) throws IOException {
     	   List list = fileUtils.saveFile(groupNum, files, path);
            groupMediaDAO.updateGroupMedia(list);

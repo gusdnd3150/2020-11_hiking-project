@@ -1,5 +1,6 @@
 package project.groupmedia;
 
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,7 +15,6 @@ public interface GroupMediaService {
     byte[] selectGroupMediaOne(int groupNum);
     
     List<byte[]> selectGroupMediaDetail(int groupNum);
-	
-  //그룹 사진 수정
+
     void updateGroupMedia(int groupNum, List<MultipartFile> files, String path) throws IOException;
 }

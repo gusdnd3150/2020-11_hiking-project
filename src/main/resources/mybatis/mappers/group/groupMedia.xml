@@ -18,11 +18,32 @@
     </insert>
 
 
-   <update id="updateGroupMedia" parameterType="map" >
-    <![CDATA[
-    update groupsMedia
-	  	set mediaNum=#{mediaNum}, fileSize=#{fileSize}, storedFileName=#{storedFileName}, originalFileName=#{originalFileName}, updatedAt=sysdate
-	    where groupNum = #{groupNum}
+    <update id="updateGroupMedia" parameterType="map" >
+        <![CDATA[
+        MERGE INTO groupsMedia
+            USING DUAL
+            ON (groupNum = #{groupNum} AND mediaNum = #{mediaNum})
+            WHEN MATCHED THEN
+                UPDATE SET
+                fileSize=#{fileSize},
+                storedFileName=#{storedFileName},
+                originalFileName=#{originalFileName},
+                updatedAt=sysdate
+            WHEN NOT MATCHED THEN
+                INSERT (groupNum,
+                        mediaNum,
+                        fileSize,
+                        storedFileName,
+                        originalFileName,
+                        createdAt,
+                        updatedAt)
+                VALUES (#{groupNum},
+                        #{mediaNum},
+                        #{fileSize},
+                        #{storedFileName},
+                        #{originalFileName},
+                        sysdate,
+                        sysdate)
         ]]>
     </update>
    <!--  <select id="selectGroupMedia" resultType="_byte[]" parameterType="_int">

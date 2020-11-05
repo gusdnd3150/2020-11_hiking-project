@@ -10,6 +10,7 @@ import project.groupmedia.GroupMediaService;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.*;
 
@@ -45,16 +46,6 @@ public class GroupController{
 
         mav.addObject("groupNum",groupNum);
         return mav;
-    }
-
-    @PostMapping("/group/update.do")
-    public void updateGroup(@ModelAttribute GroupVO vo){
-        groupService.updateGroup(vo);
-    }
-
-    @PostMapping("/group/delete.do")
-    public void deleteGroup(@RequestParam("groupNum") int groupNum){
-        groupService.deleteGroup(groupNum);
     }
 
     @GetMapping("/group/{groupNum}")
@@ -208,7 +199,6 @@ public class GroupController{
     @ResponseBody
     public List selectCommentByPostNum(@RequestParam("postNum") int postNum){
         List<Map> list = groupService.selectCommentByPostNum(postNum);
-        System.out.println("왔다");
         return list;
     }
 
@@ -223,4 +213,47 @@ public class GroupController{
     public int countSubComment(@RequestBody Map map){
         return groupService.countSubComment(map);
     }
+
+    @GetMapping("/group/mod/{groupNum}")
+    public ModelAndView updateGroupForm(@PathVariable("groupNum")int groupNum){
+        ModelAndView mav = new ModelAndView("/group/modify");
+
+        Map map = groupService.selectGroupDetail(groupNum);
+        List list = groupService.selectGroupDetailImage(groupNum);
+
+        mav.addObject("group",map);
+        mav.addObject("image",list);
+        return mav;
+    }
+
+    @PostMapping("/group/update.do")
+    @ResponseBody
+    public int updateGroupInfo(@RequestParam Map map,
+                               @RequestParam(value = "file", required = false) List<MultipartFile> files,
+                               HttpServletRequest request){
+        try {
+            int result = 0;
+            result = groupService.updateGroupInfo(map);
+
+            int groupNum = (int) map.get("groupNum");
+            String path = request.getSession().getServletContext().getRealPath("/");
+            groupMediaService.updateGroupMedia(groupNum,files,path);
+
+            return result;
+        } catch (IOException e) {
+            return 0;
+        }
+    }
+
+    @PostMapping("/group/delete.do")
+    @ResponseBody
+    public int deleteGroup(@RequestBody Map map){
+        System.out.println(map.toString());
+
+        int result = 0;
+
+        return result;
+    }
+
+
 }

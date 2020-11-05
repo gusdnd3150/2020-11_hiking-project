@@ -14,6 +14,11 @@
         window.open("/profile/${group.ID}","하하","width=700, height=500, left=300, top=300")
     }
 
+    function modify(){
+        var groupNum = ${group.GROUPNUM};
+        location.href = "/group/mod/"+groupNum+""
+    }
+
 
     function showMtInfo(){
         var userId = "<%= request.getSession().getAttribute("LOGIN")%>";
@@ -518,7 +523,12 @@
         </div>
         <div class="col-lg-4 col-md-4 col-sm-12">
             <div style="height: 80%">
-                <h2>모임 정보</h2>
+                <div class="d-flex justify-content-between">
+                    <h2>모임 정보</h2>
+                    <c:if test="${group.STATUS eq 1 and userGradeResult.USERTYPE eq 0}">
+                        <button id="modify" class="btn btn-outline-secondary" onclick="modify()" style="height: 40px">수정</button>
+                    </c:if>
+                </div>
                 <hr />
                 <h3 class="row col-12 mt-3" style="align-items: center">
                     <img src="/resources/img/${group.CONTENT2}" class="rounded-circle" style="width: 40px;height: 40px;">

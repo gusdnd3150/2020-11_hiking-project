@@ -46,4 +46,6 @@ public interface GroupService {
     List sortGroupByKeyword(Map map);
     List recommendGroup(Map map);
 	int countSubComment(Map map);
+
+    int updateGroupInfo(Map map);
 }

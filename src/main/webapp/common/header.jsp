@@ -10,16 +10,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>산오름</title>
     <!-- ico,css -->
-    <link rel="icon" href="../resources/img/favicon.ico" type="image/x-icon" />
-    <link rel="stylesheet" type="text/css" href="../resources/css/bootstrap.min.css" />
-    <link rel="stylesheet" type="text/css" href="../resources/css/views/common/header.css" />
+    <link rel="icon" href="/resources/img/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" type="text/css" href="/resources/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/resources/css/views/common/header.css" />
     
 </head>
 <!-- Navigation -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top p-0">
     <div class="container">
         <a class="navbar-brand" href="/">
-            <img src="../resources/img/main-icon.svg" width="50" height="50" class="d-inline-block align-top" alt="" loading="lazy" style="float: left">
+            <img src="/resources/img/main-icon.svg" width="50" height="50" class="d-inline-block align-top" alt="" loading="lazy" style="float: left">
             <p class="m-0 p-1" style="font: 30pt 'fromdamiM'; float: left">산오름</p>
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,7 +42,7 @@
                     <a class="nav-link" href="/shopMainCate.do?listType=100">오름마켓</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="../board/board.jsp">고객센터</a>
+                    <a class="nav-link" href="/board/board.jsp">고객센터</a>
                 </li>
                 <li class="nav-item">
                 </li>
@@ -71,7 +71,7 @@
                 </c:choose>
                 <button class="btn my-2 my-sm-0">
                     <a href="/search/main.jsp">
-                        <img src="../resources/img/search.png" width="25" height="25" onclick="">
+                        <img src="/resources/img/search.png" width="25" height="25" onclick="">
                     </a>
                 </button>
             </ul>

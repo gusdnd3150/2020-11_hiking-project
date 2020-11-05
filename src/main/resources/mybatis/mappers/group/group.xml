@@ -132,9 +132,9 @@
                    g.staffMax,
                    g.detail,
                    g.status,
-                   TO_CHAR(g.startday,'yyyy"년" MM"월"dd"일" hh"시"mm"분"') startday,
-                   TO_CHAR(g.createdAt,'yyyy.MM.dd. hh:mm') createdAt,
-                   TO_CHAR(g.updatedAt,'yyyy.MM.dd. hh:mm') updatedAt,
+                   TO_CHAR(g.startday,'yyyy"-"MM"-"dd" "hh":"mm"') startday,
+                   TO_CHAR(g.createdAt,'yyyy-MM-dd hh:mm') createdAt,
+                   TO_CHAR(g.updatedAt,'yyyy-MM-dd hh:mm') updatedAt,
                    g.area,
                    g.ageStart,
                    g.ageEnd,
@@ -492,4 +492,27 @@
                 WHERE COMMENTNUM = #{commentNum}
             ]]>
     </select>
+
+    <insert id="updateGroupInfo" parameterType="map">
+        <![CDATA[
+            UPDATE GROUPS
+            SET
+                name = #{name},
+                staffMax = #{staffMax},
+                detail = #{detail},
+                startday = #{startDay},
+                updatedAt = sysdate,
+                area = #{area},
+                ageStart = #{ageStart},
+                ageEnd = #{ageEnd},
+                sex = #{sex},
+                mtnm = #{mtNm}
+            WHERE groupNum = #{groupNum}
+        ]]>
+        <selectKey keyProperty="groupNum" resultType="_int" order="AFTER">
+            SELECT groupNum
+            FROM groups
+            WHERE groupNum = #{groupNum}
+        </selectKey>
+    </insert>
 </mapper>
