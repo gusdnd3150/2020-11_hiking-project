@@ -18,8 +18,8 @@
         </c:choose>
     </div>
     <div class="map_wrap form-inline">
-        <div id="map" class="col-sm-12 col-md-8" style="height:350px;"></div>
-        <div id="sectionList" class="col-sm-12 col-md-4" style="height: 350px;border: 1px solid black;overflow-y: scroll">
+        <div id="map" class="col-sm-12 col-md-9" style="height:500px;"></div>
+        <div id="sectionList" class="col-sm-12 col-md-3" style="height: 500px;border: 1px solid black;overflow-y: scroll">
             <li class="p-1" style="list-style: none;">
                 <a href="/trail/${trail[0].MNTN_CODE}.do?userId=${LOGIN}" class="col-12 pr-0 mr-0" style="text-decoration: none;height: 10px">
                     <span>전체 구간 보기</span>

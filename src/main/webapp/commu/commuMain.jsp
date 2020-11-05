@@ -206,6 +206,9 @@
     } */
     
 //afterBoard
+ 	function goAfter(afterNum){
+		location.href="/after/"+afterNum+".do";
+	}
  	function loadAfterBoard(){
 		$.ajax({
 			type: "GET",
@@ -222,7 +225,7 @@
 					var convertDetail = detail.replace(/(<([^>]+)>)/ig,"");
 
 					var html = ''
-					html += '<div class="col-6">';
+					html += '<div class="afterCard col-6" onclick="goAfter('+response[i].AFTERNUM+')">';
 					html += '<div class="card" style="border: 1px solid green;">';
 					html += '<div class="p-3">'
 					html += '<div class="profile-box form-inline">'

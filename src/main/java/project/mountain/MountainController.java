@@ -48,6 +48,7 @@ public class MountainController {
         mav.addObject("mountain",list);
         return mav;
     }
+
     @GetMapping("/mountain/100/image.do")
     @ResponseBody
     public List get100MountainImage(@RequestParam("mntiListNo")String mntiListNo) throws UnsupportedEncodingException {

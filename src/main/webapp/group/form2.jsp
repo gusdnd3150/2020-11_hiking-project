@@ -316,7 +316,6 @@
                                 var html = '';
 
                                 html += '<li>';
-                                html += '가입한 모임이 없습니다'
                                 html += '</li>';
                             }
 

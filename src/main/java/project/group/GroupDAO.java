@@ -151,4 +151,8 @@ public class GroupDAO{
     public void deleteComment(Map map){
         sqlSession.update("group.deleteComment",map);
     }
+
+    public List selectGroupLikeById(String userId){
+        return sqlSession.selectList("group.selectGroupLikeById",userId);
+    }
 }

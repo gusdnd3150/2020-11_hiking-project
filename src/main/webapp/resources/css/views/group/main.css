@@ -47,3 +47,7 @@ button {
     background: lightseagreen;
     color: white;
 }
+
+.afterCard:hover {
+    cursor: pointer;
+}

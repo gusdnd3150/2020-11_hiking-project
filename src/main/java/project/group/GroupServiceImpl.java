@@ -148,4 +148,8 @@ public class GroupServiceImpl implements GroupService{
     public void deleteComment(Map map){
         groupDAO.deleteComment(map);
     }
+
+    public List selectGroupLikeById(String userId){
+        return groupDAO.selectGroupLikeById(userId);
+    }
 }

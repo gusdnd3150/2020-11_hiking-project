@@ -296,4 +296,12 @@
         from TRAILINFO
         WHERE FID = 0
     </select>
+    <select id="selectTrailLikeById" resultType="map" parameterType="string">
+        SELECT tl.*, ti.MNTN_NM
+        FROM TrailLike tl, TrailInfo ti
+        WHERE tl.MNTN_CODE = ti.MNTN_CODE
+          AND ti.FID = 0
+          AND tl.likeyn = 'Y'
+          AND tl.userId = #{userId}
+    </select>
 </mapper>

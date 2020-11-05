@@ -161,5 +161,8 @@ public class MountainServiceImpl implements MountainService{
     public int countAllTrail(){
         return mountainDAO.countAllTrail();
     }
+    public List selectTrailLikeById(String userId){
+        return mountainDAO.selectTrailLikeById(userId);
+    }
 
 }

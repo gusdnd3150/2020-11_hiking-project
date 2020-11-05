@@ -68,4 +68,7 @@ public class MountainDAO {
     public int countAllTrail(){
         return sqlSession.selectOne("mountain.countAllTrail");
     }
+    public List selectTrailLikeById(String userId){
+        return sqlSession.selectList("mountain.selectTrailLikeById",userId);
+    }
 }

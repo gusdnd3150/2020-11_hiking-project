@@ -553,4 +553,13 @@
             deleted = 1
         WHERE commentNum = #{commentNum}
     </update>
+
+    <select id="selectGroupLikeById" resultType="map" parameterType="string">
+        SELECT gl.groupNum, g.NAME, DECODE(g.STATUS,1,'진행중','마감') status, gm.STOREDFILENAME
+        FROM groupLike gl, groups g , groupsMedia gm
+        WHERE gl.GROUPNUM = g.GROUPNUM
+          AND g.groupNum = gm.groupNum
+          AND gl.LIKEYN = 1
+          AND gl.userId = #{userId}
+    </select>
 </mapper>
