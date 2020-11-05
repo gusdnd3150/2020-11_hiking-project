@@ -472,6 +472,53 @@
             ]]>
     </select>
 
+    <!-- 탈퇴 전 리더 맡은 모임 있는지 확인 -->
+      <select id="mandateCheck" resultType="map" parameterType="String">
+       <![CDATA[
+          SELECT a.group1, b.group2
+		  from    (
+			        select count(*) group2
+			        FROM userWaiting uw, groups g
+			        WHERE uw.groupNum = g.groupNum
+			        and uw.USERID = #{id}
+			        and uw.USERTYPE = 0
+			        and g.TYPE = 2
+			      ) b,
+			      (
+			        select count(*) group1
+			        FROM userWaiting uw, groups g
+			        WHERE uw.groupNum = g.groupNum
+			        and uw.USERID = #{id}
+			        and uw.USERTYPE = 0
+			        and g.TYPE = 1
+			        and sysdate < g.STARTDAY
+			      ) a
+			   ]]>
+      </select>
+
+      <!-- 탈퇴 전 멤버였던 group 확인 -->
+      <select id="memberCheck" resultType="map" parameterType="String">
+            <![CDATA[
+                SELECT GROUPNUM, USERID
+                FROM userWaiting
+                WHERE USERID = #{id}
+                and USERTYPE = 1
+                and USERSTATUS = 0
+            ]]>
+    </select>
+
+        <!-- 탈퇴회원 그룹상태 변경 -->
+    <update id="withdrawUserUpdateStatus" parameterType="map">
+        <![CDATA[
+
+            UPDATE userWaiting
+            SET userStatus = 3
+            WHERE groupNum = #{GROUPNUM}
+            AND userId = #{USERID}
+        ]]>
+    </update>
+
+
     <insert id="updateGroup" parameterType="map">
         <![CDATA[
             UPDATE GROUPS

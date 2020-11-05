@@ -89,7 +89,7 @@ height: 60px;
 	</div> 
 	</nav>
 	<div class="row text-center">
-		<div class="col-md-3 mt-3"></div>
+		<div class="mt-2" style="width:30%"></div>
 		<div class="col-md-5">
 			<h2 class="display-3">산오름 회원가입</h2>
 			<br>

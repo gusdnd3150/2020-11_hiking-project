@@ -9,8 +9,8 @@
 %>
 <!doctype html>
 <html lang="ko">
-<!-- <script type="text/javascript"
-	src="/resources/ckeditor/ckeditor/ckeditor.js"></script> -->
+<script type="text/javascript" src="/resources/js/jquery.js"></script>
+<jsp:include page="/common/header.jsp" flush="false" />
 <style>
 div#posts img {
 	width: auto !important;
@@ -23,9 +23,29 @@ div#posts img {
 }
 .ck.ck-editor{
 	max-width: 100%;
-	}
+}
+.card {
+	margin: 10px auto;
+}
+
+#space {
+	width: 50px;
+}
+
+.list-group-item.active {
+	background-color: green;
+	border-color: green;
+}
+
+#leftSide {
+
+} 
+
+ #rightSide {
+	width: 100px;
+	position: fixed;
+} 
 </style>
-<script type="text/javascript" src="/resources/js/jquery.js"></script>
 <script>
 function selectCommentByPostNum(postNum){
     var data = {
@@ -96,24 +116,25 @@ function selectCommentByPostNum(postNum){
     })
 }
 </script>
-
+<div class="container mt-4" >
+	<div class="row pt-5">
 <jsp:include page="/commu/common/leftSide.jsp" flush="false" />
+			
 <!-- middle div -->
 <c:choose>
 	<c:when test="${(empty m2.USERSTATUS || 1 eq m2.USERSTATUS || 2 eq m2.USERSTATUS) && 1 eq m4.BOARDACCESS}">
-		<jsp:include page="/commu/commuIntro.jsp" flush="false" />
+		  <jsp:include page="/commu/commuIntro.jsp" flush="false" /> 
 	</c:when>
 	<c:otherwise>
-	 <c:if test="${(empty m2.USERSTATUS || 1 eq m2.USERSTATUS || 2 eq m2.USERSTATUS) && 0 eq m4.BOARDACCESS}">
+	 <c:if test="${((empty m2.USERSTATUS || 1 eq m2.USERSTATUS || 2 eq m2.USERSTATUS) && 0 eq m4.BOARDACCESS) || 0 eq m2.USERSTATUS}">
 		<div class="col-md-6 tab-content" id="nav-tabContent">
-			<div class="tab-pane fade show active" id="commuPage" role="tabpanel"
-				aria-labelledby="list-commuPage-list">
+		<div class="tab-pane fade show active" id="commuPage" role="tabpanel" aria-labelledby="list-commuPage-list">
+	</c:if>
+	 <c:if test="${(empty m2.USERSTATUS || 1 eq m2.USERSTATUS || 2 eq m2.USERSTATUS) && 0 eq m4.BOARDACCESS}">
 	  <jsp:include page="/commu/commuIntro2.jsp" flush="false" /> 
      </div>
 	</c:if>
 	<c:if test="${0 eq m2.USERSTATUS}">
-	<div class="col-md-6 tab-content" id="nav-tabContent">
-			<div class="tab-pane fade show active" id="commuPage" role="tabpanel" aria-labelledby="list-commuPage-list">
 					<form action="/commu/commuSearch.do" method="Get">
 					<div id="search" class="row pl-3 pb-2">
 						<input class="form-control " type="search" style="width: 473px; height: 40px; margin: 3px; border-color: green; !important;" placeholder="Search" name="keyword" aria-label="Search">
@@ -305,45 +326,9 @@ function selectCommentByPostNum(postNum){
 
 </div>
 </div>
-<div style="height: 230px;"></div>
 
-<!--게시글 수정 Modal -->
-<div class="modal fade" id="postUpdateForm" tabindex="-1"
-	aria-labelledby="exampleModalLabel" aria-hidden="true">
-	<div class="modal-dialog modal-lg">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLabel"> 피드 수정하기</h5>
-				<button type="button" class="close" data-dismiss="modal"
-					aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-			  <form action="/commu/updatePost.do" method="post">
-			<div class="modal-body">
-					 <div class="col-sm-5">
-							<div class="input-group mb-2 row">
-						    	 <p>&nbsp&nbsp공지게시글로 작성하기</p>
-							     <input style="margin: 5px 20px;" type="checkbox" id="importantPost" name="type" value="1">
-							</div>
-					 </div> 
-				<div class="row justify-content-md-center">
-					<div class="col_c">
-						<div class="input-group"   id="updateFeedContentDiv">
-							<textarea class="form-control" name="updateFeedContent" id="updateFeedContent"></textarea>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="modal-footer">
-				<button type="submit" class="btn btn-success">게시글 수정</button>
-			<input type="hidden" name="groupNum" value="${m1.GROUPNUM}" style="display: none;">
-			<input type="hidden" id="postNum"name="postNum" value="" style="display: none;">
-			</div>
-			 </form>
-		</div>
-	</div>
-</div>
+<jsp:include page="/commu/common/modals.jsp" flush="false" />
+
 <script src="../resources/ckeditor5/ckeditor.js"></script>
 <script type="text/javascript" src="/resources/js/jquery.js"></script>
 <script type="text/javascript" src="/resources/js/bootstrap.min.js"></script>
@@ -472,7 +457,7 @@ function removeCheck(e){
     })
     
     $(document).on('click','#withdrawBtn',function (){
-    	withdraw(${loginID});
+    	withdraw('${loginID}');
     	alert("탈퇴가 완료되었습니다.");
     	location.reload();
     })
@@ -490,7 +475,8 @@ function removeCheck(e){
        function withdraw(userId){
         var data = {
             "groupNum": ${m1.GROUPNUM},
-            "userId" : userId
+            "userId" : userId,
+            "action" : "minus"
         }
 
         $.ajax({
@@ -1022,10 +1008,10 @@ $(document).on( 'click', 'a#oC img', function(e){
 	  $('#list-member-list').off('click');
    })
 
-	  function selectMemberList(){
+    function selectMemberList(){
   
 	var data =  {
-			"groupNum" : ${m1.GROUPNUM} 
+			"groupNum" : ${m1.GROUPNUM}
 	};
 	
 	 $.ajax({
@@ -1051,6 +1037,15 @@ $(document).on( 'click', 'a#oC img', function(e){
              		+'</div>'
              		+'</li>'
              		);
+        	 
+        	 if(response.USERID == '${loginID}'){
+        		 $('div#leaderBtn').append(
+        		  '<button id="mandate" class="btn btn-link" data-toggle="modal" data-target="#mandateModal" style="color: Gray;">리더 위임</button>'            		
+                  +'<button id="forceWithdraw" class="btn btn-link" data-toggle="modal" data-target="#forceWithdrawModal" style="color: Gray;">멤버 강퇴</button>'        
+                  );
+        	 }
+        	 
+        	 
          },
          error : function (request, status, error){
         	  alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
@@ -1064,7 +1059,6 @@ $(document).on( 'click', 'a#oC img', function(e){
          dataType: 'json',
          contentType: "application/json; charset=utf-8;",
          success : function (response){
-        	 console.log("asdfasdf:   ????");
          
              for(var i=0; i<response.length; i++) {
              
@@ -1095,8 +1089,8 @@ $(document).on( 'click', 'a#oC img', function(e){
      })
 	  }
   
-  
-  $('#forceWithdraw').click(function (e){
+  $(document).on("click", "#forceWithdraw", function(e){
+  /* $('#forceWithdraw').click(function (e){ */
 	  var data =  {
 				"groupNum" : ${m1.GROUPNUM} 
 		};
@@ -1138,7 +1132,8 @@ $(document).on( 'click', 'a#oC img', function(e){
             })
         })
         
-          $('#mandate').click(function (e){
+        $(document).on("click", "#mandate", function(e){
+       /*    $('#mandate').click(function (e){ */
         	  var data =  {
         				"groupNum" : ${m1.GROUPNUM} 
         		};
@@ -1191,7 +1186,7 @@ $(document).on( 'click', 'a#oC img', function(e){
 	    	console.log("forceWithdrawCheckModalBtn :  "+ userId);
 	    	if(confirm("정말 멤버를 강퇴하시겠습니까?")==true){
 	    		  withdraw(userId);
-	    		  alert("회원이 강퇴되었습니다.");
+	    		  alert("강퇴가 완료되었습니다.");
 	    		  $('#forceWithdrawModal').modal("hide");
 	    		  $('#leader').children().remove();
 	    		   $('#members').children().remove();
@@ -1210,7 +1205,7 @@ $(document).on( 'click', 'a#oC img', function(e){
 	  	 		"userId" : e.parentNode.childNodes[0].textContent
     	};
 	  	 
-	 if(confirm("정말 "+e.parentNode.childNodes[0].textContent+"님에게 대표를 위임하시겠습니까?")==true){
+	 if(confirm("정말 "+e.parentNode.childNodes[0].textContent+"님에게 리더를 위임하시겠습니까?")==true){
 	  $.ajax({
           type: "POST",
           url: "/commu/commuMandate.do",
@@ -1219,7 +1214,7 @@ $(document).on( 'click', 'a#oC img', function(e){
           contentType: "application/json; charset=utf-8;",
           success: function (response){
           if(response =="1"){
-              alert("대표가 위임되었습니다.");
+              alert("리더가 위임되었습니다.");
               location.reload();
           }
           },

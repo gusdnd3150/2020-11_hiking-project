@@ -1,12 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-    <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>    
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>    
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/functions" prefix = "fn" %>
 <!DOCTYPE html>
 <html>
-<div class="card" style="border: 2px solid green; width:70%">
-		<h4 style="margin: 15px 0px 0px 20px; color: darkGreen;">산모임 소개</h4>
+<style>
+
+</style>
+<div class="card" style="border: 2px solid green;">
+	<!-- 		<div class="card-header">산모임 소개</div> -->
+	<h4 style="margin: 15px 0px 0px 20px; color: darkGreen;">산모임 소개</h4>
 	<hr style="border: 1px solid green;">
 	<div class="card-body" style="width: 95%;">
 				<h4 style="margin: 0px 0px 20px 15px;">${m1.NAME}</h4>
@@ -49,7 +53,7 @@
 				<td>
 					<c:choose>
 				    	<c:when test="${0 eq m1.AGESTART && 0 eq m1.AGEEND}">
-							무관
+							무관 
 				   		</c:when>
 						<c:otherwise>
 							${m1.AGESTART}~${m1.AGEEND}

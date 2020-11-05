@@ -59,13 +59,9 @@ public class MypageControllerImpl implements MypageController {
 		userVO.setId((String) httpSession.getAttribute(LOGIN));
 		String id = userVO.getId();
 		userVO = mypageService.getUserInfo(userVO);
-		if(userVO.getContent2()==null || userVO.getContent2().equals("")) {
-			userVO.setContent2("userBasic.jpg");
-		}
 		List<Map> CList = commuService.selectCreatedCommu(id); 
 		List<Map> JList = commuService.selectJoinedCommu(id);
 		
-		System.out.println("컨트롤러: "+CList);
 		
 	     ////쇼핑몰관련///
 			int userNum = userService.selectUserNum(id);         //유저넘
