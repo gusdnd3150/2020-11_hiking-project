@@ -60,7 +60,7 @@ function cancelPay() {
     $.ajax({
       type:"post",
        async:true,
-       url:"/E_P003_D001/cancelPay",
+       url:"/cancelPay.do",
        data:{imp_uid:$('#imp_uid').val(),
     	   		merchant:$('#merchant_uid').val()
     	   		},
@@ -93,6 +93,8 @@ function cancelPay() {
 				          }
 				      });  
 
+					}else{
+						alert("승인실패 다시 확인 해주세요")
 					}
        			},
       		 error:function(data,textStatus){

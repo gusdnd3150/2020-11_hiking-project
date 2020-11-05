@@ -63,7 +63,17 @@
       	]]>
     	<choose>
     		<when test="searchOption=='all'"> <!-- 전체 조회  -->
-    		
+    		<if test="key_word !='null'">
+    			 AND o.prodName  like '%'||#{key_word}||'%'
+	                OR d.custname  like '%'||#{key_word}||'%'
+	                OR d.custphone  like '%'||#{key_word}||'%'
+	                OR d.zonecode  like '%'||#{key_word}||'%'
+	                OR d.address  like '%'||#{key_word}||'%'
+	                OR d.address2  like '%'||#{key_word}||'%'
+	           </if>
+	         <if test="key_word !='null'">
+	         
+	         </if>
     		</when>
     		<when test="searchOption=='orderNum'"> <!-- 주문 번호 조회  -->
     			AND o.ordernum = #{key_word}
@@ -340,7 +350,8 @@
 	 <![CDATA[
 		UPDATE orders
 		    SET 
-		        orderstatus = 3
+		        orderstatus = 3,
+		        DELIVERYSTATUS = 400
 		    WHERE ordernum = #{orderNum}			
         	]]>	
 	</update>
@@ -354,6 +365,19 @@
 		    WHERE ordernum = #{orderNum}			
         	]]>	
 	</update>
+	
+			<!--금일 취소요청건 카운트 -->
+	<select id="toDayCancelOrder" resultType="string" parameterType="java.util.Map">
+	<![CDATA[
+	SELECT 
+		count(DISTINCT pm.MERCHANT_UID)as toDayCancelOrder
+	FROM payment pm 
+		INNER JOIN orders o
+	ON pm.ordernum =o.ordernum
+		WHERE pm.type = 'cancel' or pm.type = 'canceled'
+    and pm.updatedat >= TO_DATE( #{st},'YYYY-MM-DD')
+      	]]>
+	</select>
 	
 	
 </mapper>

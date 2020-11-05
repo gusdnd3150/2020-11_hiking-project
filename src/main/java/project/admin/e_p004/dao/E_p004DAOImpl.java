@@ -55,7 +55,7 @@ public class E_p004DAOImpl implements E_p004DAO {
 		return list;
 	}
 
-	// 취소 주문건 전회
+	// 취소 주문건 조회
 	@Override
 	public List selectCancelOrder() throws Exception {
 		List list = sqlSession.selectList("admin.mapper.e_p004.selectCancelOrder");
@@ -105,5 +105,12 @@ public class E_p004DAOImpl implements E_p004DAO {
 		}
 		return result;
 	}
+
+	// 금일 취소요청건 카운트
+	@Override
+	public String toDayCancelOrder(Map map) throws Exception {
+		return sqlSession.selectOne("admin.mapper.e_p004.toDayCancelOrder", map);
+	}
+
 
 }

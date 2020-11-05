@@ -145,6 +145,7 @@ public class E_p006ControllerImpl implements E_p006Controller{
 		return e_p006Service.selectUserBarChart(select_keyword);
 	}
 
+	//카테고리별 판매 통계
 	@Override
 	@ResponseBody
 	@RequestMapping(value = "/admin/selectCategoryChart.do", method = RequestMethod.GET)
@@ -155,6 +156,38 @@ public class E_p006ControllerImpl implements E_p006Controller{
 		select_keyword.put("st", st);
 		select_keyword.put("end", end);
 		select_keyword.put("key_word", key_word);
+		return e_p006Service.selectCategoryChart(select_keyword);
+	}
+
+	//메이페이지 통계그래프
+	@Override
+	@ResponseBody
+	@RequestMapping(value = "/admin/payChart.do", method = RequestMethod.GET)
+	public JSONObject payChart(@RequestParam("st") String startDate, @RequestParam("end") String endDate, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		Map<String, String> select_keyword = new HashMap<String, String>();
+		select_keyword.put("st", startDate);
+		select_keyword.put("end", endDate);
+		return e_p006Service.payChart(select_keyword);
+	}
+
+	//메인페이지 카테고리별 조회수 차트
+	@Override
+	@ResponseBody
+	@RequestMapping(value = "/admin/categoryChart.do", method = RequestMethod.GET)
+	public JSONObject categoryChart(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		return e_p006Service.categoryChart();
+	}
+
+	//메인페이지 카테고리별 판매 (1달)
+	@Override
+	@ResponseBody
+	@RequestMapping(value = "/admin/category.do", method = RequestMethod.GET)
+	public JSONObject category( @RequestParam(value="st",  required = false)String st, @RequestParam(value="end", required = false)String end, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		Map<String, String> select_keyword = new HashMap<String, String>();
+		select_keyword.put("st", st);
+		select_keyword.put("end", end);
+		select_keyword.put("key_word", "week_month");
 		return e_p006Service.selectCategoryChart(select_keyword);
 	}
 

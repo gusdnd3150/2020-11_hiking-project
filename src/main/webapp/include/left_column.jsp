@@ -1,5 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    <script type="text/javascript">
+ 
+    /* 로그아웃  */
+function logout(){
+	var result = confirm("로그아웃 하시겠습니까?");
+	if(result ===true){
+		 location.href="/user/logOut.do";
+	}
+};
+</script>
 <aside class="main-sidebar">
 
     <!-- sidebar: style can be found in sidebar.less -->
@@ -17,18 +27,10 @@
         </div>
       </div>
 
-      <!-- search form (Optional) -->
-      <form action="/admin" method="get" class="sidebar-form">
-        <div class="input-group">
-          <input type="text" name="q" class="form-control" placeholder="Search...">
-          <span class="input-group-btn">
-              <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
-              </button>
-            </span>
+		<div class="box-body">
+              <button type="button" class="btn btn-danger  btn-block btn-sm" onclick="logout()">LogOut</button>
         </div>
-      </form>
-      <!-- /.search form -->
-
+            
       <!-- Sidebar Menu -->
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header">관리자 메뉴</li>

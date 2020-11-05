@@ -16,11 +16,6 @@ public class E_p001DAOImpl implements E_p001DAO{
 	private SqlSession sqlSession;
 	
 
-	@Override //회원등록
-	public int addUser(E_p001VO e_p001VO) throws Exception {	
-		return sqlSession.insert("admin.mapper.e_p001.insertUsers", e_p001VO);
-	}
-
 	@Override //회원 조건 검색
 	public List selectUser(Map<String, String> search) throws Exception {
 		 List<E_p001VO> userList=sqlSession.selectList("admin.mapper.e_p001.selectUser", search);
@@ -50,6 +45,13 @@ public class E_p001DAOImpl implements E_p001DAO{
 	@Override
 	public String toDayUser(Map map) throws Exception {
 		return sqlSession.selectOne("admin.mapper.e_p001.toDayUser",map);
+	}
+
+	//금일 신규가입자 리스트
+	@Override
+	public List toDayUserList(String st) throws Exception {
+		List list = sqlSession.selectList("admin.mapper.e_p001.toDayUserList", st);
+		return list;
 	}
 
 

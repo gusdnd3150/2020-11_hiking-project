@@ -7,7 +7,7 @@ public class E_p004VO {
 	private int orderNum; //주문번호
 	private String orderDatString; // 주문시간 String
 	private int orderStatus; // 주문상태 (1.결제전   2.결제완료  3.결제취소)
-	private int deliverystatus; // 배송상태(100.입금대기  200.입금완료   300.배송준비  400.배송완료)
+	private int deliverystatus; // 배송상태(100.배송대시  200.배송준비   300.배송완료  400.배송취소)
 	private String prodName;// 상품명
 	private String prodSize; // 상품 사이즈
 	private String color; //상품 컬러

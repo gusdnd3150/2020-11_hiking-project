@@ -168,10 +168,50 @@ $(document).ready(function() {
 		        table.$('tr.selected1').removeClass('selected1');
 		        $(this).addClass('selected1');
 		    }
-		}); 
+		});
+	  
+
 });
 	
 	// 데이터테블 함수 끝----------------------------------------------------------------
+	
+	
+	/* 중고품 입력창 막기 */
+	  function used_searchOption(str) {
+		    if(str=='a'){
+		        $('#used_key_word').prop('disabled', true);
+		    }else if(str=='b'){
+		    	 $('#used_key_word').prop("disabled",true);
+		    }else if (str=='c'){
+		    	 $('#used_key_word').prop("disabled",true);
+		    }else{
+		    	  $('#used_key_word').prop("disabled",false);
+		    
+		    }
+	};
+
+	/* 상품 조회  입력창 막기 */
+	function prodsearchOption(value){
+		  if(value=='type1'){
+		        $('#prod_key_word').prop('disabled', true);
+		    }else if(value=='type2'){
+		    	 $('#prod_key_word').prop("disabled",true);
+		    }else if (value=='prodstatus1'){
+		    	 $('#prod_key_word').prop("disabled",true);
+		    }else if (value=='prodstatus2'){
+		    	 $('#prod_key_word').prop("disabled",true);
+		    }else if (value=='prodcategorynum1'){
+		    	 $('#prod_key_word').prop("disabled",true);
+		    }else if (value=='prodcategorynum2'){
+		    	 $('#prod_key_word').prop("disabled",true);
+		    }else if (value=='prodcategorynum3'){
+		    	 $('#prod_key_word').prop("disabled",true);
+		    }else{
+		    	  $('#prod_key_word').prop("disabled",false);
+		    
+		    }
+		
+	};
 
 	$(function insertProdMsg() { // 상품등록알림창
 		var insertMsg = "<c:out value="${msg}" />";
@@ -245,14 +285,15 @@ $(document).ready(function() {
 		window.location.reload(true);
 	};
 	
-// --------------------------상품등록
+
+// --------------------------상품등록-----------------------------------------------
 
     //1차 분류 선택시 2차 분류 셀렉트
     function selectprodcategory1(value){
         $("#prodcategory2").empty();
-
+        
         if(value=='a'){
-            $("#prodcategory2").append("<br>"+ "<select name='prodcategory2' class='basic_btn btn-primary' onchange='selectprodcategory2(this.value)'>"
+            $("#prodcategory2").append( "<select name='prodcategory2' class='basic_btn btn-primary' onchange='selectprodcategory2(this.value)'>"
                 +"<option value=' '>2차분류 </option>"
                 +"<option value='d'>상의</option>"
                 +"<option value='e'>하의</option>"
@@ -260,7 +301,7 @@ $(document).ready(function() {
                 +"</select>"
             );
         }else if (value=='b'){
-            $("#prodcategory2").append("<br>"+ "<select name='prodcategory2' class='basic_btn btn-primary' onchange='selectprodcategory2(this.value)'>"
+            $("#prodcategory2").append("<select name='prodcategory2' class='basic_btn btn-primary' onchange='selectprodcategory2(this.value)'>"
                 +"<option value=' '>2차분류 </option>"
                 +"<option value='g'>모자</option>"
                 +"<option value='h'>양말</option>"
@@ -269,12 +310,12 @@ $(document).ready(function() {
                 +"</select>"
             );
         }else if (value=='c') {
-            $("#prodcategory2").append("<br>"+ "<select name='prodcategory2' class='basic_btn btn-primary' onchange='selectprodcategory2(this.value)'>"
+            $("#prodcategory2").append("<select name='prodcategory2' class='basic_btn btn-primary' onchange='selectprodcategory2(this.value)'>"
                 +"<option value=' '>2차분류 </option>"
                 +"<option value='k'>스틱</option>"
-                +"<option value='k'>장갑</option>"
-                +"<option value='k'>아이젠</option>"
-                +"<option value='k'>보호대</option>"
+                +"<option value='l'>장갑</option>"
+                +"<option value='m'>아이젠</option>"
+                +"<option value='n'>보호대</option>"
                 +"</select>"
             );
         }
@@ -284,7 +325,7 @@ $(document).ready(function() {
     function selectprodcategory2(value){
         $("#prodcategory3").empty();
         if(value=='d'){
-            $("#prodcategory3").append("<br>"+ "<select name='prodcategory3' class='basic_btn btn-primary' >"
+            $("#prodcategory3").append( "<select name='prodcategory3' class='basic_btn btn-primary' id='category'>"
                 +"<option value=' '>3차분류 </option>"
                 +"<option value='15'>반팔</option>"
                 +"<option value='16'>긴팔</option>"
@@ -292,14 +333,14 @@ $(document).ready(function() {
                 +"</select>"
             );
         }else if (value=='e'){
-            $("#prodcategory3").append("<br>"+ "<select name='prodcategory3' class='basic_btn btn-primary'>"
+            $("#prodcategory3").append( "<select name='prodcategory3' class='basic_btn btn-primary'id='category'>"
                 +"<option value=' '>3차분류 </option>"
                 +"<option value='18'>반바지</option>"
                 +"<option value='19'>긴바지</option>"
                 +"</select>"
             );
         }else if (value=='f') {
-            $("#prodcategory3").append("<br>"+ "<select name='prodcategory3' class='basic_btn btn-primary' >"
+            $("#prodcategory3").append( "<select name='prodcategory3' class='basic_btn btn-primary' id='category'>"
                 +"<option value=' '>3차분류 </option>"
                 +"<option value='20'>패딩</option>"
                 +"<option value='21'>야상</option>"
@@ -307,7 +348,7 @@ $(document).ready(function() {
                 +"</select>"
             );
         }else if (value=='g') {
-            $("#prodcategory3").append("<br>"+ "<select name='prodcategory3' class='basic_btn btn-primary'>"
+            $("#prodcategory3").append("<select name='prodcategory3' class='basic_btn btn-primary'id='category'>"
                 +"<option value=' '>3차분류 </option>"
                 +"<option value='23'>비니</option>"
                 +"<option value='24'>캡모자</option>"
@@ -316,7 +357,7 @@ $(document).ready(function() {
                 +"</select>"
             );
         }else if (value=='h') {
-            $("#prodcategory3").append("<br>"+ "<select name='prodcategory3' class='basic_btn btn-primary' >"
+            $("#prodcategory3").append( "<select name='prodcategory3' class='basic_btn btn-primary' id='category'>"
                 +"<option value=' '>3차분류 </option>"
                 +"<option value='27'>긴양말</option>"
                 +"<option value='28'>반양말</option>"
@@ -324,29 +365,44 @@ $(document).ready(function() {
                 +"</select>"
             );
         }else if (value=='i') {
-            $("#prodcategory3").append("<br>"+ "<select name='prodcategory3' class='basic_btn btn-primary' >"
+            $("#prodcategory3").append( "<select name='prodcategory3' class='basic_btn btn-primary' id='category'>"
                 +"<option value=' '>3차분류 </option>"
                 +"<option value='30'>백팩</option>"
                 +"<option value='31'>크로스백</option>"
                 +"</select>"
             );
         }else if (value=='j') {
-            $("#prodcategory3").append("<br>"+ "<select name='prodcategory3' class='basic_btn btn-primary'>"
+            $("#prodcategory3").append("<select name='prodcategory3' class='basic_btn btn-primary'id='category'>"
                 +"<option value=' '>3차분류 </option>"
                 +"<option value='32'>등산화</option>"
                 +"</select>"
             );
 
         }else if (value=='k') {
-            $("#prodcategory3").append("<br>"+ "<select name='prodcategory3' class='basic_btn btn-primary'>"
+            $("#prodcategory3").append( "<select name='prodcategory3' class='basic_btn btn-primary'id='category'>"
                 +"<option value=' '>3차분류 </option>"
                 +"<option value='11'>스틱</option>"
-                +"<option value='12'>장갑</option>"
-                +"<option value='13'>아이젠</option>"
-                +"<option value='14'>보호대</option>"
                 +"</select>"
             );
-        }
+        }else if (value=='l') {
+            $("#prodcategory3").append( "<select name='prodcategory3' class='basic_btn btn-primary'id='category'>"
+                +"<option value=' '>3차분류 </option>"
+                +"<option value='12'>장갑</option>"
+                +"</select>"
+            );
+        }else if (value=='m') {
+            $("#prodcategory3").append( "<select name='prodcategory3' class='basic_btn btn-primary'id='category'>"
+                    +"<option value=' '>3차분류 </option>"
+                    +"<option value='14'>아이젠</option>"
+                    +"</select>"
+                );
+            }else if (value=='n') {
+                $("#prodcategory3").append( "<select name='prodcategory3' class='basic_btn btn-primary' id='category'>"
+                        +"<option value=' '>3차분류 </option>"
+                        +"<option value='15'>보호대</option>"
+                        +"</select>"
+                    );
+                }
     };
     var cnt3=1;
     
@@ -368,14 +424,94 @@ $(document).ready(function() {
                 +"<option value='etc'>etc</option>"
             +"</select>"
            +"<label for='title'>사이즈:</label>"
-	       +"<input type='text' name='prodSize[]' value=''><br>"
+	       +"<input type='text' name='prodSize[]' value=''>"
 	       +"<label for='title'>수량:</label>"
 	       +"<input type='text' name='quantity[]' value=''>"
 
         );
         cnt3++;
     };
+    
+
+ //상품 가격 정규식
+var regexp = /^[0-9]*$/
+	function priceCheck(value){
+		    if(regexp.test(value)){
+		   	 $("#msg").html("");
+			 $("#addProd").attr("disabled", false);
+		 }else{
+			 $("#msg").html("숫자만 입력해주세요");
+			 $("#msg").css("color", "red");
+			 $("#addProd").attr("disabled", true);
+	 	}
+};
+
+//상품 수량 정규식
+var regexp = /^[0-9]*$/
+	function quantityCheck(value){
+		    if(regexp.test(value)){
+		   	 $("#msg1").html("");
+			 $("#addProd").attr("disabled", false);
+		 }else{
+			 $("#msg1").html("숫자만 입력해주세요");
+			 $("#msg1").css("color", "red");
+			 $("#addProd").attr("disabled", true);
+	 	}
+};
+
+//상품 등록 값 체크
+function add(){
+	var name = $("#name").val();
+	var category = $("#category").val();
+	var content = $("#content").val();
+	var price = $("#price").val();
+	var color = $("#color").val();
+	var quantity = $("#quantity").val();
+	var size = $("#size").val();
+	var file = $("#file").val();
+	var file2 = $("#file2").val();
+	
+	if(name == "" || name == null || name == undefined || ( name != null && typeof name == "object" && !Object.keys(name).length )){
+		alert("상품명을 입력해주세요");
+	}else if(category == "" || category == null || category == undefined || ( category != null && typeof category == "object" && !Object.keys(category).length )){
+		alert("카테고리 값을 끝까지 선택해주세요");
+	}else if(content == "" || content == null || content == undefined || ( content != null && typeof content == "object" && !Object.keys(content).length )){
+		alert("상품 내용을 입력해주세요");
+	}else if(price == "" || price == null || price == undefined || ( price != null && typeof price == "object" && !Object.keys(price).length )){
+		alert("상품 가격을 입력해주세요");
+	}else if(color == "" || color == null || price == undefined || ( color != null && typeof color == "object" && !Object.keys(color).length )){
+		alert("컬러를 선택해주세요");
+	}else if(quantity == "" || color == null || quantity == undefined || ( quantity != null && typeof quantity == "object" && !Object.keys(quantity).length )){
+		alert("재고 수량을 입력해주세요");
+	}else if(size == "" || size == null || size == undefined || ( size != null && typeof size == "object" && !Object.keys(size).length )){
+		alert("사이즈를 입력해주세요");
+	}else if(file == "" || file == null || file == undefined || ( file != null && typeof file == "object" && !Object.keys(file).length )){
+		alert("메인 사진을 1장 이상 등록해주세요");
+	}else if(file2 == "" || file2 == null || file2 == undefined || ( file2 != null && typeof file2 == "object" && !Object.keys(file2).length )){
+		alert("디테일 사진을 1장 이상 등록해주세요");
+	}else{
+		prodForm.submit();
+	}
+	
+
+}
+//박스 닫기
+function updateClass(value){
+	console.log("박스 닫기 함수 실행")
+	$('#'+value).attr('class','box box-info collapsed-box');
+}
+//박스 열기
+function updateClass1(value){
+	console.log("박스 닫기 함수 실행")
+	$('#'+value).attr('class','box box-info');
+}
 </script>
+<style>
+.main_common{
+    display: inline-block !important;
+
+}
+</style>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
 
@@ -418,12 +554,13 @@ $(document).ready(function() {
             </div>
             <!-- /.box-header -->
             <div class="box-body pad" style="">
-     			 <form action="insertProd.do" method="post" enctype="multipart/form-data">
+     			 <form name="prodForm"action="insertProd.do" method="post" enctype="multipart/form-data">
                     <table class="table table-boardered">
                         <tr>
                             <th>상품 분류</th>
                             <td>
-                                <div>
+                            <div >
+                                <div  class="m1 main_common">
                                     <select name="prodcategory1" class="basic_btn btn-primary" onchange="selectprodcategory1(this.value)">
                                         <option value=" ">1차 분류</option>
                                         <option value="a">의류</option>
@@ -432,34 +569,37 @@ $(document).ready(function() {
                                     </select>
                                 </div>
                                 <!-- 2차 분류 생성 -->
-                                <div id="prodcategory2" >
+                                <div id="prodcategory2"  class="m2 main_common">
                                 </div>
                                 <!--3차 분류 생성  -->
-                                <div id="prodcategory3" >
+                                <div id="prodcategory3" class="m3 main_common">
                                 </div>
+                              </div>  
                             </td>
 
                         </tr>
                         <tr>
                             <th>상품명</th>
-                            <td><input type="text" class="form-control" name="name" placeholder="상품이름"></td>
+                            <td><input type="text" class="form-control" name="name" id="name" placeholder="상품이름"></td>
                         </tr>
                         <tr>
                             <th>상품설명</th>
-                            <td><input type="text" class="form-control" name="content" placeholder="상품설명"></td>
+                            <td><input type="text" class="form-control" name="content"  id="content" placeholder="상품설명"></td>
                         </tr>
                         <tr>
-                            <th>가격</th>
-                            <td><input type="text" class="form-control" name="price"placeholder="가격"></td>
+                            <th>가격 <p id="msg" style="font-size:8px"></th>
+                            <td><input type="text" class="form-control" name="price" id="price" placeholder="가격" onkeyup="priceCheck(this.value)"></td>
                         </tr>
                         <tr>
-                            <th>상품 옵션 </th>
+                            <th>상품 옵션 <br> <button  type="button" id="_addSize" class="basic_btn1 btn-danger btn-xs"  onClick="addOption()" >옵션 추가</button>
+                             <p id="msg1" style="font-size:8px">
+                             </th>
                             <td>
-                                <button  type="button" id="_addSize" class="basic_btn1 btn-danger btn-xs"  onClick="addOption()" >옵션 추가</button>
+                                
                                 <div id="sizeMain">
                                     <label for="title">색상:</label>
-                                    <select name="color[]"class="basic_btn btn-warning dropdown-toggle">
-                                        <option value=" ">color</option>
+                                    <select name="color[]"class="basic_btn btn-warning dropdown-toggle" id="color">
+                                        <option value="">color</option>
                                         <option value="white">white</option>
                                         <option value="black">black</option>
                                         <option value="red">red</option>
@@ -474,9 +614,9 @@ $(document).ready(function() {
                                         <option value="etc">etc</option>
                                     </select>
                                     <label for="title">사이즈:</label>
-                                    <input type="text" name="prodSize[]" value=""><br>
+                                    <input type="text" name="prodSize[]" value="" id=size>
                                     <label for="title">수량:</label>
-                                    <input type="text" name="quantity[]" value="">
+                                    <input type="text" name="quantity[]" value="" id="quantity" onkeyup="quantityCheck(this.value)">
 
                                 </div>
                             </td>
@@ -485,34 +625,34 @@ $(document).ready(function() {
                         <tr>
                             <th>상품구분</th>
                             <td>
-                                <input type="radio"  name="type" value="1">신상품 &nbsp;&nbsp;
+                                <input type="radio"  name="type" value="1" checked>신상품 &nbsp;&nbsp;
                                 <input type="radio"  name="type" value="2">중고품&nbsp;&nbsp;
                             </td>
                         </tr>
                         <tr>
                             <th>상품상태</th>
                             <td>
-                                <input type="radio"  name="prodStatus" value="1">판매중 &nbsp;&nbsp;
+                                <input type="radio"  name="prodStatus" value="1" checked>판매중 &nbsp;&nbsp;
                                 <input type="radio"  name="prodStatus" value="2">품절&nbsp;&nbsp;
                             </td>
                         </tr>
                         <tr>
                             <th>대표 이미지</th>
                             <td>
-                                <input type='file' id="file" name='file' multiple maxlength="3" />
+                                <input type='file' id="file" name='file' multiple  maxlength="3" accept="image/*"/>
                             </td>
                         </tr>
                         <tr>
                             <th>상세 이미지</th>
                             <td>
-                                <input type='file' id="file2" name='file2' multiple  maxlength="1"/>
+                                <input type='file' id="file2" name='file2' multiple maxlength="3" accept="image/*"/>
                             </td>
                         </tr>
                      
                         <tr>
                             <td colspan="2">
                               <center>
-                                <input class="btn btn-primary" type="submit"  value="등록"/>
+                                <input class="btn btn-primary" type="button"  id="addProd" onclick="add()" value="등록"/>
                                  </center>
                             </td>
                         </tr>
@@ -523,7 +663,7 @@ $(document).ready(function() {
           </div>
           <!-- /.box -->
           <!-- 중고품 요청폼 -->
-           <div class="box box-info">
+           <div class="box box-info" id="usedBox">
             <div class="box-header">
               <h3 class="box-title">중고품 관리
                 <small></small>
@@ -542,7 +682,7 @@ $(document).ready(function() {
 		               <form action="selectUsedProd.do" method="get">
 					<div class="input-group margin">
 						<div class="input-group-btn">
-							<select name="searchOption" id="searchOption"class="btn btn-info dropdown-toggle" >
+							<select name="searchOption" id="searchOption1"class="btn btn-info dropdown-toggle" onchange="used_searchOption(this.value)">
 								<option value="all">전체조회</option>
 								<option value="p_prodName">상품명</option>
 								<option value="p_prodNum">상품번호</option>
@@ -552,7 +692,7 @@ $(document).ready(function() {
 								<option value="c">승인상품</option>
 							</select>
 						</div>
-							<input type="text" name="key_word" id="key_word"class="form-control" placeholder="조회내용을 입력하세요">
+							<input type="text" name="key_word" class="form-control" id="used_key_word" placeholder="조회내용을 입력하세요">
 								<span class="input-group-btn">
 		                    	 	<button type="submit" id="serch"class="btn btn-info btn-flat" >조회</button>
 		                    	</span>
@@ -577,6 +717,16 @@ $(document).ready(function() {
                               </tr>
                               </thead>
                                <tbody align=center>
+                               <c:if test="${used ==null}">
+								<script>
+								updateClass("usedBox");
+								</script>
+								</c:if>
+								<c:if test="${used !=null}">
+								<script>
+								updateClass1("usedBox");
+								</script>
+								</c:if>
                                      <c:forEach var="used" items="${used}" >   
                                      <tr>
                                        <td>${used.createdAtString}</td>
@@ -607,7 +757,9 @@ $(document).ready(function() {
           		</div>
           		<!--// 중고품 요청폼 -->
 			<!-- 상품조회폼 -->
-          <div class="box box-info">
+
+          <div class="box box-info" id="prodBox">
+
             <div class="box-header">
               <h3 class="box-title">상품 조회
                 <small></small>
@@ -626,10 +778,10 @@ $(document).ready(function() {
             <form action="selectProd.do" method="get">
 			<div class="input-group margin">
 				<div class="input-group-btn">
-					<select name="searchOption" id="searchOption"class="btn btn-info dropdown-toggle" >
+					<select name="searchOption" id="searchOption"class="btn btn-info dropdown-toggle" onchange="prodsearchOption(this.value)">
 						<option value="all">전체조회</option>
 						<option value="name">상품명</option>
-						<option value="type1">신제품</option>
+						<option value="type1">신상품</option>
 						<option value="type2">중고품</option>
 						<option value="prodstatus1">판매중</option>
 						<option value="prodstatus2">품절</option>
@@ -638,7 +790,7 @@ $(document).ready(function() {
 						<option value="prodcategorynum3">등산용품</option>
 					</select>
 				</div>
-					<input type="text" name="key_word" id="key_word"class="form-control" placeholder="조회내용을 입력하세요">
+					<input type="text" name="key_word" id="prod_key_word"class="form-control" placeholder="조회내용을 입력하세요">
 						<span class="input-group-btn">
                     	 	<button type="submit" id="serch"class="btn btn-info btn-flat" >조회</button>
                     	</span>
@@ -648,12 +800,7 @@ $(document).ready(function() {
     
             <!-- /.box-header -->
 		<div class="box-body">
-				<div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
-					<div class="row">
-						<div>
-						
-						<!-- 	<button id="button" class='btn btn-danger btn-xs'>Delete</button> -->
-						
+				<div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">	
 							<table id="foo-table" class="display" style="width:100%">
 								<thead>
 								<tr>

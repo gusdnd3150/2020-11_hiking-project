@@ -1,5 +1,6 @@
 package project.admin.e_p001.controller;
 
+import java.lang.reflect.UndeclaredThrowableException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -35,35 +36,34 @@ public class E_p001ControllerImpl implements E_p001Controller {
 	// 어드민 메인 화면 컨트롤러
 	@RequestMapping(value = "/admin.do", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
-		return "admin/admin_home";
+		System.out.println("어드민 홈");
+		return "/admin/admin_home";
 	}
 
-	@Override // 회원등록
-	@RequestMapping(value = "admin/addUser.do", method = RequestMethod.POST)
-	public ModelAndView addUser(@ModelAttribute("e_p001VO") E_p001VO e_p001VO, HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
-		request.setCharacterEncoding("utf-8");
-		int result = 0;
-		result = e_p001Service.addUser(e_p001VO);
-		ModelAndView mav = new ModelAndView("e_p001_main");
-		mav.addObject("userName", e_p001VO.getName());
-		return mav;
-	}
 
 	@Override // 회원 조건검색
 	@RequestMapping(value = "admin/searchUser.do", method = RequestMethod.GET)
-	public ModelAndView searchUser(@RequestParam(defaultValue = "") String searchOption,
-			@RequestParam(defaultValue = "userNum") String key_word, HttpServletRequest request,
+	public ModelAndView searchUser(@RequestParam(defaultValue = "all") String searchOption,
+			@RequestParam(defaultValue = "null") String key_word, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		
-		Map<String, String> search = new HashMap<String, String>();
-		search.put("key_word", key_word);
-		search.put("searchOption", searchOption);
-		List userList = e_p001Service.userSearch(search);
-		ModelAndView mav = new ModelAndView();
-		mav.setViewName("e_p001_main");
-		mav.addObject("userList", userList);
-		return mav;
+		try {
+			Map<String, String> search = new HashMap<String, String>();
+			search.put("key_word", key_word);
+			search.put("searchOption", searchOption);
+			List userList = e_p001Service.userSearch(search);
+			ModelAndView mav = new ModelAndView();
+			mav.setViewName("e_p001_main");
+			mav.addObject("userList", userList);
+			return mav;
+		} catch (Exception e) {
+			e.printStackTrace();
+			ModelAndView mav = new ModelAndView();
+			mav.setViewName("e_p001_main");
+			return mav;
+		}
+		
+		
 	}
 
 	//데이터 테이블 (회원 상태 수정)
@@ -110,6 +110,19 @@ public class E_p001ControllerImpl implements E_p001Controller {
 	@RequestMapping(value = "admin/toDayUser.do", method = RequestMethod.POST)
 	public String toDayUser(@RequestParam Map map, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		return e_p001Service.toDayUser(map);
+	}
+
+	//금일 신규가입자 리스트
+	@Override
+	@RequestMapping(value = "admin/toDayUserList.do", method = RequestMethod.GET)
+	public ModelAndView toDayUserList(@RequestParam(value="st") String st, HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		List list = e_p001Service.toDayUserList(st);
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("e_p001_main");
+		mav.addObject("userList", list);
+		return mav;
+		
 	}
 
 

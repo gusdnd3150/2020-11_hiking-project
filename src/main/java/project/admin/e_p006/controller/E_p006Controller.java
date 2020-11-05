@@ -21,6 +21,8 @@ public interface E_p006Controller {
 	
 	
 	
+	
+	
 	//셀레트 조회
 	public JSONObject selectPieChart( String key_word, String st, String end, HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public JSONObject selectColumnChart( String key_word, String st, String end, HttpServletRequest request, HttpServletResponse response) throws Exception;
@@ -28,6 +30,9 @@ public interface E_p006Controller {
 	public JSONObject selectUserBarChart( String key_word, String st, String end, HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public JSONObject selectCategoryChart( String key_word, String st, String end, HttpServletRequest request, HttpServletResponse response) throws Exception;
 
-	
+	//메인 페이지
+	public JSONObject payChart( String startDate, String endDate, HttpServletRequest request, HttpServletResponse response) throws Exception;
+	public JSONObject categoryChart( HttpServletRequest request, HttpServletResponse response) throws Exception;
+	public JSONObject category( String st, String end,HttpServletRequest request, HttpServletResponse response) throws Exception;
 	
 }

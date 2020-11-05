@@ -105,7 +105,7 @@ $(document).ready(function() {
 function selectDay(str){
 	 console.log("셀렉트 옵션값          "+str);
 	var t = new Date();
-	var _end=t.getFullYear()+'-'+(t.getMonth()+1)+'-'+t.getDate()+1;
+	var _end=t.getFullYear()+'-'+(t.getMonth()+1)+'-'+t.getDate();
 	var _st;
 	var _key_word;
 	
@@ -207,7 +207,10 @@ function selectDay(str){
 .ck-editor__editable {
     min-height: 300px;
 }
+.main_common{
+    display: inline-block !important;
 
+}
 </style>
 
 
@@ -237,7 +240,7 @@ function selectDay(str){
  <section class="content">
       <div class="row">
         <div class="col-md-12">
-          <div class="box box-info collapsed-box">
+          <div class="box box-info ">
             <div class="box-header">
               <h3 class="box-title">취소 요청
                 <small></small>
@@ -287,7 +290,7 @@ function selectDay(str){
 							                </tbody>
 									</table>
 								</div>
-            		</div>
+            			</div>
           		</div>
           <!-- /.box -->
           
@@ -313,7 +316,6 @@ function selectDay(str){
 					<div class="input-group margin">
 						<div class="input-group-btn">
 							<select name="searchOption" id="searchOption"class="btn btn-info dropdown-toggle" >
-								<option value=" ">조건선택</option>
 								<option value="all">전체조회</option>
 								<option value="orderNum">주문번호</option>
 								<option value="userName">고객명</option>
@@ -329,35 +331,49 @@ function selectDay(str){
 		                    </span>
 					</div>
 					</form>
-					<!--지정일자 및 상태별 조회 css 수정해야함  -->
+				
 					<div>
-						<center>
+						<div class="m1 main_common">
 	        			 <form action="searchOrderDay.do" mathod="get">
-					  		지정일 조회<input type='date' name='startDate' id='startDate'/> ~ <input type='date' name='endDate' id='endDate'/> 
-					  		 	<button type="submit"  class="btn btn-danger btn-xs" id="searchDate">조회</button>&nbsp;&nbsp;
-					   		</form> 
-					   	<select name="searchOption" class="basic_btn btn-primary" onchange="selectDay(this.value)">
-		            		<option value=" ">일자조회</option>
-		            		<option value="all">전체조회</option>
-		            		<option value="toDay">당일</option>
-		           			<option value="1week">1주</option>
-		            		<option value="2week">2주</option>
-		            		<option value="1month">1달</option>
-		        		</select>
-		        		<select name="orderStatusOption" class="basic_btn btn-primary" onchange="orderStatusOption(this.value)">
-		            		<option value=" ">주문상태</option>
-		            		<option value="1">결제전</option>
-		            		<option value="2">결제완료</option>
-		           			<option value="3">결제취소</option>
-		        		</select> 
+	        			 	&nbsp;&nbsp;
+					  		<strong>일자별 조회 :</strong><input type='date' name='startDate' id='startDate'/> ~ <input type='date' name='endDate' id='endDate'/>
+					  		 	&nbsp;<button type="submit"  class="btn btn-danger btn-xs" id="searchDate">조회</button>&nbsp;&nbsp;
+					   		</form>
+					   	</div>&nbsp;&nbsp;	
+						   	<div class="m2 main_common">
+							   	<strong  style="color:#111111">
+								   	 <input type="radio"  name="dayType" value="all" onclick="selectDay(this.value)"> 전체조회 &nbsp;&nbsp;
+								   	 <input type="radio"  name="dayType" value="toDay" onclick="selectDay(this.value)"> 당일 &nbsp;&nbsp;
+								   	 <input type="radio"  name="dayType" value="1week" onclick="selectDay(this.value)"> 1주일 &nbsp;&nbsp;
+								   	 <input type="radio"  name="dayType" value="2week" onclick="selectDay(this.value)"> 2주일 &nbsp;&nbsp;
+								   	 <input type="radio"  name="dayType" value="1month" onclick="selectDay(this.value)"> 1달 &nbsp;&nbsp;
+		                         </strong>
+			        		</div>
+		        		</div>
+		        		<br>
+		        		
+		        		<div>
+		        		&nbsp;&nbsp;
+		        		<strong>상태별 조회 :</strong>
+			        		<div class="m3 main_common">
+				        		<select name="orderStatusOption" class="basic_btn btn-primary" onchange="orderStatusOption(this.value)">
+				            		<option value=" ">주문상태</option>
+				            		<option value="1">결제전</option>
+				            		<option value="2">결제완료</option>
+				           			<option value="3">결제취소</option>
+				        		</select>
+			        		</div>
+		        		<div class="m4 main_common"> 
 		        		<select name="deliverystatusOption" class="basic_btn btn-primary" onchange="deliverystatusOption(this.value)">
 		            		<option value=" ">배송상태</option>
 		            		<option value="100">배송대기</option>
 		           			<option value="200">배송준비</option>
 		           			<option value="300">배송완료</option>
+		           			<option value="400">배송취소</option>
 		        		</select>  
-        		   
+        		   		</div>
 			   </div>
+			   <br>
 			   <!--지정일자 및 상태별 조회 css 수정해야함  -->
             <div class="box">
     
@@ -397,12 +413,19 @@ function selectDay(str){
 												  <strong>수량:${order.quantity}</strong><br>
 												  <strong><img src="http://localhost:8090/resources/img/${order.content}" style="width: 80px; height: 80px; display: block;"></strong><br>
 							                  </td>
-							                  <td>${order.orderStatusString}</td>
+							                  <td>
+							                  <c:if test="${order.orderStatusString eq '결제완료'}">
+							                  <span class="label label-warning">${order.orderStatusString = "결제완료"}</span>
+							                  </c:if>
+							                  <c:if test="${order.orderStatusString eq '결제취소'}">
+							                  <span class="label label-danger">${order.orderStatusString = "결제취소"}</span>
+							                  </c:if>
+							                  </td>
 							                  <td>
 							                   <select  id="deliverystatus" class="basic_btn btn-primary" onchange="deliverystatus(this.value,'${order.orderNum}','${order.custPhone}','${order.custName}')">
-													<option value="100" ${order.deliverystatus == 100 ? 'selected="selected"' : ''}>배송대기</option>
-													<option value="200" ${order.deliverystatus == 200 ? 'selected="selected"' : ''}>배송준비</option>
-													<option value="300" ${order.deliverystatus == 300 ? 'selected="selected"' : ''}>배송완료</option>
+													<option value="100"  ${order.deliverystatus == 100 ? 'selected="selected"' : ''}>배송대기</option>
+													<option value="200"  ${order.deliverystatus == 200 ? 'selected="selected"' : ''}>배송준비</option>
+													<option value="300"  ${order.deliverystatus == 300 ? 'selected="selected"' : ''}>배송완료</option>
 												</select>
 							                  </td>
 							                <%--   <td><button class="btn btn-primary btn-xs" id ="view" onclick="location.href='viewOrderList.do?orderNum=${order.orderNum}'">상세보기</button></td --%> 		

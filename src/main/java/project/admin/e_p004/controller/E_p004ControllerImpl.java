@@ -32,19 +32,27 @@ public class E_p004ControllerImpl implements E_p004Controller {
 	@Override
 	@RequestMapping(value = "/admin/selectOrder.do", method = RequestMethod.GET)
 	public ModelAndView selectOrder(@RequestParam(defaultValue = "all") String searchOption,
-			@RequestParam(required = false) String key_word, HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
-
-		Map<String, String> search = new HashMap<String, String>();
-		search.put("key_word", key_word);
-		search.put("searchOption", searchOption);
-		List list = e_p004Service.selectOrder(search);
-		List list2 = e_p004Service.selectCancelOrder();
-		ModelAndView mav = new ModelAndView();
-		mav.setViewName("e_p004_main");
-		mav.addObject("list", list);
-		mav.addObject("cancelOrde", list2);
-		return mav;
+			@RequestParam( defaultValue = "null") String key_word, HttpServletRequest request, HttpServletResponse response)throws Exception {
+		
+		try {
+			Map<String, String> search = new HashMap<String, String>();
+			search.put("key_word", key_word);
+			search.put("searchOption", searchOption);
+			List list = e_p004Service.selectOrder(search);
+			List list2 = e_p004Service.selectCancelOrder();
+			ModelAndView mav = new ModelAndView();
+			mav.setViewName("e_p004_main");
+			mav.addObject("cancelOrde", list2);
+			mav.addObject("list", list);
+			return mav;
+		} catch (Exception e) {
+			e.printStackTrace();
+			ModelAndView mav = new ModelAndView();
+			mav.setViewName("e_p004_main");
+			return mav;
+			
+		}
+		
 	}
 
 	// 배송 상태 변경
@@ -78,9 +86,11 @@ public class E_p004ControllerImpl implements E_p004Controller {
 		select_keyword.put("key_word", key_word);
 
 		List list = e_p004Service.selectOrderDay(select_keyword);
+		List list2 = e_p004Service.selectCancelOrder();
 
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("e_p004_main");
+		mav.addObject("cancelOrde", list2);
 		mav.addObject("list", list);
 
 		return mav;
@@ -112,9 +122,11 @@ public class E_p004ControllerImpl implements E_p004Controller {
 	public ModelAndView selectOrderStatus(@RequestParam("orderStatus") int orderStatus, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		List list = e_p004Service.selectOrderStatus(orderStatus);
+		List list2 = e_p004Service.selectCancelOrder();
 
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("e_p004_main");
+		mav.addObject("cancelOrde", list2);
 		mav.addObject("list", list);
 
 		return mav;
@@ -127,10 +139,12 @@ public class E_p004ControllerImpl implements E_p004Controller {
 			HttpServletRequest request, HttpServletResponse response) throws Exception {
 
 		List list = e_p004Service.selectDeliveryStatus(deliverystatus);
+		List list2 = e_p004Service.selectCancelOrder();
 
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("e_p004_main");
 		mav.addObject("list", list);
+		mav.addObject("cancelOrde", list2);
 		return mav;
 	}
 
@@ -215,5 +229,28 @@ public class E_p004ControllerImpl implements E_p004Controller {
 		}
 
 	}
+
+	// 금일 취소요청건 카운트
+	@Override
+	@ResponseBody
+	@RequestMapping(value = "/admin/toDayCancelOrder.do", method = RequestMethod.POST)
+	public String toDayCancelOrder(@RequestParam Map map, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		return e_p004Service.toDayCancelOrder(map);
+	}
+
+	
+	//취소 요청건 조회
+	@Override
+	@RequestMapping(value = "/admin/selectCancelOrderList.do", method = RequestMethod.GET)
+	public ModelAndView selectCancelOrder( HttpServletRequest request, HttpServletResponse response) throws Exception {
+		List list = e_p004Service.selectCancelOrder();
+
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("e_p004_main");
+		mav.addObject("cancelOrde", list);
+
+		return mav;
+	}
+
 
 }

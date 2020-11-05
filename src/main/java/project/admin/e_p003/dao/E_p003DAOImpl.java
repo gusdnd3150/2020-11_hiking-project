@@ -54,6 +54,12 @@ public class E_p003DAOImpl implements E_p003DAO{
 	public String countBoard() throws Exception {
 		return sqlSession.selectOne("admin.mapper.e_p003.countBoard");
 	}
+
+	//신고글 카운트 알림
+	@Override
+	public String countBoard300() throws Exception {
+		return sqlSession.selectOne("admin.mapper.e_p003.countBoard300");
+	}
 	
 
 }

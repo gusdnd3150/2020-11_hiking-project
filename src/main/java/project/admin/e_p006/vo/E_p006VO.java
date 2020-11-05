@@ -24,6 +24,17 @@ public class E_p006VO {
 	private int type2; //잡화합계
 	private int type3; //등산용품합계
 	
+	//메인페이지 1달기준 총 매출 및 취소매출 통계
+	private String datString; //날짜 스트링변환
+	private String totalPrice; //승인 매출
+	private String totalCancel; //취소 매출
+	
+	//메인페이지 카테고리별 조회수 파이 차트
+	private String categorType; //카테고리 타입
+	private int sumCnt; //조회수 합
+
+	
+	
 	public String getCsposttypeString() {
 		return csposttypeString;
 	}
@@ -95,6 +106,36 @@ public class E_p006VO {
 	}
 	public void setType3(int type3) {
 		this.type3 = type3;
+	}
+	public String getDatString() {
+		return datString;
+	}
+	public void setDatString(String datString) {
+		this.datString = datString;
+	}
+	public String getTotalPrice() {
+		return totalPrice;
+	}
+	public void setTotalPrice(String totalPrice) {
+		this.totalPrice = totalPrice;
+	}
+	public String getTotalCancel() {
+		return totalCancel;
+	}
+	public void setTotalCancel(String totalCancel) {
+		this.totalCancel = totalCancel;
+	}
+	public String getCategorType() {
+		return categorType;
+	}
+	public void setCategorType(String categorType) {
+		this.categorType = categorType;
+	}
+	public int getSumCnt() {
+		return sumCnt;
+	}
+	public void setSumCnt(int sumCnt) {
+		this.sumCnt = sumCnt;
 	}	
 	
 }

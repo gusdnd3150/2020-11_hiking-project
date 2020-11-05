@@ -74,4 +74,18 @@ public class E_p006DAOImpl implements E_p006DAO{
 	}
 	
 	
+	
+	
+	//메인 페이지 페이 차트
+	@Override
+	public List<E_p006VO> payChart(Map<String, String> select_keyword) throws Exception {
+		return sqlSession.selectList("admin.mapper.e_p006.payChart",select_keyword);
+	}
+	//메인 페이지 카테고리별 조회수 차트
+	@Override
+	public List<E_p006VO> categoryChart() throws Exception {
+		return sqlSession.selectList("admin.mapper.e_p006.categoryChart");
+	}
+	
+	
 }

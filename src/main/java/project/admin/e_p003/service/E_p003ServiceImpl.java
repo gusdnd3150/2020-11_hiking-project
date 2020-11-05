@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List; 
 import java.util.Map;
 
+import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,6 +82,33 @@ public class E_p003ServiceImpl implements E_p003Service{
 	@Override
 	public String countBoard() throws Exception {
 		return e_p003DAO.countBoard();
+	}
+
+
+	@Override
+	public int mainPageMail(Map<String, String> map) throws Exception {
+		
+		System.out.println("메일 발송 들어옴");
+		MimeMessage message1 = mailSender.createMimeMessage(); // MimeMessage타입 객체 생성
+		try {
+			MimeMessageHelper emailMessag = new MimeMessageHelper(message1, true, "utf-8"); // 메일을 보내기위한 MimeMessageHelper객체 생성
+			emailMessag.setFrom("bithiking168@gmail.com", "산오름 관리자"); //보내는 사람 
+			emailMessag.setTo(map.get("email")); // 받는사람 이메일
+			emailMessag.setSubject( map.get("subject")); // 제목
+			emailMessag.setText( map.get("content")); // 내용
+			mailSender.send(message1);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+		return 1;
+	}
+
+
+	//신고글 카운트 알림
+	@Override
+	public String countBoard300() throws Exception {
+		return e_p003DAO.countBoard300();
 	}
 
 	

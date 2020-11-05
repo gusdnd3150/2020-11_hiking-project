@@ -19,6 +19,8 @@ public interface E_p003Controller {
 	public ModelAndView upDateCsBoard(Map map, HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public String removeCsboard(int csPostNum,HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public String sendMail(Map<String, String> map,HttpServletRequest request, HttpServletResponse response) throws Exception;
+	public String mainPageMail(Map<String, String> map,HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public ModelAndView searchCsBoard( String searchOption, String key_word,  HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public String countBoard(HttpServletRequest request, HttpServletResponse response) throws Exception;
+	public String countBoard300(HttpServletRequest request, HttpServletResponse response) throws Exception;
 }

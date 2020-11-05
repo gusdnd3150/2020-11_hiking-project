@@ -9,7 +9,6 @@ import project.admin.e_p001.vo.E_p001VO;
 
 public interface E_p001DAO {
 
-	public int addUser(E_p001VO e_p001VO) throws Exception;
 
 	public List selectUser(Map<String, String> search)throws Exception;
 
@@ -20,6 +19,8 @@ public interface E_p001DAO {
 	public int updateUserPoint(Map map)throws Exception;
 
 	public String toDayUser(Map map)throws Exception;
+
+	public List toDayUserList(String st)throws Exception;
 
 
 	

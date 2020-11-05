@@ -31,4 +31,6 @@ public interface E_p004Service {
 
 	int cancelMessage(Map map);
 
+	String toDayCancelOrder(Map map)throws Exception;
+
 }
