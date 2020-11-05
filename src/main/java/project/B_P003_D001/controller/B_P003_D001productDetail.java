@@ -53,6 +53,7 @@ public interface B_P003_D001productDetail {
 			@RequestParam(value = "perTotals[]") List<Integer> perTotals,
 			@RequestParam(value = "prodPrices[]") List<Integer> prodPrices,
 			@RequestParam(value = "optionNums[]") List<Integer> optionNums,
+			@RequestParam(value = "payNames[]") List<String> payNames,
 			HttpServletRequest requst,HttpServletResponse response);
 	public Map<String,Object> getSession(HttpServletRequest req, HttpServletResponse res,HttpSession httpSession)throws Exception;
 	public ModelAndView cartList(@RequestParam Map<String, Object> info,HttpSession httpSession, HttpServletRequest req, HttpServletResponse res)throws Exception;
@@ -108,4 +109,7 @@ public interface B_P003_D001productDetail {
     public ModelAndView myUsedList(@RequestParam Map<String,Object> info,HttpServletResponse response,HttpServletRequest request,HttpSession httpSession);
     public String delAfter (@RequestParam Map<String,Object> info,HttpServletResponse response);
     public String delComment (@RequestParam Map<String,Object> info,HttpServletResponse response);
+    public String delwish (@RequestParam Map<String,Object> info,HttpServletResponse response,HttpSession httpSession);
+    public String addwish (@RequestParam Map<String,Object> info,HttpServletResponse response,HttpSession httpSession);
+    public Map<String,List<Map>> showMyProduct (@RequestParam Map<String,Object> info,HttpServletResponse response,HttpSession httpSession);
 }

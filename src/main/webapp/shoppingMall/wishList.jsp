@@ -312,10 +312,10 @@
                   <td>
                     <div class="media">
                       <div class="d-flex">
-                        <img
+                        <a href="/productDetail.do?prodNum=${cartList.PRODNUM }"><img
                           src="/resources/img/${cartList.IMAGE }"
                           alt="" width="90px" height="90px"
-                        />
+                        /></a>
                         <input type="hidden" name="images" value="${cartList.IMAGE }">
                       </div>
                       <div class="media-body">

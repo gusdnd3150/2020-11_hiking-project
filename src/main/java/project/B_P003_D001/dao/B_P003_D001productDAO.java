@@ -104,4 +104,13 @@ public interface B_P003_D001productDAO {
 	
 	public int totaladdUsed(Map<String,Object> usernum)throws DataAccessException ;
 	public List<Map> selectMyUsedList(Map<String,Object> usernum)throws DataAccessException ;
+	public void delwish(Map<String,Object> prodNum)throws DataAccessException ;
+	public void addwish(Map<String,Object> prodNum)throws DataAccessException ;
+	public void updateCNT(Map<String,Object> map);
+	
+	
+	public List<Map> myMainImage(Map<String,Object> map);
+	public List<Map> myDetailImage(Map<String,Object> map);
+	public List<Map> myProdDetail(Map<String,Object> map);
+	
 }

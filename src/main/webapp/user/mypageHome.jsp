@@ -119,10 +119,10 @@
 					<li class="list-group-item d-flex justify-content-between align-items-center">
 						<b>보유포인트 P</b>
 						<c:if test="${empty point }">
-							<h5 class="mt-2">0 </h5>
+							<h5 class="mt-2">0 <img src="/resources/img/shop_coin.png" width="30px" height="30px"></h5>
 						</c:if>
 						<c:if test="${not empty point }">
-							<h5 class="mt-2">${point.point } P</h5>
+							<h5 class="mt-2">${point.point } <img src="/resources/img/shop_coin.png" width="30px" height="30px"></h5>
 						</c:if>
 					</li>
 

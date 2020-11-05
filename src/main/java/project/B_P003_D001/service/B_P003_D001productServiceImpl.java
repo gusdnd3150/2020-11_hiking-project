@@ -361,10 +361,44 @@ public class B_P003_D001productServiceImpl implements B_P003_D001productService{
 	public void delComment(Map<String, Object> afterNum) {
 		b_P003_D001productDAO.delComment(afterNum);
 	}
+	
+	@Override
+	public void delwish(Map<String, Object> prodNum) throws DataAccessException {
+		b_P003_D001productDAO.delwish(prodNum);
+	}
+	
+
+	@Override
+	public void addwish(Map<String, Object> prodNum) throws DataAccessException {
+		b_P003_D001productDAO.addwish(prodNum);
+		
+	}
+	
+	@Override
+	public void updateCNT(Map<String,Object> map) {
+		 b_P003_D001productDAO.updateCNT(map);
+	}
+	
+	@Override
+	public List<Map> myMainImage(Map<String, Object> map) {
+		
+		return b_P003_D001productDAO.myMainImage(map);
+	}
+	@Override
+	public List<Map> myDetailImage(Map<String, Object> map) {
+		return b_P003_D001productDAO.myDetailImage(map);
+	}
+	@Override
+	public List<Map> myProdDetail(Map<String, Object> map) {
+		return b_P003_D001productDAO.myProdDetail(map);
+	}
+
+
+	
 
 		@Override           //결제
 		@Transactional
-		public String insertPaymentTest(Map<String, Object> info,int userNum,List<Integer> prodNums,List<Integer> quantityToDB
+		public String insertPaymentTest(List<String> payNames,Map<String, Object> info,int userNum,List<Integer> prodNums,List<Integer> quantityToDB
 				,List<Integer> orderNums,List<Integer> perTotals,List<Integer> prodPrices,List<Integer> optionNums) throws DataAccessException {
 			String result ="";
 
@@ -457,7 +491,7 @@ public class B_P003_D001productServiceImpl implements B_P003_D001productService{
 					param.put("payTotal", perTotals.get(i));
 					param.put("price", prodPrices.get(i));
 					param.put("deliveryType", deliveryType );
-					param.put("prodName",info.get("prodName"));
+					param.put("prodName",payNames.get(i));
 					param.put("custName",info.get("custName"));
 					param.put("payType",info.get("payType"));  //
 					param.put("imp_uid",info.get("imp_uid"));
@@ -487,6 +521,12 @@ public class B_P003_D001productServiceImpl implements B_P003_D001productService{
 			return result;
 				
 		}
+
+		
+
+
+		
+		
 
 		
 

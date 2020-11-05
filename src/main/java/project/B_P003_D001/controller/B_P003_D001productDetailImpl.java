@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -39,6 +40,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -89,7 +91,6 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 		
 		String prodNum = (String) info.get("prodNum");
 		map.put("prodNum", Integer.parseInt(prodNum));
-		
 
 		if(httpSession.getAttribute(LOGIN)!=null) { //로그인을 했을 경우
 			String id = (String) httpSession.getAttribute(LOGIN); //아이디
@@ -98,9 +99,36 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 			mav.addObject("sessionId", id);
 		}else {
 			map.put("userNum", 0);
-
 		}
 
+		Cookie[] cookies = request.getCookies();
+		 Cookie checknum = null;
+		 if(cookies != null && cookies.length > 0){
+		  for(int i = 0; i< cookies.length; i++){
+		   if(cookies[i].getName().equals("checknum")){
+			   checknum = cookies[i];
+		   }
+		  }  
+		 }
+		 if(checknum == null){
+		  System.out.println("checknum 없음");
+		  Cookie newCookie = new Cookie("checknum","|"+prodNum+"|"); 
+		  response.addCookie(newCookie);
+		  newCookie.setMaxAge(20); //20초 설정
+		  b_P003_D001productService.updateCNT(map);
+		 }else{
+		  System.out.println("checknum 있음");
+		  String value = checknum.getValue();
+		  System.out.println(value);
+		  if(value.indexOf("|"+prodNum+"|") <  0){ // 입력한 번화와 일치하는 번호가 없으면 추가한다.
+		   value = value+"|"+prodNum+"|";
+		   checknum.setValue(value);
+		   System.out.println("만료시간:"+checknum.getMaxAge());
+		   response.addCookie(checknum);
+		   b_P003_D001productService.updateCNT(map);
+		  }
+		 }
+		
 		try {
 
 
@@ -394,6 +422,7 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 			@RequestParam(value = "perTotals[]") List<Integer> perTotals,
 			@RequestParam(value = "prodPrices[]") List<Integer> prodPrices,
 			@RequestParam(value = "optionNums[]") List<Integer> optionNums,
+			@RequestParam(value = "payNames[]") List<String> payNames,
 			HttpServletRequest request, HttpServletResponse response) {
 
 		String result="";
@@ -401,7 +430,7 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 			String id = (String) httpSession.getAttribute(LOGIN); //아이디
 			int userNum = userService.selectUserNum(id);         //유저넘
 
-			result=b_P003_D001productService.insertPaymentTest(info, userNum, prodNums, quantityToDB,
+			result=b_P003_D001productService.insertPaymentTest(payNames,info, userNum, prodNums, quantityToDB,
 					orderNums, perTotals, prodPrices, optionNums);
 
 		} catch (Exception e) {
@@ -702,6 +731,7 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 		String startD = (String) info.get("startD");
 		String endD = (String) info.get("endD");
 		String listType= (String) info.get("listType");
+		String deliveryStatus= (String) info.get("deliveryStatus");
 
 		if (nowPage == null && cntPerPage == null) {
 			nowPage = "1";
@@ -715,19 +745,25 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 		if(listType==null) { //100이면 일반
 			listType="100";
 		}
-
+		if(deliveryStatus==null) {
+			deliveryStatus="100";
+		}
+		
+		
 		try {
 
 		map.put("startD", startD);
 		map.put("endD", endD);
 		map.put("listType", listType);
+		map.put("deliveryStatus", deliveryStatus);
 		System.out.println("리스트타입:"+map.toString());
 
 		int total = b_P003_D001productService.totalPaymentCount(map);
-		Paging page = new Paging(startD,endD,Integer.parseInt(listType),total, Integer.parseInt(nowPage), Integer.parseInt(cntPerPage));
+		Paging page = new Paging(startD,endD,Integer.parseInt(listType),Integer.parseInt(deliveryStatus),total, Integer.parseInt(nowPage), Integer.parseInt(cntPerPage));
 		map.put("start", page.getStart());
 		map.put("end", page.getEnd());
 		map.put("listType", page.getListType());
+		map.put("deliveryStatus", page.getListType2());
 		map.put("startD", page.getStarD());
 		map.put("endD", page.getEndD());
 		List<Map> list =b_P003_D001productService.paymentList(map);
@@ -736,8 +772,6 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 		mav.addObject("paging", page);
 		
 		System.out.println("구매내역:"+list.toString());
-		
-
 		mav.setViewName("/shoppingMall/paymentList");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -938,12 +972,7 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 			throws Exception {
 		
 		String result="";
-		
-		
-		//String id = (String) httpSession.getAttribute(LOGIN); //아이디
-		//int userNum = userService.selectUserNum(id);         //유저넘
 
-		
 		try {
 
 
@@ -991,8 +1020,9 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 		
 		String id = (String) httpSession.getAttribute(LOGIN); //아이디
 		int userNum = userService.selectUserNum(id);         //유저넘
-
-		
+        String result ="";
+        
+		try {
 		String imagePath = "/resources/img/"; 
 		String path = request.getSession().getServletContext().getRealPath("/");// 실제경로
 		String savePath = path + imagePath;   //두개를 합치면  :locallhost8080~~~~~~~~/resources/img/
@@ -1011,8 +1041,6 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 		
 		addProd.put("userNum", userNum);
 		b_P003_D001productService.addUsedProduct(addProd);// 상품상세내용 추가
-		
-		
 		int prodNum = b_P003_D001productService.prodNum();  // prducts table prodnum 맥스값
 		//int optionNum= b_P003_D001productService.optionNum(); //시퀀스
 		
@@ -1073,9 +1101,8 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 	        DetailFileList.add(detail);
         }
 		
-        String result ="";
 
-		try {
+
 			b_P003_D001productService.saveUsedImage(mainFileList); //메인 이미지
 			b_P003_D001productService.saveUsedDetailImage(DetailFileList); //디테일 이미지   
 			result="success";
@@ -1533,11 +1560,15 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 		ModelAndView mav= new ModelAndView();
 		Map<String,Object> param = new HashMap<String,Object>();
 
-		String nowPage = request.getParameter("nowPage");
-		String cntPerPage = request.getParameter("cntPerPage");
-		String listType = request.getParameter("listType");
-		String startD = request.getParameter("startD");
-		String endD = request.getParameter("endD");
+		
+		System.out.println("ddd"+info.toString());
+		String nowPage = (String) info.get("nowPage");
+		String cntPerPage = (String) info.get("cntPerPage");
+		String listType = (String) info.get("listType");
+		String listType2 = (String) info.get("listType2");
+		String startD =(String) info.get("startD");
+		String endD = (String) info.get("endD");
+		
 		if (nowPage == null && cntPerPage == null) {
 			nowPage = "1";
 			cntPerPage = "6";
@@ -1549,24 +1580,26 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 		if(listType==null) {
 			listType="100";
 		}
+		if(listType2==null){
+			listType2 ="10";
+		}
 
 		try {
-
-
-		
 		String id = (String) httpSession.getAttribute(LOGIN); //아이디
 		int userNum = userService.selectUserNum(id);         //유저넘
 
 		param.put("userNum", userNum);
 		param.put("listType", listType);
+		param.put("listType2", listType2);
 		param.put("startD",startD );
 		param.put("endD", endD);
 
 		int total = b_P003_D001productService.totaladdUsed(param);
-		Paging page = new Paging(startD,endD,Integer.parseInt(listType),total, Integer.parseInt(nowPage), Integer.parseInt(cntPerPage));
+		Paging page = new Paging(startD,endD,Integer.parseInt(listType),Integer.parseInt(listType2),total, Integer.parseInt(nowPage), Integer.parseInt(cntPerPage));
 		param.put("start", page.getStart());
 		param.put("end", page.getEnd());
 		param.put("listType", page.getListType());
+		param.put("listType2", page.getListType2());
 		param.put("startD", page.getStarD());
 		param.put("endD", page.getEndD());
 
@@ -1628,6 +1661,76 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 
 
 
+
+
+
+	@Override
+	@ResponseBody
+	@RequestMapping(value = "/myShop/delwish.do", method = { RequestMethod.GET, RequestMethod.POST })
+	public String delwish(@RequestParam Map<String, Object> info, HttpServletResponse response, HttpSession httpSession) {
+		String result="";         //info = prodNum
+		try {
+			String id = (String) httpSession.getAttribute(LOGIN); //아이디
+			int userNum = userService.selectUserNum(id);         //유저넘
+			
+			info.put("userNum", userNum);
+			b_P003_D001productService.delwish(info);
+			result="success";
+		} catch (Exception e) {
+			e.printStackTrace();
+			result="fail";
+			// TODO: handle exception
+		}
+		return result;
+	}
+
+
+	@Override
+	@ResponseBody
+	@RequestMapping(value = "/myShop/addwish.do", method = { RequestMethod.GET, RequestMethod.POST })
+	public String addwish(@RequestParam Map<String, Object> info, HttpServletResponse response, HttpSession httpSession) {
+		// TODO Auto-generated method stub
+		String result="";         //info = prodNum
+		try {
+			String id = (String) httpSession.getAttribute(LOGIN); //아이디
+			int userNum = userService.selectUserNum(id);         //유저넘
+			
+			info.put("userNum", userNum);
+			b_P003_D001productService.addwish(info);
+			result="success";
+		} catch (Exception e) {
+			e.printStackTrace();
+			result="fail";
+		}
+		return result;
+	}
+
+
+
+	@Override
+	@ResponseBody
+	@RequestMapping(value = "/showMyProduct.do", method = { RequestMethod.GET, RequestMethod.POST })
+	public Map<String,List<Map>> showMyProduct(@RequestParam Map<String, Object> info, HttpServletResponse response, HttpSession httpSession) {
+		      //info 정보     = prodNum
+		Map<String,List<Map>> result = new HashMap<String,List<Map>>();
+		try {
+			
+			List<Map> mainImage = b_P003_D001productService.myMainImage(info);
+			List<Map> detailImage = b_P003_D001productService.myDetailImage(info);
+			List<Map> prodDetail = b_P003_D001productService.myProdDetail(info);
+			
+			result.put("mainImage", mainImage);
+			result.put("detailImage", detailImage);
+			result.put("prodDetail", prodDetail);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+
 }
+
+
 
 

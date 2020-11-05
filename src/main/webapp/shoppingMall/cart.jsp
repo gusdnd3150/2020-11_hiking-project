@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
     
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,7 +12,7 @@
 <script src="http://code.jquery.com/jquery-latest.js"></script>
 <script>
         $(document).ready(function () {
-	
+
 	            $("button[name=delete]").click(function () {        // 삭제
 		       var check = window.confirm("삭제 하시겠습니까?");
 		       if (check==true){
@@ -59,7 +60,7 @@
 	                    console.log(data[0].NAME);
 	                    console.log(data.length);
 	                   
-	                    for(var i ;i<data.length ; i++){
+	                    for(var i=0 ;i<data.length ; i++){
 	                          console.log(data[i].NAME);
 	                    }
 	                    
@@ -308,6 +309,7 @@
 				});
 			
 			
+	         
 			
 	         $("#selectAll").click(function(){       //체크박스 전체 선택 혹은 해제
 	             //클릭되었으면
@@ -334,6 +336,10 @@
     	    	    var shototal =$("#showTotal");
 	          	    shototal.text(sum);
                   });
+	        	                     
+	        	                     
+	        	        
+	        	                     
 	    });
         
         
@@ -486,7 +492,7 @@
             <table class="table">
               <thead>
                 <tr>
-                  <th scope="col"><input type="checkbox" id="selectAll" value=""></th>
+                  <th scope="col"><input type="checkbox" id="selectAll" value="" ></th>
                   <th scope="col">상품</th>
                   <th scope="col">가격</th>
                   <th scope="col">수량</th>
@@ -512,10 +518,10 @@
                   <td>
                     <div class="media">
                       <div class="d-flex">
-                        <img
+                        <a href="/productDetail.do?prodNum=${cartList.PRODNUM }"><img
                           src="/resources/img/${cartList.IMAGE }"
                           alt="" width="90px" height="90px"
-                        />
+                        /></a>
                         <input type="hidden" name="images" value="${cartList.IMAGE }">
                       </div>
                       <div class="media-body">
@@ -525,6 +531,7 @@
                     </div>
                   </td>
                   <td>
+                  
                     <h5>${cartList.PRICE } &nbsp; 원</h5>
                     <input type="hidden" name="perPrice" value="${cartList.PRICE }">
                   </td>
