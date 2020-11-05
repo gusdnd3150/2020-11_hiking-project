@@ -60,4 +60,14 @@ public class AfterServiceImpl implements AfterService {
 	public int countSubComment(Map map) {
 		return afterDAO.countSubComment(map);
 	}
+
+	@Transactional
+	public void deleteComment(Map map){
+        afterDAO.deleteComment(map);
+    }
+
+    @Transactional
+    public void deleteAfter(Map map){
+        afterDAO.deleteAfter(map);
+    }
 }

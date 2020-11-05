@@ -2,6 +2,7 @@ package project.group;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -247,12 +248,28 @@ public class GroupController{
 
     @PostMapping("/group/delete.do")
     @ResponseBody
+    @Transactional
     public int deleteGroup(@RequestBody Map map){
-        System.out.println(map.toString());
+        try{
+            groupService.deleteGroup(map);
+            groupMediaService.deleteGroupMedia(map);
+            return 1;
+        } catch (Exception e){
+            e.printStackTrace();
+            return 0;
+        }
+    }
 
-        int result = 0;
-
-        return result;
+    @PostMapping("/group/deleteComment.do")
+    @ResponseBody
+    public int deleteComment(@RequestBody Map map){
+        try{
+            groupService.deleteComment(map);
+            return 1;
+        } catch (Exception e){
+            e.printStackTrace();
+            return 0;
+        }
     }
 
 

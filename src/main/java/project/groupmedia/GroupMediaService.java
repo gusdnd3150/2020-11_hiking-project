@@ -17,4 +17,5 @@ public interface GroupMediaService {
     List<byte[]> selectGroupMediaDetail(int groupNum);
 
     void updateGroupMedia(int groupNum, List<MultipartFile> files, String path) throws IOException;
+    void deleteGroupMedia(Map map);
 }

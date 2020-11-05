@@ -56,6 +56,27 @@
         })
     })
 
+    function deleteAfter(afterNum){
+        var data = {
+            "afterNum": afterNum
+        }
+        $.ajax({
+            type: "POST",
+            url: "/after/delete.do",
+            data: JSON.stringify(data),
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8;",
+            success: function (response) {
+                if(response==1){
+                    alert('후기가 삭제되었습니다.')
+                    location.href = "/after/main.do"
+                }
+            },
+            error: function (response){
+                console.log("error")
+            }
+        })
+    }
     function selectLikeCount(afterNum){
         var data = {
             "afterNum": afterNum
@@ -136,6 +157,7 @@
             dataType: 'json',
             contentType: "application/json; charset=utf-8;",
             success: function (response){
+                console.log(response)
 
                 var index = 0;
 
@@ -155,9 +177,17 @@
                         html += '<div class="col-10">';
                         html += '<pre style="display: none">'+response[i].COMMENTNUM+'</pre>';
                         html += '<h5 class="m-0">'+response[i].NICKNAME+'</h5>';
-                        html += '<div>'+response[i].CONTENT +'</div>';
+                        if(response[i].DELETED==1){
+                            html += '<div class="text-muted">'+response[i].CONTENT +'</div>';
+                        }else{
+                            html += '<div>'+response[i].CONTENT +'</div>';
+                        }
                         html += '<button id ='+response[i].COMMENTNUM+' class="'+id+' p-0 btn btn-default text-muted" onclick="toggleSubComment(this)">[답글 '+ response[i].SUBCOMMENTCOUNT +'개 더보기]</button>'
                         html += '<button class="'+id+'subComment p-0 btn btn-default text-muted" onclick="toggleWriteSubComment(this)">[답글 작성]</button>';
+                        if(response[i].DELETED==1){
+                        }else if(response[i].DELETED==0 && response[i].ID=='${LOGIN}'){
+                            html += '<button class="'+id+'deleteBtn p-0 btn btn-default text-muted" onclick="deleteComment(this)">[삭제]</button>'
+                        }
                         html += '<p style="display: none"><input type="text" class="form-control" placeholder="댓글 내용 입력"/>';
                         html += '<button id="writeSubCommentBtn" class="btn btn-info" onclick="writeSubComment(this,'+response[i].AFTERNUM+')">작성</button>';
                         html += '<button class="btn btn-light" onclick="cancelwriteSubComment(this)">취소</button>';
@@ -172,13 +202,22 @@
                         for (var j = 0; j < response.length; j++) {
 
                             if (response[j].PARENTNUM == commentNum) {
-                                console.log(1)
                                 var html = '';
                                 html += '<li id="' + id + index1 + '" class="col-12 row pt-3 ml-5 pl-2" style="display: none;">';
                                 html += '<img src="/resources/img/'+response[j].CONTENT2+'" class="rounded-circle" style="width: 40px; height: 40px; float: left">';
                                 html += '<div class="col-9 ml-2 pl-5">';
+                                html += '<pre style="display: none">'+response[j].COMMENTNUM+'</pre>';
                                 html += '<h5 class="mb-0">'+response[j].NICKNAME+'</h5>'
-                                html += response[j].CONTENT +'</div></li>';
+                                if(response[j].DELETED==1){
+                                    html += '<div class="text-muted">'+response[j].CONTENT +'</div>';
+                                }else{
+                                    html += '<div>'+response[j].CONTENT +'</div>';
+                                }
+                                if(response[j].DELETED==1){
+                                }else if(response[j].DELETED==0 && response[j].ID=='${LOGIN}'){
+                                    html += '<button class="'+id+'deleteBtn p-0 btn btn-default text-muted" onclick="deleteComment(this)">[삭제]</button>'
+                                }
+                                html += '</div></li>';
 
                                 $('#' + id).append(html);
 
@@ -301,6 +340,27 @@
 	        }
 	    })
 	}
+    function deleteComment(e){
+        var data = {
+            commentNum : e.parentNode.childNodes[0].innerText
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/after/deleteComment.do",
+            data: JSON.stringify(data),
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8;",
+            success : function (response){
+                alert('삭제 되었습니다')
+                location.reload();
+            },
+            error : function (response){
+                alert("오류 발생! 다시 시도해주세요");
+            }
+        })
+
+    }
 
 </script>
 <body class="container pt-5">
@@ -320,7 +380,10 @@
             </div>
             <hr />
             <div class="after-content p-4 m-4">${after.CONTENT}</div>
-                <p class="pr-3 text-muted text-right">${after.CREATEDAT}</p>
+                <div class="pr-3 text-muted text-right">
+                    <button class="btn btn-danger" class="btn btn-danger" data-toggle="modal" data-target="#cancelModal">후기 삭제</button>
+                    <div>${after.CREATEDAT}</div>
+                </div>
             <hr />
             <div class="m-3">
                 <h3 class="mt-2 pb-1">댓글</h3>
@@ -343,6 +406,20 @@
                 </c:choose>
             </div>
         </div>
+            <div class="modal fade" id="cancelModal">
+                <div class="modal-dialog" id="modal">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            정말로 삭제할까요?
+                        </div>
+                        <!-- Footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
+                            <button type="button" class="btn btn-danger" onclick="deleteAfter(${after.AFTERNUM})">삭제</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <script>
                 selectCommentByAfterNum(${after.AFTERNUM})
                 selectLikeCount(${after.AFTERNUM})

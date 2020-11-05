@@ -187,4 +187,28 @@ public class AfterController {
     public int countSubComment(@RequestBody Map map){
         return afterService.countSubComment(map);
     }
+
+    @PostMapping("/after/deleteComment.do")
+    @ResponseBody
+    public int deleteComment(@RequestBody Map map){
+        try{
+            afterService.deleteComment(map);
+            return 1;
+        } catch (Exception e){
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    @PostMapping("/after/delete.do")
+    @ResponseBody
+    public int deleteAfter(@RequestBody Map map){
+        try{
+            afterService.deleteAfter(map);
+            return 1;
+        } catch (Exception e){
+            e.printStackTrace();
+            return 0;
+        }
+    }
 }

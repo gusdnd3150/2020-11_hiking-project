@@ -42,4 +42,8 @@ public class GroupMediaServiceImpl implements GroupMediaService {
     	   List list = fileUtils.saveFile(groupNum, files, path);
            groupMediaDAO.updateGroupMedia(list);
 	}
+	@Transactional
+    public void deleteGroupMedia(Map map){
+        groupMediaDAO.deleteGroupMedia(map);
+    }
 }

@@ -143,6 +143,12 @@ public class GroupDAO{
 		 return sqlSession.selectOne("group.countSubComment",map);
 	}
 	public int updateGroupInfo(Map map){
-        return sqlSession.update("group.updateGroupInfo",map);
+        return sqlSession.update("group.updateGroup",map);
+    }
+    public void deleteGroup(Map map){
+        sqlSession.delete("group.deleteGroup",map);
+    }
+    public void deleteComment(Map map){
+        sqlSession.update("group.deleteComment",map);
     }
 }

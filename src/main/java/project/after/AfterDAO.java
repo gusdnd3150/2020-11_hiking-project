@@ -67,4 +67,10 @@ public class AfterDAO {
 	public int countSubComment(Map map) {
 		 return sqlSession.selectOne("after.countSubComment",map);
 	}
+	public void deleteComment(Map map){
+        sqlSession.update("after.deleteComment",map);
+    }
+    public void deleteAfter(Map map){
+        sqlSession.delete("after.deleteAfter",map);
+    }
 }

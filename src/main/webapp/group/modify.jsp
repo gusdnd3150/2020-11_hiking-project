@@ -125,7 +125,7 @@
                 </div>
             </div>
             <div class="p-3" style="text-align: right">
-                <input type="button" class="btn btn-danger" id="delete" style="width: 100px" value="그룹삭제">
+                <input type="button" class="btn btn-danger" data-toggle="modal" data-target="#cancelModal" style="width: 100px" value="그룹삭제">
                 <input type="button" class="btn btn-info" id="submit" style="width: 75px" value="수정">
             </div>
         </div>
@@ -149,7 +149,20 @@
                     </div>
                     <ul class="mountainList"></ul>
                 </div>
-
+            </div>
+        </div>
+        <div class="modal fade" id="cancelModal">
+            <div class="modal-dialog" id="modal">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        정말로 삭제할까요?
+                    </div>
+                    <!-- Footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
+                        <button type="button" id="delete" class="btn btn-danger">삭제</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -270,8 +283,7 @@
 
         $('#delete').on('click',function (){
             var data = {
-                groupNum : ${group.GROUPNUM},
-                userId : '${LOGIN}'
+                groupNum : ${group.GROUPNUM}
             }
             $.ajax({
                 type: "POST",
@@ -280,10 +292,13 @@
                 dataType: 'json',
                 contentType: "application/json; charset=utf-8;",
                 success: function (response){
-                    console.log("success");
+                    if(response==1){
+                        alert('그룹이 삭제되었습니다.')
+                        location.href = "/group/main.do"
+                    }
                 },
                 error: function(response){
-                    console.log("error");
+                    alert('오류! 새로고침 후 다시 시도해주세요')
                 }
             })
         });

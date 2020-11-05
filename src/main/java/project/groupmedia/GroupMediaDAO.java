@@ -41,4 +41,7 @@ public class GroupMediaDAO {
 
 		}
 	}
+	public void deleteGroupMedia(Map map){
+		sqlSession.delete("groupMedia.deleteGroupMedia",map);
+	}
 }

@@ -113,6 +113,28 @@
         location.href="../after/form.jsp"
     }
 
+    function deleteComment(e){
+        var data = {
+            commentNum : e.parentNode.childNodes[0].innerText
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/group/deleteComment.do",
+            data: JSON.stringify(data),
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8;",
+            success : function (response){
+                alert('삭제 되었습니다')
+                location.reload();
+            },
+            error : function (response){
+                alert("오류 발생! 다시 시도해주세요");
+            }
+        })
+
+    }
+
     $(document).ready(function (){
 
         $(document).on('click','.joinGroupBtn',function (){
@@ -403,10 +425,10 @@
                     var html = '';
                     html += '<ul id="' + id + '" class="col-12 pl-5 row">'
                     html += '<img src="/resources/img/${sessionIdImage}" class="rounded-circle" style="width: 50px;height: 50px">'
-                    html += '<div class="col-10">'
-                    html += '<pre style="display: none">'+response.commentNum+'</pre>'
-                    html += '<h5>'+response.nickname+'</h5>'
-                    html += '<div>'+response.content +'</div>'
+                    html += '<div class="col-10">';
+                    html += '<pre style="display: none">'+response.commentNum+'</pre>';
+                    html += '<h5>'+response.nickname+'</h5>';
+                    html += '<div>'+response.content +'</div>';
                     html += '<button class="'+id+' p-0 btn btn-default text-muted" onclick="toggleSubComment(this)">[답글 '+ count +'개 더보기]</button>'
                     html += '<button class="'+id+'subComment p-0 btn btn-default text-muted" onclick="toggleWriteSubComment(this)">[답글 작성]</button>'
                     html += '<p style="display: none"><input type="text" class="form-control" placeholder="댓글 내용 입력"/>'
@@ -455,9 +477,17 @@
                         html += '<div class="col-10">';
                         html += '<pre style="display: none">'+response[i].commentNum+'</pre>';
                         html += '<h5>'+response[i].nickname+'</h5>';
-                        html += '<div>'+response[i].content +'</div>';
+                        if(response[i].deleted==1){
+                            html += '<div class="text-muted">'+response[i].content +'</div>';
+                        }else{
+                            html += '<div>'+response[i].content +'</div>';
+                        }
                         html += '<button class="'+id+' p-0 btn btn-default text-muted" onclick="toggleSubComment(this)">[답글 '+ count +'개 더보기]</button>';
                         html += '<button class="'+id+'subComment p-0 btn btn-default text-muted" onclick="toggleWriteSubComment(this)">[답글 작성]</button>';
+                        if(response[i].deleted==1){
+                        }else if(response[i].deleted==0 && response[i].id=='${LOGIN}'){
+                            html += '<button class="'+id+'deleteBtn p-0 btn btn-default text-muted" onclick="deleteComment(this)">[삭제]</button>'
+                        }
                         html += '<p style="display: none"><input type="text" class="form-control" placeholder="댓글 내용 입력"/>';
                         html += '<button id="writeSubCommentBtn" class="btn btn-info" onclick="writeSubComment(this)">작성</button>';
                         html += '<button class="btn btn-light" onclick="cancelwriteSubComment(this)">취소</button>';
@@ -475,8 +505,18 @@
                                 html += '<li id="' + id + index1 + '" class="col-12 row pt-3 ml-5 pl-2" style="display: none;">';
                                 html += '<img src="/resources/img/'+response[j].content2+'" class="rounded-circle" style="width: 40px; height: 40px; float: left">';
                                 html += '<div class="col-9 ml-2 pl-5">';
+                                html += '<pre style="display: none">'+response[j].commentNum+'</pre>';
                                 html += '<h5 class="mb-0">'+response[j].nickname+'</h5>'
-                                html += response[j].content +'</div></li>';
+                                if(response[j].deleted==1){
+                                    html += '<div class="text-muted">'+response[j].content +'</div>';
+                                }else{
+                                    html += '<div>'+response[j].content +'</div>';
+                                }
+                                if(response[j].deleted==1){
+                                }else if(response[j].deleted==0 && response[j].id=='${LOGIN}'){
+                                    html += '<button class="'+id+'deleteBtn p-0 btn btn-default text-muted" onclick="deleteComment(this)">[삭제]</button>'
+                                }
+                                html += '</div></li>';
 
                                 $('#' + id).append(html);
 
@@ -632,7 +672,7 @@
     <hr />
     <div class="p-3" style="text-align: center">
         <h3>후기를 작성해주세요</h3>
-        <h4 class="text-muted">후기를 작성해주시면 포인트를 드립니다(1회)</h4>
+        <h4 class="text-muted">후기를 작성해주시면 추첨을 통해 포인트를 드려요!</h4>
         <button id="writeAfter" type="button" class="btn btn-info" onclick="writeAfter()">작성하기</button>
     </div>
     </c:if>

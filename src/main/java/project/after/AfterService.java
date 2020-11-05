@@ -20,4 +20,7 @@ public interface AfterService {
     void updateAfterLike(Map map);
     int checkAfterLike(Map map);
 	int countSubComment(Map map);
+
+	void deleteComment(Map map);
+	void deleteAfter(Map map);
 }

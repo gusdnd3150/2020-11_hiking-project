@@ -85,7 +85,8 @@
                     #{content},
                     #{userId},
                     0,
-                    sysdate
+                    sysdate,
+                    0
                     )
         ]]>
     </insert>
@@ -106,7 +107,7 @@
     </select>
     <select id="selectCommentByAfterNum" resultType="map" parameterType="int">
         <![CDATA[
-        SELECT gac.afterNum, gac.commentNum, gac.parentNum, gac.depts, gac.commentOrder, gac.content, u.nickname, gac.subCommentCount, TO_CHAR(gac.createdAt,'YYYY-MM-DD') createdAt, ui.content2
+        SELECT gac.afterNum, gac.commentNum, gac.parentNum, gac.depts, gac.commentOrder, gac.content, gac.deleted, u.id, u.nickname, gac.subCommentCount, TO_CHAR(gac.createdAt,'YYYY-MM-DD') createdAt, ui.content2
         FROM groupAfterComment gac, users u, userInfo ui
         WHERE gac.userId = u.id
           AND   u.userNum = ui.userNum
@@ -171,4 +172,17 @@
             WHERE COMMENTNUM = #{commentNum}
         ]]>
     </select>
+
+    <update id="deleteComment" parameterType="map">
+        UPDATE groupAfterComment
+        SET
+            content = '--삭제된 댓글입니다--',
+            deleted = 1
+        WHERE commentNum = #{commentNum}
+    </update>
+
+    <delete id="deleteAfter" parameterType="map">
+        DELETE FROM groupAfter
+        WHERE afterNum = #{afterNum}
+    </delete>
 </mapper>

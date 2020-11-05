@@ -16,9 +16,10 @@ public class GroupCommentVO {
     private int commentOrder;
     private int groupNum;
     private String content;
-    private String userId;
+    private String id;
     private int subCommentCount;
     private Timestamp createdAt;
+    private int deleted;
 
     private int postNum;
     private String content2;

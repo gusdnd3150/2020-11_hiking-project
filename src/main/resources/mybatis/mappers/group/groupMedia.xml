@@ -46,6 +46,10 @@
                         sysdate)
         ]]>
     </update>
+    <delete id="deleteGroupMedia" parameterType="map">
+        DELETE FROM groupsMedia
+        WHERE groupNum = #{groupNum}
+    </delete>
    <!--  <select id="selectGroupMedia" resultType="_byte[]" parameterType="_int">
         <![CDATA[
             SELECT content

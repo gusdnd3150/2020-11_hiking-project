@@ -101,28 +101,6 @@
                 WHERE rnum <= 6
         ]]>
     </select>
-    
-    <update id="updateGroup" parameterType="groupVO">
-            UPDATE groups
-            SET name = #{name},
-                staffMax = #{staffMax},
-                detail = #{detail},
-                updatedAt = sysdate,
-                area = #{area},
-                ageStart = #{ageStart},
-                ageEnd = #{ageEnd},
-                sex = #{sex}
-        <where>
-            <if test="groupNum != '' and groupNum != null">
-                groupNum = #{groupNum}
-            </if>
-        </where>
-    </update>
-
-    <delete id="deleteGroup" parameterType="map">
-        DELETE FROM groups
-        WHERE groupNum = #{groupNum}
-    </delete>
 
     <select id="selectGroupDetail" resultType="map" parameterType="_int">
         <![CDATA[
@@ -334,7 +312,8 @@
                     #{userId},
                     0,
                     sysdate,
-                    NVL(#{postNum}, 0)
+                    NVL(#{postNum}, 0),
+                    0
                     )
         ]]>
     </insert>
@@ -359,7 +338,7 @@
 
     <select id="selectCommentByGroupNum" parameterType="_int" resultType="groupCommentVO">
         <![CDATA[
-            SELECT gc.commentNum, gc.parentNum, gc.depts, gc.commentOrder, gc.content, u.nickname, gc.subCommentCount, gc.createdAt, ui.content2
+            SELECT gc.commentNum, gc.parentNum, gc.depts, gc.commentOrder, gc.content, gc.deleted, u.nickname, gc.subCommentCount, gc.createdAt, u.id, ui.content2
             FROM groupComment gc, users u, userInfo ui
             WHERE gc.userId = u.id
               AND   u.userNum = ui.userNum
@@ -493,7 +472,7 @@
             ]]>
     </select>
 
-    <insert id="updateGroupInfo" parameterType="map">
+    <insert id="updateGroup" parameterType="map">
         <![CDATA[
             UPDATE GROUPS
             SET
@@ -515,4 +494,16 @@
             WHERE groupNum = #{groupNum}
         </selectKey>
     </insert>
+    <delete id="deleteGroup" parameterType="map">
+        DELETE FROM groups
+        WHERE groupNum = #{groupNum}
+    </delete>
+
+    <update id="deleteComment" parameterType="map">
+        UPDATE groupComment
+        SET
+            content = '--삭제된 댓글입니다--',
+            deleted = 1
+        WHERE commentNum = #{commentNum}
+    </update>
 </mapper>

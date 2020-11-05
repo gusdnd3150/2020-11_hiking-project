@@ -30,16 +30,6 @@ public class GroupServiceImpl implements GroupService{
         return groupDAO.selectAllGroupList();
     }
 
-    //아직
-    public void updateGroup(GroupVO vo){
-        groupDAO.updateGroup(vo);
-    }
-
-    //아직
-    public void deleteGroup(int groupNum){
-        groupDAO.deleteGroup(groupNum);
-    }
-
     public Map selectGroupDetail(int groupNum){
         return groupDAO.selectGroupDetail(groupNum);
     }
@@ -147,5 +137,15 @@ public class GroupServiceImpl implements GroupService{
 	@Transactional
 	public int updateGroupInfo(Map map){
         return groupDAO.updateGroupInfo(map);
+    }
+
+    @Transactional
+    public void deleteGroup(Map map){
+        groupDAO.deleteGroup(map);
+    }
+
+    @Transactional
+    public void deleteComment(Map map){
+        groupDAO.deleteComment(map);
     }
 }

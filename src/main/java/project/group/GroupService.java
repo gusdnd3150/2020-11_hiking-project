@@ -12,8 +12,6 @@ public interface GroupService {
     void insertGroup(Map map) throws Exception;
     List<Map> selectMainGroupList();
     List<Map> selectAllGroupList();
-    void updateGroup(GroupVO vo);
-    void deleteGroup(int groupNum);
     Map selectGroupDetail(int groupNum);
     List<Map> selectGroupDetailImage(int groupNum);
     List<Map> selectGroupsByKeyword(String keyword);
@@ -48,4 +46,7 @@ public interface GroupService {
 	int countSubComment(Map map);
 
     int updateGroupInfo(Map map);
+    void deleteGroup(Map map);
+
+    void deleteComment(Map map);
 }
