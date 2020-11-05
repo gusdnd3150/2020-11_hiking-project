@@ -15,4 +15,8 @@ public interface E_p005Service {
 
 	String toDaySales(Map map)throws Exception;
 
+	List cancelhPayList(Map<String, String> search_keyword)throws Exception;
+
+	String sumCancelPay(Map<String, String> search_keyword)throws Exception;
+
 }

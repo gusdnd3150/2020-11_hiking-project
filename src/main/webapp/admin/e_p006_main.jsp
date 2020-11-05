@@ -19,6 +19,7 @@
 
 	//구글 차트 라이브러리 로딩
 	google.charts.load('current', {'packages' : [ 'corechart' ]}); 
+	
 
 	//지정 날짜 조회
 	$(document).on("click","#searchDate",function() {
@@ -54,6 +55,9 @@
 							//파이차트 옵션
 							var pieChart_options = {
 								title : "cs게시글 통계",
+								titleTextStyle :{
+					           		 fontSize: 15
+					           	 },
 								width : '100%',
 								height : '100%',
 								is3D : true,
@@ -90,6 +94,9 @@
 						
 							var columnChartOptions = {
 								title : '매출통계',
+								titleTextStyle :{
+					           		 fontSize: 15
+					           	 },
 								width : '100%',
 								height : '100%',
 								bar : {
@@ -128,6 +135,9 @@
 
 							var userLineChartOptions = {
 								title : '회원통계',
+								titleTextStyle :{
+					           		 fontSize: 15
+					           	 },
 								width : '100%',
 								height : '100%',
 								legend : 'none',
@@ -172,9 +182,11 @@
 
 							var userBarChartDateOptions = {
 								title : '조회 일자별 회원 통계',
+								titleTextStyle :{
+					           		 fontSize: 15
+					           	 },
 								width : '100%',
 								height : '100%',
-								legend : 'none',
 								legend : {
 									position : 'top'
 								},
@@ -219,9 +231,15 @@
 					
 						      var categoryChartOptions1 = {
 						              title : '카테고리별 통계',
+						          	titleTextStyle :{
+						           		 fontSize: 15
+						           	 },
 						              width : '100%',
 									  height : '100%',
 						              seriesType: 'bars',
+						              legend : {
+											position : 'top'
+										},
 						          	animation : {
 										duration : 1500,
 										easing : 'linear',
@@ -297,12 +315,15 @@
 		
 			var pieChart_options = {
 				title : "cs게시글 통계",
+				titleTextStyle :{
+           		 fontSize: 15
+           	 },
 				width : '100%',
 				height : '100%',
 				 is3D: true,
 				 slices: {  3: {offset: 0.2},
                      1: {offset: 0.3}
-                  },
+                  }
 	             
 			};
 			
@@ -329,6 +350,9 @@
 
 			var columnChartOptions1 = {
 				title : '매출통계',
+				titleTextStyle :{
+           		 fontSize: 15
+           	 },
 				width : '100%',
 				height : '100%',
 				bar : {
@@ -368,10 +392,13 @@
 
 			var userLineChartOptions = {
 				title : '회원통계',
+				titleTextStyle :{
+           		 fontSize: 15
+           	 },
 				width : '100%',
 				height : '100%',
 				legend : 'none',
-				lineWidth : 3,
+				lineWidth : 2,
 				colors : [ '#43459d', '#f1ca3a', '#e7711b' ],
 				animation : {
 					duration : 1500,
@@ -406,6 +433,9 @@
 
 			var userBarChartDateOptions = {
 				title : '조회 일자별 회원 통계',
+				titleTextStyle :{
+           		 fontSize: 15
+           	 },
 				width : '100%',
 				height : '100%',
 				legend : 'none',
@@ -453,6 +483,8 @@
 
 		      var categoryChartOptions = {
 		              title : '카테고리별 통계',
+		            titleTextStyle :{fontSize: 15},
+		            legend : {position : 'top'},
 		              width : '100%',
 					  height : '100%',
 		              seriesType: 'bars',
@@ -469,7 +501,7 @@
 
 </script>
 <style>
-.basic_btn {
+/* .basic_btn {
 	display: inline-block;
 	max-width: 110px;
 	width: 100%;
@@ -477,7 +509,7 @@
 	font-size: 15px;
 	border: 1px solid #007bff;
 	border-radius: 10px;
-}
+} */
 </style>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
@@ -522,6 +554,7 @@
           <!--   /.box-header -->
             <div class="box-body pad" style="">
 			<center>
+					<strong>일자별 조회 : </strong>
 					<select name="searchOption" class="basic_btn btn-primary"
 						onchange="selectDay(this.value)">
 						<option>조회 선택</option>

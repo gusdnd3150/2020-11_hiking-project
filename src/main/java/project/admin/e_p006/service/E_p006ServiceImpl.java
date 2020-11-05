@@ -604,4 +604,125 @@ public class E_p006ServiceImpl implements E_p006Service {
 
 		return data;
 	}
+
+	//메인 페이지 파트
+	@Override
+	public JSONObject payChart(Map<String, String> select_keyword) throws Exception {
+		List<E_p006VO> items = e_p006DAO.payChart(select_keyword);
+		
+		JSONObject data = new JSONObject(); 
+
+		JSONObject col1 = new JSONObject();
+		JSONObject col2 = new JSONObject();
+		JSONObject col3 = new JSONObject();
+	
+		
+	
+		JSONArray title = new JSONArray();
+
+		
+		col1.put("label", "날짜"); 
+		col1.put("type", "string");
+		
+		col2.put("label", "승인매출"); 
+		col2.put("type", "number");
+		
+		col3.put("label", "취소매출"); 
+		col3.put("type", "number");
+		
+		
+		
+
+		title.add(col1);
+		title.add(col2);
+		title.add(col3);
+		
+		
+
+		data.put("cols", title);
+
+		JSONArray body = new JSONArray(); 
+
+		for (E_p006VO vo : items) {
+
+			JSONObject type = new JSONObject(); 
+			type.put("v",vo.getDatString());
+
+			JSONObject count = new JSONObject(); //승인매출
+			JSONObject count1 = new JSONObject(); //취소매출
+			
+			
+		
+			
+			count.put("v", vo.getTotalPrice());
+			count1.put("v",vo.getTotalCancel());
+
+			JSONArray row = new JSONArray(); 
+			row.add(type);
+			row.add(count); 
+			row.add(count1); 
+
+			JSONObject cell = new JSONObject();
+			cell.put("c", row);
+			body.add(cell); 
+
+		}
+		data.put("rows", body);
+
+		return data;
+	}
+
+	//메인페이지 카테고리별 조회수 차트
+	@Override
+	public JSONObject categoryChart() throws Exception {
+		
+	List<E_p006VO> items = e_p006DAO.categoryChart();
+		
+		JSONObject data = new JSONObject(); 
+
+		JSONObject col1 = new JSONObject();
+		JSONObject col2 = new JSONObject();
+		JSONObject col3 = new JSONObject();
+	
+		
+	
+		JSONArray title = new JSONArray();
+
+		
+		col1.put("label", "타입"); 
+		col1.put("type", "string");
+		
+		col2.put("label", "조회수"); 
+		col2.put("type", "number");
+		
+		title.add(col1);
+		title.add(col2);
+
+
+		data.put("cols", title);
+
+		JSONArray body = new JSONArray(); 
+
+		for (E_p006VO vo : items) {
+
+			JSONObject type = new JSONObject(); 
+			type.put("v",vo.getCategorType());//카테고리 타입
+
+			JSONObject count = new JSONObject(); 
+			
+			count.put("v", vo.getSumCnt());//조회수
+			
+			JSONArray row = new JSONArray(); 
+			row.add(type);
+			row.add(count); 
+
+			JSONObject cell = new JSONObject();
+			cell.put("c", row);
+			body.add(cell); 
+
+		}
+		data.put("rows", body);
+
+		return data;
+	}
 }

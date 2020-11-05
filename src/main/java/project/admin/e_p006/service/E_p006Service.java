@@ -20,6 +20,11 @@ public interface E_p006Service {
 	public JSONObject selectUserBarChart(Map<String, String> select_keyword)throws Exception;
 	public JSONObject selectCategoryChart(Map<String, String> select_keyword)throws Exception;
 	
+	
+	//메인페이지 차트
+	public JSONObject payChart(Map<String, String> select_keyword)throws Exception;
+	public JSONObject categoryChart()throws Exception;
+	
 
 	
 	

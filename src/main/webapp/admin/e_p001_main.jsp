@@ -6,11 +6,11 @@
       %>
 <!DOCTYPE html>
 <html>
-<%@ include file="../include/head.jsp"%>
 
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 
-<!-- 데이터 테이블 -->
+<%@ include file="../include/head.jsp"%>
+
 <!-- 데이터 테이블 css -->
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css" />
 
@@ -37,6 +37,7 @@
 
 <!-- datatable-editor js 파일 -->
 <script type="text/javascript" src="../resources/js/view/admin/datatable-editor.js"></script>
+
 
 <script type="text/javascript">
 $(document).ready(function() {
@@ -91,8 +92,13 @@ $(document).ready(function() {
 	           var _userNum = tr.find('td:eq(0)').text();
 	          
 	           console.log("회원번호"+_userNum);
-	          
-	            $.ajax({
+	           console.log("수정 포인트"+changed);
+	           
+	           var regexp = /^[0-9]*$/
+	           
+	       	    if(regexp.test(changed)){
+	   		   	 $("#msg").html("");
+	   	       $.ajax({
 	               type : 'get',
 	               url : 'updateUserPoint.do',
 	               data : {
@@ -102,13 +108,19 @@ $(document).ready(function() {
 	               success : function(data) {
 	               	if ("ok"== (data)) {
 	               		console.log("포인트지급 완료");
-
+	               		window.location.reload(true);
 						} else {
 							console.log("포인트지급 실패");
 						};
 	               	
 	               }
 	            })  
+	   		 }else{
+	   			alert("포인트는 숫만 입력가능합니다.")
+	   			window.location.reload(true);
+	   	 	}
+	          
+	     
 			}
 		});
     $('#foo-table tbody').on( 'click', 'tr', function () {
@@ -127,24 +139,6 @@ $(document).ready(function() {
 
 // 데이터테블 함수 끝----------------------------------------------------------------
 
-function user_status(value,_userNum){
-	 $.ajax({
-			type : 'get',
-			url : 'upDateUser.do',
-			data : {
-				userNum : _userNum,
-				status : value
-			},
-			success : function(data) {
-				if ("ok"== (data)) {
-					console.log("수정완료");
-				} else {
-					alert("다시확인해주세요");
-				}
-				;
-			}
-		});
-	}
 </script>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
@@ -192,10 +186,10 @@ function user_status(value,_userNum){
 		          <div class="input-group margin">
 		                <div class="input-group-btn">
 		                	<select name="searchOption" class="btn btn-info dropdown-toggle">
-		            		<option value="userNum">전체검색</option>
-		           			 <option value="name">이름</option>
+		            		<option value="all">전체검색</option>
+		           			<option value="name">이름</option>
 		            		<option value="id">아이디</option>
-		           		 <option value="address">주소</option>
+		           			<option value="address">주소</option>
 		            		<option value="email">email</option>
 		        			</select>
 		                </div>
@@ -249,6 +243,7 @@ function user_status(value,_userNum){
 		              </table>
 		
 		              </div>
+		              
 		              </div>
 		            </div>		
 				</div>
@@ -258,61 +253,6 @@ function user_status(value,_userNum){
            </div>
           </div>
           <!-- /.box -->
-
-<!-- 2페이지 시작 -->
-         <!--  <div class="box box-info">
-            <div class="box-header">
-              <h3 class="box-title">상품 조회
-                <small></small>
-              </h3>
-              tools box
-              <div class="pull-right box-tools">
-                <button type="button" class="btn btn-info btn-sm" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
-                  <i class="fa fa-minus"></i></button>
-                <button type="button" class="btn btn-info btn-sm" data-widget="remove" data-toggle="tooltip" title="" data-original-title="Remove">
-                  <i class="fa fa-times"></i></button>
-              </div>
-              /. tools
-            </div>
-            /.box-header
-            <div class="box-body pad" style="">
-            <form action="selectProd.do" method="get">
-			<div class="input-group margin">
-				<div class="input-group-btn">
-					<select name="searchOption" id="searchOption"class="btn btn-info dropdown-toggle" >
-						<option value="all">전체조회</option>
-						<option value="name">상품명</option>
-						<option value="type1">신제품</option>
-						<option value="type2">중고품</option>
-						<option value="prodstatus1">판매중</option>
-						<option value="prodstatus2">품절</option>
-						<option value="prodcategorynum1">의류</option>
-						<option value="prodcategorynum2">잡화</option>
-						<option value="prodcategorynum3">등산용품</option>
-					</select>
-				</div>
-					<input type="text" name="key_word" id="key_word"class="form-control" placeholder="조회내용을 입력하세요">
-						<span class="input-group-btn">
-                    	 	<button type="submit" id="serch"class="btn btn-info btn-flat" >조회</button>
-                    	</span>
-				</div>
-			</form>
-			
-			
-      <div class="box">
-            /.box-header
-		<div class="box-body">
-				2페이지 내용
-				
-				
-			</div>
-            /.box-body
-          </div>  
-                   
-           </div>
-          </div> --> 
-          <!--2페이지 끝  -->
-          
           
         </div>
         <!-- /.col-->

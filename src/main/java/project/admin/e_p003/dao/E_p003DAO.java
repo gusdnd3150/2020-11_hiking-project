@@ -22,6 +22,8 @@ public interface E_p003DAO {
 
 	public String countBoard()throws Exception;
 
+	public String countBoard300()throws Exception;
+
 
 
 }

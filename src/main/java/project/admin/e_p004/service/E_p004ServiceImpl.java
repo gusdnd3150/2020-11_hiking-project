@@ -150,4 +150,11 @@ public class E_p004ServiceImpl implements E_p004Service {
 
 	}
 
+	//금일 취소요청건 카운트
+	@Override
+	public String toDayCancelOrder(Map map) throws Exception {
+		return e_p004DAO.toDayCancelOrder(map);
+	}
+
+
 }

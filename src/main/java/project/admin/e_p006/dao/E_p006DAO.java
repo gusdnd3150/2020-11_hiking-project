@@ -21,6 +21,12 @@ public interface E_p006DAO {
 	List<E_p006VO> selectUserBarChart(Map<String, String> select_keyword)throws Exception;
 	List<E_p006VO> selectCategoryChart(Map<String, String> select_keyword)throws Exception;
 	
+	
+	
+	//메인페이지 차트
+	List<E_p006VO> payChart(Map<String, String> select_keyword)throws Exception;
+	List<E_p006VO> categoryChart()throws Exception;
+	
 
 	
 

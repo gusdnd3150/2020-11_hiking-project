@@ -51,7 +51,7 @@
                     <c:when test="${not empty LOGIN}">
                         <c:if test="${LOGIN eq 'admin'}">
                             <li class="nav-item">
-                                <a class="nav-link" href="/admin.do">관리자페이지</a>
+                                <a class="nav-link" href="/admin/admin_home.jsp">관리자페이지</a>
                             </li>
                         </c:if>
                         <c:if test="${LOGIN ne 'admin'}">

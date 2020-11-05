@@ -48,4 +48,17 @@ public class E_p005DAOImpl implements E_p005DAO{
 	public String toDaySales(Map map) throws Exception {
 		return sqlSession.selectOne("admin.mapper.e_p005.toDaySales",map);
 	}
+
+	//취소매출 조회
+	@Override
+	public List cancelhPayList(Map<String, String> search_keyword) throws Exception {
+		List list = sqlSession.selectList("admin.mapper.e_p005.cancelhPayList",search_keyword);
+		return list;
+	}
+
+	//취소매출 합계
+	@Override
+	public String sumCancelPay(Map<String, String> search_keyword) throws Exception {
+		return sqlSession.selectOne("admin.mapper.e_p005.sumCancelPay",search_keyword);
+	}
 }

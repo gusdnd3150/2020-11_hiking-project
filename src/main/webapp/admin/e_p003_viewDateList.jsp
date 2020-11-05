@@ -21,13 +21,12 @@
 $(document).on('click', '#btnSave', function(e) {
 	e.preventDefault();
 	$("#form").submit();
-	
-	
+		
 });
 
 $(document).on('click', '#btnEmail', function(e) {
 	var _userEmail = $(this).val();
-	alert(_userEmail);
+	
 	e.preventDefault();
 	location.href = "sendEmail.do?userEmail=" + _userEmail;
 	

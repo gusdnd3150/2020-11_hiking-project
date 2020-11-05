@@ -14,4 +14,8 @@ public interface E_p005DAO {
 	List selectSearch(Map<String, String> select_keyword)throws Exception;
 
 	String toDaySales(Map map)throws Exception;
+
+	List cancelhPayList(Map<String, String> search_keyword)throws Exception;
+
+	String sumCancelPay(Map<String, String> search_keyword)throws Exception;
 }

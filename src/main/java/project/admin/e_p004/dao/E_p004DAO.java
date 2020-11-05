@@ -27,4 +27,7 @@ public interface E_p004DAO {
 
 	int upDateOrderStatus(List<Map<String, Object>> ordernumListMap)throws Exception;
 
+	String toDayCancelOrder(Map map)throws Exception;
+
+
 }

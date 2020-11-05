@@ -24,4 +24,8 @@ public interface E_p003Service {
 
 	public String countBoard()throws Exception;
 
+	public int mainPageMail(Map<String, String> map)throws Exception;
+
+	public String countBoard300()throws Exception;
+
 }

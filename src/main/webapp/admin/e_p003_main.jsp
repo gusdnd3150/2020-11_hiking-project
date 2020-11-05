@@ -72,11 +72,9 @@ $(document).ready(function() {
 	
 	//조건검색시 인풋창 입력 막는 조건
   function myFunction(str) {
-	    if(str=='status'){
-	        $(".form-control").prop("disabled",true);
-	         $("#radioInput").append("<input type='radio'  name='key_word1' value='1'> 처리대기 &nbsp;&nbsp");
-	         $("#radioInput").append("<input type='radio'  name='key_word1' value='2'>완료  &nbsp;&nbsp");
-	    }else if(str=='all'){
+	    if(str=='count300'){
+	        $(".form-control").prop("disabled",true); 
+	    }else if(str=='count'){
 	    	 $(".form-control").prop("disabled",true);
 	    }else if (str=='csPostType100'){
 	    	 $(".form-control").prop("disabled",true);
@@ -138,6 +136,17 @@ $(document).ready(function() {
 		viewDetaList=window.open("viewDetaList.do?csPostNum="+csPostNum, '상품상세정보','width=700px,height=800px,scrollbars=yes');
 	};
 	
+	function add(){
+		var title = $("#title").val();
+		
+		if(title == "" || title == null || title == undefined || ( title != null && typeof title == "object" && !Object.keys(title).length )){
+			alert("제목을 입력해주세요");
+		}else{
+			form.submit();
+		}
+		
+
+	}
 </script>
 <style>
 .ck.ck-editor{
@@ -145,6 +154,11 @@ $(document).ready(function() {
 	}
 .ck-editor__editable {
     min-height: 300px;
+}
+
+.main_common{
+    display: inline-block !important;
+
 }
 
 </style>
@@ -201,12 +215,12 @@ $(document).ready(function() {
                </div>
         			<center> 
         				<div>
-                     <input type="radio" class="minimal" name="csPostType" value="100">공지사항 &nbsp;&nbsp;
+                     <input type="radio" class="minimal" name="csPostType" value="100" checked>공지사항 &nbsp;&nbsp;
                      <input type="radio"  class="minimal" name="csPostType" value="400">이벤트&nbsp;&nbsp;
                        </div>
                 	</center>      
                 	 <center>
-                       <input class="btn btn-info" type="submit"  value="등록"/>
+                       <input class="btn btn-info" type="button"  value="등록" onclick="add()"/>
                      </center>                      
                </form>
             </div>
@@ -240,7 +254,8 @@ $(document).ready(function() {
 		           			<option value="csPostType200">문의 전체 조회</option>
 		            		<option value="csPostType300">신고 전체 조회</option>
 		            		<option value="userNum">작성자 ID 조회</option>
-		            		<option value="status">처리 상태 조회</option>
+		            		<option value="count">미처리 문의글</option>
+		            		<option value="count300">미처리 신고글</option>
 		        			</select>  
 		                </div> 
 		                <input type="text" name="key_word" class="form-control" placeholder="조회내용을 입력하세요">
@@ -248,7 +263,6 @@ $(document).ready(function() {
 		                      <button type="submit"  id="searchBoard" class="btn btn-info btn-flat" >조회</button>            
 		                    </span>
 		              </div>
-		               <div id="radioInput"> </div> 
              </form>
             <div class="box">
     
@@ -277,7 +291,14 @@ $(document).ready(function() {
 												<td>${cs.userNum}</td>
 												<td>${cs.title}</td>
 												<td>${cs.createdAtString}</td>
-												<td>${cs.statusString}</td>
+												<td>
+													<c:if test="${cs.statusString eq '미처리'}">
+								                  	<span class="label label-danger">${cs.statusString}</span>
+								                    </c:if>
+								                    <c:if test="${cs.statusString eq '완료'}">
+								                  	<span class="label label-warning">${cs.statusString}</span>
+								                    </c:if>
+												</td>
 												<td>${cs.csPostTypeString}</td>
 												<td><button class="btn btn-primary btn-xs" onclick="viewCsboard(${cs.csPostNum})">상세보기</button></td>
 												<td><button class="btn btn-danger btn-xs" id="remove" value="${cs.csPostNum}">삭제</button></td>
@@ -285,9 +306,7 @@ $(document).ready(function() {
 										</c:forEach>
                            </tbody>
                         </table>
-             
-             		</div>
-          
+             		</div>   
               	</div>
             <!-- /.box-body -->
           	  </div>              
@@ -418,38 +437,8 @@ $(document).ready(function() {
 	    $('#title').val("");
 	    window.editor.setData("");
 	})
-/* 	
-	$('#submit').on("click",function (){
-	
-	    var data = {
-	        "title" : $('#title').val(),
-	        "title" : $('#title').val(),
-	        "content" : window.editor.getData(),
 
-	     
-	    }
 	
-	    $.ajax({
-	        type: "POST",
-	        url: "/after/insertAfter.do",
-	        data: JSON.stringify(data),
-	        dataType: 'json',
-	        contentType: "application/json; charset=utf-8;",
-	        success : function (response){
-	            console.log(response);
-	
-	            if(response==0){
-	                alert("회원당 후기는 1개만 작성가능합니다")
-	                return;
-	            }
-	            alert("작성 완료")
-	            location.href="../group/main1.jsp"
-	        },
-	        error : function (response){
-	            alert("오류 발생! 다시 시도해주세요");
-	        }
-	    })
-	}) */
 </script>
 </body>
 </html>

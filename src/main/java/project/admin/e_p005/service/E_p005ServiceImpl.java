@@ -46,4 +46,17 @@ public class E_p005ServiceImpl implements E_p005Service {
 		return e_p005DAO.toDaySales(map);
 	}
 
+	//취소매출 조회
+	@Override
+	public List cancelhPayList(Map<String, String> search_keyword) throws Exception {
+		List list = e_p005DAO.cancelhPayList(search_keyword);
+		return list;
+	}
+
+	//취소매출 합계
+	@Override
+	public String sumCancelPay(Map<String, String> search_keyword) throws Exception {
+		return e_p005DAO.sumCancelPay(search_keyword);
+	}
+
 }

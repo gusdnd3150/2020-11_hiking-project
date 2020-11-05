@@ -86,7 +86,7 @@ public class E_p002ControllerImpl implements E_p002Controller{
 	//상품조회
 	@Override
 	@RequestMapping(value = "/admin/selectProd.do", method = RequestMethod.GET )
-	public ModelAndView selectProd(@RequestParam(value="searchOption") String searchOption, @RequestParam(defaultValue = " ") String key_word, HttpServletRequest request,
+	public ModelAndView selectProd(@RequestParam(value="searchOption") String searchOption, @RequestParam(defaultValue = "null") String key_word, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		
 		Map<String, String> search = new HashMap<String, String>();
@@ -94,11 +94,9 @@ public class E_p002ControllerImpl implements E_p002Controller{
 		search.put("searchOption",searchOption);
 		
 		List list = e_p002Service.selectProd(search);
-		//List list2 =e_p002Service.searchUsedProd(search);
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("e_p002_main");
 		mav.addObject("list",list);
-		//mav.addObject("used",list2);
 		
 		return mav;
 	}
@@ -292,7 +290,7 @@ public class E_p002ControllerImpl implements E_p002Controller{
 	//중고품 조건 검색 조회
 	@Override
 	@RequestMapping(value = "/admin/selectUsedProd.do", method = RequestMethod.GET)
-	public ModelAndView selectUsedProd(@RequestParam(value="searchOption") String searchOption, @RequestParam(value="key_word", defaultValue = " ") String key_word,
+	public ModelAndView selectUsedProd(@RequestParam(value="searchOption") String searchOption, @RequestParam(value="key_word", defaultValue = "null") String key_word,
 			HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
 		Map<String, String> search = new HashMap<String, String>();
@@ -337,6 +335,7 @@ public class E_p002ControllerImpl implements E_p002Controller{
 	@ResponseBody
 	@RequestMapping(value = "/admin/toDayOrder.do", method = RequestMethod.POST)
 	public String todayOrder(@RequestParam Map map,HttpServletRequest request, HttpServletResponse response) throws Exception {
+		System.out.println("금일 주문건 카운트");
 		return e_p002Service.todayOrder(map);
 	}
 

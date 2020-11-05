@@ -21,16 +21,25 @@
 		<result property="totalquantity" column="totalquantity"/> <!--판매수량 -->
 		<result property="categorType" column="categorType"/> <!--카테고리타입 1-의류, 2-잡화, 3-등산용품 -->
 		
+		<!--메인 페이지 차트  -->
+		<result property="datString" column="datString"/> <!--날짜 스트링 -->
+		<result property="totalPrice" column="totalPrice"/> <!--승인 매출 -->
+		<result property="totalCancel" column="totalCancel"/> <!--취소 매출-->
+		
+		<!--메인페이지 조회수 차트 카테고리별  -->
+		<result property="sumCnt" column="sumCnt"/> <!--카테고리수-->
+		<result property="categorytype" column="categorytype"/> <!--카테고리 타입-->
+		
 	</resultMap>
 
 	
 	<!--지정일자 조회  cs 글 통계 파이차트  -->
 	<select id="searchDatePieChart" resultMap="e_p006Result06" parameterType="java.util.Map">
 	<![CDATA[
-	select DECODE (CSPOSTTYPE,100,'공지글',200,'문의글', 300,'신고글')as csposttypeString, COUNT(*)as csboardcnt
+	select DECODE (CSPOSTTYPE,100,'공지글',200,'문의글', 300,'신고글', 400, '이벤트')as csposttypeString, COUNT(*)as csboardcnt
 	FROM cspost
     WHERE CREATEDAT BETWEEN TO_DATE(#{startDate},'YYYY-MM-DD') AND TO_DATE(#{endDate},'YYYY-MM-DD')
-	GROUP by DECODE (CSPOSTTYPE,100,'공지글',200,'문의글', 300,'신고글')
+	group by DECODE (CSPOSTTYPE,100,'공지글',200,'문의글', 300,'신고글',400,'이벤트')
 	]]>
 	</select>
 	
@@ -41,6 +50,9 @@
 	from orders o INNER JOIN payment p
 	ON o.ordernum = p.ordernum
 	WHERE p.createdat BETWEEN TO_DATE (#{startDate}, 'YYYY-MM-DD') AND TO_DATE (#{endDate}, 'YYYY-MM-DD')
+	AND p.type != 'canceled'
+	AND p.type != 'cancel'
+	AND o.orderstatus =2
 	GROUP BY to_char(p.CREATEDAT, 'YYYY-MM-DD')
 	ORDER BY createdatString ASC
 	]]>
@@ -53,6 +65,7 @@
 	FROM users
 	WHERE createdat BETWEEN TO_DATE(#{startDate},'YYYY-MM-DD') AND TO_DATE(#{endDate},'YYYY-MM-DD')
 	group by to_char(createdat, 'YYYY-MM-DD')
+	ORDER BY userCreatedat
 	]]>
 	</select>
 	
@@ -65,13 +78,13 @@
 	]]>
 	</select>
 	
-		<!--지정일자 조회 가입자 현황 바차트  -->
+		<!--지정일자 조회 카테고리별 판매 수량  -->
 	<select id="serchCategoryChart" resultMap="e_p006Result06" parameterType="java.util.Map">
 	<![CDATA[
-SELECT DISTINCT to_char(ordereDat,'YYYY-MM-DD')as ordereDatString,
-    DECODE(sum(a.totalquantity1),null,0,sum(a.totalquantity1))as type1,
-    DECODE(sum(b.totalquantity2),null,0,sum(b.totalquantity2))as type2,
-    DECODE(sum(c.totalquantity3),null,0,sum(c.totalquantity3))as type3
+	SELECT DISTINCT to_char(pay.createdat,'YYYY-MM-DD')as ordereDatString,
+		   DECODE(sum(a.totalquantity1),null,0,sum(a.totalquantity1))as type1,
+		   DECODE(sum(b.totalquantity2),null,0,sum(b.totalquantity2))as type2,
+		   DECODE(sum(c.totalquantity3),null,0,sum(c.totalquantity3))as type3
     FROM   orders o FULL OUTER JOIN (
                                 SELECT sum(od.quantity)as totalquantity1,
                             to_char(od.ordereDat,'YYYY-MM-DD')as ordereDatString,
@@ -124,9 +137,14 @@ SELECT DISTINCT to_char(ordereDat,'YYYY-MM-DD')as ordereDatString,
                         AND aa.top=3
                             group by to_char(od.ordereDat,'YYYY-MM-DD'), DECODE(aa.top,1,'의류',2,'잡화',3,'등산용품'),od.ordernum
                     )c
-                        ON c.ordernum = o.ordernum  
-        WHERE ordereDat BETWEEN TO_DATE(#{startDate},'YYYY-MM-DD') AND TO_DATE(#{endDate},'YYYY-MM-DD') 
-        group by to_char(ordereDat,'YYYY-MM-DD')
+                        ON c.ordernum = o.ordernum
+            INNER JOIN payment pay
+                 ON pay.ordernum=o.ordernum
+            WHERE pay.type !='cancel'
+            AND pay.type != 'canceled'           
+		    AND o.orderstatus = 2   
+        WHERE pay.createdat BETWEEN TO_DATE(#{startDate},'YYYY-MM-DD') AND TO_DATE(#{endDate},'YYYY-MM-DD') 
+        group by to_char(pay.createdat,'YYYY-MM-DD')
         ORDER BY ordereDatString
 	]]>
 	</select>
@@ -139,20 +157,21 @@ SELECT DISTINCT to_char(ordereDat,'YYYY-MM-DD')as ordereDatString,
 	<!-- 셀렉트 조회 cs 글 통계  파이차트 -->
 	<select id="selectPieChart" resultMap="e_p006Result06" parameterType="java.util.Map">
 	<![CDATA[
-	select DECODE (CSPOSTTYPE,100,'공지글',200,'문의글', 300,'신고글')as csposttypeString, COUNT(*)as csboardcnt
-	FROM cspost
+	select DECODE (CSPOSTTYPE,100,'공지글',200,'문의글', 300,'신고글',400,'이벤트')as csposttypeString, COUNT(*)as csboardcnt
+	FROM cspost 
+    
 	]]>
 	<choose>
     		<when test="key_word=='all'"> <!-- 전체 조회  -->
-    			GROUP by DECODE (CSPOSTTYPE,100,'공지글',200,'문의글', 300,'신고글')
+    			group by DECODE (CSPOSTTYPE,100,'공지글',200,'문의글', 300,'신고글',400,'이벤트')
     		</when>
     		<when test="key_word=='toDay'"> <!-- 당일 조회 -->
     		 	WHERE CREATEDAT >= TO_DATE(#{st},'YYYY-MM-DD')
-				GROUP by DECODE (CSPOSTTYPE,100,'공지글',200,'문의글', 300,'신고글')
+				group by DECODE (CSPOSTTYPE,100,'공지글',200,'문의글', 300,'신고글',400,'이벤트')
     		</when>
     		<when test="key_word=='week_month'"> <!-- 1주, 2주, 1개월 조회 -->
     		 	 WHERE CREATEDAT BETWEEN TO_DATE(#{end},'YYYY-MM-DD') AND TO_DATE(#{st},'YYYY-MM-DD')
-				GROUP by DECODE (CSPOSTTYPE,100,'공지글',200,'문의글', 300,'신고글')
+				group by DECODE (CSPOSTTYPE,100,'공지글',200,'문의글', 300,'신고글',400,'이벤트')
     		</when>
     	</choose>
 	</select>
@@ -163,20 +182,30 @@ SELECT DISTINCT to_char(ordereDat,'YYYY-MM-DD')as ordereDatString,
 	select to_char(p.CREATEDAT, 'YYYY-MM-DD')as createdatString, sum(o.paytotal + o.charge)as sumPrice
 	from orders o INNER JOIN payment p
 	ON o.ordernum = p.ordernum
+    
 	]]>
 	<choose>
 	
     		<when test="key_word=='all'"> <!-- 전체 조회  -->
+    		WHERE p.type != 'cancel' 
+			AND p.type != 'canceled'
+			AND o.orderstatus =2
     		GROUP BY to_char(p.CREATEDAT, 'YYYY-MM-DD')
 			ORDER BY createdatString ASC
     		</when>
     		<when test="key_word=='toDay'"> <!-- 당일 조회 -->
      		WHERE p.createdat >= TO_DATE(#{st},'YYYY-MM-DD')
+     		AND p.type != 'canceled'
+			AND p.type != 'cancel'
+			AND o.orderstatus =2
 			GROUP BY to_char(p.CREATEDAT, 'YYYY-MM-DD')
 			ORDER BY createdatString ASC
     		</when>
     		<when test="key_word=='week_month'"> <!-- 1주, 2주, 1개월 조회 -->
     		WHERE p.createdat BETWEEN TO_DATE(#{end},'YYYY-MM-DD') AND TO_DATE(#{st},'YYYY-MM-DD')
+    		AND p.type != 'canceled'
+			AND p.type != 'cancel'
+			AND o.orderstatus =2
 			GROUP BY to_char(p.CREATEDAT, 'YYYY-MM-DD')
 			ORDER BY createdatString ASC
     		</when>
@@ -192,14 +221,17 @@ SELECT DISTINCT to_char(ordereDat,'YYYY-MM-DD')as ordereDatString,
 	<choose>
     		<when test="key_word=='all'"> <!-- 전체 조회  -->
     		group by to_char(createdat, 'YYYY-MM-DD')
+    		ORDER BY userCreatedat
     		</when>
     		<when test="key_word=='toDay'"> <!-- 당일 조회 -->
 			WHERE createdat >= TO_DATE(#{st},'YYYY-MM-DD')
 			group by to_char(createdat, 'YYYY-MM-DD')
+			ORDER BY userCreatedat
     		</when>
     		<when test="key_word=='week_month'"> <!-- 1주, 2주, 1개월 조회 -->
     		WHERE createdat BETWEEN TO_DATE(#{end},'YYYY-MM-DD') AND TO_DATE(#{st},'YYYY-MM-DD')
 			group by to_char(createdat, 'YYYY-MM-DD')
+			ORDER BY userCreatedat
     		</when>
     	</choose>
 	</select>
@@ -226,7 +258,7 @@ SELECT DISTINCT to_char(ordereDat,'YYYY-MM-DD')as ordereDatString,
 		 <!-- 셀렉트 조회 카테고리별 판매 통계 -->
    	<select id="selectCategoryChart" resultMap="e_p006Result06" parameterType="java.util.Map">
 	<![CDATA[
-	SELECT DISTINCT to_char(ordereDat,'YYYY-MM-DD')as ordereDatString,
+	SELECT DISTINCT to_char(pay.createdat,'YYYY-MM-DD')as ordereDatString,
     DECODE(sum(a.totalquantity1),null,0,sum(a.totalquantity1))as type1,
     DECODE(sum(b.totalquantity2),null,0,sum(b.totalquantity2))as type2,
     DECODE(sum(c.totalquantity3),null,0,sum(c.totalquantity3))as type3
@@ -282,31 +314,87 @@ SELECT DISTINCT to_char(ordereDat,'YYYY-MM-DD')as ordereDatString,
                         AND aa.top=3
                             group by to_char(od.ordereDat,'YYYY-MM-DD'), DECODE(aa.top,1,'의류',2,'잡화',3,'등산용품'),od.ordernum
                     )c
-                        ON c.ordernum = o.ordernum    
+                        ON c.ordernum = o.ordernum
+            INNER JOIN payment pay
+                   ON pay.ordernum=o.ordernum
+            WHERE pay.type !='cancel'
+            AND pay.type != 'canceled'           
+		    AND o.orderstatus = 2     
 	]]>
 	<choose>
     		<when test="key_word=='all'"> <!-- 전체 조회  -->
-    		WHERE ordereDat IS NOT NULL 
-		    AND o.orderstatus = 2
-		    group by to_char(ordereDat,'YYYY-MM-DD')
+    		group by to_char(pay.createdat,'YYYY-MM-DD')
 		    ORDER BY ordereDatString
     		</when>
     		<when test="key_word=='toDay'"> <!-- 당일 조회 -->
-			WHERE ordereDat IS NOT NULL 
-		    AND o.orderstatus = 2
-		    AND ordereDat >= TO_DATE(20201030,'YYYY-MM-DD')
-		    group by to_char(ordereDat,'YYYY-MM-DD')
+		    AND pay.createdat >= TO_DATE(#{st},'YYYY-MM-DD')
+		    group by to_char(pay.createdat,'YYYY-MM-DD')
 		    ORDER BY ordereDatString
     		</when>
     		<when test="key_word=='week_month'"> <!-- 1주, 2주, 1개월 조회 -->
-    	 	WHERE ordereDat IS NOT NULL 
-		    AND o.orderstatus = 2
-		    AND ordereDat BETWEEN TO_DATE (#{end},'YYYY-MM-DD')
+		    AND pay.createdat BETWEEN TO_DATE (#{end},'YYYY-MM-DD')
 								AND TO_DATE(#{st},'YYYY-MM-DD')
-		    group by to_char(ordereDat,'YYYY-MM-DD')
+		    group by to_char(pay.createdat,'YYYY-MM-DD')
 		    ORDER BY ordereDatString
     		</when>
     	</choose>
+	</select>
+	
+	
+		 <!-- 00000000000000000000000000000000000000000000000   메인 페이지 통계 그레프  00000000000000000000000000000000000000000000000000000-->
+   	<select id="payChart" resultMap="e_p006Result06" parameterType="java.util.Map">
+	<![CDATA[
+	SELECT  DECODE(sum(a.sumPrice),null,0,sum(a.sumPrice))as totalPrice, 
+			DECODE(sum(c.cancelPrice),null,0,sum(c.cancelPrice))as totalCancel, 
+			to_char(b.dt,'MM-DD')AS datString 
+    			 FROM ( SELECT TO_CHAR(p.createdat, 'YYYY-MM-DD') AS hiredate
+			              , sum(o.paytotal + o.charge)sumPrice
+			           FROM orders o INNER JOIN payment p 
+			           on o.ordernum=p.ordernum
+			          WHERE p.createdat BETWEEN TO_DATE( #{end}, 'YYYY-MM-DD')
+			                             AND TO_DATE( #{st} , 'YYYY-MM-DD') 
+			                             AND o.orderstatus = 2
+		                                 AND p.type != 'canceled'
+		                                 AND p.type != 'cancel'
+			          GROUP BY TO_CHAR(p.createdat, 'YYYY-MM-DD')
+			        ) a ,(SELECT TO_CHAR(p.createdat, 'YYYY-MM-DD') AS hiredate1
+			              , sum(o.paytotal + o.charge)as cancelPrice
+			           FROM orders o INNER JOIN payment p 
+			           on o.ordernum=p.ordernum
+			          WHERE p.createdat BETWEEN TO_DATE( #{end}, 'YYYY-MM-DD')
+			                             AND TO_DATE( #{st} , 'YYYY-MM-DD') 
+		                                 AND p.type = 'canceled'
+		                               
+			          GROUP BY TO_CHAR(p.createdat, 'YYYY-MM-DD')
+                    
+                    )c
+			      , ( SELECT TO_DATE( #{end} ,'YYYY-MM-DD') + LEVEL - 1 AS dt
+			            FROM dual 
+			         CONNECT BY LEVEL <= (TO_DATE( #{st} ,'YYYY-MM-DD') 
+			                            - TO_DATE( #{end} ,'YYYY-MM-DD') + 1)
+			        ) b
+				WHERE b.dt = a.hiredate(+)
+                and b.dt = c.hiredate1(+) 
+                group by to_char(b.dt,'MM-DD') 
+				ORDER BY datString
+	]]>
+	
+	</select>
+	
+	<!-- 메인 페이지 파이차트 (상품 조회수  ) -->
+	<select id="categoryChart" resultMap="e_p006Result06" parameterType="java.util.Map">
+	<![CDATA[
+		SELECT  sum(CNTCOUNT)as sumCnt,
+				DECODE(aa.top,1,'의류',2,'잡화',3,'등산용품')as categorType             
+        FROM products pd1
+            INNER JOIN (SELECT CONNECT_BY_ROOT(pc.prodcategorynum)as top,pc.categoryname, pc.prodcategorynum
+                           FROM prodcategory pc
+                           START WITH pc.PARENTCATEGORYNUM is null
+                           CONNECT BY PRIOR pc.PRODCATEGORYNUM = pc.PARENTCATEGORYNUM)aa
+       ON aa.prodcategorynum = pd1.prodcategorynum
+           group by DECODE(aa.top,1,'의류',2,'잡화',3,'등산용품') 
+	]]>
+	
 	</select>
 	
 </mapper>

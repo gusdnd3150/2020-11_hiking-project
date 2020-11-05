@@ -13,6 +13,12 @@
 		<result property="pay2" column="pay2" /> <!--무통장입금 -->
 		<result property="sumPrice" column="sumPrice" /> <!--총 매출 -->
 		<result property="avgPrice" column="avgPrice" /> <!--평균 매출 -->
+		
+		<result property="sumCancelPay" column="sumCancelPay" /> <!--취소 매출 합계 -->
+		<result property="cancelcreatedate" column="cancelcreatedate" /> <!--취소일자 -->
+		<result property="name" column="name" /> <!--고객이름 -->
+		<result property="totalCancelPay" column="totalCancelPay" /> <!--일자별 취소금액 -->
+		<result property="reason" column="reason" /> <!--취소 사유 -->
 
 	</resultMap>
 
@@ -25,7 +31,8 @@
 	to_char(DECODE(p.type,'trans',o.paytotal+o.charge,0),'999,999,999,999,999')as pay2
 	FROM orders o INNER JOIN payment p
 	ON o.ordernum = p.ordernum
-    ORDER BY p.CREATEDAT ASC
+	where p.CREATEDAT BETWEEN TO_DATE(#{startDate},'YYYY-MM-DD') AND TO_DATE(#{endDate},'YYYY-MM-DD') 
+    ORDER BY p.CREATEDAT DESC
 	]]>
 	</select>
 
@@ -33,26 +40,33 @@
 	<select id="sumPrice" resultType="string"
 		parameterType="java.util.Map">
 	<![CDATA[
-	select to_char(sum(o.paytotal + o.charge),'999,999,999,999,999')as sumPrice
+	select to_char(DECODE(sum(o.paytotal + o.charge),null,0,sum(o.paytotal + o.charge)),'999,999,999,999,999')as sumPrice
 	FROM orders o INNER JOIN payment p
-	ON o.ordernum = p.ordernum
+	ON o.ordernum = p.ordernum	
 	]]>
 		<choose>
 			<when test="key_word=='all'"> <!-- 전체 조회 -->
-
+				WHERE o.orderstatus = 2
+			    AND p.type != 'canceled'
+			    AND p.type != 'cancel'
 			</when>
 			<when test="key_word=='toDay'"> <!-- 당일 조회 -->
 				WHERE p.CREATEDAT >= TO_DATE(#{startDate},'YYYY-MM-DD')
-				ORDER BY
-				p.CREATEDAT ASC
+			    AND o.orderstatus = 2
+			    AND p.type != 'canceled'
+			    AND p.type != 'cancel'
 			</when>
 			<when test="key_word=='week_month'"> <!-- 1주, 2주, 1개월 조회 -->
-				WHERE p.CREATEDAT BETWEEN TO_DATE(#{startDate},'YYYY-MM-DD') AND
-				TO_DATE(#{endDate},'YYYY-MM-DD')
+				 WHERE p.CREATEDAT BETWEEN TO_DATE(#{endDate},'YYYY-MM-DD') AND TO_DATE(#{startDate},'YYYY-MM-DD')
+			    AND o.orderstatus = 2
+			    AND p.type != 'canceled'
+			    AND p.type != 'cancel'
 			</when>
 				<when test="key_word=='null'  "> <!-- 지정일자 조회-->
-				WHERE p.CREATEDAT BETWEEN TO_DATE(#{startDate},'YYYY-MM-DD') AND
-				TO_DATE(#{endDate},'YYYY-MM-DD')
+			 WHERE p.CREATEDAT BETWEEN TO_DATE(#{startDate},'YYYY-MM-DD') AND TO_DATE(#{endDate},'YYYY-MM-DD')
+			    AND o.orderstatus = 2
+			    AND p.type != 'canceled'
+			    AND p.type != 'cancel'
 			</when>
 			
 		</choose>
@@ -63,15 +77,20 @@
 		parameterType="java.util.Map">
 	<![CDATA[
 	SELECT  to_char(sum(a.sumPrice)/ COUNT(*),'999,999,999,999,999')as avgPrice
+	FROM
 	]]>
 		<choose>
 			<when test="key_word=='all'"> <!-- 전체 조회 -->
     			<![CDATA[
-  				FROM ( SELECT TO_CHAR(p.createdat, 'YYYY-MM-DD') AS hiredate , sum(o.paytotal+ o.charge)sumPrice												
+  		
+			 ( SELECT TO_CHAR(p.createdat, 'YYYY-MM-DD') AS hiredate , sum(o.paytotal+ o.charge)sumPrice												
          			FROM orders o INNER JOIN payment p 
 					 on o.ordernum=p.ordernum
 					WHERE p.createdat BETWEEN TO_DATE(( SELECT  min(to_char(createdat, 'YYYY-MM-DD')) FROM payment), 'YYYY-MM-DD')
 					                    AND TO_DATE((SELECT  max(to_char(createdat, 'YYYY-MM-DD')) FROM payment), 'YYYY-MM-DD') 
+                                        AND o.orderstatus = 2
+                                        AND p.type != 'canceled'
+                                        AND p.type != 'cancel'
 					GROUP BY TO_CHAR(p.createdat, 'YYYY-MM-DD')
 					) a
 					 , ( SELECT TO_DATE(( SELECT  min(to_char(createdat, 'YYYY-MM-DD')) FROM payment),'YYYY-MM-DD') + LEVEL - 1 AS dt
@@ -85,49 +104,61 @@
 			</when>
 			<when test="key_word== 'toDay'"> <!-- 당일 조회 -->
     		<![CDATA[
-    			 FROM ( SELECT TO_CHAR(p.createdat, 'YYYY-MM-DD') AS hiredate
-			              , sum(o.paytotal + o.charge)sumPrice
-			           FROM orders o INNER JOIN payment p 
-			           on o.ordernum=p.ordernum
-			          WHERE p.createdat >= TO_DATE(#{startDate},'YYYY-MM-DD')
-			          GROUP BY TO_CHAR(p.createdat, 'YYYY-MM-DD')
-			        ) a
-			      , ( SELECT TO_DATE(#{startDate},'YYYY-MM-DD') + LEVEL - 1 AS dt
-			            FROM dual 
-			         CONNECT BY LEVEL <= (TO_DATE(#{startDate},'YYYY-MM-DD') 
-			                            - TO_DATE(#{startDate},'YYYY-MM-DD') + 1)
-			        ) b
-				WHERE b.dt = a.hiredate(+) 
-				ORDER BY b.dt
+ 
+		 ( SELECT TO_CHAR(p.createdat, 'YYYY-MM-DD') AS hiredate
+					              , sum(o.paytotal + o.charge)sumPrice
+					           FROM orders o INNER JOIN payment p 
+					           on o.ordernum=p.ordernum
+					          WHERE p.createdat >= TO_DATE(#{startDate},'YYYY-MM-DD')
+		                      					AND o.orderstatus = 2
+		                                        AND p.type != 'canceled'
+		                                        AND p.type != 'cancel'
+					          GROUP BY TO_CHAR(p.createdat, 'YYYY-MM-DD')
+					        ) a
+					      , ( SELECT TO_DATE(#{startDate},'YYYY-MM-DD') + LEVEL - 1 AS dt
+					            FROM dual 
+					         CONNECT BY LEVEL <= (TO_DATE(#{startDate},'YYYY-MM-DD') 
+					                            - TO_DATE(#{startDate},'YYYY-MM-DD') + 1)
+					        ) b
+						WHERE b.dt = a.hiredate(+) 
+						ORDER BY b.dt
 				]]>
 			</when>
 			<when test="key_word== 'week_month'"> <!-- 1주, 2주, 1개월 조회 -->
     			<![CDATA[
-    			 FROM ( SELECT TO_CHAR(p.createdat, 'YYYY-MM-DD') AS hiredate
+    			
+    			  ( SELECT TO_CHAR(p.createdat, 'YYYY-MM-DD') AS hiredate
 			              , sum(o.paytotal + o.charge)sumPrice
 			           FROM orders o INNER JOIN payment p 
 			           on o.ordernum=p.ordernum
-			          WHERE p.createdat BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD')
-			                             AND TO_DATE(#{endDate}, 'YYYY-MM-DD') 
+			          WHERE p.createdat BETWEEN TO_DATE(#{endDate}, 'YYYY-MM-DD')
+			                             AND TO_DATE(#{startDate}, 'YYYY-MM-DD') 
+			                             AND o.orderstatus = 2
+		                                 AND p.type != 'canceled'
+		                                 AND p.type != 'cancel'
 			          GROUP BY TO_CHAR(p.createdat, 'YYYY-MM-DD')
 			        ) a
-			      , ( SELECT TO_DATE(#{startDate},'YYYY-MM-DD') + LEVEL - 1 AS dt
+			      , ( SELECT TO_DATE(#{endDate},'YYYY-MM-DD') + LEVEL - 1 AS dt
 			            FROM dual 
-			         CONNECT BY LEVEL <= (TO_DATE(#{endDate},'YYYY-MM-DD') 
-			                            - TO_DATE(#{startDate},'YYYY-MM-DD') + 1)
+			         CONNECT BY LEVEL <= (TO_DATE(#{startDate},'YYYY-MM-DD') 
+			                            - TO_DATE(#{endDate},'YYYY-MM-DD') + 1)
 			        ) b
 				WHERE b.dt = a.hiredate(+) 
 				ORDER BY b.dt
 			]]>
 			</when>
-			<when test="key_word==null"> <!-- 지정 일자 조회 -->
+			<when test="key_word=='null'"> <!-- 지정 일자 조회 -->
     			<![CDATA[
-    			 FROM ( SELECT TO_CHAR(p.createdat, 'YYYY-MM-DD') AS hiredate
+    			
+    		  ( SELECT TO_CHAR(p.createdat, 'YYYY-MM-DD') AS hiredate
 			              , sum(o.paytotal + o.charge)sumPrice
 			           FROM orders o INNER JOIN payment p 
 			           on o.ordernum=p.ordernum
 			          WHERE p.createdat BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD')
 			                             AND TO_DATE(#{endDate}, 'YYYY-MM-DD') 
+			                             AND o.orderstatus = 2
+		                                 AND p.type != 'canceled'
+		                                 AND p.type != 'cancel'
 			          GROUP BY TO_CHAR(p.createdat, 'YYYY-MM-DD')
 			        ) a
 			      , ( SELECT TO_DATE(#{startDate},'YYYY-MM-DD') + LEVEL - 1 AS dt
@@ -156,17 +187,25 @@
 	]]>
 		<choose>
 			<when test="key_word== 'all'"> <!-- 전체 조회 -->
-				ORDER BY p.CREATEDAT ASC
+			WHERE o.orderstatus = 2
+		    AND p.type != 'canceled'
+		    AND p.type != 'cancel'
+				ORDER BY p.CREATEDAT DESC
 			</when>
 			<when test="key_word=='toDay'"> <!-- 당일 조회 -->
 				WHERE p.CREATEDAT >= TO_DATE(#{startDate},'YYYY-MM-DD')
-				ORDER BY
-				p.CREATEDAT ASC
+				AND o.orderstatus = 2
+			    AND p.type != 'canceled'
+			    AND p.type != 'cancel'
+				ORDER BY p.CREATEDAT DESC
 			</when>
 			<when test="key_word=='week_month'"> <!-- 1주, 2주, 1개월 조회 -->
-				WHERE p.CREATEDAT BETWEEN TO_DATE(#{startDate},'YYYY-MM-DD') AND
-				TO_DATE(#{endDate},'YYYY-MM-DD')
-				ORDER BY p.CREATEDAT ASC
+				WHERE p.CREATEDAT BETWEEN TO_DATE(#{endDate},'YYYY-MM-DD') 
+				AND TO_DATE(#{startDate},'YYYY-MM-DD')
+				AND o.orderstatus = 2
+			    AND p.type != 'canceled'
+			    AND p.type != 'cancel'
+				ORDER BY p.CREATEDAT DESC
 			</when>
 		</choose>
 	</select>
@@ -182,7 +221,76 @@
     	WHERE p.CREATEDAT >= TO_DATE(#{st},'YYYY-MM-DD')
     AND o.orderstatus = 2
     	AND p.type != 'canceled'
+    	AND p.type != 'cancel'
       	]]>
 	</select>
-
+	
+		<!--취소금액 합계 -->
+	<select id="sumCancelPay" resultType="string" parameterType="java.util.Map">
+	<![CDATA[
+	select to_char(DECODE(sum(o.paytotal + o.charge),null,0,sum(o.paytotal + o.charge)),'999,999,999,999,999')as sumCancelPay
+	FROM orders o 
+		INNER JOIN payment p
+	ON o.ordernum = p.ordernum
+    	WHERE o.orderstatus = 3
+    AND p.type = 'canceled'
+	]]>
+	<choose>
+			<when test="key_word=='all'"> <!-- 전체 조회 -->
+			
+			</when>
+			<when test="key_word=='toDay'"> <!-- 당일 조회 -->
+				AND p.CREATEDAT >= TO_DATE(#{startDate},'YYYY-MM-DD')
+			</when>
+			<when test="key_word=='week_month'"> <!-- 1주, 2주, 1개월 조회 -->
+				 AND p.CREATEDAT BETWEEN TO_DATE(#{endDate},'YYYY-MM-DD') AND TO_DATE(#{startDate},'YYYY-MM-DD')
+			</when>
+				<when test="key_word=='null'"> <!-- 지정일자 조회-->
+			 	AND p.CREATEDAT BETWEEN TO_DATE(#{startDate},'YYYY-MM-DD') AND TO_DATE(#{endDate},'YYYY-MM-DD')
+			</when>
+			
+		</choose>
+	</select>
+	
+	
+		<!--취소매출 조회  -->
+	<select id="cancelhPayList" resultMap="e_p005Result05" parameterType="java.util.Map">
+	<![CDATA[
+	select 
+			to_char(p.CREATEDAT,'YYYY-MM-DD')AS cancelcreatedate, 
+			o.ordernum,
+			o.usernum,
+			u.name,
+			to_char(sum(o.paytotal+o.charge),'999,999,999,999,999')as totalCancelPay,p.reason
+	FROM orders o 
+		INNER JOIN payment p
+	ON o.ordernum = p.ordernum
+   	    INNER JOIN users u
+    ON u.usernum = o.usernum
+	WHERE o.orderstatus = 3
+		AND p.type = 'canceled'
+	]]>
+	<choose>
+			<when test="key_word== 'all'"> <!-- 전체 조회 -->
+			group by to_char(p.CREATEDAT,'YYYY-MM-DD'), o.ordernum, o.usernum, u.name, p.reason
+		 	ORDER BY cancelcreatedate DESC
+			</when>
+			<when test="key_word=='toDay'"> <!-- 당일 조회 -->
+				AND p.CREATEDAT >= TO_DATE(#{startDate},'YYYY-MM-DD')
+				group by to_char(p.CREATEDAT,'YYYY-MM-DD'), o.ordernum, o.usernum, u.name, p.reason
+		 		ORDER BY cancelcreatedate DESC
+			</when>
+			<when test="key_word=='week_month'"> <!-- 1주, 2주, 1개월 조회 -->
+				AND p.CREATEDAT BETWEEN TO_DATE(#{endDate},'YYYY-MM-DD') AND TO_DATE(#{startDate},'YYYY-MM-DD') 
+			    group by to_char(p.CREATEDAT,'YYYY-MM-DD'), o.ordernum, o.usernum, u.name, p.reason
+			    ORDER BY cancelcreatedate DESC
+			</when>
+			<when test="key_word=='null'"> <!-- 지정일자 조회 -->
+				AND p.CREATEDAT BETWEEN TO_DATE(#{startDate},'YYYY-MM-DD') AND TO_DATE(#{endDate},'YYYY-MM-DD') 
+			    group by to_char(p.CREATEDAT,'YYYY-MM-DD'), o.ordernum, o.usernum, u.name, p.reason
+			    ORDER BY cancelcreatedate DESC
+			</when>
+		</choose>
+	</select>
+	
 </mapper>

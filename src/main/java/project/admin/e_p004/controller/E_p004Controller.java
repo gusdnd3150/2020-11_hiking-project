@@ -19,8 +19,10 @@ public interface E_p004Controller {
 	public ModelAndView selectOrderStatus(int orderStatus, HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public ModelAndView selectDeliveryStatus(int deliverystatus, HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public ModelAndView viewCancelList(String orderNum, HttpServletRequest request, HttpServletResponse response) throws Exception;
+	public ModelAndView selectCancelOrder(HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public String message(Map map, HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public String cancelMessage(Map map, HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public String upDateCancel(List ordernum ,List quantity, List optionnum ,HttpServletRequest request, HttpServletResponse response) throws Exception;
+	public String toDayCancelOrder(Map map ,HttpServletRequest request, HttpServletResponse response) throws Exception;
 
 }

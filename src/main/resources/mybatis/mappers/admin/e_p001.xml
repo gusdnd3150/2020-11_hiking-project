@@ -31,13 +31,6 @@
 		<result property="updatedAtString" column="updatedAtString" /> <!--날짜 스트링 -->
 	</resultMap>
 	
-	<!-- 회원등록 -->
- 	<insert id="insertUsers" parameterType="e_p001VO">
-		<![CDATA[
-		INSERT INTO USERS(userNum, id , password, name, sex, phone, address, email, type, createdAt, status)
-		VALUES (USERS_SEQ.nextval, #{id}, #{password}, #{name}, #{sex}, #{phone}, #{address}, #{email}, #{type}, CURRENT_TIMESTAMP, 10)
-		]]>
-	</insert>  
 	
 	<!-- 회원 조건별 검색 -->
 	<select id="selectUser" resultMap="e_p001Result01" parameterType="java.util.Map">
@@ -49,16 +42,41 @@
         		DECODE(to_char(sum(pi.getpoint-pi.used),'999,999,999,999,999'),null,'0',to_char(sum(pi.getpoint-pi.used),'999,999,999,999,999'))as totalpoint
 		from   USERS u
 		LEFT join point pi
-		on pi.usernum = u.usernum 
+		on pi.usernum = u.usernum
       	]]>
     	<choose>
     		<when test="searchOption=='userNum'">
-    		group by u.userNum, u.id, u.password, u.name, DECODE(u.sex,10,'남자', 20, '여자'), 
+    		WHERE u.userNum = u.userNum
+    		and u.userNum != 1
+       		group by u.userNum, u.id, u.password, u.name, DECODE(u.sex,10,'남자', 20, '여자'), 
         	u.phone, u.email, DECODE(u.status, 10, '활동중', 20, '휴면')
         	ORDER BY u.userNum
     		</when>
-    		<when test="searchOption!='userNum'">
+    		<when test="searchOption=='all'">
+    		
+	    		<if test="key_word !='null'">
+	    		WHERE TRIM(u.name) like '%'||#{key_word}||'%' 
+	    			  OR TRIM(u.id) like '%'||#{key_word}||'%'
+	    			  OR TRIM(u.phone) like '%'||#{key_word}||'%'
+	    			  OR TRIM(u.email) like '%'||#{key_word}||'%' 
+	    			  OR TRIM(u.address) like '%'||#{key_word}||'%'
+	    			  and u.userNum != 1
+	       		group by u.userNum, u.id, u.password, u.name, DECODE(u.sex,10,'남자', 20, '여자'), 
+	        	u.phone, u.email, DECODE(u.status, 10, '활동중', 20, '휴면')
+	        	ORDER BY u.userNum
+	        	</if>
+	        	
+	        	<if test="key_word =='null'">
+	        		<!-- 전체 조회 선택후 키워드가 널이면 전체 조회 -->
+	        	WHERE u.userNum != 1
+	        	group by u.userNum, u.id, u.password, u.name, DECODE(u.sex,10,'남자', 20, '여자'), 
+	        	u.phone, u.email, DECODE(u.status, 10, '활동중', 20, '휴면')
+	        	ORDER BY u.userNum
+	        	</if>
+    		</when>
+    		<when test="searchOption!='all'">
     		where  ${searchOption} like '%'||#{key_word}||'%'
+    		and u.userNum != 1
     		group by u.userNum, u.id, u.password, u.name, DECODE(u.sex,10,'남자', 20, '여자'), 
         	u.phone, u.email, DECODE(u.status, 10, '활동중', 20, '휴면')
         	ORDER BY u.userNum
@@ -125,6 +143,24 @@
 		FROM users
 		WHERE CREATEDAT >= TO_DATE( #{st},'YYYY-MM-DD')
       	]]>
+	</select>
+	
+	<!-- 금일 신규가입자 리스트 -->
+	<select id="toDayUserList" resultMap="e_p001Result01" parameterType="String">
+		 <![CDATA[
+          select u.userNum, u.id,  u.password, u.name, 
+        		DECODE(u.sex,10,'남자', 20, '여자')as sexType, 
+       			u.phone,  u.email, 
+        		DECODE(u.status, 10, '활동중', 20, '휴면')as statusType,
+        		DECODE(to_char(sum(pi.getpoint-pi.used),'999,999,999,999,999'),null,'0',to_char(sum(pi.getpoint-pi.used),'999,999,999,999,999'))as totalpoint
+		from   USERS u
+		LEFT join point pi
+		on pi.usernum = u.usernum 
+        WHERE u.createdat >= TO_DATE( #{st},'YYYY-MM-DD')
+        group by u.userNum, u.id, u.password, u.name, DECODE(u.sex,10,'남자', 20, '여자'),u.phone, u.email, DECODE(u.status, 10, '활동중', 20, '휴면')
+        ORDER BY u.userNum
+      	]]>
+ 
 	</select>
 	
 </mapper>

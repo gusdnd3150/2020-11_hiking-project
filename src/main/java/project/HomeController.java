@@ -41,11 +41,11 @@ public class HomeController {
 		return afterService.selectMainAfterList();
 	}
 
-	@GetMapping("/main/commuList.do")
-	@ResponseBody
-	public List mainCommuList() {
-		return commuService.selectAllGroupList();
-	}
+//	@GetMapping("/main/commuList.do")
+//	@ResponseBody
+//	public List mainCommuList() {
+//		return commuService.selectAllGroupList();
+//	}
 
 	@RequestMapping(value = "/admin", method = RequestMethod.GET)
 	public String adminHome() {

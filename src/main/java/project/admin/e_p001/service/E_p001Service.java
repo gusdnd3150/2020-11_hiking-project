@@ -10,8 +10,6 @@ import project.admin.e_p001.vo.E_p001VO;
 
 public interface E_p001Service {
 
-	//회원 등록
-	public int addUser(E_p001VO e_p001VO) throws Exception;
 
 	//회원 조건별 검색
 	public List userSearch(Map<String, String> search) throws Exception;
@@ -28,6 +26,7 @@ public interface E_p001Service {
 	//금일신규가입자
 	public String toDayUser(Map map)throws Exception;
 
-
+	//금일 신규가입자 리스트
+	public List toDayUserList(String st)throws Exception;
 
 }

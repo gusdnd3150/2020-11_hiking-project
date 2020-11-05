@@ -50,16 +50,24 @@ public class E_p003ControllerImpl implements E_p003Controller{
 	//조건 검색
 	@Override
 	@RequestMapping(value = "/admin/csBoardsearch.do", method = RequestMethod.GET, produces = "application/text; charset=UTF-8" )
-	public ModelAndView searchCsBoard(@RequestParam(defaultValue="") String searchOption, @RequestParam(defaultValue="csPostNum") String key_word,  HttpServletRequest request, HttpServletResponse response) throws Exception {
-	
-		Map<String, String> search = new HashMap<String, String>();
-		search.put("key_word", key_word);
-		search.put("searchOption", searchOption);
-		List csBoardList = e_p003Service.searchCsBoard(search);
-		ModelAndView mav = new ModelAndView();
-		mav.setViewName("e_p003_main");
-		mav.addObject("csBoardList", csBoardList);
-		return mav;
+	public ModelAndView searchCsBoard(@RequestParam(defaultValue="all") String searchOption, @RequestParam(defaultValue="null") String key_word,  HttpServletRequest request, HttpServletResponse response) throws Exception {
+		
+		try {
+			Map<String, String> search = new HashMap<String, String>();
+			search.put("key_word", key_word);
+			search.put("searchOption", searchOption);
+			List csBoardList = e_p003Service.searchCsBoard(search);
+			ModelAndView mav = new ModelAndView();
+			mav.setViewName("e_p003_main");
+			mav.addObject("csBoardList", csBoardList);
+			return mav;
+		} catch (Exception e) {
+			e.printStackTrace();
+			ModelAndView mav = new ModelAndView();
+			mav.setViewName("e_p003_main");
+			return mav;
+		}
+		
 	}
 	
 	//상세보기
@@ -135,8 +143,35 @@ public class E_p003ControllerImpl implements E_p003Controller{
 	@ResponseBody
 	@RequestMapping(value="/admin/countBoard.do", method=RequestMethod.POST)
 	public String countBoard(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		System.out.println("문의글 카운트");
 		return e_p003Service.countBoard();
+	}
+
+	//메인 페이지 메일 발송
+	@Override
+	@ResponseBody
+	@RequestMapping(value="/admin/mainPageMail.do", method=RequestMethod.POST)
+	public String mainPageMail(@RequestParam Map<String, String> map, HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		request.setCharacterEncoding("utf-8");
+		response.setContentType("text/html;charset=utf-8");
+		int mailResult=e_p003Service.mainPageMail(map);
+		if(mailResult==1) {
+			System.out.println("메일발송 성공");
+			String msg = "ok";
+			return msg;
+		}else {
+			System.out.println("메일발송 실패>>>>>>>>>>>>>>");
+			String msg = "x";
+			return "x";
+		}
+	}
+
+	//신고글 카운트 알림
+	@Override
+	@ResponseBody
+	@RequestMapping(value="/admin/countBoard300.do", method=RequestMethod.POST)
+	public String countBoard300(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		return e_p003Service.countBoard300();
 	}
 	
 }

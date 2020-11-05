@@ -22,10 +22,6 @@ public class E_p001ServiceImpl implements E_p001Service{
 	@Autowired
 	private E_p001DAO e_p001DAO;
 
-	@Override //회원등록
-	public int addUser(E_p001VO e_p001VO) throws Exception {
-		return e_p001DAO.addUser(e_p001VO);
-	}
 
 	@Override //회원 조건검색
 	public List userSearch(Map<String, String> search) throws Exception {
@@ -57,6 +53,13 @@ public class E_p001ServiceImpl implements E_p001Service{
 	@Override
 	public String toDayUser(Map map) throws Exception {
 		return e_p001DAO.toDayUser(map);
+	}
+
+	//금일 신규가입자 리스트
+	@Override
+	public List toDayUserList(String st) throws Exception {
+		List list = e_p001DAO.toDayUserList(st);
+		return list;
 	}	
 
 
