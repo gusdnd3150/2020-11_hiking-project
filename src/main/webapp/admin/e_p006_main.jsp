@@ -501,15 +501,7 @@
 
 </script>
 <style>
-/* .basic_btn {
-	display: inline-block;
-	max-width: 110px;
-	width: 100%;
-	line-height: 35px;
-	font-size: 15px;
-	border: 1px solid #007bff;
-	border-radius: 10px;
-} */
+
 </style>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
@@ -546,8 +538,6 @@
               <div class="pull-right box-tools">
                 <button type="button" class="btn btn-info btn-sm" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
                   <i class="fa fa-minus"></i></button>
-                <button type="button" class="btn btn-info btn-sm" data-widget="remove" data-toggle="tooltip" title="" data-original-title="Remove">
-                  <i class="fa fa-times"></i></button>
               </div>
           <!--     /. tools -->
             </div>

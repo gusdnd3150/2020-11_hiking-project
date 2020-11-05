@@ -249,8 +249,7 @@ function selectDay(str){
               <div class="pull-right box-tools">
                 <button type="button" class="btn btn-info btn-sm" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
                   <i class="fa fa-minus"></i></button>
-                <button type="button" class="btn btn-info btn-sm" data-widget="remove" data-toggle="tooltip" title="" data-original-title="Remove">
-                  <i class="fa fa-times"></i></button>
+
               </div>
               <!-- /. tools -->
             </div>
@@ -282,7 +281,7 @@ function selectDay(str){
 							                  <td>
 							                      <strong>상품명:${cancel.prodCount}</strong><br>
 							                      <strong>결제금액:${cancel.totalpay}</strong><br>
-												  <strong><img src="http://localhost:8090/resources/img/${cancel.pcontent}" style="width: 90px; height: 90px; display: block;"></strong><br>
+												  <strong><img src="/resources/img/${cancel.pcontent}" style="width: 90px; height: 90px; display: block;"></strong><br>
 							                  </td>
 							              <td><button class="btn btn-primary btn-xs" id="viewCancelList" value="${cancel.merchant_uid}">상세보기</button></td>		
 							                </tr>
@@ -304,8 +303,7 @@ function selectDay(str){
               <div class="pull-right box-tools">
                 <button type="button" class="btn btn-info btn-sm" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
                   <i class="fa fa-minus"></i></button>
-                <button type="button" class="btn btn-info btn-sm" data-widget="remove" data-toggle="tooltip" title="" data-original-title="Remove">
-                  <i class="fa fa-times"></i></button>
+
               </div>
               <!-- /. tools -->
             </div>
@@ -411,7 +409,7 @@ function selectDay(str){
 												  <strong>사이즈:${order.prodSize}</strong><br>
 												  <strong>색상:${order.color}</strong><br>
 												  <strong>수량:${order.quantity}</strong><br>
-												  <strong><img src="http://localhost:8090/resources/img/${order.content}" style="width: 80px; height: 80px; display: block;"></strong><br>
+												  <strong><img src="/resources/img/${order.content}" style="width: 80px; height: 80px; display: block;"></strong><br>
 							                  </td>
 							                  <td>
 							                  <c:if test="${order.orderStatusString eq '결제완료'}">
