@@ -55,7 +55,7 @@ td{
 						<td>
 							<c:choose>
 						    	<c:when test="${0 eq m1.AGESTART && 0 eq m1.AGEEND}">
-									<small>무관</small> <br> <br>
+									무관
 						   		</c:when>
 								<c:otherwise>
 									${m1.AGESTART}~${m1.AGEEND}

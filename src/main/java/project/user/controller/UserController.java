@@ -46,6 +46,8 @@ public interface UserController {
 	
 	public String withdrawal(UserVO userVO, HttpSession httpSession) throws Exception;
 	
+	public ModelAndView withdrawalCheck(HttpSession httpSession) throws Exception;
+
 	public String logOut(HttpServletRequest request, HttpServletResponse response, HttpSession httpsession) throws Exception;
 	
 	public String searchId(@RequestParam("email") String email, HttpServletRequest request) throws Exception;
@@ -53,5 +55,6 @@ public interface UserController {
 	
 	public String sendTempPwd(@RequestParam("id") String id, @RequestParam("email") String email,
 			HttpServletRequest request) throws Exception ;
+	
 
 }

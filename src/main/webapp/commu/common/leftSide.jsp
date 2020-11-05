@@ -7,35 +7,10 @@
 <%
   request.setCharacterEncoding("UTF-8");
 %> 
-<jsp:include page="/common/header.jsp" flush="false" />
-<style>
-		.card {
-	margin: 10px auto;
-}
 
-#space {
-	width: 50px;
-}
-
-.list-group-item.active {
-	background-color: green;
-	border-color: green;
-}
-
-#leftSide {
-	position: fixed;
-} 
-
- #rightSide {
-	width: 100px;
-	position: fixed;
-} 
-</style>
-			<div class="container mt-4" >
-	<div class="row pt-5">
 			<div class="col-md-3"  >
 			<div id="leftSide">
-				<div class="card col-sm-12" style="border: 2px solid green; max-height:40rem; width: 15rem; padding:0;">
+				<div class="card col-sm-12" style="border: 2px solid green; height:40rem; width: 15rem; padding:0;">
 					<img src="/resources/img/${m3.STOREDFILENAME}" style="width:100%; height:200px;"
 						class="card-img-top" alt="산모임 기본 이미지">
 					<div class="card-body">
@@ -51,7 +26,7 @@
 						<small>연령 ${m1.AGESTART}~${m1.AGEEND}</small> <br> <br>
 						</c:otherwise>
 						</c:choose> --%>
-						<div class="mb-4" style="max-height: 19rem; overflow:scroll; margin: 20px 0px;">
+						<div class="mb-4" style="height: 17rem; overflow:scroll; margin: 20px 0px;">
 						<p class="card-text" style="display: block; overflow:scroll; text-overflow: ellipsis">${m1.DETAIL}</p>
 						</div>
 						<small>시작일 ${fn:substring(m1.CREATEDAT, 0, 10)}</small> <br>
@@ -79,128 +54,5 @@
 				</center>
 				</div>
 				</div>
-				<div>
-			</div>
 			
-			<!-- MODAL -->
-			    <div class="modal fade" id="listModal">
-        <div class="modal-dialog modal-lg" id="modal1">
-            <div class="modal-content">
-                <!-- header -->
-                <div class="modal-header">
-                    <h4 class="modal-title">가입 	요청 리스트</h4>
-                    <!-- 닫기(x) 버튼 -->
-                    <button type="button" class="close" data-dismiss="modal" onclick="window.location.reload();">×</button>
-                    <!-- header title -->
-                </div>
-                <!-- body -->
-                <div class="modal-body">
-                    <ul id="waitingList" class="pl-3 pr-3" style="font-size: 18px">
-                    </ul>
-                </div>
-                <!-- Footer -->
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal" onclick="window.location.reload();">닫기</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="modal fade" id="joinModal">
-        <div class="modal-dialog" id="modal2">
-            <div class="modal-content">
-                <!-- header -->
-                <div class="modal-header">
-                    <h4 class="modal-title">${m1.NAME} 참여하기</h4>
-                  <!--   <!-- 닫기(x) 버튼 -->
-                    <button type="button" class="close" data-dismiss="modal">×</button>
-                    <!-- header title -->
-                </div>
-                <!-- body -->
-                <div class="modal-body">
-                    <textarea id="userComment" class="form-control col-xs-12" placeholder="요청 메시지를 입력해주세요"></textarea>
-                </div>
-                <!-- Footer -->
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
-                    <button type="button" class="joinGroupBtn btn btn-success">신청</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    
-<!--    가입신청확인 모달 -->
-    <div class="modal fade" id="cancelAskModal">
-        <div class="modal-dialog" id="modal3">
-            <div class="modal-content">
-                <!-- header -->
-                <div class="modal-header">
-                    <h4 class="modal-title">${m1.NAME} 가입 신청 취소하기</h4>
-                    <!-- 닫기(x) 버튼 -->
-                    <button type="button" class="close" data-dismiss="modal">×</button>
-                    <!-- header title -->
-                </div>
-                <!-- body -->
-                <div class="modal-body">
-                    정말로 취소하시겠습니까?
-                </div>
-                <!-- Footer -->
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
-                    <button type="button" class="cancelAskBtn btn btn-outline-success">확인</button>
-                </div>
-            </div>
-        </div>
-    </div>
-	
-			
-	<!-- 탈퇴 확인모달 -->
-	<div class="modal fade" id="withdrawAskModal">
-        <div class="modal-dialog" id="modal4">
-            <div class="modal-content">
-                <!-- header -->
-                <div class="modal-header">
-                    <h4 class="modal-title">${m1.NAME} 탈퇴하기</h4>
-                    <!-- 닫기(x) 버튼 -->
-                    <button type="button" class="close" data-dismiss="modal">×</button>
-                    <!-- header title -->
-                </div>
-                <!-- body -->
-                <div class="modal-body">
-                    정말로 탈퇴하시겠습니까?
-                </div>
-                <!-- Footer -->
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
-                    <button type="button"id="withdrawBtn" class=" btn btn-outline-success">확인</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    
-    <!-- 산모임 삭제 확인모달 -->
-	<div class="modal fade" id="deleteAskModal">
-        <div class="modal-dialog" id="modal5">
-            <div class="modal-content">
-                <!-- header -->
-                <div class="modal-header">
-                    <h4 class="modal-title">산모임 ${m1.NAME} 삭제하기</h4>
-                    <!-- 닫기(x) 버튼 -->
-                    <button type="button" class="close" data-dismiss="modal">×</button>
-                    <!-- header title -->
-                </div>
-                <!-- body -->
-                <div class="modal-body">
-                    정말로 산모임을 지우시겠습니까?
-                </div>
-                <!-- Footer -->
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
-                    <button type="button"id="deleteCommuBtn" class=" btn btn-outline-success">확인</button>
-                </div>
-            </div>
-        </div>
-    </div>
-			
-			
+

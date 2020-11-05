@@ -46,7 +46,7 @@
 		<br>
 		<br>
 			<div class="row text-center">
-				 <div class="col-md-4"></div>
+				 <div style="width:30%"></div>
 				<div class="col-md-5">
 					<h3 class="display-4">나의 정보</h3>
 					<br>
@@ -119,7 +119,7 @@
 								<input type="button"
 									class="btn btn-primary" value="저장하기" id="updateUser" disabled >
 								<br><br><br><br><br><br>
-								<a href="/user/withdrawalCheck.jsp" id="deleteUser"><h6>탈퇴하기</h6></a>
+								<a href="/user/withdrawalCheck.do" id="deleteUser"><h6>탈퇴하기</h6></a>
 									</td>
 							</tr>
 						</table>

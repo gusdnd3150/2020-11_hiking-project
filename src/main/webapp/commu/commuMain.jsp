@@ -55,7 +55,9 @@
 			<!-- row -->
 		</div>
 		<div id="result"></div>
+		<div style="height:30px;"></div>
 		<!-- responsive -->
+	<button type="button" id="appendMoreListBtn" class="btn btn-outline-secondary btn-lg btn-block">더 보기</button>
 	</div>
 	<!-- container -->
 
@@ -75,10 +77,6 @@
 </body>
 <script>
  $(document).ready(function (){
-
-        window.addEventListener('scroll',function (){
-        });
-        
         $('#sort_lately').click();
     })
 
@@ -86,6 +84,8 @@
     	loadAfterBoard();
         $('#commuList_even').empty();
         $('#commuList_odd').empty();
+        $('#appendMoreListBtn').data('keyword','lately');
+        $('#appendMoreListBtn').data('rowNum', 0 );
 
         var data = {
             'keyword' : 'lately',
@@ -93,23 +93,51 @@
         }
 
         sortList(data);
-        infiniteScroll(data);
     });
 
+ 
     $('#sort_like').on('click',function (){
 		loadAfterBoard();
 		$('#commuList_even').empty();
 		$('#commuList_odd').empty();
-
-        var data = {
+		$('#appendMoreListBtn').data('keyword','like');
+		$('#appendMoreListBtn').data('rowNum', 0 );
+        
+		var data = {
             'keyword' : 'like',
             'rowNum' : 0
         }
 
         sortList(data);
-        infiniteScroll(data);
     });
-    var isEnd = false;
+    
+    $('#appendMoreListBtn').on('click',function (){
+    	console.log('keyword:  '+$('#appendMoreListBtn').data('keyword'));
+    	console.log('rowNum:  '+$('#appendMoreListBtn').data('rowNum'));
+   	
+    if($('#appendMoreListBtn').data('keyword') === 'lately'){
+	   	  var rN = ( $('#appendMoreListBtn').data('rowNum') +1 ); 
+	   	  $('#appendMoreListBtn').data('rowNum',rN );
+	   	  var data = {
+	              'keyword' : 'lately',
+	              'rowNum' : rN
+	          }
+	   	     sortList(data);
+   		 
+   	 }else if($('#appendMoreListBtn').data('keyword') == 'lately'){
+   	  var rN = ( $('#appendMoreListBtn').data('rowNum') +1 ); 
+      $('#appendMoreListBtn').data('rowNum',rN );
+   	  var data = {
+              'keyword' : 'like',
+              'rowNum' : rN
+          }
+   	     sortList(data);
+   	 }
+
+    });
+   
+    
+    var isEnd = false; 
 
     function sortList(data){
         if(isEnd == true){
@@ -126,11 +154,10 @@
                     appendSortList(response);
                 }else if(response.length==0) {
                     isEnd = true;
-                    window.removeEventListener('scroll', function (){
-                    
+                   // window.removeEventListener('scroll', function (){
                         $('#result')
-                            .append('<div>없어요</div>');
-                    })
+                            .append('<center><div>산모임이 더 이상 없습니다.</div></center>');
+                   // })
                 }
             },
             error: function(request, status, error){
@@ -138,6 +165,8 @@
             }
         })
     };
+    
+   
     function appendSortList(response){
         for(var i=0;i<response.length;i++){
 
@@ -152,7 +181,6 @@
 					      '<small style="color: gray;">멤버 '+response[i].STAFFCURRENT+' / 지역 '+response[i].AREA+' </small>'+
 				          '</div> </div> </a>';
 
-
             if( i%2==0 ){
                 $('#commuList_odd').append(status);
             }else if(i%2==1){
@@ -160,27 +188,14 @@
             }
         }
     }
-    function infiniteScroll(data){
-            var curHeight = $(window).height() + $(window).scrollTop();
-            var docHeight = $(document).height();
 
-            if (curHeight == docHeight) {
-                closeLoading();
-                loadingImage();
 
-                setTimeout(function (){
-                    data.rowNum += 1;
-                    sortList(data);
-                },1500)
-            }
-    }
-
-    function loadingImage() {
+   /*  function loadingImage() {
         var loadingImg ='';
 
-        loadingImg +="<div id='loadingImg' class='pt-5' style='width: 100%'>";
-        loadingImg +="<img src='/resources/img/loading.gif' style='position: relative; margin: 0px auto;display: block'/>";
-        loadingImg +="</div>";
+        loadingImg += "<div id='loadingImg' class='pt-5' style='width: 100%'>";
+        loadingImg += "<img src='/resources/img/loading.gif' style='position: relative; margin: 0px auto;display: block'/>";
+        loadingImg += "</div>";
 
         $('#result').append(loadingImg);
 
@@ -188,7 +203,8 @@
 
     function closeLoading() {
         $('#loadingImg').remove();
-    }
+    } */
+    
 //afterBoard
  	function loadAfterBoard(){
 		$.ajax({

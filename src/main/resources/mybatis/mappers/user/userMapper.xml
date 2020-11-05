@@ -47,15 +47,15 @@
 
 	<insert id="insertUser3" parameterType="userVO">
       <![CDATA[
-     INSERT INTO userinfo(usernum, profile)
-	  VALUES ((SELECT max(userNum) from users), '안녕하세요. 산을 좋아하는 오르미입니다.')
+     INSERT INTO userinfo(usernum, profile, content2)
+	  VALUES ((SELECT max(userNum) from users), '안녕하세요. 산을 좋아하는 오르미입니다.','userBasic.jpg' )
       ]]>
 	</insert>
 
 	<insert id="insertUser4" parameterType="java.util.Map">
       <![CDATA[
-     INSERT INTO userinfo(usernum, profile)
-	  VALUES ((SELECT max(userNum) from users), '안녕하세요. 산을 좋아하는 오르미입니다.')
+     INSERT INTO userinfo(usernum, profile, content2)
+	  VALUES ((SELECT max(userNum) from users), '안녕하세요. 산을 좋아하는 오르미입니다.', 'userBasic.jpg')
       ]]>
 	</insert>
 	

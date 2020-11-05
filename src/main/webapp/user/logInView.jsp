@@ -58,13 +58,7 @@
                  </form>
                 <div class="buttons">
               <a href="${ naver_url }"> 
-			<img src="/resources/img/naver.png" width="230" height="45" alt="왓더"></a>
-			</div>
-			 <div class="buttons">
-			<img src="/resources/img/kakao.png" width="230" height="45" alt="왓더">
-			</div>
-			 <div class="buttons">
-			<img src="/resources/img/google.png" width="230" height="45" alt="왓더">
+			<img src="/resources/img/naver.png" width="230" height="45" alt="네이버로그인"></a>
 			</div>
                 <div class="text-center"> 
                   <a class="small" href="/user/searchInfo.jsp">아이디/비밀번호 찾기</a></div>
@@ -72,12 +66,7 @@
                   <div class="text-center"> 
                    <a class="nav-link" href="/user/tou.jsp"><strong>회원가입</strong></a>
                    </div>
-               
-            
-              
-         </div>
-            
-            
+        	 </div>
           </div>
         </div>
       </div>

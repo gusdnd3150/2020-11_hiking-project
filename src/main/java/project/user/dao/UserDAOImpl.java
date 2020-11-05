@@ -1,19 +1,16 @@
 package project.user.dao;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.multipart.MultipartFile;
 
 import project.user.dto.LoginDTO;
 import project.user.vo.UserVO;
@@ -128,4 +125,23 @@ public class UserDAOImpl implements UserDAO {
 		return sqlSession.selectOne("userMapper.selectUserNum", id);
 	}
 
+	@Override
+	public Map<String, Integer> mandateCheck(String id) {
+		return sqlSession.selectOne("group.mandateCheck", id);
+	}
+
+	@Override
+	public List<Map> memberCheck(String id) {
+		return sqlSession.selectList("group.memberCheck", id);
+	}
+
+	@Override
+	public void withdrawUserUpdateStatus(List<Map> memberC) {
+		for (Map<String, String> m : memberC) {
+			m.put("action", "minus");
+			System.out.println("m:     "+m);
+			sqlSession.update("group.withdrawUserUpdateStatus", m);
+			sqlSession.update("group.updateGroupCount", m);
+		}
+	}
 }

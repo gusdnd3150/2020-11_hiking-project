@@ -82,12 +82,13 @@ public class CommuController {
 			@RequestParam(value = "file", required = false) List<MultipartFile> file, HttpServletRequest request)
 			throws Exception {
 		commuService.updateGroup(map);
-			System.out.println("files.isEmpty()???:     "+ file.size());
-		if (file.size() ==0) {
-			String path = request.getSession().getServletContext().getRealPath("/");
-			int groupNum = Integer.parseInt((String) map.get("groupNum"));
-			groupMediaService.updateGroupMedia(groupNum, file, path);
-		}
+		for(MultipartFile m : file) {
+			if (!m.isEmpty()) {
+				String path = request.getSession().getServletContext().getRealPath("/");
+				int groupNum = Integer.parseInt((String) map.get("groupNum"));
+				groupMediaService.updateGroupMedia(groupNum, file, path);
+			}
+		}	
 	}
 
 	@GetMapping("/commuMainView.do")
