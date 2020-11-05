@@ -22,8 +22,10 @@ th, td {
 <script src="http://code.jquery.com/jquery-latest.js"></script>
 <script>
         $(document).ready(function () {
-	
-	         $("#listType22").change(function(){
+        	document.getElementById('defualtDate').value = new Date().toISOString().substring(0, 10);;
+	    });
+        	
+	   /*       $("#listType22").change(function(){
 	        	 var listType= $(this).val();
 	        	 
 	        	 var startD = $("input[name=startD22]").val();
@@ -35,8 +37,7 @@ th, td {
 	        	 }
 	        	 
 	         });
-
-	    });
+ */
         
         
 
@@ -87,10 +88,90 @@ th, td {
         	
         	
         }
+      
+      
+     
+      
+      
+      function showMyProduct(prodNum,index){
+    	  console.log(prodNum);
+    	  //var index =$("img[name=showDetail]").index(this);
+    	  var main = $("#modal-body-mainImage"+index+"");
+    	  var detailImage = $("#modal-body-detailImage"+index+"");
+    	  var detail = $("#modal-body-detail"+index+"");
+    	  console.log(index);
+    	  $.ajax({
+ 			 type:"post",
+ 		     async:true,
+ 		     url:"/showMyProduct.do",
+ 		     data:{prodNum:prodNum},
+ 		     dataType:"json",
+ 		     success:function(data,textStatus){
+ 		    	 
+ 		    	var mainput ="<lable align='center'><strong>메인 이미지</strong></lable>";
+ 		    	mainput += "<div><img style='border: groove;' src='/resources/img/"+data.mainImage[0].MAINIMAGE+"' id='bigImage' width='250px' height='250px';></div>";
+ 		    	
+ 		    	 mainput +=" <div><ul>";
+ 		    	 for (var i=0; i<data.mainImage.length;i++){
+ 		    		mainput +="<li style='float:left'>";
+ 		    		mainput +="<img width='80px' height='80px' src='/resources/img/"+data.mainImage[i].MAINIMAGE+"' id='smallImage"+i+"'  onclick='changImage("+i+")'>";
+ 		    		mainput +="</li>";
+ 		    	  }
+ 		    	mainput +="</ul></div>";
+ 		    	mainput +="<br>";
+ 		    	main.html(mainput);
+ 		    	
+ 		  
+ 		    	var detailput ="<lable align='center'><strong>상세 이미지</strong></lable>";
+ 		    	detailput += "<div><img style='border: groove;' src='/resources/img/"+data.detailImage[0].DETAILIMAGE+"' id='bigImage2' width='250px' height='250px';></div>";
+ 		    	
+ 		    	detailput +=" <div><ul>";
+ 		    	 for (var i=0; i<data.detailImage.length;i++){
+ 		    		detailput +="<li style='float:left'>";
+ 		    		detailput +="<img width='80px' height='80px' src='/resources/img/"+data.detailImage[i].DETAILIMAGE+"' id='smallImage2"+i+"'  onclick='changImage2("+i+")'>";
+ 		    		detailput +="</li>";
+ 		    	  }
+ 		    	detailput +="</ul></div>";
+ 		    	detailput +="<br>";
+ 		    	detailImage.html(detailput);
+ 		    	
+ 		    	
+ 		    	
+ 		    	
+ 		    	
+ 		    	var contents ="<table>";
+ 		    	contents += "<tr><th>상품이름</th><th>가격</th><th>내용</th></tr>";
+ 		    	contents += "<tr>";
+ 		    	contents += "<td>"+data.prodDetail[0].NAME+"</td>";
+ 		    	contents += "<td>"+data.prodDetail[0].PRICE+"원</td>";
+ 		    	contents += "<td>"+data.prodDetail[0].CONTENT+"</td>";
+ 		    	contents += "</tr>";
+ 		    	
+ 		    	detail.html(contents);
+ 		    	 
+ 		    	 
+ 		     	
+ 		     },
+ 		     error:function(data,textStatus){
+ 		     }
+ 		 });
+    	  
+    	  
+      }
 	         
 	
         
-        
+      function changImage(index){
+    	    var image =$("#smallImage"+index+"");
+    	    var bigImage =$("#bigImage");
+    	      bigImage.attr("src",image.attr("src"));
+    	    }
+      
+      function changImage2(index){
+  	    var image =$("#smallImage2"+index+"");
+  	    var bigImage =$("#bigImage2");
+  	      bigImage.attr("src",image.attr("src"));
+  	    }
         
 </script>
 
@@ -153,20 +234,25 @@ th, td {
       <div class="container">
         <div class="left_dorp">
               
-              <table>
+              <ul>
                 <!-- <th><button><a href="/paymentList?listType=0">당일</a></button></th> -->
-                <th><button class="btn btn-info"><a href="/myUsedList.do?listType=1" style="color:white">1주일</a></button></th>
-                <th><button class="btn btn-info"><a href="/myUsedList.do?listType=15" style="color:white">15일</a></button></th>
-                <th><button class="btn btn-info"><a href="/myUsedList.do?listType=30" style="color:white">1개월</a></button></th>
-                <th><form action="/myUsedList.do" method="get" name="searchForm">
+                <li style="float:left;padding-right: 3px"><button class="btn btn-info"><a href="/myUsedList.do?listType=1" style="color:white">1주일</a></button></li>
+                <li style="float:left;padding-right: 3px"><button class="btn btn-info"><a href="/myUsedList.do?listType=15" style="color:white">15일</a></button></li>
+                <li style="float:left;padding-right: 19px"><button class="btn btn-info"><a href="/myUsedList.do?listType=30" style="color:white">1개월</a></button></li>
+                <li style="float:left"><form action="/myUsedList.do" method="get" name="searchForm">
                   <input type="date" name="startD" required="required"> 
-                  <input type="date" name="endD" required="required"> 
+                  <input type="date" name="endD" id ="defualtDate" required="required"> 
                  <input type="hidden" name= "listType" value="200" >
+                 <select style="height: 34px;" id="listType2" name="listType2">
+                                      <option value="3">승인대기</option>  
+                                      <option value="5">등록완료</option>
+                                      <option value="4">승인거절</option>
+                                       </select> 
                  <input class="btn btn-info" type="submit" value="조회"> 
-              </form></th>
-              </table>
+              </form></li>
+              </ul>
               </div>
-      
+
         <div class="cart_inner">
           <div class="table-responsive">
             <table class="table">
@@ -178,11 +264,7 @@ th, td {
                   <th scope="col"><strong>요청금액</strong></th>
                   <th scope="col"><strong>상품분류</strong></th>
                   <th scope="col"><strong>처리상태</strong></th>
-                  <th scope="col">   <select style="height: 34px;" id="listType22" name="listType22">
-                                      <option value="3">승인대기</option>  
-                                      <option value="5">등록완료</option>
-                                      <option value="4">승인거절</option>
-                                       </select>  
+                  <th scope="col">   
                    </th>
                 </tr>
               </thead>
@@ -199,7 +281,10 @@ th, td {
                      <c:forEach var="myUsedList" items="${myUsedList }" varStatus="Num">
                 <tr>
                    <td> <!-- 대표사진 -->
-                      <img class="img-thumbnail" src="/resources/img/${myUsedList.IMAGE }"  width="120px" height="120px"/>
+                      <img style="cursor: pointer;" class="img-thumbnail" src="/resources/img/${myUsedList.IMAGE }" name="showDetail" 
+                       data-toggle="modal" data-target="#myProduct${Num.index }" onclick="showMyProduct(${myUsedList.PRODNUM},${Num.index })"
+                       width="120px" height="120px"/>
+                       
                   </td>
                 
                   <td>
@@ -323,6 +408,33 @@ th, td {
                   </td>
                 </tr>
                 
+  <!-- Modal -->
+    <div class="modal fade" id="myProduct${Num.index }" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+          <h4 align="center" class="modal-title">내 중고물품</h4>
+        
+        <div align='center' id="modal-body-mainImage${Num.index }">
+        </div> <br>
+        <hr>
+         <div  align="center" id="modal-body-detailImage${Num.index }" >
+        </div> <br>
+        <hr> 
+         <div align="center" id="modal-body-detail${Num.index }">
+        </div> <br>
+        <div class="modal-footer">        
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  
                 
                 
                      </c:forEach>
@@ -336,21 +448,21 @@ th, td {
                  
           <div style="display: block; text-align: center;">
 	     <c:if test="${paging.startPage != 1 }">
-			<a href="/myUsedList.do?startD=${paging.starD }&endD=${paging.endD }&nowPage=${paging.startPage - 1 }&cntPerPage=${paging.cntPerPage}">&lt;</a>
+			<a href="/myUsedList.do?listType2=${paging.listType2 }&listType=${paging.listType }&startD=${paging.starD }&endD=${paging.endD }&nowPage=${paging.startPage - 1 }&cntPerPage=${paging.cntPerPage}">&lt;</a>
 		</c:if>
 		<c:forEach begin="${paging.startPage }" end="${paging.endPage }" var="p">
 			<c:choose>
 				<c:when test="${p == paging.nowPage }">
 					<b>${p }</b>
 				</c:when>
-				<c:when test="${p != paging.nowPage }">
-					<a href="/myUsedList.do?startD=${paging.starD }&endD=${paging.endD }&nowPage=${p }&cntPerPage=${paging.cntPerPage}">${p }</a>
+				<c:when test="${p != paging.nowPage }"> 
+					<a href="/myUsedList.do?listType2=${paging.listType2 }&listType=${paging.listType }&startD=${paging.starD }&endD=${paging.endD }&nowPage=${p }&cntPerPage=${paging.cntPerPage}">${p }</a>
 				</c:when>
 			</c:choose>
 		</c:forEach>
 		
 		<c:if test="${paging.endPage != paging.lastPage}">
-			<a href="/myUsedList.do?startD=${paging.starD }&endD=${paging.endD }&nowPage=${paging.endPage+1 }&cntPerPage=${paging.cntPerPage}">&gt;</a>
+			<a href="/myUsedList.do?listType2=${paging.listType2 }&listType=${paging.listType }&startD=${paging.starD }&endD=${paging.endD }&nowPage=${paging.endPage+1 }&cntPerPage=${paging.cntPerPage}">&gt;</a>
 		</c:if>
 	    </div>      
 	      

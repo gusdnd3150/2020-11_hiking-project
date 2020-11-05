@@ -89,11 +89,11 @@
                   <td>
                     <div class="media">
                       <div class="d-flex">
-                        <img
+                        <a href="/productDetail.do?prodNum=${payDetailList.PRODNUM }"><img
                           src="/resources/img/${payDetailList.CONTENT }"
                           <%-- src="http://localhost:8080/resources/img/${payDetailList.CONTENT }" --%>
                           alt="" width="90px" height="90px"
-                        />
+                        /></a>
                       </div>
                       <div class="media-body">
                         <p>${payDetailList.NAME }</p>
@@ -150,6 +150,9 @@
                    </c:if>  
                   <c:if test="${payDetailList.DELIVERYSTATUS ==300 }">
                   <h5>배송완료</h5>
+                   </c:if>  
+                    <c:if test="${payDetailList.DELIVERYSTATUS ==400 }">
+                  <h5>배송취소</h5>
                    </c:if>  
                  </td>
                  

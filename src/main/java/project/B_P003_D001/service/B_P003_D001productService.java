@@ -60,7 +60,7 @@ public interface B_P003_D001productService {
 	public void insertPayment(List<Map> map) throws DataAccessException ;
 	//트랜잭션 테스트용
 	@Transactional
-	public String insertPaymentTest(Map<String, Object> info,int userNum,List<Integer> prodNums,List<Integer> quantityToDB
+	public String insertPaymentTest(List<String> payNames,Map<String, Object> info,int userNum,List<Integer> prodNums,List<Integer> quantityToDB
 			,List<Integer> orderNums,List<Integer> perTotals,List<Integer> prodPrices,List<Integer> optionNums) throws DataAccessException ;
 	
 	//장바구니 상품 추가
@@ -102,4 +102,12 @@ public interface B_P003_D001productService {
 	public List<Map> selectMyUsedList(Map<String, Object> usernum) throws DataAccessException ;
 	public void delAfter(Map<String, Object> info) ;	
 	public void delComment(Map<String, Object> afterNum) ;
+	public void delwish(Map<String, Object> prodNum) throws DataAccessException ;
+	public void addwish(Map<String, Object> prodNum) throws DataAccessException ;
+	public void updateCNT(Map<String,Object> map) ;
+	
+	
+	public List<Map> myMainImage(Map<String, Object> map) ;
+	public List<Map> myDetailImage(Map<String, Object> map) ;
+	public List<Map> myProdDetail(Map<String, Object> map) ;
 }

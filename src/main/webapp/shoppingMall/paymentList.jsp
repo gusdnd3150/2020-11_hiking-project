@@ -2,10 +2,11 @@
     pageEncoding="UTF-8"%>
     
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<!DOCTYPE html>
-<html>
-<head>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
+<!DOCTYPE html>
+<html lang="ko">
+<head>
 
 
 <style>
@@ -22,9 +23,7 @@ th, td {
 <script src="http://code.jquery.com/jquery-latest.js"></script>
 <script>
         $(document).ready(function () {
-	
-	         
-
+            	document.getElementById('defualtDate').value = new Date().toISOString().substring(0, 10);;
 	    });
         
         
@@ -35,7 +34,7 @@ th, td {
         	console.log(createDat);
         	
         	window.open("/payListDetail.do?createDat="+createDat+"&delivery="+delivery+"",
-                    "childForm", "width=1300, height=450, resizable = no, scrollbars = no");
+                    "childForm", "width=1000, height=450, resizable = no, scrollbars = no");
         	
         }
         
@@ -127,10 +126,6 @@ th, td {
               <h2>${userId }님 구매내역</h2>
               <p></p>
             </div>
-            <div class="page_link">
-              <a href="index.html">Home</a>
-              <a href="cart.html">Cart</a>
-            </div>
           </div>
         </div>
       </div>
@@ -140,27 +135,31 @@ th, td {
     <!--================Cart Area =================-->
     <section class="cart_area">
       <div class="container">
-        <div class="left_dorp">
-              
-              <table>
-                <!-- <th><button><a href="/paymentList.do?listType=0">당일</a></button></th> -->
-                <th><button class="btn btn-info"><a href="/paymentList.do?listType=1" style="color:white">1주일</a></button></th>
-                <th><button class="btn btn-info"><a href="/paymentList.do?listType=15" style="color:white">15일</a></button></th>
-                <th><button class="btn btn-info"><a href="/paymentList.do?listType=30" style="color:white">1개월</a></button></th>
-                <th><form action="/paymentList.do" method="get" name="searchForm">
-                  <input type="date" name="startD" required="required"> 
-                  <input type="date" name="endD" required="required"> 
-                 <input type="hidden" name= "listType" value="200" >
-                 <input class="btn btn-info" type="submit" value="조회"> 
-              </form></th>
-              </table>
-              </div>
       
+           <div class="left_dorp">
+              <ul>
+                <!-- <th><button><a href="/paymentList?listType=0">당일</a></button></th> -->
+                <li style="float:left;padding-right: 3px"><button class="btn btn-info"><a href="/paymentList.do?listType=1" style="color:white">1주일</a></button></li>
+                <li style="float:left;padding-right: 3px"><button class="btn btn-info"><a href="/paymentList.do?listType=15" style="color:white">15일</a></button></li>
+                <li style="float:left;padding-right: 19px"><button class="btn btn-info"><a href="/paymentList.do?listType=30" style="color:white">1개월</a></button></li>
+                <li style="float:left"><form action="/paymentList.do" method="get" name="searchForm">
+                  <input type="date" name="startD" required="required"> 
+                  <input type="date" name="endD" id ="defualtDate" required="required"> 
+                 <input type="hidden" name= "listType" value="200" >
+                 <select style="height: 34px;" id="deliveryStatus" name="deliveryStatus">
+                                      <option value="200">배송준비</option>  
+                                      <option value="300">배송완료</option>
+                                      <option value="400">배송취소</option>
+                                       </select> 
+                 <input class="btn btn-info" type="submit" value="조회"> 
+              </form></li>
+              </ul>
+              </div>
         <div class="cart_inner">
           <div class="table-responsive">
             <table class="table">
               <thead>
-                <tr>
+                <tr style="background-color: #f2f2f2;">
                 <th></th>
                   <th scope="col"><strong>결제일</strong></th>
                   <th scope="col"><strong>구매자</strong></th>
@@ -168,6 +167,8 @@ th, td {
                   <th scope="col"><strong>상품이름</strong></th>
                   <th scope="col"><strong>결제금액</strong></th>
                   <th scope="col"><strong>포인트사용</strong></th>
+                  <th scope="col"><strong>배송상태</strong></th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
@@ -177,15 +178,15 @@ th, td {
                 <h>최근 결제 내역이 없습니다.</h>
                 </c:when>
                 <c:when test="${not empty payList }">
-                
                      <c:forEach var="payList" items="${payList }" varStatus="Num">
+                     
                 <c:if test="${payList.TYPE != 'cancel' && payList.TYPE != 'canceled' }">
                 <tr>
                   <td>
                       <p>${payList.RN }</p>  <!-- 결제일 -->      
                   </td>
                   <td>
-                      <p>${payList.CREATEDAT }</p>  <!-- 결제일 -->      
+                     <p>${payList.CREATEDAT2}</p> <!-- 결제일 -->
                   </td>
                   <td>
                   <p>${payList.BUYERNAME }</p>      <!-- 구매자 -->
@@ -197,10 +198,20 @@ th, td {
                     <p>${payList.NAME } (외 : ${payList.COUNT } 건 )</p>  <!-- 상품이름 + 건수-->
                   </td>
                   <td>
-                   <p>${payList.TOTALPRICE -payList.USED  }</p>      <!-- 결제금액 -->
+                   <%-- <p>${payList.TOTALPRICE -payList.USED  }</p>      <!-- 결제금액 --> --%>
+                      <fmt:formatNumber var="money" value="${payList.TOTALPRICE -payList.USED  }"  pattern="###,###,###"/>
+                     <p>${money }</p>
                   </td>
                   <td>
                    <p>${payList.USED }</p>      <!-- 포인트사용 -->
+                  </td>
+                    <td>
+                    <c:if test="${payList.DELIVERYSTATUS ==300 }">
+                   <p style="color:blue">배송완료</p>
+                   </c:if>
+                   <c:if test="${payList.DELIVERYSTATUS ==200 }">
+                   <p>배송준비</p>
+                   </c:if>
                   </td>
                    <td>
                     <button class="btn btn-info btn-sm" onclick="prodDetail(${Num.index})" value="" >상세보기</button><br><br>
@@ -213,14 +224,14 @@ th, td {
                 <input type= "hidden" name="merchant_uid" value="${payList.MERCHANT_UID }">
                 <input type= "hidden" name="orderStatus" value="${payList.ORDERSTATUS }">
                 </c:if>
-                
+                                <!-- 취소요청한 경우 -->
                 <c:if test="${payList.TYPE eq 'cancel' }">
                 <tr>
                       <td>
-                      <p>${payList.RN }</p>  <!-- 결제일 -->      
+                      <p>${payList.RN }</p>  <!-- 순번 -->      
                   </td>
                   <td>
-                      <p>${payList.CREATEDAT }</p>  <!-- 결제일 -->      
+                         <p>${payList.CREATEDAT2}</p> <!-- 결제일 -->
                   </td>
                   <td>
                   <p>${payList.BUYERNAME }</p>      <!-- 구매자 -->
@@ -232,11 +243,23 @@ th, td {
                     <p>${payList.NAME } (외 : ${payList.COUNT } 건 )</p>  <!-- 상품이름 + 건수-->
                   </td>
                   <td>
-                   <p>${payList.TOTALPRICE }</p>      <!-- 결제금액 -->
+                   <%-- <p>${payList.TOTALPRICE }</p>      <!-- 결제금액 --> --%>
+                     <fmt:formatNumber var="money" value="${payList.TOTALPRICE -payList.USED  }"  pattern="###,###,###"/>
+                     <p>${money }</p>
                   </td>
                   <td>
                    <p>${payList.USED }</p>      <!-- 포인트사용 -->
                   </td>
+                  
+                   <td>
+                   <c:if test="${payList.DELIVERYSTATUS ==300 }">
+                   <p>배송완료</p>
+                   </c:if>
+                   <c:if test="${payList.DELIVERYSTATUS ==200 }">
+                   <p>배송준비</p>
+                   </c:if>
+                  </td>
+                  
                    <td>
                     <button class="btn btn-info btn-sm" onclick="prodDetail(${Num.index})" value="" >상세보기</button><br><br>
                     <%-- <button class="btn btn-info btn-sm" onclick="cancelProd(${Num.index})" value="" style="display:none">취소요청</button> --%>
@@ -250,14 +273,14 @@ th, td {
                 <input type= "hidden" name="orderStatus" value="${payList.ORDERSTATUS }">
                 </c:if>
                 
-                
+                          <!-- 취소되었을 경우 -->
                     <c:if test="${payList.TYPE eq 'canceled' }">
                 <tr>
                       <td>
-                      <p>${payList.RN }</p>  <!-- 결제일 -->      
+                      <p>${payList.RN }</p>  <!-- 순번 -->      
                   </td>
                   <td>
-                      <p>${payList.CREATEDAT }</p>  <!-- 결제일 -->      
+                      <p>${payList.CREATEDAT2}</p> <!-- 결제일 -->
                   </td>
                   <td>
                   <p>${payList.BUYERNAME }</p>      <!-- 구매자 -->
@@ -269,10 +292,16 @@ th, td {
                     <p>${payList.NAME } (외 : ${payList.COUNT } 건 )</p>  <!-- 상품이름 + 건수-->
                   </td>
                   <td>
-                   <p>${payList.TOTALPRICE }</p>      <!-- 결제금액 -->
+                   <%-- <p>${payList.TOTALPRICE }</p>      <!-- 결제금액 --> --%>
+                     <fmt:formatNumber var="money" value="${payList.TOTALPRICE -payList.USED  }"  pattern="###,###,###"/>
+                     <p>${money }</p>
                   </td>
                   <td>
                    <p>${payList.USED }</p>      <!-- 포인트사용 -->
+                  </td>
+                  
+                   <td>
+                   <p style="color:red">배송취소</p>      <!-- 포인트사용 -->
                   </td>
                    <td>
                     <button class="btn btn-info btn-sm" onclick="prodDetail(${Num.index})" value="" >상세보기</button><br><br>
@@ -299,7 +328,7 @@ th, td {
                  
           <div style="display: block; text-align: center;">
 	     <c:if test="${paging.startPage != 1 }">
-			<a href="/paymentList.do?startD=${paging.starD }&endD=${paging.endD }&listType=${paging.listType }&nowPage=${paging.startPage - 1 }&cntPerPage=${paging.cntPerPage}">&lt;</a>
+			<a href="/paymentList.do?deliveryStatus=${paging.listType2 }&startD=${paging.starD }&endD=${paging.endD }&listType=${paging.listType }&nowPage=${paging.startPage - 1 }&cntPerPage=${paging.cntPerPage}">&lt;</a>
 		</c:if>
 		<c:forEach begin="${paging.startPage }" end="${paging.endPage }" var="p">
 			<c:choose>
@@ -307,13 +336,13 @@ th, td {
 					<b>${p }</b>
 				</c:when>
 				<c:when test="${p != paging.nowPage }">
-					<a href="/paymentList.do?startD=${paging.starD }&endD=${paging.endD }&listType=${paging.listType }&nowPage=${p }&cntPerPage=${paging.cntPerPage}">${p }</a>
+					<a href="/paymentList.do?deliveryStatus=${paging.listType2 }&startD=${paging.starD }&endD=${paging.endD }&listType=${paging.listType }&nowPage=${p }&cntPerPage=${paging.cntPerPage}">${p }</a>
 				</c:when>
 			</c:choose>
 		</c:forEach>
 		
 		<c:if test="${paging.endPage != paging.lastPage}">
-			<a href="/paymentList.do?startD=${paging.starD }&endD=${paging.endD }&listType=${paging.listType }&nowPage=${paging.endPage+1 }&cntPerPage=${paging.cntPerPage}">&gt;</a>
+			<a href="/paymentList.do?deliveryStatus=${paging.listType2 }&startD=${paging.starD }&endD=${paging.endD }&listType=${paging.listType }&nowPage=${paging.endPage+1 }&cntPerPage=${paging.cntPerPage}">&gt;</a>
 		</c:if>
 	    </div>      
 	    

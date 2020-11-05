@@ -36,6 +36,9 @@
 
 <style>
 
+img{
+cursor: pointer;
+}
 </style>
 
   </head>
@@ -271,6 +274,49 @@
 
       
       
+      
+      function addComment2(index){ //댓글등록
+   	   
+   	   var prodNum =$("input[name=afterProdNum2]").eq(index).val();
+   	   var afterType =$("input[name=afterType2]").eq(index).val();
+   	   var content =$("input[name=afterContent2]").eq(index).val();
+   	    
+   	   console.log("에프터번호"+afterType);
+   	   console.log("인덱스"+index);
+   	   console.log(content);
+   	  
+   	     $.ajax({
+                type:"post",
+                async:true,
+                url:"/getSession.do",
+                dataType:"json",
+                success:function(data,textStatus){
+                  
+                  if(data.checkStatus == 'notEmpty'){
+               	   
+               	   $.ajax({
+          	            type:"post",
+          	            async:true,
+          	            url:"/myShop/addComent.do",
+          	            data:{prodNum:prodNum,afterType:afterType,content:content},
+          	            dataType:"json",
+          	            error:function(data,textStatus){
+          	            },
+          	            complete:function(){
+          	            	location.reload(); 
+          	            }
+          	          }); 
+                  }else{ 
+               	   alert("로그인 후 이용가능합니다.");
+               	   return;
+                  }
+                },
+                error:function(data,textStatus){
+                }
+              });
+      }
+      
+      
  
    function addComment(index){ //댓글등록
 	   
@@ -313,27 +359,15 @@
              error:function(data,textStatus){
              }
            });
-	     
-	     
-		  /* $.ajax({
-	            type:"post",
-	            async:true,
-	            url:"/myShop/addComent.do",
-	            data:{prodNum:prodNum,afterType:afterType,content:content},
-	            dataType:"json",
-	            success:function(data,textStatus){
-	            	console.log(data);
-	            	if(data =="fail"){
-	            		alert("로그인 후 이용가능합니다.");
-	            	}else{
-	            		location.href = location.href;
-	            	}
-	            },
-	            error:function(data,textStatus){
-	            }
-	          });  */
+	
       
    }
+   
+   function showComment2(index){
+	   var tag = $("#commentInput2"+index+"");
+	   tag.slideDown();
+   }
+   
    
    function showCommentForm(index){
 	   var tag = $("#commentInput"+index+"");
@@ -347,6 +381,7 @@
 	   var putter =$("#CommentPutter"+index+"");
 	   var hidebutton =$("#showcommentList"+index+"");   //댓글보기 버튼 숨기기 위함
 	   var sessionId="${sessionId}";
+	   var foldList =$("#foldList"+index+"");
 	   
 	   console.log("인덱스"+index);
 	   console.log(afterNum);
@@ -360,8 +395,17 @@
 	            contentType: "application/json; charset=utf-8;",
 	            success:function(data,textStatus){
 	            	
+	            	var put ="";
 	            	for(var i=0;i<data.length;i++){
-	            	    var put = "<div>";
+	            		
+                        if(data[i].LV==2){
+	            	    put = "<div style='padding-left:60px'>";
+                        }else if(data[i].LV==3){
+                        	put = "<div style='padding-left:100px'>";	
+                        }else{
+                          put = "<div>";
+                        }
+                        
 	            	    put +="<br>";
 	            		put += "<ul class='col-12 pl-5 row'>";
 	            		
@@ -370,24 +414,59 @@
 	            		}else{
 	            		put += '<li style="float:left"><img src="/resources/img/'+data[i].IMAGE+'" class="rounded-circle" style="width: 50px;height: 50px"></li>';
 	            		}
+	            		put +=  '<li style="float:left;padding-left: 22px;padding-top: 4px;"><p>'+data[i].ID+'&nbsp;&nbsp; '+data[i].CREATEDAT+'&nbsp;&nbsp;';
 	            		
-	            		put +=  '<li style="float:left;padding-left: 22px;padding-top: 4px;"><p>'+data[i].ID+'&nbsp;&nbsp; '+data[i].CREATEDAT+' </p> </li>';
-	            		
-	            		if(data[i].ID ==sessionId){
-	            		put +=  '<li style="float:right;padding-left: 560px;padding-top: 4px;"><button class="genric-btn danger"'; 
-	            		put +=  'style="line-height: 27px;padding: 0px 7px;" onclick="delComment('+data[i].AFTERNUM+','+data[i].PRODNUM+')">댓글삭제</button> </li>';
+	            	    if(data[i].LV!=3){
+	            		put +=  '<button class="genric-btn default-border"'; 
+	            		put +=  'style="line-height: 18px;padding: 0px 2px;" onclick="showComment2('+i+')">댓글달기</button> ';
 	            		}
 	            		
+	            		if(data[i].ID ==sessionId){
+	            		put +=  '<button class="genric-btn danger"'; 
+	            		put +=  'style="line-height: 18px;padding: 0px 2px;" onclick="delComment('+data[i].AFTERNUM+','+data[i].PRODNUM+')">x</button> ';
+	            		put += ' </p></li>';
+	            		}else{
+	            			put += ' </p></li>';
+	            		}
 	            	    put +="</ul>";
 	            	    put +="<p style='padding-left: 50px;padding-top: 2px;' >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong> "+data[i].CONTENT+" </strong> </p>";
+	            		
+	            	    put += "<div id='commentInput2"+i+"' class='row' style='justify-content:center;display:none'  width='80%'>";
+	            		put += "<input name='afterContent2' class='form-control'  style='width: 81%;' type='text'"; 
+	            	    put += "placeholder='내용을 입력해주세요'>";
+	            		put += "<button class='genric-btn info radius' style='line-height: 35px;padding: 0 17px;' onclick='addComment2("+i+")'>등록</button>";
+	            		put += "<input type='hidden' name='afterProdNum2' value='"+data[i].PRODNUM+"'>";
+	            		put += "<input type='hidden' name='afterType2' value='"+data[i].AFTERNUM+"'>";
+	            		put += "</div>";
 	            	    put +="<br></div>";
 	            	    putter.append(put);
 	            	}
+	            	putter.slideDown();
 	            	hidebutton.hide();
+	            	foldList.show();
 	            },
 	            error:function(data,textStatus){
 	            }
 	          });
+   }
+   
+   function foldComment(index){
+	   var hidelist =$("#CommentPutter"+index+"");  
+	   var foldList =$("#foldList"+index+"");
+	   var spreadList =$("#spreadList"+index+"");
+	   hidelist.slideUp(); //댓글숨기고
+	   foldList.hide(); //접기버튼 숨기고
+	   spreadList.show(); //펴기버튼 보여준다
+	   
+   }
+   
+   function spreadComment(index){  
+	   var showList =$("#CommentPutter"+index+"");
+	   var foldList =$("#foldList"+index+"");
+	   var spreadList =$("#spreadList"+index+"");
+	   showList.slideDown();
+	   foldList.show();
+	   spreadList.hide();
    }
  
    
@@ -418,6 +497,9 @@
     
     function delComment(afterNum,prodNum){
     	
+    	var check =window.confirm("댓글을 삭제 하시겠습니까?");
+    	
+    	if(check==true){
     	$.ajax({
 			type :"get",       
 			dataType : "text",    
@@ -430,6 +512,7 @@
 			error : function(data, textStatus) {
 			}
 		});
+    	}
     }
     
     
@@ -482,6 +565,73 @@
     	
     }
       
+    
+    function delwish(prodNum){
+   	 
+        $.ajax({
+            type:"post",
+            async:true,
+            url:"/myShop/delwish.do",
+            dataType:"text",
+            data: {prodNum:prodNum},
+            success:function(data,textStatus){
+            	if(data=='success'){
+           	   $("#changeNode").replaceWith('<a id="changeNode" onclick="return addwish('+prodNum+');"><img src="/resources/img/shop_heart.png" width="20px" height="20px" style="color:black"></a>');
+            	}
+            },
+            error:function(){
+            }
+          });
+        
+   	 
+    }
+    
+    
+    function addwish(prodNum){
+    	
+    	
+    	$.ajax({
+            type:"post",
+            async:true,
+            url:"/getSession.do",
+            dataType:"json",
+            success:function(data,textStatus){
+              if(data.checkStatus == 'notEmpty'){
+            	  
+            	   $.ajax({
+                       type:"post",
+                       async:true,
+                       url:"/myShop/addwish.do",
+                       dataType:"text",
+                       data: {prodNum:prodNum},
+                       success:function(data,textStatus){
+                       	if(data=='success'){
+                      	      //location.reload();
+                      	     $("#changeNode").replaceWith('<a id="changeNode"  onclick="return delwish('+prodNum+');"><img src="/resources/img/shop_heart2.png" width="20px" height="20px" ></a>');
+                       	}
+                       },
+                       error:function(){
+                       }
+                     });
+            	  
+              }else{ 
+           	   alert("로그인 후 이용가능합니다.");
+           	   return;
+              }
+            },
+            error:function(data,textStatus){
+            }
+          });
+        
+   	 
+    }
+    
+    function changImage(index){
+    var image =$("#smallImage"+index+"");
+    var bigImage =$("#bigImage");
+      bigImage.attr("src",image.attr("src"));
+    }
+    
 </script>
 
   <body>
@@ -494,97 +644,20 @@
         
           <div class="col-lg-6">
             <div class="s_product_img">
-              <div
-                id="carouselExampleIndicators"
-                class="carousel slide"
-                data-ride="carousel"
-              >
+               <!-- 여기서부터는 큰이미지 -->
+              <div>
+               <img src="/resources/img/${images[0].CONTENT }" width="500px" height="500px" id="bigImage" style="color:black;">
+              </div>
                <!-- 여기서부터는 작은이미지 -->
-                <ol class="carousel-indicators">
+              <div>
+               <ul style="margin-right: 42px;">
                <c:forEach var="showimages" items="${images }" varStatus="index">
-                  <li
-                    data-target="#carouselExampleIndicators"
-                    data-slide-to="${index.index }"
-                    class="active"
-                  >
-                    <img
-                    width="60px" height="60px"
-                      src="/resources/img/${showimages.CONTENT }"
-                      alt=""
-                    />
+                  <li style="float:right">
+                   <img src="/resources/img/${showimages.CONTENT }" id="smallImage${index.index}"
+                   onclick="changImage(${index.index})" width="100px" height="100px" style="border: groove;color:black">   
                   </li>
                </c:forEach>
-                </ol>
-                
-               <!-- 여기서부터는 큰이미지 -->
-                <div class="carousel-inner">
-                
-                
-                  
-                  <div class="carousel-item active">
-                    <img
-                    width="450px" height="450px"
-                      class="d-block w-100"
-                      src="/resources/img/${images[0].CONTENT }"
-                    />
-                  </div>
-                  
-   
-                  
-                  
-                  <c:if test="${fn:length(images) ==4 }">
-                           <div class="carousel-item ">
-                    <img
-                    width="450px" height="450px"
-                      class="d-block w-100"
-                      src="/resources/img/${images[1].CONTENT }"
-                    />
-                  </div>
-                           <div class="carousel-item ">
-                    <img
-                    width="450px" height="450px"
-                      class="d-block w-100"
-                      src="/resources/img/${images[2].CONTENT }"
-                    />
-                  </div>
-                           <div class="carousel-item ">
-                    <img
-                    width="450px" height="450px"
-                      class="d-block w-100"
-                      src="/resources/img/${images[3].CONTENT }"
-                    />
-                  </div>
-                  
-                  </c:if>
-                 
-                 <c:if test="${fn:length(images) ==3 }">
-                          <div class="carousel-item ">
-                    <img
-                    width="450px" height="450px"
-                      class="d-block w-100"
-                      src="/resources/img/${images[1].CONTENT }"
-                    />
-                  </div>
-                           <div class="carousel-item ">
-                    <img
-                    width="450px" height="450px"
-                      class="d-block w-100"
-                      src="/resources/img/${images[2].CONTENT }"
-                    />
-                  </div>
-                  </c:if>
-                 
-                 <c:if test="${fn:length(images) ==2 }">
-                          <div class="carousel-item ">
-                    <img
-                    width="450px" height="450px"
-                      class="d-block w-100"
-                      src="/resources/img/${images[1].CONTENT }"
-                    />
-                  </div>
-                  </c:if>
-                  
-                </div>
+               </ul>
               </div>
             </div>
           </div>
@@ -687,12 +760,10 @@
                 <input type="hidden" id="prodPrice" value="${prodDetail[0].PRICE }">
                 
                 <c:if test="${empty prodDetail[0].USERNUM }">
-                <a class="icon_btn" href="/myShop/addCartMain.do?prodNum=${prodDetail[0].PRODNUM}&prodName=${prodDetail[0].NAME}&prodPrice=${prodDetail[0].PRICE}&addType=wish">
-                  <img src="/resources/img/shop_heart.png" width="20px" height="20px" style="color:black">
-                </a>
+                <a id="changeNode"  onclick="return addwish(${prodDetail[0].PRODNUM});"><img src="/resources/img/shop_heart.png" width="20px" height="20px" style="color:black"></a>
                 </c:if>
                 <c:if test="${not empty prodDetail[0].USERNUM }">
-                  <img src="/resources/img/shop_heart2.png" width="20px" height="20px" style="color:black">
+                  <a id="changeNode"  onclick="return delwish(${prodDetail[0].PRODNUM});"><img src="/resources/img/shop_heart2.png" width="20px" height="20px" ></a>
                 </c:if>
               </div>
             </div>
@@ -817,6 +888,8 @@
                 </div>
               </div>
               <div class="col-lg-6">
+              
+              <c:if test="${prodDetail[0].CHECKBUY !=0 }">
                 <div class="review_box">
                   <h4>상품 후기 등록</h4>
                   
@@ -839,7 +912,7 @@
             <option value="5">5</option>
              </select><br>
                     <!-- 파일첨부 -->
-                        <input type="file" id="uploadFile" name="photo"/>
+                        <input type="file"  id="uploadFile" name="photo"/>
                   <!-- 상품후기내용 -->
                     <div class="col-md-12">
                       <div class="form-group">
@@ -855,8 +928,14 @@
                       
                     </div>
                   </form>
-                     <button onclick="addAfterTest()" style="display:inline;" class="nav-link active">후기등록</button>
+                     <button onclick="addAfterTest()" style="display:inline;" class="genric-btn info radius">후기등록</button>
                 </div>
+                </c:if>
+                
+                <c:if test="${prodDetail[0].CHECKBUY ==0 }">
+                      
+                </c:if>
+                
               </div>
             </div>
             
@@ -999,6 +1078,14 @@
                          <li id="showcommentList${num.index }" style="float:right"><p align="right"><button style="line-height: 27px;padding: 0px 7px;"
                      class="genric-btn default-border" onclick="PutComment(${num.index})">댓글${afterList.CNT }개보기</button></p>
                      </li>
+                     
+                     
+                       <li id="foldList${num.index }" style="float:right;display:none"><p align="right"><button style="line-height: 27px;padding: 0px 7px;"
+                     class="genric-btn default-border" onclick="foldComment(${num.index})">댓글 접기</button></p>
+                     </li>
+                      <li id="spreadList${num.index }" style="float:right;display:none"><p align="right"><button style="line-height: 27px;padding: 0px 7px;"
+                     class="genric-btn default-border" onclick="spreadComment(${num.index})">댓글 펴기</button></p>
+                     </li>
                          </c:if>
                      
                      <c:if test="${afterList.ID == sessionId }">
@@ -1027,8 +1114,8 @@
         <input type="hidden" name="afterProdNum" value="${prodDetail[0].PRODNUM }">
         <input type="hidden" name="afterType" value="${afterList.AFTERNUM }">
        </div>
-                   
-                   <div id="CommentPutter${num.index }">
+                 
+                   <div id="CommentPutter${num.index }" style="display:none">
                    </div>
                    </div>
               

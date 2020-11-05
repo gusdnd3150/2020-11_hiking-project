@@ -9,7 +9,9 @@ public class Paging {
 	private int nowPage, startPage, endPage, total, cntPerPage, lastPage, start, end;
 	private int cntPage = 5;  //한화면에 보여줄 페이징 숫자의 개수
 	private int listType;
+	private int listType2;
 	private int search;
+
 	private String searchType;
 	private String searchContent;
 	private String starD;
@@ -46,6 +48,18 @@ public class Paging {
 
 	}
 
+	public Paging(String starD,String endD,int listType,int listType2, int total, int nowPage, int cntPerPage) {
+		setNowPage(nowPage);
+		setCntPerPage(cntPerPage);
+		setTotal(total);
+		calcLastPage(getTotal(), getCntPerPage());
+		calcStartEndPage(getNowPage(), cntPage);
+		calcStartEnd(getNowPage(), getCntPerPage());
+		this.listType = listType;
+		this.listType2 = listType2;
+		this.endD=endD;
+		this.starD=starD;
+	}
 	public Paging(String starD,String endD,int listType, int total, int nowPage, int cntPerPage) {
 		setNowPage(nowPage);
 		setCntPerPage(cntPerPage);
@@ -236,7 +250,13 @@ public class Paging {
 	public void setSorting(String sorting) {
 		this.sorting = sorting;
 	}
+	public int getListType2() {
+		return listType2;
+	}
 
+	public void setListType2(int listType2) {
+		this.listType2 = listType2;
+	}
 	@Override
 	public String toString() {
 		return "PagingVO [nowPage=" + nowPage + ", startPage=" + startPage + ", endPage=" + endPage + ", total=" + total

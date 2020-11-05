@@ -326,6 +326,34 @@ public class B_P003_D001productDAOImpl implements B_P003_D001productDAO {
 	public void delComment(Map<String, Object> afterNum) {
 		sqlSession.delete("project.e_P002_D003.delComment",afterNum);
 	}
+	@Override
+	public void delwish(Map<String, Object> prodNum) throws DataAccessException {
+		sqlSession.delete("project.e_P002_D003.delwish",prodNum);
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void addwish(Map<String, Object> prodNum) throws DataAccessException {
+		sqlSession.insert("project.e_P002_D003.addwish",prodNum);
+	}
+	@Override
+	public void updateCNT(Map<String,Object> map) {
+		sqlSession.update("project.e_P002_D003.updateCNT",map);
+	}
+	
+	
+	@Override
+	public List<Map> myMainImage(Map<String, Object> map) {
+		return sqlSession.selectList("project.e_P002_D003.myMainImage",map);
+	}
+	@Override
+	public List<Map> myDetailImage(Map<String, Object> map) {
+		return sqlSession.selectList("project.e_P002_D003.myDetailImage",map);
+	}
+	@Override
+	public List<Map> myProdDetail(Map<String, Object> map) {
+		return sqlSession.selectList("project.e_P002_D003.myProdDetail",map);
+	}
 
 
 

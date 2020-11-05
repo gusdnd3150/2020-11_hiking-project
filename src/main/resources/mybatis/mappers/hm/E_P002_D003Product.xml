@@ -190,7 +190,12 @@
   	<!-- 상품상세 -->
        <select id="selectProductDetail" resultType="map" parameterType="java.util.Map">
 	    <if test="userNum==0">
-	    	       select op.color,op.prodsize,op.quantity,p.prodnum,
+	    	       select op.color,op.prodsize,op.quantity,p.prodnum,(
+                                                      select count(ORDERTYPE)
+                                                      from orders 
+                                                      where userNum= #{userNum}
+                                                      and ordertype=4
+                                                      and prodnum =#{prodNum})as checkBuy,
                    p.content,p.name,to_char(p.price,'999,999,999,999')as price,p.type,op.optionnum
            from products p, prodoption op 
            where p.prodnum=op.prodnum
@@ -198,8 +203,14 @@
 	    </if>
 	    
 	    <if test="userNum!=0">
-	     SELECT *
-             FROM(select op.color,op.prodsize,op.quantity,p.prodnum,
+
+         SELECT *
+             FROM(select op.color,op.prodsize,op.quantity,p.prodnum,(
+                                                      select count(ORDERTYPE)
+                                                      from orders 
+                                                      where userNum= #{userNum}
+                                                      and ordertype=4
+                                                      and prodnum =#{prodNum})as checkBuy,
               p.content,p.name,to_char(p.price,'999,999,999,999')as price,p.type,op.optionnum
            from products p, prodoption op 
            where p.prodnum=op.prodnum
@@ -253,6 +264,16 @@
 	  update prodlike
 	     set PRODCOMMENT = #{prodComment}
 	     where likenum= #{likeNum}
+      ]]>      
+   </update> 
+   
+   
+   <!-- 조회수 증가-->
+    <update id="updateCNT" parameterType="java.util.Map">
+     <![CDATA[
+	  update products
+	     set cntCount = cntCount+1
+	     where prodNum= #{prodNum}
       ]]>      
    </update> 
    
@@ -541,7 +562,7 @@
 		       FROM (
 			       SELECT ROWNUM RN, A.* 
 				     FROM (
-					SELECT p.PRODNUM, p.PRODCATEGORYNUM,p.NAME,p.PRICE as sortPrice,p.CONTENT
+					SELECT p.PRODNUM, p.PRODCATEGORYNUM,p.NAME,p.PRICE as sortPrice,p.CONTENT,p.cntcount
 					 ,p.TYPE,p.CREATEDAT,p.UPDATEDAT,io.content as image , to_char(p.price,'999,999,999,999') as price
 						FROM products p,prodPhoto io
                         where p.prodnum=io.prodnum
@@ -995,62 +1016,13 @@
 				        where  createdat between sysdate-30 and sysdate
 				        </if>
 				        <if test="listType==200">
-				      and p.type not in (1,2)
+				      and p.type =#{listType2}
                    and po.pphotonum=1
                  ORDER BY p.prodnum desc 
 						) A
 				)
 				         where createdat BETWEEN to_date(#{startD},'yyyy-mm-dd hh') and to_date(#{endD},'yyyy-mm-dd')+1
 				        </if>
-				        
-				        <if test="listType==5 and endD != null">
-				     and p.type =#{listType}
-                   and po.pphotonum=1
-                 ORDER BY p.prodnum desc 
-						) A
-				)
-				         where createdat BETWEEN to_date(#{startD},'yyyy-mm-dd hh') and to_date(#{endD},'yyyy-mm-dd')+1
-				        </if>
-				        
-				        			        <if test="listType==4 and endD != null">
-				        		        		        and p.type =#{listType}
-                   and po.pphotonum=1
-                 ORDER BY p.prodnum desc 
-						) A
-				)
-				         where createdat BETWEEN to_date(#{startD},'yyyy-mm-dd hh') and to_date(#{endD},'yyyy-mm-dd')+1
-				        </if>
-				        
-				      <if test="listType==4 and endD == null">
-				        		        		        and p.type =#{listType}
-                   and po.pphotonum=1
-                 ORDER BY p.prodnum desc 
-						) A
-				)
-				        </if>
-				<if test="listType==5 and endD == null">
-				        		        		        and p.type =#{listType}
-                   and po.pphotonum=1
-                 ORDER BY p.prodnum desc 
-						) A
-				)
-				        </if>
-				        
-				  <if test="listType==3 and endD != null">
-				     and p.type =#{listType}
-                   and po.pphotonum=1
-                 ORDER BY p.prodnum desc 
-						) A
-				)
-				         where createdat BETWEEN to_date(#{startD},'yyyy-mm-dd hh') and to_date(#{endD},'yyyy-mm-dd')+1
-				        </if>  
-				  <if test="listType==3 and endD == null">
-				     and p.type =#{listType}
-                   and po.pphotonum=1
-                 ORDER BY p.prodnum desc 
-						) A
-				)
-				        </if>    
        </select>
         
             <!-- 중고품 신청 내역 페이징 -->   
@@ -1096,13 +1068,14 @@
            and createdat between sysdate-30 and sysdate
            </if>
            <if test="listType==200">
-           and p.type not in (1,2)
+           and p.type =#{listType2}
                    and po.pphotonum=1
                  ORDER BY p.prodnum desc 
 						) A
 				)
 	  WHERE RN BETWEEN #{start} AND #{end}
            and createdat BETWEEN to_date(#{startD},'yyyy-mm-dd hh') and to_date(#{endD},'yyyy-mm-dd')+1
+           
            </if>
            <if test="listType==100">
            and p.type not in (1,2)
@@ -1113,59 +1086,7 @@
 	  WHERE RN BETWEEN #{start} AND #{end}
            </if>
            
-          <if test="listType==4 and endD !=null">
-           and p.type =#{listType}
-                   and po.pphotonum=1
-                 ORDER BY p.prodnum desc 
-						) A
-				)
-	  WHERE RN BETWEEN #{start} AND #{end}
-	   and createdat BETWEEN to_date(#{startD},'yyyy-mm-dd hh') and to_date(#{endD},'yyyy-mm-dd')+1
-           </if>
-          <if test="listType==5 and endD !=null">
-           and p.type =#{listType}
-                   and po.pphotonum=1
-                 ORDER BY p.prodnum desc 
-						) A
-				)
-	  WHERE RN BETWEEN #{start} AND #{end}
-	   and createdat BETWEEN to_date(#{startD},'yyyy-mm-dd hh') and to_date(#{endD},'yyyy-mm-dd')+1
-           </if>
-           
-          <if test="listType==5 and endD ==null">
-           and p.type =#{listType}
-                   and po.pphotonum=1
-                 ORDER BY p.prodnum desc 
-						) A
-				)
-	  WHERE RN BETWEEN #{start} AND #{end}
-           </if>
-           <if test="listType==4 and endD ==null">
-           and p.type =#{listType}
-                   and po.pphotonum=1
-                 ORDER BY p.prodnum desc 
-						) A
-				)
-	  WHERE RN BETWEEN #{start} AND #{end}
-           </if>
-           
-         <if test="listType==3 and endD !=null">
-           and p.type =#{listType}
-                   and po.pphotonum=1
-                 ORDER BY p.prodnum desc 
-						) A
-				)
-	  WHERE RN BETWEEN #{start} AND #{end}
-	  and createdat BETWEEN to_date(#{startD},'yyyy-mm-dd hh') and to_date(#{endD},'yyyy-mm-dd')+1
-           </if>
-          <if test="listType==3 and endD ==null">
-           and p.type =#{listType}
-                   and po.pphotonum=1
-                 ORDER BY p.prodnum desc 
-						) A
-				)
-	  WHERE RN BETWEEN #{start} AND #{end}
-           </if>
+      
         </select>
         
         
@@ -1174,14 +1095,16 @@
              <!-- 구매내역 페이징 -->   
          <select id="paymentList" resultType="map" parameterType="java.util.Map">
         <![CDATA[
-     SELECT *
+  SELECT Rn,createdat,buyername,count,imp_uid,merchant_uid,type,apply_num,name,totalPrice,
+         used,delivery,orderStatus,deliveryStatus,ordernum,to_char(createdat,'yyyy-mm-dd')as createdat2
 		FROM (
 			SELECT ROWNUM RN, A.*                                    
 				FROM (
                            select pay.createdat, min(pay.buyername) as buyername,count(pay.ordernum) as count,
-                min(pay.imp_uid) as imp_uid, min(pay.merchant_uid) as merchant_uid,min(pay.ordernum),
+                min(pay.imp_uid) as imp_uid, min(pay.merchant_uid) as merchant_uid,min(pay.ordernum)as ordernum,
                 min(pay.type) as type ,min(pay.apply_num) as apply_num ,min(p.name) as name,
-                sum(o.payTotal) as totalPrice ,min(used) as used,min(o.deliverytype) as delivery,min(o.orderStatus) as orderStatus
+                sum(o.payTotal) as totalPrice ,min(used) as used,min(o.deliverytype) as delivery,min(o.orderStatus) as orderStatus,
+                min(o.deliveryStatus)as deliveryStatus
                 
                 from payment pay, orders o,products p,point poin
                 where pay.ordernum =o.ordernum
@@ -1189,34 +1112,63 @@
                 and poin.ordernum=pay.ordernum
                 and o.usernum=#{userNum}
                  and o.ordertype=4
-                 group by pay.createdat
+                 
+                 
+         
+        ]]>
+        
+          <if test= "listType == 100 ">
+                    group by pay.createdat
                  order by pay.createdat desc
 						) A
 				)
 	  WHERE RN BETWEEN #{start} AND #{end}
-        ]]>
-        
-          <if test= "listType == 100 ">
           and createdat BETWEEN sysdate-3 and sysdate
          </if>
          
         <if test= "listType != null and listType == 0">
+                  group by pay.createdat
+                 order by pay.createdat desc
+						) A
+				)
+	  WHERE RN BETWEEN #{start} AND #{end}
          and createdat BETWEEN sysdate-1 and sysdate
          </if>
          
          <if test= "listType != null and listType == 1">
+                   group by pay.createdat
+                 order by pay.createdat desc
+						) A
+				)
+	  WHERE RN BETWEEN #{start} AND #{end}
          and createdat BETWEEN sysdate-7 and sysdate
          </if>
          
          <if test= "listType != null and listType == 15">
+                   group by pay.createdat
+                 order by pay.createdat desc
+						) A
+				)
+	  WHERE RN BETWEEN #{start} AND #{end}
          and createdat BETWEEN sysdate-15 and sysdate
          </if>
          
           <if test= "listType != null and listType == 30">
+                    group by pay.createdat
+                 order by pay.createdat desc
+						) A
+				)
+	  WHERE RN BETWEEN #{start} AND #{end}
          and createdat BETWEEN sysdate-30 and sysdate
          </if>
          
           <if test= "listType != null and listType == 200">
+                   and o.deliverystatus =#{deliveryStatus}
+                    group by pay.createdat
+                 order by pay.createdat desc
+						) A
+				)
+	  WHERE RN BETWEEN #{start} AND #{end}
          and createdat BETWEEN to_date(#{startD},'yyyy-mm-dd hh') and to_date(#{endD},'yyyy-mm-dd')+1
          </if>
          
@@ -1294,6 +1246,7 @@
            </if>
         
             <if test="listType!= null and listType==200">
+                 and o.deliverystatus = #{deliveryStatus}
                  and pay.createdat between #{startD} and #{endD}
                  group by pay.createdat
 				)
@@ -1308,7 +1261,35 @@
         
         
         
-               	<!--장바구니 총개수 -->
+               	<!--중고메인이미지 -->
+       <select id="myMainImage" resultType="map" parameterType="java.util.Map">
+        <![CDATA[
+	      select content as mainImage
+          from prodphoto
+          where prodnum= #{prodNum}
+          and content is not null
+	       ]]>
+       </select>
+       <!--중고디테일이미지 -->
+       <select id="myDetailImage" resultType="map" parameterType="java.util.Map">
+        <![CDATA[
+	      select contentdetail as detailImage
+          from prodphoto
+          where prodnum= #{prodNum}
+          and contentdetail is not null
+	       ]]>
+       </select>
+       <!--중고 디테일 -->
+       <select id="myProdDetail" resultType="map" parameterType="java.util.Map">
+        <![CDATA[
+	      select PRODNUM,PRODCATEGORYNUM,NAME,PRICE,CONTENT,TYPe,
+	      to_char(CREATEDAT,'yyyy-mm-dd')as createdat,USERNUM,REQUIRECOMMENT,CNTCOUNT
+           from products
+         where prodnum= #{prodNum}
+	       ]]>
+       </select>
+       
+                 	<!--중고 메인 -->
        <select id="CartCount" resultType="int" parameterType="java.util.Map">
         <![CDATA[
 	      SELECT COUNT(*) FROM orders
@@ -1378,7 +1359,8 @@
 						) C
 				)
 	 WHERE RN BETWEEN #{start} AND #{end}
-        ]]>
+	 order by pickdate desc
+        ]]> 
         </select>
        
        
@@ -1389,6 +1371,25 @@
 	  and userNum = #{userNum}
 	  and orderType=2
 	   </delete>
+	   
+	   
+	   <!-- 위시리스트 취소 -->
+       <delete id="delwish" parameterType="java.util.Map">
+	  delete from prodlike
+	  where prodNum = #{prodNum}
+	  and userNum = #{userNum}
+	   </delete>
+	   
+	   <!-- 위시리스트 추가 -->
+	   <insert id="addwish" parameterType="java.util.Map">
+	    <selectKey resultType="int" keyProperty="likeNum" order="BEFORE">
+	    	 select seq_prodLike.nextval from dual
+	    </selectKey>
+        <![CDATA[
+      insert into prodlike(LIKENUM,USERNUM,PRODNUM,PICKDATE)
+      values(#{likeNum},#{userNum},#{prodNum},sysdate)
+          ]]>
+	   </insert>
 	   
 	    <!-- 장바구니 구매페이지 이동 전 테이블 수정 -->
 	   <update id="modifyBeforeBuy"  parameterType="java.util.List">
@@ -1412,7 +1413,8 @@
 	   <update id="applycancelPay"  parameterType="java.util.Map">
       update payment
      set type='cancel',
-      reason=#{reason}
+      reason=#{reason},
+      updatedat=sysdate
       where imp_uid=#{imp_uid}
 
        </update>
@@ -1455,6 +1457,7 @@
            ,ORDERSTATUS =2
            ,DELIVERYSTATUS =200
            ,ORDEREDAT =sysdate
+           ,prodname =#{item.prodName}
            ,DELIVERYTYPE = #{item.deliveryType}
            WHERE USERNUM= #{item.userNum}
            AND ORDERNUM= #{item.orderNum}
@@ -2059,7 +2062,7 @@
              <!-- 댓글 가져오기 -->   
          <select id="selectComment" resultType="map" parameterType="java.util.Map">
         <![CDATA[
-          select af.usernum,af.afternum,af.prodnum,af.content,af.aftertype,TO_CHAR(af.createdat,'yyyy-mm-dd hh:mm')as createdat,
+          select level as lv,af.usernum,af.afternum,af.prodnum,af.content,af.aftertype,TO_CHAR(af.createdat,'yyyy-mm-dd hh:mm')as createdat,
            u.content2 as image, us.id
          from productafter af ,userinfo u,users us
          where af.usernum=u.usernum

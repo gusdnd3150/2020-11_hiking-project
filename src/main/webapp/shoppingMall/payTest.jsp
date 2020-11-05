@@ -193,7 +193,10 @@ function usePoin(){                         //포인트 사용할 경우
      var reg = new RegExp(/[^0-9]/g);
      
      
-     if(Number.parseInt(usepoint.val()) > Number.parseInt(comparePoint.val())){
+     if(comparePoint.val()==null||comparePoint.val()==""||Number.parseInt(comparePoint.val()) <0){
+    	 alert("보유포인트가 없습니다.");
+    	 return;
+     }else if(Number.parseInt(usepoint.val()) > Number.parseInt(comparePoint.val())){
     	 alert("보유포인트보다 많습니다");
     	 return;
      }else if(usepoint.val()==''||usepoint.val()==null){
@@ -262,7 +265,7 @@ function usePoin(){                         //포인트 사용할 경우
 		 type:"post",
 	     async:true,
 	     url:"/cancelPay.do",
-	     data:{imp_uid:imp_uid,merchant:merchant,reason:reason},
+	     data:{test:imp_uid,merchant:merchant,reason:reason},
 	     success:function(data,textStatus){
 	     	alert('결제취소 결과:'+data);
 	     	console.log(data);
@@ -367,8 +370,7 @@ function usePoin(){                         //포인트 사용할 경우
 		      pay_method : payType,           //trans는 무통장
 		      merchant_uid : 'merchant_' + new Date().getTime(),
 		      name : AllProdNames,
-		      amount : totalPrice-point, //판매 가격
-		      /* buyer_email : 'iamport@siot.do', */
+		      amount : totalPrice-point, 
 		      buyer_name : custName,
 		      buyer_tel : phoneNum,
 		      buyer_addr : address1+address2,
@@ -388,7 +390,7 @@ function usePoin(){                         //포인트 사용할 경우
 	                	payType:payType,totalPrice:totalPrice,point:point,paid_amount:rsp.paid_amount,optionNums:optionNums,
 	                	imp_uid:rsp.imp_uid,merchant_uid:rsp.merchant_uid,prodPrices:prodPrices,
 	                	apply_num:rsp.apply_num,prodNums:prodNums,quantityToDB:quantityToDB,type:type,
-	                	chooseAddress:chooseAddress,prodName:prodName,orderNums:orderNums,perTotals:perTotals,
+	                	chooseAddress:chooseAddress,prodName:prodName,payNames:payNames,orderNums:orderNums,perTotals:perTotals,
 	                },
 	                success:function(data,textStatus){
 	                    alert(data);
@@ -403,8 +405,6 @@ function usePoin(){                         //포인트 사용할 경우
 	                error:function(data,textStatus){
 	                	alert('결제 실패.');
 	                	cancelPay(rsp.imp_uid,rsp.merchant_uid);
-	                },
-	                complete:function(){
 	                }
 	              });
 		         
@@ -413,7 +413,6 @@ function usePoin(){                         //포인트 사용할 경우
 		          msg += '에러내용 : ' + rsp.error_msg;
 		          window.close();
 		      }
-		      alert(msg);
 		  });
 	  }else{
 		  location.href="/shopMainCate.do?listType=100";
@@ -642,7 +641,7 @@ align:bottom;
     </form>
     <div class="text-center mt-3">
         <button type="button" onclick="check()" class="btn btn-success">결제하기</button>
-        <button type="button" onclick="cancelPay()" class="btn btn-info" >뒤로가기</button>
+        <button type="button" onclick="window.history.back();" class="btn btn-info" >뒤로가기</button>
     </div>
 </div>
 
