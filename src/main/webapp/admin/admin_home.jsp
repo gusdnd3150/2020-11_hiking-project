@@ -380,8 +380,6 @@ function userinpo(){
               <div class="pull-right box-tools">
                 <button type="button" class="btn btn-info btn-sm" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
                   <i class="fa fa-minus"></i></button>
-                <button type="button" class="btn btn-info btn-sm" data-widget="remove" data-toggle="tooltip" title="" data-original-title="Remove">
-                  <i class="fa fa-times"></i></button>
               </div>
               <!-- /. tools -->
             </div>
@@ -414,8 +412,8 @@ function userinpo(){
 		              <h3 class="box-title"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">이메일</font></font></h3>
 		              <!-- tools box -->
 		              <div class="pull-right box-tools">
-		                <button type="button" class="btn btn-warning btn-sm" data-widget="remove" data-toggle="tooltip" title="" data-original-title="Remove">
-		                  <i class="fa fa-times"></i></button>
+		                <button type="button" class="btn btn-warning btn-sm" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
+                  <i class="fa fa-minus"></i></button>
 		              </div>
 		              <!-- /. tools -->
 		            </div>
@@ -469,7 +467,6 @@ function userinpo(){
               <div class="box-tools pull-right">
                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                 </button>
-                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
               </div>
             </div>
             <!-- /.box-header -->

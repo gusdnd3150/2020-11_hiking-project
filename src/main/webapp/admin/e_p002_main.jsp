@@ -408,7 +408,7 @@ $(document).ready(function() {
     
     //옵션 추가
     function addOption(){
-        $("#sizeMain").append("<br><br>"+"<label for='title'>색상:</label><select name='color[]'class='basic_btn btn-warning dropdown-toggle'>"
+        $("#sizeMain").append("<br><br>"+"<label for='title'>색상:</label><select name='color[]'class='basic_btn btn-default dropdown-toggle'>"
                 +"<option value=' '>color</option>"
                 +"<option value='white'>white</option>"
                 +"<option value='black'>black</option>"
@@ -547,8 +547,6 @@ function updateClass1(value){
               <div class="pull-right box-tools">
                 <button type="button" class="btn btn-info btn-sm" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
                   <i class="fa fa-minus"></i></button>
-                <button type="button" class="btn btn-info btn-sm" data-widget="remove" data-toggle="tooltip" title="" data-original-title="Remove">
-                  <i class="fa fa-times"></i></button>
               </div>
               <!-- /. tools -->
             </div>
@@ -598,7 +596,7 @@ function updateClass1(value){
                                 
                                 <div id="sizeMain">
                                     <label for="title">색상:</label>
-                                    <select name="color[]"class="basic_btn btn-warning dropdown-toggle" id="color">
+                                    <select name="color[]"class="basic_btn btn-default dropdown-toggle" id="color">
                                         <option value="">color</option>
                                         <option value="white">white</option>
                                         <option value="black">black</option>
@@ -672,8 +670,6 @@ function updateClass1(value){
               <div class="pull-right box-tools">
                 <button type="button" class="btn btn-info btn-sm" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
                   <i class="fa fa-minus"></i></button>
-                <button type="button" class="btn btn-info btn-sm" data-widget="remove" data-toggle="tooltip" title="" data-original-title="Remove">
-                  <i class="fa fa-times"></i></button>
               </div>
               <!-- /. tools -->
             </div>
@@ -739,7 +735,7 @@ function updateClass1(value){
                                            <strong>카테고리:${used.prodcategorynumString}</strong><br>
                                        </td>
                                        <td>
-                                          <strong><img src="http://localhost:8090/resources/img/${used.pcontent}" style="width: 80px; height: 80px; display: block;"></strong><br>
+                                          <strong><img src="/resources/img/${used.pcontent}" style="width: 80px; height: 80px; display: block;"></strong><br>
                                        </td>
                                        <td>${used.prodstatusString}</td>
                                    <td><button class="btn btn-primary btn-xs" id="viewUsedList" onclick="viewUsedList(${used.prodNum},${used.userNum})" >상세보기</button></td>      
@@ -768,8 +764,6 @@ function updateClass1(value){
               <div class="pull-right box-tools">
                 <button type="button" class="btn btn-info btn-sm" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
                   <i class="fa fa-minus"></i></button>
-                <button type="button" class="btn btn-info btn-sm" data-widget="remove" data-toggle="tooltip" title="" data-original-title="Remove">
-                  <i class="fa fa-times"></i></button>
               </div>
               <!-- /. tools -->
             </div>

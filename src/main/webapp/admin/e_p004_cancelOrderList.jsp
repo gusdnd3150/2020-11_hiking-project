@@ -212,7 +212,7 @@ function cancelPay() {
 						
 						<tr>
 							<th>대표 이미지</th>
-							<td><img src="http://localhost:8090/resources/img/${viewList2.content}"  style="width: 250px; height: 250px; display: block;">
+							<td><img src="/resources/img/${viewList2.content}"  style="width: 250px; height: 250px; display: block;">
 							</td>
 						</tr>
 						<tr>
