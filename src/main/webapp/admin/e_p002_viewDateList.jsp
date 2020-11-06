@@ -627,11 +627,15 @@ function removeImgDetailImageFile(_pphotonum){
   })	 
 
 function end(){
-		var upDate = "<c:out value="${upDatemsg}" />";
+	
+	  opener.location.reload();
+		close();
+		
+	/* 	var upDate = "<c:out value="${upDatemsg}" />";
 		if (upDate ==="ok") {
 			 opener.location.reload();
 			close();
-		}
+		} */
 };
 </script>
 <body>
@@ -764,7 +768,7 @@ function end(){
 						  <c:forEach var="photoMainList" items="${viewPhotoMainList}" varStatus="itemNum" >   	 
 						<tr>
 							<th>대표 이미지</th>
-							<td><img src="http://localhost:8090/resources/img/${photoMainList.pcontent}"  style="width: 250px; height: 250px; display: block;">
+							<td><img src="/resources/img/${photoMainList.pcontent}"  style="width: 250px; height: 250px; display: block;">
 							<input type="file"  id="main_img${photoMainList.pphotonum}"  name="file"  />
 							</td>
 							<td>
@@ -781,7 +785,7 @@ function end(){
 						 <c:forEach var="photoDetailList" items="${viewPhotoDetail}" >  
 						<tr>
 							<th>상세 이미지</th>
-							<td><img src="http://localhost:8090/resources/img/${photoDetailList.pcontentDetail}" style="width: 250px; height: 250px; display: block;">
+							<td><img src="/resources/img/${photoDetailList.pcontentDetail}" style="width: 250px; height: 250px; display: block;">
 							<input type='file'  id="detail_img${photoDetailList.pphotonum}" name='file2' />
 							</td>
 							<td>

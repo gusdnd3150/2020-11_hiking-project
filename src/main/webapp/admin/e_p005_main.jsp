@@ -243,11 +243,7 @@ var table = null;
 										data-original-title="Collapse">
 										<i class="fa fa-minus"></i>
 									</button>
-									<button type="button" class="btn btn-info btn-sm"
-										data-widget="remove" data-toggle="tooltip" title=""
-										data-original-title="Remove">
-										<i class="fa fa-times"></i>
-									</button>
+
 								</div>
 
 							</div>
@@ -285,7 +281,7 @@ var table = null;
 								<div class="box">
 
 									<div class="box-body">
-										<!-- 2페이지 내용 -->
+										
 										<div id="example1_wrapper"
 											class="dataTables_wrapper form-inline dt-bootstrap">
 											<div class="row">
@@ -319,10 +315,9 @@ var table = null;
 																	<td>${cancel.orderNum}</td>
 																	<td>${cancel.userNum}</td>
 																	<td>${cancel.name}</td>
-																	<td>${cancel.totalCancelPay}</td>
 																	<td>${cancel.reason}</td>
+																	<td>${cancel.totalCancelPay}</td>
 																</tr>
-
 															</c:forEach>
 														</tbody>
 														<tfoot>
@@ -361,11 +356,6 @@ var table = null;
 								data-widget="collapse" data-toggle="tooltip" title=""
 								data-original-title="Collapse">
 								<i class="fa fa-minus"></i>
-							</button>
-							<button type="button" class="btn btn-info btn-sm"
-								data-widget="remove" data-toggle="tooltip" title=""
-								data-original-title="Remove">
-								<i class="fa fa-times"></i>
 							</button>
 						</div>
 						<!--     /. tools -->
