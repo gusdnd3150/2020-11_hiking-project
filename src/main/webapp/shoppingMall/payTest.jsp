@@ -619,6 +619,7 @@ align:bottom;
 						<c:if test="${ point ne null }">
 							<p>보유 포인트: ${point }  <img src="/resources/img/shop_coin.png" width="25px" height="25px"></p><br>
 						</c:if>
+						<p>test</p>
                                     
                                     
                                     
