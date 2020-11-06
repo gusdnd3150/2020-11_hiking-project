@@ -196,7 +196,7 @@ function end(){
 						<c:forEach var="photoMain" items="${list3}" >
 						<tr>
 							<th>대표 이미지</th>
-							<td><center><img src="http://localhost:8090/resources/img/${photoMain.pcontent}"  style="width: 250px; height: 250px; display: block;"></center>
+							<td><center><img src="/resources/img/${photoMain.pcontent}"  style="width: 250px; height: 250px; display: block;"></center>
 							</td>
 							</td>
 						</tr>
@@ -204,7 +204,7 @@ function end(){
 						<c:forEach var="photoDetail" items="${list4}" >
 						<tr>
 							<th>상세 이미지</th>
-							<td><center><img src="http://localhost:8090/resources/img/${photoDetail.pcontentDetail}"  style="width: 250px; height: 250px; display: block;"></center>
+							<td><center><img src="/resources/img/${photoDetail.pcontentDetail}"  style="width: 250px; height: 250px; display: block;"></center>
 							</td>
 						</tr>
 						<tr>

@@ -199,8 +199,6 @@ $(document).ready(function() {
               <div class="pull-right box-tools">
                 <button type="button" class="btn btn-info btn-sm" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
                   <i class="fa fa-minus"></i></button>
-                <button type="button" class="btn btn-info btn-sm" data-widget="remove" data-toggle="tooltip" title="" data-original-title="Remove">
-                  <i class="fa fa-times"></i></button>
               </div>
               <!-- /. tools -->
             </div>
@@ -236,8 +234,6 @@ $(document).ready(function() {
               <div class="pull-right box-tools">
                 <button type="button" class="btn btn-info btn-sm" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
                   <i class="fa fa-minus"></i></button>
-                <button type="button" class="btn btn-info btn-sm" data-widget="remove" data-toggle="tooltip" title="" data-original-title="Remove">
-                  <i class="fa fa-times"></i></button>
               </div>
               <!-- /. tools -->
             </div>
