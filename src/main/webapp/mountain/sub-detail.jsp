@@ -9,7 +9,7 @@
     <link rel="stylesheet" type="text/css" href="/resources/css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="/resources/css/views/mountain/sub-detail.css" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
-    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=10adf6d2b4bb761d1e63b20e8cb26e87&libraries=services"></script>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=aa5fc29e99e8b77c9464b6a8922d3eaa&libraries=services"></script>
 </head>
 <body>
 <ul class="nav nav-tabs">
