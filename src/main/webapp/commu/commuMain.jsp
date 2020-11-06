@@ -8,7 +8,7 @@
 <body class="pt-5 mt-5">
 	<div class="container">
 		<div class="row">
-			<h1 class="col-md-8 col-lg-10 mb-0">인기글</h1>
+			<h1 class="col-md-8 col-lg-10 mb-0">인기 후기 글</h1>
 			<div class="col-md-4 col-lg-2 pt-2 pb-2 mt-5">
 				<a href="/after/main.do"><button type="button"  style="margin:0 0 0 60px; color:green;" class="btn btn-link">더 보기 ></button></a>
 			</div>
@@ -35,7 +35,7 @@
 		<div class="responsive">
 			<div class="row">
 				<div class="col-sm-6">
-					<a href="/commu/createForm.jsp"><button type="button" class="btn btn-outline-success"
+					<a href="/commu/createFormView.do"><button type="button" class="btn btn-outline-success"
 						style="padding: 10px 10px; margin:20px 10px 10px 10px; width: 100%; height: 100px;">
 						<div class="row">
 						<svg width="3em" height="3em" viewBox="0 0 16 16"
@@ -77,11 +77,16 @@
 </body>
 <script>
  $(document).ready(function (){
+		loadAfterBoard();
         $('#sort_lately').click();
     })
 
-    $('#sort_lately').on('click',function (){
-    	loadAfterBoard();
+    var isEnd = false;
+  
+ $('#sort_lately').on('click',function (){
+     isEnd = false; 
+    
+        $('#result').empty();
         $('#commuList_even').empty();
         $('#commuList_odd').empty();
         $('#appendMoreListBtn').data('keyword','lately');
@@ -97,7 +102,9 @@
 
  
     $('#sort_like').on('click',function (){
-		loadAfterBoard();
+    	 isEnd = false; 
+		
+		 $('#result').empty();
 		$('#commuList_even').empty();
 		$('#commuList_odd').empty();
 		$('#appendMoreListBtn').data('keyword','like');
@@ -112,24 +119,25 @@
     });
     
     $('#appendMoreListBtn').on('click',function (){
-    	console.log('keyword:  '+$('#appendMoreListBtn').data('keyword'));
-    	console.log('rowNum:  '+$('#appendMoreListBtn').data('rowNum'));
-   	
+    	if(isEnd == true){
+            return ;
+        }
+    	
     if($('#appendMoreListBtn').data('keyword') === 'lately'){
-	   	  var rN = ( $('#appendMoreListBtn').data('rowNum') +1 ); 
-	   	  $('#appendMoreListBtn').data('rowNum',rN );
+	   	  var lateRN = ( $('#appendMoreListBtn').data('rowNum') +1 ); 
+	   	  $('#appendMoreListBtn').data('rowNum',lateRN );
 	   	  var data = {
 	              'keyword' : 'lately',
-	              'rowNum' : rN
+	              'rowNum' : lateRN
 	          }
 	   	     sortList(data);
    		 
-   	 }else if($('#appendMoreListBtn').data('keyword') == 'lately'){
-   	  var rN = ( $('#appendMoreListBtn').data('rowNum') +1 ); 
-      $('#appendMoreListBtn').data('rowNum',rN );
+   	 }else if($('#appendMoreListBtn').data('keyword') === 'like'){
+   	  var likeRN = ( $('#appendMoreListBtn').data('rowNum') +1 ); 
+      $('#appendMoreListBtn').data('rowNum',likeRN );
    	  var data = {
               'keyword' : 'like',
-              'rowNum' : rN
+              'rowNum' : likeRN
           }
    	     sortList(data);
    	 }
@@ -140,9 +148,7 @@
     var isEnd = false; 
 
     function sortList(data){
-        if(isEnd == true){
-            return ;
-        }
+        
         $.ajax({
             type: "POST",
             url: "/commu/selectAllCommuList.do",
@@ -154,10 +160,8 @@
                     appendSortList(response);
                 }else if(response.length==0) {
                     isEnd = true;
-                   // window.removeEventListener('scroll', function (){
                         $('#result')
                             .append('<center><div>산모임이 더 이상 없습니다.</div></center>');
-                   // })
                 }
             },
             error: function(request, status, error){
@@ -190,21 +194,6 @@
     }
 
 
-   /*  function loadingImage() {
-        var loadingImg ='';
-
-        loadingImg += "<div id='loadingImg' class='pt-5' style='width: 100%'>";
-        loadingImg += "<img src='/resources/img/loading.gif' style='position: relative; margin: 0px auto;display: block'/>";
-        loadingImg += "</div>";
-
-        $('#result').append(loadingImg);
-
-    }
-
-    function closeLoading() {
-        $('#loadingImg').remove();
-    } */
-    
 //afterBoard
  	function goAfter(afterNum){
 		location.href="/after/"+afterNum+".do";

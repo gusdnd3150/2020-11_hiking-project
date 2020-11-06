@@ -99,14 +99,14 @@
                         <div class="mb-3 col-6">
                             <h5 for="sex">성별</h5>
                             <select class="custom-select" id="sex">
-                                <option value="무관" selected>무관</option>
+                                <option value="무관" selected>혼성</option>
                                 <option value="남자">남자</option>
                                 <option value="여자">여자</option>
                             </select>
                         </div>
             <div class="p-3" style="text-align: right">
                 
-                <input type="button" class="btn btn-primary" id="update" style="width: 75px" value="등록">
+                <input type="button" class="btn btn-primary" id="update" style="width: 75px" value="수정">
             </div>
              <div class="p-3" style="text-align: right">
               <button type="button" id="deleteCommu" class="btn btn-link"  data-toggle="modal" data-target="#deleteAskModal" style="color: lightGray;">산모임 지우기</button><br>
