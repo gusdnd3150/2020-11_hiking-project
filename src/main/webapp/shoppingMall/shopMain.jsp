@@ -21,10 +21,6 @@
 $(document).ready(function () {
 	
 	
-		
-	
-
-	
 
 	$("#sortProduct").change(function(){
 		var sorting= $(this).val();
