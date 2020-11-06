@@ -335,8 +335,11 @@ function usePoin(){                         //포인트 사용할 경우
         	  return;
           }else if(point==null||point==''){
 			  point = '0';
-          }else if(custName==null||custName==''){
+          }
+		  
+		  if(custName==null||custName==''){
         	  alert("구매자 이름은 필수입니다.");
+        	  return;
           }
 		  
 		  
@@ -474,7 +477,7 @@ align:bottom;
                             <tr>
                                 <td>전화번호</td>
                                 <td>
-                                    <input type="text" name="tel" class="form-control" value="" required="required">
+                                    <input type="text" name="tel" class="form-control" value="" required="required" placeholder="'-'제외 (01033334747)">
                                 </td>
                                 <td>구매자</td>
                                 <td>
@@ -562,7 +565,6 @@ align:bottom;
                         title="Quantity:"
                         class="input-text qty"
                       />
-                      
                       <p></p>
                     </div>
                   </td>
@@ -650,23 +652,6 @@ align:bottom;
     </div>
 </div>
 
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <!-- <script src="/resouces/shop/js/jquery-3.2.1.min.js"></script>
-    <script src="/resouces/shop/js/popper.js"></script>
-    <script src="/resouces/shop/js/bootstrap.min.js"></script>
-    <script src="/resouces/shop/js/stellar.js"></script>
-    <script src="/resouces/shop/vendors/lightbox/simpleLightbox.min.js"></script>
-    <script src="/resouces/shop/vendors/nice-select/js/jquery.nice-select.min.js"></script>
-    <script src="/resouces/shop/vendors/isotope/imagesloaded.pkgd.min.js"></script>
-    <script src="/resouces/shop/vendors/isotope/isotope-min.js"></script>
-    <script src="/resouces/shop/vendors/owl-carousel/owl.carousel.min.js"></script>
-    <script src="/resouces/shop/js/jquery.ajaxchimp.min.js"></script>
-    <script src="/resoucesjs/mail-script.js"></script>
-    <script src="/resoucesvendors/jquery-ui/jquery-ui.js"></script>
-    <script src="/resoucesvendors/counter-up/jquery.waypoints.min.js"></script>
-    <script src="/resoucesvendors/counter-up/jquery.counterup.js"></script>
-    <script src="/resoucesjs/theme.js"></script> -->
 
 </body>
 <jsp:include page="/common/footer.jsp" />

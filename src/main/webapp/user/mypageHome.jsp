@@ -2,7 +2,9 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <jsp:include page="/common/header.jsp" flush="false" />
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%
+
 	request.setCharacterEncoding("UTF-8");
 	pageContext.setAttribute("loginID", request.getSession().getAttribute("LOGIN"));
 %>
@@ -120,7 +122,9 @@
 							<h5 class="mt-2"> 0 <img src="/resources/img/shop_coin.png" width="30px" height="30px"></h5>
 						</c:if>
 						<c:if test="${ point.point ne null }">
-							<h5 class="mt-2">${point.point } <img src="/resources/img/shop_coin.png" width="30px" height="30px"></h5>
+							<h5 class="mt-2"> 
+							    <fmt:formatNumber value="${point.point }" pattern="###,###,###" />
+							<img src="/resources/img/shop_coin.png" width="30px" height="30px"></h5>
 						</c:if>
 					</li>
 

@@ -8,6 +8,7 @@
 	pageEncoding="UTF-8"%>
 <html lang="ko">
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %> 
 
 
 <style>
@@ -1139,8 +1140,7 @@ var cnt2=1;
                 <h4>${items.NAME }</h4>
               </a>
               <div class="mt-3">
-                <span class="mr-4"> ${items.PRICE }</span>
-                <del>$35.00</del>
+              <span class="mr-4"><fmt:formatNumber value="${items.PRICE }"  pattern="###,###,###"/>원</span>
               </div>
             </div>
           </div>
