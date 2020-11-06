@@ -61,8 +61,7 @@ public class CommuServiceImpl implements CommuService {
 	}
 
 	@Override
-	public void insertAlbum(Map m) {
-
+	public void insertAlbum2(Map m) {
 		commuDAO.insertAlbum(m);
 	}
 

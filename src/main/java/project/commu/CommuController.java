@@ -213,7 +213,7 @@ public class CommuController {
 				mm.put("groupNum", groupNum);
 				mm.put("storedFileName", fileName);
 				mm.put("userNum", userNum);
-				commuService.insertAlbum(mm);
+				commuService.insertAlbum2(mm);
 			}
 			
 			m = info;
