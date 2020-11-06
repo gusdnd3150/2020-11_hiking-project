@@ -123,7 +123,6 @@ $(document).ready(function () {
             //var deliPhonNum =$('input[name=deliPhonNum]').val();
             
             if(basic==''||basic==null){  //테스트로 name으로 진행 완료 후 basic 로 바꾸자
-            	alert("기본배송지가 없습니다.");
             	var check = window.confirm("배송지를 추가하시겠습니까?");
             	
             	if(check==true){ //예 누르면
