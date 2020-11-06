@@ -393,7 +393,6 @@ function usePoin(){                         //포인트 사용할 경우
 	                	chooseAddress:chooseAddress,prodName:prodName,payNames:payNames,orderNums:orderNums,perTotals:perTotals,
 	                },
 	                success:function(data,textStatus){
-	                    alert(data);
 	                    if(data =='fail'){
 	                    	cancelPay(rsp.imp_uid,rsp.merchant_uid,'결제실패');
 	                    	alert('결제 취소실행.');
@@ -615,7 +614,14 @@ align:bottom;
                             <tr style="line-height:32px;">
                                 <td>포인트</td>
                                 <td>
-                                    <p>보유 포인트: ${point }  <img src="/resources/img/shop_coin.png" width="25px" height="25px"></p><br>
+                          <c:if test="${ point eq null}">
+							<p>보유 포인트: 0  <img src="/resources/img/shop_coin.png" width="25px" height="25px"></p><br>
+						</c:if>
+						<c:if test="${ point ne null }">
+							<p>보유 포인트: ${point }  <img src="/resources/img/shop_coin.png" width="25px" height="25px"></p><br>
+						</c:if>
+                                    
+                                    
                                     
                                     <input type="hidden" name="comparePoint" value="${point }">
                                     <input type="hidden" name="point" value="${point }">

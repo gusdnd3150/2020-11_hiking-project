@@ -1022,10 +1022,11 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 		int userNum = userService.selectUserNum(id);         //유저넘
         String result ="";
         
-		try {
+	
 		String imagePath = "/resources/img/"; 
 		String path = request.getSession().getServletContext().getRealPath("/");// 실제경로
-		String savePath = path + imagePath;   //두개를 합치면  :locallhost8080~~~~~~~~/resources/img/
+		String savePath = path + imagePath;   
+		//C:\Users\LG\eclipse-workspace\.metadata\.plugins\org.eclipse.wst.server.core\tmp1\wtpwebapps\hiking1102\resources\img
         String originalFileName = null;
         String storedFileName = null;
         String originalFileExtension = null;
@@ -1056,6 +1057,8 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 			addOption.add(putOption);
 		}
 		b_P003_D001productService.addOption(addOption);   //옵션
+		
+		
 		
 		List<MultipartFile> Mainfiles = upfile.getFiles("content");
 		List<MultipartFile> Detailfiles= upfile.getFiles("contentDetail");
@@ -1100,9 +1103,11 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 	        
 	        DetailFileList.add(detail);
         }
+        
+	
 		
 
-
+    	try {
 			b_P003_D001productService.saveUsedImage(mainFileList); //메인 이미지
 			b_P003_D001productService.saveUsedDetailImage(DetailFileList); //디테일 이미지   
 			result="success";
