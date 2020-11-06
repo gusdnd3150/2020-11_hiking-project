@@ -12,7 +12,7 @@
     <link rel="icon" href="../resources/img/favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" type="text/css" href="/resources/css/bootstrap.min.css" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
-    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=4541bce3bc5ce5862fab9152b1b9f049&libraries=drawing"></script>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=aa5fc29e99e8b77c9464b6a8922d3eaa&libraries=drawing"></script>
 </head>
 <body class="p-3">
 <div>
