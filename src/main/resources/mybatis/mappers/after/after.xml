@@ -23,7 +23,7 @@
         ]]>
     </insert>
     <select id="selectAfterDetail" resultType="map" parameterType="int">
-        SELECT ga.afterNum, ga.userNum, ga.mtNm, ga.title, ga.content, TO_CHAR(ga.createdAt,'yyyy-mm-dd') createdAt, ui.content2
+        SELECT ga.afterNum, ga.userNum, ga.mtNm, ga.title, ga.content, TO_CHAR(ga.createdAt,'yyyy-mm-dd') createdAt, u.id, ui.content2
             FROM groupAfter ga, users u, userInfo ui
             WHERE ga.userNum = u.userNum
               AND u.userNum = ui.userNum
@@ -39,7 +39,7 @@
     </select>
     <select id="selectAllAfterList" resultType="map">
         <![CDATA[
-            SELECT ga.afterNum, ga.userNum, ga.mtNm, ga.title, ga.content, TO_CHAR(ga.createdAt,'yyyy-mm-dd') createdAt, ui.content2
+            SELECT ga.afterNum, ga.userNum, ga.mtNm, ga.title, ga.content, TO_CHAR(ga.createdAt,'yyyy-mm-dd') createdAt, u.id, ui.content2
             FROM groupAfter ga, users u, userInfo ui
             WHERE ga.userNum = u.userNum
               AND u.userNum = ui.userNum
