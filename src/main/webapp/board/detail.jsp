@@ -9,7 +9,7 @@
     <div>
     </div>
     <div>
-        <button id="returnToList"class="btn btn-dark" onclick="goBoard()">리스트로</button>
+        <button id="returnToList"class="btn btn-dark" onclick="goBoard()">뒤로</button>
     </div>
 </div>
 <div class="responsive">

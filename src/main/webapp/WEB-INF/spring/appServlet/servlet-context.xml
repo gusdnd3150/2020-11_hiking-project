@@ -80,6 +80,7 @@
 	<mvc:interceptors>
 		<mvc:interceptor>
 		<mvc:mapping path="/commu/commuPageView.do" />
+		<mvc:mapping path="/commu/createFormView.do" />
 		<mvc:mapping path="/mypage/*" />
 		<mvc:mapping path="/admin/*" />
 		<mvc:mapping path="/group/*" />

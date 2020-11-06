@@ -22,8 +22,8 @@
 		margin: 10px auto;
 
 		}
-		
-		
+
+
 	</style>
 </head>
 <body>

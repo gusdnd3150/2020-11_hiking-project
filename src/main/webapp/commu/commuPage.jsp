@@ -409,10 +409,11 @@ function removeCheck(e){
 	
 }
    
-    $(document).on('click','#AremoveBtn',function (){ 
+    $(document).on('click','#AremoveBtn',function (e){ 
+    	console.log("?????:   " + $('#AremoveBtn').data('postNum'));
 	  if(confirm("정말 삭제하시겠습니까?")==true){ 
 	   var data = {
-		          "postNum" : $('#commentContent').data('postNum')
+		          "postNum" : $('#AremoveBtn').data('postNum')
 	   };
 	   $.ajax({
            type: "GET",
@@ -512,7 +513,8 @@ function deleteCommu(){
      	dataType: 'json',
      	contentType: "application/json; charset=utf-8;",
      	success : function (response){
-         location.reload();
+     		alert("산모임 삭제가 완료되었습니다.");
+     		self.location="/commu/commuMainView.do"; 
      	},
     	 error : function (response){
          console.log("error")
@@ -752,11 +754,11 @@ $(document).on('click','.selectWaitingList',function (){
           cache: false,
           success(response){
               console.log(response);
-              alert("등록완료!")
+              alert("산모임 정보 수정 완료!")
              self.location ="/commu/commuPageView.do?groupNum=${m1.GROUPNUM}";
           },
           error(response){
-              alert("등록 오류, 새로고침 후 다시 시도 해주세요")
+              alert("수정 오류, 새로고침 후 다시 시도 해주세요")
           }
       });
   });   
@@ -961,7 +963,7 @@ $(document).on( 'click', 'a#oC img', function(e){
          	document.getElementById('nickName').innerHTML=nickName;
          	document.getElementById('profilePic').src=src;
          	document.getElementById('createdAt').innerHTML=createdAt;
-         	$('#commentContent').data('postNum', postNum);
+         	$('#AremoveBtn').data('postNum', postNum);
          	  modal.style.display = 'block';
          	 modalImg.src = this.src;
          	 
@@ -1516,6 +1518,7 @@ function submitComment(postNum){
                 $('#'+selector).append(html);
                 $('#commentContent-'+postNum).val("");
                 index++;
+                location.reload();
             }
         },
         error: function(response){

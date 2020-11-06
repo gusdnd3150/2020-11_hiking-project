@@ -69,7 +69,7 @@
 					<hr />
 					<div id="commentInput" class="row" style="text-align: center">
 						<img src="/resources/img/${sessionIdImage}" class="rounded-circle mt-1" style="margin-left: 10px; width: 30px; height: 30px"> 
-							<input id="commentContent"name="commentContent" class="form-control form-control-md col-lg-9 col-md-9 col-sm-10 col-10 ml-2 mr-2" type="text" placeholder="내용을 입력해주세요">
+							<input id="commentContent" name="commentContent" class="form-control form-control-md col-lg-9 col-md-9 col-sm-10 col-10 ml-2 mr-2" type="text" placeholder="내용을 입력해주세요">
 							<button id="commentSubmit" class="btn btn-success btn-sm" >입력</button>
 					</div>
 

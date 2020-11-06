@@ -176,6 +176,12 @@ public class CommuController {
 		} catch (Exception e) {
 		}
 	}
+	
+	@RequestMapping("/createFormView.do")
+	public ModelAndView createFormView(ModelAndView mav) {
+		mav.setViewName("createForm");
+		return mav;
+	}
 
 	@Transactional
 	@RequestMapping(value = "/insertPost.do")

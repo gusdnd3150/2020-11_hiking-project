@@ -49,4 +49,6 @@ public interface GroupService {
     void deleteGroup(Map map);
 
     void deleteComment(Map map);
+
+    List selectGroupLikeById(String userId);
 }

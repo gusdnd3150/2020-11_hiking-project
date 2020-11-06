@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!doctype html>
-<html lang="en">
+<html lang="ko">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
@@ -14,13 +14,13 @@
 
 ul {
 list-style:none;
-padding-left: 10px;
+padding-left: 30px;
 }
 ul#a li {
-padding: 20px;
+padding: 15px;
 }
 ul#b li {
-padding: 20px;
+padding: 15px;
 } 
 </style>
 <body>
@@ -29,12 +29,12 @@ padding: 20px;
 <ul class="nav nav-tabs row" id="myInfoTab" role="tablist">
 	<li class="nav-item" role="presentation">
 		<a class="nav-link active" id="following-tab" data-toggle="tab" href="#following" role="tab" aria-controls="following" aria-selected="true">
-			<b>나를 팔로잉하는 친구들</b>
+			<b>나를 팔로잉&nbsp&nbsp&nbsp&nbsp(숫자)</b>
 		</a>
 	</li>
 	<li class="nav-item" role="presentation">
 		<a class="nav-link" id="follower-tab" data-toggle="tab" href="#follower" role="tab" aria-controls="follower" aria-selected="false">
-			<b>내가 팔로우하는 친구들</b>
+			<b>내가 팔로우&nbsp&nbsp&nbsp&nbsp(숫자)</b>
 		</a>
 	</li>
 </ul>

@@ -381,7 +381,9 @@
             <hr />
             <div class="after-content p-4 m-4">${after.CONTENT}</div>
                 <div class="pr-3 text-muted text-right">
+                    <c:if test="${LOGIN eq after.ID}">
                     <button class="btn btn-danger" class="btn btn-danger" data-toggle="modal" data-target="#cancelModal">후기 삭제</button>
+                    </c:if>
                     <div>${after.CREATEDAT}</div>
                 </div>
             <hr />

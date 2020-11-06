@@ -35,3 +35,9 @@ footer address {
 .sanorem {
     color: mediumaquamarine;
 }
+
+@media screen and (max-width: 996px){
+    footer > ul{
+        display: none;
+    }
+}

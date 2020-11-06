@@ -48,12 +48,28 @@
         display: none; !important;
     }
 
+    #carouselExampleIndicators {
+        margin-top: 10%;
+    }
+
+    .carousel-caption > h3 {
+        font-size: 32px;
+    }
+    .carousel-caption > p {
+        font-size: 20px;
+    }
+
+    #memberCount {
+        height: 0px; !important;
+        display: none; !important;
+    }
+
 }
 @media screen and (min-width: 997px) {
     .cover-container {
         display: flex
     }
-    
+
 }
 
 #afterList > a {

@@ -35,4 +35,5 @@ public interface MountainService {
     List selectAllTrailList(Map map);
 
     int countAllTrail();
+    List selectTrailLikeById(String userId);
 }

@@ -41,24 +41,24 @@
 		</ol>
 		<div class="carousel-inner" role="listbox">
 			<!-- Slide One - Set the background image for this slide in the line below -->
-			<div class="carousel-item active" style="background-image: url('resources/img/slider/slider1.jpg')">
-				<div class="carousel-caption d-none d-md-block">
-					<h3 class="display-4">우리가 '진짜' 백두 산악회</h3>
-					<p class="lead">건전한 등산문화 '음주가무는 안돼' 마음편히 등산하자..더보기</p>
+			<div class="carousel-item active" style="background-image: url('resources/img/slider/slider1-1.jpg')">
+				<div class="carousel-caption">
+					<h3 class="display-4">가을에는 역시~ 단풍구경이죠</h3>
+					<p class="lead">국내 단풍명소 10선을 소개합니다 ..더보기</p>
 				</div>
 			</div>
 			<!-- Slide Two - Set the background image for this slide in the line below -->
-			<div class="carousel-item" style="background-image: url('/resources/img/slider/slider2.jpg')">
-				<div class="carousel-caption d-none d-md-block">
-					<h3 class="display-4">등산이 즐거운 11가지 이유</h3>
-					<p class="lead">등산이 즐거운 이유는 여러가지 이지만..더보기</p>
+			<div class="carousel-item" style="background-image: url('/resources/img/slider/slider1-2.jpg')">
+				<div class="carousel-caption">
+					<h3 class="display-4">겨울산행을 미리 준비하는 이유</h3>
+					<p class="lead">올해도 일출 보러 가실거죠? ..더보기</p>
 				</div>
 			</div>
 			<!-- Slide Three - Set the background image for this slide in the line below -->
-			<div class="carousel-item" style="background-image: url('/resources/img/slider/photo3.jpeg')">
+			<div class="carousel-item" style="background-image: url('/resources/img/slider/slider1-3.jpg')">
 				<div class="carousel-caption d-none d-md-block">
-					<h3 class="display-4">시원한 가을바람 쐬고 가세요</h3>
-					<p class="lead">여름은 갔다. 가을산행에 준비해야할 것들은..더보기</p>
+					<h3 class="display-4">한사랑 산악회</h3>
+					<p class="lead">산과 함께 호흡하는 그대들이 아름답다 ..더보기</p>
 				</div>
 			</div>
 		</div>
@@ -107,10 +107,8 @@
 		</div>
 	</div>
 	<hr />
-	<div class="text-center" style="width:100%; height: 150px; display: flex;justify-content: center;flex-direction: column">
-		<div>
-			<div class="memberCountCon col-12" style="font-size:40px;"></div>
-		</div>
+	<div id="memberCount" class="text-center" style="width:100%;justify-content: center;flex-direction: column">
+		<div class="memberCountCon col-12" style="font-size:40px;"></div>
 	</div>
 	<hr />
 </div>
