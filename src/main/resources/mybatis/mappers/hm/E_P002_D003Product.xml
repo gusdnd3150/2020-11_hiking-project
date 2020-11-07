@@ -562,12 +562,19 @@
 		       FROM (
 			       SELECT ROWNUM RN, A.* 
 				     FROM (
-					SELECT p.PRODNUM, p.PRODCATEGORYNUM,p.NAME,p.PRICE as sortPrice,p.CONTENT,p.cntcount
-					 ,p.TYPE,p.CREATEDAT,p.UPDATEDAT,io.content as image , to_char(p.price,'999,999,999,999') as price
-						FROM products p,prodPhoto io
+					SELECT distinct p.PRODNUM, p.PRODCATEGORYNUM,p.NAME,p.PRICE as sortPrice,p.CONTENT,p.cntcount,
+					  (select count(afternum)
+                        from productafter
+                          where prodnum=p.prodnum
+                          and aftertype is null
+                          )as afterCount,p.TYPE,p.CREATEDAT,p.UPDATEDAT,io.content as image , to_char(p.price,'999,999,999,999') as price
+                          ,op.prodstatus
+						FROM products p,prodPhoto io ,prodoption op
                         where p.prodnum=io.prodnum
+                        and p.prodnum=op.prodnum 
                         and io.pphotonum=1
-                        and p.type not in (3,4)
+                        and p.type not in (3,4) 
+                        and op.prodstatus=1
            ]]>
    
            <choose>
@@ -688,15 +695,17 @@
          <!-- 최신글 5개 -->
        <select id="lastItems" resultType="map" parameterType="java.util.Map">
           <![CDATA[
-          SELECT *
+                SELECT *
 		       FROM (
 			       SELECT ROWNUM RN, A.* 
 				     FROM (
-		   SELECT p.PRODNUM, p.PRODCATEGORYNUM,p.NAME,p.PRICE,p.CONTENT ,p.TYPE,p.CREATEDAT,p.UPDATEDAT,io.content as image
-						FROM products p,prodPhoto io
+		   SELECT distinct p.PRODNUM, p.PRODCATEGORYNUM,p.NAME,p.PRICE,p.CONTENT ,p.TYPE,p.CREATEDAT,p.UPDATEDAT,io.content as image
+						FROM products p,prodPhoto io,prodoption op
                         where p.prodnum=io.prodnum
+                        and p.prodnum=op.prodnum
                         and io.pphotonum=1
                         and p.type not in(3,4)
+                        and op.prodstatus=1
 						ORDER BY p.createdat desc
 						) A
 				     )

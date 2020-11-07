@@ -106,8 +106,8 @@
 	                    
 	                    $("button[name=upNum2]").click(function() {           //수량업 클릭 시 
 	       				 var index = $("button[name=upNum2]").index(this); //인덱스 값 (이벤트를 발생시킨 태그의 index)
+	       				 
 	       				 var dbquantity = $("input[name=quantity2]").eq(index).val(); 
-	       	        	 console.log(index);
 	       	        	 var quantity =$("input[name=qty2]").eq(index); // 값
 	       	        	 var sst = quantity.val();
 	       	        	 
@@ -123,7 +123,6 @@
 	       	        	 var perTotal =$("input[name=perTotal2]").eq(index);  //태그만 선택
 	       	        	 quantity.val(quantity2);
 	       	        	 perTotal.val(calcul);
-	       	        	 
 	                    });
 	                    
 	                    $("button[name=downNum2]").click(function() {                  //수량다운 클릭 시 
@@ -218,7 +217,7 @@
 	        	 
 	        	 $('input[name=buyinfo]:checked').each(function (i, elements) {
 	        		    var index= $(elements).index("input:checkbox[name=buyinfo]");
-	        		    var perTotal =$("input[name=perTotal]").eq(index).val();//해당상품의 토탈 값
+	        		    var perTotal =$("#perTotal"+index).text().replace(",","").trim();//해당상품의 토탈 값
 	        		    var orderNum =$("input[name=orderNum]").eq(index).val();//해당상품의 orderNum
 	        		    var quantity =$("input[name=qty]").eq(index).val();//해당상품의 수량
 	        		    var image  =$("input[name=images]").eq(index).val();//해당상품의 수량
@@ -276,13 +275,19 @@
 	        	 if(!isNaN(sst)){
 	        		 sst++;
 	        	 }
+	        	 $("input[name=buyinfo]").prop("checked",false);
+	        	 $("#selectAll").prop("checked",false);
+	        	 $("#showTotal").text("0");
+	        	 
 	        	 quantity.val(sst);
 	             var quantity2 =quantity.val();
 	        	 var perPrice =$("input[name=perPrice]").eq(index).val(); // 값
 	        	 var calcul = quantity2* perPrice;
-	        	 var perTotal =$("input[name=perTotal]").eq(index);  //태그만 선택
+	        	 //var perTotal =$("input[name=perTotal]").eq(index);  //태그만 선택
+	        	 var perTotal =$("#perTotal"+index);  //태그만 선택
+	        	 console.log(perTotal);
 	        	 quantity.val(quantity2);
-	        	 perTotal.val(calcul);
+	        	 perTotal.text(calcul.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
 	        	 
 			});
 	         
@@ -299,13 +304,17 @@
 		        	 }else if(!isNaN(sst)){
 		        		 sst--;
 		        	 }
+		        	 $("input[name=buyinfo]").prop("checked",false);
+		        	 $("#selectAll").prop("checked",false);
+		        	 $("#showTotal").text("0");
+		        	 
 		        	 quantity.val(sst);
 		             var quantity2 =quantity.val();
 		        	 var perPrice =$("input[name=perPrice]").eq(index).val(); // 값
 		        	 var calcul = quantity2* perPrice;
-		        	 var perTotal =$("input[name=perTotal]").eq(index);  //태그만 선택
+		        	 var perTotal =$("#perTotal"+index);  //태그만 선택
 		        	 quantity.val(quantity2);
-		        	 perTotal.val(calcul);
+		        	 perTotal.text(calcul.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
 				});
 			
 			
@@ -328,13 +337,14 @@
                      var sum =0;
     	        	 $('input[name=buyinfo]:checked').each(function (i, elements) {
     	        		    var index= $(elements).index("input:checkbox[name=buyinfo]");
-    	        		    var perTotal =$("input[name=perTotal]").eq(index).val();
+    	        		    var perTotal =$("#perTotal"+index).text().replace(",","").trim();
+    	        		    console.log(perTotal);
     	        		    var pase = Number.parseInt(perTotal)
     	        		    sum = sum+pase;
     	        		});
     	        	console.log(sum);
     	    	    var shototal =$("#showTotal");
-	          	    shototal.text(sum);
+	          	    shototal.text(sum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
                   });
 	        	                     
 	        	                     
@@ -399,8 +409,7 @@
               <p></p>
             </div>
             <div class="page_link">
-              <a href="index.html">Home</a>
-              <a href="cart.html">Cart</a>
+              
             </div>
           </div>
         </div>
@@ -508,7 +517,7 @@
                 <h>등록된 상품이 없습니다</h>
                 </c:when>
                 <c:when test="${not empty cartList }">
-                     <c:forEach var="cartList" items="${cartList }">
+                     <c:forEach var="cartList" items="${cartList }" varStatus="num">
                 <tr>
                       <td>
                 <input type="checkbox" name="buyinfo" value="${cartList.PRODNUM }">
@@ -532,7 +541,9 @@
                   </td>
                   <td>
                   
-                    <h5>${cartList.PRICE } &nbsp; 원</h5>
+                    <%-- <h5>${cartList.PRICE } &nbsp; 원</h5> --%>
+                    <h5><fmt:formatNumber value="${cartList.PRICE }"  pattern="###,###,###"/>원</h5>
+                    
                     <input type="hidden" name="perPrice" value="${cartList.PRICE }">
                   </td>
                   <td>
@@ -565,8 +576,8 @@
                     </div>
                   </td>
                   <td>
-                    <%-- <h5 id="totalPut">${cartList.price * cartList.quantity }</h5> --%>
-                    <input type="text" name="perTotal" value="${cartList.PRICE * cartList.QUANTITY }" readonly style="border: none" width="30px">
+                     <h5 id="perTotal${num.index }"><fmt:formatNumber value="${cartList.PRICE * cartList.QUANTITY }"  pattern="###,###,###"/></h5>
+                    <%-- <input type="text" name="perTotal" pattern="###,###,###" value="${value }" readonly style="border: none" width="30px"> --%>
                   </td>
                   <td>
                   <div>

@@ -668,7 +668,7 @@ cursor: pointer;
           <div class="col-lg-5 offset-lg-1">
             <div class="s_product_text">
               <h3>${prodDetail[0].NAME}</h3>
-              <h2>$ ${prodDetail[0].PRICE } 원</h2>
+              <h2> ${prodDetail[0].PRICE } 원</h2>
               <input type="hidden" name="addPrice" value="${prodDetail[0].PRICE }">
               <ul class="list">
                 <li>

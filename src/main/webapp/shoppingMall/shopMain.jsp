@@ -957,7 +957,7 @@ var cnt2=1;
                       </div>
                       <div>
                        <p style="align:right;color:gray"><img src="/resources/img/shop_eye.png" width="25px" height="25px" style="color:black">
-                       &nbsp;${data.CNTCOUNT }</p>
+                       &nbsp;${data.CNTCOUNT } &nbsp; 후기 &nbsp;${data.AFTERCOUNT }</p>
                       </div>
                     </div>
                   </div>
@@ -1070,7 +1070,7 @@ var cnt2=1;
             <aside class="left_widgets p_filter_widgets">
                 <div class="l_w_title">
                   <!-- <h3><a href="/addUsedForm">중고등록</a></h3> -->
-                  <h3><a data-toggle="modal" data-target="#myModal" style="cursor: pointer;">중고등록</a></h3>
+                  <h3><a data-toggle="modal" data-target="#myModal" style="cursor: pointer;">중고 신청</a></h3>
                 </div>
                 <div class="widgets_inner">
                 </div>

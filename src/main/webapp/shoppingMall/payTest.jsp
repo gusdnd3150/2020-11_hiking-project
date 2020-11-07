@@ -2,6 +2,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html lang="ko">
 <head>
 <meta charset="utf-8"/>
@@ -51,36 +52,12 @@ $(document).ready(function () {
           });
           var showTotalPrice =$("#payTotal");
           var innerTotalPice=$("input[name=payTotal]");
-          showTotalPrice.text(sum);
           innerTotalPice.val(sum);
+          showTotalPrice.text(sum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+          //showTotalPrice.text(sum);
 	
-            $("#clickUp").on("click",function(){     //업버튼 클릭 시
-         var quantity = $("#sst").val();
-         var price = $('#price').text();
-         var totalPrice = $('input[name=total]'); 
-         var totalPay = $('input[name=payTotal]');
-         var total = quantity*price;
-         $("#totalPut").text(total); //상품토탈
-         totalPrice.val(total);
-
-         $("#payTotal").text(total);  //결제 토탈
-         totalPay.val(total);
-        });
+     
  
-        $("#clickDown").on("click",function(){          //다운버튼 클릭 시
-          var quantity = $("#sst").val();
-          var price = $('#price').text();
-          var totalPrice = $('input[name=total]');
-         var totalPay = $('input[name=payTotal]');
-         var total = quantity*price;
-
-         $("#totalPut").text(total); //상품토탈
-         totalPrice.val(total);
-
-         $("#payTotal").text(total);  //결제 토탈
-         totalPay.val(total);
-         
-        });
         
         $("input[name=card]").on("click",function(){  //카드결제
           var account = $('input[name=account]');
@@ -550,7 +527,7 @@ align:bottom;
                     </div>
                   </td>
                   <td>
-                    <h5 id="price">${prodDetail.PRICE }</h5>
+                    <h5 id="price"><fmt:formatNumber value="${prodDetail.PRICE }"  pattern="###,###,###"/>원</h5>
                     <input type="hidden" name="prodPrice" value="${prodDetail.PRICE }" style="border: none;">
                   </td>
                   <td>
@@ -573,7 +550,7 @@ align:bottom;
                 <h> <span>사이즈 </span> : ${prodDetail.PRODSIZE }  &nbsp; &nbsp;</h> 
                   </td>
                   <td>
-                    <h5> <bold id="totalPut">${prodDetail.PRICE * prodDetail.QUANTITY }</bold>원</h5> <!--  수량 *가격 --> 
+                    <h5> <bold id="totalPut"><fmt:formatNumber value="${prodDetail.PRICE * prodDetail.QUANTITY }"  pattern="###,###,###"/></bold>원</h5> <!--  수량 *가격 --> 
                     <input type ="hidden" name="total" value="${prodDetail.PRICE * prodDetail.QUANTITY }">
                   </td>
                 </tr>
@@ -582,7 +559,6 @@ align:bottom;
                 <input type="hidden" name="orderNum" value="${prodDetail.ORDERNUM }">
                 <input type="hidden" name="optionNums" value="${prodDetail.OPTIONNUM }">
                 <input type="hidden" name="type" value="${type }">
-                
                     </c:forEach>
                   </c:when>
               </c:choose>
@@ -613,16 +589,16 @@ align:bottom;
                                 </td>
                             </tr>
                             <tr style="line-height:32px;">
-                                <td>포인트</td>
+                                <td>보유 포인트</td>
                                 <td>
-                          <c:if test="${ point eq null}">
-							<p>보유 포인트: 0  <img src="/resources/img/shop_coin.png" width="25px" height="25px"></p><br>
-						</c:if>
+                           <c:if test="${ point eq null}">
+							 0 <img src="/resources/img/shop_coin.png" width="30px" height="30px"></c:if>
 						<c:if test="${ point ne null }">
-							<p>보유 포인트: ${point }  <img src="/resources/img/shop_coin.png" width="25px" height="25px"></p><br>
-						</c:if>
+							    <fmt:formatNumber value="${point }" pattern="###,###,###" />
+							<img src="/resources/img/shop_coin.png" width="30px" height="30px">
+						</c:if> 
                                     
-                                    
+                                    <br>
                                     
                                     <input type="hidden" name="comparePoint" value="${point }">
                                     <input type="hidden" name="point" value="${point }">

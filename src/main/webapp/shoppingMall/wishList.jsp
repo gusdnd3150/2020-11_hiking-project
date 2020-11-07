@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
     
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -324,7 +325,8 @@
                     </div>
                   </td>
                   <td>
-                    <h5>${cartList.PRICE } &nbsp; 원</h5>
+                    <%-- <h5>${cartList.PRICE } &nbsp; 원</h5> --%>
+                    <h5><fmt:formatNumber value="${cartList.PRICE }"  pattern="###,###,###"/>원</h5>
                   </td>
                   <td>
                   
