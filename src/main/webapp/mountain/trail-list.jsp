@@ -26,6 +26,12 @@
     <div class="responsive pt-5">
         <table id="trailList"class="table table-hover">
         </table>
+        <div class="form-inline justify-content-center">
+            <input id="trailName" type="text" class="form-control" style="width:300px;" placeholder="등산로 검색하기">
+            <a href="#" class="pl-2" onclick="trailSearch()">
+                <img src="../resources/img/search.png" width="25" height="25" onclick="">
+            </a>
+        </div>
         <div id="pagination"></div>
     </div>
 </div>
@@ -253,5 +259,31 @@
         $('#pagination').append(html);
     }
 
+    function trailSearch(){
+        var data = {
+            "MNTN_NM": $('#trailName').val()
+        }
+
+        if($('#trailName').val()!='' || $('#trailName').val()!=null){
+            alert('검색어를 입력해주세요');return
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/trail/search",
+            data: JSON.stringify(data),
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8;",
+            success: function (response){
+                $('#trailList').empty()
+                $('#pagination').empty()
+                appendList(response);
+            },
+            error: function(response){
+                console.log("error");
+            }
+        })
+
+    }
 </script>
 </body>

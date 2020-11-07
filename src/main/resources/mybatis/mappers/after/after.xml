@@ -39,10 +39,11 @@
     </select>
     <select id="selectAllAfterList" resultType="map">
         <![CDATA[
-            SELECT ga.afterNum, ga.userNum, ga.mtNm, ga.title, ga.content, TO_CHAR(ga.createdAt,'yyyy-mm-dd') createdAt, u.id, ui.content2
-            FROM groupAfter ga, users u, userInfo ui
+            SELECT g.groupNum, g.name, ga.afterNum, ga.userNum, ga.mtNm, ga.title, ga.content, TO_CHAR(ga.createdAt,'yyyy-mm-dd') createdAt, u.id, ui.content2
+            FROM groups g, groupAfter ga, users u, userInfo ui
             WHERE ga.userNum = u.userNum
               AND u.userNum = ui.userNum
+              AND g.groupNum = ga.groupNum
             ORDER BY ga.afterNum DESC
         ]]>
     </select>

@@ -164,5 +164,7 @@ public class MountainServiceImpl implements MountainService{
     public List selectTrailLikeById(String userId){
         return mountainDAO.selectTrailLikeById(userId);
     }
-
+    public List selectTrailByKeyword(Map map){
+        return mountainDAO.selectTrailByKeyword(map);
+    }
 }

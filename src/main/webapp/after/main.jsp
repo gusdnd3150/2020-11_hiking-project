@@ -367,12 +367,17 @@
     <div class="col-12 pt-5">
         <c:forEach var="after" items="${after}">
         <div class="afterBox" style="width: 100%">
-            <div class="after-title row d-flex justify-content-between m-3">
-                <div class="titlebox form-inline">
-                    <a href="/profile/${after.USERNUM}">
-                        <img class="rounded-circle" src="/resources/img/${after.CONTENT2}" style="width: 45px;height: 45px">
-                    </a>
-                    <h3 class="pl-2 mt-1 mb-0">[${after.MTNM}] ${after.TITLE}</h3>
+            <div class="after-title d-flex justify-content-between m-3">
+                <div class="titlebox">
+                    <div class="form-inline">
+                        <a href="/profile/${after.USERNUM}">
+                            <img class="rounded-circle" src="/resources/img/${after.CONTENT2}" style="width: 45px;height: 45px">
+                        </a>
+                        <div>
+                            <div class="pl-2 text-muted">[${after.MTNM}]${after.NAME}의 후기  <a href="/group/${after.GROUPNUM}">바로가기></a></div>
+                            <h3 class="pl-2 mb-0">${after.TITLE}</h3>
+                        </div>
+                    </div>
                 </div>
                 <div id="like-${after.AFTERNUM}" class="align-self-center" style="font-size: 22px">
                     <span id="likebox-${after.AFTERNUM}" style="margin: 5px 5px 5px 5px;"></span>

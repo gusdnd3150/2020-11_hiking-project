@@ -304,4 +304,10 @@
           AND tl.likeyn = 'Y'
           AND tl.userId = #{userId}
     </select>
+    <select id="selectTrailByKeyword" resultType="map" parameterType="map">
+        SELECT ROWNUM rnum, ti.*
+        FROM TRAILINFO ti
+        WHERE ti.FID = 0
+          AND ti.MNTN_NM = #{MNTN_NM}
+    </select>
 </mapper>
