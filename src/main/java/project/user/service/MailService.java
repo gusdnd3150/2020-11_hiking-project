@@ -46,7 +46,7 @@ public class MailService {
 	public String sendAuthMail(String email, String authKey) {
 		MimeMessage message = mailSender.createMimeMessage();
 		String mailContent = "<html><head><h1>[산오름 이메일 인증]</h1><br><p>아래 링크를 클릭하시면 이메일 인증이 완료됩니다.</p></head>"
-                + "<body><a href='http://localhost:8080/user/signUpConfirm.do?email=" 
+                + "<body><a href='http://3.35.92.56:8080/user/signUpConfirm.do?email=" 
                 + email + "&authKey=" + authKey + "'target='_blenk'>이 곳을 눌러 산오름 서비스를 마음껏 누리세요.</a></body></html>";
 		
 		try {

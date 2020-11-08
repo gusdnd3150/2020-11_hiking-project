@@ -27,15 +27,13 @@
 						</c:otherwise>
 						</c:choose> --%>
 						<div class="mb-4" style="height: 17rem; overflow:scroll; margin: 20px 0px;">
-						<p class="card-text" style="display: block; overflow:scroll; text-overflow: ellipsis">${m1.DETAIL}</p>
+						<p class="card-text" style=" text-overflow: ellipsis">${m1.DETAIL}</p>
 						</div>
-						<small>시작일 ${fn:substring(m1.CREATEDAT, 0, 10)}</small> <br>
+						<small>시작일 ${fn:substring(m1.CREATEDAT, 0, 10)}</small>
+						<div style="height:10px"></div>
 						<c:choose>
                     <c:when test="${0 eq m2.USERTYPE}">
-                    <br>
-				
-					  <a style=" color: gray;" id="list-setting-list" data-toggle="list" href="#setting" role="tab" aria-controls="setting" > 관리하기> </a><br>
-				
+					  <a style="color: gray; margin-top:10px;" id="list-setting-list" data-toggle="list" href="#setting" role="tab" aria-controls="setting" > 관리하기> </a><br>
 					</c:when>
                       <c:when test="${1 eq m2.USERTYPE && 0 eq m2.USERSTATUS }">
                       <br>

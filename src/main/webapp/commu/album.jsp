@@ -24,7 +24,7 @@
 <div class="tab-pane fade" id="album" role="tabpanel"
 	aria-labelledby="list-album-list">
 	<div class="row pt-3">
-		<h3>&nbsp&nbsp&nbsp오름 사진</h3>
+		<h3>&nbsp&nbsp&nbsp산악회 사진</h3>
 		<div id="ASpace"></div>
 		<button type="file" style="float: right;" class="btn btn-outline-success" data-toggle="modal" data-target="#uploadAlbum">사진 올리기</button>
 	</div>
