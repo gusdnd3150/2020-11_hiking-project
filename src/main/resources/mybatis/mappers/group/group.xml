@@ -555,11 +555,18 @@
     </update>
 
     <select id="selectGroupLikeById" resultType="map" parameterType="string">
-        SELECT gl.groupNum, g.NAME, DECODE(g.STATUS,1,'진행중','마감') status, gm.STOREDFILENAME
+        SELECT g.MTNM, gl.groupNum, g.NAME, g.STAFFCURRENT, g.STAFFMAX, TO_CHAR(g.STARTDAY,'yyyy"년"mm"월"dd"일" hh"시"mi"분"') startDay , g.AREA, DECODE(g.STATUS,1,'진행중','마감') status, gm.STOREDFILENAME
         FROM groupLike gl, groups g , groupsMedia gm
         WHERE gl.GROUPNUM = g.GROUPNUM
           AND g.groupNum = gm.groupNum
           AND gl.LIKEYN = 1
           AND gl.userId = #{userId}
+    </select>
+
+    <select id="selectGroupLeader" resultType="string" parameterType="int">
+        SELECT userId
+        FROM userWaiting
+        WHERE groupNum = #{groupNum}
+          AND userType = 0
     </select>
 </mapper>

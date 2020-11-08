@@ -51,4 +51,5 @@ public interface GroupService {
     void deleteComment(Map map);
 
     List selectGroupLikeById(String userId);
+    String selectGroupLeader(int groupNum);
 }

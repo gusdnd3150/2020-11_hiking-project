@@ -47,4 +47,8 @@ public class ChatDao {
     public void deleteUserFromChatRoom(Map map){
         sqlSession.delete("chat.deleteUserFromChatRoom",map);
     }
+
+    public int countPushAlarm(String userId){
+        return sqlSession.selectOne("chat.countPushAlarm",userId);
+    }
 }

@@ -13,4 +13,6 @@ public interface ChatService {
 
     void insertUserToChatRoom(Map map);
     void deleteUserFromChatRoom(Map map);
+
+    int countPushAlarm(String userId);
 }

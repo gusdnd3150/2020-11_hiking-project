@@ -149,8 +149,17 @@
                 dataType: 'json',
                 contentType: "application/json; charset=utf-8;",
                 success : function (response){
-                    alert("신청 처리 되었습니다");
-                    location.reload();
+                    if(response.leaderId!=null){
+                        var data = {
+                            "leaderId" : response.leaderId,
+                            "groupNum" : ${group.GROUPNUM},
+                            "groupName" : '${group.NAME}',
+                            "requestId" : '${LOGIN}'
+                        }
+                        stompClient.send("/notice/send/"+response.leaderId,{},JSON.stringify(data))
+                        alert("신청 처리 되었습니다");
+                        location.reload();
+                    }
                 },
                 error : function (response){
                     alert("오류 발생! 다시 시도해주세요");

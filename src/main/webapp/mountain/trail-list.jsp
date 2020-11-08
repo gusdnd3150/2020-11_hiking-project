@@ -264,10 +264,6 @@
             "MNTN_NM": $('#trailName').val()
         }
 
-        if($('#trailName').val()!='' || $('#trailName').val()!=null){
-            alert('검색어를 입력해주세요');return
-        }
-
         $.ajax({
             type: "POST",
             url: "/trail/search",

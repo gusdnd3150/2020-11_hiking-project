@@ -61,4 +61,8 @@ public class ChatServiceImpl implements ChatService {
     public void deleteUserFromChatRoom(Map map){
         chatDAO.deleteUserFromChatRoom(map);
     }
+
+    public int countPushAlarm(String userId){
+        return chatDAO.countPushAlarm(userId);
+    }
 }

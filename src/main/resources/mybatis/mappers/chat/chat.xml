@@ -91,4 +91,12 @@
         ]]>
 
     </delete>
+
+    <select id="countPushAlarm" resultType="int" parameterType="string">
+        select COUNT(userId)
+        From USERWAITING
+        WHERE userId = #{userId}
+          AND USERTYPE = 0
+          AND CONFIRM NOT IN ('Y')
+    </select>
 </mapper>
