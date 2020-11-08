@@ -4,7 +4,7 @@
 <html>
  <div class="tab-pane fade" id="member" role="tabpanel" aria-labelledby="list-member-list">
 	<div class="row pt-3">
-		<h3>&nbsp&nbsp&nbsp오름 멤버</h3>
+		<h3>&nbsp&nbsp&nbsp산악회 멤버</h3>
 		<div style="width:43%"></div>
 		<div id="leaderBtn"></div>
 	</div>

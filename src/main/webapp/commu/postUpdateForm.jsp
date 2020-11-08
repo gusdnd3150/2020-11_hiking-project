@@ -19,7 +19,7 @@
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLabel">산모임 피드 쓰기</h5>
+				<h5 class="modal-title" id="exampleModalLabel">산악회 피드 수정</h5>
 				<button type="button" class="close" data-dismiss="modal"
 					aria-label="Close">
 					<span aria-hidden="true">&times;</span>
@@ -45,7 +45,7 @@
 			</div>
 
 			<div class="modal-footer">
-				<button type="submit" class="btn btn-success">게시글 수정</button>
+				<button type="submit" class="btn btn-success">수정</button>
 			</div>
 			<input type="hidden" name="groupNum" value="">
 			</form>

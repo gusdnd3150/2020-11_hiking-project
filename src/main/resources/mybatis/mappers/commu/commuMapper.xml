@@ -440,7 +440,7 @@
 	</select>
 	<select id="selectScheduleList" resultType="Map" parameterType="int">
             <![CDATA[
-			select a.GROUPNUM, b.STOREDFILENAME, f.CONTENT2, a.NAME, a.DETAIL, d.NICKNAME,
+			select a.GROUPNUM, b.STOREDFILENAME, f.CONTENT2, a.NAME, a.DETAIL, d.NICKNAME, a.MTNM,
    					   DECODE(a.STATUS, 0, '마감', '진행중') STATUS,
      					   TO_CHAR(a.STARTDAY, 'yyyy"년"MM"월"dd"일"') STARTDAY,
      					   NVL(f.CONTENT2, 'basic_profile.PNG') CONTENT2

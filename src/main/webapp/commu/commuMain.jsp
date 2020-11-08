@@ -21,7 +21,7 @@
 		<p></p>
 		<hr >
 		<div class="row">
-			<h1 class="col-md-8 col-lg-10 mb-0">이런 산모임 어때요?</h1>
+			<h1 class="col-md-8 col-lg-10 mb-0">이런 산악 어때요?</h1>
 			<div class="col-md-4 col-lg-2 pt-2 pb-2 btn-group btn-group-toggle"
 				data-toggle="buttons">
 				<label class="btn btn-outline-secondary active"> 
@@ -45,7 +45,7 @@
 						  <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
 						  <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
 						</svg>
-						<h3 style="margin:1% 0% 0% 0%;">&nbsp&nbsp&nbsp&nbsp산모임 만들기</h3>
+						<h3 style="margin:1% 0% 0% 0%;">&nbsp&nbsp&nbsp&nbsp산악회 만들기</h3>
 						</div>
 					</button></a>
 					<div id="commuList_even"></div>
