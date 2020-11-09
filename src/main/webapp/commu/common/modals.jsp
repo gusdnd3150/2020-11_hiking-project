@@ -10,7 +10,7 @@ pageContext.setAttribute("loginID", request.getSession().getAttribute("LOGIN"));
 <!DOCTYPE html>
 <html>
 			<!-- MODAL -->
-			    <div class="modal fade" id="listModal">
+			    <div class="modal fade" id="listModal" style="z-index:9999;">
         <div class="modal-dialog modal-lg" id="modal1">
             <div class="modal-content">
                 <!-- header -->
@@ -32,7 +32,7 @@ pageContext.setAttribute("loginID", request.getSession().getAttribute("LOGIN"));
             </div>
         </div>
     </div>
-    <div class="modal fade" id="joinModal">
+    <div class="modal fade" id="joinModal" style="z-index:9999;">
         <div class="modal-dialog" id="modal2">
             <div class="modal-content">
                 <!-- header -->
@@ -57,7 +57,7 @@ pageContext.setAttribute("loginID", request.getSession().getAttribute("LOGIN"));
     
     
 <!--    가입신청확인 모달 -->
-    <div class="modal fade" id="cancelAskModal">
+    <div class="modal fade" id="cancelAskModal" style="z-index:9999;">
         <div class="modal-dialog" id="modal3">
             <div class="modal-content">
                 <!-- header -->
@@ -82,7 +82,7 @@ pageContext.setAttribute("loginID", request.getSession().getAttribute("LOGIN"));
 	
 			
 	<!-- 탈퇴 확인모달 -->
-	<div class="modal fade" id="withdrawAskModal">
+	<div class="modal fade" id="withdrawAskModal" style="z-index:9999;">
         <div class="modal-dialog" id="modal4">
             <div class="modal-content">
                 <!-- header -->
@@ -107,7 +107,7 @@ pageContext.setAttribute("loginID", request.getSession().getAttribute("LOGIN"));
     
     
     <!-- 산모임 삭제 확인모달 -->
-	<div class="modal fade" id="deleteAskModal">
+	<div class="modal fade" id="deleteAskModal" style="z-index:9999;">
         <div class="modal-dialog" id="modal5">
             <div class="modal-content">
                 <!-- header -->
@@ -132,8 +132,7 @@ pageContext.setAttribute("loginID", request.getSession().getAttribute("LOGIN"));
 			
 
 <!--게시글 수정 Modal -->
-<div class="modal fade" id="postUpdateForm" tabindex="-1"
-	aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="postUpdateForm" tabindex="-1" style="z-index:9999;" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
 			<div class="modal-header">

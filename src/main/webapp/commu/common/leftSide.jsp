@@ -10,7 +10,7 @@
 
 			<div class="col-md-3"  >
 			<div id="leftSide">
-				<div class="card col-sm-12" style="border: 2px solid green; height:40rem; width: 15rem; padding:0;">
+				<div class="card col-sm-12" style="border: 2px solid green; height:35rem; width: 15rem; padding:0;">
 					<img src="/resources/img/${m3.STOREDFILENAME}" style="width:100%; height:200px;"
 						class="card-img-top" alt="산모임 기본 이미지">
 					<div class="card-body">
@@ -26,17 +26,16 @@
 						<small>연령 ${m1.AGESTART}~${m1.AGEEND}</small> <br> <br>
 						</c:otherwise>
 						</c:choose> --%>
-						<div class="mb-4" style="height: 17rem; overflow:scroll; margin: 20px 0px;">
+						<div class="mb-4" style="height: 12rem; overflow:scroll; margin: 20px 0px;">
 						<p class="card-text" style=" text-overflow: ellipsis">${m1.DETAIL}</p>
 						</div>
 						<small>시작일 ${fn:substring(m1.CREATEDAT, 0, 10)}</small>
 						<div style="height:10px"></div>
 						<c:choose>
                     <c:when test="${0 eq m2.USERTYPE}">
-					  <a style="color: gray; margin-top:10px;" id="list-setting-list" data-toggle="list" href="#setting" role="tab" aria-controls="setting" > 관리하기> </a><br>
+					  <a style="color: gray;" id="list-setting-list" data-toggle="list" href="#setting" role="tab" aria-controls="setting" > 관리하기> </a><br>
 					</c:when>
                       <c:when test="${1 eq m2.USERTYPE && 0 eq m2.USERSTATUS }">
-                      <br>
                       <button type="button" id="withdrawCheckModalBtn" class="btn btn-link"  data-toggle="modal" data-target="#withdrawAskModal" style="color: gray;">탈퇴하기></button><br>
 						</c:when>
 						</c:choose>

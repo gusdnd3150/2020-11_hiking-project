@@ -186,7 +186,6 @@ public class CommuController {
 	@Transactional
 	@RequestMapping(value = "/insertPost.do")
 	public ModelAndView insertPost(@RequestParam Map<String, Object> info, HttpServletResponse response, HttpServletRequest request, HttpSession httpSession) throws Exception {
-		System.out.println("커뮤 피드 작성하기: insertPost" +info);
 		String id = (String) httpSession.getAttribute(LOGIN);
 		int userNum = userService.selectUserNum(id);
 
@@ -310,7 +309,6 @@ public class CommuController {
 	@ResponseBody
 	public List<Map> selectMemberList(@RequestBody Map groupNum, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
-	 System.out.println("?? 왜 안와 여기??");
 		List<Map> rst = new ArrayList<Map>();
 		rst = commuService.selectMemberList(groupNum);
 		return rst;

@@ -42,7 +42,7 @@ div#posts img {
 
 #leftSide {
 position: fixed;
-
+z-index:9
 } 
 
  #rightSide {
@@ -82,15 +82,23 @@ function selectCommentByPostNum(postNum){
                     html += '<div class="col-10">';
                     html += '<pre style="display: none">'+response[i].commentNum+'</pre>';
                     html += '<h5 class="m-0">'+response[i].nickname+'</h5>';
-                    html += '<div>'+response[i].content +'</div>';
+                    if(response[i].deleted==1){
+                        html += '<div class="text-muted">--삭제된 댓글입니다--</div>';
+                    }else{
+                        html += '<div>'+response[i].content +'</div>';
+                    }
                     html += '<button id ='+response[i].commentNum+' class="'+id+' p-0 btn btn-default text-muted" onclick="toggleSubComment(this)">[답글 '+ response[i].subCommentCount +'개 더보기]</button>'
                     html += '<button class="'+id+'subComment p-0 btn btn-default text-muted" onclick="toggleWriteSubComment(this)">[답글 작성]</button>';
+                    if(response[i].deleted==1){
+                    }else if(response[i].deleted==0 && response[i].id==='${loginID}'){
+                        html += '<button class="'+id+'deleteBtn p-0 btn btn-default text-muted" onclick="deleteComment(this)">[삭제]</button>'
+                    }
                     html += '<p style="display: none"><input type="text" class="form-control" placeholder="댓글 내용 입력"/>';
                     html += '<button id="writeSubCommentBtn" class="btn btn-info" onclick="writeSubComment(this,'+response[i].postNum+')">작성</button>';
                     html += '<button class="btn btn-light" onclick="cancelwriteSubComment(this)">취소</button>';
                     html += '</p></div></ul>';
 
-
+ 
                     $('#'+selector).append(html);
 
                     index++;
@@ -103,8 +111,18 @@ function selectCommentByPostNum(postNum){
                             html += '<li id="' + id + index1 + '" class="col-12 row pt-3 ml-5 pl-2" style="display: none;">';
                             html += '<img src="/resources/img/'+response[j].content2+'" class="rounded-circle" style="width: 40px; height: 40px; float: left">';
                             html += '<div class="col-9 ml-2 pl-5">';
+                            html += '<pre style="display: none">'+response[j].commentNum+'</pre>';
                             html += '<h5 class="mb-0">'+response[j].nickname+'</h5>'
-                            html += response[j].content +'</div></li>';
+                            if(response[j].deleted==1){
+                                html += '<div class="text-muted">--삭제된 댓글입니다--</div>';
+                            }else{
+                                html += '<div>'+response[j].content +'</div>';
+                            }
+                            if(response[j].deleted==1){
+                            }else if(response[j].deleted==0 && response[i].id==='${loginID}'){
+                                html += '<button class="'+id+'deleteBtn p-0 btn btn-default text-muted" onclick="deleteComment(this)">[삭제]</button>'
+                            }
+                            html += '</div></li>';
 
                             $('#' + id).append(html);
 
@@ -119,6 +137,32 @@ function selectCommentByPostNum(postNum){
         }
     })
 }
+
+    function deleteComment(e){
+    	 if(confirm("정말 삭제하시겠습니까?")==true){ 
+        var data = {
+            commentNum : e.parentNode.childNodes[0].innerText
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/group/deleteComment.do",
+            data: JSON.stringify(data),
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8;",
+            success : function (response){
+                alert('삭제 되었습니다')
+                location.reload();
+            },
+            error : function (response){
+                alert("오류 발생! 다시 시도해주세요");
+            }
+        })
+    	 }else {
+    			return false;
+    		}
+
+    }
 </script>
 <div class="container mt-4" >
 	<div class="row pt-5">
@@ -795,7 +839,8 @@ $(document).on('click','.selectWaitingList',function (){
   var totalData = ${vM.total};    // 총 데이터 수
   console.log("언제찍히나:   " +${vM.total});
   var dataPerPage = 12;   // 한 페이지에 나타낼 데이터 수
-  var pageCount = 10;        // 한 화면에 나타낼 페이지 수   
+  var pageCount = 5;        // 한 화면에 나타낼 페이지 수   
+  
 /* 페이징 처리 */
   $('#list-album-list').click(function (e){
   if((totalData/dataPerPage) < pageCount){
@@ -813,7 +858,7 @@ $(document).on('click','.selectWaitingList',function (){
       var totalPage = Math.ceil(totalData/dataPerPage);    // 총 페이지 수
       var section = Math.ceil(currentPage/pageCount);    // 페이지 그룹
       
- /*      console.log("section : " + section); */
+       console.log("section : " + section); 
       
       var last = section * pageCount;    // 화면에 보여질 마지막 페이지 번호
       if(last > totalPage)
@@ -822,27 +867,27 @@ $(document).on('click','.selectWaitingList',function (){
       var next = last+1;
       var prev = first-1;
       
-     /*  console.log("last : " + last);
+       console.log("last : " + last);
       console.log("first : " + first);
       console.log("next : " + next);
-      console.log("prev : " + prev); */
+      console.log("prev : " + prev); 
 
       var $pingingView = $("#paging");
       
       var html = "";
       
       if(prev > 0) { 
-    	  html += "<a href=# id='prev'><</a> "
+    	  html += /* "<a href=# id='prev'><</a> " */ "<li class='page-item'><a class='page-link' href='#' id="+prev+" aria-label='Previous'><span aria-hidden='true'>&laquo;</span></a></li>"
     	  };
           
           
       if(first<1){first==1}
       for(var i=first; i <= last; i++){
-          html += "<a href=# id=" + i + ">" + i + "</a> ";
-      }
+          html += /* "<a href=# id=" + i + ">" + i + "</a> " */  "<li class='page-item'><a class='page-link' id=" + i + " href='#'>" + i + "</a></li>"
+      };
       
       if(last < totalPage){
-          html += "<a href=# id='next'>></a>"
+          html += /* "<a href=# id='next'>></a>" */ "<li class='page-item'><a class='page-link' id="+next+" href='#' aria-label='Next'><span aria-hidden='true'>&raquo;</span></a></li>"
           };
       
       $("#paging").html(html);    // 페이지 목록 생성
@@ -850,6 +895,7 @@ $(document).on('click','.selectWaitingList',function (){
       $("#paging a#" + currentPage).css({"text-decoration":"none", 
                                          "color":"green", 
                                          "font-weight":"bold"});    // 현재 페이지 표시
+                                      
                   
          /* 페이징 아작스 */
          var html;
@@ -906,13 +952,12 @@ $(document).on('click','.selectWaitingList',function (){
   
    $(document).on('click','#paging a',function (e){
      var $item = $(this);
-     var $id = $item.attr("id");     
-     var selectedPage = $item.text();
+     var $id = $item.attr("id");   
+     var selectedPage = $id
      selectedPage *= 1;
      
-     if($id == "next")    selectedPage = next;  
-     if($id == "prev")    selectedPage = prev;
-
+    /*  if($id == "next")    selectedPage = next;  
+     if($id == "prev")    selectedPage = prev; */
      paging(totalData, dataPerPage, pageCount, selectedPage);
  });
    
@@ -1035,8 +1080,8 @@ $(document).on( 'click', 'a#oC img', function(e){
              		+'</a><div class="media-body row mt-3">'
              		+"<a href='/profile/"+response.USERID+"' style='color: black;'onclick='window.open(this.href,'','width=450, height=600'); return false;'>"
             		+'<p class="mt-0 mb-1" style="margin:10px;">'+ response.USERID
-            		+'</p></a><h5 class="mt-0 mb-1" style="margin:10px;">'+response.NICKNAME+'</h5>'
-             		+'<svg style="margin:5px; color: red;" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-flag-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">'
+            		+'</p></a><h5 class="mt-0 mb-1" style="width: 59%; margin:10px;">'+response.NICKNAME+'</h5>'
+             		+'<svg style="margin:5px 5px 5px 0px; color: red;" width="1.3em" height="1.3em" viewBox="0 0 16 16" class="bi bi-flag-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">'
             		+' <path fill-rule="evenodd" d="M14.778.085A.5.5 0 0 1 15 .5V8a.5.5 0 0 1-.314.464L14.5 8l.186.464-.003.001-.006.003-.023.009a12.435 12.435 0 0 1-.397.15c-.264.095-.631.223-1.047.35-.816.252-1.879.523-2.71.523-.847 0-1.548-.28-2.158-.525l-.028-.01C7.68 8.71 7.14 8.5 6.5 8.5c-.7 0-1.638.23-2.437.477A19.626 19.626 0 0 0 3 9.342V15.5a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 1 0v.282c.226-.079.496-.17.79-.26C4.606.272 5.67 0 6.5 0c.84 0 1.524.277 2.121.519l.043.018C9.286.788 9.828 1 10.5 1c.7 0 1.638-.23 2.437-.477a19.587 19.587 0 0 0 1.349-.476l.019-.007.004-.002h.001"/>'
             	    +'</svg>'
              		+'</div>'
@@ -1071,7 +1116,29 @@ $(document).on( 'click', 'a#oC img', function(e){
                  var userId = response[i].USERID;
                  var content2 = response[i].CONTENT2;
                  var nickName = response[i].NICKNAME;
-            	 console.log("asdfasdf:   "+userId);
+                     
+                 if('${loginID}' == userId){
+                	 $('div#members').append(
+                     		'<li class=" list-group-item ">'
+                     		+'<div class="row">'
+                     		+"<a href='/profile/"+userId+"' style='color: black;'onclick='window.open(this.href,'','width=450, height=600'); return false;'>"
+                     		+'<img src="/resources/img/'+content2+'" class="rounded-circle mr-3" width="50" height="50" style="margin-left:30px;" alt="멤버사진">'
+                     		+'</a><div class="media-body row mt-3">'
+                     		+"<a href='/profile/"+userId+"' style='color: black;'onclick='window.open(this.href,'','width=450, height=600'); return false;'>"
+                     		+'<p class="mt-0 mb-1" style="margin:10px;">'+ userId
+                     		+'</p></a><h5 class="mt-0 mb-1" style="width: 55%; margin:10px;">'+nickName+'</h5>'
+                     		+'<svg style="margin:5px 5px 5px 0px; color: orange;" width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-emoji-smile" fill="currentColor" xmlns="http://www.w3.org/2000/svg">'
+                     		+'<path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>'
+                     		+'<path fill-rule="evenodd" d="M4.285 9.567a.5.5 0 0 1 .683.183A3.498 3.498 0 0 0 8 11.5a3.498 3.498 0 0 0 3.032-1.75.5.5 0 1 1 .866.5A4.498 4.498 0 0 1 8 12.5a4.498 4.498 0 0 1-3.898-2.25.5.5 0 0 1 .183-.683z"/>'
+                     		+'<path d="M7 6.5C7 7.328 6.552 8 6 8s-1-.672-1-1.5S5.448 5 6 5s1 .672 1 1.5zm4 0c0 .828-.448 1.5-1 1.5s-1-.672-1-1.5S9.448 5 10 5s1 .672 1 1.5z"/>'
+                     		+'</svg>'
+                     		+'</div>'
+                     		+'<div class="row">'
+                     		+'</div>'
+                      		+'</div>'
+                     		+'</li>'
+                     		);
+                 } else{
                      $('div#members').append(
                     		'<li class=" list-group-item ">'
                     		+'<div class="row">'
@@ -1088,6 +1155,8 @@ $(document).on( 'click', 'a#oC img', function(e){
                     		+'</li>'
                     		);
                  }
+                     
+                 }
              },
          error : function (request, status, error){
         	  alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
@@ -1096,7 +1165,6 @@ $(document).on( 'click', 'a#oC img', function(e){
 	  }
   
   $(document).on("click", "#forceWithdraw", function(e){
-  /* $('#forceWithdraw').click(function (e){ */
 	  var data =  {
 				"groupNum" : ${m1.GROUPNUM} 
 		};
@@ -1125,7 +1193,7 @@ $(document).on( 'click', 'a#oC img', function(e){
                             } else if(response.length == 0){
                                 var html = '';
                                 html += '<li>';
-                                html += '산모임 멤버가 없습니다'
+                                html += '산악회 멤버가 없습니다'
                                 html += '</li>';
                             }
 
@@ -1139,7 +1207,6 @@ $(document).on( 'click', 'a#oC img', function(e){
         })
         
         $(document).on("click", "#mandate", function(e){
-       /*    $('#mandate').click(function (e){ */
         	  var data =  {
         				"groupNum" : ${m1.GROUPNUM} 
         		};
@@ -1168,7 +1235,7 @@ $(document).on( 'click', 'a#oC img', function(e){
                             } else if(response.length == 0){
                                 var html = '';
                                 html += '<li>';
-                                html += '산모임 멤버가 없습니다'
+                                html += '산악회 멤버가 없습니다'
                                 html += '</li>';
                             }
 
@@ -1204,7 +1271,6 @@ $(document).on( 'click', 'a#oC img', function(e){
     
   
   function mandateCheck(e){
-	  //mandateCheckDo(e.parentNode.childNodes[0].textContent, e.parentNode.childNodes[1].textContent);
 	  
 	  	var data = {
     			"groupNum" : ${m1.GROUPNUM}, 
@@ -1264,7 +1330,7 @@ $(document).on( 'click', 'a#oC img', function(e){
     	                console.log("error");
     	            }
     	        })
-    	    /* }; */
+    
     	    
     	 function appendSortList(response){
     	        for(var i=0;i<response.length;i++){
@@ -1277,7 +1343,10 @@ $(document).on( 'click', 'a#oC img', function(e){
     	                           '<div class="col-md-7">'+
     	                           '<div class="card-body"><div class="row">'+
    	                               '<img src="/resources/img/' + response[i].CONTENT2 + '" class="rounded-circle" style="width:40px; height:40px; border:1px solid grey; margin-left: 20px">'+
-   	                               '<p style="margin-top: 10px; margin-left: 5px">'+response[i].NICKNAME+'</p>'+
+   	                               '<p style="width:55%; margin-top: 10px; margin-left: 5px">'+response[i].NICKNAME+'</p>'+
+   	                          	   '<svg style="margin-top: 10px; color: green;"width="1em" height="1.5em" viewBox="0 0 16 16" class="bi bi-triangle-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">'+
+   	                          	   '<path fill-rule="evenodd" d="M7.022 1.566a1.13 1.13 0 0 1 1.96 0l6.857 11.667c.457.778-.092 1.767-.98 1.767H1.144c-.889 0-1.437-.99-.98-1.767L7.022 1.566z"/>'+
+   	                          	   '</svg><p style=" margin-top: 8px;">'+response[i].MTNM+'</p>'+
        	                           '</div><div class="col-10 p-0 pl-2 m-0">' +
        	                           '<h6 class="card-title m-0" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">'+
        	                           '<span style="color: limegreen">['+response[i].STATUS+']</span> <br>' +response[i].NAME +'</h6>'+
@@ -1295,7 +1364,10 @@ $(document).on( 'click', 'a#oC img', function(e){
        	                           '<div class="col-md-7">'+
        	                           '<div class="card-body"><div class="row">'+
 	                               '<img src="/resources/img/' + response[i].CONTENT2 + '" class="rounded-circle" style="width:40px; height:40px; border:1px solid grey; margin-left: 20px">' +
-	                               '<p style="margin-top: 10px; margin-left: 5px">'+response[i].NICKNAME+'</p>'+
+	                               '<p style=" width:55%; margin-top: 10px; margin-left: 5px">'+response[i].NICKNAME+'</p>'+
+   	                          	   '<svg style="margin-top: 10px; color: green;"width="1em" height="1.5em" viewBox="0 0 16 16" class="bi bi-triangle-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">'+
+   	                          	   '<path fill-rule="evenodd" d="M7.022 1.566a1.13 1.13 0 0 1 1.96 0l6.857 11.667c.457.778-.092 1.767-.98 1.767H1.144c-.889 0-1.437-.99-.98-1.767L7.022 1.566z"/>'+
+   	                          	   '</svg><p style=" margin-top: 8px;">'+response[i].MTNM+'</p>'+
     	                           '<div class="col-10 p-0 pl-2 m-0">' +
     	                           '<h6 class="card-title m-0" style="display:block;overflow:hidden;white-space:nowrap;text-overflow: ellipsis">'+
     	                           '<span style="color:red">['+response[i].STATUS+']</span> <br>' +response[i].NAME +'</h6>' +
@@ -1313,20 +1385,7 @@ $(document).on( 'click', 'a#oC img', function(e){
     	    }
     	        $('#list-schedule-list').off('click');
      });
-/*     function infiniteScroll(data){
-            var curHeight = $(window).height() + $(window).scrollTop();
-            var docHeight = $(document).height();
 
-            if (curHeight == docHeight) {
-                closeLoading();
-                loadingImage();
-
-                setTimeout(function (){
-                    data.rowNum += 1;
-                    sortList(data);
-                },1500)
-            }
-    } */
     
     $('#insertPostBtn').click(function(){ 
      $('#feedContentDiv').empty();
@@ -1621,6 +1680,7 @@ var data = {
                 }else{
                 	selectWaitingList[0].innerText = "새로운 가입 요청";
                 	selectWaitingList[0].disabled = false;
+                	return;
             	     /*  $('.selectWaitingList').attr(disabled, false);  */
                 }
             }
