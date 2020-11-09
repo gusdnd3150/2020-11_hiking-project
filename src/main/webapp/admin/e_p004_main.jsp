@@ -49,12 +49,12 @@ $(document).ready(function() {
 		buttons : [ {
 			extend : 'excel',
 			text : 'excel',
-			filename : '회원정보',
-			title : '산오름 회원정보'
+			filename : '주문정보',
+			title : '주문정보'
 		}, {
 			extend : 'copy',
 			text : 'copy',
-			title : '회원정보입니다.'
+			title : '주문정보'
 		}, 'pdf', 'print' ]
 	});
 	
@@ -67,7 +67,6 @@ $(document).ready(function() {
 		        $(this).addClass('selected');
 		    }
 		}); 
-	
 });
 /* 취소 요청 데이터 테이블 */
 var	table2 = null;
@@ -79,12 +78,12 @@ $(document).ready(function() {
 		buttons : [ {
 			extend : 'excel',
 			text : 'excel',
-			filename : '회원정보',
-			title : '산오름 회원정보'
+			filename : '취소요청 정보',
+			title : '취소 요청 정보'
 		}, {
 			extend : 'copy',
 			text : 'copy',
-			title : '회원정보입니다.'
+			title : '취소요청 정보'
 		}, 'pdf', 'print' ]
 	});
 	
@@ -153,10 +152,10 @@ function selectDay(str){
 	           },
 	           success : function(data) {
 	           	if ("ok"== (data)) {
-	           		console.log("수정완료");
+	           		console.log("배송 상태 수정완료");
 	           		//window.location.reload(true);
 					} else {
-						console.log("수정 실패");
+						console.log("배송 상태  수정 실패");
 					};
 	             }
 	        })
@@ -199,6 +198,16 @@ function selectDay(str){
 		window.open("viewCancelList.do?merchant_uid="+num, '취소요청상세보기','width=700px,height=800px,scrollbars=yes');
 		
 	});
+	//박스 닫기
+	function updateClass(value){
+	
+		$('#'+value).attr('class','box box-info collapsed-box');
+	}
+	//박스 열기
+	function updateClass1(value){
+	
+		$('#'+value).attr('class','box box-info');
+	}
 </script>
 <style>
 .ck.ck-editor{
@@ -240,7 +249,7 @@ function selectDay(str){
  <section class="content">
       <div class="row">
         <div class="col-md-12">
-          <div class="box box-info ">
+          <div class="box box-info " id="cancelBox">
             <div class="box-header">
               <h3 class="box-title">취소 요청
                 <small></small>
@@ -267,6 +276,16 @@ function selectDay(str){
 										</tr>
 										</thead>
 										 <tbody align=center>
+										  <c:if test="${cancelOrde ==null}">
+											<script>
+											updateClass("cancelBox");
+											</script>
+											</c:if>
+											<c:if test="${cancelOrde !=null}">
+											<script>
+											updateClass1("cancelBox");
+											</script>
+											</c:if>
 							                <c:forEach var="cancel" items="${cancelOrde}" >   
 							                <tr>
 							                  <td>${cancel.merchant_uid}</td>
@@ -294,7 +313,7 @@ function selectDay(str){
           <!-- /.box -->
           
 
-          <div class="box box-info">
+          <div class="box box-info" id="orderBox">
             <div class="box-header">
               <h3 class="box-title">주문 조회
                 <small></small>
@@ -389,10 +408,19 @@ function selectDay(str){
 											<th>주문정보</th>
 											<th>주문상태</th>
 											<th>배송상태</th>
-											<!-- <th>상세 보기</th> -->
 										</tr>
 										</thead>
 										 <tbody align=center>
+										 <c:if test="${list ==null}">
+											<script>
+											updateClass("orderBox");
+											</script>
+											</c:if>
+											<c:if test="${list !=null}">
+											<script>
+											updateClass1("orderBox");
+											</script>
+											</c:if>
 							                <c:forEach var="order" items="${list}" >   
 							                <tr>
 							                  <td>${order.orderNum}</td>
@@ -426,7 +454,6 @@ function selectDay(str){
 													<option value="300"  ${order.deliverystatus == 300 ? 'selected="selected"' : ''}>배송완료</option>
 												</select>
 							                  </td>
-							                <%--   <td><button class="btn btn-primary btn-xs" id ="view" onclick="location.href='viewOrderList.do?orderNum=${order.orderNum}'">상세보기</button></td --%> 		
 							                </tr>
 							                 </c:forEach>
 							                </tbody>

@@ -128,7 +128,6 @@ public class E_p005ControllerImpl implements E_p005Controller {
 	@ResponseBody
 	@RequestMapping(value = "admin/toDaySales.do", method = RequestMethod.POST)
 	public String toDaySales(@RequestParam Map map, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		System.out.println("금일 매출 출력");
 		return e_p005Service.toDaySales(map);
 	}
 

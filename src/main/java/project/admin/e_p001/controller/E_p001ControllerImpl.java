@@ -36,7 +36,6 @@ public class E_p001ControllerImpl implements E_p001Controller {
 	// 어드민 메인 화면 컨트롤러
 	@RequestMapping(value = "/admin.do", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
-		System.out.println("어드민 홈");
 		return "/admin/admin_home";
 	}
 
