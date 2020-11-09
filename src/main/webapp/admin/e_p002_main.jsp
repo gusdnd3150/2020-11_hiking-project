@@ -152,12 +152,12 @@ $(document).ready(function() {
 		buttons : [ {
 			extend : 'excel',
 			text : 'excel',
-			filename : '회원정보',
-			title : '산오름 회원정보'
+			filename : '중고품 정보',
+			title : '중고품 정보'
 		}, {
 			extend : 'copy',
 			text : 'copy',
-			title : '회원정보입니다.'
+			title : '중고품 정보'
 		}, 'pdf', 'print' ]
 	});
 	  $('#foo-table tbody2').on( 'click', 'tr', function () {
@@ -238,10 +238,10 @@ $(document).ready(function() {
         },
         success : function(data) {
         	if ("ok"== (data)) {
-        		console.log("수정완료");
+        		console.log("상품 상태 수정완료");
         		//window.location.reload(true);
 				} else {
-					console.log("수정 실패");
+					console.log("상품 상태 수정 실패");
 				};
        	 }
      })   
@@ -263,10 +263,10 @@ $(document).ready(function() {
         },
         success : function(data) {
         	if ("ok"== (data)) {
-        		console.log("수정완료");
+        		console.log("상품 색상 수정완료");
         		//window.location.reload(true);
 				} else {
-					console.log("수정 실패");
+					console.log("상품 색상 수정 실패");
 				};
        	 }
      })   
@@ -275,14 +275,12 @@ $(document).ready(function() {
 	
 	//상품 상세보기
 	function viewProd (optionNum, prodNum){
-		window.open('viewProdList.do?optionNum='+optionNum+'&prodNum='+prodNum, '상품상세정보','width=700px,height=800px,scrollbars=yes');
-		window.location.reload(true);
+		window.open('viewProdList.do?optionNum='+optionNum+'&prodNum='+prodNum, '상품상세정보','width=800px,height=800px,scrollbars=yes');
 	};
 	
 	//중고품 상세보기
 	function viewUsedList (prodNum, userNum){
 		window.open('viewUsedList.do?prodNum='+prodNum+'&userNum='+userNum, '중고품거래요청','width=800px,height=800px,scrollbars=yes');
-		window.location.reload(true);
 	};
 	
 
@@ -538,7 +536,212 @@ function updateClass1(value){
  <section class="content">
       <div class="row">
         <div class="col-md-12">
-          <div class="box box-info collapsed-box">
+        <!-- 1페이지 시작 -->
+           <div class="box box-info" id="prodBox">
+
+            <div class="box-header">
+              <h3 class="box-title">상품 조회
+                <small></small>
+              </h3>
+              <!-- tools box -->
+              <div class="pull-right box-tools">
+                <button type="button" class="btn btn-info btn-sm" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
+                  <i class="fa fa-minus"></i></button>
+              </div>
+              <!-- /. tools -->
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body pad" style="">
+            <form action="selectProd.do" method="get">
+			<div class="input-group margin">
+				<div class="input-group-btn">
+					<select name="searchOption" id="searchOption"class="btn btn-info dropdown-toggle" onchange="prodsearchOption(this.value)">
+						<option value="all">전체조회</option>
+						<option value="name">상품명</option>
+						<option value="type1">신상품</option>
+						<option value="type2">중고품</option>
+						<option value="prodstatus1">판매중</option>
+						<option value="prodstatus2">품절</option>
+						<option value="prodstatus3">대기</option>
+						<option value="prodcategorynum1">의류</option>
+						<option value="prodcategorynum2">잡화</option>
+						<option value="prodcategorynum3">등산용품</option>
+					</select>
+				</div>
+					<input type="text" name="key_word" id="prod_key_word"class="form-control" placeholder="조회내용을 입력하세요">
+						<span class="input-group-btn">
+                    	 	<button type="submit" id="serch"class="btn btn-info btn-flat" >조회</button>
+                    	</span>
+				</div>
+			</form>
+       <div class="box">
+    
+            <!-- /.box-header -->
+		<div class="box-body">
+				<div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">	
+							<table id="foo-table" class="display" style="width:100%">
+								<thead>
+								<tr>
+									<th>번호</th>
+									<th>옵션번호</th>
+									<th>상품명</th>
+									<th>가격</th>
+									<th>재고</th>
+									<th>사이즈</th>
+									<th>색상</th>
+									<th>타입</th>
+									<th>분류</th>
+									<th>상태</th>
+									<th>등록일</th>
+									<th>상세 보기 </th>
+								</tr>
+								</thead>
+								 <tbody>
+					                <c:forEach var="prod" items="${list}" >   
+					                <tr>
+					                  <td>${prod.prodNum}</td>
+					                  <td>${prod.optionNum}</td>
+					                  <td>${prod.name}</td>
+					                  <td>${prod.priceString}</td>
+					                  <td>${prod.quantity}</td>
+					                  <td>${prod.prodsize}</td>
+									  <td>
+					                   <select  id="prodStatus1" class="basic_btn btn btn-default" onchange="prodColor1(this.value,${prod.optionNum})">
+											<option value="white" ${prod.color == 'white' ? 'selected="selected"' : ''}>white</option>
+											<option value="black" ${prod.color == 'black' ? 'selected="selected"' : ''}>black</option>
+											<option value="red" ${prod.color == 'red' ? 'selected="selected"' : ''}>red</option>
+											<option value="blue" ${prod.color == 'blue' ? 'selected="selected"' : ''}>blue</option>
+											<option value="ogrange" ${prod.color == 'ogrange' ? 'selected="selected"' : ''}>ogrange</option>
+											<option value="yellow" ${prod.color == 'yellow' ? 'selected="selected"' : ''}>yellow</option>
+											<option value="green" ${prod.color == 'green' ? 'selected="selected"' : ''}>green</option>
+											<option value="violet" ${prod.color == 'violet' ? 'selected="selected"' : ''}>violet</option>
+											<option value="pink" ${prod.color == 'pink' ? 'selected="selected"' : ''}>pink</option>
+											<option value="navy" ${prod.color == 'navy' ? 'selected="selected"' : ''}>navy</option>
+											<option value="gray" ${prod.color == 'gray' ? 'selected="selected"' : ''}>gray</option>
+											<option value="etc" ${prod.color == 'etc' ? 'selected="selected"' : ''}>etc</option>
+										</select>
+										</td>
+					                  <td>${prod.typeString}</td>
+					                  <td>${prod.prodcategorynumString}</td>
+					                 <td>
+					                 	<select  id="prodStatus1" class="basic_btn btn btn-default" onchange="prodStatus1(this.value,${prod.optionNum})">
+											<option value="1"${prod.prodstatusString == '판매중' ? 'selected="selected"' : ''}>판매중</option>
+											<option value="2"${prod.prodstatusString == '품절' ? 'selected="selected"' : ''}>품절</option>
+											<option value="3"${prod.prodstatusString == '대기' ? 'selected="selected"' : ''}>대기</option>
+										</select>
+									</td>
+									
+					                  <td>${prod.createdAtString}</td>
+					                  <td><button class="btn btn-primary btn-xs" id ="view" onclick="viewProd(${prod.optionNum},${prod.prodNum})">상세보기</button></td> 		
+					                </tr>
+					                 </c:forEach>
+					                </tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+            <!-- /.box-body -->
+          	  </div>              
+            </div>
+          </div>
+         
+          <!-- 1페이지 끝 -->
+          <!-- /.box -->
+          <!-- 2페이지 중고품 요청폼 -->
+           <div class="box box-info" id="usedBox">
+            <div class="box-header">
+              <h3 class="box-title">중고품 관리
+                <small></small>
+              </h3>
+              <!-- tools box -->
+              <div class="pull-right box-tools">
+                <button type="button" class="btn btn-info btn-sm" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
+                  <i class="fa fa-plus"></i></button>
+              </div>
+              <!-- /. tools -->
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body pad" style="">
+		               <form action="selectUsedProd.do" method="get">
+					<div class="input-group margin">
+						<div class="input-group-btn">
+							<select name="searchOption" id="searchOption1"class="btn btn-info dropdown-toggle" onchange="used_searchOption(this.value)">
+								<option value="all">전체조회</option>
+								<option value="p_prodName">상품명</option>
+								<option value="p_prodNum">상품번호</option>
+								<option value="u_userNum">고객번호</option>
+								<option value="a">거래요청</option>
+								<option value="b">취소상품</option>
+								<option value="c">승인상품</option>
+							</select>
+						</div>
+							<input type="text" name="key_word" class="form-control" id="used_key_word" placeholder="조회내용을 입력하세요">
+								<span class="input-group-btn">
+		                    	 	<button type="submit" id="serch"class="btn btn-info btn-flat" >조회</button>
+		                    	</span>
+						</div>
+					</form>
+		       <div class="box">
+		    
+		            <!-- /.box-header -->
+				<div class="box-body">
+						 <!-- 데이터 테이블 -->
+               <div id="example1_wrapper"class="dataTables_wrapper form-inline dt-bootstrap">
+                           <table id="foo-table2" class="display" style="width:100%">
+                              <thead align=center>
+                              <tr>
+                                 <th>요청일자</th>
+                                 <th>상품번호</th>
+                                 <th>고객번호</th>
+                                 <th>상품정보</th>
+                                 <th>이미지</th>
+                                 <th>상태</th>
+                                 <th>상세보기</th>
+                              </tr>
+                              </thead>
+                               <tbody align=center>
+                               <c:if test="${used ==null}">
+								<script>
+								updateClass("usedBox");
+								</script>
+								</c:if>
+								<c:if test="${used !=null}">
+								<script>
+								updateClass1("usedBox");
+								</script>
+								</c:if>
+                                     <c:forEach var="used" items="${used}" >   
+                                     <tr>
+                                       <td>${used.createdAtString}</td>
+                                       <td>${used.prodNum}</td>
+                                       <td>${used.userNum}</td>
+                                   
+                                       <td>
+                                           <strong>상품명:${used.name}</strong><br>
+                                           <strong>판매가격:${used.priceString}</strong><br>
+                                           <strong>카테고리:${used.prodcategorynumString}</strong><br>
+                                       </td>
+                                       <td>
+                                          <strong><img src="/resources/img/${used.pcontent}" style="width: 80px; height: 80px; display: block;"></strong><br>
+                                       </td>
+                                       <td>${used.prodstatusString}</td>
+                                   <td><button class="btn btn-primary btn-xs" id="viewUsedList" onclick="viewUsedList(${used.prodNum},${used.userNum})" >상세보기</button></td>      
+                                     </tr>
+                                      </c:forEach>
+                                     </tbody>
+                           </table>
+                        </div>
+                        <!--// 데이터 테이블  -->
+					</div>
+		            <!-- /.box-body -->
+		          	  </div>    
+         
+            		</div>
+          		</div>
+          		<!--// 2페이 중고품 요청폼 -->
+			<!-- 3페이지 -->
+			 <div class="box box-info collapsed-box">
             <div class="box-header">
               <h3 class="box-title">상품 등록
                 <small></small>
@@ -546,7 +749,7 @@ function updateClass1(value){
               <!-- tools box -->
               <div class="pull-right box-tools">
                 <button type="button" class="btn btn-info btn-sm" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
-                  <i class="fa fa-minus"></i></button>
+                  <i class="fa fa-plus"></i></button>
               </div>
               <!-- /. tools -->
             </div>
@@ -659,208 +862,8 @@ function updateClass1(value){
                 </form>
             </div>
           </div>
-          <!-- /.box -->
-          <!-- 중고품 요청폼 -->
-           <div class="box box-info" id="usedBox">
-            <div class="box-header">
-              <h3 class="box-title">중고품 관리
-                <small></small>
-              </h3>
-              <!-- tools box -->
-              <div class="pull-right box-tools">
-                <button type="button" class="btn btn-info btn-sm" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
-                  <i class="fa fa-minus"></i></button>
-              </div>
-              <!-- /. tools -->
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body pad" style="">
-		               <form action="selectUsedProd.do" method="get">
-					<div class="input-group margin">
-						<div class="input-group-btn">
-							<select name="searchOption" id="searchOption1"class="btn btn-info dropdown-toggle" onchange="used_searchOption(this.value)">
-								<option value="all">전체조회</option>
-								<option value="p_prodName">상품명</option>
-								<option value="p_prodNum">상품번호</option>
-								<option value="u_userNum">고객번호</option>
-								<option value="a">거래요청</option>
-								<option value="b">취소상품</option>
-								<option value="c">승인상품</option>
-							</select>
-						</div>
-							<input type="text" name="key_word" class="form-control" id="used_key_word" placeholder="조회내용을 입력하세요">
-								<span class="input-group-btn">
-		                    	 	<button type="submit" id="serch"class="btn btn-info btn-flat" >조회</button>
-		                    	</span>
-						</div>
-					</form>
-		       <div class="box">
-		    
-		            <!-- /.box-header -->
-				<div class="box-body">
-						 <!-- 데이터 테이블 -->
-               <div id="example1_wrapper"class="dataTables_wrapper form-inline dt-bootstrap">
-                           <table id="foo-table2" class="display" style="width:100%">
-                              <thead align=center>
-                              <tr>
-                                 <th>요청일자</th>
-                                 <th>상품번호</th>
-                                 <th>고객번호</th>
-                                 <th>상품정보</th>
-                                 <th>이미지</th>
-                                 <th>상태</th>
-                                 <th>상세보기</th>
-                              </tr>
-                              </thead>
-                               <tbody align=center>
-                               <c:if test="${used ==null}">
-								<script>
-								updateClass("usedBox");
-								</script>
-								</c:if>
-								<c:if test="${used !=null}">
-								<script>
-								updateClass1("usedBox");
-								</script>
-								</c:if>
-                                     <c:forEach var="used" items="${used}" >   
-                                     <tr>
-                                       <td>${used.createdAtString}</td>
-                                       <td>${used.prodNum}</td>
-                                       <td>${used.userNum}</td>
-                                   
-                                       <td>
-                                           <strong>상품명:${used.name}</strong><br>
-                                           <strong>판매가격:${used.priceString}</strong><br>
-                                           <strong>카테고리:${used.prodcategorynumString}</strong><br>
-                                       </td>
-                                       <td>
-                                          <strong><img src="/resources/img/${used.pcontent}" style="width: 80px; height: 80px; display: block;"></strong><br>
-                                       </td>
-                                       <td>${used.prodstatusString}</td>
-                                   <td><button class="btn btn-primary btn-xs" id="viewUsedList" onclick="viewUsedList(${used.prodNum},${used.userNum})" >상세보기</button></td>      
-                                     </tr>
-                                      </c:forEach>
-                                     </tbody>
-                           </table>
-                        </div>
-                        <!--// 데이터 테이블  -->
-					</div>
-		            <!-- /.box-body -->
-		          	  </div>    
-         
-            		</div>
-          		</div>
-          		<!--// 중고품 요청폼 -->
-			<!-- 상품조회폼 -->
-
-          <div class="box box-info" id="prodBox">
-
-            <div class="box-header">
-              <h3 class="box-title">상품 조회
-                <small></small>
-              </h3>
-              <!-- tools box -->
-              <div class="pull-right box-tools">
-                <button type="button" class="btn btn-info btn-sm" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
-                  <i class="fa fa-minus"></i></button>
-              </div>
-              <!-- /. tools -->
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body pad" style="">
-            <form action="selectProd.do" method="get">
-			<div class="input-group margin">
-				<div class="input-group-btn">
-					<select name="searchOption" id="searchOption"class="btn btn-info dropdown-toggle" onchange="prodsearchOption(this.value)">
-						<option value="all">전체조회</option>
-						<option value="name">상품명</option>
-						<option value="type1">신상품</option>
-						<option value="type2">중고품</option>
-						<option value="prodstatus1">판매중</option>
-						<option value="prodstatus2">품절</option>
-						<option value="prodcategorynum1">의류</option>
-						<option value="prodcategorynum2">잡화</option>
-						<option value="prodcategorynum3">등산용품</option>
-					</select>
-				</div>
-					<input type="text" name="key_word" id="prod_key_word"class="form-control" placeholder="조회내용을 입력하세요">
-						<span class="input-group-btn">
-                    	 	<button type="submit" id="serch"class="btn btn-info btn-flat" >조회</button>
-                    	</span>
-				</div>
-			</form>
-       <div class="box">
-    
-            <!-- /.box-header -->
-		<div class="box-body">
-				<div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">	
-							<table id="foo-table" class="display" style="width:100%">
-								<thead>
-								<tr>
-									<th>번호</th>
-									<th>옵션번호</th>
-									<th>상품명</th>
-									<th>가격</th>
-									<th>재고</th>
-									<th>사이즈</th>
-									<th>색상</th>
-									<th>타입</th>
-									<th>분류</th>
-									<th>상태</th>
-									<th>등록일</th>
-									<th>상세 보기 </th>
-								</tr>
-								</thead>
-								 <tbody>
-					                <c:forEach var="prod" items="${list}" >   
-					                <tr>
-					                  <td>${prod.prodNum}</td>
-					                  <td>${prod.optionNum}</td>
-					                  <td>${prod.name}</td>
-					                  <td>${prod.priceString}</td>
-					                  <td>${prod.quantity}</td>
-					                  <td>${prod.prodsize}</td>
-									  <td>
-					                   <select  id="prodStatus1" class="basic_btn btn btn-default" onchange="prodColor1(this.value,${prod.optionNum})">
-											<option value="white" ${prod.color == 'white' ? 'selected="selected"' : ''}>white</option>
-											<option value="black" ${prod.color == 'black' ? 'selected="selected"' : ''}>black</option>
-											<option value="red" ${prod.color == 'red' ? 'selected="selected"' : ''}>red</option>
-											<option value="blue" ${prod.color == 'blue' ? 'selected="selected"' : ''}>blue</option>
-											<option value="ogrange" ${prod.color == 'ogrange' ? 'selected="selected"' : ''}>ogrange</option>
-											<option value="yellow" ${prod.color == 'yellow' ? 'selected="selected"' : ''}>yellow</option>
-											<option value="green" ${prod.color == 'green' ? 'selected="selected"' : ''}>green</option>
-											<option value="violet" ${prod.color == 'violet' ? 'selected="selected"' : ''}>violet</option>
-											<option value="pink" ${prod.color == 'pink' ? 'selected="selected"' : ''}>pink</option>
-											<option value="navy" ${prod.color == 'navy' ? 'selected="selected"' : ''}>navy</option>
-											<option value="gray" ${prod.color == 'gray' ? 'selected="selected"' : ''}>gray</option>
-											<option value="etc" ${prod.color == 'etc' ? 'selected="selected"' : ''}>etc</option>
-										</select>
-										</td>
-					                  <td>${prod.typeString}</td>
-					                  <td>${prod.prodcategorynumString}</td>
-					                 <td>
-					                 	<select  id="prodStatus1" class="basic_btn btn btn-default" onchange="prodStatus1(this.value,${prod.optionNum})">
-											<option value="1"${prod.prodstatusString == '판매중' ? 'selected="selected"' : ''}>판매중</option>
-											<option value="2"${prod.prodstatusString == '품절' ? 'selected="selected"' : ''}>품절</option>
-										</select>
-									</td>
-									
-					                  <td>${prod.createdAtString}</td>
-					                  <td><button class="btn btn-primary btn-xs" id ="view" onclick="viewProd(${prod.optionNum},${prod.prodNum})">상세보기</button></td> 		
-					                </tr>
-					                 </c:forEach>
-					                </tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-			</div>
-            <!-- /.box-body -->
-          	  </div>              
-            </div>
-          </div>
-          <!-- //상품조회폼 -->
+       
+          <!-- //3페이 -->
           
           
         </div>

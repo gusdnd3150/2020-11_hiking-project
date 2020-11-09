@@ -93,8 +93,6 @@ a {
     text-align: center  !important;
 }
 
-
-출처: https://xodgl2.tistory.com/82 [Beginning]
 </style>
 </head>
 <body>
@@ -128,7 +126,6 @@ a {
 									<th>이름</th>
 									<th>이메일</th>
 									<th>글번호</th>
-							
 									<th>구분</th>
 									<th>등록일자</th>
 									<th>수정일자</th>

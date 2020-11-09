@@ -26,8 +26,6 @@
 						
 						var _startDate = $('#startDate').val();
 						var _endDate = $('#endDate').val();
-						console.log(_startDate);
-						console.log(_endDate);
 
 						google.charts.setOnLoadCallback(searchDate);//라이브러리를 불러오는 작업이 완료되었으면 drawChart작업을 실행하라는 뜻.
 

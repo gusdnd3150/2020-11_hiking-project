@@ -32,7 +32,6 @@ public class E_p001ServiceImpl implements E_p001Service{
 	//회원 정보 수정 (상태)
 	@Override
 	public int upDateUser(Map map) throws Exception {
-		// TODO Auto-generated method stub
 		return e_p001DAO.upDateUser(map);
 	}
 

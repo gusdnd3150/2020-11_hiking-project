@@ -67,6 +67,7 @@ function cancelPay() {
 		       success:function(data,textStatus){
 		   		if ("ok"== (data)) {
 					console.log("결제 취소 완료");
+					alert("결제 취소 완료");
 					 var queryString = $('#option').serialize();
 				       $.ajax({
 				          type : 'post',

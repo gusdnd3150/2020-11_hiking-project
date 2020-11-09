@@ -60,4 +60,6 @@ public interface E_p002DAO {
 
 	String todayOrder(Map map)throws Exception;
 
+	void upDateProdOptionType(int prodNum)throws Exception;
+
 }

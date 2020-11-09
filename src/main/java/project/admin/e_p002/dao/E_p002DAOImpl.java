@@ -217,4 +217,10 @@ public class E_p002DAOImpl implements E_p002DAO{
 		return sqlSession.selectOne("admin.mapper.e_p002.todayOrder",map);
 	}
 	
+	//중고 승인시 상품 옵션 상태 대기 전환
+	@Override
+	public void upDateProdOptionType(int prodNum) throws Exception {
+		 sqlSession.update("admin.mapper.e_p002.upDateProdOptionType", prodNum);
+	}
+	
 }
