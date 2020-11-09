@@ -912,16 +912,8 @@ var cnt2=1;
                       <img class="card-img" src="/resources/img/${data.IMAGE }"alt=""/> </a>
                       
                       <div class="p_icon">
-                      <c:if test="${data.TYPE ==2 || data.TYPE==5 }">
-                        <a href="#">
-                          <i>old</i>
-                        </a> 
-                      </c:if>
-                      <c:if test="${data.TYPE ==1 }">
-                        <a href="#">
-                          <i >new</i>
-                        </a> 
-                      </c:if>
+                      
+
                       
                       <c:if test="${not empty data.USERNUM }">
                       <a id="changeNode${num.index }" onclick="return delwish(${num.index});"><img style="cursor: pointer;" src="/resources/img/shop_heart2.png" width="20px" height="20px" ></a>
@@ -957,7 +949,7 @@ var cnt2=1;
                       </div>
                       <div>
                        <p style="align:right;color:gray"><img src="/resources/img/shop_eye.png" width="25px" height="25px" style="color:black">
-                       &nbsp;${data.CNTCOUNT }</p>
+                       &nbsp;${data.CNTCOUNT } &nbsp; 후기 &nbsp;${data.AFTERCOUNT }</p>
                       </div>
                     </div>
                   </div>
@@ -1070,7 +1062,7 @@ var cnt2=1;
             <aside class="left_widgets p_filter_widgets">
                 <div class="l_w_title">
                   <!-- <h3><a href="/addUsedForm">중고등록</a></h3> -->
-                  <h3><a data-toggle="modal" data-target="#myModal" style="cursor: pointer;">중고등록</a></h3>
+                  <h3><a data-toggle="modal" data-target="#myModal" style="cursor: pointer;">중고 신청</a></h3>
                 </div>
                 <div class="widgets_inner">
                 </div>
@@ -1110,16 +1102,7 @@ var cnt2=1;
             <div class="product-img" style="height:280px">
             <a href="/productDetail.do?prodNum=${items.PRODNUM}"><img class="img-fluid w-100" src="/resources/img/${items.IMAGE }" alt=""/></a>
               <div class="p_icon">
-       <c:if test="${items.TYPE ==2 || items.TYPE==5 }">
-                        <a href="#">
-                          <i>old</i>
-                        </a> 
-                      </c:if>
-                      <c:if test="${items.TYPE ==1 }">
-                        <a href="#">
-                          <i >new</i>
-                        </a> 
-                      </c:if>
+       
               
                    <c:if test="${not empty items.USERNUM }">
                       <a id="changeNode2${num.index }" onclick="return delwish2(${num.index});"><img src="/resources/img/shop_heart2.png" width="20px" height="20px" ></a>

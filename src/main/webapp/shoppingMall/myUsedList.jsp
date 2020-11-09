@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
     
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -220,8 +221,7 @@ th, td {
               <p></p>
             </div>
             <div class="page_link">
-              <a href="index.html">Home</a>
-              <a href="cart.html">Cart</a>
+              
             </div>
           </div>
         </div>
@@ -294,7 +294,8 @@ th, td {
                       <p>${myUsedList.NAME }</p>  <!-- 상품이름 -->      
                   </td>
                   <td>
-                  <p>${myUsedList.PRICE }</p>      <!-- 요청금액 -->
+                  <%-- <p>${myUsedList.PRICE }</p>      <!-- 요청금액 --> --%>
+                   <p><fmt:formatNumber value="${myUsedList.PRICE }"  pattern="###,###,###"/>원</p>
                   </td>
                   
                     <td>
@@ -372,10 +373,10 @@ th, td {
                    <p>승인대기</p>
                    </c:if>
                     <c:if test="${myUsedList.TYPE ==4 }">
-                   <p style="font-color:red">승인거절</p>
+                   <p style="color:red">승인거절</p>
                    </c:if>
                    <c:if test="${myUsedList.TYPE ==5 }">
-                   <p>중고물품 등록 완료</p>
+                   <p style="color:blue">중고물품 등록 완료</p>
                    </c:if>
                    
                   

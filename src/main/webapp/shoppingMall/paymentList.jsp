@@ -34,7 +34,7 @@ th, td {
         	console.log(createDat);
         	
         	window.open("/payListDetail.do?createDat="+createDat+"&delivery="+delivery+"",
-                    "childForm", "width=1000, height=450, resizable = no, scrollbars = no");
+                    "childForm", "width=1200, height=450, resizable = no, scrollbars = no");
         	
         }
         
