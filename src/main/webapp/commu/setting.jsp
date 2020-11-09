@@ -123,7 +123,7 @@
                 
                 <input type="button" class="btn btn-primary" id="update" style="width: 75px" value="수정">
             </div>
-             <div class="p-3" style="text-align: right">
+             <div class="pl-3" style="text-align: right">
               <button type="button" id="deleteCommu" class="btn btn-link"  data-toggle="modal" data-target="#deleteAskModal" style="color: lightGray;">산악회 지우기</button><br>
              </div>
         </div>

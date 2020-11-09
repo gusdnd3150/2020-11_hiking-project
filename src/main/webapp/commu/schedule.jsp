@@ -4,7 +4,7 @@
 <html>
 <style>
 #SSpace {
-	width: 280px;
+	width: 40%;
 }
 </style>
  <div class="tab-pane fade" id="schedule" role="tabpanel" aria-labelledby="list-schedule-list">

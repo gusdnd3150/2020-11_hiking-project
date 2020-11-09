@@ -57,6 +57,7 @@
     })
 
     function deleteAfter(afterNum){
+    	 if(confirm("정말 삭제하시겠습니까?")==true){ 
         var data = {
             "afterNum": afterNum
         }
@@ -76,6 +77,9 @@
                 console.log("error")
             }
         })
+    	 }else {
+ 			return false;
+ 		}
     }
     function selectLikeCount(afterNum){
         var data = {
@@ -178,7 +182,7 @@
                         html += '<pre style="display: none">'+response[i].COMMENTNUM+'</pre>';
                         html += '<h5 class="m-0">'+response[i].NICKNAME+'</h5>';
                         if(response[i].DELETED==1){
-                            html += '<div class="text-muted">'+response[i].CONTENT +'</div>';
+                            html += '<div class="text-muted">--삭제된 댓글입니다--</div>';
                         }else{
                             html += '<div>'+response[i].CONTENT +'</div>';
                         }
@@ -209,7 +213,7 @@
                                 html += '<pre style="display: none">'+response[j].COMMENTNUM+'</pre>';
                                 html += '<h5 class="mb-0">'+response[j].NICKNAME+'</h5>'
                                 if(response[j].DELETED==1){
-                                    html += '<div class="text-muted">'+response[j].CONTENT +'</div>';
+                                    html += '<div class="text-muted">--삭제된 댓글입니다--</div>';
                                 }else{
                                     html += '<div>'+response[j].CONTENT +'</div>';
                                 }
@@ -341,6 +345,7 @@
 	    })
 	}
     function deleteComment(e){
+    	 if(confirm("정말 삭제하시겠습니까?")==true){ 
         var data = {
             commentNum : e.parentNode.childNodes[0].innerText
         }
@@ -359,6 +364,9 @@
                 alert("오류 발생! 다시 시도해주세요");
             }
         })
+    	 }else {
+ 			return false;
+ 		}
 
     }
 

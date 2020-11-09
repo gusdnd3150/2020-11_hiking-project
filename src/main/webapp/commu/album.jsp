@@ -9,7 +9,7 @@
 
 <style>
 #ASpace {
-	width: 320px;
+	width: 40%;
 }
 
 #OContent {
@@ -21,8 +21,7 @@
 }
 </style>
 
-<div class="tab-pane fade" id="album" role="tabpanel"
-	aria-labelledby="list-album-list">
+<div class="tab-pane fade" id="album" role="tabpanel" aria-labelledby="list-album-list">
 	<div class="row pt-3">
 		<h3>&nbsp&nbsp&nbsp산악회 사진</h3>
 		<div id="ASpace"></div>
@@ -81,10 +80,12 @@
 
 
 	<!-- 페이징 -->
-	<div class="col-sm-6 mt-5">
-		<div style="display: block; text-align: center;">
-			<div id="paging"></div>
-		</div>
+	<div class="col-sm-10 ml-6 mt-5" style="margin-top:70%">
+<!-- 			<div id="paging"></div> -->
+			<nav style="margin-left:35%" aria-label="Page navigation example">
+              <ul class="pagination"  id="paging">
+              </ul>
+            </nav>
 	</div>
 
 

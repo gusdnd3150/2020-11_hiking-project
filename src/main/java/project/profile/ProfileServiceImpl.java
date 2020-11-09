@@ -47,4 +47,9 @@ public class ProfileServiceImpl implements ProfileService{
 		return profileDAO.selectFollowerList(userId);
 	}
 	
+	@Override
+	public Map<String, Object> selectFollowCnt(String userId) {
+		return profileDAO.selectFollowCnt(userId);
+	}
+	
 }

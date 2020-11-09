@@ -24,4 +24,5 @@ public class GroupCommentVO {
     private int postNum;
     private String content2;
     private String nickname;
+    
 }

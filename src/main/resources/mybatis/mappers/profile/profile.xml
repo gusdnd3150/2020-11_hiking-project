@@ -50,12 +50,28 @@
 		and u.userNum  = ui.userNum
     </select>
     
-    <select id="selectFollowerList" resultType="map" parameterType="string">
+    <select id="selectFollowerList" resultType="map" parameterType="String">
         SELECT uf.followId, u.userNum, u.nickname, to_char(u.createdAt,'YYYY-MM-DD')AS createdAt, ui.content2, ui.profile
 		FROM userFollow uf, users u, userInfo ui
 		WHERE uf.userId = #{userId}
 		and u.id = uf.followId
 		and u.userNum  = ui.userNum
+    </select>
+    
+	<select id="selectFollowCnt" resultType="map" parameterType="String">
+	   select a.followingCnt, b.followerCnt
+		from 
+			(
+				select count(*) followingCnt
+				from userFollow uf
+				where uf.followid = #{userId}
+			)
+			a,
+			(
+				select count(*) followerCnt
+				from userFollow uf
+				where uf.userId = #{userId})
+			b
     </select>
     
 </mapper>
