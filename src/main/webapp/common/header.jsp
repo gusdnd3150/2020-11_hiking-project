@@ -58,7 +58,7 @@
                             <li class="nav-item">
                                     <a class="nav-link" href="/mypage/mypageHomeView.do">마이페이지
                                         <div class="noticeContainer">
-                                            <div class="notice">1</div>
+                                            <div class="notice"></div>
                                         </div>
                                     </a>
 

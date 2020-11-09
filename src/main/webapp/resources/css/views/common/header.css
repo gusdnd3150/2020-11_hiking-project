@@ -44,12 +44,12 @@ li {
 
 .noticeContainer {
     position: absolute;
-    display:inline-block;
+    display:none;
     background-color: red;
     color: white;
     font-weight: bold;
     font-size: 14px;
-    width: 20px;
+    width: 22px;
     text-align: center;
     border: 1px solid grey;
     border-radius: 10px;

@@ -96,8 +96,10 @@ public class GroupController{
     @ResponseBody
     public Map joinGroup(@RequestBody Map map){
         try{
+            System.out.println("join : "+map.toString());
             Map result = new HashMap();
             groupService.joinGroup(map);
+            groupService.insertAlarm(map);
             int groupNum = Integer.parseInt((String) map.get("groupNum"));
             String leaderId = groupService.selectGroupLeader(groupNum);
             result.put("leaderId",leaderId);

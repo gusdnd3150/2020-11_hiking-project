@@ -52,4 +52,5 @@ public interface GroupService {
 
     List selectGroupLikeById(String userId);
     String selectGroupLeader(int groupNum);
+    void insertAlarm(Map map);
 }

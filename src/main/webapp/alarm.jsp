@@ -12,6 +12,7 @@
 
     if(userId!=null && userId!=''){
         connect();
+        countAlarm();
     }
 
     function connect() {
@@ -31,16 +32,48 @@
     }
 
     function showAlarm(data){
-        console.log(1)
 
         var html = '';
 
-        html += '<a class="alarm" href="/group/"+'+data.groupNum+'>'
+        html += '<a class="alarm" href="/group/'+data.groupNum+'">'
         html += '<div class="alert alert-primary" role="alert">';
         html += '<button type="button" class="close" data-dismiss="alert">x</span></button>'
         html += data.requestId + '님이 '+ data.groupName + '모임에 참가를 원합니다!'
         html += '</div></a>';
 
         $('body').append(html)
+
+        $('.notice').text(data.count)
+    }
+
+    function countAlarm(){
+        var userId = "${LOGIN}"
+
+        if(userId==null||userId==''){
+            return;
+        }
+        var data = {
+            "userId" : userId
+        }
+
+        $.ajax({
+            type: "GET",
+            url: "/alarm/count",
+            data: data,
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8;",
+            success: function (response){
+                if(response==0){
+                    $('.notice').css('display','none');
+                }else{
+                    $('.noticeContainer').css('display','inline-block');
+                    $('.notice').text(response)
+                }
+            },
+            error: function(response){
+                console.log("error");
+            }
+        })
+
     }
 </script>

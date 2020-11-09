@@ -51,4 +51,13 @@ public class ChatDao {
     public int countPushAlarm(String userId){
         return sqlSession.selectOne("chat.countPushAlarm",userId);
     }
+    public List selectResponseAlarm(String userId){
+        return sqlSession.selectList("chat.selectResponseAlarm",userId);
+    }
+    public List selectRequestAlarm(String userId){
+        return sqlSession.selectList("chat.selectRequestAlarm",userId);
+    }
+    public void updateAlarm(String userId){
+        sqlSession.update("chat.updateAlarm",userId);
+    }
 }

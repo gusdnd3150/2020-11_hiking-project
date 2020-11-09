@@ -156,4 +156,8 @@ public class GroupServiceImpl implements GroupService{
     public String selectGroupLeader(int groupNum){
         return groupDAO.selectGroupLeader(groupNum);
     }
+    @Transactional
+    public void insertAlarm(Map map){
+        groupDAO.insertAlarm(map);
+    }
 }

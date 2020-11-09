@@ -569,4 +569,14 @@
         WHERE groupNum = #{groupNum}
           AND userType = 0
     </select>
+
+    <insert id="insertAlarm" parameterType="map">
+        insert into PUSHALARM
+        values (
+                #{groupNum},
+                #{userId},
+                'N',
+                sysdate
+               )
+    </insert>
 </mapper>

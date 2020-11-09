@@ -48,9 +48,14 @@
 					<li class="list-group-item text-center">
 						<h4>나의 산오름</h4>
 					</li>
-					<a class="list" href='#' style='color: black;'>
+					<a class="list" href='/alarm.do?userId=${LOGIN}' style='color: black;'>
 						<li class="list-group-item d-flex justify-content-between align-items-center">
-							<b>새로운 요청 리스트</b>
+							<div>
+								<b>새로운 알림</b>
+								<div class="noticeContainer">
+									<div class="notice"></div>
+								</div>
+							</div>
 							<span class="text-muted m-2">더보기></span>
 						</li>
 					</a>

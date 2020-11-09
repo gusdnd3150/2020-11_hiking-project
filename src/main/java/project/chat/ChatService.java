@@ -15,4 +15,8 @@ public interface ChatService {
     void deleteUserFromChatRoom(Map map);
 
     int countPushAlarm(String userId);
+    List selectResponseAlarm(String userId);
+    List selectRequestAlarm(String userId);
+
+    void updateAlarm(String userId);
 }

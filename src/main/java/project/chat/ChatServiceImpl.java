@@ -65,4 +65,15 @@ public class ChatServiceImpl implements ChatService {
     public int countPushAlarm(String userId){
         return chatDAO.countPushAlarm(userId);
     }
+
+    public List selectResponseAlarm(String userId){
+        return chatDAO.selectResponseAlarm(userId);
+    }
+    public List selectRequestAlarm(String userId){
+        return chatDAO.selectRequestAlarm(userId);
+    }
+    @Transactional
+    public void updateAlarm(String userId){
+        chatDAO.updateAlarm(userId);
+    }
 }

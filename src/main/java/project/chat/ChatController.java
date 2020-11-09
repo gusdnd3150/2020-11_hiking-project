@@ -2,9 +2,7 @@ package project.chat;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
@@ -55,5 +53,33 @@ public class ChatController {
 
         mav.setViewName("redirect:/main.do");
         return mav;
+    }
+
+    @GetMapping("/alarm.do")
+    public ModelAndView selectAlarm(@RequestParam("userId")String userId){
+        ModelAndView mav = new ModelAndView("/user/requestList");
+        List response = chatService.selectResponseAlarm(userId);
+        List request = chatService.selectRequestAlarm(userId);
+
+        mav.addObject("response",response);
+        mav.addObject("request",request);
+        return mav;
+    }
+    @GetMapping("/alarm/count")
+    @ResponseBody
+    public int countAlarm(@RequestParam("userId")String userId){
+        return chatService.countPushAlarm(userId);
+    }
+
+    @GetMapping("/alarm/update")
+    @ResponseBody
+    public int updateAlarm(@RequestParam("userId")String userId){
+        try{
+            chatService.updateAlarm(userId);
+            return 1;
+        } catch (Exception e){
+            e.printStackTrace();
+            return 0;
+        }
     }
 }
