@@ -6,7 +6,7 @@
 <!DOCTYPE html>
 <html>
 <div class="card" style="border: 2px solid green; width:70%">
-		<h4 style="margin: 15px 0px 0px 20px; color: darkGreen;">산모임 소개</h4>
+		<h4 style="margin: 15px 0px 0px 20px; color: darkGreen;">산악회 소개</h4>
 	<hr style="border: 1px solid green;">
 	<div class="card-body" style="width: 95%;">
 				<h4 style="margin: 0px 0px 20px 15px;">${m1.NAME}</h4>

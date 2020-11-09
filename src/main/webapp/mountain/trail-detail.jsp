@@ -74,7 +74,7 @@
     var mapContainer = document.getElementById('map'),
         mapOptions = {
             center: new kakao.maps.LatLng(p.y, p.x),
-            level: 5,
+            level: 3,
             draggable: true
         };
 
@@ -147,7 +147,6 @@
                                 image: markerImage,
                                 zIndex: positions[i].zIndex,
                             });
-                            console.log("pushed")
                             overlays.push(marker);
 
                         }

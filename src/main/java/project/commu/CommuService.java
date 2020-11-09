@@ -23,7 +23,7 @@ public interface CommuService {
 
 	void updateGroup(Map map);
 
-	void insertAlbum(Map m);
+	void insertAlbum2(Map m);
 
 	void insertPost(Map m);
 

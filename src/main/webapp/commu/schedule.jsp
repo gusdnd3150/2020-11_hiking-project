@@ -9,14 +9,12 @@
 </style>
  <div class="tab-pane fade" id="schedule" role="tabpanel" aria-labelledby="list-schedule-list">
 <div class="row pt-3">
-		<h3>&nbsp&nbsp&nbsp오름 일정</h3>
+		<h3>&nbsp&nbsp&nbsp산악회 일정</h3>
 		<div id="SSpace" ></div>
 		<button type="file" style="float: right;" class="btn btn-outline-success" data-toggle="modal" data-target="#createModal">등산일정 계획하기</button>
 	</div>
 
 <div class="card-list" ></div>
-
-
 
 <div class="modal fade" id="createModal" role="dialog">
     <div class="modal-dialog" style="max-width: 100%; width: auto; display: table">

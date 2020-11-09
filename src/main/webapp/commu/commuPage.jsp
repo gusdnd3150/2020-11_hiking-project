@@ -12,6 +12,9 @@
 <script type="text/javascript" src="/resources/js/jquery.js"></script>
 <jsp:include page="/common/header.jsp" flush="false" />
 <style>
+body{ -ms-overflow-style: none; } 
+::-webkit-scrollbar { display: none; }
+
 div#posts img {
 	width: auto !important;
 	height: auto !important;
@@ -38,6 +41,7 @@ div#posts img {
 }
 
 #leftSide {
+position: fixed;
 
 } 
 
@@ -155,7 +159,7 @@ function selectCommentByPostNum(postNum){
   <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
   <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
 </svg>
-		<h3 style="margin: 1% 0% 0% 0%;">&nbsp&nbsp&nbsp&nbsp산모임 피드 쓰기</h3>
+		<h3 style="margin: 1% 0% 0% 0%;">&nbsp&nbsp&nbsp&nbsp산악회 피드 쓰기</h3>
 	</div>
 </button>
 
@@ -165,7 +169,7 @@ function selectCommentByPostNum(postNum){
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLabel">산모임 피드 쓰기</h5>
+				<h5 class="modal-title" id="exampleModalLabel">산악회 피드 쓰기</h5>
 				<button type="button" class="close" data-dismiss="modal"
 					aria-label="Close">
 					<span aria-hidden="true">&times;</span>

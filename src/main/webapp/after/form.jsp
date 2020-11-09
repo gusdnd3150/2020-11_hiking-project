@@ -5,7 +5,14 @@
 <link rel="stylesheet" type="text/css" href="../resources/css/views/group/after.css">
 <body class="container pt-5">
 <div class="pt-5">
-    <h1>후기 작성</h1>
+    <div>
+        <h2>[${group.MTNM}]<span class="text-muted">${group.NAME}의 후기</span></h2>
+        <div class="p-3">
+            <h5>작성자</h5>
+            <img src="/resources/img/${group.CONTENT2}" class="rounded-circle" style="width: 50px;height: 50px">
+            <span class="pl-1">${group.NICKNAME}</span>
+        </div>
+    </div>
     <form id="afterForm" class="form-group" method="POST" action="/after/insert.do" enctype="multipart/form-data">
         <div class="p-3">
             <label class="label control-label" for="title"><h5>후기 제목</h5></label>

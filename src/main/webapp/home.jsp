@@ -4,34 +4,25 @@
 <%@ page session="false" %>
 <jsp:include page="/common/header.jsp" />
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="./resources/css/views/home.css">
-<body class="container pt-3" style="width: 100%">
+<link rel="stylesheet" type="text/css" href="/resources/css/views/home.css">
+<body class="container pt-4">
 <!-- cover -->
-<div class="cover-container row">
-	<div class="left-cover col-6 align-self-center">
-		<div class="inner-cover" style="margin-left: 20%">
-			<h1>등산 좋아하세요?</h1>
-			등산모임 검색하기
-<%--			<button class="btn btn-outline-info" onclick="moveToMain();">더보기</button>--%>
-			<div class="form-inline">
-				<input id="keyword" type="text" class="form-control col-6">
-				<a href="#" class="pl-2" onclick="mainSearch()">
-					<img src="../resources/img/search.png" width="25" height="25" onclick="">
-				</a>
-			</div>
-			<ul id="keywordRank" class="p-1"></ul>
+<div class="inner-cover justify-content-center align-self-center" style="display:flex;height: 400px">
+	<div class="justify-content-center align-self-center text-center" style="display: inline">
+		<p style="font-size: 3em">등산 좋아하세요?</p>
+		<div class="form-inline">
+			<input id="keyword" type="text" class="form-control" style="width:500px;height: 50px" placeholder="등산모임 검색하기">
+			<a href="#" class="pl-2" onclick="mainSearch()">
+				<img src="../resources/img/search.png" width="25" height="25" onclick="">
+			</a>
+		</div>
+		<div class="text-left">
+			<div style="display: inline-block">인기검색어</div>
+			<div id="keywordRank" class="text-left pl-3" style="display: inline-block"></div>
 		</div>
 	</div>
-	<div class="right-cover text-right col-sm-12 col-md-6 pt-5" style="object-fit: cover">
-		<img id="cover_image" src="./resources/img/cover.png" style="height: 100%;overflow-y: hidden" >
-	</div>
-	<h2 class="container pb-5 align-self-end text-center" onclick="moveToMain()" style="position: absolute;">
-		<i class="fas fa-angle-down"></i>
-	</h2>
 </div>
 <hr />
-<%--<div class="container">--%>
-<!-- slider -->
 <header>
 	<div id="carouselExampleIndicators" class="carousel slide container" data-ride="carousel">
 		<ol class="carousel-indicators">

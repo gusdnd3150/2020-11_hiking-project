@@ -33,6 +33,15 @@ public class AfterController {
     @Resource(name = "groupService")
     private GroupService groupService;
 
+
+    @GetMapping("/after/form.do")
+    public ModelAndView form(@RequestParam("groupNum")int groupNum){
+        ModelAndView mav = new ModelAndView("form");
+        Map map = groupService.selectGroupDetail(groupNum);
+
+        mav.addObject("group",map);
+        return mav;
+    }
     @GetMapping("/after/main.do")
     public ModelAndView main(HttpServletRequest request){
         ModelAndView mav = new ModelAndView("/after/main");

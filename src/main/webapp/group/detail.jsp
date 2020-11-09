@@ -107,10 +107,7 @@
     }
 
     function writeAfter(){
-
-        localStorage.setItem("groupNum", ${group.GROUPNUM})
-        localStorage.setItem("mtNm","${group.MTNM}")
-        location.href="../after/form.jsp"
+        location.href="../after/form.do?groupNum=${group.GROUPNUM}";
     }
 
     function deleteComment(e){

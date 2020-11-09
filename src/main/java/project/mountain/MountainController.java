@@ -293,6 +293,11 @@ public class MountainController {
         return mountainService.selectTrailSpot(map);
     }
 
+    @PostMapping("/trail/search")
+    @ResponseBody
+    public List selectTrail(@RequestBody Map map){
+        return mountainService.selectTrailByKeyword(map);
+    }
     @GetMapping("/trail/{MNTN_CODE}.do")
     public ModelAndView selectTrailInfo(@PathVariable("MNTN_CODE")int mntn_code,
                                         @RequestParam(value = "FID",required = false)String fid,

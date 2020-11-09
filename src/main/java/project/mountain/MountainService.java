@@ -36,4 +36,5 @@ public interface MountainService {
 
     int countAllTrail();
     List selectTrailLikeById(String userId);
+    List selectTrailByKeyword(Map map);
 }

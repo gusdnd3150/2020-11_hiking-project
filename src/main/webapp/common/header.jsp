@@ -28,15 +28,15 @@
         <div class="collapse navbar-collapse" id="navbarResponsive" style="font-size: 20px">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="/group/main.do">산오르기<span class="sr-only"></span></a>
+                    <a class="nav-link" href="/group/main.do">등산가기<span class="sr-only"></span></a>
                     <ul id="sub-menu">
-                        <li style="font-size: 16px"><a class="nav-link" href="/group/main.do">등산모임<span class="sr-only"></span></a></li>
-                        <li style="font-size: 16px"><a class="nav-link" href="/mountain/main.do">등산로<span class="sr-only"></span></a></li>
-                        <li style="font-size: 16px"><a class="nav-link" href="/after/main.do">후기<span class="sr-only"></span></a></li>
+                        <li style="font-size: 16px"><a class="nav-link" href="/group/main.do">등산 모임<span class="sr-only"></span></a></li>
+                        <li style="font-size: 16px"><a class="nav-link" href="/mountain/main.do">등산로 정보<span class="sr-only"></span></a></li>
+                        <li style="font-size: 16px"><a class="nav-link" href="/after/main.do">등산 이야기<span class="sr-only"></span></a></li>
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/commu/commuMainView.do">산모임</a>
+                    <a class="nav-link" href="/commu/commuMainView.do">산악회</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/shopMainCate.do?listType=100">오름마켓</a>

@@ -71,4 +71,7 @@ public class MountainDAO {
     public List selectTrailLikeById(String userId){
         return sqlSession.selectList("mountain.selectTrailLikeById",userId);
     }
+    public List selectTrailByKeyword(Map map){
+        return sqlSession.selectList("mountain.selectTrailByKeyword",map);
+    }
 }
