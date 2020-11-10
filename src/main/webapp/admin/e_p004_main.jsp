@@ -452,6 +452,7 @@ function selectDay(str){
 													<option value="100"  ${order.deliverystatus == 100 ? 'selected="selected"' : ''}>배송대기</option>
 													<option value="200"  ${order.deliverystatus == 200 ? 'selected="selected"' : ''}>배송준비</option>
 													<option value="300"  ${order.deliverystatus == 300 ? 'selected="selected"' : ''}>배송완료</option>
+													<option value="400"  ${order.deliverystatus == 400 ? 'selected="selected"' : ''}>배송취소</option>
 												</select>
 							                  </td>
 							                </tr>

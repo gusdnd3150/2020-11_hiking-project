@@ -546,7 +546,7 @@ function updateClass1(value){
               <!-- tools box -->
               <div class="pull-right box-tools">
                 <button type="button" class="btn btn-info btn-sm" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
-                  <i class="fa fa-minus"></i></button>
+                  <i class="fa fa-plus"></i></button>
               </div>
               <!-- /. tools -->
             </div>
@@ -597,6 +597,16 @@ function updateClass1(value){
 								</tr>
 								</thead>
 								 <tbody>
+								  <c:if test="${list ==null}">
+								<script>
+								updateClass("prodBox");
+								</script>
+								</c:if>
+								<c:if test="${list !=null}">
+								<script>
+								updateClass1("prodBox");
+								</script>
+								</c:if>
 					                <c:forEach var="prod" items="${list}" >   
 					                <tr>
 					                  <td>${prod.prodNum}</td>

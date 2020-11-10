@@ -139,6 +139,26 @@ $(document).ready(function() {
 
 // 데이터테블 함수 끝----------------------------------------------------------------
 
+
+function user_status(value,_userNum){
+	 $.ajax({
+			type : 'get',
+			url : 'upDateUser.do',
+			data : {
+				userNum : _userNum,
+				status : value
+			},
+			success : function(data) {
+				if ("ok"== (data)) {
+					console.log("수정완료");
+				} else {
+					alert("다시확인해주세요");
+				}
+				;
+			}
+		}); 
+	}
+
 </script>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
