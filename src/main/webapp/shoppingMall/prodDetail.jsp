@@ -35,7 +35,6 @@
     
 
 <style>
-
 img{
 cursor: pointer;
 }
@@ -84,7 +83,6 @@ cursor: pointer;
 	           });
 		   });
 	   
-
 	   
           
           $("button[name=upNum]").click(function() {           //수량업 클릭 시 
@@ -206,7 +204,6 @@ cursor: pointer;
 	              return;
 	           }
 	   	 }
-
 	        $.ajax({
 	         type:"post",
 	         async:true,
@@ -271,7 +268,6 @@ cursor: pointer;
 	          }); 
 	          
        }
-
       
       
       
@@ -280,11 +276,11 @@ cursor: pointer;
    	   var prodNum =$("input[name=afterProdNum2]").eq(index).val();
    	   var afterType =$("input[name=afterType2]").eq(index).val();
    	   var content =$("input[name=afterContent2]").eq(index).val();
-   	    
-   	   console.log("에프터번호"+afterType);
-   	   console.log("인덱스"+index);
-   	   console.log(content);
-   	  
+   	
+   	   
+   	   var prodNumtag =$("input[name=afterProdNum2]").eq(index);
+   	  var index2 =prodNumtag.parents(".review_item").index();
+   	   
    	     $.ajax({
                 type:"post",
                 async:true,
@@ -303,7 +299,8 @@ cursor: pointer;
           	            error:function(data,textStatus){
           	            },
           	            complete:function(){
-          	            	location.reload(); 
+          	            	//location.reload(); 
+          	            	PutComment(index2);
           	            }
           	          }); 
                   }else{ 
@@ -327,7 +324,12 @@ cursor: pointer;
 	   console.log("에프터번호"+afterType);
 	   console.log("인덱스"+index);
 	   console.log(content);
-	  
+	   
+	   var prodNumtag =$("input[name=afterContent]").eq(index);
+	   var index2 =prodNumtag.parents(".review_item").index();
+  	   var putter =$("#CommentPutter"+index2+"");
+	    
+	   
 	     $.ajax({
              type:"post",
              async:true,
@@ -346,7 +348,10 @@ cursor: pointer;
        	            error:function(data,textStatus){
        	            },
        	            complete:function(){
-       	            	location.reload(); 
+       	            	putter.empty();
+           	         	PutComment(index2);
+      	            	putter.show();
+       	            	//location.reload(); 
        	            }
        	          }); 
             	   
@@ -386,6 +391,12 @@ cursor: pointer;
 	   console.log("인덱스"+index);
 	   console.log(afterNum);
 	   
+	   $(".emptyPutter").empty();
+	   
+	   $(".showbutton").show();
+	   $(".hidefold").hide();
+	   $(".hidespread").hide();
+	   
 		  $.ajax({
 	            type:"get",
 	            async:true,
@@ -401,7 +412,7 @@ cursor: pointer;
                         if(data[i].LV==2){
 	            	    put = "<div style='padding-left:60px'>";
                         }else if(data[i].LV==3){
-                        	put = "<div style='padding-left:100px'>";	
+                        	put = "<div  style='padding-left:100px'>";	
                         }else{
                           put = "<div>";
                         }
@@ -1075,15 +1086,15 @@ cursor: pointer;
                      <ul style="padding-right: 23px;">
                      
                          <c:if test="${afterList.CNT !=0 }">
-                         <li id="showcommentList${num.index }" style="float:right"><p align="right"><button style="line-height: 27px;padding: 0px 7px;"
+                         <li class="showbutton" id="showcommentList${num.index }" style="float:right"><p align="right"><button style="line-height: 27px;padding: 0px 7px;"
                      class="genric-btn default-border" onclick="PutComment(${num.index})">댓글${afterList.CNT }개보기</button></p>
                      </li>
                      
                      
-                       <li id="foldList${num.index }" style="float:right;display:none"><p align="right"><button style="line-height: 27px;padding: 0px 7px;"
+                       <li id="foldList${num.index }" style="float:right;display:none" class="hidefold"><p align="right"><button style="line-height: 27px;padding: 0px 7px;"
                      class="genric-btn default-border" onclick="foldComment(${num.index})">댓글 접기</button></p>
                      </li>
-                      <li id="spreadList${num.index }" style="float:right;display:none"><p align="right"><button style="line-height: 27px;padding: 0px 7px;"
+                      <li id="spreadList${num.index }" style="float:right;display:none" class="hidespread"><p align="right"><button style="line-height: 27px;padding: 0px 7px;"
                      class="genric-btn default-border" onclick="spreadComment(${num.index})">댓글 펴기</button></p>
                      </li>
                          </c:if>
@@ -1115,16 +1126,17 @@ cursor: pointer;
         <input type="hidden" name="afterType" value="${afterList.AFTERNUM }">
        </div>
                  
-                   <div id="CommentPutter${num.index }" style="display:none">
+                   <div class="emptyPutter" id="CommentPutter${num.index }" style="display:none">
+                   
                    </div>
-                   </div>
-              
+              </div>
                                </c:forEach>
                             </c:when>
                          </c:choose>       
                   
                  <!-- 경계선 -->
                 </div>
+                
                 
                 
                     <!-- 페이징 -->
