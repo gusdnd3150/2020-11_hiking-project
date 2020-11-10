@@ -348,10 +348,7 @@ cursor: pointer;
        	            error:function(data,textStatus){
        	            },
        	            complete:function(){
-       	            	putter.empty();
-           	         	PutComment(index2);
-      	            	putter.show();
-       	            	//location.reload(); 
+       	            	location.reload(); 
        	            }
        	          }); 
             	   
