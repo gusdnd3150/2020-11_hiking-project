@@ -535,7 +535,7 @@
                         A.prodNum,
                         A.content,
                       A.aftertype,      
-                      TO_CHAR(A.createDat,'YYYY-MM-DD HH:MM'),
+                      TO_CHAR(A.createDat,'YYYY-MM-DD HH:Mi')as createdat,
                         A.evalue,
                         A.photo,
                         A.photoName
@@ -2046,7 +2046,7 @@
 					  			      #{afterNum},
 					  			      #{prodNum},
 					  			      #{content},
-					  			      sysdate
+					  			      CURRENT_TIMESTAMP
 					  			      )
 		]]>
 	</insert> 
@@ -2071,7 +2071,7 @@
              <!-- 댓글 가져오기 -->   
          <select id="selectComment" resultType="map" parameterType="java.util.Map">
         <![CDATA[
-          select level as lv,af.usernum,af.afternum,af.prodnum,af.content,af.aftertype,TO_CHAR(af.createdat,'yyyy-mm-dd hh:mm')as createdat,
+          select level as lv,af.usernum,af.afternum,af.prodnum,af.content,af.aftertype,TO_CHAR(af.createdat,'yyyy-mm-dd hh12:mi')as createdat,
            u.content2 as image, us.id
          from productafter af ,userinfo u,users us
          where af.usernum=u.usernum
@@ -2079,8 +2079,7 @@
          and af.prodnum= #{prodNum}
         start with af.AFTERTYPE = #{afterNum}
         connect by prior af.afternum = af.AFTERTYPE
-        ORDER SIBLINGS BY af.afternum desc
-        
+        ORDER SIBLINGS BY af.afternum asc
         ]]>
         </select>
         

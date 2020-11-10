@@ -203,7 +203,8 @@ th, td {
                      <p>${money }</p>
                   </td>
                   <td>
-                   <p>${payList.USED }</p>      <!-- 포인트사용 -->
+                   <fmt:formatNumber var="money2" value="${payList.USED  }"  pattern="###,###,###"/>
+                     <p>${money2 }</p><!-- 포인트사용 -->
                   </td>
                     <td>
                     <c:if test="${payList.DELIVERYSTATUS ==300 }">
@@ -248,7 +249,8 @@ th, td {
                      <p>${money }</p>
                   </td>
                   <td>
-                   <p>${payList.USED }</p>      <!-- 포인트사용 -->
+                  <fmt:formatNumber var="money2" value="${payList.USED  }"  pattern="###,###,###"/>
+                     <p>${money2 }</p><!-- 포인트사용 -->
                   </td>
                   
                    <td>
@@ -297,7 +299,8 @@ th, td {
                      <p>${money }</p>
                   </td>
                   <td>
-                   <p>${payList.USED }</p>      <!-- 포인트사용 -->
+                   <fmt:formatNumber var="money2" value="${payList.USED  }"  pattern="###,###,###"/>
+                     <p>${money2 }</p><!-- 포인트사용 -->
                   </td>
                   
                    <td>
