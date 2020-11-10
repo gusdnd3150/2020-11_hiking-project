@@ -143,7 +143,7 @@
             WHERE pay.type !='cancel'
             AND pay.type != 'canceled'           
 		    AND o.orderstatus = 2   
-        WHERE pay.createdat BETWEEN TO_DATE(#{startDate},'YYYY-MM-DD') AND TO_DATE(#{endDate},'YYYY-MM-DD') 
+        AND pay.createdat BETWEEN TO_DATE(#{startDate},'YYYY-MM-DD') AND TO_DATE(#{endDate},'YYYY-MM-DD') 
         group by to_char(pay.createdat,'YYYY-MM-DD')
         ORDER BY ordereDatString
 	]]>
