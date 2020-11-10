@@ -92,8 +92,8 @@ var table = null;
 			buttons : [ {
 				extend : 'excel',
 				text : 'excel',
-				filename : '결제정보',
-				title : '오름마켓 결제정보'
+				filename : '취소매출정보',
+				title : '취소 매출 정보'
 			}, {
 				extend : 'copy',
 				text : 'copy',
@@ -191,12 +191,10 @@ var table = null;
 	
 	//박스 닫기
 	function updateClass(value){
-		console.log("박스 닫기 함수 실행")
 		$('#'+value).attr('class','box box-info collapsed-box');
 	}
 	//박스 열기
 	function updateClass1(value){
-		console.log("박스 닫기 함수 실행")
 		$('#'+value).attr('class','box box-info');
 	}
 </script>
@@ -231,121 +229,9 @@ var table = null;
 			<section class="content">
 				<div class="row">
 					<div class="col-md-12">
-						<div class="box box-info " id="cancelBox">
-							<div class="box-header">
-								<h3 class="box-title">
-									취소 매출 조회 <small></small>
-								</h3>
-
-								<div class="pull-right box-tools">
-									<button type="button" class="btn btn-info btn-sm"
-										data-widget="collapse" data-toggle="tooltip" title=""
-										data-original-title="Collapse">
-										<i class="fa fa-minus"></i>
-									</button>
-
-								</div>
-
-							</div>
-
-							<div class="box-body pad" style="">
-								<div>
-									<div class="m1 main_common">
-										<form action="cancelhPayList.do" mathod="get">
-											&nbsp; <strong>일자별 조회 : </strong><input type='date'
-												name='startDate' id='startDate' /> ~ <input type='date'
-												name='endDate' id='endDate' />
-											<button type="submit" class="btn btn-danger btn-xs"
-												id="searchDate">조회</button>
-											&nbsp;&nbsp;
-										</form>
-									</div>
-									&nbsp;&nbsp;
-									<div class="m2 main_common">
-										<strong style="color: #111111"> <input type="radio"
-											name="dayType" value="all"
-											onclick="cancelselectDay(this.value)"> 전체조회
-											&nbsp;&nbsp; <input type="radio" name="dayType" value="toDay"
-											onclick="cancelselectDay(this.value)"> 당일
-											&nbsp;&nbsp; <input type="radio" name="dayType" value="1week"
-											onclick="cancelselectDay(this.value)"> 1주일
-											&nbsp;&nbsp; <input type="radio" name="dayType" value="2week"
-											onclick="cancelselectDay(this.value)"> 2주일
-											&nbsp;&nbsp; <input type="radio" name="dayType"
-											value="1month" onclick="cancelselectDay(this.value)">
-											1달 &nbsp;&nbsp;
-										</strong>
-									</div>
-								</div>
-								<br>
-								<div class="box">
-
-									<div class="box-body">
-										
-										<div id="example1_wrapper"
-											class="dataTables_wrapper form-inline dt-bootstrap">
-											<div class="row">
-												<div>
-													<table id="foo-table2" class="display" style="width: 100%">
-														<thead>
-															<tr>
-																<th>취소일자</th>
-																<th>주문번호</th>
-																<th>회원번호</th>
-																<th>회원이름</th>
-																<th>취소사유</th>
-																<th>취소금액</th>
-															</tr>
-														</thead>
-														<tbody>
-															<c:if test="${cancelPayList ==null}">
-															<script>
-															updateClass("cancelBox");
-															</script>
-															</c:if>
-															<c:if test="${cancelPayList !=null}">
-															<script>
-															updateClass1("cancelBox");
-															</script>
-															</c:if>
-															<c:forEach var="cancel" items="${cancelPayList}">
-															
-																<tr>
-																	<td>${cancel.cancelcreatedate}</td>
-																	<td>${cancel.orderNum}</td>
-																	<td>${cancel.userNum}</td>
-																	<td>${cancel.name}</td>
-																	<td>${cancel.reason}</td>
-																	<td>${cancel.totalCancelPay}</td>
-																</tr>
-															</c:forEach>
-														</tbody>
-														<tfoot>
-															<tr>
-																<th colspan="4"style="text-align: right; white-space: nowrap;">총 취소금액 :</th>
-																<th colspan="2"style="text-align: right; white-space: nowrap;">${sumCancelPay}</th>
-																
-															</tr>
-														</tfoot>
-
-													</table>
-												</div>
-											</div>
-										</div>
-
-									</div>
-
-								</div>
-
-							</div>
-						</div>
-
-					</div>
-					<!--  /.box-body -->
-				</div>
-
-				<!-- 2페이지 시작 -->
-				<div class="box box-info" id="payBox">
+					
+					<!-- 000000000000000000000 시작 -->
+					<div class="box box-info" id="payBox">
 					<div class="box-header">
 						<h3 class="box-title">
 							승인 매출 조회 <small></small>
@@ -452,13 +338,128 @@ var table = null;
 						</div>
 					</div>
 				</div>
+						
+						<!-- 00000000000000끝 -->
+
+					</div>
+					<!--  /.box-body -->
+				</div>
+
+				<!-- 2페이지 시작 -->
+				<div class="box box-info " id="cancelBox">
+							<div class="box-header">
+								<h3 class="box-title">
+									취소 매출 조회 <small></small>
+								</h3>
+
+								<div class="pull-right box-tools">
+									<button type="button" class="btn btn-info btn-sm"
+										data-widget="collapse" data-toggle="tooltip" title=""
+										data-original-title="Collapse">
+										<i class="fa fa-plus"></i>
+									</button>
+
+								</div>
+
+							</div>
+
+							<div class="box-body pad" style="">
+								<div>
+									<div class="m1 main_common">
+										<form action="cancelhPayList.do" mathod="get">
+											&nbsp; <strong>일자별 조회 : </strong><input type='date'
+												name='startDate' id='startDate' /> ~ <input type='date'
+												name='endDate' id='endDate' />
+											<button type="submit" class="btn btn-danger btn-xs"
+												id="searchDate">조회</button>
+											&nbsp;&nbsp;
+										</form>
+									</div>
+									&nbsp;&nbsp;
+									<div class="m2 main_common">
+										<strong style="color: #111111"> <input type="radio"
+											name="dayType" value="all"
+											onclick="cancelselectDay(this.value)"> 전체조회
+											&nbsp;&nbsp; <input type="radio" name="dayType" value="toDay"
+											onclick="cancelselectDay(this.value)"> 당일
+											&nbsp;&nbsp; <input type="radio" name="dayType" value="1week"
+											onclick="cancelselectDay(this.value)"> 1주일
+											&nbsp;&nbsp; <input type="radio" name="dayType" value="2week"
+											onclick="cancelselectDay(this.value)"> 2주일
+											&nbsp;&nbsp; <input type="radio" name="dayType"
+											value="1month" onclick="cancelselectDay(this.value)">
+											1달 &nbsp;&nbsp;
+										</strong>
+									</div>
+								</div>
+								<br>
+								<div class="box">
+
+									<div class="box-body">
+										
+										<div id="example1_wrapper"
+											class="dataTables_wrapper form-inline dt-bootstrap">
+											<div class="row">
+												<div>
+													<table id="foo-table2" class="display" style="width: 100%">
+														<thead>
+															<tr>
+																<th>취소일자</th>
+																<th>주문번호</th>
+																<th>회원번호</th>
+																<th>회원이름</th>
+																<th>취소사유</th>
+																<th>취소금액</th>
+															</tr>
+														</thead>
+														<tbody>
+															<c:if test="${cancelPayList ==null}">
+															<script>
+															updateClass("cancelBox");
+															</script>
+															</c:if>
+															<c:if test="${cancelPayList !=null}">
+															<script>
+															updateClass1("cancelBox");
+															</script>
+															</c:if>
+															<c:forEach var="cancel" items="${cancelPayList}">
+															
+																<tr>
+																	<td>${cancel.cancelcreatedate}</td>
+																	<td>${cancel.orderNum}</td>
+																	<td>${cancel.userNum}</td>
+																	<td>${cancel.name}</td>
+																	<td>${cancel.reason}</td>
+																	<td>${cancel.totalCancelPay}</td>
+																</tr>
+															</c:forEach>
+														</tbody>
+														<tfoot>
+															<tr>
+																<th colspan="4"style="text-align: right; white-space: nowrap;">총 취소금액 :</th>
+																<th colspan="2"style="text-align: right; white-space: nowrap;">${sumCancelPay}</th>
+																
+															</tr>
+														</tfoot>
+
+													</table>
+												</div>
+											</div>
+										</div>
+
+									</div>
+
+								</div>
+
+							</div>
+						</div>
+				
+				
+				<!--     00000000002페이지 끝 -->
 		</div>
 	</div>
 	<!-- /.box -->
-
-
-
-
 
 	</div>
 	<!-- /.col-->

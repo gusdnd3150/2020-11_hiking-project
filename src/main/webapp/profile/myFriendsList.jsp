@@ -29,12 +29,12 @@ padding: 15px;
 <ul class="nav nav-tabs row" id="myInfoTab" role="tablist">
 	<li class="nav-item" role="presentation">
 		<a class="nav-link active" id="following-tab" data-toggle="tab" href="#following" role="tab" aria-controls="following" aria-selected="true">
-			<b>나를 팔로잉&nbsp&nbsp&nbsp&nbsp(숫자)</b>
+			<b>나를 팔로잉&nbsp&nbsp&nbsp&nbsp${followCnt.FOLLOWINGCNT}</b>
 		</a>
 	</li>
 	<li class="nav-item" role="presentation">
 		<a class="nav-link" id="follower-tab" data-toggle="tab" href="#follower" role="tab" aria-controls="follower" aria-selected="false">
-			<b>내가 팔로우&nbsp&nbsp&nbsp&nbsp(숫자)</b>
+			<b>내가 팔로우&nbsp&nbsp&nbsp&nbsp${followCnt.FOLLOWERCNT}</b>
 		</a>
 	</li>
 </ul>

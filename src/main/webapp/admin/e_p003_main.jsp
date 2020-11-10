@@ -46,12 +46,12 @@ $(document).ready(function() {
 		buttons : [ {
 			extend : 'excel',
 			text : 'excel',
-			filename : '회원정보',
-			title : '산오름 회원정보'
+			filename : '게시글 정보',
+			title : '게시글 정보'
 		}, {
 			extend : 'copy',
 			text : 'copy',
-			title : '회원정보입니다.'
+			title : '게시글 정보'
 		}, 'pdf', 'print' ]
 	});
 	
@@ -118,7 +118,6 @@ $(document).ready(function() {
 		var result = "<c:out value="${result}" />";
 		if (result == 1) {
 			alert(" 등록완료");
-			//window.location.href = 'http://localhost:8090/admin/e_p003_main.jsp';
 		} else {
 
 		}
@@ -131,6 +130,7 @@ $(document).ready(function() {
 			close(viewDetaList);
 		}
 	});
+	
 	var viewDetaList;
 	function viewCsboard (csPostNum){
 		viewDetaList=window.open("viewDetaList.do?csPostNum="+csPostNum, '상품상세정보','width=700px,height=800px,scrollbars=yes');
@@ -190,42 +190,8 @@ $(document).ready(function() {
  <section class="content">
       <div class="row">
         <div class="col-md-12">
-          <div class="box box-info collapsed-box">
-            <div class="box-header">
-              <h3 class="box-title">게시글 등록
-                <small></small>
-              </h3>
-              <!-- tools box -->
-              <div class="pull-right box-tools">
-                <button type="button" class="btn btn-info btn-sm" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
-                  <i class="fa fa-minus"></i></button>
-              </div>
-              <!-- /. tools -->
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body pad" style="">
-                      <form name="form" id="form" role="form" method="post" action="addCSboard.do">
-                  <div style="margin-bottom:10px;">
-                  <input  class="form-control" type="text" class="form-control" name="title" id="title" placeholder="제목을 입력해 주세요">
-               </div>
-               <div style="margin-bottom:10px;">
-                  <textarea class="form-control"  name="content" id="content" ></textarea>
-               </div>
-        			<center> 
-        				<div>
-                     <input type="radio" class="minimal" name="csPostType" value="100" checked>공지사항 &nbsp;&nbsp;
-                     <input type="radio"  class="minimal" name="csPostType" value="400">이벤트&nbsp;&nbsp;
-                       </div>
-                	</center>      
-                	 <center>
-                       <input class="btn btn-info" type="button"  value="등록" onclick="add()"/>
-                     </center>                      
-               </form>
-            </div>
-          </div>
-          <!-- /.box -->
-
-          <div class="box box-info">
+        <!-- 1페이지 -->
+            <div class="box box-info">
             <div class="box-header">
               <h3 class="box-title">게시글 조회
                 <small></small>
@@ -308,6 +274,44 @@ $(document).ready(function() {
           	  </div>              
             </div>
           </div>
+         
+          <!--1페이지 끝  -->
+          <!-- /.box -->
+		<!-- 2페이지 시작 -->
+       <div class="box box-info collapsed-box">
+            <div class="box-header">
+              <h3 class="box-title">게시글 등록
+                <small></small>
+              </h3>
+              <!-- tools box -->
+              <div class="pull-right box-tools">
+                <button type="button" class="btn btn-info btn-sm" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
+                  <i class="fa fa-plus"></i></button>
+              </div>
+              <!-- /. tools -->
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body pad" style="">
+                      <form name="form" id="form" role="form" method="post" action="addCSboard.do">
+                  <div style="margin-bottom:10px;">
+                  <input  class="form-control" type="text" class="form-control" name="title" id="title" placeholder="제목을 입력해 주세요">
+               </div>
+               <div style="margin-bottom:10px;">
+                  <textarea class="form-control"  name="content" id="content" ></textarea>
+               </div>
+        			<center> 
+        				<div>
+                     <input type="radio" class="minimal" name="csPostType" value="100" checked>공지사항 &nbsp;&nbsp;
+                     <input type="radio"  class="minimal" name="csPostType" value="400">이벤트&nbsp;&nbsp;
+                       </div>
+                	</center>      
+                	 <center>
+                       <input class="btn btn-info" type="button"  value="등록" onclick="add()"/>
+                     </center>                      
+               </form>
+            </div>
+          </div>
+          <!-- 2페이지 끝 -->
           
           
         </div>

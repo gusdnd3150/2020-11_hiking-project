@@ -360,15 +360,13 @@ public class E_p002ServiceImpl implements E_p002Service{
 		
 		//포인트 지급
 		int result =e_p002DAO.insertPoint(map);
-		System.out.println("서비스 result 값" +result);
-		
-	
 		
 		if(result !=0) {
 			
 			//상품 상태변환 (중고거래 승인)
 			int prodNum = Integer.parseInt (map.get("prodNum").toString());	
-			e_p002DAO.upDateProdType(prodNum);
+			e_p002DAO.upDateProdType(prodNum); // 상품 옵션 수정
+			e_p002DAO.upDateProdOptionType(prodNum); // 상품 옵션 수정(대기로 전환)
 			
 			//문자발송
 			Message message = new Message(api_key, api_secret);

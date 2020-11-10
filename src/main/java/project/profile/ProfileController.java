@@ -70,13 +70,12 @@ public class ProfileController {
         ModelAndView mav = new ModelAndView("myFriendsList.jsp");
 
         List<Map> followingList = profileService.selectFollowingList(userId);
-        for(Map m : followingList) {
-        	System.out.println("mmmmm  "+ m) ;
-        }
         List<Map> followerList = profileService.selectFollowerList(userId);
+        Map<String, Object> followCnt = profileService.selectFollowCnt(userId);
        
         mav.addObject("followingList", followingList);
         mav.addObject("followerList", followerList);
+        mav.addObject("followCnt", followCnt);
         mav.setViewName("/profile/myFriendsList");
 
         return mav;

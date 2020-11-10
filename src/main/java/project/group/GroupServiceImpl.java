@@ -152,4 +152,12 @@ public class GroupServiceImpl implements GroupService{
     public List selectGroupLikeById(String userId){
         return groupDAO.selectGroupLikeById(userId);
     }
+
+    public String selectGroupLeader(int groupNum){
+        return groupDAO.selectGroupLeader(groupNum);
+    }
+    @Transactional
+    public void insertAlarm(Map map){
+        groupDAO.insertAlarm(map);
+    }
 }

@@ -185,10 +185,6 @@ function category (value){
 	var _prodNum = $('#prodNum').val();
 	var _prodcategorynum = value;
 	
-	console.log("_result    "+_result);
-	console.log("_prodNum    "+_prodNum);
-	console.log("_prodcategorynum    "+_prodcategorynum);
-	
        $.ajax({
            type : 'get',
            url : 'updateDateProd.do',
@@ -199,7 +195,7 @@ function category (value){
            },
            success : function(data) {
            	if ("ok"== (data)) {
-           		console.log("수정완료");
+           		console.log("카테고리 수정완료");
            		window.location.reload(true);
 				} else {
 					console.log("수정 실패");
@@ -217,10 +213,6 @@ $(document).on("click", "#prodName1", function(){
 	var _name = $('#prodName').val();
 	var _prodNum = $('#prodNum').val();
 	
-	console.log("_result    "+_result);
-	console.log("_name    "+_name);
-	console.log("_prodNum    "+_prodNum);
-	
        $.ajax({
            type : 'get',
            url : 'updateDateProd.do',
@@ -231,7 +223,7 @@ $(document).on("click", "#prodName1", function(){
            },
            success : function(data) {
            	if ("ok"== (data)) {
-           		console.log("수정완료");
+           		console.log("상품명 수정완료");
            		window.location.reload(true);
 
 				} else {
@@ -247,11 +239,7 @@ $(document).on("click", "#price1", function(){
 	var _result = 'price';
 	var _price = $('#price').val();
 	var _prodNum = $('#prodNum').val();
-	
-	console.log("_result    "+_result);
-	console.log("_price    "+_price);
-	console.log("_prodNum    "+_prodNum);
-	
+
        $.ajax({
            type : 'get',
            url : 'updateDateProd.do',
@@ -262,7 +250,7 @@ $(document).on("click", "#price1", function(){
            },
            success : function(data) {
            	if ("ok"== (data)) {
-           		console.log("수정완료");
+           		console.log("가격 수정완료");
            		window.location.reload(true);
 
 				} else {
@@ -283,9 +271,6 @@ $(document).on("click", "#quantity1", function(){
 	var _quantity = $('#quantity').val();
 	var _optionNum = $('#optionNum').val();
 	
-	console.log("_result    "+_result);
-	console.log("_quantity    "+_quantity);
-	console.log("optionNum    "+_optionNum);
 	
        $.ajax({
            type : 'get',
@@ -297,7 +282,7 @@ $(document).on("click", "#quantity1", function(){
            },
            success : function(data) {
            	if ("ok"== (data)) {
-           		console.log("수정완료");
+           		console.log("재고 수정완료");
            		window.location.reload(true);
 
 				} else {
@@ -314,10 +299,6 @@ $(document).on("click", "#prodsize1", function(){
 	var _prodsize = $('#prodsize').val();
 	var _optionNum = $('#optionNum').val();
 	
-	console.log("_result    "+_result);
-	console.log("_prodsize    "+_prodsize);
-	console.log("_optionNum    "+_optionNum);
-	
        $.ajax({
            type : 'get',
            url : 'updateDateProdOption.do',
@@ -328,7 +309,7 @@ $(document).on("click", "#prodsize1", function(){
            },
            success : function(data) {
            	if ("ok"== (data)) {
-           		console.log("수정완료");
+           		console.log("사이즈 수정완료");
            		window.location.reload(true);
 
 				} else {
@@ -345,10 +326,6 @@ function colorUpdate (value){
 	var _color = value;
 	var _optionNum = $('#optionNum').val();
 	
-	console.log("_result    "+_result);
-	console.log("_color    "+_color);
-	console.log("_optionNum    "+_optionNum);
-	
        $.ajax({
            type : 'get',
            url : 'updateDateProdOption.do',
@@ -359,7 +336,7 @@ function colorUpdate (value){
            },
            success : function(data) {
            	if ("ok"== (data)) {
-           		console.log("수정완료");
+           		console.log("상품 색상 수정완료");
            		window.location.reload(true);
 				} else {
 					console.log("수정 실패");
@@ -375,10 +352,6 @@ function typeUpdate (value){
 	var _type = value;
 	var _prodNum = $('#prodNum').val();
 	
-	console.log("_result    "+_result);
-	console.log("_type    "+_type);
-	console.log("_prodNum    "+_prodNum);
-	
        $.ajax({
            type : 'get',
            url : 'updateDateProd.do',
@@ -389,7 +362,7 @@ function typeUpdate (value){
            },
            success : function(data) {
            	if ("ok"== (data)) {
-           		console.log("수정완료");
+           		console.log("상품 구분 수정완료");
            		window.location.reload(true);
 				} else {
 					console.log("수정 실패");
@@ -404,10 +377,7 @@ function prodStatusUpdate (value){
 	var _result = 'prodStatus';
 	var _prodStatus = value;
 	var _optionNum = $('#optionNum').val();
-	
-	console.log("_result    "+_result);
-	console.log("_prodStatus    "+_prodStatus);
-	console.log("_optionNum    "+_optionNum);
+
 	
        $.ajax({
            type : 'get',
@@ -419,7 +389,7 @@ function prodStatusUpdate (value){
            },
            success : function(data) {
            	if ("ok"== (data)) {
-           		console.log("수정완료");
+           		console.log("상품 옵션 수정완료");
            		window.location.reload(true);
 				} else {
 					console.log("수정 실패");
@@ -435,9 +405,6 @@ $(document).on("click", "#prodContent1", function(){
 	var _content = $('#content').val();
 	var _prodNum = $('#prodNum').val();
 	
-	console.log("_result    "+_result);
-	console.log("_content    "+_content);
-	console.log("_prodNum    "+_prodNum);
 	
        $.ajax({
            type : 'get',
@@ -449,7 +416,7 @@ $(document).on("click", "#prodContent1", function(){
            },
            success : function(data) {
            	if ("ok"== (data)) {
-           		console.log("수정완료");
+           		console.log("상품 내용 수정완료");
            		window.location.reload(true);
 
 				} else {
@@ -626,16 +593,11 @@ function removeImgDetailImageFile(_pphotonum){
 	   	 });   
   })	 
 
+  /*  팝업 닫기*/
 function end(){
-	
 	  opener.location.reload();
 		close();
 		
-	/* 	var upDate = "<c:out value="${upDatemsg}" />";
-		if (upDate ==="ok") {
-			 opener.location.reload();
-			close();
-		} */
 };
 </script>
 <body>
@@ -743,8 +705,8 @@ function end(){
 						<tr>
 							<th>상품구분</th>
 							<td><select id="type"  class="basic_btn btn-primary" onchange="typeUpdate(this.value)">
-									<option value="1" ${viewList.type == 1 ? 'selected="selected"' : ''}>신상품</option>
-									<option value="2" ${viewList.type == 2 ? 'selected="selected"' : ''}>중고품</option>
+									<option value="1" ${viewList.typeString == '신상품' ? 'selected="selected"' : ''}>신상품</option>
+									<option value="2" ${viewList.typeString == '중고품' ? 'selected="selected"' : ''}>중고품</option>
 								</select>
 							</td>
 						</tr>
@@ -753,6 +715,7 @@ function end(){
 							<td><select  id="prodStatus1" class="basic_btn btn-primary" onchange="prodStatusUpdate(this.value)">					
 									<option value="1" ${viewList.prodstatus == 1 ? 'selected="selected"' : ''}>판매중</option>
 									<option value="2" ${viewList.prodstatus == 2 ? 'selected="selected"' : ''}>품절</option>
+									<option value="3" ${viewList.prodstatus == 3 ? 'selected="selected"' : ''}>대기</option>
 							</select>
 							</td>
 						</tr>
@@ -772,11 +735,13 @@ function end(){
 							<input type="file"  id="main_img${photoMainList.pphotonum}"  name="file"  />
 							</td>
 							<td>
+								<center>
 								<button type="button" id="modifyImgMain" class="basic_btn1 btn-primary btn-xs"
 								onClick="modifyImageFileMain('main_img${photoMainList.pphotonum}',${photoMainList.pphotonum})" >수정</button>
-								&nbsp;&nbsp;&nbsp;&nbsp;
+								<br>
 								<button type="button" id="removeImgMain" class="basic_btn1 btn-danger btn-xs"
 								onClick="removeImgMainImageFile(${photoMainList.pphotonum})" >삭제</button>
+								</center>
 							</td>					
 						</tr>
 						</c:forEach>		
@@ -789,11 +754,13 @@ function end(){
 							<input type='file'  id="detail_img${photoDetailList.pphotonum}" name='file2' />
 							</td>
 							<td>
+								<center>
 								<button type="button" id="modifyImgDetail" class="basic_btn1 btn-primary btn-xs"
 								onClick="modifyImageFileDetail('detail_img${photoDetailList.pphotonum}',${photoDetailList.pphotonum})" >수정</button>
-								&nbsp;&nbsp;&nbsp;&nbsp;
+								<br>
 								<button type="button" id="modifyImgDetail" class="basic_btn1 btn-danger btn-xs"
 								onClick="removeImgDetailImageFile(${photoDetailList.pphotonum})" >삭제</button>
+								</center>
 							</td>	
 						</tr>
 						</c:forEach>
@@ -808,8 +775,7 @@ function end(){
                                 <button type="button" id="addMainImg" class="basic_btn1 btn-primary btn-xs">추가</button>
                             </td>
 						</tr>
-						</form>
-						
+						</form>	
 						<form id="addDetailImg" method="post" enctype="multipart/form-data"  >
 						<tr>
 							<th>상세 이미지 추가</th>

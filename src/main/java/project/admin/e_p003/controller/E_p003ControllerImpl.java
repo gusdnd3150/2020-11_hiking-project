@@ -156,11 +156,9 @@ public class E_p003ControllerImpl implements E_p003Controller{
 		response.setContentType("text/html;charset=utf-8");
 		int mailResult=e_p003Service.mainPageMail(map);
 		if(mailResult==1) {
-			System.out.println("메일발송 성공");
 			String msg = "ok";
 			return msg;
 		}else {
-			System.out.println("메일발송 실패>>>>>>>>>>>>>>");
 			String msg = "x";
 			return "x";
 		}

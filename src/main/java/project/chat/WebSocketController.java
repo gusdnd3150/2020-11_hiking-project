@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -29,6 +30,14 @@ public class WebSocketController {
         Timestamp insertTs = Timestamp.valueOf(inputTime);
         map.put("messagedAt",insertTs);
         chatService.insertMessage(map);
+        return map;
+    }
+
+    @MessageMapping("/notice/send/{userId}")
+    @SendTo("/topic/notice/{userId}")
+    public Map sendNotice(@DestinationVariable String userId,Map map){
+        int count = chatService.countPushAlarm(userId);
+        map.put("count",count);
         return map;
     }
 }

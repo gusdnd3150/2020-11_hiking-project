@@ -125,6 +125,9 @@
 		<websocket:stomp-endpoint path="/chatting">
 			<websocket:sockjs />
 		</websocket:stomp-endpoint>
+		<websocket:stomp-endpoint path="/alarm">
+			<websocket:sockjs />
+		</websocket:stomp-endpoint>
 		<websocket:simple-broker prefix="/topic" />
 	</websocket:message-broker>
 

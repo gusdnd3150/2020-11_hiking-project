@@ -128,7 +128,6 @@ public class E_p002ControllerImpl implements E_p002Controller{
 	@ResponseBody
 	@RequestMapping(value = "/admin/updateOption.do", method = RequestMethod.GET)
 	public String updateOption(@RequestParam Map map, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		System.out.println("map>>>>>>>>>>>"+map.toString());
 
 		int result = e_p002Service.updateOption(map);
 		
@@ -316,7 +315,6 @@ public class E_p002ControllerImpl implements E_p002Controller{
 		int result = e_p002Service.insertPoint(map);
 		
 		if(result != 0) {
-			System.out.println("포인트 지급 완료");
 			return "ok";
 		}
 		return "x";
@@ -335,7 +333,6 @@ public class E_p002ControllerImpl implements E_p002Controller{
 	@ResponseBody
 	@RequestMapping(value = "/admin/toDayOrder.do", method = RequestMethod.POST)
 	public String todayOrder(@RequestParam Map map,HttpServletRequest request, HttpServletResponse response) throws Exception {
-		System.out.println("금일 주문건 카운트");
 		return e_p002Service.todayOrder(map);
 	}
 

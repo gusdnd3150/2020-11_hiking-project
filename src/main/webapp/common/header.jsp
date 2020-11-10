@@ -13,7 +13,7 @@
     <link rel="icon" href="/resources/img/favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" type="text/css" href="/resources/css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="/resources/css/views/common/header.css" />
-    
+
 </head>
 <!-- Navigation -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top p-0">
@@ -56,7 +56,12 @@
                         </c:if>
                         <c:if test="${LOGIN ne 'admin'}">
                             <li class="nav-item">
-                                    <a class="nav-link" href="/mypage/mypageHomeView.do">마이페이지</a>
+                                    <a class="nav-link" href="/mypage/mypageHomeView.do">마이페이지
+                                        <div class="noticeContainer">
+                                            <div class="notice"></div>
+                                        </div>
+                                    </a>
+
                             </li>
                         </c:if>
                         <li class="nav-item">
@@ -79,3 +84,4 @@
     </div>
 </div>
 </nav>
+<jsp:include page="/alarm.jsp" />

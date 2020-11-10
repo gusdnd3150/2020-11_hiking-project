@@ -81,7 +81,6 @@
             stompClient.subscribe('/topic/' + '${roomId}', function (e) {
                 showMessage(JSON.parse(e.body));
                 $("#chat").scrollTop($("#chat")[0].scrollHeight);
-                // alertClosing('comeMessage',2000);
             });
         });
     }
@@ -121,7 +120,6 @@
 
     function showMessage(data) {
 
-        console.log(data)
         if(data.userId!='<%= session.getAttribute("LOGIN")%>'){
 
             var html = '';

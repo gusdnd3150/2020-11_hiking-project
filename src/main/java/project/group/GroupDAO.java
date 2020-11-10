@@ -157,4 +157,10 @@ public class GroupDAO{
     public List selectGroupLikeById(String userId){
         return sqlSession.selectList("group.selectGroupLikeById",userId);
     }
+    public String selectGroupLeader(int groupNum){
+        return sqlSession.selectOne("group.selectGroupLeader",groupNum);
+    }
+    public void insertAlarm(Map map){
+        sqlSession.insert("group.insertAlarm",map);
+    }
 }

@@ -297,7 +297,7 @@
         WHERE FID = 0
     </select>
     <select id="selectTrailLikeById" resultType="map" parameterType="string">
-        SELECT tl.*, ti.MNTN_NM
+        SELECT tl.MNTN_CODE, tl.USERID, TO_CHAR(tl.CREATEDAT,'yyyy-mm-dd') createdAt, ti.MNTN_NM
         FROM TrailLike tl, TrailInfo ti
         WHERE tl.MNTN_CODE = ti.MNTN_CODE
           AND ti.FID = 0

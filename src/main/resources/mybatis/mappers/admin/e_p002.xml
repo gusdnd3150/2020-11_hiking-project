@@ -212,11 +212,11 @@
 				po.optionNum,
 		        p.name,
 		       	TRIM(to_char(p.price,'999,999,999,999,999'))as priceString,
-		        DECODE(type,1,'신상품',2,'중고품')as typeString,
+		        DECODE(p.type,1,'신상품',2,'중고품',5,'중고품')as typeString,
 		        po.quantity,
 		        po.prodsize,
 		        po.color,
-		        DECODE(po.prodstatus,1,'판매중',2,'품절')as prodstatusString,
+		        DECODE(po.prodstatus,1,'판매중',2,'품절', 3,'대기')as prodstatusString,
 		        to_char(p.createdat,'YYYY-MM-DD')as createdAtString,
 		        DECODE(p.prodcategorynum,15,'반팔', 16,'긴팔',17,'후드',18,'반바지',19,'긴바지',20,'패딩',21,'야상',22,'바람막이', 23,'비니'
 		        ,24,'캡모자',25,'정글모',26,'썬캡',27,'긴양말',28,'반양말',29,'발가락양말',30,'백팩',31,'크로스백',32,'등산화',11,'스틱',12,'장갑'
@@ -225,9 +225,7 @@
 		 FROM products p 
 		 	INNER JOIN prodoption po
 		 ON p.prodnum = po.prodnum
-		    WHERE po.prodstatus !=3
-            AND po.prodstatus !=4
-            AND po.prodstatus !=5
+		WHERE p.type = 1 OR p.type = 2 OR p.type = 5
 		        )
 		SELECT *
 		FROM prod pr   
@@ -270,6 +268,11 @@
     		
     		<when test="searchOption=='prodstatus2'"> <!-- 품절 --> 
     		where pr.prodstatusString = '품절'
+    		ORDER BY pr.prodnum 
+    		</when>
+    		
+    		<when test="searchOption=='prodstatus3'"> <!-- 대기 --> 
+    		where pr.prodstatusString = '대기'
     		ORDER BY pr.prodnum 
     		</when>
     		
@@ -319,7 +322,7 @@
 		po.quantity,
 		po.prodsize,
 		po.color,
-		p.type,
+		DECODE(p.type,1,'신상품',2,'중고품',5,'중고품')as typeString,
 		po.prodStatus,
 		p.content,
 		DECODE(p.prodcategorynum,15,'반팔', 16,'긴팔',17,'후드',18,'반바지',19,'긴바지',20,'패딩',21,'야상',22,'바람막이', 23,'비니'
@@ -623,6 +626,17 @@
 		        UPDATEDAT=CURRENT_TIMESTAMP,
 		        type = 5
 		WHERE prodnum = #{prodNum}
+			]]>
+	</update>
+	
+	 	<!-- 중고거래 승인 상품 옵션 상태 변화 -->
+	 <update id="upDateProdOptionType" parameterType="int">
+		 <![CDATA[
+		UPDATE prodoption
+		    SET 
+		        prodstatus = 3,
+		        moddate = CURRENT_TIMESTAMP
+		    WHERE prodnum = #{prodNum}
 			]]>
 	</update>
 	

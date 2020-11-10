@@ -49,7 +49,6 @@ public class E_p003ServiceImpl implements E_p003Service{
 	//메일발송
 	@Override
 	public int mailSending(Map<String, String> map) throws Exception {
-		System.out.println("메일 발송 들어옴");
 		MimeMessage message = mailSender.createMimeMessage(); // MimeMessage타입 객체 생성
 		try {
 			MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, "utf-8"); // 메일을 보내기위한 MimeMessageHelper객체 생성
@@ -88,7 +87,6 @@ public class E_p003ServiceImpl implements E_p003Service{
 	@Override
 	public int mainPageMail(Map<String, String> map) throws Exception {
 		
-		System.out.println("메일 발송 들어옴");
 		MimeMessage message1 = mailSender.createMimeMessage(); // MimeMessage타입 객체 생성
 		try {
 			MimeMessageHelper emailMessag = new MimeMessageHelper(message1, true, "utf-8"); // 메일을 보내기위한 MimeMessageHelper객체 생성

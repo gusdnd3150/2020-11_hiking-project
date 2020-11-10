@@ -177,7 +177,6 @@
     <update id="deleteComment" parameterType="map">
         UPDATE groupAfterComment
         SET
-            content = '--삭제된 댓글입니다--',
             deleted = 1
         WHERE commentNum = #{commentNum}
     </update>

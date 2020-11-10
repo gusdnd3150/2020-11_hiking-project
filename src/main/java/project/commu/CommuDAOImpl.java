@@ -28,7 +28,6 @@ public class CommuDAOImpl implements CommuDAO {
 		Map<String, Object> mm = m;
 		for(int i=1; i<=5; i++) {
 			m.put("boardType", i);
-			System.out.println(mm);
 			sqlSession.insert("commuMapper.insertGroupsBoard", mm);
 		}
 		//sqlSession.insert("commuMapper.insertGroupsBoardPost", list);
@@ -184,7 +183,6 @@ public class CommuDAOImpl implements CommuDAO {
 
 	@Override
 	public int commuMandate(Map map) {
-		System.out.println("commuMandate:    " +map);
 		sqlSession.update("commuMapper.updateLeaderType", map);
 		sqlSession.update("commuMapper.commuMandate", map);
 		  return 1;

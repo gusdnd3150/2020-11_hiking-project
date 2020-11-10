@@ -94,8 +94,20 @@ public class GroupController{
 
     @PostMapping("/group/join.do")
     @ResponseBody
-    public int joinGroup(@RequestBody Map map){
-        return groupService.joinGroup(map);
+    public Map joinGroup(@RequestBody Map map){
+        try{
+            System.out.println("join : "+map.toString());
+            Map result = new HashMap();
+            groupService.joinGroup(map);
+            groupService.insertAlarm(map);
+            int groupNum = Integer.parseInt((String) map.get("groupNum"));
+            String leaderId = groupService.selectGroupLeader(groupNum);
+            result.put("leaderId",leaderId);
+            return result;
+        } catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @PostMapping("/group/withdraw.do")
@@ -271,6 +283,5 @@ public class GroupController{
             return 0;
         }
     }
-
 
 }

@@ -45,6 +45,8 @@ public class ProfileDAO {
 		return sqlSession.selectList("profile.selectFollowerList",userId);
 	}
 	
-	
+	public Map<String, Object> selectFollowCnt(String userId) {
+		return sqlSession.selectOne("profile.selectFollowCnt",userId);
+	}
 	
 }

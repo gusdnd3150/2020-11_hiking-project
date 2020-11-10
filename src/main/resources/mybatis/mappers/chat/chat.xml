@@ -91,4 +91,53 @@
         ]]>
 
     </delete>
+
+    <select id="countPushAlarm" resultType="int" parameterType="string">
+        select COUNT(pa.userId)
+        From pushAlarm pa, userWaiting uw
+        WHERE pa.groupNum = uw.GROUPNUM
+          AND uw.userId = #{userId}
+          AND pa.userId NOT IN (#{userId})
+          AND pa.CONFIRM NOT IN ('Y')
+    </select>
+
+    <select id="selectResponseAlarm" resultType="map" parameterType="string">
+        select pa.groupNum, g.NAME, pa.userId requestUser, uw.userId responseUser, uw.userComment, DECODE(uw.USERSTATUS,0,'대기중',1,'승인됨') status, TO_CHAR(pa."createdAt",'yyyy-mm-dd hh:mi:ss') requestedAt, u.NICKNAME, ui.CONTENT2
+        From PUSHALARM pa, USERWAITING uw, groups g, users u, userInfo ui
+        where pa.GROUPNUM = uw.GROUPNUM
+          and pa.GROUPNUM = g.GROUPNUM
+          and pa.USERID = u.id
+          and u.USERNUM = ui.USERNUM
+          and usertype=0
+          and pa.CONFIRM NOT IN ('Y')
+          and uw.userId = #{userId}
+    </select>
+
+    <select id="selectRequestAlarm" resultType="map" parameterType="string">
+        select pa.groupNum, g.NAME, pa.userId requestUser, uw.userId responseUser, uw.userComment, DECODE(uw.USERSTATUS,0,'대기중',1,'승인됨') status, TO_CHAR(pa."createdAt",'yyyy-mm-dd hh:mi:ss') requestedAt, u.NICKNAME, ui.CONTENT2
+        From PUSHALARM pa, USERWAITING uw, groups g, users u, userInfo ui
+        where pa.GROUPNUM = uw.GROUPNUM
+          and pa.GROUPNUM = g.GROUPNUM
+          and uw.USERID = u.id
+          and u.USERNUM = ui.USERNUM
+          and usertype=0
+          and pa.CONFIRM NOT IN ('Y')
+          and pa.userId = #{userId}
+    </select>
+    <update id="updateAlarm" parameterType="string">
+        update PUSHALARM
+        set CONFIRM = 'Y'
+        WHERE groupNum = (select pa.groupNum
+                       From PUSHALARM pa, USERWAITING uw
+                       where pa.GROUPNUM = uw.GROUPNUM
+                         and usertype=0
+                         and pa.CONFIRM NOT IN ('Y')
+                         and uw.userId = #{userId})
+        AND userId = (select pa.userId
+                      From PUSHALARM pa, USERWAITING uw
+                      where pa.GROUPNUM = uw.GROUPNUM
+                        and usertype=0
+                        and pa.CONFIRM NOT IN ('Y')
+                        and uw.userId = #{userId})
+    </update>
 </mapper>

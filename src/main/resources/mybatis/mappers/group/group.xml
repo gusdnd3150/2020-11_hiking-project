@@ -352,7 +352,7 @@
     <!-- 산모임 페이지 댓글 -->
     <select id="selectCommentByPostNum" parameterType="_int" resultType="groupCommentVO">
         <![CDATA[
-            SELECT gc.postNum, gc.commentNum, gc.parentNum, gc.depts, gc.commentOrder, gc.content, gc.subCommentCount, gc.createdAt, ui.content2, u.nickname 
+            SELECT gc.postNum, gc.commentNum, gc.parentNum, gc.depts, gc.commentOrder, gc.deleted, gc.content, gc.subCommentCount, gc.createdAt, ui.content2, u.id, u.nickname 
             FROM groupComment gc, users u, userInfo ui
             WHERE gc.userId = u.id
             AND   u.userNum = ui.userNum
@@ -549,17 +549,33 @@
     <update id="deleteComment" parameterType="map">
         UPDATE groupComment
         SET
-            content = '--삭제된 댓글입니다--',
             deleted = 1
         WHERE commentNum = #{commentNum}
     </update>
 
     <select id="selectGroupLikeById" resultType="map" parameterType="string">
-        SELECT gl.groupNum, g.NAME, DECODE(g.STATUS,1,'진행중','마감') status, gm.STOREDFILENAME
+        SELECT g.MTNM, gl.groupNum, g.NAME, g.STAFFCURRENT, g.STAFFMAX, TO_CHAR(g.STARTDAY,'yyyy"년"mm"월"dd"일" hh"시"mi"분"') startDay , g.AREA, DECODE(g.STATUS,1,'진행중','마감') status, gm.STOREDFILENAME
         FROM groupLike gl, groups g , groupsMedia gm
         WHERE gl.GROUPNUM = g.GROUPNUM
           AND g.groupNum = gm.groupNum
           AND gl.LIKEYN = 1
           AND gl.userId = #{userId}
     </select>
+
+    <select id="selectGroupLeader" resultType="string" parameterType="int">
+        SELECT userId
+        FROM userWaiting
+        WHERE groupNum = #{groupNum}
+          AND userType = 0
+    </select>
+
+    <insert id="insertAlarm" parameterType="map">
+        insert into PUSHALARM
+        values (
+                #{groupNum},
+                #{userId},
+                'N',
+                sysdate
+               )
+    </insert>
 </mapper>
