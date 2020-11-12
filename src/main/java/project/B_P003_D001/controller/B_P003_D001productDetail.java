@@ -112,4 +112,9 @@ public interface B_P003_D001productDetail {
     public String delwish (@RequestParam Map<String,Object> info,HttpServletResponse response,HttpSession httpSession);
     public String addwish (@RequestParam Map<String,Object> info,HttpServletResponse response,HttpSession httpSession);
     public Map<String,List<Map>> showMyProduct (@RequestParam Map<String,Object> info,HttpServletResponse response,HttpSession httpSession);
+    public ModelAndView ajaxPagingTest(HttpServletResponse response,HttpServletRequest request);
+    
+    
+    public Paging PgingResult(HttpServletResponse response,HttpServletRequest request);
+    public List<Map<String,Object>> pagingValues(@RequestParam Map<String,Object> info,HttpServletResponse response,HttpSession httpSession);
 }

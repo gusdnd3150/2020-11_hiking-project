@@ -522,6 +522,14 @@ public class B_P003_D001productServiceImpl implements B_P003_D001productService{
 				
 		}
 
+		@Override
+		public int ajaxTotal() {
+			return b_P003_D001productDAO.ajaxTotal();
+		}
+		@Override
+		public List<Map<String, Object>> ajaxResult(Map<String, Object> info) {
+			return b_P003_D001productDAO.ajaxResult(info);
+		}
 		
 
 

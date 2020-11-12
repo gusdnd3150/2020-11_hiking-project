@@ -110,4 +110,7 @@ public interface B_P003_D001productService {
 	public List<Map> myMainImage(Map<String, Object> map) ;
 	public List<Map> myDetailImage(Map<String, Object> map) ;
 	public List<Map> myProdDetail(Map<String, Object> map) ;
+	
+	public int ajaxTotal() ;
+	public List<Map<String, Object>> ajaxResult(Map<String, Object> info) ;
 }

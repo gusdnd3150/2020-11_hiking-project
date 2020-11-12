@@ -156,6 +156,34 @@
 	      SELECT COUNT(*) FROM products
        </select>
        
+       <!-- 아작스 테스트 -->
+       <select id="ajaxTotal" resultType="int">
+	      SELECT COUNT(*) FROM products
+       </select>
+       
+       <!-- 아작스 테스트 -->
+       <select id="ajaxResult" resultType="map" parameterType="java.util.Map">
+	      	SELECT  PRODNUM,
+                     NAME,
+                    PRICE,
+                  CONTENT,
+                    TYPE,
+                     to_char(CREATEDAT,'yyyy-mm-dd hh:mi'),
+                     USERNUM,
+                   PRODCATEGORYNUM,
+                  REQUIRECOMMENT,
+                      CNTCOUNT
+		FROM (
+			SELECT ROWNUM RN, A.* 
+				FROM (
+						SELECT * 
+						FROM products 
+						ORDER BY prodnum DESC 
+						) A
+				)
+	    WHERE RN BETWEEN #{start} AND #{end}
+       </select>
+       
        
        	<!--후기 총 개수 출력 -->
        <select id="afterTotal" resultType="int" parameterType="java.util.Map">

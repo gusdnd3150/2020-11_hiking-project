@@ -71,6 +71,7 @@ public class B_P002_D001ControllerImpl  implements B_P002_D001Controller{
 		String searchContent= (String) info.get("searchContent");
 		String sorting = (String) info.get("sorting");
 
+		
 		if(httpSession.getAttribute(LOGIN)!=null) { //로그인을 했을 경우
 			String id = (String) httpSession.getAttribute(LOGIN); //아이디
 			int userNum = userService.selectUserNum(id);         //유저넘

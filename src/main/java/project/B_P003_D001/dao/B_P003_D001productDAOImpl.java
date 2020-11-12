@@ -354,6 +354,15 @@ public class B_P003_D001productDAOImpl implements B_P003_D001productDAO {
 	public List<Map> myProdDetail(Map<String, Object> map) {
 		return sqlSession.selectList("project.e_P002_D003.myProdDetail",map);
 	}
+	@Override
+	public int ajaxTotal() {
+		return sqlSession.selectOne("project.e_P002_D003.ajaxTotal");
+	}
+	@Override
+	public List<Map<String, Object>> ajaxResult(Map<String, Object> info) {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList("project.e_P002_D003.ajaxResult",info);
+	}
 
 
 

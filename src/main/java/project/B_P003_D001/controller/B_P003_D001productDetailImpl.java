@@ -101,7 +101,9 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 			map.put("userNum", 0);
 		}
 
-		Cookie[] cookies = request.getCookies();
+		
+		
+		 Cookie[] cookies = request.getCookies();
 		 Cookie checknum = null;
 		 if(cookies != null && cookies.length > 0){
 		  for(int i = 0; i< cookies.length; i++){
@@ -1239,8 +1241,8 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 
 			JSONParser parser = new JSONParser(); // 전달받은 json형식의 문자열을 파싱하기위함
 			JSONObject obj = (JSONObject) parser.parse(requestString);
-			if((Long)obj.get("code")  == 0){      //key ,value이기때문에 Map에서 값을 뽑아쓰듯 사용
-				JSONObject getToken = (JSONObject) obj.get("response");
+			if((Long)obj.get("code")  == 0){      // 0이면  서버 통신이 잘 되었다는 의미
+				JSONObject getToken = (JSONObject) obj.get("response"); // 아임포트의 경우 response 이름으로 토큰값이 온다
 				System.out.println("getToken==>>"+getToken.get("access_token"));
 				return "ok";
 			}
@@ -1732,6 +1734,56 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 		}
 		
 		return result;
+	}
+
+
+
+
+
+
+
+	@Override  //아작스 페이징 연습
+	@RequestMapping(value = "/ajaxPaging.do", method = { RequestMethod.GET, RequestMethod.POST })
+	public ModelAndView ajaxPagingTest(HttpServletResponse response, HttpServletRequest request) {
+		ModelAndView mav= new ModelAndView();
+		mav.setViewName("/practice/ajaxPaging");
+		return mav;
+	}
+
+	@Override
+	@RequestMapping(value = "/PagingResult.do", method = { RequestMethod.GET, RequestMethod.POST })
+	@ResponseBody
+	public Paging PgingResult(HttpServletResponse response, HttpServletRequest request) {
+		String nowPage = request.getParameter("nowPage");
+		String cntPerPage = request.getParameter("cntPerPage");
+		//String listType = request.getParameter("listType");
+		
+		if (nowPage == null && cntPerPage == null) {
+			nowPage = "1";
+			cntPerPage = "6";
+		} else if (nowPage == null) {
+			nowPage = "1";
+		} else if (cntPerPage == null) {
+			cntPerPage = "6";
+		}
+		
+		/*if(listType==null) {       // 여러타입의 페이징을 처리해야할 경우 사용하면 좋을듯
+			listType="default";
+		}*/
+		
+		int total = b_P003_D001productService.ajaxTotal(); //products 테이블 사용 (테스트용) 
+		Paging paging = new Paging(total,Integer.parseInt(nowPage),Integer.parseInt(cntPerPage)); //계산 후 start,end 번호 뱉는다
+		
+		return paging;
+	}
+	
+	@Override
+	@RequestMapping(value = "/PagingValues.do", method = { RequestMethod.GET, RequestMethod.POST })
+	@ResponseBody
+	public List<Map<String, Object>> pagingValues(@RequestParam Map<String, Object> info, HttpServletResponse response,
+			HttpSession httpSession) {
+		List<Map<String,Object>> list = b_P003_D001productService.ajaxResult(info);
+		return list;
 	}
 
 }

@@ -976,6 +976,7 @@ var cnt2=1;
 	<c:if test="${paging.startPage != 1 }">
 			<a href="/shopMainCate.do?sorting=${paging.sorting }&searchContent=${paging.searchContent }&listType=${paging.listType}&nowPage=${paging.startPage - 1 }&cntPerPage=${paging.cntPerPage}">&lt;</a>
 		</c:if>
+		
 		<c:forEach begin="${paging.startPage }" end="${paging.endPage }" var="p">
 			<c:choose>
 				<c:when test="${p == paging.nowPage }">
@@ -986,11 +987,12 @@ var cnt2=1;
 				</c:when>
 			</c:choose>
 		</c:forEach>
+		
 		<c:if test="${paging.endPage != paging.lastPage}">
 			<a href="/shopMainCate.do?sorting=${paging.sorting }&searchContent=${paging.searchContent }&listType=${paging.listType}&nowPage=${paging.endPage+1 }&cntPerPage=${paging.cntPerPage}">&gt;</a>
 			<p> ${paging.listType}</p>
 		</c:if>
-	</div>
+	      </div>
 	       
 
 	<!-- 페이징 끝-->
