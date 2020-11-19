@@ -182,6 +182,10 @@
 						<b>페이징 아작스 테스트</b>
 							<a href="/ajaxPaging.do"><h5 class="mt-2"> 테스트</h5></a>
 					</li>
+					<li class="list-group-item d-flex justify-content-between align-items-center">
+						<b>아이비시트</b>
+							<a href="/ibsheet.do"><h5 class="mt-2"> 테스트</h5></a>
+					</li>
 
 					<!-- <li class="list-group-item">
 						<nav id="scroll">

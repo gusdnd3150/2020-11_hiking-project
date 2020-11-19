@@ -363,6 +363,10 @@ public class B_P003_D001productDAOImpl implements B_P003_D001productDAO {
 		// TODO Auto-generated method stub
 		return sqlSession.selectList("project.e_P002_D003.ajaxResult",info);
 	}
+	@Override
+	public List<Map<String, Object>> ibsheet() {
+		return sqlSession.selectList("project.e_P002_D003.ibsheetResult");
+	}
 
 
 

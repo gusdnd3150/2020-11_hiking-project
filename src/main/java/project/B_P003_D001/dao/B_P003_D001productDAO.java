@@ -116,5 +116,6 @@ public interface B_P003_D001productDAO {
 	
 	public int ajaxTotal();
 	public List<Map<String,Object>> ajaxResult(Map<String,Object> map);
+	public List<Map<String,Object>> ibsheet();
 	
 }

@@ -185,6 +185,21 @@
        </select>
        
        
+       <!-- 아이비시트 테스트 -->
+       <select id="ibsheetResult" resultType="map">
+	      	SELECT  PRODNUM,
+                     NAME,
+                    PRICE,
+                  CONTENT,
+                    TYPE,
+                     to_char(CREATEDAT,'yyyy-mm-dd hh:mi'),
+                     USERNUM,
+                   PRODCATEGORYNUM,
+                  REQUIRECOMMENT,
+                      CNTCOUNT
+		FROM products
+       </select>
+       
        	<!--후기 총 개수 출력 -->
        <select id="afterTotal" resultType="int" parameterType="java.util.Map">
 	      SELECT COUNT(*) FROM productafter

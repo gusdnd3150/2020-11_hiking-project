@@ -530,6 +530,11 @@ public class B_P003_D001productServiceImpl implements B_P003_D001productService{
 		public List<Map<String, Object>> ajaxResult(Map<String, Object> info) {
 			return b_P003_D001productDAO.ajaxResult(info);
 		}
+
+		@Override
+		public List<Map<String, Object>> ibsheet() {
+			return b_P003_D001productDAO.ibsheet();
+		}
 		
 
 

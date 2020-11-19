@@ -113,4 +113,5 @@ public interface B_P003_D001productService {
 	
 	public int ajaxTotal() ;
 	public List<Map<String, Object>> ajaxResult(Map<String, Object> info) ;
+	public List<Map<String, Object>> ibsheet() ;
 }

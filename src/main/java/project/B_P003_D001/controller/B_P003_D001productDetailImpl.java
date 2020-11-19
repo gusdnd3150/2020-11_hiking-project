@@ -1741,8 +1741,8 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 
 
 
-
-	@Override  //아작스 페이징 연습
+	 //아작스 페이징 연습
+	@Override 
 	@RequestMapping(value = "/ajaxPaging.do", method = { RequestMethod.GET, RequestMethod.POST })
 	public ModelAndView ajaxPagingTest(HttpServletResponse response, HttpServletRequest request) {
 		ModelAndView mav= new ModelAndView();
@@ -1784,6 +1784,28 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 			HttpSession httpSession) {
 		List<Map<String,Object>> list = b_P003_D001productService.ajaxResult(info);
 		return list;
+	}
+
+
+
+
+
+
+     // 아이비시트 연습용
+	@Override
+	@RequestMapping(value = "/ibsheet.do", method = { RequestMethod.GET, RequestMethod.POST })
+	public ModelAndView ibsheet() {
+		ModelAndView mav= new ModelAndView();
+		mav.setViewName("practice/ibsheet");
+		return mav;
+	}
+
+	@Override
+	@ResponseBody
+	@RequestMapping(value = "/ibsheetResult.do", method = { RequestMethod.GET, RequestMethod.POST })
+	public List<Map<String, Object>> ibsheetResult() {
+		List<Map<String, Object>> result = b_P003_D001productService.ibsheet();
+		return result;
 	}
 
 }
