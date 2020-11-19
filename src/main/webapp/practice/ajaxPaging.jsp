@@ -24,14 +24,15 @@ function paging(nowPage,cntPerPage){        //현재페이지 , 페이지당 보
     		
     		  if(data.startPage !=1){
     			  pagingView +="<a href='#' onclick='return paging("+(data.startPage -1)+","+data.cntPerPage+");'>&lt;</a>";
-    		  }
-    		  for(var i =data.startPage; i<data.endPage;i++){
+    		  } 
+    		  for(var i =data.startPage; i<=data.endPage;i++){
     			  if(i ==data.nowPage ){
     				  pagingView +="<a style='color:red' href='#'>"+i+"</a>";
     			  }else if(i !=data.nowPage){
     				  pagingView +="<a href='#' onclick='return paging("+i+","+data.cntPerPage+");'>"+i+"</a>";
     			  }
     		  }
+    		  
     		  if(data.endPage != data.lastPage){
     			  pagingView +="<a href='#' onclick='return paging("+(data.endPage +1)+","+data.cntPerPage+");'>&gt;</a>";
     		  }

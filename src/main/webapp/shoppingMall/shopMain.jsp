@@ -1193,7 +1193,7 @@ var cnt2=1;
             </ul>
         </div>
         <div>
-        <input type="hidden" name="type" value="3">
+        <input type="hidden" name="type" value="1">
             </div>
               <hr>
             <br>

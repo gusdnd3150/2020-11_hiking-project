@@ -1786,11 +1786,7 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 		return list;
 	}
 
-
-
-
-
-
+	
      // 아이비시트 연습용
 	@Override
 	@RequestMapping(value = "/ibsheet.do", method = { RequestMethod.GET, RequestMethod.POST })
