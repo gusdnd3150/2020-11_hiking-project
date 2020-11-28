@@ -4,8 +4,13 @@
 ## 개발 인원 및 기간
 - 개발 기간 : 2020/9/14 ~ 11/14 (2달)
 - 개발 인원 : 4명
-- 메인 기능 :  등산모임, 산모임 , 쇼핑몰, 관리자
+- 메인 기능 : 등산모임, 산모임 , 쇼핑몰, 관리자
 - 담당 기능 : 쇼핑몰 전체
+
+##  시연영상
+등산모임,산모임 : https://www.youtube.com/watch?v=BBrjdwnsI6E&feature=youtu.be&app=desktop
+쇼핑몰          :  https://www.youtube.com/watch?v=iWvhkXqNjS0&t=14s
+관리자          :  https://www.youtube.com/watch?v=p0imIJDZqz8
 
 ## 목적
 누구나 쉽게 등산을 시작할 수 있기 위함
