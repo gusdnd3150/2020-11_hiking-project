@@ -18,7 +18,7 @@
 누구나 쉽게 등산을 시작할 수 있기 위함
 
 ## 개발환경
-
+https://github.com/gusdnd3150/hiking/issues/1#issue-752587672
 
 ## 프로젝트 정보
 [프로젝트 정보 보러가기](https://drive.google.com/file/d/1WORDnb_Wjdql2k0yXXRk1_IjFdpa0Bdg/view?usp=sharing)
