@@ -8,7 +8,7 @@
 - 담당 기능 : 쇼핑몰 전체
 
 ##  시연영상
--등산모임,산모임 : https://www.youtube.com/watch?v=BBrjdwnsI6E&feature=youtu.be&app=desktop
+-등산모임, 산모임 : https://www.youtube.com/watch?v=BBrjdwnsI6E&feature=youtu.be&app=desktop
 
 -쇼핑몰          :  https://www.youtube.com/watch?v=iWvhkXqNjS0&t=14s
 
