@@ -14,6 +14,8 @@
 
 -관리자          :  https://www.youtube.com/watch?v=p0imIJDZqz8
 
+-풀 영상(11분)        : https://www.youtube.com/watch?v=BBrjdwnsI6E&t=13s  
+
 ## 목적
 누구나 쉽게 등산을 시작할 수 있기 위함
 
