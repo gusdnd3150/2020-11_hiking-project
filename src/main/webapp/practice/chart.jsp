@@ -4,14 +4,28 @@
 <html>
 <head>
 
+<!-- 차트js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js" integrity="sha512-d9xgZrVZpmmQlfonhQUvTR7lMPtO7NkZMkA0ABN3PHCbKA5nqylQ/yWlFAyY6hYgdF1Qh6nYiuADWwKB4C2WSw==" crossorigin="anonymous"></script>
+
+<!-- morris 차트 -->
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
 
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
 <body>
 
-<canvas id="myChart" width="400" height="400"></canvas>
+<div>
+ <p>차트 그리기</p>
+<div style="float:left">
+<canvas id="myChart" width="200" height="200"></canvas>
+</div style="float:left">
+<div id="myfirstchart" style="height: 250px;float:left"></div>
+</div>
+
 
 </body>
 
@@ -22,7 +36,7 @@ var data =[2,3,4,5,6,7];
 
 var ctx = document.getElementById('myChart');
 var myChart = new Chart(ctx, {
-    type: 'line',
+    type: 'radar',
     data: {
         labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
         datasets: [{
@@ -48,6 +62,7 @@ var myChart = new Chart(ctx, {
         }]
     },
     options: {
+    	responsive:false,
         scales: {
             yAxes: [{
                 ticks: {
@@ -57,6 +72,29 @@ var myChart = new Chart(ctx, {
         }
     }
 });
+
+
+/* 배열안에 객체 스타일로 data를 입력 */
+new Morris.Line({
+	  // ID of the element in which to draw the chart.
+	  element: 'myfirstchart',
+	  // Chart data records -- each entry in this array corresponds to a point on
+	  // the chart.
+	  data: [
+	    { year: '2008', value: 20 },
+	    { year: '2009', value: 10 },
+	    { year: '2010', value: 5 },
+	    { year: '2011', value: 5 },
+	    { year: '2012', value: 20 }
+	  ],
+	  // The name of the data record attribute that contains x-values.
+	  xkey: 'year',
+	  // A list of names of data record attributes that contain y-values.
+	  ykeys: ['value'],
+	  // Labels for the ykeys -- will be displayed when you hover over the
+	  // chart.
+	  labels: ['Value']
+	});
 
 </script>
 
