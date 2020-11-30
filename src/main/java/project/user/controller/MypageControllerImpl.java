@@ -94,6 +94,7 @@ public class MypageControllerImpl implements MypageController {
 
 	@RequestMapping(value = "/mypage/modifyView.do", produces = "application/json", method = { RequestMethod.GET,
 			RequestMethod.POST })
+	
 	@ResponseBody
 	public ModelAndView updateUserView(HttpSession httpSession) throws Exception {
 		UserVO userVO = new UserVO();

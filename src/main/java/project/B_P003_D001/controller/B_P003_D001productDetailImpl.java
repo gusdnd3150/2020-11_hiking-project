@@ -1803,6 +1803,11 @@ public class B_P003_D001productDetailImpl implements B_P003_D001productDetail {
 		List<Map<String, Object>> result = b_P003_D001productService.ibsheet();
 		return result;
 	}
+	
+	@RequestMapping(value = "/chart.do", method = { RequestMethod.GET, RequestMethod.POST })
+	public String chart2() {
+		return "/practice/chart";
+	}
 
 }
 
