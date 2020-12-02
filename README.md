@@ -17,7 +17,8 @@
 -풀 영상(11분)        : https://www.youtube.com/watch?v=BBrjdwnsI6E&t=13s  
 
 ## 목적
-누구나 쉽게 등산을 시작할 수 있기 위함
+코로나 바이러스로 실내 스포츠 활동 감소 혼자서도 편하게 즐기는 취미생활로 등산하는 사람들 증가 
+여행의 대체재로 각광받고 있는 지금 등산이라는 주제에 포커스를 두어 보다 나은 서비스를 제공하기 위함
 
 ## 아키텍쳐
 ![image](https://user-images.githubusercontent.com/66711577/100492961-79d6ff80-3175-11eb-82da-93aa4a461a09.png)
